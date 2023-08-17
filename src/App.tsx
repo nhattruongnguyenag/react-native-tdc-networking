@@ -5,85 +5,105 @@
  * @format
  */
 
-import React, { useEffect, useMemo } from 'react'
-import type { PropsWithChildren } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native'
-
-import { Colors } from 'react-native/Libraries/NewAppScreen'
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React, { useEffect, useMemo, useState } from 'react'
 import SplashScreen from 'react-native-splash-screen'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { Provider, useSelector } from 'react-redux'
+import { RootState, store } from './redux/store'
+import DoneScreen from './screens/DoneScreen'
+import TodoScreen from './screens/TodoScreen'
+import TaskScreen from './screens/TaskScreen'
+import CameraScreen from './screens/CameraScreen'
 
-type SectionProps = PropsWithChildren<{
-  title: string
-}>
+const BottomTab = createMaterialBottomTabNavigator()
+const RootStack = createNativeStackNavigator()
 
-function Section({ children, title }: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark'
+function HomeTabs() {
+  const { taskList } = useSelector((state: RootState) => state.taskReducer)
+
+  let numOfTaskActive = useMemo(() => {
+    return taskList.filter((task) => task.status).length
+  }, [taskList])
+
+  let numOfTaskDone = useMemo(() => {
+    return taskList.filter((task) => !task.status).length
+  }, [taskList])
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black
+    <BottomTab.Navigator
+      shifting={true}
+      activeColor={'#0080ff'}
+      inactiveColor={'#777'}
+      barStyle={{ backgroundColor: '#fff', height: 70 }}
+      screenOptions={({ route }) => ({
+        header: () => null,
+        tabBarIcon: ({ focused, color }) => {
+          let iconName = ''
+          let size = 20
+          if (route.name === 'To-Do') {
+            iconName = 'clipboard-list'
+            size = focused ? 22 : 20
+          } else if (route.name == 'Done') {
+            iconName = 'clipboard-check'
+            size = focused ? 22 : 20
           }
-        ]}
-      >
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark
-          }
-        ]}
-      >
-        {children}
-      </Text>
-    </View>
+
+          return <Icon name={iconName} size={size} color={color} />
+        }
+      })}
+    >
+      <BottomTab.Screen
+        name={'To-Do'}
+        options={{
+          title: 'Todo',
+          tabBarBadge: numOfTaskActive
+        }}
+        component={TodoScreen}
+      />
+      <BottomTab.Screen
+        name={'Done'}
+        options={{
+          title: 'Done',
+          tabBarBadge: numOfTaskDone
+        }}
+        component={DoneScreen}
+      />
+    </BottomTab.Navigator>
   )
 }
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark'
-
   useEffect(() => {
     SplashScreen.hide()
   }, [])
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
-  }
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Text>Hello world !!!</Text>
-    </SafeAreaView>
+    <Provider store={store}>
+      <NavigationContainer>
+        <RootStack.Navigator
+          initialRouteName='Home'
+          screenOptions={{
+            headerTitleAlign: 'center',
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontSize: 24,
+              fontWeight: 'bold'
+            },
+            headerStyle: {
+              backgroundColor: '#0088ff'
+            }
+          }}
+        >
+          <RootStack.Screen name='Home' component={HomeTabs} />
+          <RootStack.Screen name='Task' component={TaskScreen} />
+          <RootStack.Screen name='Camera' component={CameraScreen} />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </Provider>
   )
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600'
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400'
-  },
-  highlight: {
-    fontWeight: '700'
-  }
-})
 
 export default App
