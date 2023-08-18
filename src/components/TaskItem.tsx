@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Pressable, StyleSheet, Text, Touchable, TouchableWithoutFeedback, Vibration, View } from 'react-native'
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -17,12 +17,13 @@ type TaskItemProps = {
 }
 
 const TaskItem = ({ navigation, data }: TaskItemProps) => {
-  let menuRef: Menu | null
+  const [menuRef, setMenuRef] = useState<Menu | null>()
+  const [isMenuOpen, setMenuOpen] = useState(false)
   const [confirmModal, setConfirmModal] = useState(false)
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
   const dispach = useDispatch()
+
   const onEditTask = useCallback(() => {
-    console.log(data)
     dispach(startEditTaskAction(data))
     navigation.navigate('Task')
   }, [taskList])
@@ -32,14 +33,17 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
     setConfirmModal(false)
   }, [])
 
+  useEffect(() => {
+    console.log('ref', menuRef?.isOpen())
+  }, [menuRef?.isOpen()])
+
   return (
     <View>
       <Pressable
+        style={[styles.body, { backgroundColor: isMenuOpen ? '#f9f9f9' : '#fff' }]}
         onLongPress={() => {
           menuRef?.open()
-          Vibration.vibrate(75)
         }}
-        style={styles.body}
       >
         <View style={[styles.taskColor, { backgroundColor: data.color }]} />
 
@@ -54,8 +58,15 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
         </View>
 
         <Menu
-          ref={(menu) => {
-            menuRef = menu
+          onOpen={() => {
+            setMenuOpen(true)
+            Vibration.vibrate(75)
+          }}
+          onClose={() => {
+            setMenuOpen(false)
+          }}
+          ref={(ref) => {
+            setMenuRef(ref)
           }}
         >
           <MenuTrigger style={styles.btnOptions}>
