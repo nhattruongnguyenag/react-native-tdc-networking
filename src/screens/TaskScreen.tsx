@@ -1,11 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
+import { StyleSheet, Text, View } from 'react-native'
 
 export default function TaskScreen() {
-
-
   return (
     <View>
       <Text>TaskScreen</Text>

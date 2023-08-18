@@ -23,7 +23,10 @@ const TaskSlice = createSlice({
     startEditTaskAction: (state, action: PayloadAction<string>) => {},
     cancelEditTaskAction: (state, action: PayloadAction<string>) => {},
     finishEditTaskAction: (state, action: PayloadAction<string>) => {},
-    removeTaskAction: (state, action: PayloadAction<string>) => {}
+    removeTaskAction: (state, action: PayloadAction<number>) => {
+      let taskId = action.payload
+      state.taskList = state.taskList.filter((task) => task._id != taskId)
+    }
   },
   extraReducers(builder) {}
 })
