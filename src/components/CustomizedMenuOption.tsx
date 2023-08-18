@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { MenuOption } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import GlobalStyles from '../styles/GlobalStyles'
 
 interface MenuOptionProps {
   onSelect?: any
@@ -20,12 +21,12 @@ export default function CustomizedMenuOption({
 }: MenuOptionProps) {
   return (
     <MenuOption style={styles.menuOption} onSelect={onSelect}>
-      <Icon name={icon} color={customIconColor} />
-      <Text style={[{ marginStart: 5 }, { color: customTextColor }]}>{text}</Text>
+      <Icon name={icon} color={customIconColor} size={14}/>
+      <Text style={[{ marginStart: 5 }, { color: customTextColor }, GlobalStyles.normalText]}>{text}</Text>
     </MenuOption>
   )
 }
 
 const styles = StyleSheet.create({
-  menuOption: { flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }
+  menuOption: { flexDirection: 'row', alignItems: 'center', padding: 10 }
 })

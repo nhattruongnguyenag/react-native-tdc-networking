@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react'
-import {
-  SectionList,
-  StyleSheet,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { SectionList, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { MenuProvider } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import TaskItem from '../components/TaskItem'
 import TaskSectionHeader from '../components/TaskSectionHeader'
 import { RootState } from '../redux/store'
 import { getTaskBySections } from '../utils/CommonUtils'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
+import { startEditTaskAction } from '../redux/task.reducer'
 
-export default function TodoScreen({ navigation }: any) {
+export default function TodoScreen(): JSX.Element {
+  const dispach = useDispatch()
+  const navigation = useNavigation<NativeStackNavigationProp<any>>()
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
 
   let data = useMemo(() => {
@@ -26,14 +26,14 @@ export default function TodoScreen({ navigation }: any) {
         <SectionList
           keyExtractor={(item, index) => index.toString()}
           sections={data}
-          renderItem={({ item, index }: any) => item.status && <TaskItem navigation={navigation} data={item} />}
+          renderItem={({ item, index}) => <TaskItem navigation={navigation} data={item} />}
           renderSectionHeader={({ section }) => <TaskSectionHeader title={new Date(section.title).toDateString()} />}
         />
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            // dispach(setTaskId(tasks.length + 1))
+            dispach(startEditTaskAction(null))
             navigation.navigate('Task')
           }}
         >

@@ -4,7 +4,7 @@ export interface Task {
   desc: string
   color: string
   image: string
-  status: boolean | null
+  isDone: boolean
   createAt: number
   updatedAt: number
 }

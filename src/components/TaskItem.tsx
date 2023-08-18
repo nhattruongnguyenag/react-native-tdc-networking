@@ -1,34 +1,46 @@
 import { useCallback, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, Touchable, TouchableWithoutFeedback, Vibration, View } from 'react-native'
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { useDispatch } from 'react-redux'
-import { removeTaskAction } from '../redux/task.reducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeTaskAction, startEditTaskAction } from '../redux/task.reducer'
 import GlobalStyles from '../styles/GlobalStyles'
 import { Task } from '../types/Task'
 import ConfirmModal from './ConfirmModal'
 import CustomizedMenuOption from './CustomizedMenuOption'
+import { RootState } from '../redux/store'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type TaskItemProps = {
   data: Task
-  navigation: any
+  navigation: NativeStackNavigationProp<any>
 }
 
 const TaskItem = ({ navigation, data }: TaskItemProps) => {
+  let menuRef: Menu | null
   const [confirmModal, setConfirmModal] = useState(false)
+  const { taskList } = useSelector((state: RootState) => state.taskReducer)
   const dispach = useDispatch()
   const onEditTask = useCallback(() => {
-    navigation.navigate('Task', { taskId: data._id })
-  }, [])
+    console.log(data)
+    dispach(startEditTaskAction(data))
+    navigation.navigate('Task')
+  }, [taskList])
 
-  const deleteTaskHandling = useCallback(() => {
-    dispach(removeTaskAction(data._id ?? 0))
+  const deleteTaskHandling = useCallback((taskId: number) => {
+    dispach(removeTaskAction(taskId))
     setConfirmModal(false)
   }, [])
 
   return (
-    <>
-      <View style={styles.body}>
+    <View>
+      <Pressable
+        onLongPress={() => {
+          menuRef?.open()
+          Vibration.vibrate(75)
+        }}
+        style={styles.body}
+      >
         <View style={[styles.taskColor, { backgroundColor: data.color }]} />
 
         <View style={styles.itemContent}>
@@ -37,15 +49,19 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
             {data.desc}
           </Text>
           <Text style={[styles.date, { marginTop: 15, marginBottom: 10 }]}>
-            Last modified: {new Date(data.createAt).toLocaleTimeString('vi-VN').slice(0, 5)}
+            Last modified: {new Date(data.createAt).toLocaleTimeString().slice(0, 5)}
           </Text>
         </View>
 
-        <Menu>
+        <Menu
+          ref={(menu) => {
+            menuRef = menu
+          }}
+        >
           <MenuTrigger style={styles.btnOptions}>
             <Icon name={'ellipsis-v'} size={18} color={'#000'} />
           </MenuTrigger>
-          <MenuOptions>
+          <MenuOptions optionsContainerStyle={{ marginLeft: 0, marginTop: 0 }}>
             <CustomizedMenuOption icon='edit' text='Edit' onSelect={onEditTask} />
             <CustomizedMenuOption icon='bell' text='Set notification' />
             <CustomizedMenuOption
@@ -59,7 +75,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
             />
           </MenuOptions>
         </Menu>
-      </View>
+      </Pressable>
       <ConfirmModal
         visible={confirmModal}
         title={'Warning'}
@@ -67,9 +83,9 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
         onBtnDeletePress={() => {
           setConfirmModal(false)
         }}
-        onBtnOkPress={deleteTaskHandling}
+        onBtnOkPress={() => deleteTaskHandling(data._id ?? 0)}
       />
-    </>
+    </View>
   )
 }
 
