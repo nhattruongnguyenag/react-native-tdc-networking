@@ -21,7 +21,7 @@ export default function CustomizedMenuOption({
 }: MenuOptionProps) {
   return (
     <MenuOption style={styles.menuOption} onSelect={onSelect}>
-      <Icon name={icon} color={customIconColor} size={14}/>
+      <Icon name={icon} color={customIconColor} size={14} />
       <Text style={[{ marginStart: 5 }, { color: customTextColor }, GlobalStyles.normalText]}>{text}</Text>
     </MenuOption>
   )

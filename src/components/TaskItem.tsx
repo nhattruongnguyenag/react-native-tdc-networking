@@ -40,12 +40,12 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
   return (
     <View>
       <Pressable
-        style={[styles.body, { backgroundColor: isMenuOpen ? '#f9f9f9' : '#fff' }]}
+        style={[styles.body, { backgroundColor: isMenuOpen ? '#f6f6f6' : '#fff' }]}
         onLongPress={() => {
           menuRef?.open()
         }}
       >
-        <View style={[styles.taskColor, { backgroundColor: data.color }]} />
+        <View style={[styles.taskColor, { backgroundColor: data.color, elevation: 2 }]} />
 
         <View style={styles.itemContent}>
           <Text style={[GlobalStyles.title, { marginTop: 10, marginBottom: 10 }]}>{data.title}</Text>
@@ -72,7 +72,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
           <MenuTrigger style={styles.btnOptions}>
             <Icon name={'ellipsis-v'} size={18} color={'#000'} />
           </MenuTrigger>
-          <MenuOptions optionsContainerStyle={{ marginLeft: 0, marginTop: 0 }}>
+          <MenuOptions optionsContainerStyle={{ marginLeft: -35, marginTop: 0 }}>
             <CustomizedMenuOption icon='edit' text='Edit' onSelect={onEditTask} />
             <CustomizedMenuOption icon='bell' text='Set notification' />
             <CustomizedMenuOption

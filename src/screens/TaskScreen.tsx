@@ -8,9 +8,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { addTaskAction, finishEditTaskAction } from '../redux/task.reducer'
 import { TaskFormData } from '../types/TaskFormData'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-export default function TaskScreen({ navigation }: any) {
+export default function TaskScreen() {
   const { taskList, editingTask } = useSelector((state: RootState) => state.taskReducer)
+  const navigation = useNavigation<NativeStackNavigationProp<any>>()
   const dispach = useDispatch()
 
   const [formData, setFormData] = useState<TaskFormData>({

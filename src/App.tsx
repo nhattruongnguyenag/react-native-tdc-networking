@@ -17,6 +17,7 @@ import CameraScreen from './screens/CameraScreen'
 import DoneScreen from './screens/DoneScreen'
 import TaskScreen from './screens/TaskScreen'
 import TodoScreen from './screens/TodoScreen'
+import { MenuProvider } from 'react-native-popup-menu'
 
 const BottomTab = createMaterialBottomTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -25,11 +26,11 @@ function HomeTabs() {
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
 
   let numOfTaskActive = useMemo(() => {
-    return taskList.filter((task) => task.isDone).length
+    return taskList.filter((task) => !task.isDone).length
   }, [taskList])
 
   let numOfTaskDone = useMemo(() => {
-    return taskList.filter((task) => !task.isDone).length
+    return taskList.filter((task) => task.isDone).length
   }, [taskList])
 
   return (
@@ -81,28 +82,30 @@ function App(): JSX.Element {
   }, [])
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <RootStack.Navigator
-          initialRouteName='Home'
-          screenOptions={{
-            headerTitleAlign: 'center',
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontSize: 24,
-              fontWeight: 'bold'
-            },
-            headerStyle: {
-              backgroundColor: '#0088ff'
-            }
-          }}
-        >
-          <RootStack.Screen name='Home' component={HomeTabs} />
-          <RootStack.Screen name='Task' component={TaskScreen} />
-          <RootStack.Screen name='Camera' component={CameraScreen} />
-        </RootStack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <MenuProvider>
+      <Provider store={store}>
+        <NavigationContainer>
+          <RootStack.Navigator
+            initialRouteName='Home'
+            screenOptions={{
+              headerTitleAlign: 'center',
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold'
+              },
+              headerStyle: {
+                backgroundColor: '#0088ff'
+              }
+            }}
+          >
+            <RootStack.Screen name='Home' options={{ title: 'Todo App' }} component={HomeTabs} />
+            <RootStack.Screen name='Task' component={TaskScreen} />
+            <RootStack.Screen name='Camera' component={CameraScreen} />
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    </MenuProvider>
   )
 }
 

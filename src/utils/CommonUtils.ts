@@ -23,3 +23,11 @@ export function getTaskBySections(tasks: Task[]): TaskSection[] {
 
   return taskSections
 }
+
+export function isExistsTaskTodo(tasks: Task[]): boolean {
+  return tasks.filter((task) => !task.isDone).length > 0
+}
+
+export function isExistsTaskDone(tasks: Task[]): boolean {
+  return tasks.filter((task) => task.isDone).length > 0
+}
