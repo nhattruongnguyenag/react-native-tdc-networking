@@ -6,18 +6,23 @@ interface State {
   taskList: Task[]
   editingTask: Task | null
   formData: FormData | null
+  imagePath: string | null
 }
 
 const initialState: State = {
   taskList: initTodoList,
   editingTask: null,
-  formData: null
+  formData: null,
+  imagePath: null
 }
 
 const TaskSlice = createSlice({
   name: 'Task',
   initialState: initialState,
   reducers: {
+    setImagePath: (state, action: PayloadAction<string | null>) => {
+      state.imagePath = action.payload
+    },
     setTasks: (state, action: PayloadAction<Task[]>) => {
       state.taskList = action.payload
     },
@@ -27,7 +32,6 @@ const TaskSlice = createSlice({
     startEditTaskAction: (state, action: PayloadAction<Task | null>) => {
       state.editingTask = action.payload
     },
-    cancelEditTaskAction: (state, action: PayloadAction<string>) => {},
     finishEditTaskAction: (state, action: PayloadAction<Task>) => {
       const taskId = action.payload._id
       const index = state.taskList.findIndex((task) => task._id === taskId)
@@ -42,14 +46,8 @@ const TaskSlice = createSlice({
   extraReducers(builder) {}
 })
 
-export const {
-  addTaskAction,
-  startEditTaskAction,
-  cancelEditTaskAction,
-  finishEditTaskAction,
-  removeTaskAction,
-  setTasks
-} = TaskSlice.actions
+export const { addTaskAction, startEditTaskAction, finishEditTaskAction, setImagePath, removeTaskAction, setTasks } =
+  TaskSlice.actions
 
 const TaskReducer = TaskSlice.reducer
 export default TaskReducer

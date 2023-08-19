@@ -1,15 +1,15 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useCallback, useEffect, useState } from 'react'
-import { Pressable, StyleSheet, Text, Touchable, TouchableWithoutFeedback, Vibration, View } from 'react-native'
+import { Pressable, SafeAreaView, StyleSheet, Text, Vibration, View } from 'react-native'
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../redux/store'
 import { removeTaskAction, startEditTaskAction } from '../redux/task.reducer'
 import GlobalStyles from '../styles/GlobalStyles'
 import { Task } from '../types/Task'
 import ConfirmModal from './ConfirmModal'
 import CustomizedMenuOption from './CustomizedMenuOption'
-import { RootState } from '../redux/store'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type TaskItemProps = {
   data: Task
@@ -33,15 +33,12 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
     setConfirmModal(false)
   }, [])
 
-  useEffect(() => {
-    console.log('ref', menuRef?.isOpen())
-  }, [menuRef?.isOpen()])
-
   return (
-    <View>
+    <SafeAreaView>
       <Pressable
         style={[styles.body, { backgroundColor: isMenuOpen ? '#f6f6f6' : '#fff' }]}
         onLongPress={() => {
+          Vibration.vibrate(75)
           menuRef?.open()
         }}
       >
@@ -60,7 +57,6 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
         <Menu
           onOpen={() => {
             setMenuOpen(true)
-            Vibration.vibrate(75)
           }}
           onClose={() => {
             setMenuOpen(false)
@@ -96,7 +92,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
         }}
         onBtnOkPress={() => deleteTaskHandling(data._id ?? 0)}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -133,9 +129,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   btnOptions: {
-    width: 20,
-    height: 30,
+    width: 25,
+    height: 40,
     margin: 10,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center'
   }

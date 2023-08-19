@@ -1,27 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import CheckBox from '@react-native-community/checkbox'
-import InputColor, { TASK_COLORS } from '../components/InputColor'
-import { Task } from '../types/Task'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { addTaskAction, finishEditTaskAction } from '../redux/task.reducer'
-import { TaskFormData } from '../types/TaskFormData'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Alert, Image, LogBox, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import ActionSheet from 'react-native-actionsheet'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useDispatch, useSelector } from 'react-redux'
+import InputColor, { TASK_COLORS } from '../components/InputColor'
+import { RootState } from '../redux/store'
+import { addTaskAction, finishEditTaskAction, setImagePath } from '../redux/task.reducer'
+import { Task } from '../types/Task'
+import { TaskFormData } from '../types/TaskFormData'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
 
 export default function TaskScreen() {
-  const { taskList, editingTask } = useSelector((state: RootState) => state.taskReducer)
+  const { taskList, editingTask, imagePath } = useSelector((state: RootState) => state.taskReducer)
   const navigation = useNavigation<NativeStackNavigationProp<any>>()
+  const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
   const dispach = useDispatch()
+
+  const focused = useIsFocused()
+
+  useEffect(() => {
+    console.log('abc')
+  }, [focused])
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`', 'Warning: componentWillReceiveProps has been renamed'])
+  }, [])
 
   const [formData, setFormData] = useState<TaskFormData>({
     title: editingTask ? editingTask.title : '',
     desc: editingTask ? editingTask.desc : '',
     color: editingTask ? editingTask.color : TASK_COLORS.white,
     isDone: editingTask ? editingTask.isDone : false,
-    image: editingTask ? editingTask.image : ''
+    image: editingTask ? (imagePath ? imagePath : editingTask.image) : imagePath
   })
 
   const [toggleModal, setToggleModal] = useState(false)
@@ -51,6 +64,7 @@ export default function TaskScreen() {
     }
   }, [formData])
 
+  const [cameraRef, setCameraRef] = useState()
   return (
     <View>
       <ScrollView>
@@ -84,7 +98,9 @@ export default function TaskScreen() {
             </Pressable>
 
             <Pressable
-              onPress={() => {}}
+              onPress={() => {
+                imagePickerOptionsRef?.show()
+              }}
               style={({ pressed }) => [pressed ? styles.btn50Pressed : styles.btn50, { marginLeft: 5 }]}
             >
               <Icon name={'camera'} size={20} color={'#fff'} />
@@ -99,7 +115,7 @@ export default function TaskScreen() {
             <Text style={styles.checkboxTitle}>Done</Text>
           </View>
 
-          {false && <Image resizeMode={'contain'} style={styles.taskImage} source={{ uri: '' }} />}
+          {imagePath && <Image resizeMode={'contain'} style={styles.taskImage} source={{ uri: imagePath }} />}
 
           <Pressable
             onPress={saveOrUpdateTask}
@@ -109,6 +125,13 @@ export default function TaskScreen() {
           </Pressable>
         </View>
       </ScrollView>
+      <CustomizedImagePicker
+        optionsRef={(ref) => setImagePickerOptionsRef(ref)}
+        onResult={(data) => {
+          console.log(data.path)
+          dispach(setImagePath(data.path))
+        }}
+      />
     </View>
   )
 }
