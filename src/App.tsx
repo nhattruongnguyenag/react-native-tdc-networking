@@ -13,12 +13,13 @@ import SplashScreen from 'react-native-splash-screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Provider, useSelector } from 'react-redux'
 import { RootState, store } from './redux/store'
-import CameraScreen from './screens/CameraScreen'
 import DoneScreen from './screens/DoneScreen'
 import TaskScreen from './screens/TaskScreen'
 import TodoScreen from './screens/TodoScreen'
 import { MenuProvider } from 'react-native-popup-menu'
+import { initDB } from './sqlite/core.sqlite'
 
+initDB()
 const BottomTab = createMaterialBottomTabNavigator()
 const RootStack = createNativeStackNavigator()
 
@@ -26,11 +27,11 @@ function HomeTabs() {
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
 
   let numOfTaskActive = useMemo(() => {
-    return taskList.filter((task) => !task.isDone).length
+    return taskList.filter((task) => !task.isDone && task.active).length
   }, [taskList])
 
   let numOfTaskDone = useMemo(() => {
-    return taskList.filter((task) => task.isDone).length
+    return taskList.filter((task) => task.isDone && task.active).length
   }, [taskList])
 
   return (

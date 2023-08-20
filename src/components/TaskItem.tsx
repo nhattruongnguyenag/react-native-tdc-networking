@@ -86,7 +86,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
       <ConfirmModal
         visible={confirmModal}
         title={'Warning'}
-        message={'Are you sure to delete this task?'}
+        message={'Are you sure moving task to trash?'}
         onBtnDeletePress={() => {
           setConfirmModal(false)
         }}

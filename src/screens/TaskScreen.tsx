@@ -9,8 +9,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import InputColor, { TASK_COLORS } from '../components/InputColor'
 import { RootState } from '../redux/store'
-import { addTaskAction, finishEditTaskAction, setImagePath } from '../redux/task.reducer'
+import { addTaskAction, finishEditTaskAction } from '../redux/task.reducer'
 import { Task } from '../types/Task'
+import { TaskSave, TaskUpdate } from '../sqlite/task.sqlite'
 
 export default function TaskScreen() {
   const { taskList, editingTask } = useSelector((state: RootState) => state.taskReducer)
@@ -35,11 +36,6 @@ export default function TaskScreen() {
       setDesc(editingTask.desc)
       setColor(editingTask.color)
       setImage(editingTask.image)
-      dispach(setImagePath(editingTask.image))
-    }
-
-    return () => {
-      dispach(setImagePath(null))
     }
   }, [])
 
@@ -47,26 +43,22 @@ export default function TaskScreen() {
     if (title.length === 0) {
       Alert.alert('Warning !', 'Please write your task title.')
     } else {
-      let task: Task = {
-        _id: taskList.length + 1,
+      let task: TaskSave | TaskUpdate = {
         title: title,
         desc: desc,
         image: image,
-        color: color,
-        isDone: isDone,
-        createAt: editingTask ? editingTask.createAt : Date.now(),
-        updatedAt: Date.now()
+        color: color
       }
-
-      console.log('IMAGE PATH', task)
-      console.log('FORM DATA', task)
 
       if (editingTask === null) {
         dispach(addTaskAction(task))
         Alert.alert('Success !', 'Task saved successfully')
       } else {
-        task._id = editingTask._id
-        dispach(finishEditTaskAction(task))
+        let taskUpdate: TaskUpdate = {
+          _id: editingTask._id,
+          ...task
+        }
+        dispach(finishEditTaskAction(taskUpdate))
         Alert.alert('Success !', 'Task updated successfully')
       }
 

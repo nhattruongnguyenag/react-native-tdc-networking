@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { Task } from '../types/Task'
 import { initTodoList } from '../constants/Constants'
+import { TaskSave, TaskUpdate, getTaskById, moveTaskToTrash, saveTask, updateTask } from '../sqlite/task.sqlite'
 
 interface State {
   taskList: Task[]
@@ -20,33 +21,38 @@ const TaskSlice = createSlice({
   name: 'Task',
   initialState: initialState,
   reducers: {
-    setImagePath: (state, action: PayloadAction<string | null>) => {
-      state.imagePath = action.payload
-    },
-    setTasks: (state, action: PayloadAction<Task[]>) => {
+    setTasksAction: (state, action: PayloadAction<Task[]>) => {
       state.taskList = action.payload
     },
-    addTaskAction: (state, action: PayloadAction<Task>) => {
-      state.taskList.push(action.payload)
+    addTaskAction: (state, action: PayloadAction<TaskSave>) => {
+      saveTask(action.payload, (taskId: number) => {
+        getTaskById(taskId, (data: Task) => {
+          state.taskList.push(data)
+        })
+      })
     },
     startEditTaskAction: (state, action: PayloadAction<Task | null>) => {
       state.editingTask = action.payload
     },
-    finishEditTaskAction: (state, action: PayloadAction<Task>) => {
+    finishEditTaskAction: (state, action: PayloadAction<TaskUpdate>) => {
       const taskId = action.payload._id
-      const index = state.taskList.findIndex((task) => task._id === taskId)
-      state.taskList[index] = action.payload
+      updateTask(action.payload)
+      getTaskById(taskId ?? 0, (taskResponse: Task) => {
+        const index = state.taskList.findIndex((task) => task._id === taskId)
+        state.taskList[index] = taskResponse
+      })
       state.editingTask = null
     },
     removeTaskAction: (state, action: PayloadAction<number>) => {
       let taskId = action.payload
+      moveTaskToTrash(taskId)
       state.taskList = state.taskList.filter((task) => task._id !== taskId)
     }
   },
   extraReducers(builder) {}
 })
 
-export const { addTaskAction, startEditTaskAction, finishEditTaskAction, setImagePath, removeTaskAction, setTasks } =
+export const { addTaskAction, startEditTaskAction, finishEditTaskAction, removeTaskAction, setTasksAction } =
   TaskSlice.actions
 
 const TaskReducer = TaskSlice.reducer

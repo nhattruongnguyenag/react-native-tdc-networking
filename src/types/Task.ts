@@ -4,6 +4,7 @@ export interface Task {
   desc: string
   color: string
   image: string | null
+  active: boolean
   isDone: boolean
   createAt: number
   updatedAt: number

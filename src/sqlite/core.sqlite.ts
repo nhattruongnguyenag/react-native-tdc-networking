@@ -2,43 +2,41 @@ import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite
 
 export const TASK_TABLE_NAME = 'tasks'
 
+export const TASK_TRASH_TABLE_NAME = 'tasks_trashs'
+
 enablePromise(true)
 
-initDB()
-
-/**
- * Initializes the SQLite database by establishing a connection and creating necessary tables.
- *
- * This asynchronous function initializes the SQLite database by first establishing a connection using
- * the getDBConnection() function. It then proceeds to create a table for tasks using the createTable()
- * function with the provided TASK_TABLE_NAME and TASK_TABLE_COLUMNS.
- *
- * @async
- * @function
- * @returns {Promise<void>} A promise that resolves when the database initialization is completed.
- * @throws {Error} Throws an error if there's an issue with database connection or table creation.
- */
 export async function initDB() {
-  try {
-    const db = await getDBConnection()
+  const db = await getDBConnection()
 
-    // Create task's table
-    const columns = {
-      _id: 'INTEGER PRIMARY KEY AUTOINCREMENT',
-      title: 'TEXT',
-      desc: 'TEXT',
-      image: 'TEXT',
-      status: 'TINYINT DEFAULT 1',
-      created_at: "DATETIME DEFAULT (datetime('now','localtime'))",
-      updated_at: 'DATETIME'
-    }
-
-    await createTable(db, TASK_TABLE_NAME, columns)
-
-    console.log('Created tasks table')
-  } catch (error: any) {
-    console.error('Error while initializing database: ' + error.message)
+  // Create task's table
+  const taskTableColumns = {
+    _id: 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    title: 'TEXT',
+    desc: 'TEXT',
+    image: 'TEXT',
+    color: 'TEXT',
+    active: 'TINYINT DEFAULT 1',
+    status: 'TINYINT DEFAULT 0',
+    created_at: "DATETIME DEFAULT (datetime('now','localtime'))",
+    updated_at: "DATETIME DEFAULT (datetime('now','localtime'))"
   }
+
+  await createTable(db, TASK_TABLE_NAME, taskTableColumns)
+
+  console.log('Tasks table created')
+
+  // Create trash's task table
+  const trashTaskTableColumns = {
+    _id: 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    task_id: 'INTEGER',
+    created_at: "DATETIME DEFAULT (datetime('now','localtime'))"
+  }
+
+  const transhTaskTableConstrains = ['FOREIGN KEY(task_id) REFERENCES tasks(_id)']
+  await createTable(db, TASK_TRASH_TABLE_NAME, trashTaskTableColumns, transhTaskTableConstrains)
+
+  console.log("Trash's task table created")
 }
 
 /**
@@ -70,12 +68,12 @@ export async function getDBConnection() {
  * @returns {Promise<void>} A promise that resolves when the table is successfully created.
  * @throws {Error} Throws an error if there's an issue executing the SQL statement.
  */
-export const createTable = async (db: SQLiteDatabase, tableName: string, columns: Object) => {
-  let sql = createTableStatement(tableName, columns)
+export const createTable = async (db: SQLiteDatabase, tableName: string, columns: Object, constrains?: string[]) => {
+  let sql = createTableStatement(tableName, columns, constrains)
   await db.executeSql(sql)
 }
 
-function createTableStatement(tableName: string, columns: Object): string {
+function createTableStatement(tableName: string, columns: Object, constrains?: string[]): string {
   let sql = `CREATE TABLE IF NOT EXISTS ${tableName}\n(`
 
   let index = 0
@@ -86,6 +84,10 @@ function createTableStatement(tableName: string, columns: Object): string {
 
     sql += '\n' + key + ' ' + value
     index++
+  }
+
+  if (constrains) {
+    sql += ', ' + constrains.join(', ')
   }
 
   sql += ')'

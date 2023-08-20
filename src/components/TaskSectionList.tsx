@@ -27,35 +27,41 @@ function TaskSectionList(props: TaskSectionListProps) {
     return getTaskBySections([...taskList])
   }, [taskList])
 
-  let taskRenderSectionHeader = useCallback((section: TaskSection): JSX.Element => {
-    let check = false
+  let taskRenderSectionHeader = useCallback(
+    (section: TaskSection): JSX.Element => {
+      let check = false
 
-    if (props.taskRenderType === TASK_RENDER_TYPE.todo) {
-      check = isExistsTaskTodo(section.data)
-    } else if (props.taskRenderType === TASK_RENDER_TYPE.done) {
-      check = isExistsTaskDone(section.data)
-    }
+      if (props.taskRenderType === TASK_RENDER_TYPE.todo) {
+        check = isExistsTaskTodo(section.data)
+      } else if (props.taskRenderType === TASK_RENDER_TYPE.done) {
+        check = isExistsTaskDone(section.data)
+      }
 
-    if (check) {
-      return <TaskSectionHeader title={new Date(section.title).toDateString()} />
-    } else return <></>
-  }, [taskList])
+      if (check) {
+        return <TaskSectionHeader title={new Date(section.title).toDateString()} />
+      } else return <></>
+    },
+    [taskList]
+  )
 
-  let taskRenderItem = useCallback((item: Task): JSX.Element => {
-    let check = false
+  let taskRenderItem = useCallback(
+    (item: Task): JSX.Element => {
+      let check = false
 
-    if (props.taskRenderType === TASK_RENDER_TYPE.todo) {
-      check = !item.isDone
-    } else if (props.taskRenderType === TASK_RENDER_TYPE.done) {
-      check = item.isDone
-    }
+      if (props.taskRenderType === TASK_RENDER_TYPE.todo) {
+        check = !item.isDone
+      } else if (props.taskRenderType === TASK_RENDER_TYPE.done) {
+        check = item.isDone
+      }
 
-    if (check) {
-      return <TaskItem navigation={navigation} data={item} />
-    } else {
-      return <></>
-    }
-  }, [taskList])
+      if (check && item.active) {
+        return <TaskItem navigation={navigation} data={item} />
+      } else {
+        return <></>
+      }
+    },
+    [taskList]
+  )
 
   return (
     <SectionList
