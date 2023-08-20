@@ -3,5 +3,4 @@ export interface TaskFormData {
   desc: string
   color: string
   isDone: boolean
-  image: string | null
 }

@@ -1,93 +1,99 @@
 import CheckBox from '@react-native-community/checkbox'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Image, LogBox, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import InputColor, { TASK_COLORS } from '../components/InputColor'
 import { RootState } from '../redux/store'
 import { addTaskAction, finishEditTaskAction, setImagePath } from '../redux/task.reducer'
 import { Task } from '../types/Task'
-import { TaskFormData } from '../types/TaskFormData'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
 
 export default function TaskScreen() {
-  const { taskList, editingTask, imagePath } = useSelector((state: RootState) => state.taskReducer)
+  const { taskList, editingTask } = useSelector((state: RootState) => state.taskReducer)
   const navigation = useNavigation<NativeStackNavigationProp<any>>()
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
   const dispach = useDispatch()
 
-  const focused = useIsFocused()
-
-  useEffect(() => {
-    console.log('abc')
-  }, [focused])
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`', 'Warning: componentWillReceiveProps has been renamed'])
-  }, [])
-
-  const [formData, setFormData] = useState<TaskFormData>({
-    title: editingTask ? editingTask.title : '',
-    desc: editingTask ? editingTask.desc : '',
-    color: editingTask ? editingTask.color : TASK_COLORS.white,
-    isDone: editingTask ? editingTask.isDone : false,
-    image: editingTask ? (imagePath ? imagePath : editingTask.image) : imagePath
-  })
+  const [title, setTitle] = useState<string>('')
+  const [desc, setDesc] = useState<string>('')
+  const [color, setColor] = useState<string>(TASK_COLORS.white)
+  const [image, setImage] = useState<string | null>(null)
+  const [isDone, setDone] = useState<boolean>(false)
 
   const [toggleModal, setToggleModal] = useState(false)
 
+  useEffect(() => {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`', 'Warning: componentWillReceiveProps has been renamed'])
+
+    console.log('editing task', editingTask)
+    if (editingTask) {
+      setTitle(editingTask.title)
+      setDesc(editingTask.desc)
+      setColor(editingTask.color)
+      setImage(editingTask.image)
+      dispach(setImagePath(editingTask.image))
+    }
+
+    return () => {
+      dispach(setImagePath(null))
+    }
+  }, [])
+
   const saveOrUpdateTask = useCallback(() => {
-    if (formData.title.length === 0) {
+    if (title.length === 0) {
       Alert.alert('Warning !', 'Please write your task title.')
     } else {
       let task: Task = {
         _id: taskList.length + 1,
-        title: formData.title,
-        desc: formData.desc,
-        image: formData.image ?? '',
-        color: formData.color,
-        isDone: formData.isDone,
-        createAt: Date.now(),
+        title: title,
+        desc: desc,
+        image: image,
+        color: color,
+        isDone: isDone,
+        createAt: editingTask ? editingTask.createAt : Date.now(),
         updatedAt: Date.now()
       }
+
+      console.log('IMAGE PATH', task)
+      console.log('FORM DATA', task)
+
       if (editingTask === null) {
         dispach(addTaskAction(task))
+        Alert.alert('Success !', 'Task saved successfully')
       } else {
         task._id = editingTask._id
         dispach(finishEditTaskAction(task))
+        Alert.alert('Success !', 'Task updated successfully')
       }
 
       navigation.goBack()
     }
-  }, [formData])
+  }, [title, desc, color, isDone, image])
 
-  const [cameraRef, setCameraRef] = useState()
   return (
     <View>
       <ScrollView>
         <View style={styles.body}>
           <TextInput
             style={styles.input}
-            value={formData.title}
-            onChangeText={(value) => setFormData({ ...formData, title: value })}
+            value={title}
+            onChangeText={(value) => setTitle(value)}
             placeholder='Title ...'
           />
 
           <TextInput
             style={styles.input}
-            value={formData.desc}
-            onChangeText={(value) => setFormData({ ...formData, desc: value })}
+            value={desc}
+            onChangeText={(value) => setDesc(value)}
             placeholder='Description ...'
             multiline
           />
 
-          <InputColor
-            selectColor={formData.color}
-            onChangeValue={(value) => setFormData({ ...formData, color: value })}
-          />
+          <InputColor selectColor={color} onChangeValue={(value) => setColor(value)} />
 
           <View style={styles.btnGroupWithRow}>
             <Pressable
@@ -108,14 +114,11 @@ export default function TaskScreen() {
           </View>
 
           <View style={styles.checkboxGroup}>
-            <CheckBox
-              value={formData.isDone}
-              onValueChange={(value: boolean) => setFormData({ ...formData, isDone: value })}
-            />
+            <CheckBox value={isDone} onValueChange={(value) => setDone(value)} />
             <Text style={styles.checkboxTitle}>Done</Text>
           </View>
 
-          {imagePath && <Image resizeMode={'contain'} style={styles.taskImage} source={{ uri: imagePath }} />}
+          {image && <Image resizeMode={'contain'} style={styles.taskImage} source={{ uri: image }} />}
 
           <Pressable
             onPress={saveOrUpdateTask}
@@ -127,9 +130,10 @@ export default function TaskScreen() {
       </ScrollView>
       <CustomizedImagePicker
         optionsRef={(ref) => setImagePickerOptionsRef(ref)}
-        onResult={(data) => {
-          console.log(data.path)
-          dispach(setImagePath(data.path))
+        onResult={(path) => {
+          if (path) {
+            setImage('file://' + path)
+          }
         }}
       />
     </View>

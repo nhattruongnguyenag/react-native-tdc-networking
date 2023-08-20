@@ -101,7 +101,6 @@ function App(): JSX.Element {
           >
             <RootStack.Screen name='Home' options={{ title: 'Todo App' }} component={HomeTabs} />
             <RootStack.Screen name='Task' component={TaskScreen} />
-            <RootStack.Screen name='Camera' component={CameraScreen} />
           </RootStack.Navigator>
         </NavigationContainer>
       </Provider>

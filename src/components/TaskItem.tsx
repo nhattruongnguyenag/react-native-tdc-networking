@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Pressable, SafeAreaView, StyleSheet, Text, Vibration, View } from 'react-native'
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -138,4 +138,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default TaskItem
+export default memo(TaskItem)

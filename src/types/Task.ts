@@ -3,7 +3,7 @@ export interface Task {
   title: string
   desc: string
   color: string
-  image: string
+  image: string | null
   isDone: boolean
   createAt: number
   updatedAt: number

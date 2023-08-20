@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { Pressable, StyleSheet, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 export const TASK_COLORS = {
@@ -18,8 +18,10 @@ export default function InputColor({ selectColor, onChangeValue }: InputColorPro
   const [color, setColor] = useState(selectColor ? selectColor : TASK_COLORS.white)
 
   useEffect(() => {
-    console.log('selected color', color)
-  }, [color])
+    if (selectColor) {
+      setColor(selectColor)
+    }
+  }, [selectColor])
 
   return (
     <View style={styles.colorInput}>

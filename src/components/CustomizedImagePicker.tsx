@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { LogBox } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
-import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker'
+import { ExternalDirectoryPath, moveFile } from 'react-native-fs'
+import {
+  CameraOptions,
+  ImageLibraryOptions,
+  ImagePickerResponse,
+  launchCamera,
+  launchImageLibrary
+} from 'react-native-image-picker'
 
 interface ImagePickerOptionsProps {
   optionsRef: (ref: ActionSheet | null) => void
-  onResult: (result: ImageOrVideo) => void
+  onResult: (result: string | null) => void
 }
 
 export default function CustomizedImagePicker({ optionsRef, onResult }: ImagePickerOptionsProps) {
@@ -23,24 +30,39 @@ export default function CustomizedImagePicker({ optionsRef, onResult }: ImagePic
       destructiveButtonIndex={2}
       onPress={(index: number) => {
         if (index === 0) {
-          ImagePicker.openCamera({
-            width: 300,
-            height: 400
-          }).then((image) => {
-            onResult(image)
+          const options: CameraOptions = {
+            mediaType: 'photo',
+            saveToPhotos: true
+          }
+          launchCamera(options, (res: ImagePickerResponse) => {
+            const filePath = handleImagePickerResult(res)
+            onResult(filePath)
           })
-        } else if (index == 1) {
-          ImagePicker.openPicker({
-            mediaType: 'any',
-            showCropFrame: true,
-            width: 300,
-            height: 400,
-            cropping: true
-          }).then((image) => {
-            onResult(image)
+        } else if (index === 1) {
+          const options: ImageLibraryOptions = {
+            mediaType: 'photo'
+          }
+
+          launchImageLibrary(options, (res: ImagePickerResponse) => {
+            const filePath = handleImagePickerResult(res)
+            onResult(filePath)
           })
         }
       }}
     />
   )
+}
+
+const handleImagePickerResult = (res: ImagePickerResponse): string | null => {
+  let newFilePath = null
+  if (res.didCancel) {
+    console.log('INFO', 'User cancel image picker')
+  } else if (res.errorCode) {
+    console.log('ERROR', res.errorMessage)
+  } else {
+    const filePath = res.assets ? res.assets[0].uri : ''
+    newFilePath = ExternalDirectoryPath + '/' + Date.now().toString() + '.jpg'
+    moveFile(filePath as string, newFilePath)
+  }
+  return newFilePath
 }

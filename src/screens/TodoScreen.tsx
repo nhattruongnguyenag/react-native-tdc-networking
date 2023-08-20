@@ -1,8 +1,7 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useEffect, useState } from 'react'
-import { Animated, LogBox, StyleSheet, TouchableOpacity, View } from 'react-native'
-import ActionSheet, { ActionSheetProps } from 'react-native-actionsheet'
+import React from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch } from 'react-redux'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
@@ -20,8 +19,8 @@ export default function TodoScreen(): JSX.Element {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          dispach(startEditTaskAction(null))
           navigation.navigate('Task')
+          dispach(startEditTaskAction(null))
         }}
       >
         <Icon name={'plus'} size={20} color={'#fff'} />

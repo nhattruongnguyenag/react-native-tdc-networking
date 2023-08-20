@@ -6,8 +6,7 @@ export const initTodoList: Task[] = [
     title: 'Todo 1',
     desc: 'Todo description',
     color: '#fff',
-    image:
-      'https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=',
+    image: null,
     isDone: false,
     createAt: new Date('2023-08-18 11:18').getTime(),
     updatedAt: new Date('2023-08-18 11:18').getTime()
@@ -17,8 +16,7 @@ export const initTodoList: Task[] = [
     title: 'Todo 2',
     desc: 'Todo description',
     color: '#fff',
-    image:
-      'https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=',
+    image: null,
     isDone: false,
     createAt: new Date('2023-08-20 11:18').getTime(),
     updatedAt: new Date('2023-08-20 11:18').getTime()
@@ -28,8 +26,7 @@ export const initTodoList: Task[] = [
     title: 'Todo 3',
     desc: 'Todo description',
     color: '#fff',
-    image:
-      'https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=',
+    image: null,
     isDone: false,
     createAt: new Date('2023-08-19 11:19').getTime(),
     updatedAt: new Date('2023-08-19 11:19').getTime()
@@ -39,8 +36,7 @@ export const initTodoList: Task[] = [
     title: 'Todo 4',
     desc: 'Todo description',
     color: '#fff',
-    image:
-      'https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=',
+    image: null,
     isDone: false,
     createAt: new Date('2023-08-18 11:18').getTime(),
     updatedAt: new Date('2023-08-18 11:18').getTime()
