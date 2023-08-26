@@ -1,17 +1,17 @@
+import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch } from 'react-redux'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
 import { setTasksAction, startEditTaskAction } from '../redux/task.reducer'
-import GlobalStyles from '../styles/GlobalStyles'
 import { getTasksFromDB } from '../sqlite/task.sqlite'
+import GlobalStyles from '../styles/GlobalStyles'
 
 export default function TodoScreen(): JSX.Element {
   const dispach = useDispatch()
-  const navigation = useNavigation<NativeStackNavigationProp<any>>()
+  const navigation = useNavigation<DrawerNavigationProp<any>>()
   let focused = useIsFocused()
 
   useEffect(() => {

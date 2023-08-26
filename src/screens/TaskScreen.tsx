@@ -10,7 +10,6 @@ import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import InputColor, { TASK_COLORS } from '../components/InputColor'
 import { RootState } from '../redux/store'
 import { addTaskAction, finishEditTaskAction } from '../redux/task.reducer'
-import { Task } from '../types/Task'
 import { TaskSave, TaskUpdate } from '../sqlite/task.sqlite'
 
 export default function TaskScreen() {

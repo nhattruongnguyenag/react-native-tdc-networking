@@ -14,5 +14,8 @@ export default StyleSheet.create({
   },
   textWhite: {
     color: '#fff'
+  },
+  toolbarHeader: {
+    backgroundColor: '#0088ff'
   }
 })

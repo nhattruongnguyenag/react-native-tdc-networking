@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
-import GlobalStyles from '../styles/GlobalStyles'
-import { Task } from '../types/Task'
 import {
   TaskSave,
-  TaskUpdate,
-  getTasksFromDB,
-  moveTaskToTrash,
-  restoreTaskFromTrash,
-  updateTask
+  TaskUpdate
 } from '../sqlite/task.sqlite'
+import GlobalStyles from '../styles/GlobalStyles'
 
 export default function DoneScreen() {
   let task: TaskSave = {
@@ -27,7 +22,7 @@ export default function DoneScreen() {
     color: '#fff updated',
     image: 'image.jpg updated'
   }
-
+  
   return (
     <View style={GlobalStyles.body}>
       <TaskSectionList taskRenderType={TASK_RENDER_TYPE.done} />
