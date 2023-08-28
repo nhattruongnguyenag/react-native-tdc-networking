@@ -21,6 +21,7 @@ export default function TextInputWithLeftIcon({ onTextChange }: TextInputWithLef
     <View style={styles.inputWrapper}>
       <Icon style={{ marginLeft: 10 }} name='search' size={25} />
       <TextInput
+        autoFocus={true}
         onChangeText={(value) => onTextChange(value)}
         ref={searchInputRef}
         placeholder='Search...'
