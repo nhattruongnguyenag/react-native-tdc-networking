@@ -8,6 +8,7 @@ export const initTodoList: Task[] = [
     color: '#fff',
     image: null,
     isDone: false,
+    active: true,
     createAt: new Date('2023-08-18 11:18').getTime(),
     updatedAt: new Date('2023-08-18 11:18').getTime()
   },
@@ -18,6 +19,7 @@ export const initTodoList: Task[] = [
     color: '#fff',
     image: null,
     isDone: false,
+    active: true,
     createAt: new Date('2023-08-20 11:18').getTime(),
     updatedAt: new Date('2023-08-20 11:18').getTime()
   },
@@ -28,6 +30,7 @@ export const initTodoList: Task[] = [
     color: '#fff',
     image: null,
     isDone: false,
+    active: true,
     createAt: new Date('2023-08-19 11:19').getTime(),
     updatedAt: new Date('2023-08-19 11:19').getTime()
   },
@@ -38,6 +41,7 @@ export const initTodoList: Task[] = [
     color: '#fff',
     image: null,
     isDone: false,
+    active: true,
     createAt: new Date('2023-08-18 11:18').getTime(),
     updatedAt: new Date('2023-08-18 11:18').getTime()
   }

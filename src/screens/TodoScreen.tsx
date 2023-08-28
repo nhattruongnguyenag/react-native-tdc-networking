@@ -8,10 +8,12 @@ import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList
 import { setTasksAction, startEditTaskAction } from '../redux/task.reducer'
 import { getTasksFromDB } from '../sqlite/task.sqlite'
 import GlobalStyles from '../styles/GlobalStyles'
+import useOnResume from '../hooks/UseOnResume'
 
 export default function TodoScreen(): JSX.Element {
   const dispach = useDispatch()
   const navigation = useNavigation<DrawerNavigationProp<any>>()
+
   let focused = useIsFocused()
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage'
+import { Task } from '../types/Task'
 
 export const TASK_TABLE_NAME = 'tasks'
 

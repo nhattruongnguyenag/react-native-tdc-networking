@@ -3,7 +3,11 @@ import React, { useEffect, useRef } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { useIsFocused } from '@react-navigation/native'
 
-export default function TextInputWithLeftIcon(): JSX.Element {
+interface TextInputWithLeftIconProps {
+  onTextChange: (value: string) => void
+}
+
+export default function TextInputWithLeftIcon({ onTextChange }: TextInputWithLeftIconProps): JSX.Element {
   const searchInputRef = useRef<TextInput | null>(null)
   const focus = useIsFocused()
 
@@ -16,7 +20,12 @@ export default function TextInputWithLeftIcon(): JSX.Element {
   return (
     <View style={styles.inputWrapper}>
       <Icon style={{ marginLeft: 10 }} name='search' size={25} />
-      <TextInput ref={searchInputRef} placeholder='Search...' style={styles.searchInput} />
+      <TextInput
+        onChangeText={(value) => onTextChange(value)}
+        ref={searchInputRef}
+        placeholder='Search...'
+        style={styles.searchInput}
+      />
     </View>
   )
 }

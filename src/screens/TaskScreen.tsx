@@ -17,7 +17,6 @@ export default function TaskScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>()
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
   const dispach = useDispatch()
-
   const [title, setTitle] = useState<string>('')
   const [desc, setDesc] = useState<string>('')
   const [color, setColor] = useState<string>(TASK_COLORS.white)

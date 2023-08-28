@@ -1,16 +1,15 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import GlobalStyles from '../styles/GlobalStyles'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 import { Divider } from 'react-native-paper'
-import TaskSectionList from '../components/TaskSectionList'
-import TaskFlatList from '../components/TaskSearchResultList'
+import TaskSearchResultList from '../components/TaskSearchResultList'
+import GlobalStyles from '../styles/GlobalStyles'
 
 export default function SearchScreen() {
   return (
     <ScrollView style={GlobalStyles.body}>
       <Text style={styles.resultTitle}>Search Result</Text>
       <Divider />
-      <TaskFlatList style={{ marginTop: 10 }} />
+      <TaskSearchResultList style={{ marginTop: 10 }} />
     </ScrollView>
   )
 }

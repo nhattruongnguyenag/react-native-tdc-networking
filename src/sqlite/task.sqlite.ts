@@ -177,3 +177,15 @@ export function getTasksFromResultSet(results: ResultSet): Task[] {
   }
   return tasks
 }
+
+export async function searchTaskByTitleOrContent(key: string, response: (result: Task[]) => void) {
+  const db = await getDBConnection()
+  key = '%' + key + '%'
+  const sql = `SELECT * FROM tasks WHERE title LIKE '${key}' OR desc LIKE '${key}'`
+  console.log(sql)
+  db.transaction((tx) => {
+    tx.executeSql(sql, [], (tx, results) => {
+      response(getTasksFromResultSet(results))
+    })
+  })
+}

@@ -1,17 +1,27 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { Task } from '../types/Task'
 import { initTodoList } from '../constants/Constants'
-import { TaskSave, TaskUpdate, getTaskById, moveTaskToTrash, saveTask, updateTask } from '../sqlite/task.sqlite'
+import {
+  TaskSave,
+  TaskUpdate,
+  getTaskById,
+  moveTaskToTrash,
+  saveTask,
+  updateTask,
+  searchTaskByTitleOrContent
+} from '../sqlite/task.sqlite'
 
 interface State {
   taskList: Task[]
+  taskSearchResult: Task[]
   editingTask: Task | null
   formData: FormData | null
   imagePath: string | null
 }
 
 const initialState: State = {
-  taskList: initTodoList,
+  taskList: [],
+  taskSearchResult: [],
   editingTask: null,
   formData: null,
   imagePath: null
@@ -47,13 +57,31 @@ const TaskSlice = createSlice({
       let taskId = action.payload
       moveTaskToTrash(taskId)
       state.taskList = state.taskList.filter((task) => task._id !== taskId)
+    },
+    taskSearchAction: (state, action: PayloadAction<Task[]>) => {
+      state.taskSearchResult = []
+      state.taskSearchResult = action.payload
+      // state.taskSearchResult = []
+      // state.taskList.forEach(task => {
+      //   if (key.length > 0) {
+      //     if (task.title.includes(key) || task.desc.includes(key)) {
+      //       state.taskSearchResult.push(task)
+      //     }
+      //   }
+      // })
     }
   },
   extraReducers(builder) {}
 })
 
-export const { addTaskAction, startEditTaskAction, finishEditTaskAction, removeTaskAction, setTasksAction } =
-  TaskSlice.actions
+export const {
+  addTaskAction,
+  startEditTaskAction,
+  finishEditTaskAction,
+  removeTaskAction,
+  setTasksAction,
+  taskSearchAction
+} = TaskSlice.actions
 
 const TaskReducer = TaskSlice.reducer
 export default TaskReducer

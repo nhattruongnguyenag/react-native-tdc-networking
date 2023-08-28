@@ -12,32 +12,32 @@ export default function ToolBar() {
   }
 
   return (
-      <Appbar.Header style={styles.header}>
-        <Appbar.Action
-          icon={'menu'}
-          color={'#fff'}
-          onPress={() => {
-            navigation.openDrawer()
-          }}
-        />
-        <Appbar.Content title='Todo App' titleStyle={[GlobalStyles.textWhite, GlobalStyles.title]} />
-        <Appbar.Action
-          icon='magnify'
-          size={25}
-          color={'#fff'}
-          onPress={() => {
-            onSearchBtnPressHanling()
-          }}
-        />
-        <Appbar.Action icon={'cog'} size={22} color={'#fff'} onPress={() => {}} />
-      </Appbar.Header>
+    <Appbar.Header style={styles.header}>
+      <Appbar.Action
+        icon={'menu'}
+        color={'#fff'}
+        onPress={() => {
+          navigation.openDrawer()
+        }}
+      />
+      <Appbar.Content title='Todo App' titleStyle={[GlobalStyles.textWhite, GlobalStyles.title]} />
+      <Appbar.Action
+        icon='magnify'
+        size={25}
+        color={'#fff'}
+        onPress={() => {
+          onSearchBtnPressHanling()
+        }}
+      />
+      <Appbar.Action icon={'cog'} size={22} color={'#fff'} onPress={() => {}} />
+    </Appbar.Header>
   )
 }
 
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#0088ff',
-    height: 70
+    height: 60
   },
   appbarContent: {
     color: '#fff'

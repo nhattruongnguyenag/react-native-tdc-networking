@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { LogBox } from 'react-native'
+import { LogBox, PermissionsAndroid } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import { ExternalDirectoryPath, moveFile } from 'react-native-fs'
 import {
@@ -28,16 +28,26 @@ export default function CustomizedImagePicker({ optionsRef, onResult }: ImagePic
       options={['Camera', 'Gallery', 'Cancel']}
       cancelButtonIndex={2}
       destructiveButtonIndex={2}
-      onPress={(index: number) => {
+      onPress={async (index: number) => {
         if (index === 0) {
           const options: CameraOptions = {
             mediaType: 'photo',
             saveToPhotos: true
           }
-          launchCamera(options, (res: ImagePickerResponse) => {
-            const filePath = handleImagePickerResult(res)
-            onResult(filePath)
-          })
+
+          try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA)
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              launchCamera(options, (res: ImagePickerResponse) => {
+                const filePath = handleImagePickerResult(res)
+                onResult(filePath)
+              })
+            } else {
+              console.log('Camera permission denied')
+            }
+          } catch (err) {
+            console.warn(err)
+          }
         } else if (index === 1) {
           const options: ImageLibraryOptions = {
             mediaType: 'photo'

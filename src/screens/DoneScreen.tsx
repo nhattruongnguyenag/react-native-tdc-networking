@@ -1,10 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
-import {
-  TaskSave,
-  TaskUpdate
-} from '../sqlite/task.sqlite'
+import { TaskSave, TaskUpdate } from '../sqlite/task.sqlite'
 import GlobalStyles from '../styles/GlobalStyles'
 
 export default function DoneScreen() {
@@ -22,7 +19,7 @@ export default function DoneScreen() {
     color: '#fff updated',
     image: 'image.jpg updated'
   }
-  
+
   return (
     <View style={GlobalStyles.body}>
       <TaskSectionList taskRenderType={TASK_RENDER_TYPE.done} />
