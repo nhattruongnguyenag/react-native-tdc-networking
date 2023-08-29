@@ -1,24 +1,20 @@
 import React from 'react'
 import { View } from 'react-native'
+import { useDispatch } from 'react-redux'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
-import { TaskSave, TaskUpdate } from '../sqlite/task.sqlite'
+import useOnResume from '../hooks/UseOnResume'
+import { setTasksAction } from '../redux/task.reducer'
+import { getTasksFromDB, TaskSave, TaskUpdate } from '../sqlite/task.sqlite'
 import GlobalStyles from '../styles/GlobalStyles'
 
 export default function DoneScreen() {
-  let task: TaskSave = {
-    title: '11111111111',
-    desc: '1111111111',
-    color: '#fff',
-    image: 'image.jpg'
-  }
+  const dispach = useDispatch()
 
-  let taskUpdate: TaskUpdate = {
-    _id: 1,
-    title: 'title updated',
-    desc: 'Updated 1111111111',
-    color: '#fff updated',
-    image: 'image.jpg updated'
-  }
+  useOnResume(() => {
+    getTasksFromDB((data) => {
+      dispach(setTasksAction(data))
+    })
+  })
 
   return (
     <View style={GlobalStyles.body}>

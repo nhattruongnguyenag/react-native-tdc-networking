@@ -25,9 +25,13 @@ export function getTaskBySections(tasks: Task[]): TaskSection[] {
 }
 
 export function isExistsTaskTodo(tasks: Task[]): boolean {
-  return tasks.filter((task) => !task.isDone && task.active).length > 0
+  return tasks.filter((task) => !task.status && task.active).length > 0
 }
 
 export function isExistsTaskDone(tasks: Task[]): boolean {
-  return tasks.filter((task) => task.isDone && task.active).length > 0
+  return tasks.filter((task) => task.status && task.active).length > 0
+}
+
+export function isExistsTaskInactive(tasks: Task[]): boolean {
+  return tasks.filter((task) => !task.active).length > 0
 }

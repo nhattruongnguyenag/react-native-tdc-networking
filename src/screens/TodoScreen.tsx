@@ -4,6 +4,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch } from 'react-redux'
+import IconButton from '../components/buttons/IconButton'
 import TaskSectionList, { TASK_RENDER_TYPE } from '../components/TaskSectionList'
 import useOnResume from '../hooks/UseOnResume'
 import { setTasksAction, startEditTaskAction } from '../redux/task.reducer'
@@ -23,16 +24,19 @@ export default function TodoScreen(): JSX.Element {
   return (
     <View style={GlobalStyles.body}>
       <TaskSectionList taskRenderType={TASK_RENDER_TYPE.todo} />
-
-      <TouchableOpacity
-        style={styles.button}
+      <IconButton
+        width={55}
+        height={55}
+        iconName='plus'
+        iconColor='#fff'
+        inactiveBackgroundColor='#0088ff'
+        activeBackgroundColor='#0088ffB3'
+        customStyle={styles.button}
         onPress={() => {
           navigation.navigate('Task')
           dispach(startEditTaskAction(null))
         }}
-      >
-        <Icon name={'plus'} size={20} color={'#fff'} />
-      </TouchableOpacity>
+      />
     </View>
   )
 }
@@ -41,11 +45,6 @@ const styles = StyleSheet.create({
   button: {
     width: 60,
     height: 60,
-    backgroundColor: '#0088ff',
-    elevation: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
     position: 'absolute',
     bottom: 20,
     right: 20

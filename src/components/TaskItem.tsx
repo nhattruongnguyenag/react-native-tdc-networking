@@ -8,7 +8,7 @@ import { RootState } from '../redux/store'
 import { removeTaskAction, startEditTaskAction } from '../redux/task.reducer'
 import GlobalStyles from '../styles/GlobalStyles'
 import { Task } from '../types/Task'
-import ConfirmModal from './ConfirmModal'
+import ConfirmModal from './modals/ConfirmModal'
 import CustomizedMenuOption from './CustomizedMenuOption'
 
 type TaskItemProps = {
@@ -50,7 +50,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
             {data.desc}
           </Text>
           <Text style={[styles.date, { marginTop: 15, marginBottom: 10 }]}>
-            Last modified: {new Date(data.createAt).toLocaleTimeString().slice(0, 5)}
+            Last modified: {new Date(data.createAt).toLocaleTimeString()}
           </Text>
         </View>
 
@@ -77,7 +77,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
               }}
               icon='trash'
               customIconColor='red'
-              text='Delete'
+              text='Move to trash'
               customTextColor='red'
             />
           </MenuOptions>

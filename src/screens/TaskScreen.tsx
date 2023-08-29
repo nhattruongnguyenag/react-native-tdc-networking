@@ -21,19 +21,19 @@ export default function TaskScreen() {
   const [desc, setDesc] = useState<string>('')
   const [color, setColor] = useState<string>(TASK_COLORS.white)
   const [image, setImage] = useState<string | null>(null)
-  const [isDone, setDone] = useState<boolean>(false)
+  const [status, setStatus] = useState<boolean>(false)
 
   const [toggleModal, setToggleModal] = useState(false)
 
   useEffect(() => {
     LogBox.ignoreLogs(['Animated: `useNativeDriver`', 'Warning: componentWillReceiveProps has been renamed'])
 
-    console.log('editing task', editingTask)
     if (editingTask) {
       setTitle(editingTask.title)
       setDesc(editingTask.desc)
       setColor(editingTask.color)
       setImage(editingTask.image)
+      setStatus(editingTask.status)
     }
   }, [])
 
@@ -41,28 +41,34 @@ export default function TaskScreen() {
     if (title.length === 0) {
       Alert.alert('Warning !', 'Please write your task title.')
     } else {
-      let task: TaskSave | TaskUpdate = {
-        title: title,
-        desc: desc,
-        image: image,
-        color: color
-      }
-
       if (editingTask === null) {
+        let task: TaskSave = {
+          title: title,
+          desc: desc,
+          image: image,
+          color: color,
+          status: false
+        }
+
         dispach(addTaskAction(task))
         Alert.alert('Success !', 'Task saved successfully')
       } else {
-        let taskUpdate: TaskUpdate = {
+        let task: TaskUpdate = {
           _id: editingTask._id,
-          ...task
+          title: title,
+          desc: desc,
+          image: image,
+          color: color,
+          status: status
         }
-        dispach(finishEditTaskAction(taskUpdate))
+
+        dispach(finishEditTaskAction(task))
         Alert.alert('Success !', 'Task updated successfully')
       }
 
       navigation.goBack()
     }
-  }, [title, desc, color, isDone, image])
+  }, [title, desc, color, status, image])
 
   return (
     <View>
@@ -104,7 +110,7 @@ export default function TaskScreen() {
           </View>
 
           <View style={styles.checkboxGroup}>
-            <CheckBox value={isDone} onValueChange={(value) => setDone(value)} />
+            <CheckBox value={status ? true : false} onValueChange={(value) => setStatus(value)} />
             <Text style={styles.checkboxTitle}>Done</Text>
           </View>
 

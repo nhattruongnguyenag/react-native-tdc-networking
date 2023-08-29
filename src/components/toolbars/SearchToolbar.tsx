@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import { Appbar } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { taskSearchAction } from '../redux/task.reducer'
-import { searchTaskByTitleOrContent } from '../sqlite/task.sqlite'
-import GlobalStyles from '../styles/GlobalStyles'
-import { Task } from '../types/Task'
-import TextInputWithLeftIcon from './TextInputWithLeftIcon'
+import { taskSearchAction } from '../../redux/task.reducer'
+import { searchTaskByTitleOrContent } from '../../sqlite/task.sqlite'
+import GlobalStyles from '../../styles/GlobalStyles'
+import { Task } from '../../types/Task'
+import TextInputWithLeftIcon from '../TextInputWithLeftIcon'
 
 export default function SearchToolbar() {
   const navigation = useNavigation<DrawerNavigationProp<any>>()

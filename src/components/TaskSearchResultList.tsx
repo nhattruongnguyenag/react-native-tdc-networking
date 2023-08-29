@@ -16,9 +16,9 @@ export default function TaskSearchResultList({ style }: TaskSearchResultListProp
 
   return (
     <View style={style}>
-      {taskSearchResult.map((item, index) => (
-        <TaskItem key={index} navigation={navigation} data={item} />
-      ))}
+      {taskSearchResult.map((item, index) =>
+        item.active ? <TaskItem key={index} navigation={navigation} data={item} /> : <></>
+      )}
     </View>
   )
 }

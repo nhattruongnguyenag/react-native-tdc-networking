@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { memo, useCallback, useMemo } from 'react'
 import { SectionList } from 'react-native'
@@ -8,7 +8,7 @@ import { Task } from '../types/Task'
 import { TaskSection } from '../types/TaskSection'
 import { getTaskBySections, isExistsTaskDone, isExistsTaskTodo } from '../utils/CommonUtils'
 import TaskItem from './TaskItem'
-import TaskSectionHeader from './TaskSectionHeader'
+import TaskSectionHeader from './toolbars/TaskSectionHeader'
 
 interface TaskSectionListProps {
   taskRenderType: number
@@ -20,7 +20,7 @@ export const TASK_RENDER_TYPE = {
 }
 
 function TaskSectionList(props: TaskSectionListProps) {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>()
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
 
   let data = useMemo(() => {
@@ -49,9 +49,9 @@ function TaskSectionList(props: TaskSectionListProps) {
       let check = false
 
       if (props.taskRenderType === TASK_RENDER_TYPE.todo) {
-        check = !item.isDone
+        check = !item.status
       } else if (props.taskRenderType === TASK_RENDER_TYPE.done) {
-        check = item.isDone
+        check = item.status
       }
 
       if (check && item.active) {

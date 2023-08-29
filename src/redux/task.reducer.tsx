@@ -8,8 +8,10 @@ import {
   moveTaskToTrash,
   saveTask,
   updateTask,
-  searchTaskByTitleOrContent
+  searchTaskByTitleOrContent,
+  restoreTaskFromTrash
 } from '../sqlite/task.sqlite'
+import { Alert } from 'react-native'
 
 interface State {
   taskList: Task[]
@@ -61,14 +63,12 @@ const TaskSlice = createSlice({
     taskSearchAction: (state, action: PayloadAction<Task[]>) => {
       state.taskSearchResult = []
       state.taskSearchResult = action.payload
-      // state.taskSearchResult = []
-      // state.taskList.forEach(task => {
-      //   if (key.length > 0) {
-      //     if (task.title.includes(key) || task.desc.includes(key)) {
-      //       state.taskSearchResult.push(task)
-      //     }
-      //   }
-      // })
+    },
+    restoreTaskAction: (state, action: PayloadAction<number>) => {
+      const taskId = action.payload
+      restoreTaskFromTrash(taskId)
+      state.taskList = state.taskList.filter((task) => task._id !== taskId)
+      Alert.alert('Success !', 'Task restored successfully')
     }
   },
   extraReducers(builder) {}
@@ -80,7 +80,8 @@ export const {
   finishEditTaskAction,
   removeTaskAction,
   setTasksAction,
-  taskSearchAction
+  taskSearchAction,
+  restoreTaskAction
 } = TaskSlice.actions
 
 const TaskReducer = TaskSlice.reducer

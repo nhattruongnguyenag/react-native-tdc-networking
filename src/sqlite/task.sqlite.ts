@@ -30,10 +30,11 @@ export async function saveTask(task: TaskSave, response: (taskId: number) => voi
 export async function updateTask(task: TaskUpdate) {
   const db = await getDBConnection()
 
-  let sql = "UPDATE tasks set title = ?, desc = ?, image = ?, color = ?, updated_at = (datetime('now', 'localtime'))"
+  let sql =
+    "UPDATE tasks set title = ?, desc = ?, image = ?, color = ?, status = ?,  updated_at = (datetime('now', 'localtime'))"
   sql += '\nWHERE _id = ?'
 
-  const params = [task.title, task.desc, task.image, task.color, task._id]
+  const params = [task.title, task.desc, task.image, task.color, task.status, task._id]
 
   db.transaction(async (tx: Transaction) => {
     tx.executeSql(sql, params, (tx, results) => {
@@ -168,7 +169,7 @@ export function getTasksFromResultSet(results: ResultSet): Task[] {
       color: resultSet.item(i).color,
       image: resultSet.item(i).image,
       active: resultSet.item(i).active,
-      isDone: resultSet.item(i).status,
+      status: resultSet.item(i).status,
       createAt: new Date(resultSet.item(i).created_at).getTime(),
       updatedAt: new Date(resultSet.item(i).updated_at).getTime()
     }

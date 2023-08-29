@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import GlobalStyles from '../styles/GlobalStyles'
+import GlobalStyles from '../../styles/GlobalStyles'
 
 interface ConfirmModalProps {
   visible: boolean

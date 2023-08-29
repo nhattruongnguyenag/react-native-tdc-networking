@@ -20,10 +20,11 @@ import { MenuProvider } from 'react-native-popup-menu'
 import { initDB } from './sqlite/core.sqlite'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import TaskRecybinScreen from './screens/TaskRecybinScreen'
-import { PaperProvider } from 'react-native-paper'
+import { Divider, PaperProvider } from 'react-native-paper'
 import ToolBar from './components/ToolBar'
 import SearchScreen from './screens/SearchScreen'
-import SearchToolbar from './components/SearchToolbar'
+import SearchToolbar from './components/toolbars/SearchToolbar'
+import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 
 initDB()
 const BottomTab = createMaterialBottomTabNavigator()
@@ -55,7 +56,17 @@ export function DrawerNavigator(): JSX.Element {
         }}
         component={StackNavigator}
       />
-      <Drawer.Screen name='Recybin' component={TaskRecybinScreen} />
+      <Drawer.Screen
+        name='Recybin'
+        options={{
+          header: () => <ToolbarWithBackPress title="Task's Recybin" />,
+          drawerLabelStyle: { fontSize: 18 },
+          drawerIcon: ({ color, size, focused }) => (
+            <Icon style={{ marginStart: 5 }} color={focused ? '#0088ff' : '#666'} name='trash-restore' size={18} />
+          )
+        }}
+        component={TaskRecybinScreen}
+      />
     </Drawer.Navigator>
   )
 }
@@ -99,11 +110,11 @@ function BottomTabNavigator(): JSX.Element {
   const { taskList } = useSelector((state: RootState) => state.taskReducer)
 
   let numOfTaskActive = useMemo(() => {
-    return taskList.filter((task) => !task.isDone && task.active).length
+    return taskList.filter((task) => !task.status && task.active).length
   }, [taskList])
 
   let numOfTaskDone = useMemo(() => {
-    return taskList.filter((task) => task.isDone && task.active).length
+    return taskList.filter((task) => task.status && task.active).length
   }, [taskList])
 
   return (
