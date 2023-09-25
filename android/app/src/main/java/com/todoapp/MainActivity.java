@@ -16,7 +16,6 @@ public class MainActivity extends ReactActivity {
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
-    SplashScreen.show(this);
     super.onCreate(savedInstanceState);
   }
 
@@ -27,7 +26,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "DemoApp";
+    return "TDCSocialNetwork";
   }
 
   /**

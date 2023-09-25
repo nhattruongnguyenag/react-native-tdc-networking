@@ -1,0 +1,6 @@
+export const BUSINESS_DASHBOARD = 'Business Dashboard'
+export const FACULTY_DASHBOARD = 'Faculty Dashboard'
+export const STUDENT_DISCUSSION_DASHBOARD = 'Student Discussion Dashboard'
+export const NOTIFICATION = 'Notification'
+export const CONVERSATION = 'Conversation'
+export const SEACRH = 'Search'

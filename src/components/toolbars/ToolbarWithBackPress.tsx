@@ -1,7 +1,6 @@
 import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Dimensions } from 'react-native'
 import { StyleSheet, Text, View } from 'react-native'
 import IconButton from '../buttons/IconButton'
 
@@ -14,11 +13,12 @@ export default function ToolbarWithBackPress({ title }: ToolbarWithBackPressProp
   return (
     <View style={styles.toolbarBody}>
       <IconButton
-        iconName='arrow-left'
+        iconSize={18}
+        iconName='chevron-left'
         iconColor='#fff'
         onPress={() => navigation.goBack()}
         inactiveBackgroundColor='#ffffff00'
-        activeBackgroundColor='#ffffff1A'
+        activeBackgroundColor='#ffffff1a'
         customStyle={styles.backBtnStyle}
       />
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 60,
+    height: 50,
     backgroundColor: '#0088ff'
   },
   toolbarTitle: {

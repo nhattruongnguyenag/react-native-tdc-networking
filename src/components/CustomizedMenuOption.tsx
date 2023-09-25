@@ -22,7 +22,7 @@ export default function CustomizedMenuOption({
   return (
     <MenuOption style={styles.menuOption} onSelect={onSelect}>
       <Icon name={icon} color={customIconColor} size={14} />
-      <Text style={[{ marginStart: 5 }, { color: customTextColor }, GlobalStyles.normalText]}>{text}</Text>
+      <Text style={[{ marginStart: 5 }, { color: customTextColor }]}>{text}</Text>
     </MenuOption>
   )
 }

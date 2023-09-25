@@ -50,7 +50,7 @@ const TaskItem = ({ navigation, data }: TaskItemProps) => {
             {data.desc}
           </Text>
           <Text style={[styles.date, { marginTop: 15, marginBottom: 10 }]}>
-            Last modified: {new Date(data.createAt).toLocaleTimeString()}
+            Last modified: {new Date(data.updatedAt).toLocaleTimeString()}
           </Text>
         </View>
 

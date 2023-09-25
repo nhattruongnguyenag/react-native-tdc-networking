@@ -1,14 +1,13 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
-import { Alert, Pressable, StyleSheet, Text, Vibration, View } from 'react-native'
+import { Pressable, StyleSheet, Text, Vibration, View } from 'react-native'
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
-import { restoreTaskAction, startEditTaskAction } from '../redux/task.reducer'
-import { restoreTaskFromTrash } from '../sqlite/task.sqlite'
+import { permanentlyRemoveTaskAction, restoreTaskAction, startEditTaskAction } from '../redux/task.reducer'
 import GlobalStyles from '../styles/GlobalStyles'
 import { Task } from '../types/Task'
 import CustomizedMenuOption from './CustomizedMenuOption'
@@ -18,7 +17,7 @@ type TaskRecybinItemProps = {
   data: Task
 }
 
-export default function TaskRecybinItem({ data }: TaskRecybinItemProps) {
+function TaskRecybinItem({ data }: TaskRecybinItemProps) {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [menuRef, setMenuRef] = useState<Menu | null>()
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -34,12 +33,14 @@ export default function TaskRecybinItem({ data }: TaskRecybinItemProps) {
   const deleteTaskHandling = useCallback(
     (taskId: number) => {
       setConfirmModal(false)
+      dispach(permanentlyRemoveTaskAction(taskId))
     },
     [taskList]
   )
 
   const onRestoreTaskHandling = useCallback(() => {
     dispach(restoreTaskAction(data._id ?? 0))
+    navigation.navigate('To-Do')
   }, [taskList])
 
   return (
@@ -59,7 +60,7 @@ export default function TaskRecybinItem({ data }: TaskRecybinItemProps) {
             {data.desc}
           </Text>
           <Text style={[styles.date, { marginTop: 15, marginBottom: 10 }]}>
-            Last modified: {new Date(data.createAt).toLocaleTimeString()}
+            Last modified: {new Date(data.updatedAt).toLocaleTimeString()}
           </Text>
         </View>
 
@@ -146,3 +147,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 })
+
+export default React.memo(TaskRecybinItem)
