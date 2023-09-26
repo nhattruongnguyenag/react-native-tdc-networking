@@ -122,7 +122,7 @@ function TopTabNavigator(): JSX.Element {
           } else if (route.name === NOTIFICATION) {
             iconName = 'bell'
           } else if (route.name === CONVERSATION) {
-            iconName = 'facebook-messenger'
+            iconName = 'user-friends'
           }
 
           return <Icon name={iconName} size={size} color={color} solid={focused} />
