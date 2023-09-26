@@ -112,6 +112,7 @@ function TopTabNavigator(): JSX.Element {
         tabBarIcon: ({ focused, color }) => {
           let iconName = ''
           let size = focused ? 20 : 19
+          
           if (route.name === BUSINESS_DASHBOARD) {
             iconName = 'home'
           } else if (route.name === STUDENT_DISCUSSION_DASHBOARD) {
