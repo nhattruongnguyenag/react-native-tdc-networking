@@ -1,15 +1,20 @@
 import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Appbar } from 'react-native-paper'
-import { SEACRH } from '../../constants/Screen'
+import { SEARCH_ICON } from '../../constants/Icon'
+import { CONVERSATION_SCREEN, SEACRH_SCREEN } from '../../constants/Screen'
 export default function ToolBar() {
   const navigation = useNavigation<DrawerNavigationProp<any>>()
 
-  const onSearchBtnPressHanling = () => {
-    navigation.navigate(SEACRH)
-  }
+  const onSearchBtnPress = useCallback(() => {
+    navigation.navigate(SEACRH_SCREEN)
+  }, [])
+
+  const onMessengerBtnPress = useCallback(() => {
+    navigation.navigate(CONVERSATION_SCREEN)
+  }, [])
 
   return (
     <Appbar.Header style={styles.header}>
@@ -19,12 +24,22 @@ export default function ToolBar() {
           navigation.openDrawer()
         }}
       />
-      <Appbar.Content title='TDC Social Network' titleStyle={{color: '#0065FF', fontWeight: 'bold', fontSize: 20, fontFamily: ''}} />
+      <Appbar.Content title='TDC Social Network' titleStyle={styles.appbarContent} />
       <Appbar.Action
+        style={styles.appbarAction}
         icon='magnify'
-        size={30}
+        size={25}
         onPress={() => {
-          onSearchBtnPressHanling()
+          onSearchBtnPress()
+        }}
+      />
+
+      <Appbar.Action
+        style={styles.appbarAction}
+        icon='facebook-messenger'
+        size={25}
+        onPress={() => {
+          onMessengerBtnPress()
         }}
       />
     </Appbar.Header>
@@ -36,9 +51,11 @@ const styles = StyleSheet.create({
     height: 40
   },
   appbarContent: {
-    color: '#fff'
+    color: '#0065FF', 
+    fontWeight: 'bold', 
+    fontSize: 20
   },
   appbarAction: {
-    alignItems: 'center'
+    width: 35, height: 35
   }
 })

@@ -17,17 +17,18 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Provider } from 'react-redux'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
+import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 import {
-  BUSINESS_DASHBOARD,
-  CONVERSATION,
-  FACULTY_DASHBOARD,
-  NOTIFICATION,
-  SEACRH,
-  STUDENT_DISCUSSION_DASHBOARD
+  BUSINESS_DASHBOARD_SCREEN,
+  CONVERSATION_SCREEN,
+  FACULTY_DASHBOARD_SCREEN,
+  NOTIFICATION_SCREEN,
+  SEACRH_SCREEN,
+  STUDENT_DISCUSSION_DASHBOARD_SCREEN
 } from './constants/Screen'
 import { store } from './redux/store'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
-import ConversationScreen from './screens/ConversationScreen'
+import ConversationScreen from './screens/conversation/ConversationScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
@@ -97,9 +98,15 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
-        name={SEACRH}
-        options={{header: () => <ToolbarWithBackPress title='Tìm kiếm' />}}
+        name={SEACRH_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Tìm kiếm' /> }}
         component={SearchScreen}
+      />
+
+      <RootStack.Screen
+        name={CONVERSATION_SCREEN}
+        options={{ header: () => <ToolbarWithSearchIcon title='Hội thoại' /> }}
+        component={ConversationScreen}
       />
     </RootStack.Navigator>
   )
@@ -112,16 +119,16 @@ function TopTabNavigator(): JSX.Element {
         tabBarIcon: ({ focused, color }) => {
           let iconName = ''
           let size = focused ? 20 : 19
-          
-          if (route.name === BUSINESS_DASHBOARD) {
+
+          if (route.name === BUSINESS_DASHBOARD_SCREEN) {
             iconName = 'home'
-          } else if (route.name === STUDENT_DISCUSSION_DASHBOARD) {
+          } else if (route.name === STUDENT_DISCUSSION_DASHBOARD_SCREEN) {
             iconName = 'chalkboard-teacher'
-          } else if (route.name === FACULTY_DASHBOARD) {
+          } else if (route.name === FACULTY_DASHBOARD_SCREEN) {
             iconName = 'graduation-cap'
-          } else if (route.name === NOTIFICATION) {
+          } else if (route.name === NOTIFICATION_SCREEN) {
             iconName = 'bell'
-          } else if (route.name === CONVERSATION) {
+          } else if (route.name === CONVERSATION_SCREEN) {
             iconName = 'user-friends'
           }
 
@@ -133,11 +140,11 @@ function TopTabNavigator(): JSX.Element {
         header: () => <ToolBar />
       })}
     >
-      <TopTab.Screen name={BUSINESS_DASHBOARD} component={BusinessDashboardScreen} />
-      <TopTab.Screen name={FACULTY_DASHBOARD} component={FacultyDashboardScreen} />
-      <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD} component={StudentDiscussionDashboardScreen} />
-      <TopTab.Screen name={NOTIFICATION} component={NotificationScreen} />
-      <TopTab.Screen name={CONVERSATION} component={ConversationScreen} />
+      <TopTab.Screen name={BUSINESS_DASHBOARD_SCREEN} component={BusinessDashboardScreen} />
+      <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
+      <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
+      <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
+      <TopTab.Screen name={CONVERSATION_SCREEN} component={ConversationScreen} />
     </TopTab.Navigator>
   )
 }
