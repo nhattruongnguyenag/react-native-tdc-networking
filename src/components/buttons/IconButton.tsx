@@ -24,8 +24,8 @@ export default function IconButton(props: IconButtonProps) {
     return {
       alignItems: 'center',
       justifyContent: 'center',
-      width: props.width ?? 40,
-      height: props.height ?? 40,
+      width: props.width ?? 42,
+      height: props.height ?? 42,
       borderRadius: props.borderRadius ?? 999,
       backgroundColor: pressed ? props.activeBackgroundColor ?? '#fff' : props.inactiveBackgroundColor ?? '#000'
     }
