@@ -20,19 +20,30 @@ import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 import {
   BUSINESS_DASHBOARD_SCREEN,
+  BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
+  DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
+  FOLLOWING_SCREEN,
+  LOGIN_SCREEN,
   NOTIFICATION_SCREEN,
   SEACRH_SCREEN,
-  STUDENT_DISCUSSION_DASHBOARD_SCREEN
+  STUDENT_DISCUSSION_DASHBOARD_SCREEN,
+  STUDENT_REGISTER_SCREEN,
+  TOP_TAB_NAVIGATOR
 } from './constants/Screen'
+import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/store'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
+import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
 import ConversationScreen from './screens/conversation/ConversationScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
+import FollowingScreen from './screens/FollowingScreen'
+import LoginScreen from './screens/LoginScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
+import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -70,7 +81,7 @@ export function DrawerNavigator(): JSX.Element {
 export function StackNavigator(): JSX.Element {
   return (
     <RootStack.Navigator
-      initialRouteName='BottomTabNavigator'
+      initialRouteName={INITIAL_SCREEN}
       screenOptions={{
         headerTitleAlign: 'center',
         headerTintColor: '#fff',
@@ -84,15 +95,15 @@ export function StackNavigator(): JSX.Element {
       }}
     >
       <RootStack.Screen
-        name='BottomTabNavigator'
+        name={TOP_TAB_NAVIGATOR}
         options={{
-          title: 'Todo App',
+          title: 'TDC Social Network',
           header: () => <ToolBar />
         }}
         component={TopTabNavigator}
       />
       <RootStack.Screen
-        name='DrawerNavigator'
+        name={DRAWER_TAB_NAVIGATOR}
         options={{ title: 'Todo App', header: () => null }}
         component={DrawerNavigator}
       />
@@ -107,6 +118,24 @@ export function StackNavigator(): JSX.Element {
         name={CONVERSATION_SCREEN}
         options={{ header: () => <ToolbarWithSearchIcon title='Hội thoại' /> }}
         component={ConversationScreen}
+      />
+
+      <RootStack.Screen
+        name={LOGIN_SCREEN}
+        options={{ header: () => null }}
+        component={LoginScreen}
+      />
+
+      <RootStack.Screen
+        name={STUDENT_REGISTER_SCREEN}
+        options={{ header: () => null }}
+        component={StudentRegistrationScreen}
+      />
+
+      <RootStack.Screen
+        name={BUSINESS_REGISTER_SCREEN}
+        options={{ header: () => null }}
+        component={BusinessRegistrationScreen}
       />
     </RootStack.Navigator>
   )
@@ -128,7 +157,7 @@ function TopTabNavigator(): JSX.Element {
             iconName = 'graduation-cap'
           } else if (route.name === NOTIFICATION_SCREEN) {
             iconName = 'bell'
-          } else if (route.name === CONVERSATION_SCREEN) {
+          } else if (route.name === FOLLOWING_SCREEN) {
             iconName = 'user-friends'
           }
 
@@ -144,7 +173,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
-      <TopTab.Screen name={CONVERSATION_SCREEN} component={ConversationScreen} />
+      <TopTab.Screen name={FOLLOWING_SCREEN} component={FollowingScreen} />
     </TopTab.Navigator>
   )
 }
