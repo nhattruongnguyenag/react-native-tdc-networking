@@ -15,6 +15,7 @@ import { MenuProvider } from 'react-native-popup-menu'
 import SplashScreen from 'react-native-splash-screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Provider } from 'react-redux'
+import MessengerToolbar from './components/toolbars/MessengerToolbar'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
@@ -26,6 +27,7 @@ import {
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN,
   LOGIN_SCREEN,
+  MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
   SEACRH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
@@ -40,6 +42,7 @@ import ConversationScreen from './screens/conversation/ConversationScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import FollowingScreen from './screens/FollowingScreen'
 import LoginScreen from './screens/LoginScreen'
+import MessagerScreen from './screens/MessagerScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
@@ -104,7 +107,7 @@ export function StackNavigator(): JSX.Element {
       />
       <RootStack.Screen
         name={DRAWER_TAB_NAVIGATOR}
-        options={{ title: 'Todo App', header: () => null }}
+        options={{ title: 'TDC Social Network', header: () => null }}
         component={DrawerNavigator}
       />
 
@@ -118,6 +121,12 @@ export function StackNavigator(): JSX.Element {
         name={CONVERSATION_SCREEN}
         options={{ header: () => <ToolbarWithSearchIcon title='Hội thoại' /> }}
         component={ConversationScreen}
+      />
+
+      <RootStack.Screen
+        name={MESSENGER_SCREEN}
+        options={{ header: () => <MessengerToolbar /> }}
+        component={MessagerScreen}
       />
 
       <RootStack.Screen

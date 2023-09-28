@@ -4,6 +4,7 @@ export const STUDENT_DISCUSSION_DASHBOARD_SCREEN = 'Student Discussion Dashboard
 export const NOTIFICATION_SCREEN = 'Notification'
 export const FOLLOWING_SCREEN = 'Following'
 export const CONVERSATION_SCREEN = 'Conversation'
+export const MESSENGER_SCREEN = 'Messenger'
 export const SEACRH_SCREEN = 'Search'
 export const ACTIVE_CONVERSATION_TAB = 'Active conversation tab'
 export const ALL_CONVERSATION_TAB = 'All conversation tab'
