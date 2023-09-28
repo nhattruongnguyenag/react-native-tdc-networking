@@ -32,6 +32,7 @@ import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
+import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -98,7 +99,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={SEACRH}
-        options={{header: () => <ToolbarWithBackPress title='Tìm kiếm' />}}
+        options={{ header: () => <ToolbarWithBackPress title='Tìm kiếm' /> }}
         component={SearchScreen}
       />
     </RootStack.Navigator>
@@ -112,7 +113,7 @@ function TopTabNavigator(): JSX.Element {
         tabBarIcon: ({ focused, color }) => {
           let iconName = ''
           let size = focused ? 20 : 19
-          
+
           if (route.name === BUSINESS_DASHBOARD) {
             iconName = 'home'
           } else if (route.name === STUDENT_DISCUSSION_DASHBOARD) {
@@ -148,15 +149,16 @@ function App(): JSX.Element {
   }, [])
 
   return (
-    <MenuProvider>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            <DrawerNavigator />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
-    </MenuProvider>
+    // <MenuProvider>
+    //   <Provider store={store}>
+    //     <PaperProvider>
+    //       <NavigationContainer>
+    //         <DrawerNavigator />
+    //       </NavigationContainer>
+    //     </PaperProvider>
+    //   </Provider>
+    // </MenuProvider>
+    <CreateNormalPostScreen />
   )
 }
 
