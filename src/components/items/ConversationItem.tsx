@@ -1,9 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { Avatar } from 'react-native-paper'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { MESSENGER_SCREEN } from '../../constants/Screen'
 
 export default function ConversationItem() {
     const [active, setActive] = useState(false)
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
 
     const onItemPressIn = useCallback(() => {
         setActive(true)
@@ -13,8 +17,12 @@ export default function ConversationItem() {
         setActive(false)
     }, [])
 
+    const onItemPress = useCallback(() => {
+        navigation.navigate(MESSENGER_SCREEN)
+    }, [])
+
     return (
-        <Pressable style={[styles.body, { backgroundColor: active ? '#f6f6f6' : '#fff' }]} onPressIn={onItemPressIn} onPressOut={onItemPressOut}>
+        <Pressable onPress={onItemPress} style={[styles.body, { backgroundColor: active ? '#f6f6f6' : '#fff' }]} onPressIn={onItemPressIn} onPressOut={onItemPressOut}>
             <View style={styles.avatarGroup}>
                 <Avatar.Image size={60} source={{ uri: 'https://i.stack.imgur.com/bl1g5.png?s=192&g=1' }} />
                 <View style={styles.activeSignal} />

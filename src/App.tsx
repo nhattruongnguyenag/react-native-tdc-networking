@@ -47,6 +47,7 @@ import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
+import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
