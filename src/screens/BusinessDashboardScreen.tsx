@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CustomizeBusinessPost from '../components/CustomizeBusinessPost'
-
+import {COLOR_GREY} from '../constants/Color'
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   return (
@@ -30,6 +30,6 @@ export default function BusinessDashboardScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'grey'
+    backgroundColor: COLOR_GREY
   }
 })

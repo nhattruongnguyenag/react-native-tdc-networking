@@ -1,11 +1,14 @@
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Image } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER } from '../constants/Color'
+import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 
 const { width, height } = Dimensions.get('screen');
-
+const TEXT_COMPLETE = 'Hoàn tất'
+const TEXT_TITLE = 'Thêm bài viết'
+const TEXT_INPUT_PLACEHOLDER = 'Hãy nhập nội dung bài viết.'
+const TEXT_ADD_IMAGES = 'Thêm hình ảnh'
 // man hinh dang bai viet thong thuong
 export default function CreateNormalPostScreen({ navigation }: any) {
   // Function area
@@ -31,17 +34,19 @@ export default function CreateNormalPostScreen({ navigation }: any) {
           <IconButton
             iconSize={18}
             iconName='chevron-left'
-            iconColor='black'
+            iconColor={COLOR_BLACK}
             onPress={handleClickBackIcon}
             inactiveBackgroundColor='#ffffff00'
             activeBackgroundColor='#ffffff1a'
           />
-          <Text style={styles.tabBarTxt}>Thêm bài viết</Text>
+          <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
           <TouchableOpacity
             onPress={handleClickCompleteButton}
             style={styles.wrapTabBarBtnRight}>
             <Text style={styles.tabBarBtnRightTxt}>
-              Hoàn tất
+              {
+                TEXT_COMPLETE
+              }
             </Text>
           </TouchableOpacity>
         </View>
@@ -51,8 +56,8 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         <TextInput
           scrollEnabled={false}
           style={styles.txtBody}
-          placeholder='Hãy nhập nội dung bài viết.'
-          placeholderTextColor={'black'}
+          placeholder={TEXT_INPUT_PLACEHOLDER}
+          placeholderTextColor={COLOR_BLACK}
           multiline={true}
         />
         {/* images container when user post images */}
@@ -74,7 +79,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
               inactiveBackgroundColor='#ffffff00'
               activeBackgroundColor='#ffffff1a'
             />
-            <Text style={styles.bottomText}>Thêm hình ảnh</Text>
+            <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -95,7 +100,9 @@ const styles = StyleSheet.create({
   },
   // Header
   tabBarTxt: {
-    color: 'black', fontWeight: 'bold', fontSize: 16
+    color: COLOR_BLACK,
+     fontWeight: 'bold',
+      fontSize: 16
   },
   wrapTabBar: {
     flexDirection: 'row',
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     height: height * 0.75,
   },
   txtBody: {
-    color: 'black',
+    color: COLOR_BLACK,
     paddingHorizontal: 10,
   }
   // Bottom

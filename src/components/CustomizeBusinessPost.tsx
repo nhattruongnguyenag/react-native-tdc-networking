@@ -6,8 +6,13 @@ import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommun
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE, BACKGROUND_COLOR_BOTTOM_ICON } from '../constants/Color'
 import { BusinessPost } from '../types/BusinessPost'
-import { NUM_OF_LINES, TEXT_AVAILABLE, TEXT_HIDE_LESS, TEXT_SEE_MORE, HEADER_ICON_SIZE, BOTTOM_ICON_SIZE } from '../constants/BusinessPost';
 
+export const NUM_OF_LINES = 5
+export const TEXT_AVAILABLE = 'Khả dụng'
+export const TEXT_SEE_MORE = 'xem thêm'
+export const TEXT_HIDE_LESS = 'ẩn bớt'
+export const HEADER_ICON_SIZE = 15
+export const BOTTOM_ICON_SIZE = 30
 // get devices info 
 const { width, height } = Dimensions.get('screen');
 
