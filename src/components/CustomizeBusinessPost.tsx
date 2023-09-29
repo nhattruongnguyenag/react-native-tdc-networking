@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, Dimensions, ImageBackground } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -62,17 +62,23 @@ const CustomizeBusinessPost = (props: BusinessPost) => {
           <View style={styles.headerCenter}>
             <View style={styles.headerCenterTop}>
               {/* Name company */}
-              <Text style={[styles.headerBusinessName, styles.headerItem]}>{post.name}</Text>
+              <Text
+                style={[styles.headerBusinessName, styles.headerItem]}>
+                {post.name}
+                <Text> </Text>
+                <IconAntDesign name='checkcircle' size={HEADER_ICON_SIZE} color={"blue"} style={styles.headerItem} />
+              </Text>
               {/* Icon check authentications */}
-              <IconAntDesign name='checkcircle' size={HEADER_ICON_SIZE} color={"blue"} style={styles.headerItem} />
-              {/* Type author */}
-              <View style={styles.headerCenterType}><Text style={styles.headerTxt}>{post.typeAuthor}</Text></View>
             </View>
             <View style={styles.headerCenterTop}>
               {/* Time created post */}
               <Text style={[styles.headerCenterTimePost, styles.headerItem]}>{post.timeCreatePost} - {post.type}</Text>
               {/* in ability? */}
-              <View style={styles.headerCenterType}><Text style={styles.headerTxt}>{post.available ? TEXT_AVAILABLE : null}</Text></View>
+              <View style={[styles.headerCenterType, styles.headerItem]}><Text style={styles.headerTxt}>{post.available ? TEXT_AVAILABLE : null}</Text></View>
+              {/* Type author */}
+              <View style={styles.headerCenterType}>
+                <Text style={styles.headerTxt}>{post.typeAuthor}</Text>
+              </View>
             </View>
           </View>
           {/* Menu 3 dot */}
@@ -175,7 +181,8 @@ const styles = StyleSheet.create({
   headerBusinessName: {
     fontSize: 16,
     color: COLOR_BLACK,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    width: '60%'
   },
   headerCenterTop: {
     flexDirection: 'row',
@@ -215,6 +222,9 @@ const styles = StyleSheet.create({
     color: COLOR_BLACK,
   },
   // Images area test
+  wrapInfoLLeftOfPost: {
+    flexDirection: 'row'
+  },
   wrapImage: {
     flexDirection: 'row',
     justifyContent: 'space-between',
