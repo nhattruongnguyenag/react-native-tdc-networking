@@ -3,9 +3,9 @@ import React, { Fragment } from 'react'
 import { Appbar, Avatar } from 'react-native-paper'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { PURPLE_COLOR } from '../../constants/Color'
 
 const AVATAR_HEIGHT = 40
-const PURPLE_COLOR = '#8919FF'
 
 export default function MessengerToolbar({ }) {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()

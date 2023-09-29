@@ -47,13 +47,14 @@ const styles = StyleSheet.create({
         marginEnd: 10
     },
     messageTextContent: {
-        color: '#fff'
+        color: '#fff',
+        fontSize: 16
     },
     messageDate: {
         marginStart: 'auto',
         marginEnd: AVATAR_HEIGHT + 25,
-        fontSize: 11,
-        marginTop: 5,
+        fontSize: 12,
+        marginTop: 7,
         marginBottom: 10
     }
 })

@@ -42,7 +42,7 @@ import ConversationScreen from './screens/conversation/ConversationScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import FollowingScreen from './screens/FollowingScreen'
 import LoginScreen from './screens/LoginScreen'
-import MessagerScreen from './screens/MessagerScreen'
+import MessengerScreen from './screens/MessengerScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
@@ -126,7 +126,7 @@ export function StackNavigator(): JSX.Element {
       <RootStack.Screen
         name={MESSENGER_SCREEN}
         options={{ header: () => <MessengerToolbar /> }}
-        component={MessagerScreen}
+        component={MessengerScreen}
       />
 
       <RootStack.Screen

@@ -45,12 +45,13 @@ const styles = StyleSheet.create({
         marginStart: 10
     },
     messageTextContent: {
-        color: '#000'
+        color: '#000',
+        fontSize: 16
     },
     messageDate: {
-        marginBottom: 10,
         marginStart: AVATAR_HEIGHT + 25,
-        fontSize: 11,
-        marginTop: 5
+        fontSize: 12,
+        marginTop: 7,
+        marginBottom: 10
     }
 })
