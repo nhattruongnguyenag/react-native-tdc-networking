@@ -27,7 +27,7 @@ export default function BusinessRegistrationScreen() {
     <ScrollView>
       <SafeAreaView>
         <View style={styles.header}>
-          <Text style={styles.txtHeader}>Đăng ký</Text>
+          <Text style={styles.txtHeader}>Đăng ký doanh nghiệp</Text>
         </View>
 
         <View style={styles.form}>
