@@ -39,7 +39,7 @@ export default function MessengerScreen() {
 
   return (
     <View style={styles.body}>
-      <ScrollView ref={ref}>
+      <ScrollView ref={ref} showsVerticalScrollIndicator={false}>
         <KeyboardAvoidingView
           style={{ flex: 1 }} enabled>
           <MessageGroupTitle />
@@ -91,14 +91,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingTop: 15
+    paddingHorizontal: 10
   },
   inputMessageGroup: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10
+    paddingVertical: 5
   },
   inputMessage: {
     flex: 1,

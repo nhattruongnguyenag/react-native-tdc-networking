@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     body: {
         display: 'flex',
         marginTop: 10,
-        marginStart: 15,
         width: 300
     },
     mainContentGroup: {

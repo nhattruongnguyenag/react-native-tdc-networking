@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         marginTop: 10,
         marginStart: 'auto',
-        marginEnd: 15,
+        marginEnd: 10,
         width: 300
     },
     mainContentGroup: {
