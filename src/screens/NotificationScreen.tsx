@@ -15,7 +15,7 @@ const dataNew = [
   },
   {
     "id": 2,
-    "name": "John da dang ky thanh cong!!!",
+    "name": "John da dang ky thanh cong!!",
     "time": "1 gio truoc",
     "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg"
   },
