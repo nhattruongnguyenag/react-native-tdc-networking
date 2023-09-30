@@ -2,10 +2,14 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { IconButton } from 'react-native-paper'
 
-export default function QuestionTitle() {
+interface QuestionTitleProps {
+    title?: string
+}
+
+export default function QuestionTitle(props: QuestionTitleProps) {
     return (
         <View style={styles.body}>
-            <Text style={styles.questionTitle}>Bạn có đi làm thêm vào thứ mấy?</Text>
+            <Text style={styles.questionTitle}>{props.title}</Text>
             <IconButton
                 icon="close"
                 size={25}
@@ -23,7 +27,6 @@ const styles = StyleSheet.create({
     },
     questionTitle: {
         color: '#000',
-        marginBottom: 5,
         fontSize: 16,
         fontWeight: 'bold'
     },

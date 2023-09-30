@@ -18,7 +18,7 @@ export default function AddQuestionView() {
                 search
                 labelField='name'
                 valueField='value'
-                placeholder='-- Chọn loại câu hỏi --'
+                placeholder='--- Chọn loại câu hỏi ---'
                 searchPlaceholder='Tìm kiếm...'
                 onChange={(item) => {
                 }}

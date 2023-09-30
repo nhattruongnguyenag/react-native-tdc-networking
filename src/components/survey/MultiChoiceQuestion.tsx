@@ -10,7 +10,7 @@ export default function MultiChoiceQuestion() {
 
     return (
         <View style={styles.itemBody}>
-            <QuestionTitle />
+            <QuestionTitle title='Bạn có đi làm thêm vào thứ mấy?'/>
             <CheckboxInputWithTitle label='Thứ 2' checked={true} />
             <CheckboxInputWithTitle label='Thứ 3' />
             <CheckboxInputWithTitle label='Thứ 4' />
