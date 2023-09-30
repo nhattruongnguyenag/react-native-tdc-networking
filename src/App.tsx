@@ -23,6 +23,7 @@ import {
   BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
+  CREATE_RECRUITMENT_SCREEN,
   DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN,
@@ -48,6 +49,7 @@ import SearchScreen from './screens/SearchScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -146,6 +148,12 @@ export function StackNavigator(): JSX.Element {
         name={BUSINESS_REGISTER_SCREEN}
         options={{ header: () => null }}
         component={BusinessRegistrationScreen}
+      />
+
+      <RootStack.Screen
+        name={CREATE_RECRUITMENT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Thêm tin tuyển dụng'/> }}
+        component={CreateRecruitmentScreen}
       />
     </RootStack.Navigator>
   )
