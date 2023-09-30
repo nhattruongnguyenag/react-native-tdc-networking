@@ -1,15 +1,20 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { Button } from 'react-native-paper'
 
 // man hinh dang bai viet tuyen dung
 export default function CreateRecruitmentScreen() {
+  useEffect(() => {
+    
+  }, [])
+
   return (
     <SafeAreaView style={styles.body}>
       <ScrollView>
         <TextInputWithTitle title='Tiêu đề'
-          placeholder='Nhập tiêu đề...' />
+          placeholder='Nhập tiêu đề...' 
+          onChangeText={(value) => console.log(value)}/>
 
         <TextInputWithTitle title='Hình thức làm việc'
           placeholder='Hình thức làm việc...' />

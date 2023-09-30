@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 55,
-    borderBottomWidth: 1,
-    borderBottomColor: '#d9d9d9'
+    backgroundColor: '#fff',
+    elevation: 5
   },
   toolbarTitle: {
     color: '#000',
