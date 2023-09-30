@@ -4,14 +4,15 @@ import React from 'react'
 interface TextInputWithTitleProps {
     title?: string
     placeholder?: string
-    onChangeText?: () => void
+    onChangeText?: (value: string) => void
 }
 
 export default function TextInputWithTitle(props: TextInputWithTitleProps) {
     return (
         <View style={styles.group}>
             <Text style={styles.txt}>{props.title}</Text>
-            <TextInput placeholder={props.placeholder} style={styles.ip}></TextInput>
+            <TextInput placeholder={props.placeholder} style={styles.ip}
+            onChangeText={(value) => props.onChangeText && props.onChangeText(value) }></TextInput>
         </View>
     )
 }
