@@ -27,7 +27,7 @@ export default function AddQuestionView() {
             <IconButton
                 icon="plus"
                 mode='outlined'
-                size={20}
+                size={25}
                 style={styles.btnPlus}
                 onPress={() => console.log('Pressed')}
             />
