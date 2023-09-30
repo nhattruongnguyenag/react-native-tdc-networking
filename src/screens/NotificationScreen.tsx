@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-
+    height: 80,
     backgroundColor: '#f3f9ff',
     paddingBottom: 3,
     paddingTop: 3,
@@ -154,9 +154,9 @@ const styles = StyleSheet.create({
     paddingRight: 15
   },
   image: {
-    flex: 1.2,
-    width: 75,
-    height: 80,
+    flex: 1.1,
+
+    height: 74,
     borderRadius: 50,
     paddingVertical: 20,
   },
