@@ -2,14 +2,41 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Button, IconButton } from 'react-native-paper'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 
-const questionTypes = [
-    { name: 'Trả lời ngắn', value: '1' },
-    { name: 'Câu hỏi nhiều đáp án một lựa chọn', value: '2' },
-    { name: 'Câu hỏi nhiều đáp án nhiều lựa chọn', value: '3' },
+interface QuestionType {
+    icon: string
+    name: string
+    value: string
+}
+const questionTypes: QuestionType[] = [
+    {
+        icon: 'envelope-open-text',
+        name: 'Trả lời ngắn',
+        value: '1'
+    },
+    {
+        icon: 'check-circle',
+        name: 'Trắc nghiệm',
+        value: '2'
+    },
+    {
+        icon: 'check-square',
+        name: 'Nhiều lựa chọn',
+        value: '3'
+    },
 ]
 
 export default function AddQuestionView() {
+    const renderItem = (item: QuestionType) => {
+        return (
+            <View style={{flexDirection: 'row', alignItems: 'center', marginStart: 10}}>
+                <Text style={{margin: 5, fontSize: 16}}>{item.name}</Text>
+                <FontAwesome5Icon name={item.icon} size={16} style={{marginStart: 'auto', marginEnd: 10}}/>
+            </View>
+        );
+    };
+
     return (
         <View style={styles.body}>
             <Dropdown
@@ -22,14 +49,15 @@ export default function AddQuestionView() {
                 searchPlaceholder='Tìm kiếm...'
                 onChange={(item) => {
                 }}
+                renderItem={renderItem}
             />
 
             <Button icon="plus"
                 mode="elevated"
-                style={{backgroundColor: '#0065FF'}}
-                onPress={() => {}}
+                style={{ backgroundColor: '#0065FF' }}
+                onPress={() => { }}
                 textColor="#fff">
-                <Text style={{fontSize: 16}}>Thêm</Text>
+                <Text style={{ fontSize: 16 }}>Thêm</Text>
             </Button>
         </View>
     )
