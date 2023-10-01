@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
-import { IconButton } from 'react-native-paper'
+import { Button, IconButton } from 'react-native-paper'
 
 const questionTypes = [
     { name: 'Trả lời ngắn', value: '1' },
@@ -24,13 +24,13 @@ export default function AddQuestionView() {
                 }}
             />
 
-            <IconButton
-                icon="plus"
-                mode='outlined'
-                size={25}
-                style={styles.btnPlus}
-                onPress={() => console.log('Pressed')}
-            />
+            <Button icon="plus"
+                mode="elevated"
+                style={{backgroundColor: '#0065FF'}}
+                onPress={() => {}}
+                textColor="#fff">
+                <Text style={{fontSize: 16}}>Thêm</Text>
+            </Button>
         </View>
     )
 }
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     body: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 20
     },
     dropdown: {
         flex: 1,
