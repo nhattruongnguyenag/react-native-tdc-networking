@@ -10,8 +10,9 @@ interface ButtonFullWithProps {
 export default function ButtonFullWith(props: ButtonFullWithProps) {
     return (
         <Button icon="plus"
-            mode="contained"
+            mode="elevated"
             buttonColor={'#0065FF'}
+            textColor={'#fff'}
             style={styles.buttonCreateRecruitment}
             onPress={() => props.onPress && props.onPress()}>
             <Text style={styles.buttonCreateRecruitmentTitle}>{props.title}</Text>
@@ -22,9 +23,8 @@ export default function ButtonFullWith(props: ButtonFullWithProps) {
 const styles = StyleSheet.create({
     buttonCreateRecruitment: {
         borderRadius: 10,
-        marginTop: 15,
+        marginTop: 25,
         marginBottom: 30,
-        paddingVertical: 5,
         marginHorizontal: 5
     },
     buttonCreateRecruitmentTitle: {
