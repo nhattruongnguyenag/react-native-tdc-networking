@@ -30,6 +30,7 @@ export default function SearchScreen() {
       })
   }, [type])
 
+  const postItems = (item: any, index: any) => {}
 
 
   //Render Items
@@ -68,7 +69,6 @@ export default function SearchScreen() {
       setFilterData(masterData)
       setSearch(txt)
     }
-
   }
 
   useEffect(() => {
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     marginTop: 15,
-
   },
   search: {
     backgroundColor: '#d9d9d9',
