@@ -56,7 +56,7 @@ export default function MessengerToolbar({ }) {
 
 const styles = StyleSheet.create({
     header: {
-        height: 60,
+        height: 55,
         elevation: 5
     },
     appbarContent: {

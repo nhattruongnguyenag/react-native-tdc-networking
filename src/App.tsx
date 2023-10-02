@@ -24,6 +24,7 @@ import {
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
+  CREATE_SURVEY_SCREEN,
   DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN,
@@ -39,7 +40,7 @@ import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/store'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
 import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
-import ConversationScreen from './screens/conversation/ConversationScreen'
+import ConversationScreen from './screens/ConversationScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import FollowingScreen from './screens/FollowingScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -50,6 +51,7 @@ import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboa
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
+import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -154,6 +156,12 @@ export function StackNavigator(): JSX.Element {
         name={CREATE_RECRUITMENT_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Thêm tin tuyển dụng' /> }}
         component={CreateRecruitmentScreen}
+      />
+
+      <RootStack.Screen
+        name={CREATE_SURVEY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát'/> }}
+        component={CreateSurveyPostScreen}
       />
     </RootStack.Navigator>
   )

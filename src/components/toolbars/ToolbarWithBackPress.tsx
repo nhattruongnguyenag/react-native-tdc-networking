@@ -15,7 +15,7 @@ export default function ToolbarWithBackPress({ title }: ToolbarWithBackPressProp
       <IconButton
         iconSize={18}
         iconName='chevron-left'
-        iconColor='#fff'
+        iconColor='#000'
         onPress={() => navigation.goBack()}
         inactiveBackgroundColor='#ffffff00'
         activeBackgroundColor='#ffffff1a'
@@ -32,11 +32,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
-    backgroundColor: '#0088ff'
+    height: 55,
+    backgroundColor: '#fff',
+    elevation: 5
   },
   toolbarTitle: {
-    color: '#fff',
+    color: '#000',
     fontSize: 18,
     fontWeight: 'bold'
   },
