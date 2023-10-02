@@ -158,11 +158,11 @@ export function StackNavigator(): JSX.Element {
         component={CreateRecruitmentScreen}
       />
 
-      <RootStack.Screen
+      {/* <RootStack.Screen
         name={CREATE_SURVEY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát' /> }}
         component={CreateSurveyPostScreen}
-      />
+      /> */}
     </RootStack.Navigator>
   )
 }
