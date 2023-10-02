@@ -176,23 +176,23 @@ const styles = StyleSheet.create({
   },
   dropDown: {
     backgroundColor: '#0065ff',
-    // width: width * 0.75,
     borderRadius: 5,
-    paddingLeft: 120,
-    color: 'white'
+    color: 'white',
+    height: 35,
+    justifyContent: 'center'
   },
   
   listSearch: {
-    height: height * 0.75,
+    height: height * 0.66,
     resizeMode: 'contain',
   },
   drop: {
-    width: width * 0.75,
+    flex: 5,
     color: 'white',
 
   },
   btnSearch: {
-    width: width * 0.17,
+    flex: 1,
     backgroundColor: '#0065ff',
     height: 35,
     justifyContent: 'center',
