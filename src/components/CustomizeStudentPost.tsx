@@ -1,26 +1,28 @@
+
 import { View, StyleSheet, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE, BACKGROUND_COLOR_BOTTOM_ICON } from '../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
+import CustomizeBodyPost from './CustomizeBodyPost';
 import CustomizeImagePost from './CustomizeImagePost';
 import CustomizeBottomPost from './CustomizeBottomPost';
-import CustomizeBodyPost from './CustomizeBodyPost';
-export interface Faculity {
+
+export interface StudentPost {
     name: string,
     avatar: string,
     timeCreatePost: string,
     content: string,
     images: { id: number, image: string }[],
     likes: {
-        id: number,
-        name: string,
-        avatar: string
+        id: number;
+        name: string;
+        avatar: string;
     }[],
     isLike: boolean,
     comments: {
-        id: number,
-        name: string,
-        avatar: string
+        id: number;
+        name: string;
+        avatar: string;
     }[],
     isComment: boolean,
     role: number
@@ -36,7 +38,7 @@ export const BOTTOM_ICON_SIZE = 30
 // get devices info 
 const { width, height } = Dimensions.get('screen');
 
-const CustomizeFacultyPost = (props: Faculity) => {
+const CustomizeStudentPost = (props: StudentPost) => {
     // Get data 
     let post = props
 
@@ -49,9 +51,7 @@ const CustomizeFacultyPost = (props: Faculity) => {
     const handleClickBottomBtnEvent = (type: number | null) => {
         type === 1 ? (setLike(!isLike)
         ) : setComment(!isComment)
-        console.log('click into react');
     }
-
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
         marginBottom: 0.5,
     },
 })
-export default CustomizeFacultyPost
+export default CustomizeStudentPost
