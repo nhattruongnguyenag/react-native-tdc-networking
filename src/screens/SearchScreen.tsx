@@ -44,9 +44,13 @@ export default function SearchScreen() {
           source={{uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg"}} />
         <Text style={styles.name}
         >{item.title}</Text>
-        <TouchableOpacity style={styles.follow} >
+        <View style={styles.a}>
+          <TouchableOpacity style={styles.follow} >
+
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
         </TouchableOpacity>
+        </View>
+        
       </View>
     )
   }
@@ -118,8 +122,8 @@ export default function SearchScreen() {
             <Text style={styles.txt}>Kết quả tìm kiếm ({qty})</Text>
           </View>
         </View>
-        <View style={styles.listSearch}
-        >
+        <View style={styles.listSearch}>
+          
           <FlatList
             showsVerticalScrollIndicator={false}
             data={filterData}
@@ -214,7 +218,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   follow: {
-    flex: 1.2,
     height: 30,
     marginRight: 12,
     borderRadius: 5,
@@ -225,6 +228,9 @@ const styles = StyleSheet.create({
   },
   buttonFollow: {
     backgroundColor: '#f3f9ff',
+  },
+  a: {
+    flex: 1.2,
   }
-
+ 
 })
