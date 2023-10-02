@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
+
+
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
   const [search, setSearch] = useState('')
   const [masterData, setMasterData] = useState([])
   const [filterData, setFilterData] = useState([])
-  const [type, setType] = useState('')
+  const [type, setType] = useState('posts')
   const [qty, setQty] = useState('')
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -19,6 +21,8 @@ export default function SearchScreen() {
     { label: '--comments--', value: 'comments' },
     { label: '--albums--', value: 'albums' }
   ]);
+
+
 
   useEffect(() => {
     // document.title = title
@@ -30,7 +34,7 @@ export default function SearchScreen() {
       })
   }, [type])
 
-  const postItems = (item: any, index: any) => {}
+  const postItems = (item: any, index: any) => { }
 
 
   //Render Items
@@ -39,18 +43,26 @@ export default function SearchScreen() {
       <View
         key={index}
         style={styles.item}>
-        <Image
-          style={styles.image}
-          source={{uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg"}} />
-        <Text style={styles.name}
-        >{item.title}</Text>
-        <View style={styles.a}>
-          <TouchableOpacity style={styles.follow} >
+        <View style={styles.item2}>
+          <Image
+            style={styles.image}
+            source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
+          <Text style={styles.name}
+          >{item.title}</Text>
 
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
-        </TouchableOpacity>
         </View>
-        
+        <View>
+          {
+            item.title ?
+              (<TouchableOpacity style={styles.follow} >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
+              </TouchableOpacity>)
+              : 
+              (<View><Icon name="dots-three-vertical" size={20} color="#000000" /></View>)
+          }
+
+        </View>
+
       </View>
     )
   }
@@ -82,7 +94,7 @@ export default function SearchScreen() {
 
   const show = () => {
     console.log(height - (height * 0.17));
-    
+
   }
 
   return (
@@ -97,7 +109,7 @@ export default function SearchScreen() {
             onChangeText={(txt) => searchFilter(txt)}
           ></TextInput>
           <View style={styles.select}>
-            <View style={styles.s}>
+            <View style={styles.drop}>
               <Dropdown
                 style={styles.dropDown}
                 data={items}
@@ -110,9 +122,7 @@ export default function SearchScreen() {
                 }}
               />
             </View>
-            <TouchableOpacity style={styles.s1}
-              onPress={show}
-            >
+            <TouchableOpacity style={styles.btnSearch}>
               <Text>
                 <Icon name="search" size={20} color="#ffffff" />
               </Text>
@@ -123,7 +133,7 @@ export default function SearchScreen() {
           </View>
         </View>
         <View style={styles.listSearch}>
-          
+
           <FlatList
             showsVerticalScrollIndicator={false}
             data={filterData}
@@ -166,45 +176,49 @@ const styles = StyleSheet.create({
   },
   dropDown: {
     backgroundColor: '#0065ff',
-    width: 310,
+    // width: width * 0.75,
     borderRadius: 5,
     paddingLeft: 120,
     color: 'white'
   },
-  bnt: {
-    width: 30,
-    height: 30
-  },
+  
   listSearch: {
-    height: 500,
-    resizeMode: 'contain'
+    height: height * 0.75,
+    resizeMode: 'contain',
   },
-  s: {
-    flex: 5,
+  drop: {
+    width: width * 0.75,
     color: 'white',
 
   },
-  s1: {
-    flex: 1,
+  btnSearch: {
+    width: width * 0.17,
     backgroundColor: '#0065ff',
     height: 35,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+    marginLeft: 10
 
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f3f9ff',
-    paddingBottom: 3,
-    paddingTop: 3,
+    justifyContent: 'space-between',
+    width: '100%',
     paddingLeft: 10,
+    paddingRight: 12,
+    paddingTop: 2,
+    paddingBottom: 2,
     borderBottomWidth: 0.9,
-    borderBlockColor: 'gray',
+    borderBottomColor: 'gray',
+  },
+  item2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10
   },
   image: {
-    flex: 1,
     width: 70,
     height: 70,
     borderRadius: 50,
@@ -213,9 +227,9 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   name: {
-    flex: 3.4,
     paddingLeft: 10,
     paddingRight: 10,
+    width: '62%',
   },
   follow: {
     height: 30,
@@ -224,7 +238,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0065ff',
     justifyContent: 'center',
     alignItems: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    paddingRight: 10,
+
   },
   buttonFollow: {
     backgroundColor: '#f3f9ff',
@@ -232,5 +249,5 @@ const styles = StyleSheet.create({
   a: {
     flex: 1.2,
   }
- 
+
 })
