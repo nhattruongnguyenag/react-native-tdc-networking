@@ -149,7 +149,8 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     marginTop: 15,
-    marginBottom: 50
+    marginBottom: 50,
+    height: 50
   },
   search: {
     backgroundColor: '#d9d9d9',
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   select: {
     flexDirection: 'row',
     paddingTop: 5,
-    flex: 1
+    
   },
   qty: {
     fontWeight: 'bold',
@@ -234,8 +235,5 @@ const styles = StyleSheet.create({
   buttonFollow: {
     backgroundColor: '#f3f9ff',
   },
-  a: {
-    flex: 1.2,
-  }
 
 })
