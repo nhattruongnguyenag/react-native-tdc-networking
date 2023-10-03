@@ -12,7 +12,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { useEffect } from 'react'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
-import SplashScreen from 'react-native-splash-screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Provider } from 'react-redux'
 import MessengerToolbar from './components/toolbars/MessengerToolbar'
@@ -32,12 +31,13 @@ import {
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
   SEACRH_SCREEN,
+  SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
   TOP_TAB_NAVIGATOR
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
-import { store } from './redux/store'
+import { store } from './redux/Store'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
 import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
 import ConversationScreen from './screens/ConversationScreen'
@@ -52,6 +52,7 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
+import SplashScreen from './screens/SplashScreen'
 
 const TopTab = createMaterialTopTabNavigator()
 const RootStack = createNativeStackNavigator()
@@ -160,8 +161,14 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={CREATE_SURVEY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát'/> }}
+        options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát' /> }}
         component={CreateSurveyPostScreen}
+      />
+
+      <RootStack.Screen
+        name={SPLASH_SCREEN}
+        options={{ header: () => null }}
+        component={SplashScreen}
       />
     </RootStack.Navigator>
   )
@@ -205,10 +212,6 @@ function TopTabNavigator(): JSX.Element {
 }
 
 function App(): JSX.Element {
-  useEffect(() => {
-    SplashScreen.hide()
-  }, [])
-
   return (
     <MenuProvider>
       <Provider store={store}>
