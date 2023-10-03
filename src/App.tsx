@@ -37,7 +37,7 @@ import {
   TOP_TAB_NAVIGATOR
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
-import { store } from './redux/store'
+import { store } from './redux/Store'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
 import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
 import ConversationScreen from './screens/ConversationScreen'
