@@ -28,7 +28,7 @@ export const imageData = [
     },
     {
         id: 2,
-        image: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg?impolicy=fcrop&w=1600&h=1066&q=medium'
+        image: 'xhttps://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg?impolicy=fcrop&w=1600&h=1066&q=medium'
     },
     {
         id: 3,

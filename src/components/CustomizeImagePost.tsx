@@ -1,12 +1,18 @@
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, LogBox } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLOR_WHITE } from '../constants/Color';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotify';
+// Hide log warning to export image error
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
+
 // Definition props
 export interface ImagePost {
     images: {
         id: number,
         image: string
-    }[],
+    }[]
 }
 
 const { width, height } = Dimensions.get('screen');
@@ -19,28 +25,60 @@ const CustomizeImagePost = (props: ImagePost) => {
     const [typeImageLayout, setTypeImageLayout] = useState(-1)
     const [numberImageRemaining, setNumberImageRemaining] = useState(0)
     const imageQty = props.images?.length
+    const [listImageError, setListImageError] = useState([] as any);
+
+
+    const handleAddImageToListError = (id: any) => {
+        setListImageError([...listImageError, id])
+    }
+
+    const handleCheckImageHaveError = (id: any) => {
+        let result = false;
+        listImageError.some((item: any) => {
+            if (item === id) {
+                result = true
+            }
+            return result;
+        })
+        return result;
+    }
+
     // Dam bao bang cach kiem tra o post call ham nay toi phai !=null
 
     useEffect(() => {
-        Image.getSize(props.images[0].image, (width, height) => {
-            if (width > height) {
-                setTypeImageLayout(TYPE_LAYOUT_WIDTH_GREATER_HEIGHT)
-            } else if (height > width) {
-                setTypeImageLayout(TYPE_LAYOUT_HEIGHT_GREATER_WIDTH)
-            } else {
-                setTypeImageLayout(TYPE_LAYOUT_WIDTH_BALANCE_HEIGHT)
-            }
-            setNumberImageRemaining(props.images.length - 5)
-        })
+        try {
+            Image.getSize(props.images[0].image, (width, height) => {
+                if (width > height) {
+                    setTypeImageLayout(TYPE_LAYOUT_WIDTH_GREATER_HEIGHT)
+                } else if (height > width) {
+                    setTypeImageLayout(TYPE_LAYOUT_HEIGHT_GREATER_WIDTH)
+                } else {
+                    setTypeImageLayout(TYPE_LAYOUT_WIDTH_BALANCE_HEIGHT)
+                }
+                setNumberImageRemaining(props.images.length - 5)
+            })
+        } catch (error) {
+            setTypeImageLayout(TYPE_LAYOUT_WIDTH_GREATER_HEIGHT)
+        }
     }, [])
     switch (imageQty) {
         // 1 dieu kien sap xep
         case 1:
             return (
                 <TouchableOpacity style={styles.wrapImage}>
-                    <Image style={styles.imageOnePost}
-                        key={props.images[0].id}
-                        source={{ uri: props.images[0].image }} />
+                    {
+                        handleCheckImageHaveError(props.images[0].id) ?
+                            <>
+                                <CustomizeLayoutImageNotify />
+                            </>
+                            :
+                            <>
+                                <Image
+                                    onError={() => handleAddImageToListError(props.images[0].id)}
+                                    style={styles.imageOnePost}
+                                    source={{ uri: props.images[0].image }} />
+                            </>
+                    }
                 </TouchableOpacity>
             )
         case 2:
@@ -54,8 +92,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                     key={item.id}
                                     style={styles.widthGreaterHeight}
                                 >
-                                    <Image
-                                        style={styles.imageOnePost} source={{ uri: item.image }} />
+                                    {
+                                        handleCheckImageHaveError(item.id) ?
+                                            <>
+                                                <CustomizeLayoutImageNotify />
+                                            </>
+                                            :
+                                            <>
+                                                <Image
+                                                    onError={() => handleAddImageToListError(item.id)}
+                                                    style={styles.imageOnePost}
+                                                    source={{ uri: item.image }} />
+                                            </>
+                                    }
                                 </TouchableOpacity>
                             ))
                         }
@@ -70,9 +119,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                     key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
-                                    <Image
-                                        style={styles.imageOnePost}
-                                        source={{ uri: item.image }} />
+                                    {
+                                        handleCheckImageHaveError(item.id) ?
+                                            <>
+                                                <CustomizeLayoutImageNotify />
+                                            </>
+                                            :
+                                            <>
+                                                <Image
+                                                    onError={() => handleAddImageToListError(item.id)}
+                                                    style={styles.imageOnePost}
+                                                    source={{ uri: item.image }} />
+                                            </>
+                                    }
                                 </TouchableOpacity>
                             ))
                         }
@@ -87,9 +146,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                     key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
-                                    <Image
-                                        style={styles.imageOnePost}
-                                        source={{ uri: item.image }} />
+                                    {
+                                        handleCheckImageHaveError(item.id) ?
+                                            <>
+                                                <CustomizeLayoutImageNotify />
+                                            </>
+                                            :
+                                            <>
+                                                <Image
+                                                    onError={() => handleAddImageToListError(item.id)}
+                                                    style={styles.imageOnePost}
+                                                    source={{ uri: item.image }} />
+                                            </>
+                                    }
                                 </TouchableOpacity>
                             ))
                         }
@@ -105,9 +174,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                             key={props.images[0].id}
                             style={styles.widthGreaterHeight}
                         >
-                            <Image
-                                style={styles.imageOnePost}
-                                source={{ uri: props.images[0].image }} />
+                            {
+                                handleCheckImageHaveError(props.images[0].id) ?
+                                    <>
+                                        <CustomizeLayoutImageNotify />
+                                    </>
+                                    :
+                                    <>
+                                        <Image
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
+                                            style={styles.imageOnePost}
+                                            source={{ uri: props.images[0].image }} />
+                                    </>
+                            }
                         </TouchableOpacity>
                         <View style={[styles.widthGreaterHeight, styles.wrapImageRow, styles.justifyContent]}>
                             {
@@ -116,9 +195,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -133,20 +222,41 @@ const CustomizeImagePost = (props: ImagePost) => {
                             key={props.images[0].id}
                             style={styles.heightGreaterWidth}
                         >
-                            <Image
-                                style={styles.imageOnePost}
-                                source={{ uri: props.images[0].image }} />
+                            {
+                                handleCheckImageHaveError(props.images[0].id) ?
+                                    <>
+                                        <CustomizeLayoutImageNotify />
+                                    </>
+                                    :
+                                    <>
+                                        <Image
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
+                                            style={styles.imageOnePost}
+                                            source={{ uri: props.images[0].image }} />
+                                    </>
+                            }
                         </TouchableOpacity>
                         <View style={[styles.heightGreaterWidth, styles.justifyContent]}>
                             {
                                 props.images.slice(1, 3).map((item, index) => (
+
                                     <TouchableOpacity
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -163,9 +273,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                             key={props.images[0].id}
                             style={styles.biggestWithGreaterHeight}
                         >
-                            <Image
-                                style={styles.imageOnePost}
-                                source={{ uri: props.images[0].image }} />
+                            {
+                                handleCheckImageHaveError(props.images[0].id) ?
+                                    <>
+                                        <CustomizeLayoutImageNotify />
+                                    </>
+                                    :
+                                    <>
+                                        <Image
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
+                                            style={styles.imageOnePost}
+                                            source={{ uri: props.images[0].image }} />
+                                    </>
+                            }
                         </TouchableOpacity>
                         <View style={[styles.bottomWrapImageThree, styles.wrapImageRow]}>
                             {
@@ -174,9 +294,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -191,9 +321,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                             key={props.images[0].id}
                             style={styles.biggestHeightGreaterWidth}
                         >
-                            <Image
-                                style={styles.imageOnePost}
-                                source={{ uri: props.images[0].image }} />
+                            {
+                                handleCheckImageHaveError(props.images[0].id) ?
+                                    <>
+                                        <CustomizeLayoutImageNotify />
+                                    </>
+                                    :
+                                    <>
+                                        <Image
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
+                                            style={styles.imageOnePost}
+                                            source={{ uri: props.images[0].image }} />
+                                    </>
+                            }
                         </TouchableOpacity>
                         <View style={styles.rightWrapImageFour}>
                             {
@@ -202,9 +342,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -221,9 +371,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                     key={item.id}
                                     style={[styles.imageSquare, index % 2 === 0 ? styles.marginRight : null]}
                                 >
-                                    <Image
-                                        style={styles.imageOnePost}
-                                        source={{ uri: item.image }} />
+                                    {
+                                        handleCheckImageHaveError(item.id) ?
+                                            <>
+                                                <CustomizeLayoutImageNotify />
+                                            </>
+                                            :
+                                            <>
+                                                <Image
+                                                    onError={() => handleAddImageToListError(item.id)}
+                                                    style={styles.imageOnePost}
+                                                    source={{ uri: item.image }} />
+                                            </>
+                                    }
                                 </TouchableOpacity>
                             ))
                         }
@@ -242,9 +402,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -256,9 +426,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -276,9 +456,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -290,9 +480,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -312,9 +512,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -326,9 +536,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -337,10 +557,23 @@ const CustomizeImagePost = (props: ImagePost) => {
                                 style={[styles.smallImageBottom, styles.wrapperLastImageButRemaining]}
                                 key={props.images[4].id}
                             >
-                                <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
-                                <Image
-                                    style={styles.imageOnePost}
-                                    source={{ uri: props.images[4].image }} />
+
+                                {
+                                    handleCheckImageHaveError(props.images[4].id) ?
+                                        <>
+                                            <View style={styles.wrapperLastImageButRemainingNotFound} />
+                                            <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
+                                            <CustomizeLayoutImageNotify />
+                                        </>
+                                        :
+                                        <>
+                                            <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
+                                            <Image
+                                                onError={() => handleAddImageToListError(props.images[4].id)}
+                                                style={styles.imageOnePost}
+                                                source={{ uri: props.images[4].image }} />
+                                        </>
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -355,9 +588,19 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
@@ -369,17 +612,41 @@ const CustomizeImagePost = (props: ImagePost) => {
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
-                                        <Image
-                                            style={styles.imageOnePost}
-                                            source={{ uri: item.image }} />
+                                        {
+                                            handleCheckImageHaveError(item.id) ?
+                                                <>
+                                                    <CustomizeLayoutImageNotify />
+                                                </>
+                                                :
+                                                <>
+                                                    <Image
+                                                        onError={() => handleAddImageToListError(item.id)}
+                                                        style={styles.imageOnePost}
+                                                        source={{ uri: item.image }} />
+                                                </>
+                                        }
                                     </TouchableOpacity>
                                 ))
                             }
-                            <TouchableOpacity style={[styles.smallImageRight, styles.wrapperLastImageButRemaining]}>
-                                <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
-                                <Image
-                                    key={props.images[4].id}
-                                    style={styles.imageOnePost} source={{ uri: props.images[4].image }} />
+                            <TouchableOpacity style={
+                                [styles.smallImageRight, styles.wrapperLastImageButRemaining]}>
+
+                                {
+                                    handleCheckImageHaveError(props.images[4].id) ?
+                                        <>
+                                            <View style={styles.wrapperLastImageButRemainingNotFound} />
+                                            <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
+                                            <CustomizeLayoutImageNotify />
+                                        </>
+                                        :
+                                        <>
+                                            <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
+                                            <Image
+                                                onError={() => handleAddImageToListError(props.images[4].id)}
+                                                style={styles.imageOnePost}
+                                                source={{ uri: props.images[4].image }} />
+                                        </>
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -460,7 +727,7 @@ const styles = StyleSheet.create({
     },
     wrapperLastImageButRemaining: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     numberImageRemaining: {
         zIndex: 999,
@@ -470,6 +737,13 @@ const styles = StyleSheet.create({
     },
     marginRight: {
         marginRight: '0.5%'
+    },
+    wrapperLastImageButRemainingNotFound: {
+        backgroundColor: 'rgba(0.5,0.5,0.5,0.5)',
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        zIndex: 999
     }
 })
 
