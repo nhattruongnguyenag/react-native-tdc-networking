@@ -1,11 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image } from 'react-native'
+import React, { useEffect } from 'react'
+
 
 // man hinh splash
 export default function SplashScreen() {
+  useEffect(() => {
+    setTimeout(() => {
+
+    }, 10000)
+  })
+
   return (
     <View>
-      <Text>SplashScreen</Text>
+      <Image
+        style={{ width: '100%', height: '100%'}}
+        source={require('../assets/splash/splash.png')}
+      />
     </View>
   )
 }
