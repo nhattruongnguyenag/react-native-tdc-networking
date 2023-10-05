@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { UserLoginRequest } from '../types/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
@@ -26,6 +26,7 @@ import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
 import { COLOR_BTN_BLUE } from '../constants/Color'
+
 // man hinh dang nhap
 export default function LoginScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -86,6 +87,13 @@ export default function LoginScreen() {
       })
   }
 
+  const isBtnDisabled = useMemo(() => {
+      return userLoginRequest.email == '' ||
+      userLoginRequest.password == '' ||
+      checkEmail == false ||
+      checkPassword == false
+  },[checkEmail,checkPassword,userLoginRequest]) 
+  
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -130,19 +138,10 @@ export default function LoginScreen() {
               {!isChecked ? <Text style={{ marginLeft: 10 }}>Hiện</Text> : <Text style={{ marginLeft: 10 }}>Ẩn</Text>}
             </View>
           </View>
-          {userLoginRequest.email == '' ||
-          userLoginRequest.password == '' ||
-          checkEmail == false ||
-          checkPassword == false ? (
-            <TouchableOpacity disabled style={styles.btnLogin1} onPress={() => onSubmit()}>
-              <Text style={styles.txtB}>Đăng nhập</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.btnLogin} onPress={() => onSubmit()}>
+            <TouchableOpacity disabled={isBtnDisabled} style={[styles.btnLogin, {opacity: isBtnDisabled? 0.5: 1}]} onPress={() => onSubmit()}>
               <Text style={styles.txtB}>Đăng nhập</Text>
               <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none'}} />
             </TouchableOpacity>
-          )}
           <View style={styles.txt}>
             <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
     top: 14
   },
   txtFogot: {
-    color: '#0065FF',
+    color: COLOR_BTN_BLUE,
     fontSize: 15
   },
   btnLogin: {
@@ -207,22 +206,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center'
   },
-
-  btnLogin1: {
-    marginTop: 30,
-    fontSize: 30,
-    backgroundColor: 'blue',
-    opacity: 0.5,
-    paddingVertical: 15,
-    alignItems: 'center',
-    borderRadius: 10
-  },
   txtB: {
     fontSize: 20,
     color: '#FFFFFF',
     fontWeight: 'bold',
     marginRight: 10
-    
   },
   txt: {
     flexDirection: 'row',
