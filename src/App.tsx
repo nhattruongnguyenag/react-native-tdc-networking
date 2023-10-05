@@ -71,7 +71,7 @@ interface DrawerIcon {
 }
 
 const customDrawerLabel = (props: DrawerLabel) => (
-  <Text style={{ fontSize: 15, color: props.focused ? '#0088ff' : '#000', fontWeight: props.focused ? 'bold' : 'normal' }}>{props.label}</Text>
+  <Text style={{ fontSize: 14, color: props.focused ? '#0088ff' : '#000', fontWeight: props.focused ? 'bold' : 'normal' }}>{props.label}</Text>
 )
 
 const customDrawerIcon = (props: DrawerIcon) => (
