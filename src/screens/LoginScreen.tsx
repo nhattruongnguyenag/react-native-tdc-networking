@@ -76,7 +76,7 @@ export default function LoginScreen() {
       })
       .catch((error) => {
         console.log(error)
-        Alert.alert('User not logged in', 'Tên đăng nhập hoặc mật khẩu không đúng')
+        Alert.alert('Đăng nhập thất bại', 'Tên đăng nhập hoặc mật khẩu không đúng')
       })
   }
 
@@ -88,7 +88,7 @@ export default function LoginScreen() {
         </View>
         <View>
           <View>
-            <Text style={styles.txtLogin}>Login</Text>
+            <Text style={styles.txtLogin}>Đăng nhập</Text>
           </View>
           <View style={styles.form}>
             {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>Email sai định dạng hoặc rỗng</Text> : ''}
@@ -101,27 +101,27 @@ export default function LoginScreen() {
                 onChangeText={(value) => handleCheckEmail(value)}
               ></TextInput>
             </View>
-            {!checkPassword ? <Text style={{ color: 'red' }}>Password sai định dạng hoặc rỗng</Text> : ''}
+            {!checkPassword ? <Text style={{ color: 'red' }}>Mật khẩu sai định dạng hoặc rỗng</Text> : ''}
             <View style={styles.group}>
               <View>
                 <Icon style={styles.icon} name='lock' />
                 <TextInput
                   value={userLoginRequest.password}
                   secureTextEntry={!isChecked ? true : false}
-                  placeholder='Password'
+                  placeholder='Mật khẩu'
                   style={styles.txtIP}
                   onChangeText={(value) => handleCheckPassword(value)}
                 ></TextInput>
               </View>
               <View>
                 <TouchableOpacity>
-                  <Text style={styles.txtFogot}>Forgots?</Text>
+                  <Text style={styles.txtFogot}>Quên mật khẩu</Text>
                 </TouchableOpacity>
               </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <CheckBox checkBoxColor='green' isChecked={isChecked} onClick={() => handleCheckBoxToggle()} />
-              {!isChecked ? <Text style={{ marginLeft: 10 }}>Show</Text> : <Text style={{ marginLeft: 10 }}>Hide</Text>}
+              {!isChecked ? <Text style={{ marginLeft: 10 }}>Hiện</Text> : <Text style={{ marginLeft: 10 }}>Ẩn</Text>}
             </View>
           </View>
           {userLoginRequest.email == '' ||
@@ -129,17 +129,17 @@ export default function LoginScreen() {
           checkEmail == false ||
           checkPassword == false ? (
             <TouchableOpacity disabled style={styles.btnLogin1} onPress={() => onSubmit()}>
-              <Text style={styles.txtB}>Login</Text>
+              <Text style={styles.txtB}>Đăng nhập</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={styles.btnLogin} onPress={() => onSubmit()}>
-              <Text style={styles.txtB}>Login</Text>
+              <Text style={styles.txtB}>Đăng nhập</Text>
             </TouchableOpacity>
           )}
           <View style={styles.txt}>
-            <Text>Don't have account? </Text>
+            <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity onPress={() => {navigation.navigate(TOP_TAB_NAVIGATOR)}}>
-              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Register</Text>
+              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Đăng ký</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -180,11 +180,11 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 20,
     position: 'absolute',
-    top: 16
+    top: 14
   },
   txtFogot: {
     color: '#0065FF',
-    fontSize: 18
+    fontSize: 15
   },
   btnLogin: {
     marginTop: 30,
