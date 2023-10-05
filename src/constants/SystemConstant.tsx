@@ -1,4 +1,4 @@
 import { SPLASH_SCREEN, TOP_TAB_NAVIGATOR,LOGIN_SCREEN } from "./Screen";
 
 export const INITIAL_SCREEN = LOGIN_SCREEN
-export const SERVER_ADDRESS = "http://192.168.1.18:8080/";
+export const SERVER_ADDRESS = "http://192.168.137.38:8080/";

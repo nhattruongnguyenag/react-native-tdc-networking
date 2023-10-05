@@ -24,6 +24,8 @@ import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
+import { ActivityIndicator } from 'react-native-paper'
+import { COLOR_BTN_BLUE } from '../constants/Color'
 // man hinh dang nhap
 export default function LoginScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -34,6 +36,8 @@ export default function LoginScreen() {
   const [checkEmail, setCheckEmail] = useState(true)
   const [checkPassword, setCheckPassword] = useState(true)
   const [isChecked, setIsChecked] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleCheckBoxToggle = () => {
     setIsChecked(!isChecked)
   }
@@ -48,7 +52,6 @@ export default function LoginScreen() {
       setCheckEmail(true)
     }
   }
-
   const handleCheckPassword = (value: any) => {
     //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
     const regexPass = /^[0-9]{5}$/
@@ -59,7 +62,9 @@ export default function LoginScreen() {
       setCheckPassword(true)
     }
   }
+
   const onSubmit = () => {
+    setIsLoading(true)
     axios
       .post<UserLoginRequest, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/login', userLoginRequest)
       .then((loginResponse) => {
@@ -68,6 +73,7 @@ export default function LoginScreen() {
           .get<void, AxiosResponse<Data<Student | Faculty | Business>>>(SERVER_ADDRESS + `api/users/token/${token}`)
           .then((response) => {
             if (response.status == 200) {
+              setIsLoading(false)
               AsyncStorage.setItem('token', JSON.stringify(token))
               AsyncStorage.setItem('userLogin', JSON.stringify(response.data))
               navigation.navigate(TOP_TAB_NAVIGATOR)
@@ -75,8 +81,8 @@ export default function LoginScreen() {
           })
       })
       .catch((error) => {
-        console.log(error)
         Alert.alert('Đăng nhập thất bại', 'Tên đăng nhập hoặc mật khẩu không đúng')
+        setIsLoading(false)
       })
   }
 
@@ -134,11 +140,16 @@ export default function LoginScreen() {
           ) : (
             <TouchableOpacity style={styles.btnLogin} onPress={() => onSubmit()}>
               <Text style={styles.txtB}>Đăng nhập</Text>
+              <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none'}} />
             </TouchableOpacity>
           )}
           <View style={styles.txt}>
             <Text>Chưa có tài khoản? </Text>
-            <TouchableOpacity onPress={() => {navigation.navigate(TOP_TAB_NAVIGATOR)}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(TOP_TAB_NAVIGATOR)
+              }}
+            >
               <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Đăng ký</Text>
             </TouchableOpacity>
           </View>
@@ -189,10 +200,12 @@ const styles = StyleSheet.create({
   btnLogin: {
     marginTop: 30,
     fontSize: 30,
-    backgroundColor: 'blue',
+    backgroundColor: COLOR_BTN_BLUE,
     paddingVertical: 15,
     alignItems: 'center',
-    borderRadius: 10
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
 
   btnLogin1: {
@@ -207,7 +220,9 @@ const styles = StyleSheet.create({
   txtB: {
     fontSize: 20,
     color: '#FFFFFF',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginRight: 10
+    
   },
   txt: {
     flexDirection: 'row',
