@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import { Menu } from 'react-native-popup-menu';
 
 
 const { height, width } = Dimensions.get('screen')
-
 const dataNew = [
   {
     "id": 1,
@@ -70,14 +70,16 @@ const dataNew = [
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
-  const [data, setData] = useState([])
+  const [menuRef, setMenuRef] = useState<Menu | null>()
+  const [isMenuOpen, setMenuOpen] = useState(false)
+
   useEffect(() => {
     // document.title = title
     fetch(`${SERVER_ADDRESS}/api/notifications`)
       .then(res => res.json())
       .then(posts => {
-        // console.log(posts);
-        setData(posts.data)
+        console.log(posts);
+
       })
   }, [])
 
@@ -89,11 +91,11 @@ export default function NotificationScreen() {
         style={styles.item}>
         <Image
           style={styles.image}
-          source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
+          source={{ uri: item.image }} />
         <Text style={styles.name}
-        >{item.content}</Text>
+        >{item.name}</Text>
         <View style={styles.time}>
-          <Text style={styles.tg}>15 phut truoc</Text>
+          <Text style={styles.tg}>{item.time}</Text>
         </View>
       </View>
     )
@@ -126,7 +128,7 @@ export default function NotificationScreen() {
         <View style={styles.platList}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={data}
+            data={dataNew}
             renderItem={({ item, index }) => renderItem(item, index)}
           />
         </View>
