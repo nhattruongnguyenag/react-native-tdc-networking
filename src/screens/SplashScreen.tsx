@@ -2,7 +2,9 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { LOGIN_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { USER_LOGIN_KEY } from '../constants/KeyValue'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 // man hinh splash
