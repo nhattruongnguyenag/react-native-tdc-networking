@@ -11,9 +11,18 @@ export default function SplashScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace(TOP_TAB_NAVIGATOR)
+      AsyncStorage.getItem(USER_LOGIN_KEY).then(json => {
+        if (json) {
+          const userLogin = JSON.parse(json)
+          if (userLogin) {
+            navigation.replace(TOP_TAB_NAVIGATOR)
+          }
+        } else {
+          navigation.replace(LOGIN_SCREEN)
+        }
+      }).catch(err => console.log(err))
     }, 3000)
-  })
+  },[])
 
   return (
     <View>
