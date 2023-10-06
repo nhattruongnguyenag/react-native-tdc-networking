@@ -1,28 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { Faculity } from '../components/CustomizeFacultyPost'
+import { Student } from '../types/Student'
+import { Business } from '../types/Business'
 
 export interface TDCSocialNetworkState {
-  editingPostId: string
+  userLogin: Student | Faculity | Business | null
 }
 
 const initialState: TDCSocialNetworkState = {
-  editingPostId: ''
+  userLogin: null,
 }
 
 export const TDCSocialNetworkSlice = createSlice({
-  name: 'counter',
+  name: 'TDCSocialNetwork',
   initialState,
   reducers: {
-    startEditPost: (state, action: PayloadAction<string>) => {
-      state.editingPostId = action.payload
-    },
-    cancelEditPost: (state, action: PayloadAction<void>) => {
-      state.editingPostId = ''
+    setUserLogin: (state, action:PayloadAction<Student | Faculity | Business>) => {
+      state.userLogin = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { startEditPost, cancelEditPost } = TDCSocialNetworkSlice.actions
+export const { setUserLogin } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer
