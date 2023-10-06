@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { BACKGROUND_BLUE } from '../constants/Color'
 
 const dataKhoa = [
   { name: 'Công nghệ thông tin', value: '1' },
@@ -144,7 +143,7 @@ export default function StudentRegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { backgroundColor: BACKGROUND_BLUE, alignItems: 'center' },
+  header: { backgroundColor: '#1e90ff', alignItems: 'center' },
   txtHeader: {
     color: '#ffffff',
     paddingVertical: 10,
@@ -171,7 +170,7 @@ const styles = StyleSheet.create({
   },
 
   btnRegister: {
-    backgroundColor: BACKGROUND_BLUE,
+    backgroundColor: '#1e90ff',
     alignItems: 'center',
     marginVertical: 30,
     marginHorizontal: 15,
