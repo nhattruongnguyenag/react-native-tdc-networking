@@ -116,7 +116,7 @@ export function DrawerNavigator(): JSX.Element {
             icon: 'square-poll-vertical'
           }),
           drawerActiveTintColor: '#0088ff',
-          drawerLabel: ({color, focused}) => customDrawerLabel({
+          drawerLabel: ({ color, focused }) => customDrawerLabel({
             color: color,
             focused: focused,
             label: 'Thêm khảo sát'

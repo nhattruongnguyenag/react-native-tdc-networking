@@ -1,31 +1,36 @@
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, LogBox } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, LogBox } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLOR_WHITE } from '../constants/Color';
+import { COLOR_MODAL, COLOR_WHITE } from '../constants/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotify';
+import { openModalImage, closeModalImage } from '../redux/Slice';
+import { useAppDispatch } from '../redux/Hook';
+import { act } from 'react-test-renderer';
+import { WINDOW_HEIGHT } from '../utils';
 // Hide log warning to export image error
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 
 // Definition props
 export interface ImagePost {
+    name: string,
+    avatar: string,
     images: {
         id: number,
         image: string
     }[]
 }
 
-const { width, height } = Dimensions.get('screen');
 // Constant
 const TYPE_LAYOUT_WIDTH_GREATER_HEIGHT = 1
 const TYPE_LAYOUT_HEIGHT_GREATER_WIDTH = 2
 const TYPE_LAYOUT_WIDTH_BALANCE_HEIGHT = 3
 const CustomizeImagePost = (props: ImagePost) => {
-
     const [typeImageLayout, setTypeImageLayout] = useState(-1)
     const [numberImageRemaining, setNumberImageRemaining] = useState(0)
     const imageQty = props.images?.length
     const [listImageError, setListImageError] = useState([] as any);
+    const dispatch = useAppDispatch()
 
 
     const handleAddImageToListError = (id: any) => {
@@ -42,6 +47,17 @@ const CustomizeImagePost = (props: ImagePost) => {
         })
         return result;
     }
+
+    const handleClickIntoImage = (idImage: number) => {
+        dispatch(openModalImage({
+            name: props.name,
+            idImage: idImage,
+            avatar: props.avatar,
+            images: props.images,
+            listImageError: listImageError
+        }))
+    }
+
 
     // Dam bao bang cach kiem tra o post call ham nay toi phai !=null
 
@@ -65,7 +81,9 @@ const CustomizeImagePost = (props: ImagePost) => {
         // 1 dieu kien sap xep
         case 1:
             return (
-                <TouchableOpacity style={styles.wrapImage}>
+                <TouchableOpacity
+                    onPress={() => handleClickIntoImage(props.images[0].id)}
+                    style={styles.wrapImage}>
                     {
                         handleCheckImageHaveError(props.images[0].id) ?
                             <>
@@ -89,6 +107,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
+                                    onPress={() => handleClickIntoImage(item.id)}
                                     key={item.id}
                                     style={styles.widthGreaterHeight}
                                 >
@@ -116,6 +135,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
+                                    onPress={() => handleClickIntoImage(item.id)}
                                     key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
@@ -143,6 +163,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
+                                    onPress={() => handleClickIntoImage(item.id)}
                                     key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
@@ -171,6 +192,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                 return (
                     <View style={styles.wrapImage}>
                         <TouchableOpacity
+                            onPress={() => handleClickIntoImage(props.images[0].id)}
                             key={props.images[0].id}
                             style={styles.widthGreaterHeight}
                         >
@@ -192,6 +214,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(1, 3).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
@@ -219,6 +242,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                 return (
                     <View style={[styles.wrapImage, styles.wrapImageRow]}>
                         <TouchableOpacity
+                            onPress={() => handleClickIntoImage(props.images[0].id)}
                             key={props.images[0].id}
                             style={styles.heightGreaterWidth}
                         >
@@ -241,6 +265,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                                 props.images.slice(1, 3).map((item, index) => (
 
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
@@ -270,6 +295,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                 return (
                     <View style={[styles.wrapImage, { justifyContent: 'space-between' }]}>
                         <TouchableOpacity
+                            onPress={() => handleClickIntoImage(props.images[0].id)}
                             key={props.images[0].id}
                             style={styles.biggestWithGreaterHeight}
                         >
@@ -291,6 +317,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(1, 4).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
@@ -318,6 +345,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                 return (
                     <View style={[styles.wrapImage, styles.wrapImageRow]}>
                         <TouchableOpacity
+                            onPress={() => handleClickIntoImage(props.images[0].id)}
                             key={props.images[0].id}
                             style={styles.biggestHeightGreaterWidth}
                         >
@@ -339,6 +367,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(1, 4).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
@@ -368,6 +397,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                         {
                             props.images.slice(0, 4).map((item, index) => (
                                 <TouchableOpacity
+                                    onPress={() => handleClickIntoImage(item.id)}
                                     key={item.id}
                                     style={[styles.imageSquare, index % 2 === 0 ? styles.marginRight : null]}
                                 >
@@ -399,6 +429,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
@@ -423,6 +454,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(2, 5).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
@@ -453,6 +485,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
@@ -477,6 +510,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(2, 5).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
@@ -509,6 +543,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
@@ -533,6 +568,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(2, 4).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageBottom}
                                     >
@@ -554,6 +590,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             }
 
                             <TouchableOpacity
+                                onPress={() => handleClickIntoImage(props.images[4].id)}
                                 style={[styles.smallImageBottom, styles.wrapperLastImageButRemaining]}
                                 key={props.images[4].id}
                             >
@@ -585,6 +622,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
@@ -609,6 +647,7 @@ const CustomizeImagePost = (props: ImagePost) => {
                             {
                                 props.images.slice(2, 4).map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoImage(item.id)}
                                         key={item.id}
                                         style={styles.smallImageRight}
                                     >
@@ -628,8 +667,10 @@ const CustomizeImagePost = (props: ImagePost) => {
                                     </TouchableOpacity>
                                 ))
                             }
-                            <TouchableOpacity style={
-                                [styles.smallImageRight, styles.wrapperLastImageButRemaining]}>
+                            <TouchableOpacity
+                                onPress={() => handleClickIntoImage(props.images[4].id)}
+                                style={
+                                    [styles.smallImageRight, styles.wrapperLastImageButRemaining]}>
 
                                 {
                                     handleCheckImageHaveError(props.images[4].id) ?
@@ -659,7 +700,7 @@ const styles = StyleSheet.create({
     wrapImage: {
         justifyContent: 'space-between',
         width: '100%',
-        height: height * 0.4,
+        height: WINDOW_HEIGHT * 0.4,
     },
     wrapImageSquare: {
         justifyContent: 'space-between',
@@ -739,7 +780,7 @@ const styles = StyleSheet.create({
         marginRight: '0.5%'
     },
     wrapperLastImageButRemainingNotFound: {
-        backgroundColor: 'rgba(0.5,0.5,0.5,0.5)',
+        backgroundColor: COLOR_MODAL,
         width: '100%',
         height: '100%',
         position: 'absolute',
