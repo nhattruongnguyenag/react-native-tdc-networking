@@ -54,9 +54,31 @@ import SearchScreen from './screens/SearchScreen'
 import SplashScreen from './screens/SplashScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
+import { Conversation } from './types/Conversation'
+
+export type RootStackParamList = {
+  CONVERSATION_SCREEN: { conversation: Conversation } | undefined
+  BUSINESS_DASHBOARD_SCREEN: undefined
+  FACULTY_DASHBOARD_SCREEN: undefined
+  STUDENT_DISCUSSION_DASHBOARD_SCREEN: undefined
+  NOTIFICATION_SCREEN: undefined
+  FOLLOWING_SCREEN: undefined
+  MESSENGER_SCREEN: undefined
+  SEACRH_SCREEN: undefined
+  ACTIVE_CONVERSATION_TAB: undefined
+  ALL_CONVERSATION_TAB: undefined
+  LOGIN_SCREEN: undefined
+  STUDENT_REGISTER_SCREEN: undefined
+  BUSINESS_REGISTER_SCREEN: undefined
+  TOP_TAB_NAVIGATOR: undefined
+  DRAWER_TAB_NAVIGATOR: undefined
+  CREATE_RECRUITMENT_SCREEN: undefined
+  CREATE_SURVEY_SCREEN: undefined
+  SPLASH_SCREEN: undefined
+}
 
 const TopTab = createMaterialTopTabNavigator()
-const RootStack = createNativeStackNavigator()
+const RootStack = createNativeStackNavigator<RootStackParamList>()
 const Drawer = createDrawerNavigator()
 
 interface DrawerLabel {

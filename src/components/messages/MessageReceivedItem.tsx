@@ -1,22 +1,23 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Avatar } from 'react-native-paper'
+import { Message } from '../../types/Messages'
 
 const AVATAR_HEIGHT = 30
 const BACKGROUND_COLOR = '#f0f0f0'
 
 interface MessageReceivedItemProps {
     showDate: boolean
+    data: Message
 }
 
-export default function MessageReceivedItem({showDate}: MessageReceivedItemProps) {
+export default function MessageReceivedItem({showDate, data}: MessageReceivedItemProps) {
     return (
         <View style={styles.body}>
             <View style={styles.mainContentGroup}>
                 <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: 'https://i.stack.imgur.com/bl1g5.png?s=192&g=1' }} />
                 <View style={styles.messageContentGroup}>
-                    <Text style={styles.messageTextContent}>Lorem ipsum dolor sit amet consectetur.
-                        Lorem ipsum dolor sit amet consectetur.</Text>
+                    <Text style={styles.messageTextContent}>{data?.content}</Text>
                 </View>
             </View>
             <Text style={[styles.messageDate, {display: showDate ? 'flex' : 'none'}]}>6:45 AM</Text>
@@ -39,17 +40,20 @@ const styles = StyleSheet.create({
         backgroundColor: BACKGROUND_COLOR,
         paddingHorizontal: 20,
         borderRadius: 20,
+        alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
-        marginStart: 10
+        marginStart: 10,
+        maxWidth: 300,
+        minWidth: 95
     },
     messageTextContent: {
         color: '#000',
         fontSize: 16
     },
     messageDate: {
-        marginStart: AVATAR_HEIGHT + 25,
-        fontSize: 12,
+        marginStart: AVATAR_HEIGHT + 35,
+        fontSize: 11,
         marginTop: 7,
         marginBottom: 10
     }

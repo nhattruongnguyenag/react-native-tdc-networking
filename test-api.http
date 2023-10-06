@@ -1,0 +1,13 @@
+# GET http://localhost:8080/api/messages/1/2
+GET http://localhost:8080/api/users
+
+POST http://localhost:8080/api/messages HTTP/1.1
+content-type: application/json
+
+{
+    "senderId": 1,
+    "receiverId": 2,
+    "type": "plain/text",
+    "content": "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "status": 0
+}

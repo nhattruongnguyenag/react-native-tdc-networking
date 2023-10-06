@@ -1,23 +1,25 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
 import ConversationItem from '../items/ConversationItem'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import SockJS from 'sockjs-client'
+import { Client, Frame, Message, over } from 'stompjs'
+import { Conversation } from '../../types/Conversation'
 
-export default function ConversationListView() {
-    return (
-        <ScrollView>
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-            <ConversationItem />
-        </ScrollView>
-    )
+interface ConversationListViewProps {
+  data: Conversation[]
+}
+
+export default function ConversationListView({ data }: ConversationListViewProps) {
+
+  return (
+    <ScrollView>
+      <FlatList
+        data={data}
+        renderItem={({ index, item }) => <ConversationItem key={index} data={item}/>}
+      />
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({})

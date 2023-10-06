@@ -26,9 +26,13 @@ import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
 import { COLOR_BTN_BLUE } from '../constants/Color'
+import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
+import { useAppDispatch } from '../redux/Hook'
+import { setUserLogin } from '../redux/Slice'
 
 // man hinh dang nhap
 export default function LoginScreen() {
+  const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [userLoginRequest, setUserLoginRequest] = useState<UserLoginRequest>({
     email: '',
@@ -75,8 +79,9 @@ export default function LoginScreen() {
           .then((response) => {
             if (response.status == 200) {
               setIsLoading(false)
-              AsyncStorage.setItem('token', JSON.stringify(token))
-              AsyncStorage.setItem('userLogin', JSON.stringify(response.data))
+              AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token))
+              AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data))
+              dispatch(setUserLogin(response.data.data))
               navigation.navigate(TOP_TAB_NAVIGATOR)
             }
           })
