@@ -21,5 +21,3 @@ export default function ConversationListView({ data }: ConversationListViewProps
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({})

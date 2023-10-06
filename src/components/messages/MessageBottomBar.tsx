@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { LegacyRef, useEffect, useRef } from 'react'
 import IconButton from '../buttons/IconButton'
 import { PURPLE_COLOR } from '../../constants/Color'
 
@@ -7,9 +7,11 @@ interface MessageBottomBarProps {
     onButtonSendPress?: () => void
     onButtonImagePickerPress?: () => void
     onInputMessageContent?: (value: string) => void
+    textInputMessageRef: LegacyRef<TextInput>
 }
 
-export default function MessageBottomBar({onInputMessageContent, onButtonSendPress, onButtonImagePickerPress}: MessageBottomBarProps) {
+
+export default function MessageBottomBar(props: MessageBottomBarProps) {
     return (
         <View style={styles.inputMessageGroup}>
             <IconButton
@@ -17,20 +19,24 @@ export default function MessageBottomBar({onInputMessageContent, onButtonSendPre
                 iconName='images'
                 iconColor={PURPLE_COLOR}
                 onPress={
-                    () => onButtonImagePickerPress && onButtonImagePickerPress()
+                    () => props.onButtonImagePickerPress && props.onButtonImagePickerPress()
                 }
                 inactiveBackgroundColor={PURPLE_COLOR + "00"}
                 activeBackgroundColor={PURPLE_COLOR + "4d"}
             />
 
-            <TextInput onChangeText={(value) => onInputMessageContent && onInputMessageContent(value)} placeholder='Tin nhắn' style={styles.inputMessage} cursorColor={PURPLE_COLOR} multiline />
+            <TextInput
+                ref={props.textInputMessageRef}
+                onChangeText={(value) => props.onInputMessageContent && props.onInputMessageContent(value)}
+                placeholder='Tin nhắn' style={styles.inputMessage}
+                cursorColor={PURPLE_COLOR} multiline />
 
             <IconButton
                 iconSize={20}
                 iconName='paper-plane'
                 iconColor={PURPLE_COLOR}
                 onPress={
-                    () => onButtonSendPress && onButtonSendPress()
+                    () => props.onButtonSendPress && props.onButtonSendPress()
                 }
                 inactiveBackgroundColor={PURPLE_COLOR + "00"}
                 activeBackgroundColor={PURPLE_COLOR + "40"}

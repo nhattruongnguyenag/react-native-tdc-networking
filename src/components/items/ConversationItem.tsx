@@ -6,13 +6,17 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-naviga
 import { CONVERSATION_SCREEN, MESSENGER_SCREEN } from '../../constants/Screen'
 import { Conversation } from '../../types/Conversation'
 import { RootStackParamList } from '../../App'
+import { useAppDispatch } from '../../redux/Hook'
+import { setSelectConversation } from '../../redux/Slice'
 
-interface ConversationItemProps extends NativeStackScreenProps<RootStackParamList, "CONVERSATION_SCREEN"> {
+interface ConversationItemProps {
     data: Conversation
 }
 
-export default function ConversationItem({route, navigation, data}: ConversationItemProps) {
+export default function ConversationItem({data}: ConversationItemProps) {
     const [active, setActive] = useState(false)
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const dispatch = useAppDispatch()
 
     const onItemPressIn = useCallback(() => {
         setActive(true)
@@ -23,9 +27,8 @@ export default function ConversationItem({route, navigation, data}: Conversation
     }, [])
 
     const onItemPress = useCallback(() => {
-        navigation.navigate(CONVERSATION_SCREEN, {
-            conversation: data
-        })
+        dispatch(setSelectConversation(data))
+        navigation.navigate(MESSENGER_SCREEN)
     }, [])
 
     return (

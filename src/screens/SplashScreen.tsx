@@ -17,16 +17,15 @@ export default function SplashScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      AsyncStorage.getItem("usersadfsdaf").then(json => {
+      AsyncStorage.getItem(USER_LOGIN_KEY).then(json => {
         if (json) {
           const userLogin = JSON.parse(json)
-  
           if (userLogin) {
+            dispatch(setUserLogin(userLogin))
             navigation.replace(TOP_TAB_NAVIGATOR)
-          } else {
-            navigation.replace(LOGIN_SCREEN)
-          }
-  
+          } 
+        } else {
+          navigation.replace(LOGIN_SCREEN)
         }
       }).catch(error => console.log(error))
     }, 3000)

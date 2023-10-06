@@ -57,13 +57,13 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import { Conversation } from './types/Conversation'
 
 export type RootStackParamList = {
-  CONVERSATION_SCREEN: { conversation: Conversation } | undefined
+  CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
   FACULTY_DASHBOARD_SCREEN: undefined
   STUDENT_DISCUSSION_DASHBOARD_SCREEN: undefined
   NOTIFICATION_SCREEN: undefined
   FOLLOWING_SCREEN: undefined
-  MESSENGER_SCREEN: undefined
+  MESSENGER_SCREEN: { conversation: Conversation } | undefined
   SEACRH_SCREEN: undefined
   ACTIVE_CONVERSATION_TAB: undefined
   ALL_CONVERSATION_TAB: undefined

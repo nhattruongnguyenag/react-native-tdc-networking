@@ -43,7 +43,3 @@ export default function AllConversationGroupTab() {
     <ConversationListView data={conversations}/>
   )
 }
-
-const styles = StyleSheet.create({
-
-})

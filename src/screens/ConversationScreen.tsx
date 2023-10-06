@@ -4,7 +4,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ACTIVE_CONVERSATION_TAB, ALL_CONVERSATION_TAB } from '../constants/Screen'
 import AllConversationGroupTab from '../components/conversation/AllConversationGroupTab'
 import ActiveConversationGroupTab from '../components/conversation/ActiveConversationGroupTab'
-import { useAppSelector } from '../redux/Hook'
 
 const TopTab = createMaterialTopTabNavigator()
 

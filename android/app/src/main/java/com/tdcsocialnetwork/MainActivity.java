@@ -1,4 +1,4 @@
-package com.todoapp;
+package com.tdcsocialnetwork;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;

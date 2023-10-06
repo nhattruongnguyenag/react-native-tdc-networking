@@ -1,37 +1,34 @@
-import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
 import SockJS from 'sockjs-client'
 import { Client, Frame, Message, over } from 'stompjs'
+import { RootStackParamList } from '../App'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageGroupTitle from '../components/messages/MessageGroupTitle'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSentItem from '../components/messages/MessageSentItem'
-import { MESSENGER_SCREEN } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
 import { Conversation } from '../types/Conversation'
 import { Message as MessageModel } from '../types/Messages'
 import { MessageSection } from '../types/MessageSection'
 import { sortMessageBySections } from '../utils/MessageUtils'
 
-interface Props extends NativeStackScreenProps<ParamListBase, > {
-}
-
 let stompClient: Client
 export default function MessengerScreen() {
+  const textInputMessageRef = useRef<TextInput | null>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [messageSections, setMessageSections] = useState<MessageSection[]>([])
   const [messageContent, setMessageContent] = useState<string>('')
-  const [conversation, setConversation] = useState<Conversation>()
-  const route = useRoute<RouteProp<ParamListBase>>()
+  const { selectConversation } = useAppSelector(state => state.TDCSocialNetworkReducer)
+
+  const senderId = selectConversation?.sender?.id
+  const receiverId = selectConversation?.receiver?.id
 
   useEffect(() => {
-    if (route.params) {
-      const {conversation} = route.params
-      console.log(conversation)
-    }
-
     const connect = () => {
       const Sock = new SockJS(SERVER_ADDRESS + 'tdc-social-network-ws')
       stompClient = over(Sock)
@@ -39,8 +36,8 @@ export default function MessengerScreen() {
     }
 
     const onConnected = () => {
-      stompClient.subscribe('/topic/messages/1/2', onMessageReceived)
-      stompClient.send('/app/messages/1/2/listen', {}, JSON.stringify(1))
+      stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
+      stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`, {}, JSON.stringify(1))
     }
 
     const onMessageReceived = (payload: Message) => {
@@ -58,13 +55,15 @@ export default function MessengerScreen() {
 
   const onButtonSendPress = useCallback(() => {
     let message = {
-      senderId: 1,
-      receiverId: 2,
+      senderId: senderId,
+      receiverId: receiverId,
       type: "plain/text",
       content: messageContent,
       status: 0
     }
-    stompClient.send(`/app/messages/1/2`, {}, JSON.stringify(message))
+
+    stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
+    textInputMessageRef.current?.clear()
   }, [messageContent])
 
   const messageSectionRenderItems = (item: MessageSection, sectionIndex: number) => (
@@ -105,6 +104,7 @@ export default function MessengerScreen() {
       </ScrollView>
 
       <MessageBottomBar
+        textInputMessageRef={textInputMessageRef}
         onButtonSendPress={onButtonSendPress}
         onInputMessageContent={(value) => setMessageContent(value)} />
     </View>
