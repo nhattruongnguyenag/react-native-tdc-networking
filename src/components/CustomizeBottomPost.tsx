@@ -2,18 +2,31 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_WHITE } from '../constants/Color'
-
+import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../constants/Color'
+import { useAppDispatch } from '../redux/Hook';
+import { openModalComments, openModalUserReaction } from '../redux/Slice';
+import { commentData } from './DataBase'
+import { ModalComments } from '../types/ModalComments';
 //  Definition props
 export interface BottomPost {
+    id: number,
+    role: number,
     handleClickBottomBtnEvent: (a: number | null) => void,
     isLike: boolean,
     isComment: boolean,
-    comments:
-    {
-        id: number,
-        name: string,
+    comments: {
+        id: number
+        name: string
         avatar: string
+        content: string
+        timeCreated: string
+        commentChildren: {
+            id: number
+            name: string
+            avatar: string
+            content: string
+            timeCreated: string
+        }[]
     }[],
     likes:
     {
@@ -28,21 +41,36 @@ export interface BottomPost {
 const BOTTOM_ICON_SIZE = 30
 const TEXT_LIKE_BY = 'Thích bởi'
 const CustomizeBottomPost = (props: BottomPost) => {
+    const dispatch = useAppDispatch();
     const numberUserReacted: number = props.likes?.length
+    //  Function
+    const handleClickIntoBtnIconComments = () => {
+        dispatch(openModalComments({
+            id: props.id,
+            commentFather: props.comments
+        }))
+    }
+    const handleClickIntoListUserReactions = () => {
+        dispatch(openModalUserReaction({
+            likes: props.likes
+        }))
+    }
     return (
         <View style={styles.wrapBottom}>
             <View style={[styles.wrapBottomLeft, styles.row]}>
                 <View style={styles.wrapIconAndTextBottom}>
-                    {
-                        !props.isLike ?
-                            (
-                                <IconAntDesign name='like2' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
-                            )
-                            :
-                            (
-                                <IconAntDesign name='like1' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
-                            )
-                    }
+                    <TouchableOpacity>
+                        {
+                            !props.isLike ?
+                                (
+                                    <IconAntDesign name='like2' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
+                                )
+                                :
+                                (
+                                    <IconAntDesign name='like1' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
+                                )
+                        }
+                    </TouchableOpacity>
                     <Text>
                         {
                             props.likes?.length
@@ -50,16 +78,20 @@ const CustomizeBottomPost = (props: BottomPost) => {
                     </Text>
                 </View>
                 <View style={[styles.wrapIconAndTextBottom, styles.iconRight]}>
-                    {
-                        !props.isComment ?
-                            (
-                                <IconMaterialCommunityIcons name='comment-outline' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
-                            )
-                            :
-                            (
-                                <IconMaterialCommunityIcons name='comment' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
-                            )
-                    }
+                    <TouchableOpacity
+                        onPress={() => handleClickIntoBtnIconComments()}
+                    >
+                        {
+                            !props.isComment ?
+                                (
+                                    <IconMaterialCommunityIcons name='comment-outline' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
+                                )
+                                :
+                                (
+                                    <IconMaterialCommunityIcons name='comment' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
+                                )
+                        }
+                    </TouchableOpacity>
                     <Text>
                         {
                             props.likes?.length
@@ -73,7 +105,9 @@ const CustomizeBottomPost = (props: BottomPost) => {
                 </Text>
                 {
                     numberUserReacted > 3 ?
-                        <TouchableOpacity style={styles.avatarUserReactedContainer}>
+                        <TouchableOpacity
+                            onPress={() => handleClickIntoListUserReactions()}
+                            style={styles.avatarUserReactedContainer}>
                             <Image
                                 style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
                                 source={{ uri: props.likes[0].avatar }}
@@ -98,6 +132,7 @@ const CustomizeBottomPost = (props: BottomPost) => {
                             {
                                 props.likes.map((item, index) => (
                                     <TouchableOpacity
+                                        onPress={() => handleClickIntoListUserReactions()}
                                         key={item.id}
                                     >
                                         <Image
@@ -175,7 +210,7 @@ const styles = StyleSheet.create({
     },
     numberUserReactedRemaining: {
         right: 0,
-        backgroundColor: 'rgb(232 237 244)',
+        backgroundColor: COLOR_BOTTOM_AVATAR,
         justifyContent: 'center',
         alignItems: 'center',
     },
