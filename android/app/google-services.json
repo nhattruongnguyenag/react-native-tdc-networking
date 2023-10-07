@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965473727209",
+    "project_id": "tdcsocialnetwork",
+    "storage_bucket": "tdcsocialnetwork.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965473727209:android:04e7f73b788184f1bbf678",
+        "android_client_info": {
+          "package_name": "com.tdcsocialnetwork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIZV46MppwFNwoafrg7Gf4Iyf9yjvhSzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

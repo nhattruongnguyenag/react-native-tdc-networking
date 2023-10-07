@@ -9,7 +9,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -20,6 +20,8 @@ import MessengerToolbar from './components/toolbars/MessengerToolbar'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
+import messaging from "@react-native-firebase/messaging"
+
 import {
   BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
@@ -274,7 +276,20 @@ function TopTabNavigator(): JSX.Element {
   )
 }
 
+const getFCMToken = async () => {
+  try {
+    const token = await messaging().getToken();
+    console.log("FCM token", token);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 function App(): JSX.Element {
+  useEffect(() => {
+    getFCMToken()
+  })
+
   return (
     <MenuProvider>
       <Provider store={store}>
