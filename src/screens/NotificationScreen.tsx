@@ -4,117 +4,61 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon1 from 'react-native-vector-icons/Entypo';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
-
+import axios from 'axios'
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 
 const { height, width } = Dimensions.get('screen')
-const dataNew = [
-  {
-    "id": 1,
-    "name": "Ban da dang ky thanh cong!!!",
-    "time": "1 phut truoc",
-    "image": "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg"
-  },
-  {
-    "id": 2,
-    "name": "John da dang ky thanh cong!!",
-    "time": "2 gio truoc",
-    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg"
-  },
-  {
-    "id": 3,
-    "name": "Cong ty .......... vua dang thong tin tuyen dung ",
-    "time": "3 ngay truoc",
-    "image": "https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg"
-  },
-  {
-    "id": 4,
-    "name": "Ban da dang ky thanh cong!!!",
-    "time": "4 phut truoc",
-    "image": "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg"
-  },
-  {
-    "id": 5,
-    "name": "John da dang ky thanh cong!!",
-    "time": "5 gio truoc",
-    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg"
-  },
-  {
-    "id": 6,
-    "name": "Cong ty .......... vua dang thong tin tuyen dung ",
-    "time": "6 ngay truoc",
-    "image": "https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg"
-  },
-  {
-    "id": 7,
-    "name": "Ban da dang ky thanh cong!!!",
-    "time": "7 phut truoc",
-    "image": "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg"
-  },
-  {
-    "id": 8,
-    "name": "John da dang ky thanh cong!!",
-    "time": "8 gio truoc",
-    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg"
-  },
-
-  {
-    "id": 9,
-    "name": "John da dang ky thanh cong!!",
-    "time": "9 gio truoc",
-    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg"
-  },
-
-
-
-]
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
   const [menuRef, setMenuRef] = useState<Menu | null>()
   const [isMenuOpen, setMenuOpen] = useState(false)
+  const [data, setData] = useState([]);
+  const [idNotification, setIdNotification] = useState()
 
-  // useEffect(() => {
-  //   // document.title = title
-  //   fetch(`${SERVER_ADDRESS}/api/notifications`)
-  //     .then(res => res.json())
-  //     .then(posts => {
-  //       console.log(posts);
+  useEffect(() => {
+    axios.get(`${SERVER_ADDRESS}/api/notifications`)
+      .then(res => {
+        const persons = res.data.data;
+        setData(persons);
+        console.log('call');
+      })
+      .catch(error => console.log(error));
+  }, [])
 
-  //     })
-  // }, [])
 
-  const handleMenu = () => {
-
+  const handleIsRead = (isId: any, userId: any) => {
+    // console.log(isId + ' hello ' + userId);
+    try {
+      // Gửi yêu cầu cập nhật tên bằng Axios
+       axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus`, {
+        id: isId,
+        userId: userId
+      })
+    } catch (error) {
+      console.error('Error updating name:', error);
+    }
   }
 
-
+  // const handleRenderItem = (): void => {
+  //   console.log('write');
+  // }
 
   //Render Items
   const renderItem = (item: any, index: any) => {
     return (
       <View>
-        <Pressable 
-            style={{ backgroundColor: isMenuOpen ? '#f6f6f6' : '#000000'}}
-            onLongPress={() => {
-              console.log(item.id)
-              
-              Vibration.vibrate(75)
-              menuRef?.open()
-            }}
-        >
-          
         <View
           key={index}
-          style={styles.item}>
+          style={[styles.item, {backgroundColor: item.status === '0' ? '#ffffff' : '#f3f9ff'}]}>
           <View style={styles.cont}>
-
             <Image
               style={styles.image}
               source={{ uri: item.image }} />
             <View style={styles.content}>
-              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.name}>{item.content}</Text>
               <Text style={styles.tg}>{item.time}</Text>
             </View>
           </View>
@@ -135,19 +79,19 @@ export default function NotificationScreen() {
             </MenuTrigger>
             <MenuOptions
               optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
-              <MenuOption>
+              <MenuOption
+              // onSelect={() => hanDleDelNotification()}
+              >
                 <Text style={styles.option}>Xóa thông báo</Text>
               </MenuOption>
-              <MenuOption>
+              <MenuOption
+                onSelect={() => handleIsRead(item.id, item.user.id)}
+              >
                 <Text style={styles.option}>Đánh dấu chưa đọc</Text>
-              </MenuOption>
-              <MenuOption>
-                <Text style={styles.option}>Báo cáo</Text>
               </MenuOption>
             </MenuOptions>
           </Menu>
         </View>
-        </Pressable>
       </View>
 
 
@@ -177,13 +121,18 @@ export default function NotificationScreen() {
             </TouchableOpacity>
           </View>
         </View>
-        {/* Flatlist */}
+        {/*  */}
         <ScrollView style={styles.platList}>
           {
-            dataNew.map((item, index) => renderItem(item, index))
+            data !== null ? (
+              data.map((item, index) => (
+                renderItem(item, index)
+                // <Text>{JSON.stringify(data)}</Text>
+              ))
+            ) : null
           }
-        </ScrollView>
-      </View>
+        </ScrollView >
+      </View >
     </>
 
   )
@@ -250,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     height: 80,
-    backgroundColor: '#f3f9ff',
+    // backgroundColor: '#f3f9ff',
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 10,
