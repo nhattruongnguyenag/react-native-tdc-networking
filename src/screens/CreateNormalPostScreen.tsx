@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen')
 const TEXT_COMPLETE = 'Hoàn tất'
 const TEXT_TITLE = 'Thêm bài viết'
 const TEXT_INPUT_PLACEHOLDER = 'Hãy nhập nội dung bài viết.'
@@ -13,15 +13,15 @@ const TEXT_ADD_IMAGES = 'Thêm hình ảnh'
 export default function CreateNormalPostScreen({ navigation }: any) {
   // Function area
   const handleClickPickerImageButton = () => {
-    console.log('change to picker images screen');
+    console.log('change to picker images screen')
   }
 
   const handleClickCompleteButton = () => {
-    console.log('Finish');
+    console.log('Finish')
   }
 
   const handleClickBackIcon = () => {
-    console.log('Back');
+    console.log('Back')
   }
 
   return (
@@ -40,14 +40,8 @@ export default function CreateNormalPostScreen({ navigation }: any) {
             activeBackgroundColor='#ffffff1a'
           />
           <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
-          <TouchableOpacity
-            onPress={handleClickCompleteButton}
-            style={styles.wrapTabBarBtnRight}>
-            <Text style={styles.tabBarBtnRightTxt}>
-              {
-                TEXT_COMPLETE
-              }
-            </Text>
+          <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
+            <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -61,21 +55,17 @@ export default function CreateNormalPostScreen({ navigation }: any) {
           multiline={true}
         />
         {/* images container when user post images */}
-        <View style={styles.wrapperBodyImage}>
-          {/* TODO */}
-        </View>
+        <View style={styles.wrapperBodyImage}>{/* TODO */}</View>
       </View>
       {/* Bottom */}
       <View style={styles.bottomContainer}>
-        <TouchableOpacity
-          onPress={handleClickPickerImageButton}
-        >
+        <TouchableOpacity onPress={handleClickPickerImageButton}>
           <View style={styles.wrapBottom}>
             <IconButton
               iconSize={18}
               iconName='images'
               iconColor='#fff'
-              onPress={() => { }}
+              onPress={() => {}}
               inactiveBackgroundColor='#ffffff00'
               activeBackgroundColor='#ffffff1a'
             />
@@ -90,26 +80,26 @@ export default function CreateNormalPostScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height,
+    height: height
   },
   tabBarContainer: {
     borderLeftWidth1: 1,
     borderRightWidth1: 1,
     borderBottomWidth: 1,
-    borderColor: COLOR_BORDER,
+    borderColor: COLOR_BORDER
   },
   // Header
   tabBarTxt: {
     color: COLOR_BLACK,
-     fontWeight: 'bold',
-      fontSize: 16
+    fontWeight: 'bold',
+    fontSize: 16
   },
   wrapTabBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     height: height * 0.08,
     alignItems: 'center',
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   wrapTabBarBtnRight: {
     width: 77,
@@ -125,17 +115,17 @@ const styles = StyleSheet.create({
   },
   // Body
   wrapperBody: {
-    height: height * 0.75,
+    height: height * 0.75
   },
   txtBody: {
     color: COLOR_BLACK,
-    paddingHorizontal: 10,
-  }
+    paddingHorizontal: 10
+  },
   // Bottom
-  , wrapBottom: {
+  wrapBottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   bottomText: {
     color: COLOR_WHITE,
@@ -151,6 +141,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '40%',
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   }
 })

@@ -32,7 +32,7 @@ import { setUserLogin } from '../redux/Slice'
 
 // man hinh dang nhap
 export default function LoginScreen() {
-  const dispatch  = useAppDispatch()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [userLoginRequest, setUserLoginRequest] = useState<UserLoginRequest>({
     email: '',
@@ -93,12 +93,11 @@ export default function LoginScreen() {
   }
 
   const isBtnDisabled = useMemo(() => {
-      return userLoginRequest.email == '' ||
-      userLoginRequest.password == '' ||
-      checkEmail == false ||
-      checkPassword == false
-  },[checkEmail,checkPassword,userLoginRequest]) 
-  
+    return (
+      userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+    )
+  }, [checkEmail, checkPassword, userLoginRequest])
+
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -143,10 +142,14 @@ export default function LoginScreen() {
               {!isChecked ? <Text style={{ marginLeft: 10 }}>Hiện</Text> : <Text style={{ marginLeft: 10 }}>Ẩn</Text>}
             </View>
           </View>
-            <TouchableOpacity disabled={isBtnDisabled} style={[styles.btnLogin, {opacity: isBtnDisabled? 0.5: 1}]} onPress={() => onSubmit()}>
-              <Text style={styles.txtB}>Đăng nhập</Text>
-              <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none'}} />
-            </TouchableOpacity>
+          <TouchableOpacity
+            disabled={isBtnDisabled}
+            style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
+            onPress={() => onSubmit()}
+          >
+            <Text style={styles.txtB}>Đăng nhập</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
+          </TouchableOpacity>
           <View style={styles.txt}>
             <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity

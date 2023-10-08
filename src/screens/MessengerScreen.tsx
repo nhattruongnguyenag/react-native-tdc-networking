@@ -1,39 +1,37 @@
-import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import SockJS from 'sockjs-client'
-import { Client, Frame, Message, over } from 'stompjs'
-import { RootStackParamList } from '../App'
+import { ActivityIndicator } from 'react-native-paper'
+import { Client, Frame, Message } from 'stompjs'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
-import MessageGroupTitle from '../components/messages/MessageGroupTitle'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
+import MessageSectionTitle from '../components/messages/MessageSectionTitle'
 import MessageSentItem from '../components/messages/MessageSentItem'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
-import { Conversation } from '../types/Conversation'
+import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Messages'
-import { MessageSection } from '../types/MessageSection'
-import { sortMessageBySections } from '../utils/MessageUtils'
+import { MessageSection, MessageSectionByTime } from '../types/MessageSection'
+import { getMessageSectionTitle } from '../utils/DateTimeUtils'
+import { sortMessageBySections, sortMessagesByTime } from '../utils/MessageUtils'
 
 let stompClient: Client
+
 export default function MessengerScreen() {
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const textInputMessageRef = useRef<TextInput | null>(null)
   const scrollViewRef = useRef<ScrollView>(null)
-  const [messageSections, setMessageSections] = useState<MessageSection[]>([])
+  const [isLoading, setLoading] = useState(false)
+  const [messageSection, setMessageSection] = useState<MessageSection[]>([])
   const [messageContent, setMessageContent] = useState<string>('')
-  const { selectConversation } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { selectConversation } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   const senderId = selectConversation?.sender?.id
   const receiverId = selectConversation?.receiver?.id
 
   useEffect(() => {
-    const connect = () => {
-      const Sock = new SockJS(SERVER_ADDRESS + 'tdc-social-network-ws')
-      stompClient = over(Sock)
-      stompClient.connect({}, onConnected, onError)
-    }
+    setLoading(true)
+
+    stompClient = getStompClient()
 
     const onConnected = () => {
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
@@ -41,8 +39,10 @@ export default function MessengerScreen() {
     }
 
     const onMessageReceived = (payload: Message) => {
+      setLoading(false)
       const messages = JSON.parse(payload.body) as MessageModel[]
-      setMessageSections(sortMessageBySections(messages))
+      const messageSectionsTime = sortMessagesByTime(messages)
+      setMessageSection(sortMessageBySections(messageSectionsTime))
       scrollViewRef.current?.scrollToEnd()
     }
 
@@ -50,14 +50,20 @@ export default function MessengerScreen() {
       console.log(err)
     }
 
-    connect()
+    stompClient.connect({}, onConnected, onError)
   }, [])
+
+  useEffect(() => {
+    if (messageSection) {
+      scrollViewRef.current?.scrollToEnd()
+    }
+  }, [messageSection])
 
   const onButtonSendPress = useCallback(() => {
     let message = {
       senderId: senderId,
       receiverId: receiverId,
-      type: "plain/text",
+      type: 'plain/text',
       content: messageContent,
       status: 0
     }
@@ -68,45 +74,43 @@ export default function MessengerScreen() {
 
   const messageSectionRenderItems = (item: MessageSection, sectionIndex: number) => (
     <Fragment key={sectionIndex}>
-      <MessageGroupTitle />
-      {
-        item?.data.map((item, itemIndex) => messageRenderItems(item, itemIndex))
-      }
+      <MessageSectionTitle title={getMessageSectionTitle(item.title)} />
+      {item?.data.map((item, itemIndex) => messageRenderItems(item, itemIndex))}
     </Fragment>
   )
 
   const messageRenderItems = useCallback(
-    (item: MessageModel, index: number): JSX.Element => {
-      if (item.sender.id == 1) {
+    (item: MessageSectionByTime, index: number): JSX.Element => {
+      if (item.sender.id == userLogin?.id) {
         return <MessageSentItem key={index} data={item} showDate={true} />
       } else {
         return <MessageReceivedItem key={index} data={item} showDate={true} />
       }
     },
-    [messageSections]
+    [messageSection]
   )
-
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd()
-    }
-  }, [scrollViewRef, messageSections])
-
   return (
     <View style={styles.body}>
-      <ScrollView
-        ref={scrollViewRef}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}>
-        {
-          messageSections.map((item, index) => messageSectionRenderItems(item, index))
-        }
-      </ScrollView>
+      {isLoading ? (
+        <View style={styles.loadingBody}>
+          <ActivityIndicator style={{ marginTop: -70 }} animating={true} color={'#0065FF'} />
+          <Text style={{ marginTop: 20 }}>Đang tải tin nhắn</Text>
+        </View>
+      ) : (
+        <Fragment>
+          <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            {messageSection.map((item, index) => messageSectionRenderItems(item, index))}
 
-      <MessageBottomBar
-        textInputMessageRef={textInputMessageRef}
-        onButtonSendPress={onButtonSendPress}
-        onInputMessageContent={(value) => setMessageContent(value)} />
+            <View style={{ height: 30, backgroundColor: '#fff' }} />
+          </ScrollView>
+
+          <MessageBottomBar
+            textInputMessageRef={textInputMessageRef}
+            onButtonSendPress={onButtonSendPress}
+            onInputMessageContent={(value) => setMessageContent(value)}
+          />
+        </Fragment>
+      )}
     </View>
   )
 }
@@ -117,5 +121,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 10
+  },
+  loadingBody: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

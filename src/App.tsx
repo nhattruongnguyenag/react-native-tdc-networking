@@ -9,7 +9,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -20,7 +20,6 @@ import MessengerToolbar from './components/toolbars/MessengerToolbar'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
-import messaging from "@react-native-firebase/messaging"
 
 import {
   BUSINESS_DASHBOARD_SCREEN,
@@ -57,6 +56,10 @@ import SplashScreen from './screens/SplashScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import { Conversation } from './types/Conversation'
+import moment from 'moment'
+
+const vi = require('moment/locale/vi')
+moment.locale('vi', vi)
 
 export type RootStackParamList = {
   CONVERSATION_SCREEN: undefined
@@ -85,17 +88,21 @@ const Drawer = createDrawerNavigator()
 
 interface DrawerLabel {
   color: string
-  focused: boolean,
+  focused: boolean
   label: string
 }
 
 interface DrawerIcon {
-  focused: boolean,
+  focused: boolean
   icon: string
 }
 
 const customDrawerLabel = (props: DrawerLabel) => (
-  <Text style={{ fontSize: 14, color: props.focused ? '#0088ff' : '#000', fontWeight: props.focused ? 'bold' : 'normal' }}>{props.label}</Text>
+  <Text
+    style={{ fontSize: 14, color: props.focused ? '#0088ff' : '#000', fontWeight: props.focused ? 'bold' : 'normal' }}
+  >
+    {props.label}
+  </Text>
 )
 
 const customDrawerIcon = (props: DrawerIcon) => (
@@ -105,9 +112,7 @@ const customDrawerIcon = (props: DrawerIcon) => (
 export function DrawerNavigator(): JSX.Element {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <DrawerContent
-        {...props}
-      />}
+      drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{
         headerTitleAlign: 'center',
         headerTintColor: '#fff',
@@ -118,7 +123,7 @@ export function DrawerNavigator(): JSX.Element {
         headerStyle: {
           backgroundColor: '#0088ff'
         },
-        header: () => null,
+        header: () => null
       }}
     >
       <Drawer.Screen
@@ -134,17 +139,19 @@ export function DrawerNavigator(): JSX.Element {
       <Drawer.Screen
         name={CREATE_SURVEY_SCREEN}
         options={{
-          header: () => <ToolbarWithBackPress title="Thêm khảo sát" />,
-          drawerIcon: ({ color, size, focused }) => customDrawerIcon({
-            focused: focused,
-            icon: 'square-poll-vertical'
-          }),
+          header: () => <ToolbarWithBackPress title='Thêm khảo sát' />,
+          drawerIcon: ({ color, size, focused }) =>
+            customDrawerIcon({
+              focused: focused,
+              icon: 'square-poll-vertical'
+            }),
           drawerActiveTintColor: '#0088ff',
-          drawerLabel: ({ color, focused }) => customDrawerLabel({
-            color: color,
-            focused: focused,
-            label: 'Thêm khảo sát'
-          })
+          drawerLabel: ({ color, focused }) =>
+            customDrawerLabel({
+              color: color,
+              focused: focused,
+              label: 'Thêm khảo sát'
+            })
         }}
         component={CreateSurveyPostScreen}
       />
@@ -200,11 +207,7 @@ export function StackNavigator(): JSX.Element {
         component={MessengerScreen}
       />
 
-      <RootStack.Screen
-        name={LOGIN_SCREEN}
-        options={{ header: () => null }}
-        component={LoginScreen}
-      />
+      <RootStack.Screen name={LOGIN_SCREEN} options={{ header: () => null }} component={LoginScreen} />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -230,11 +233,7 @@ export function StackNavigator(): JSX.Element {
         component={CreateSurveyPostScreen}
       />
 
-      <RootStack.Screen
-        name={SPLASH_SCREEN}
-        options={{ header: () => null }}
-        component={SplashScreen}
-      />
+      <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>
   )
 }
@@ -276,20 +275,7 @@ function TopTabNavigator(): JSX.Element {
   )
 }
 
-const getFCMToken = async () => {
-  try {
-    const token = await messaging().getToken();
-    console.log("FCM token", token);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 function App(): JSX.Element {
-  useEffect(() => {
-    getFCMToken()
-  })
-
   return (
     <MenuProvider>
       <Provider store={store}>

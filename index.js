@@ -15,16 +15,4 @@ PushNotification.configure({
     requestPermissions: Platform.OS === 'ios'
 });
 
-PushNotification.createChannel(
-    {
-        channelId: "tdc-social-network-channel",
-        channelName: "Tdc social network channel",
-        playSound: true, 
-        soundName: "default", 
-        importance: Importance.HIGH,
-        vibrate: true,
-    },
-    (created) => console.log(`createChannel returned '${created}'`)
-);
-
 AppRegistry.registerComponent(appName, () => App);

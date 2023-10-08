@@ -9,9 +9,10 @@ import SockJS from 'sockjs-client'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Conversation } from '../../types/Conversation'
 import { useAppSelector } from '../../redux/Hook'
+import moment from 'moment'
 
 export default function AllConversationGroupTab() {
-  const {userLogin} = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [conversations, setConversations] = useState<Conversation[]>([])
   useEffect(() => {
     let stompClient: Client
@@ -24,7 +25,7 @@ export default function AllConversationGroupTab() {
 
     const onConnected = () => {
       stompClient.subscribe('/topic/conversations', onMessageReceived)
-      stompClient.send('/app/conversations/listen', {}, JSON.stringify(userLogin?.id))
+      stompClient.send(`/app/conversations/listen/${userLogin?.id}`)
     }
 
     const onMessageReceived = (payload: Message) => {
@@ -38,8 +39,6 @@ export default function AllConversationGroupTab() {
 
     connect()
   }, [])
-  
-  return (
-    <ConversationListView data={conversations}/>
-  )
+
+  return <ConversationListView data={conversations} />
 }

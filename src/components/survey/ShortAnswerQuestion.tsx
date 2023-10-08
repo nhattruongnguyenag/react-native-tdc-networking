@@ -11,8 +11,11 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle title='Bạn có đi làm thêm không?' />
-      <TextInput placeholder='Nhập câu trả lời...' style={styles.ip}
-        onChangeText={(value) => props.onChangeText && props.onChangeText(value)} />
+      <TextInput
+        placeholder='Nhập câu trả lời...'
+        style={styles.ip}
+        onChangeText={(value) => props.onChangeText && props.onChangeText(value)}
+      />
     </View>
   )
 }

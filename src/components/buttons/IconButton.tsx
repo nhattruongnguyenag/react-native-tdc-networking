@@ -42,7 +42,7 @@ export default function IconButton(props: IconButtonProps) {
       style={({ pressed }) => [props.customStyle, btnStyle]}
       onPress={props.onPress}
     >
-      <Icon name={props.iconName} size={props.iconSize ?? 20} color={iconColorStr} solid/>
+      <Icon name={props.iconName} size={props.iconSize ?? 20} color={iconColorStr} solid />
     </Pressable>
   )
 }
