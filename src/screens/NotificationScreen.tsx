@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Pressable, Vibration } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Pressable, Vibration, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -7,33 +7,37 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import axios from 'axios'
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SEACRH_SCREEN} from '../constants/Screen';
 
 
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
-  const [menuRef, setMenuRef] = useState<Menu | null>()
-  const [isMenuOpen, setMenuOpen] = useState(false)
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  // const [menuRef, setMenuRef] = useState<Menu | null>()
   const [data, setData] = useState([]);
-  const [idNotification, setIdNotification] = useState()
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const [openListIsRead, setOpenListIsRead] = useState(false)
+  const [userId, setUserId] = useState()
+
 
   useEffect(() => {
     axios.get(`${SERVER_ADDRESS}/api/notifications`)
       .then(res => {
-        const persons = res.data.data;
-        setData(persons);
-        console.log('call');
+        const respo = res.data.data;
+        setData(respo)
+
       })
       .catch(error => console.log(error));
   }, [])
 
 
   const handleIsRead = (isId: any, userId: any) => {
-    // console.log(isId + ' hello ' + userId);
     try {
-      // Gửi yêu cầu cập nhật tên bằng Axios
-       axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus`, {
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus`, {
         id: isId,
         userId: userId
       })
@@ -42,17 +46,31 @@ export default function NotificationScreen() {
     }
   }
 
-  // const handleRenderItem = (): void => {
-  //   console.log('write');
-  // }
+  const handleDelNotification = (id: number, userId: number) => {
+    // console.log(id + ':', userId);
+    try {
+      axios.delete(`${SERVER_ADDRESS}/api/notifications/`, {data: {id: id, userId: userId}})
+    } catch (error) {
+      console.error('Error updating name:', error);
+    }
+  }
+
+  const handleItem = (id: number) => {
+    navigation.navigate(SEACRH_SCREEN, {id: id})
+    
+  }
+  const handleListIsRead = () => {
+    console.log('write');
+  }
 
   //Render Items
   const renderItem = (item: any, index: any) => {
     return (
       <View>
-        <View
+        <Pressable
+          onPress={() => handleItem(item.id)}
           key={index}
-          style={[styles.item, {backgroundColor: item.status === '0' ? '#ffffff' : '#f3f9ff'}]}>
+          style={[styles.item, { backgroundColor: item.status === '0' ? '#ffffff' : '#f3f9ff' }]}>
           <View style={styles.cont}>
             <Image
               style={styles.image}
@@ -62,16 +80,15 @@ export default function NotificationScreen() {
               <Text style={styles.tg}>{item.time}</Text>
             </View>
           </View>
-
           <Menu style={styles.menu}
             key={item.id}
             onOpen={() => setMenuOpen(true)
             }
             onClose={() => setMenuOpen(false)
             }
-            ref={(ref) => {
-              setMenuRef(ref)
-            }}
+          // ref={(ref) => {
+          //   setMenuRef(ref)
+          // }}
           >
             <MenuTrigger
             >
@@ -80,7 +97,7 @@ export default function NotificationScreen() {
             <MenuOptions
               optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
               <MenuOption
-              // onSelect={() => hanDleDelNotification()}
+                onSelect={() => handleDelNotification(item.id, item.user.id)}
               >
                 <Text style={styles.option}>Xóa thông báo</Text>
               </MenuOption>
@@ -91,7 +108,7 @@ export default function NotificationScreen() {
               </MenuOption>
             </MenuOptions>
           </Menu>
-        </View>
+        </Pressable>
       </View>
 
 
@@ -107,7 +124,9 @@ export default function NotificationScreen() {
             <Text style={styles.txt}>Thông báo</Text>
           </View>
           <View style={styles.tick}>
-            <TouchableOpacity style={styles.tickButton}>
+            <TouchableOpacity style={styles.tickButton}
+              onPress={handleListIsRead}
+            >
               <Text style={styles.txtTick}>
                 Đánh dấu tất cả đã đọc
               </Text>
