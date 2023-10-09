@@ -7,6 +7,8 @@ interface MessageBottomBarProps {
   onButtonSendPress?: () => void
   onButtonImagePickerPress?: () => void
   onInputMessageContent?: (value: string) => void
+  onInputMessageFocus?: () => void
+  onInputMessageBlur?: () => void
   textInputMessageRef: LegacyRef<TextInput>
 }
 
@@ -23,6 +25,12 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
       />
 
       <TextInput
+        onFocus={() => {
+          props.onInputMessageFocus && props.onInputMessageFocus()
+        }}
+        onBlur={() => {
+          props.onInputMessageBlur && props.onInputMessageBlur()
+        }}
         ref={props.textInputMessageRef}
         onChangeText={(value) => props.onInputMessageContent && props.onInputMessageContent(value)}
         placeholder='Tin nhắn'

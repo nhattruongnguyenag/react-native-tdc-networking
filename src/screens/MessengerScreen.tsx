@@ -1,7 +1,7 @@
+import { useIsFocused } from '@react-navigation/native'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import { ActivityIndicator } from 'react-native-paper'
 import { Client, Frame, Message } from 'stompjs'
 import Loading from '../components/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
@@ -36,7 +36,7 @@ export default function MessengerScreen() {
 
     const onConnected = () => {
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
-      stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`, {}, JSON.stringify(1))
+      stompClient.send(`/app/messages/focus/in/${senderId}/${receiverId}`)
     }
 
     const onMessageReceived = (payload: Message) => {
@@ -90,22 +90,42 @@ export default function MessengerScreen() {
     },
     [messageSection]
   )
+
+  const onInputMessageContent = useCallback((value: string) => {
+    if (value.trim().length > 0) {
+      stompClient.send(`/app/messages/typing/on/${senderId}/${receiverId}`)
+    } else {
+      stompClient.send(`/app/messages/typing/off/${senderId}/${receiverId}`)
+    }
+
+    setMessageContent(value)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      stompClient.send(`/app/messages/focus/out/${senderId}/${receiverId}`)
+      stompClient.send(`/app/messages/typing/off/${senderId}/${receiverId}`)
+    }
+  }, [])
+
   return (
     <View style={styles.body}>
       {isLoading ? (
-        <Loading title={'Đang tải tin nhắn'}/>
+        <Loading title={'Đang tải tin nhắn'} />
       ) : (
         <Fragment>
           <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             {messageSection.map((item, index) => messageSectionRenderItems(item, index))}
 
-            <View style={{ height: 30, backgroundColor: '#fff' }} />
+            <View style={{ height: 30, backgroundColor: '#fff' }}/>
           </ScrollView>
+
+          <Text style={{marginBottom: 5, display: Boolean(selectConversation?.sender.isTyping) ? 'flex' : 'none'}}>Đang soạn tin...</Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}
             onButtonSendPress={onButtonSendPress}
-            onInputMessageContent={(value) => setMessageContent(value)}
+            onInputMessageContent={(value) => onInputMessageContent(value)}
           />
         </Fragment>
       )}

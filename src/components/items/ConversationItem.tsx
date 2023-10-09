@@ -80,13 +80,15 @@ const styles = StyleSheet.create({
     borderRadius: 999
   },
   activeSignal: {
-    width: 8,
-    height: 8,
+    width: 12,
+    height: 12,
+    borderWidth: 1,
     borderRadius: 999,
+    borderColor: '#fff',
     backgroundColor: '#00ea5f',
     position: 'absolute',
-    left: 30 + 30 / Math.SQRT2 - 4,
-    top: 30 + 30 / Math.SQRT2 - 4
+    left: 30 + 30 / Math.SQRT2 - 6.5,
+    top: 30 + 30 / Math.SQRT2 - 6.5
   },
   conversationContentGroup: {
     display: 'flex',

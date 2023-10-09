@@ -1,15 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { Fragment, useEffect, useState } from 'react'
-import { Appbar, Avatar } from 'react-native-paper'
-import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import React, { Fragment } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { Appbar, Avatar } from 'react-native-paper'
 import { PURPLE_COLOR } from '../../constants/Color'
-import { Conversation } from '../../types/Conversation'
-import { RootStackParamList } from '../../App'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
-import DefaultAvatar from '../DefaultAvatar'
 import { getUserStatus } from '../../utils/DateTimeUtils'
+import DefaultAvatar from '../DefaultAvatar'
 
 const AVATAR_HEIGHT = 40
 
@@ -89,13 +87,15 @@ const styles = StyleSheet.create({
     borderRadius: 999
   },
   activeSignal: {
-    width: 8,
-    height: 8,
+    width: 10,
+    height: 10,
     borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#fff',
     backgroundColor: '#00ea5f',
     position: 'absolute',
-    left: (AVATAR_HEIGHT / 2) * (1 + 1 / Math.SQRT2) - 4,
-    top: (AVATAR_HEIGHT / 2) * (1 + 1 / Math.SQRT2) - 4
+    left: (AVATAR_HEIGHT / 2) * (1 + 1 / Math.SQRT2) - 5.5,
+    top: (AVATAR_HEIGHT / 2) * (1 + 1 / Math.SQRT2) - 5.5
   },
   conversationContentGroup: {
     display: 'flex',
