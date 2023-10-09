@@ -9,6 +9,7 @@ import { ModalUserReaction } from '../types/ModalUserReaction'
 import { Conversation } from '../types/Conversation'
 
 export interface TDCSocialNetworkState {
+  conversations: Conversation[]
   selectConversation: Conversation | null
   userLogin: Student | Faculity | Business | null
   deviceToken: string | null
@@ -21,6 +22,7 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  conversations: [],
   deviceToken: null,
   selectConversation: null,
   userLogin: null,
@@ -41,6 +43,9 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setDeviceToken: (state, action: PayloadAction<string>) => {
       state.deviceToken = action.payload
+    },
+    setConversations: (state, action: PayloadAction<Conversation[]>) => {
+      state.conversations = action.payload
     },
     setSelectConversation: (state, action: PayloadAction<Conversation | null>) => {
       state.selectConversation = action.payload
@@ -65,6 +70,9 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     closeModalUserReaction: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
+    },
+    listenConversationsSoket: (state, action: PayloadAction<void>) => {
+      state.isOpenModalUserReaction = false
     }
   }
 })
@@ -72,6 +80,7 @@ export const TDCSocialNetworkSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setUserLogin,
+  setConversations,
   setDeviceToken,
   openModalImage,
   closeModalImage,

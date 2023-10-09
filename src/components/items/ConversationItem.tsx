@@ -50,13 +50,16 @@ export default function ConversationItem({ data }: ConversationItemProps) {
       </View>
       <View style={styles.conversationContentGroup}>
         <Text style={styles.userFullnameTitle}>{data?.receiver?.name}</Text>
-        <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontWeight: data?.countNewMessage ? 'bold' : 'normal' }}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode='tail'
+          style={{ fontWeight: data?.countNewMessage ? 'bold' : 'normal' }}>
           {data?.lastMessageContent}
         </Text>
       </View>
       <View style={styles.conversationExtraInfoGroup}>
         <Text style={styles.conversationTime}>{getConversationLastUpdate(data?.lastMessageSentAt)}</Text>
-        <Text style={styles.conversationCountNewMessage}>{data?.countNewMessage}</Text>
+        <Text style={[styles.conversationCountNewMessage, { display: Boolean(data?.countNewMessage) ? 'flex' : 'none' }]}>{data?.countNewMessage}</Text>
       </View>
     </Pressable>
   )
@@ -103,10 +106,10 @@ const styles = StyleSheet.create({
     marginStart: 'auto'
   },
   conversationTime: {
-    fontSize: 12,
-    marginBottom: 10
+    fontSize: 12
   },
   conversationCountNewMessage: {
+    marginTop: 10,
     width: 24,
     height: 24,
     lineHeight: 24,

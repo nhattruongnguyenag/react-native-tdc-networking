@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { ActivityIndicator } from 'react-native-paper'
 import { Client, Frame, Message } from 'stompjs'
+import Loading from '../components/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSectionTitle from '../components/messages/MessageSectionTitle'
@@ -92,10 +93,7 @@ export default function MessengerScreen() {
   return (
     <View style={styles.body}>
       {isLoading ? (
-        <View style={styles.loadingBody}>
-          <ActivityIndicator style={{ marginTop: -70 }} animating={true} color={'#0065FF'} />
-          <Text style={{ marginTop: 20 }}>Đang tải tin nhắn</Text>
-        </View>
+        <Loading title={'Đang tải tin nhắn'}/>
       ) : (
         <Fragment>
           <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
@@ -121,10 +119,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 10
-  },
-  loadingBody: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 })

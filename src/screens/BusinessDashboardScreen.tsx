@@ -8,8 +8,11 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setDeviceToken } from '../redux/Slice'
+import { setConversations, setDeviceToken } from '../redux/Slice'
 import { useSaveDeviceTokenMutation } from '../redux/Service'
+import { getStompClient } from '../sockets/SocketClient'
+import { Conversation } from '../types/Conversation'
+import { Client, Frame, Message } from 'stompjs'
 
 // man hinh hien thi bai viet doanh nghiep
 
@@ -30,12 +33,33 @@ export default function BusinessDashboardScreen() {
     }
   }, [])
 
+  const updateUserStatusToOnline = useCallback(() => {
+    const stompClient: Client = getStompClient()
+
+    const onConnected = () => {
+      stompClient.subscribe('/topic/conversations', onMessageReceived)
+      stompClient.send(`/app/conversations/online/${userLogin?.id}`)
+    }
+
+    const onMessageReceived = (payload: Message) => {
+      dispatch(setConversations(JSON.parse(payload.body)))
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
   useEffect(() => {
     getFCMToken()
   }, [])
 
+
   useEffect(() => {
     if (userLogin && deviceToken) {
+      updateUserStatusToOnline()
       updateToken({
         userId: userLogin.id,
         deviceToken: deviceToken
