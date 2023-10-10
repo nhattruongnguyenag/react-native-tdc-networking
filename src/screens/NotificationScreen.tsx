@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon1 from 'react-native-vector-icons/Entypo';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import axios from 'axios'
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SEACRH_SCREEN } from '../constants/Screen';
 
 
 const { height, width } = Dimensions.get('screen')
@@ -23,17 +22,27 @@ export default function NotificationScreen() {
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
+  const [filterData, setFilterData] = useState([]);
 
-
-
-  useEffect(() => {
+  const callData = () => {
     axios.get(`${SERVER_ADDRESS}/api/notifications`)
       .then(res => {
         const respo = res.data.data;
         setData(respo)
       })
       .catch(error => console.log(error));
+  }
+  useEffect(() => {
+    callData()
   }, [])
+
+  useEffect(() => {
+    axios.get(`${SERVER_ADDRESS}/api/notifications/find?content=${search}`)
+      .then(res => {
+        const respo = res.data.data
+        setFilterData(respo)
+      })
+  }, [search])
 
   const handleIsRead = (id: any, userId: any) => {
     try {
@@ -41,14 +50,7 @@ export default function NotificationScreen() {
         id: id,
         userId: userId
       })
-        .then((response) => {
-          if (response.status === 204) {
-            console.log('that bai');
-          } else {
-
-            console.log('thanh cong');
-          }
-        })
+      callData()
     } catch (error) {
       console.error('Error updating name:', error);
     }
@@ -58,6 +60,7 @@ export default function NotificationScreen() {
 
     try {
       axios.delete(`${SERVER_ADDRESS}/api/notifications/`, { data: { id: id, userId: userId } })
+      callData()
     } catch (error) {
       console.error('Error updating name:', error);
     }
@@ -70,16 +73,26 @@ export default function NotificationScreen() {
         id: id,
         userId: userId
       })
+      callData()
     } catch (error) {
       console.error('Error updating name:', error);
     }
   }
 
   const handleListIsRead = () => {
-    axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 2 })
-      .catch(error => console.log(error));
+    try {
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 2 })
+      callData()
+    }
+    
+    catch(error) {
+     console.log(error)}
+
   }
 
+  const handleDelSearch = () => {
+    setSearch('')
+  }
 
   const handleOpenSearch = () => {
     setOpenSearch(!openSearch);
@@ -132,8 +145,6 @@ export default function NotificationScreen() {
           </Menu>
         </Pressable>
       </View>
-
-
     )
   }
 
@@ -141,7 +152,7 @@ export default function NotificationScreen() {
     <>
       <View style={styles.screen}>
         {/* Select */}
-        <View style={[styles.operation, {height: openSearch ? height*0.168 : height*0.1}]}>
+        <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
             <View style={styles.txtN}>
               <Text style={styles.txt}>Thông báo</Text>
@@ -157,7 +168,7 @@ export default function NotificationScreen() {
             </View>
             <View style={styles.searchBtn}>
               <TouchableOpacity style={styles.searchButton}
-              onPress={handleOpenSearch}
+                onPress={handleOpenSearch}
               >
                 <Text>
                   <Icon name="search" size={20} color="#ffffff" />
@@ -166,22 +177,42 @@ export default function NotificationScreen() {
             </View>
           </View>
           {openSearch && (<View >
-            <TextInput 
-            value={search}
-            style={styles.search}
-             placeholder='Tìm kiếm thông báo...'/>
+            <TextInput
+              value={search}
+              style={styles.search}
+              placeholder='Tìm kiếm thông báo...'
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={(i) => setSearch(i)}
+            />
+            {
+              search != '' ?
+                (<Pressable
+                  style={{ position: 'absolute', right: 0, paddingRight: 30, marginTop: 20 }}
+                  onPress={handleDelSearch}>
+                  <Icon2 name="closecircleo" size={18} color="grey" />
+                </Pressable>) : null
+            }
+
           </View>)}
-          
+
         </View>
         {/*  */}
         <ScrollView style={styles.platList}>
           {
-            (data !== null ? (
-              data.map((item, index) => (
-                renderItem(item, index)
-                // <Text>{JSON.stringify(data)}</Text>
-              ))
-            ) : null)
+            search === '' ?
+              (data !== null ? (
+                data.map((item, index) => (
+                  renderItem(item, index)
+                  // <Text>{JSON.stringify(data)}</Text>
+                ))
+              ) : null)
+              :
+              (
+                filterData.map((item, index) => (
+                  renderItem(item, index)
+                ))
+              )
           }
         </ScrollView >
       </View >
@@ -206,6 +237,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     paddingLeft: 15,
+    paddingRight: 50,
     backgroundColor: '#d9d9d9',
     borderRadius: 5,
     height: 40,
