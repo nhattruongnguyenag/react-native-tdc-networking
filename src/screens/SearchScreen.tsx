@@ -4,6 +4,8 @@ import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import axios from 'axios';
 
 const dataNew = [
   {
@@ -88,26 +90,30 @@ export default function SearchScreen() {
   const [search, setSearch] = useState('')
   const [masterData, setMasterData] = useState([])
   const [filterData, setFilterData] = useState([])
-  const [type, setType] = useState('posts')
+  const [type, setType] = useState('')
   const [qty, setQty] = useState('')
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: '--posts--', value: 'posts' },
-    { label: '--comments--', value: 'comments' },
-    { label: '--albums--', value: 'albums' }
+    { label: 'Người dùng', value: 'users' },
+    { label: 'Doanh nghiệp', value: 'business' },
+    { label: 'Bài viết', value: 'posts' }
   ]);
 
 
 
-  // useEffect(() => {
-  //   // document.title = title
-  //   fetch(`https://jsonplaceholder.typicode.com/${type}`)
-  //     .then(res => res.json())
-  //     .then(posts => {
-  //       setMasterData(posts)
-  //       setFilterData(posts)
-  //     })
-  // }, [type])
+  useEffect(() => {
+    console.log(type);
+    // document.title = title
+    // fetch(`${SERVER_ADDRESS}/api/${type}`)
+    axios.get(`${SERVER_ADDRESS}/api/${type}`)
+    .then((response) => {
+      const res = response.data.data
+      setMasterData(res)
+      
+    })
+    console.log(masterData)
+
+  }, [type])
 
   const postItems = (item: any, index: any) => { }
 
@@ -125,14 +131,17 @@ export default function SearchScreen() {
           <Text style={styles.name}>{index + ". " + item.name}</Text>
         </View>
         <View>
-          {
+          <TouchableOpacity style={styles.follow} >
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
+          </TouchableOpacity>
+          {/* {
             item.title ?
               (<TouchableOpacity style={styles.follow} >
                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
               </TouchableOpacity>)
               :
               (<View><Icon name="dots-three-vertical" size={20} color="#000000" /></View>)
-          }
+          } */}
 
         </View>
 
@@ -141,71 +150,66 @@ export default function SearchScreen() {
   }
 
   //
-  const searchFilter = (txt: any) => {
-    if (txt) {
-      const newData = masterData.filter(
-        function (item: any, index: any) {
-          const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
-          const textData = txt.toUpperCase();
-          const i = itemData.indexOf(textData) > -1;
-          return i;
-        }
-      )
-      setFilterData(newData)
-      setSearch(txt)
+  // const searchFilter = (txt: any) => {
+  //   if (txt) {
+  //     const newData = masterData.filter(
+  //       function (item: any, index: any) {
+  //         const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+  //         const textData = txt.toUpperCase();
+  //         const i = itemData.indexOf(textData) > -1;
+  //         return i;
+  //       }
+  //     )
+  //     setFilterData(newData)
+  //     setSearch(txt)
 
-    } else {
-      setFilterData(masterData)
-      setSearch(txt)
-    }
-  }
+  //   } else {
+  //     setFilterData(masterData)
+  //     setSearch(txt)
+  //   }
+  // }
 
   useEffect(() => {
     setQty(filterData.length + '')
 
   })
 
-  const show = () => {
-    console.log(height - (height * 0.17));
-
-  }
-
   return (
     <View style={styles.searchScreen}>
       <View style={styles.operation}>
         <TextInput
-            style={styles.search}
-            placeholder='Nhập nội dung tìm kiếm...'
-            placeholderTextColor='#000000'
-            value={search}
-            onChangeText={(txt) => searchFilter(txt)}
-          ></TextInput>
+          style={styles.search}
+          placeholder='Nhập nội dung tìm kiếm...'
+          placeholderTextColor='#000000'
+          value={search}
+          // onChangeText={(txt) => searchFilter(txt)}
+        ></TextInput>
         <View style={styles.select}>
-            <View style={styles.drop}>
-              <Dropdown
-                style={styles.dropDown}
-                data={items}
-                value={value}
-                placeholder='-- Doi tuong --'
-                labelField='label'
-                valueField='value'
-                onChange={item => {
-                  setType(item.value)
-                }}
-              />
-            </View>
-            <TouchableOpacity style={styles.btnSearch}>
-              <Text>
-                <Icon name="search" size={20} color="#ffffff" />
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.drop}>
+            <Dropdown
+              style={styles.dropDown}
+              data={items}
+              value={value}
+              placeholder='-- Đối tượng --'
+              labelField='label'
+              valueField='value'
+              onChange={item => {
+                setType(item.value)
+              }}
+            />
           </View>
+          <TouchableOpacity style={styles.btnSearch}>
+            <Text>
+              <Icon name="search" size={20} color="#ffffff" />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView >
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
-          dataNew.map((item, index) => renderItem(item, index))
+          masterData.map((item, index) => renderItem(item, index))
         }
       </ScrollView>
     </View>
@@ -228,18 +232,19 @@ const styles = StyleSheet.create({
   search: {
     backgroundColor: '#d9d9d9',
     borderRadius: 5,
-    height: 40
+    height: 40,
+    paddingLeft: 10 
   },
   select: {
     flexDirection: 'row',
     paddingTop: 5,
-    
+
   },
   qty: {
     fontWeight: 'bold',
     fontSize: 15,
     color: '#000000',
-    marginLeft: 15, 
+    marginLeft: 15,
     marginBottom: 10
   },
   dropDown: {
@@ -247,11 +252,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: 'white',
     height: 35,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingLeft: 10
   },
   drop: {
     flex: 5,
     color: 'white',
+
   },
   btnSearch: {
     flex: 1,
@@ -295,7 +302,7 @@ const styles = StyleSheet.create({
   },
   follow: {
     height: 30,
-    marginRight: 12,
+    // marginRight: 12,
     borderRadius: 5,
     backgroundColor: '#0065ff',
     justifyContent: 'center',
