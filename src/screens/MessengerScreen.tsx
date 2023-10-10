@@ -1,4 +1,3 @@
-import { useIsFocused } from '@react-navigation/native'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
@@ -9,6 +8,7 @@ import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSectionTitle from '../components/messages/MessageSectionTitle'
 import MessageSentItem from '../components/messages/MessageSentItem'
 import { useAppSelector } from '../redux/Hook'
+import { useSendFCMNotificationMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Messages'
 import { MessageSection, MessageSectionByTime } from '../types/MessageSection'
@@ -24,23 +24,22 @@ export default function MessengerScreen() {
   const [isLoading, setLoading] = useState(false)
   const [messageSection, setMessageSection] = useState<MessageSection[]>([])
   const [messageContent, setMessageContent] = useState<string>('')
-  const { selectConversation } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { selectConversation, deviceToken } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [sendFCMNotifiction, sendFCMNotificationResult] = useSendFCMNotificationMutation()
 
   const senderId = selectConversation?.sender?.id
   const receiverId = selectConversation?.receiver?.id
 
   useEffect(() => {
-    setLoading(true)
-
     stompClient = getStompClient()
+    stompClient.debug()
 
     const onConnected = () => {
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
-      stompClient.send(`/app/messages/focus/in/${senderId}/${receiverId}`)
+      stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
     }
 
     const onMessageReceived = (payload: Message) => {
-      setLoading(false)
       const messages = JSON.parse(payload.body) as MessageModel[]
       const messageSectionsTime = sortMessagesByTime(messages)
       setMessageSection(sortMessageBySections(messageSectionsTime))
@@ -54,6 +53,9 @@ export default function MessengerScreen() {
     stompClient.connect({}, onConnected, onError)
   }, [])
 
+  console.log("fdafdasfasdfasdfasf", deviceToken)
+
+
   useEffect(() => {
     if (messageSection) {
       scrollViewRef.current?.scrollToEnd()
@@ -61,7 +63,7 @@ export default function MessengerScreen() {
   }, [messageSection])
 
   const onButtonSendPress = useCallback(() => {
-    let message = {
+    const message = {
       senderId: senderId,
       receiverId: receiverId,
       type: 'plain/text',
@@ -70,43 +72,27 @@ export default function MessengerScreen() {
     }
 
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
-    textInputMessageRef.current?.clear()
+    setMessageContent('')
   }, [messageContent])
 
-  const messageSectionRenderItems = (item: MessageSection, sectionIndex: number) => (
-    <Fragment key={sectionIndex}>
-      <MessageSectionTitle title={getMessageSectionTitle(item.title)} />
-      {item?.data.map((item, itemIndex) => messageRenderItems(item, itemIndex))}
-    </Fragment>
-  )
+  const messageSectionRenderItems = useCallback(
+    (item: MessageSection, sectionIndex: number) => (
+      <Fragment key={sectionIndex}>
+        <MessageSectionTitle title={getMessageSectionTitle(item.title)} />
+        {item?.data.map((item, itemIndex) => messageRenderItems(item, itemIndex))}
+      </Fragment>
+    ), [])
 
   const messageRenderItems = useCallback(
     (item: MessageSectionByTime, index: number): JSX.Element => {
       if (item.sender.id == userLogin?.id) {
-        return <MessageSentItem key={index} data={item} showDate={true} />
+        return <MessageSentItem key={index} data={item} />
       } else {
-        return <MessageReceivedItem key={index} data={item} showDate={true} />
+        return <MessageReceivedItem key={index} data={item} />
       }
     },
-    [messageSection]
+    []
   )
-
-  const onInputMessageContent = useCallback((value: string) => {
-    if (value.trim().length > 0) {
-      stompClient.send(`/app/messages/typing/on/${senderId}/${receiverId}`)
-    } else {
-      stompClient.send(`/app/messages/typing/off/${senderId}/${receiverId}`)
-    }
-
-    setMessageContent(value)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      stompClient.send(`/app/messages/focus/out/${senderId}/${receiverId}`)
-      stompClient.send(`/app/messages/typing/off/${senderId}/${receiverId}`)
-    }
-  }, [])
 
   return (
     <View style={styles.body}>
@@ -117,15 +103,15 @@ export default function MessengerScreen() {
           <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             {messageSection.map((item, index) => messageSectionRenderItems(item, index))}
 
-            <View style={{ height: 30, backgroundColor: '#fff' }}/>
+            <View style={{ height: 30, backgroundColor: '#fff' }} />
           </ScrollView>
 
-          <Text style={{marginBottom: 5, display: Boolean(selectConversation?.sender.isTyping) ? 'flex' : 'none'}}>Đang soạn tin...</Text>
+          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.sender.isTyping) ? 'flex' : 'none' }}>Đang soạn tin...</Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}
             onButtonSendPress={onButtonSendPress}
-            onInputMessageContent={(value) => onInputMessageContent(value)}
+            onInputMessageContent={(value) => setMessageContent(value)}
           />
         </Fragment>
       )}

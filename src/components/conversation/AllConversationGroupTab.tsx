@@ -16,7 +16,8 @@ export default function AllConversationGroupTab() {
   useEffect(() => {
     if (isFocused) {
       const stompClient: Client = getStompClient()
-
+      stompClient.debug('')
+      
       const onConnected = () => {
         setLoading(true)
         stompClient.subscribe('/topic/conversations', onMessageReceived)

@@ -5,14 +5,13 @@ import { Avatar } from 'react-native-paper'
 import MessageSectionTimeItemStyle, {
     AVATAR_HEIGHT
 } from '../../styles/MessageSectionTimeItemStyle'
-import { Message } from '../../types/Messages'
+import { Message } from '../../types/Message'
 import { MessageSectionByTime } from '../../types/MessageSection'
 import DefaultAvatar from '../DefaultAvatar'
 
 const BACKGROUND_COLOR = '#6942f4'
 
 interface MessageSentItemProps {
-  showDate: boolean
   data: MessageSectionByTime
 }
 
@@ -57,7 +56,7 @@ const messageRenderItems = (lastIndex: number, item: Message, index: number) => 
   )
 }
 
-export default function MessageSentItem({ showDate, data }: MessageSentItemProps) {
+export default function MessageSentItem({ data }: MessageSentItemProps) {
   return (
     <View style={[{ alignItems: 'flex-end' }, MessageSectionTimeItemStyle.body]}>
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>

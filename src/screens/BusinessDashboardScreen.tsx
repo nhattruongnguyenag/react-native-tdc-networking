@@ -24,14 +24,19 @@ export default function BusinessDashboardScreen() {
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
 
-  const getFCMToken = useCallback(async () => {
-    try {
-      const token = await messaging().getToken()
-      dispatch(setDeviceToken(token))
-    } catch (error) {
-      console.log(error)
+  useEffect(() => {
+    const getFCMToken = async () => {
+      try {
+        const token = await messaging().getToken()
+        dispatch(setDeviceToken(token))
+      } catch (error) {
+        console.log(error)
+      }
     }
+
+    getFCMToken()
   }, [])
+
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
@@ -53,17 +58,13 @@ export default function BusinessDashboardScreen() {
   }, [])
 
   useEffect(() => {
-    getFCMToken()
-  }, [])
-
-
-  useEffect(() => {
+    console.log(userLogin, deviceToken)
     if (userLogin && deviceToken) {
-      updateUserStatusToOnline()
       updateToken({
         userId: userLogin.id,
         deviceToken: deviceToken
       })
+      updateUserStatusToOnline()
     }
   }, [deviceToken])
 

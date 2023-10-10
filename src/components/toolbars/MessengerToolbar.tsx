@@ -48,16 +48,6 @@ export default function MessengerToolbar({}) {
           </Fragment>
         }
       />
-
-      <Appbar.Action style={styles.appbarAction} icon='phone' iconColor={PURPLE_COLOR} size={25} onPress={() => {}} />
-
-      <Appbar.Action
-        style={styles.appbarAction}
-        icon='dots-vertical'
-        iconColor={PURPLE_COLOR}
-        size={25}
-        onPress={() => {}}
-      />
     </Appbar.Header>
   )
 }

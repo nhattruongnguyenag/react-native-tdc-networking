@@ -29,11 +29,11 @@ export default function IconButton(props: IconButtonProps) {
       borderRadius: props.borderRadius ?? 999,
       backgroundColor: pressed ? props.activeBackgroundColor ?? '#fff' : props.inactiveBackgroundColor ?? '#000'
     }
-  }, [pressed])
+  }, [pressed, props.activeBackgroundColor])
 
   const iconColorStr = useMemo<string>(() => {
     return props.iconColor ?? (pressed ? props.activeIconColor ?? '#000' : props.inactiveIconColor ?? '#fff')
-  }, [pressed])
+  }, [pressed, props.iconColor])
 
   return (
     <Pressable

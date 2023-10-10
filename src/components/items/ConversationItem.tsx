@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { MESSENGER_SCREEN } from '../../constants/Screen'
-import { useAppDispatch } from '../../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { Conversation } from '../../types/Conversation'
 import { getConversationLastUpdate } from '../../utils/DateTimeUtils'
@@ -19,6 +19,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
   const [active, setActive] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
+  const {conversations} = useAppSelector(state => state.TDCSocialNetworkReducer)
 
   const onItemPressIn = useCallback(() => {
     setActive(true)
@@ -31,7 +32,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
   const onItemPress = useCallback(() => {
     dispatch(setSelectConversation(data))
     navigation.navigate(MESSENGER_SCREEN)
-  }, [])
+  }, [conversations])
 
   return (
     <Pressable

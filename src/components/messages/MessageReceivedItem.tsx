@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Avatar } from 'react-native-paper'
-import { Message } from '../../types/Messages'
+import { Message } from '../../types/Message'
 import moment from 'moment'
 import MessageSectionTimeItemStyle, {
   AVATAR_HEIGHT,
@@ -14,7 +14,6 @@ import DefaultAvatar from '../DefaultAvatar'
 const BACKGROUND_COLOR = '#f0f0f0'
 
 interface MessageReceivedItemProps {
-  showDate: boolean
   data: MessageSectionByTime
 }
 
@@ -58,7 +57,7 @@ const messageRenderItems = (lastIndex: number, item: Message, index: number) => 
   )
 }
 
-export default function MessageReceivedItem({ showDate, data }: MessageReceivedItemProps) {
+export default function MessageReceivedItem({ data }: MessageReceivedItemProps) {
   return (
     <View style={MessageSectionTimeItemStyle.body}>
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { LegacyRef, useEffect, useRef } from 'react'
+import React, { LegacyRef, useEffect, useRef, useState } from 'react'
 import IconButton from '../buttons/IconButton'
 import { PURPLE_COLOR } from '../../constants/Color'
 
@@ -13,26 +13,17 @@ interface MessageBottomBarProps {
 }
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
+  const [messageContent, setMessageContent] = useState('')
+
   return (
     <View style={styles.inputMessageGroup}>
-      <IconButton
-        iconSize={20}
-        iconName='images'
-        iconColor={PURPLE_COLOR}
-        onPress={() => props.onButtonImagePickerPress && props.onButtonImagePickerPress()}
-        inactiveBackgroundColor={PURPLE_COLOR + '00'}
-        activeBackgroundColor={PURPLE_COLOR + '4d'}
-      />
-
       <TextInput
-        onFocus={() => {
-          props.onInputMessageFocus && props.onInputMessageFocus()
-        }}
-        onBlur={() => {
-          props.onInputMessageBlur && props.onInputMessageBlur()
-        }}
+        value={messageContent}
         ref={props.textInputMessageRef}
-        onChangeText={(value) => props.onInputMessageContent && props.onInputMessageContent(value)}
+        onChangeText={(value) => {
+          setMessageContent(value)
+          props.onInputMessageContent && props.onInputMessageContent(value)
+        }}
         placeholder='Tin nhắn'
         style={styles.inputMessage}
         cursorColor={PURPLE_COLOR}
@@ -40,10 +31,17 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
       />
 
       <IconButton
-        iconSize={20}
+        iconSize={22}
+        width={50}
+        height={50}
         iconName='paper-plane'
-        iconColor={PURPLE_COLOR}
-        onPress={() => props.onButtonSendPress && props.onButtonSendPress()}
+        iconColor={PURPLE_COLOR +  (messageContent.trim().length > 0 ? 'FF' : '80')}
+        onPress={() => {
+          if (props.onButtonSendPress && messageContent.trim().length > 0) {
+            props.onButtonSendPress()
+          }
+          setMessageContent('')
+        }}
         inactiveBackgroundColor={PURPLE_COLOR + '00'}
         activeBackgroundColor={PURPLE_COLOR + '40'}
         customStyle={{ marginLeft: 'auto' }}
@@ -66,6 +64,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     fontSize: 16,
     marginHorizontal: 5,
-    paddingVertical: 5
+    paddingVertical: 7
   }
 })

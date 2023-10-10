@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Message } from '../types/Messages'
+import { Message } from '../types/Message'
 import { MessageSection, MessageSectionByTime } from '../types/MessageSection'
 
 export function sortMessageBySections(messageSectionTimes: MessageSectionByTime[]): MessageSection[] {

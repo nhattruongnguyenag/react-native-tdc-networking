@@ -47,25 +47,25 @@ export default function LoginScreen() {
     setIsChecked(!isChecked)
   }
   const handleCheckEmail = (value: any) => {
-    let regexEmail = new RegExp(
-      /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
-    )
+    // let regexEmail = new RegExp(
+    //   /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
+    // )
     setUserLoginRequest({ ...userLoginRequest, email: value })
-    if (!regexEmail.test(userLoginRequest.email)) {
-      setCheckEmail(false)
-    } else {
-      setCheckEmail(true)
-    }
+    // if (!regexEmail.test(userLoginRequest.email)) {
+    //   setCheckEmail(false)
+    // } else {
+    //   setCheckEmail(true)
+    // }
   }
   const handleCheckPassword = (value: any) => {
-    //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
-    const regexPass = /^[0-9]{5}$/
+    // //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
+    // const regexPass = /^[0-9]{5}$/
     setUserLoginRequest({ ...userLoginRequest, password: value })
-    if (!regexPass.test(userLoginRequest.password)) {
-      setCheckPassword(false)
-    } else {
-      setCheckPassword(true)
-    }
+    // if (!regexPass.test(userLoginRequest.password)) {
+    //   setCheckPassword(false)
+    // } else {
+    //   setCheckPassword(true)
+    // }
   }
 
   const onSubmit = () => {
@@ -94,7 +94,8 @@ export default function LoginScreen() {
 
   const isBtnDisabled = useMemo(() => {
     return (
-      userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+      false
+      // userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
     )
   }, [checkEmail, checkPassword, userLoginRequest])
 

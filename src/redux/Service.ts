@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { DeviceToken } from '../types/DeviceToken'
+import { FCMNotificationRequest } from '../types/FCMNotificationRequest'
 import { MessageResponseData } from '../types/MessageResponseData'
 
 export const TDCSocialNetworkAPI = createApi({
@@ -14,10 +15,23 @@ export const TDCSocialNetworkAPI = createApi({
         method: 'POST',
         body: data
       })
+    }),
+    sendFCMNotification: builder.mutation<MessageResponseData, FCMNotificationRequest>({
+      query: (data) => ({
+        url: 'api/fcm-notification',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        }
+      })
     })
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useSaveDeviceTokenMutation } = TDCSocialNetworkAPI
+export const { 
+  useSaveDeviceTokenMutation,
+  useSendFCMNotificationMutation
+ } = TDCSocialNetworkAPI

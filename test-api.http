@@ -1,4 +1,4 @@
-GET http://localhost:8080/api/conversations/1
+# GET http://localhost:8080/api/conversations/1
 # GET http://localhost:8080/api/users
 
 # POST http://localhost:8080/api/messages HTTP/1.1
@@ -22,10 +22,18 @@ GET http://localhost:8080/api/conversations/1
 #     "token": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
 # }
 
-# POST http://localhost:8080/api/device-token HTTP/1.1
+# POST http://localhost:8080/api/fcm-notification HTTP/1.1
 # content-type: application/json
 
 # {
-#     "userId": 1,
-#     "deviceToken": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
+#     "userId": 2,
+#     "content": "aaaaaaaaaaaaa"
 # }
+
+POST http://localhost:8080/api/device-token HTTP/1.1
+content-type: application/json
+
+{
+    "userId": 2,
+    "deviceToken": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
+}
