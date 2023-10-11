@@ -8,6 +8,7 @@ import { LOGIN_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setUserLogin } from '../redux/Slice'
 
+
 // man hinh splash
 export default function SplashScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
