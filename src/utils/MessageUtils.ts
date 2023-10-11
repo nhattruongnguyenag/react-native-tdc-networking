@@ -37,6 +37,7 @@ export function sortMessagesByTime(messages: Message[]) {
       messageSectionTime[index].messages.push(message)
     } else {
       messageSectionTime.push({
+        type: message.type,
         sender: message.sender,
         time: message.createdAt,
         messages: []

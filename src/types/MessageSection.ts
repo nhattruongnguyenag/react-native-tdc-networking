@@ -7,6 +7,7 @@ export interface MessageSection {
 }
 
 export interface MessageSectionByTime {
+  type: string
   sender: User
   messages: Message[]
   time: string

@@ -32,5 +32,12 @@ export default StyleSheet.create({
   messageContentWrapper: {
     flexShrink: 1,
     marginTop: 10
+  },
+  imagesGroup: {
+    borderRadius: 5,
+  }, 
+  imageItem: {
+    borderRadius: 3,
+    margin: 1
   }
 })

@@ -58,7 +58,7 @@ export default function BusinessDashboardScreen() {
   }, [])
 
   useEffect(() => {
-    console.log(userLogin, deviceToken)
+    console.log('device-token', deviceToken)
     if (userLogin && deviceToken) {
       updateToken({
         userId: userLogin.id,
@@ -67,12 +67,6 @@ export default function BusinessDashboardScreen() {
       updateUserStatusToOnline()
     }
   }, [deviceToken])
-
-  useEffect(() => {
-    if (updateTokenResponse) {
-      console.log(updateTokenResponse.data)
-    }
-  }, [updateTokenResponse])
 
   return (
     <View style={styles.container}>

@@ -6,6 +6,7 @@ import { Image, StyleSheet, View } from 'react-native'
 import { USER_LOGIN_KEY } from '../constants/KeyValue'
 import { LOGIN_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { setUserLogin } from '../redux/Slice'
 
 // man hinh splash
 export default function SplashScreen() {
@@ -19,6 +20,8 @@ export default function SplashScreen() {
         if (json) {
           const userLogin = JSON.parse(json)
           if (userLogin) {
+            console.log("user-login")
+            dispatch(setUserLogin(userLogin))
             navigation.replace(TOP_TAB_NAVIGATOR)
           }
         } else {

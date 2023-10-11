@@ -8,7 +8,6 @@ import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSectionTitle from '../components/messages/MessageSectionTitle'
 import MessageSentItem from '../components/messages/MessageSentItem'
 import { useAppSelector } from '../redux/Hook'
-import { useSendFCMNotificationMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Messages'
 import { MessageSection, MessageSectionByTime } from '../types/MessageSection'
@@ -18,14 +17,13 @@ import { sortMessageBySections, sortMessagesByTime } from '../utils/MessageUtils
 let stompClient: Client
 
 export default function MessengerScreen() {
-  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const textInputMessageRef = useRef<TextInput | null>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [isLoading, setLoading] = useState(false)
   const [messageSection, setMessageSection] = useState<MessageSection[]>([])
   const [messageContent, setMessageContent] = useState<string>('')
   const { selectConversation, deviceToken } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [sendFCMNotifiction, sendFCMNotificationResult] = useSendFCMNotificationMutation()
 
   const senderId = selectConversation?.sender?.id
   const receiverId = selectConversation?.receiver?.id
@@ -52,9 +50,6 @@ export default function MessengerScreen() {
 
     stompClient.connect({}, onConnected, onError)
   }, [])
-
-  console.log("fdafdasfasdfasdfasf", deviceToken)
-
 
   useEffect(() => {
     if (messageSection) {
@@ -94,6 +89,20 @@ export default function MessengerScreen() {
     []
   )
 
+  useEffect(() => {
+    if (imagesUpload) {
+      const message = {
+        senderId: senderId,
+        receiverId: receiverId,
+        type: 'images',
+        content: imagesUpload?.join(','),
+        status: 0
+      }
+  
+      stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
+    }
+  }, [imagesUpload])
+
   return (
     <View style={styles.body}>
       {isLoading ? (
@@ -102,11 +111,10 @@ export default function MessengerScreen() {
         <Fragment>
           <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             {messageSection.map((item, index) => messageSectionRenderItems(item, index))}
-
             <View style={{ height: 30, backgroundColor: '#fff' }} />
           </ScrollView>
 
-          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.sender.isTyping) ? 'flex' : 'none' }}>Đang soạn tin...</Text>
+          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.receiver.isTyping) ? 'flex' : 'none' }}>Đang soạn tin...</Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}

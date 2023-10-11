@@ -2,6 +2,8 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { LegacyRef, useEffect, useRef, useState } from 'react'
 import IconButton from '../buttons/IconButton'
 import { PURPLE_COLOR } from '../../constants/Color'
+import ActionSheet from 'react-native-actionsheet'
+import CustomizedImagePicker from '../CustomizedImagePicker'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -14,9 +16,24 @@ interface MessageBottomBarProps {
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
   const [messageContent, setMessageContent] = useState('')
+  const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
 
   return (
     <View style={styles.inputMessageGroup}>
+      <IconButton
+        iconSize={22}
+        width={50}
+        height={50}
+        iconName='image'
+        iconColor={PURPLE_COLOR}
+        onPress={() => {
+          imagePickerOptionsRef?.show()
+        }}
+        inactiveBackgroundColor={PURPLE_COLOR + '00'}
+        activeBackgroundColor={PURPLE_COLOR + '40'}
+        customStyle={{ marginLeft: 'auto' }}
+      />
+
       <TextInput
         value={messageContent}
         ref={props.textInputMessageRef}
@@ -35,7 +52,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
         width={50}
         height={50}
         iconName='paper-plane'
-        iconColor={PURPLE_COLOR +  (messageContent.trim().length > 0 ? 'FF' : '80')}
+        iconColor={PURPLE_COLOR + (messageContent.trim().length > 0 ? 'FF' : '80')}
         onPress={() => {
           if (props.onButtonSendPress && messageContent.trim().length > 0) {
             props.onButtonSendPress()
@@ -46,6 +63,10 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
         activeBackgroundColor={PURPLE_COLOR + '40'}
         customStyle={{ marginLeft: 'auto' }}
       />
+
+      <CustomizedImagePicker
+        optionsRef={(ref) => setImagePickerOptionsRef(ref)}
+      />
     </View>
   )
 }
@@ -55,7 +76,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5
+    paddingVertical: 5,
+    marginHorizontal: -10,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0'
   },
   inputMessage: {
     flex: 1,
