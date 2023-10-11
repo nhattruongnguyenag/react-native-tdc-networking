@@ -30,6 +30,7 @@ import {
   DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN,
+  IMAGE_VIEW_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
@@ -57,6 +58,7 @@ import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboa
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import { Conversation } from './types/Conversation'
 import moment from 'moment'
+import ImageViewScreen from './screens/ImageViewScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -80,6 +82,7 @@ export type RootStackParamList = {
   CREATE_RECRUITMENT_SCREEN: undefined
   CREATE_SURVEY_SCREEN: undefined
   SPLASH_SCREEN: undefined
+  IMAGE_VIEW_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -231,6 +234,12 @@ export function StackNavigator(): JSX.Element {
         name={CREATE_SURVEY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát' /> }}
         component={CreateSurveyPostScreen}
+      />
+
+      <RootStack.Screen
+        name={IMAGE_VIEW_SCREEN}
+        options={{ header: () => null }}
+        component={ImageViewScreen}
       />
 
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />

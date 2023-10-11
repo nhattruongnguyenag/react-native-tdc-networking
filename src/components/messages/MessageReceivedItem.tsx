@@ -1,5 +1,6 @@
 import moment from 'moment'
-import React from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
+import { Pressable } from 'react-native'
 import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
@@ -10,6 +11,9 @@ import MessageSectionTimeItemStyle, {
 import { Message } from '../../types/Message'
 import { MessageSectionByTime } from '../../types/MessageSection'
 import DefaultAvatar from '../DefaultAvatar'
+import ImageView from "react-native-image-viewing"
+import { ImageUri } from '../../types/ImageUri'
+import * as Animatable from 'react-native-animatable'
 
 const BACKGROUND_COLOR = '#f0f0f0'
 
@@ -55,8 +59,10 @@ const textMessageRenderItem = (message: Message, lastIndex: number, currentIndex
     ]
   }
 
+  const [statusMessageVisible, setStatusMessageVisible] = useState<boolean>(false)
+
   return (
-    <View style={style}>
+    <Pressable style={style}>
       <Text style={[{ color: '#000' }, MessageSectionTimeItemStyle.messageTextContent]}>{message.content}</Text>
       <Text
         style={[
@@ -68,11 +74,13 @@ const textMessageRenderItem = (message: Message, lastIndex: number, currentIndex
       >
         {moment(message.createdAt).format('hh:mm a')}
       </Text>
-    </View>
+    </Pressable>
   )
 }
 
 const imagesMessageRenderItem = (data: MessageSectionByTime): React.JSX.Element => {
+  const [visible, setIsVisible] = useState(false)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const images = data.messages[0].content.split(',')
   let imageWidth = 100
   let imageHeight = 100
@@ -84,23 +92,48 @@ const imagesMessageRenderItem = (data: MessageSectionByTime): React.JSX.Element 
     col = 1
   }
 
+  const imageURIs = useMemo(() => {
+    return images.map<ImageUri>((item, index) => {
+
+      return {
+        uri: SERVER_ADDRESS + 'api/images/' + item
+      }
+    })
+  }, [])
+
   return (
-    <View style={[MessageSectionTimeItemStyle.imagesGroup, { width: imageWidth * col + 8, marginLeft: 10 }]}>
-      <FlatGrid
-        itemDimension={imageWidth - 2}
-        spacing={1}
-        data={images}
-        renderItem={({ item, index }) => (
-          <Image style={MessageSectionTimeItemStyle.imageItem} source={{ uri: SERVER_ADDRESS + 'api/images/' + item, width: images.length - 1 === index ? imageWidth * 2 + 3 : imageWidth, height: imageHeight }} />
-        )}
-      />
-    </View>
+    <Fragment>
+      <View style={[MessageSectionTimeItemStyle.imagesGroup, { width: imageWidth * col + 8, marginLeft: 10 }]}>
+        <FlatGrid
+          itemDimension={imageWidth - 2}
+          spacing={1}
+          data={images}
+          renderItem={({ item, index }) => (
+            <Pressable onPress={() => {
+              setSelectedImageIndex(index)
+              setIsVisible(true)
+            }}>
+              <Image style={MessageSectionTimeItemStyle.imageItem} source={{ uri: SERVER_ADDRESS + 'api/images/' + item, width: images.length - 1 === index ? imageWidth * 2 + 3 : imageWidth, height: imageHeight }} />
+            </Pressable>
+          )}
+        />
+      </View>
+
+      <ImageView
+        images={imageURIs}
+        imageIndex={selectedImageIndex}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+        animationType={'slide'}
+        presentationStyle={'formSheet'}
+        doubleTapToZoomEnabled={true} />
+    </Fragment>
   )
 }
 
 export default function MessageReceivedItem({ data }: MessageReceivedItemProps) {
   return (
-    <View style={MessageSectionTimeItemStyle.body}>
+    <Pressable style={MessageSectionTimeItemStyle.body}>
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>
         {data.sender.image ? (
           <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: data.sender.image }} />
@@ -111,7 +144,7 @@ export default function MessageReceivedItem({ data }: MessageReceivedItemProps) 
           {messageContentRenderItems(data)}
         </View>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

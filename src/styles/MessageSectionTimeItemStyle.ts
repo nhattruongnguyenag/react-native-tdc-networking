@@ -39,5 +39,8 @@ export default StyleSheet.create({
   imageItem: {
     borderRadius: 3,
     margin: 1
+  },
+  statusMessage: {
+    fontSize: 13
   }
 })

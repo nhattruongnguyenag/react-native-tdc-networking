@@ -30,14 +30,15 @@ export default function MessengerScreen() {
 
   useEffect(() => {
     stompClient = getStompClient()
-    stompClient.debug()
 
     const onConnected = () => {
+      setLoading(true)
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
       stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
     }
 
     const onMessageReceived = (payload: Message) => {
+      setLoading(false)
       const messages = JSON.parse(payload.body) as MessageModel[]
       const messageSectionsTime = sortMessagesByTime(messages)
       setMessageSection(sortMessageBySections(messageSectionsTime))
@@ -98,7 +99,7 @@ export default function MessengerScreen() {
         content: imagesUpload?.join(','),
         status: 0
       }
-  
+
       stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
     }
   }, [imagesUpload])
