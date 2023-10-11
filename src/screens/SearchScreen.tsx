@@ -98,27 +98,22 @@ export default function SearchScreen() {
     { label: 'Doanh nghiệp', value: 'business' },
     { label: 'Bài viết', value: 'posts' }
   ]);
-
-
+  const URL = `${SERVER_ADDRESS}/api/${type}`
 
   useEffect(() => {
     console.log(type);
-    // document.title = title
-    // fetch(`${SERVER_ADDRESS}/api/${type}`)
-    axios.get(`${SERVER_ADDRESS}/api/${type}`)
+    axios.get(URL)
     .then((response) => {
       const res = response.data.data
       setMasterData(res)
-      
     })
-    console.log(masterData)
-
   }, [type])
 
+  //Render Posts Item
   const postItems = (item: any, index: any) => { }
 
 
-  //Render Items
+  //Render Items(Users, Business)
   const renderItem = (item: any, index: any) => {
     return (
       <View
@@ -149,25 +144,6 @@ export default function SearchScreen() {
     )
   }
 
-  //
-  // const searchFilter = (txt: any) => {
-  //   if (txt) {
-  //     const newData = masterData.filter(
-  //       function (item: any, index: any) {
-  //         const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
-  //         const textData = txt.toUpperCase();
-  //         const i = itemData.indexOf(textData) > -1;
-  //         return i;
-  //       }
-  //     )
-  //     setFilterData(newData)
-  //     setSearch(txt)
-
-  //   } else {
-  //     setFilterData(masterData)
-  //     setSearch(txt)
-  //   }
-  // }
 
   useEffect(() => {
     setQty(filterData.length + '')
@@ -317,3 +293,22 @@ const styles = StyleSheet.create({
   },
 
 })
+  //
+  // const searchFilter = (txt: any) => {
+  //   if (txt) {
+  //     const newData = masterData.filter(
+  //       function (item: any, index: any) {
+  //         const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+  //         const textData = txt.toUpperCase();
+  //         const i = itemData.indexOf(textData) > -1;
+  //         return i;
+  //       }
+  //     )
+  //     setFilterData(newData)
+  //     setSearch(txt)
+
+  //   } else {
+  //     setFilterData(masterData)
+  //     setSearch(txt)
+  //   }
+  // }
