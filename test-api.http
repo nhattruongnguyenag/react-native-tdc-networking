@@ -1,0 +1,23 @@
+# GET http://localhost:8080/api/messages/1/2
+# GET http://localhost:8080/api/users
+
+# POST http://localhost:8080/api/messages HTTP/1.1
+# content-type: application/json
+
+# {
+#     "senderId": 1,
+#     "receiverId": 2,
+#     "type": "plain/text",
+#     "content": "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers",
+#     "status": 0
+# }
+
+POST http://localhost:8080/api/notification/token HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Nguyễn Nhật Trường",
+    "message": "> Hôm nay bạn khỏe không???",
+    "topic": "abced",
+    "token": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
+}

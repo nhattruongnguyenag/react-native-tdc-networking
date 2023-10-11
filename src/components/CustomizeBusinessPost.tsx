@@ -1,13 +1,15 @@
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE, COLOR_BORDER } from '../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
 import CustomizeBottomPost from './CustomizeBottomPost';
 import CustomizeBodyPost from './CustomizeBodyPost';
 import CustomizeImagePost from './CustomizeImagePost';
+import { ModalComments } from '../types/ModalComments';
 
 // Definition props
 export interface BusinessPost {
+  id: number
   name: string,
   avatar: string,
   typeAuthor: string,
@@ -26,9 +28,18 @@ export interface BusinessPost {
   }[],
   isLike: boolean,
   comments: {
-    id: number,
-    name: string,
+    id: number
+    name: string
     avatar: string
+    content: string
+    timeCreated: string
+    commentChildren: {
+      id: number
+      name: string
+      avatar: string
+      content: string,
+      timeCreated: string
+    }[]
   }[],
   isComment: boolean,
   role: number
@@ -40,9 +51,6 @@ export const TEXT_AVAILABLE = 'Khả dụng'
 export const TEXT_SEE_MORE = 'xem thêm'
 export const TEXT_HIDE_LESS = 'ẩn bớt'
 export const HEADER_ICON_SIZE = 15
-
-// get devices info 
-const { width, height } = Dimensions.get('screen');
 const HEADER_PADDING_TOP = 15;
 
 const CustomizeBusinessPost = (props: BusinessPost) => {
@@ -80,12 +88,16 @@ const CustomizeBusinessPost = (props: BusinessPost) => {
       />
       {/* Image */}
       <CustomizeImagePost
+        name={post.name}
+        avatar={post.avatar}
         images={post.images}
       />
       {/* Bottom */}
       <CustomizeBottomPost
-        isLike={false}
-        isComment={true}
+        id={post.id}
+        role={post.role}
+        isLike={post.isLike}
+        isComment={post.isComment}
         likes={post.likes}
         comments={post.comments}
         handleClickBottomBtnEvent={

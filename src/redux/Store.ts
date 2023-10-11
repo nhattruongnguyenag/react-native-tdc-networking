@@ -7,7 +7,7 @@ import TaskReducer, { TDCSocialNetworkSlice } from './Slice'
 export const store = configureStore({
   reducer: {
     TDCSocialNetworkReducer: TDCSocialNetworkSlice.reducer,
-    [TDCSocialNetworkAPI.reducerPath]: TDCSocialNetworkAPI.reducer
+    [TDCSocialNetworkAPI.reducerPath]: TDCSocialNetworkAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(TDCSocialNetworkAPI.middleware, rtkQueryErrorLogger)

@@ -2,12 +2,21 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { Avatar } from 'react-native-paper'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { MESSENGER_SCREEN } from '../../constants/Screen'
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
+import { CONVERSATION_SCREEN, MESSENGER_SCREEN } from '../../constants/Screen'
+import { Conversation } from '../../types/Conversation'
+import { RootStackParamList } from '../../App'
+import { useAppDispatch } from '../../redux/Hook'
+import { setSelectConversation } from '../../redux/Slice'
 
-export default function ConversationItem() {
+interface ConversationItemProps {
+    data: Conversation
+}
+
+export default function ConversationItem({data}: ConversationItemProps) {
     const [active, setActive] = useState(false)
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const dispatch = useAppDispatch()
 
     const onItemPressIn = useCallback(() => {
         setActive(true)
@@ -18,17 +27,18 @@ export default function ConversationItem() {
     }, [])
 
     const onItemPress = useCallback(() => {
+        dispatch(setSelectConversation(data))
         navigation.navigate(MESSENGER_SCREEN)
     }, [])
 
     return (
         <Pressable onPress={onItemPress} style={[styles.body, { backgroundColor: active ? '#f6f6f6' : '#fff' }]} onPressIn={onItemPressIn} onPressOut={onItemPressOut}>
             <View style={styles.avatarGroup}>
-                <Avatar.Image size={60} source={{ uri: 'https://i.stack.imgur.com/bl1g5.png?s=192&g=1' }} />
-                <View style={styles.activeSignal} />
+                <Avatar.Image size={60} source={{ uri: data?.receiver?.image }} />
+                <View style={[styles.activeSignal, {display: 'flex'}]} />
             </View>
             <View style={styles.conversationContentGroup}>
-                <Text style={styles.userFullnameTitle}>Nguyễn Thị A</Text>
+                <Text style={styles.userFullnameTitle}>{data?.receiver?.name}</Text>
                 <Text style={styles.conversationContent}>Chào bạn, dạo này bạn khỏe không ?</Text>
             </View>
             <View style={styles.conversationExtraInfoGroup}>

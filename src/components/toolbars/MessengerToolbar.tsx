@@ -1,21 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Appbar, Avatar } from 'react-native-paper'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PURPLE_COLOR } from '../../constants/Color'
+import { Conversation } from '../../types/Conversation'
+import { RootStackParamList } from '../../App'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { setSelectConversation } from '../../redux/Slice'
 
 const AVATAR_HEIGHT = 40
 
 export default function MessengerToolbar({ }) {
+    const dispatch = useAppDispatch()
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-
+    const {selectConversation} = useAppSelector(state => state.TDCSocialNetworkReducer)
+    
     return (
         <Appbar.Header style={styles.header}>
             <Appbar.Action
                 icon={'arrow-left'}
                 iconColor={PURPLE_COLOR}
                 onPress={() => {
+                    dispatch(setSelectConversation(null))
                     navigation.goBack()
                 }}
                 size={25}
@@ -27,7 +34,7 @@ export default function MessengerToolbar({ }) {
                         <View style={styles.activeSignal} />
                     </View>
                     <View style={styles.conversationContentGroup}>
-                        <Text style={styles.userFullnameTitle}>Nguyễn Thị A</Text>
+                        <Text style={styles.userFullnameTitle}>{selectConversation?.receiver.name}</Text>
                         <Text style={styles.conversationContent}>Truy cập 15 phút trước</Text>
                     </View>
                 </Fragment>

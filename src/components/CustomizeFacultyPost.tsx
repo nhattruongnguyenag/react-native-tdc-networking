@@ -1,11 +1,13 @@
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE, BACKGROUND_COLOR_BOTTOM_ICON } from '../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
 import CustomizeImagePost from './CustomizeImagePost';
 import CustomizeBottomPost from './CustomizeBottomPost';
 import CustomizeBodyPost from './CustomizeBodyPost';
+import { ModalComments } from '../types/ModalComments';
 export interface Faculity {
+    id: number,
     name: string,
     avatar: string,
     timeCreatePost: string,
@@ -18,9 +20,18 @@ export interface Faculity {
     }[],
     isLike: boolean,
     comments: {
-        id: number,
-        name: string,
+        id: number
+        name: string
         avatar: string
+        content: string
+        timeCreated: string
+        commentChildren: {
+            id: number
+            name: string
+            avatar: string
+            content: string
+            timeCreated: string
+        }[]
     }[],
     isComment: boolean,
     role: number
@@ -32,9 +43,6 @@ export const TEXT_SEE_MORE = 'xem thêm'
 export const TEXT_HIDE_LESS = 'ẩn bớt'
 export const HEADER_ICON_SIZE = 15
 export const BOTTOM_ICON_SIZE = 30
-
-// get devices info 
-const { width, height } = Dimensions.get('screen');
 
 const CustomizeFacultyPost = (props: Faculity) => {
     // Get data 
@@ -71,9 +79,12 @@ const CustomizeFacultyPost = (props: Faculity) => {
             {/* Image */}
             <CustomizeImagePost
                 images={post.images}
-            />
+                name={post.name}
+                avatar={post.avatar} />
             {/* Bottom */}
             <CustomizeBottomPost
+                id={post.id}
+                role={post.role}
                 isLike={false}
                 isComment={true}
                 likes={post.likes}

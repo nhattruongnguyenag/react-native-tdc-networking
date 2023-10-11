@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -24,8 +24,6 @@ export const TEXT_HIDE_LESS = 'ẩn bớt'
 export const HEADER_ICON_SIZE = 15
 export const BOTTOM_ICON_SIZE = 30
 
-// get devices info 
-const { width, height } = Dimensions.get('screen');
 
 const CustomizeHeaderPost = (props: HeaderPostProps) => {
     // Get data 
