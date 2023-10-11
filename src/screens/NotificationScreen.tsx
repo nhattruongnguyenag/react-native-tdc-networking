@@ -1,15 +1,14 @@
-import { Dimensions, StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Pressable, Vibration, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import Icon1 from 'react-native-vector-icons/Entypo';
-import { SERVER_ADDRESS } from '../constants/SystemConstant';
-import axios from 'axios'
-import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SEACRH_SCREEN} from '../constants/Screen';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import Icon1 from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { SEACRH_SCREEN } from '../constants/Screen';
+import { SERVER_ADDRESS } from '../constants/SystemConstant';
 
 
 const { height, width } = Dimensions.get('screen')
