@@ -81,13 +81,12 @@ export default function NotificationScreen() {
 
   const handleListIsRead = () => {
     try {
-      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 2 })
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 1 })
       callData()
     }
     
     catch(error) {
      console.log(error)}
-
   }
 
   const handleDelSearch = () => {
