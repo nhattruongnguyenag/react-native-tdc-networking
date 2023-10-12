@@ -22,7 +22,7 @@ import { Faculty } from '../types/Faculty'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
 import { COLOR_BTN_BLUE } from '../constants/Color'
@@ -155,7 +155,7 @@ export default function LoginScreen() {
             <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate(TOP_TAB_NAVIGATOR)
+                navigation.navigate(INTERMEDIATIOO_SCREEN)
               }}
             >
               <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Đăng ký</Text>
