@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
   txt: {
     color: '#000000',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 16
   },
   ip: {
-    fontSize: 18,
+    fontSize: 16,
     borderWidth: 1,
     borderColor: '#97A1B0',
     paddingLeft: 10,

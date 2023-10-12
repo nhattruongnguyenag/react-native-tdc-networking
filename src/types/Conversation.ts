@@ -7,4 +7,5 @@ export interface Conversation extends Base {
   countNewMessage: number
   lastMessageContent: string
   lastMessageSentAt: string
+  lastMessageType: string
 }

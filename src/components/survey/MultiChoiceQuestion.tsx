@@ -1,19 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { IconButton, RadioButton } from 'react-native-paper'
-import RadioInputWithTitle from '../inputs/RadioInputWithTitle'
+import { StyleSheet, View } from 'react-native'
+import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
 import QuestionTitle from './QuestionTitle'
 
-export default function MultiChoiceQuestion() {
-  const [value, setValue] = React.useState('first')
-
+export default function MultiChoiceQuestion(props: QuestionProps) {
   return (
     <View style={styles.itemBody}>
-      <QuestionTitle title='Bạn có đi làm thêm vào thứ mấy?' />
-      <CheckboxInputWithTitle label='Thứ 2' checked={true} />
-      <CheckboxInputWithTitle label='Thứ 3' />
-      <CheckboxInputWithTitle label='Thứ 4' />
+      <QuestionTitle title={props.data.title} index={props.index} />
+      {
+        props.data.choices.map((item, index) => {
+          return <CheckboxInputWithTitle label={item} key={index}/>
+        })
+      }
     </View>
   )
 }
