@@ -23,9 +23,13 @@ import { COLOR_BTN_BLUE } from '../constants/Color'
 import ActionSheet from 'react-native-actionsheet'
 import { useAppSelector } from '../redux/Hook'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import { useNavigation, ParamListBase } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { LOGIN_SCREEN } from '../constants/Screen'
 
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [business, setBusiness] = useState<Business>({
     id: 0,
     password: '',
@@ -66,14 +70,11 @@ export default function BusinessRegistrationScreen() {
       secureTextEntry: !isCheck1.secureTextEntry
     })
   }
-  
+
   const onSubmit = () => {
     setIsLoading(true)
-   
-    setBusiness({ ...business, image: JSON.stringify(imagesUpload)})
+    setBusiness({ ...business, code: JSON.stringify(Date.now()), image: JSON.stringify(imagesUpload) })
 
-    setBusiness({ ...business, code: JSON.stringify(Date.now())})
-    
     axios
       .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
       .then((response) => {
@@ -86,9 +87,9 @@ export default function BusinessRegistrationScreen() {
         Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
         setIsLoading(false)
       })
-      console.log(business)
+    console.log(business)
   }
-  
+
   return (
     <ScrollView>
       <SafeAreaView>
@@ -177,6 +178,17 @@ export default function BusinessRegistrationScreen() {
           <Text style={styles.txtRegister}>Đăng ký tài khoản</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
+
+        <View style={styles.login}>
+          <Text>Đã có tài khoản? </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(LOGIN_SCREEN)
+            }}
+          >
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>Đăng nhập</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </ScrollView>
   )
@@ -215,7 +227,8 @@ const styles = StyleSheet.create({
   btnRegister: {
     backgroundColor: COLOR_BTN_BLUE,
     alignItems: 'center',
-    marginVertical: 30,
+    marginTop: 20,
+    marginBottom: 10,
     marginHorizontal: 15,
     borderRadius: 10,
     flexDirection: 'row',
@@ -249,5 +262,12 @@ const styles = StyleSheet.create({
   },
   btnImg: {
     marginRight: 30
+  },
+
+  login: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20
   }
 })
