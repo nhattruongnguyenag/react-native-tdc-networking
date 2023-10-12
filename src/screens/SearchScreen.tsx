@@ -18,12 +18,13 @@ export default function SearchScreen() {
   const [type, setType] = useState('')
   const [qty, setQty] = useState('')
   const [value, setValue] = useState(null);
+  const [label, setLabel] = useState('Nguoi dung')
+  const [indexType, setIndexType] = useState()
   const [items, setItems] = useState([
-    { label: 'Sinh viên', value: 'sinh-vien' },
-    { label: 'Doanh nghiệp', value: 'doanh-nghiep' },
-    { label: 'Bài viết', value: 'posts' }
+    { label: 'Nguoi dung', value: 'nguoi-dung', children: [{ label: 'Sinh viên', value: 'sinh-vien' }, { label: 'Doanh nghiệp', value: 'doanh-nghiep' }] },
+    { label: 'Bài viết', value: 'bai-viet', children: [{ label: 'Bai viet', value: 'bai-viet' }, { label: 'khao sat', value: 'khao sat' }] }
   ]);
-  
+
   const handleSearch = async () => {
     try {
       console.log(type + ' - ' + search)
@@ -41,6 +42,10 @@ export default function SearchScreen() {
 
 
 
+  useEffect(() => {
+    console.log(type)
+    setG()
+  }, [type])
   //Render Posts Item
   const postItems = (item: any, index: any) => { }
 
@@ -79,9 +84,16 @@ export default function SearchScreen() {
 
   useEffect(() => {
     setQty(filterData.length + '')
-
   })
 
+  const setG = () => {
+    for (let index = 0; index < items.length; index++) {
+      if (items[index].label === label) {
+        return index
+
+      }
+    }
+  }
   return (
     <View style={styles.searchScreen}>
       <View style={styles.operation}>
@@ -98,7 +110,22 @@ export default function SearchScreen() {
               style={styles.dropDown}
               data={items}
               value={value}
-              placeholder='-- Đối tượng --'
+              placeholder={label}
+              labelField='label'
+              valueField='value'
+              onChange={item => {
+                setLabel(item.label)
+              }}
+            />
+            <Dropdown
+              style={[styles.dropDown2]}
+              data={
+                label === 'Bài viết' ? items[1].children : items[0].children
+                // setG()
+
+              }
+              value={value}
+              placeholder='doi tuong...'
               labelField='label'
               valueField='value'
               onChange={item => {
@@ -110,18 +137,19 @@ export default function SearchScreen() {
             onPress={handleSearch}
           >
             <Text>
-              <Icon name="search" size={20} color="#ffffff" />
+              <Icon name="search" size={25} color="#ffffff" />
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <ScrollView >
+      {/* <ScrollView >
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
           masterData.map((item, index) => renderItem(item, index))
         }
-      </ScrollView>
+      </ScrollView> */}
+
     </View>
   )
 }
@@ -164,6 +192,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10
   },
+  dropDown2: {
+    backgroundColor: '#0065ff',
+    borderRadius: 5,
+    color: 'white',
+    height: 35,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    marginTop: 3
+  },
   drop: {
     flex: 5,
     color: 'white',
@@ -172,7 +209,7 @@ const styles = StyleSheet.create({
   btnSearch: {
     flex: 1,
     backgroundColor: '#0065ff',
-    height: 35,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

@@ -58,7 +58,6 @@
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.0",
-    "react-native-vision-camera": "^2.15.5",
     "react-redux": "^8.1.2",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
