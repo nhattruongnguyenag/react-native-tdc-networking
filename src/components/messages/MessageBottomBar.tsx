@@ -16,6 +16,7 @@ interface MessageBottomBarProps {
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
   const [messageContent, setMessageContent] = useState('')
+  
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
 
   return (

@@ -22,6 +22,7 @@ import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 
 import {
+  ADD_QUESTION_SCREEN,
   BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
@@ -34,6 +35,7 @@ import {
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
+  REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
@@ -59,6 +61,8 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import { Conversation } from './types/Conversation'
 import moment from 'moment'
 import ImageViewScreen from './screens/ImageViewScreen'
+import AddQuestionScreen from './screens/AddQuestionScreen'
+import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -83,6 +87,8 @@ export type RootStackParamList = {
   CREATE_SURVEY_SCREEN: undefined
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
+  ADD_QUESTION_SCREEN: undefined
+  REVIEW_SURVEY_POST_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -139,25 +145,7 @@ export function DrawerNavigator(): JSX.Element {
         component={StackNavigator}
       />
 
-      <Drawer.Screen
-        name={CREATE_SURVEY_SCREEN}
-        options={{
-          header: () => <ToolbarWithBackPress title='Thêm khảo sát' />,
-          drawerIcon: ({ color, size, focused }) =>
-            customDrawerIcon({
-              focused: focused,
-              icon: 'square-poll-vertical'
-            }),
-          drawerActiveTintColor: '#0088ff',
-          drawerLabel: ({ color, focused }) =>
-            customDrawerLabel({
-              color: color,
-              focused: focused,
-              label: 'Thêm khảo sát'
-            })
-        }}
-        component={CreateSurveyPostScreen}
-      />
+
     </Drawer.Navigator>
   )
 }
@@ -235,6 +223,19 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát' /> }}
         component={CreateSurveyPostScreen}
       />
+
+      <RootStack.Screen
+        name={ADD_QUESTION_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Thêm câu hỏi' /> }}
+        component={AddQuestionScreen}
+      />
+
+      <RootStack.Screen
+        name={REVIEW_SURVEY_POST_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Xem lại bài viết' /> }}
+        component={ReviewSurveyPostScreen}
+      />
+
 
       <RootStack.Screen
         name={IMAGE_VIEW_SCREEN}

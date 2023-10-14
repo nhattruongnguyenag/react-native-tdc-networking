@@ -3,6 +3,7 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { DeviceToken } from '../types/DeviceToken'
 import { FCMNotificationRequest } from '../types/FCMNotificationRequest'
 import { MessageResponseData } from '../types/MessageResponseData'
+import { SurveyPostRequest } from '../types/SurveyPost'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -25,6 +26,16 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8',
         }
       })
+    }),
+    addSurveyPost: builder.mutation<MessageResponseData, SurveyPostRequest>({
+      query: (data) => ({
+        url: 'api/posts/survey',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        }
+      })
     })
   })
 })
@@ -32,6 +43,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const { 
+  useAddSurveyPostMutation,
   useSaveDeviceTokenMutation,
   useSendFCMNotificationMutation
  } = TDCSocialNetworkAPI
