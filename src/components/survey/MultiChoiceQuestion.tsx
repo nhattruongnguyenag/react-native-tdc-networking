@@ -7,7 +7,7 @@ import QuestionTitle from './QuestionTitle'
 export default function MultiChoiceQuestion(props: QuestionProps) {
   return (
     <View style={styles.itemBody}>
-      <QuestionTitle title={props.data.title} index={props.index} />
+      <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
       {
         props.data.choices.map((item, index) => {
           return <CheckboxInputWithTitle label={item} key={index}/>

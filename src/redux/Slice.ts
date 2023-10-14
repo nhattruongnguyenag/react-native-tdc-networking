@@ -1,15 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { Faculity } from '../components/CustomizeFacultyPost'
-import { Student } from '../types/Student'
 import { Business } from '../types/Business'
-import { ModalImage } from '../types/ModalImage'
-import { ModalComments } from '../types/ModalComments'
-import { ModalUserReaction } from '../types/ModalUserReaction'
 import { Conversation } from '../types/Conversation'
+import { ModalComments } from '../types/ModalComments'
+import { ModalImage } from '../types/ModalImage'
+import { ModalUserReaction } from '../types/ModalUserReaction'
 import { ChoiceProps, Question } from '../types/Question'
+import { Student } from '../types/Student'
+import { SurveyPostRequest } from '../types/SurveyPost'
 
 export interface TDCSocialNetworkState {
+  surveyPostRequest: SurveyPostRequest | null
   choices: string[],
   questions: Question[]
   imagesUpload: string[] | null,
@@ -26,6 +28,7 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  surveyPostRequest: null,
   choices: ['', '', ''],
   questions: [],
   imagesUpload: null,
@@ -60,18 +63,23 @@ export const TDCSocialNetworkSlice = createSlice({
     setSelectConversation: (state, action: PayloadAction<Conversation | null>) => {
       state.selectConversation = action.payload
     },
+    setSurveyPostRequest: (state, action: PayloadAction<SurveyPostRequest | null>) => {
+      state.surveyPostRequest = action.payload
+    },
     addQuestion: (state, action: PayloadAction<Question>) => {
-      state.questions.push(action.payload)
-      state.choices = ['', '', '']
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
+      }
     },
     deleteQuestion: (state, action: PayloadAction<number>) => {
-      state.questions.splice(action.payload, 1)
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions.splice(action.payload, 1)
+      }
     },
     addChoice: (state, action: PayloadAction<string>) => {
       state.choices.push(action.payload)
     },
     updateChoice: (state, action: PayloadAction<ChoiceProps>) => {
-      console.log(action.payload)
       state.choices[action.payload.index] = action.payload.data
     },
     deleteChoice: (state, action: PayloadAction<number>) => {
@@ -113,6 +121,7 @@ export const {
   setUserLogin,
   setConversations,
   setDeviceToken,
+  setSurveyPostRequest,
   addQuestion,
   deleteQuestion,
   addChoice,

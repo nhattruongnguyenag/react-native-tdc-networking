@@ -10,7 +10,7 @@ export default function OneChoiceQuestion(props: QuestionProps) {
 
   return (
     <View style={styles.itemBody}>
-      <QuestionTitle title={props.data.title} index={props.index} />
+      <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
       <RadioButton.Group onValueChange={(value) => setValue(value)} value={value}>
         {
           props.data.choices.map((item, index) => {

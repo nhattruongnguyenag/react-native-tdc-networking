@@ -1,21 +1,32 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleProp, StyleSheet, Text, TextInput, TextStyle, View } from 'react-native'
 import React from 'react'
 
 interface TextInputWithTitleProps {
   title?: string
   placeholder?: string
   onChangeText?: (value: string) => void
+  multiline?: boolean
+  textInputStyle?: StyleProp<TextStyle>
+  numberOfLine?: number
+  onFocus?: () => void
+  onBlur?: () => void
+  value?: string
 }
 
 export default function TextInputWithTitle(props: TextInputWithTitleProps) {
   return (
     <View style={styles.group}>
-      <Text style={styles.txt}>{props.title}</Text>
+      <Text style={[styles.txt, {display: props.title ? 'flex' : 'none'}]}>{props.title}</Text>
       <TextInput
+        value={props.value}
+        onBlur={() => props.onBlur && props.onBlur()}
+        onFocus={() => props.onFocus && props.onFocus()}
+        numberOfLines={props.numberOfLine ? props.numberOfLine : 1}
+        multiline={props.multiline ? props.multiline : false}
         placeholder={props.placeholder}
-        style={styles.ip}
+        style={[styles.ip, props.textInputStyle]}
         onChangeText={(value) => props.onChangeText && props.onChangeText(value)}
-      ></TextInput>
+      />
     </View>
   )
 }
