@@ -4,9 +4,33 @@ import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState, useCallback } from "react";
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon1 from 'react-native-vector-icons/Entypo';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import axios from 'axios';
 
+const itemsData = [
+  {
+    "id": 1,
+    "name": "Ban da dang ky thanh cong!!!",
+    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "image": "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg",
+    "follow": false
+  },
+  {
+    "id": 2,
+    "name": "John da dang ky thanh cong!!",
+    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg",
+    "follow": true
+  },
+  {
+    "id": 3,
+    "name": "Cong ty .......... vua dang thong tin tuyen dung ",
+    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "image": "https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg",
+    "follow": false
+  },
+]
 
 
 const { height, width } = Dimensions.get('screen')
@@ -17,17 +41,17 @@ export default function SearchScreen() {
   const [filterData, setFilterData] = useState([])
   const [type, setType] = useState('')
   const [qty, setQty] = useState('')
+  //Xu ly dropdown
   const [value, setValue] = useState(null);
-  const [label, setLabel] = useState('Nguoi dung')
-  const [indexType, setIndexType] = useState()
+  const [label, setLabel] = useState('Người dùng')
   const [items, setItems] = useState([
-    { label: 'Nguoi dung', value: 'nguoi-dung', children: [{ label: 'Sinh viên', value: 'sinh-vien' }, { label: 'Doanh nghiệp', value: 'doanh-nghiep' }] },
-    { label: 'Bài viết', value: 'bai-viet', children: [{ label: 'Bai viet', value: 'bai-viet' }, { label: 'khao sat', value: 'khao sat' }] }
+    { label: 'Người dùng', value: 'nguoi-dung', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }] },
+    { label: 'Bài viết', value: 'bai-viet', children: [{ label: '- - Bài viết - -', value: 'bai-viet' }, { label: '- - Khảo sát - -', value: 'khao-sat' }, { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }] }
   ]);
 
   const handleSearch = async () => {
     try {
-      console.log(type + ' - ' + search)
+      // console.log(type + ' - ' + search)
       await axios.post(`${SERVER_ADDRESS}/api/find/user`, {
         type: type,
         name: search
@@ -40,14 +64,28 @@ export default function SearchScreen() {
     }
   };
 
-
-
-  useEffect(() => {
-    console.log(type)
-    setG()
-  }, [type])
   //Render Posts Item
-  const postItems = (item: any, index: any) => { }
+  const postItems = (item: any, index: any) => {
+    return (
+      <View
+        key={index}
+        style={styles.itemPost1}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Image
+            style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
+            source={{ uri: item.image }} />
+          <View style={{ marginLeft: 10, width: '75%' }}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.name}</Text>
+            <Text>{(item.content).length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
+          </View>
+        </View>
+
+        <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+      </View>
+
+    )
+  }
 
 
   //Render Items(Users, Business)
@@ -60,20 +98,17 @@ export default function SearchScreen() {
           <Image
             style={styles.image}
             source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
-          <Text style={styles.name}>{index + ". " + item.name}</Text>
+          <Text style={styles.name}>{item.name}</Text>
         </View>
         <View>
-          <TouchableOpacity style={styles.follow} >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
-          </TouchableOpacity>
-          {/* {
-            item.title ?
+          {
+            item.follow ?
+              (<View><Icon1 name="dots-three-vertical" size={17} color="#000000" /></View>)
+              :
               (<TouchableOpacity style={styles.follow} >
                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
               </TouchableOpacity>)
-              :
-              (<View><Icon name="dots-three-vertical" size={20} color="#000000" /></View>)
-          } */}
+          }
 
         </View>
 
@@ -81,17 +116,22 @@ export default function SearchScreen() {
     )
   }
 
-
-  useEffect(() => {
-    setQty(filterData.length + '')
-  })
-
-  const setG = () => {
-    for (let index = 0; index < items.length; index++) {
-      if (items[index].label === label) {
-        return index
-
-      }
+  const checkType = () => {
+    switch (type) {
+      case 'sinh-vien':
+        return itemsData.map((item, index) => renderItem(item, index));
+        break;
+      case 'doanh-nghiep':
+        return itemsData.map((item, index) => renderItem(item, index));
+        break;
+      case 'bai-viet':
+        return itemsData.map((item, index) => postItems(item, index));
+        break;
+      case 'khao-sat':
+        return itemsData.map((item, index) => postItems(item, index));
+        break;
+      default:
+        console.log('Khong co type');
     }
   }
   return (
@@ -121,11 +161,9 @@ export default function SearchScreen() {
               style={[styles.dropDown2]}
               data={
                 label === 'Bài viết' ? items[1].children : items[0].children
-                // setG()
-
               }
               value={value}
-              placeholder='doi tuong...'
+              placeholder='- - Chọn đối tượng - -'
               labelField='label'
               valueField='value'
               onChange={item => {
@@ -143,12 +181,13 @@ export default function SearchScreen() {
         </View>
       </View>
 
-      {/* <ScrollView >
+      <ScrollView >
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
-          masterData.map((item, index) => renderItem(item, index))
+          // itemsData.map((item, index) => postItems(item, index))
+          checkType()
         }
-      </ScrollView> */}
+      </ScrollView>
 
     </View>
   )
@@ -164,12 +203,12 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 15,
     marginBottom: 50,
-    height: 50
+    height: 90
   },
   search: {
     backgroundColor: '#d9d9d9',
     borderRadius: 5,
-    height: 40,
+    height: 45,
     paddingLeft: 10
   },
   select: {
@@ -209,12 +248,23 @@ const styles = StyleSheet.create({
   btnSearch: {
     flex: 1,
     backgroundColor: '#0065ff',
-    height: 70,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginLeft: 10
-
+    marginLeft: 10,
+    marginTop: 5
+  },
+  itemPost1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    // borderBottomWidth: 0.9,
+    // borderBottomColor: 'gray',
   },
   item: {
     flexDirection: 'row',
@@ -223,8 +273,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 10,
     paddingRight: 12,
-    paddingTop: 2,
-    paddingBottom: 2,
+    paddingTop: 5,
+    paddingBottom: 5,
     borderBottomWidth: 0.9,
     borderBottomColor: 'gray',
   },
@@ -242,9 +292,11 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   name: {
-    paddingLeft: 10,
     paddingRight: 10,
+    paddingLeft: 10,
     width: '62%',
+    fontSize: 15,
+    color: '#5A5F5C'
   },
   follow: {
     height: 30,
@@ -263,22 +315,3 @@ const styles = StyleSheet.create({
   },
 
 })
-//
-// const searchFilter = (txt: any) => {
-//   if (txt) {
-//     const newData = masterData.filter(
-//       function (item: any, index: any) {
-//         const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
-//         const textData = txt.toUpperCase();
-//         const i = itemData.indexOf(textData) > -1;
-//         return i;
-//       }
-//     )
-//     setFilterData(newData)
-//     setSearch(txt)
-
-//   } else {
-//     setFilterData(masterData)
-//     setSearch(txt)
-//   }
-// }
