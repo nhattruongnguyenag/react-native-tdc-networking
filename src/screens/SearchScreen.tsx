@@ -37,38 +37,46 @@ const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
   //Danh sach tim kiem
+  const [userData, setUserData] = useState([])
+  const [postData, setPostData] = useState([])
   const [masterData, setMasterData] = useState([])
   //Kieu du lieu
   const [search, setSearch] = useState('')
-  const [subjects, setSubjects] = useState('')
-  const [type, setType] = useState('')
-  const [qty, setQty] = useState('')
+  const [subjects, setSubjects] = useState('user')
+  const [type, setType] = useState('sinh-vien')
+  const [qty, setQty] = useState(0)
+  let URL = `${SERVER_ADDRESS}/api/find/${subjects}`
   //Xu ly dropdown
   const [value, setValue] = useState(null);
   const [label, setLabel] = useState('Người dùng')
+  const [label2, setLabel2] = useState('- - Sinh viên - -')
   const [items, setItems] = useState([
     { label: 'Người dùng', value: 'user', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }] },
     { label: 'Bài viết', value: 'post', children: [{ label: '- - Bài viết - -', value: 'thong-thuong' }, { label: '- - Khảo sát - -', value: 'khao-sat' }, { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }] }
   ]);
 
-  const handleSearch = async () => {
-    
-    
+  // useEffect(() => {
+  //   setMasterData([])
+  //   setQty(0)
+  // }, [subjects])
+
+  const handleSearch = () => {
+    console.log(masterData);
     try {
       // console.log(type + ' - ' + search)
       console.log(subjects + '-' + type + '-' + search);
-      await axios.post(`${SERVER_ADDRESS}/api/find/${subjects}`, {
+      axios.post(URL, {
         type: type,
         name: search
       }).then(res => {
         setMasterData(res.data.data);
-        console.log(masterData)
-
+        setQty(masterData.length)
         setSearch('')
       })
     } catch (error) {
       console.error('Lỗi trong quá trình tìm kiếm: ', error);
     }
+
   };
 
   //Render Posts Item
@@ -81,13 +89,12 @@ export default function SearchScreen() {
         <View style={{ flexDirection: 'row' }}>
           <Image
             style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
-            source={{ uri: item.image }} />
+            source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
           <View style={{ marginLeft: 10, width: '75%' }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.user.name}</Text>
             <Text>{(item.content).length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
           </View>
         </View>
-
         <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
       </View>
 
@@ -120,7 +127,6 @@ export default function SearchScreen() {
       </View>
     )
   }
-
   const checkType = () => {
     switch (type) {
       case 'sinh-vien':
@@ -159,8 +165,12 @@ export default function SearchScreen() {
               labelField='label'
               valueField='value'
               onChange={item => {
+                setMasterData([])
+                setQty(0)
                 setLabel(item.label)
                 setSubjects(item.value)
+                setType(item.label === 'Bài viết' ? items[1].children[0].value : items[0].children[0].value)
+                setLabel2(item.label === 'Bài viết' ? items[1].children[0].label : items[0].children[0].label)
               }}
             />
             <Dropdown
@@ -169,7 +179,7 @@ export default function SearchScreen() {
                 label === 'Bài viết' ? items[1].children : items[0].children
               }
               value={value}
-              placeholder='- - Chọn đối tượng - -'
+              placeholder={label2}
               labelField='label'
               valueField='value'
               onChange={item => {
@@ -191,7 +201,7 @@ export default function SearchScreen() {
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
           // itemsData.map((item, index) => postItems(item, index))
-          // checkType()
+          checkType()
         }
       </ScrollView>
 
