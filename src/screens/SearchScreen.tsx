@@ -68,8 +68,6 @@ export default function SearchScreen() {
         name: search
       }).then(res => {
         setMasterData(res.data.data);
-        console.log(res.data.data);
-
         // setQty(masterData.length)
         setSearch('')
       })
@@ -78,11 +76,15 @@ export default function SearchScreen() {
     }
   };
 
-  const handleFollow = (id: number) => {
+  const handleFollow = (userFollowId: number) => {
+    console.log(userFollowId);
+    
     try {
       axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
+        userFollowId: userFollowId,
         userId: 12,
       })
+      masterData
     } catch (error) {
       console.error('Lỗi trong quá trình follow: ', error);
     }
@@ -128,7 +130,7 @@ export default function SearchScreen() {
               (<View><Icon1 name="dots-three-vertical" size={17} color="#000000" /></View>)
               :
               (<TouchableOpacity style={styles.follow}
-                // onPress={handleFollow(item.id)}
+                onPress={() => handleFollow(item.id)}
               >
                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
               </TouchableOpacity>)
