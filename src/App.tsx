@@ -291,15 +291,16 @@ function App(): JSX.Element {
   })
 
   return (
-    <MenuProvider>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            <DrawerNavigator />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
-    </MenuProvider>
+    // <MenuProvider>
+    //   <Provider store={store}>
+    //     <PaperProvider>
+    //       <NavigationContainer>
+    //         <DrawerNavigator />
+    //       </NavigationContainer>
+    //     </PaperProvider>
+    //   </Provider>
+    // </MenuProvider>
+    <SearchScreen/>
   )
 }
 

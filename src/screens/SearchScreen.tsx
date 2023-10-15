@@ -36,27 +36,34 @@ const itemsData = [
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
-  const [search, setSearch] = useState('')
+  //Danh sach tim kiem
   const [masterData, setMasterData] = useState([])
-  const [filterData, setFilterData] = useState([])
+  //Kieu du lieu
+  const [search, setSearch] = useState('')
+  const [subjects, setSubjects] = useState('')
   const [type, setType] = useState('')
   const [qty, setQty] = useState('')
   //Xu ly dropdown
   const [value, setValue] = useState(null);
   const [label, setLabel] = useState('Người dùng')
   const [items, setItems] = useState([
-    { label: 'Người dùng', value: 'nguoi-dung', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }] },
-    { label: 'Bài viết', value: 'bai-viet', children: [{ label: '- - Bài viết - -', value: 'bai-viet' }, { label: '- - Khảo sát - -', value: 'khao-sat' }, { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }] }
+    { label: 'Người dùng', value: 'user', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }] },
+    { label: 'Bài viết', value: 'post', children: [{ label: '- - Bài viết - -', value: 'thong-thuong' }, { label: '- - Khảo sát - -', value: 'khao-sat' }, { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }] }
   ]);
 
   const handleSearch = async () => {
+    
+    
     try {
       // console.log(type + ' - ' + search)
-      await axios.post(`${SERVER_ADDRESS}/api/find/user`, {
+      console.log(subjects + '-' + type + '-' + search);
+      await axios.post(`${SERVER_ADDRESS}/api/find/${subjects}`, {
         type: type,
         name: search
       }).then(res => {
         setMasterData(res.data.data);
+        console.log(masterData)
+
         setSearch('')
       })
     } catch (error) {
@@ -76,7 +83,7 @@ export default function SearchScreen() {
             style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
             source={{ uri: item.image }} />
           <View style={{ marginLeft: 10, width: '75%' }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.name}</Text>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.user.name}</Text>
             <Text>{(item.content).length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
           </View>
         </View>
@@ -109,9 +116,7 @@ export default function SearchScreen() {
                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
               </TouchableOpacity>)
           }
-
         </View>
-
       </View>
     )
   }
@@ -119,19 +124,19 @@ export default function SearchScreen() {
   const checkType = () => {
     switch (type) {
       case 'sinh-vien':
-        return itemsData.map((item, index) => renderItem(item, index));
+        return masterData.map((item, index) => renderItem(item, index));
         break;
       case 'doanh-nghiep':
-        return itemsData.map((item, index) => renderItem(item, index));
+        return masterData.map((item, index) => renderItem(item, index));
         break;
-      case 'bai-viet':
-        return itemsData.map((item, index) => postItems(item, index));
+      case 'thong-thuong':
+        return masterData.map((item, index) => postItems(item, index));
         break;
       case 'khao-sat':
-        return itemsData.map((item, index) => postItems(item, index));
+        return masterData.map((item, index) => postItems(item, index));
         break;
       default:
-        console.log('Khong co type');
+        console.log('...');
     }
   }
   return (
@@ -155,6 +160,7 @@ export default function SearchScreen() {
               valueField='value'
               onChange={item => {
                 setLabel(item.label)
+                setSubjects(item.value)
               }}
             />
             <Dropdown
@@ -185,7 +191,7 @@ export default function SearchScreen() {
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
           // itemsData.map((item, index) => postItems(item, index))
-          checkType()
+          // checkType()
         }
       </ScrollView>
 
@@ -295,8 +301,9 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingLeft: 10,
     width: '62%',
-    fontSize: 15,
-    color: '#5A5F5C'
+    fontSize: 17,
+    color: '#5A5F5C',
+    fontWeight: 'bold'
   },
   follow: {
     height: 30,
