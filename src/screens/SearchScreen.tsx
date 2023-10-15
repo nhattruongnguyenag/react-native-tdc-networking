@@ -6,6 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon1 from 'react-native-vector-icons/Entypo';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 import axios from 'axios';
 
 const itemsData = [
@@ -78,7 +79,7 @@ export default function SearchScreen() {
 
   const handleFollow = (userFollowId: number) => {
     console.log(userFollowId);
-    
+
     try {
       axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
         userFollowId: userFollowId,
@@ -100,12 +101,33 @@ export default function SearchScreen() {
           <Image
             style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
             source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
-          <View style={{ marginLeft: 10, width: '75%' }}>
+          <View style={{ marginLeft: 10, width: '75%', zIndex: -99 }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.user.name}</Text>
             <Text>{(item.content).length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
           </View>
         </View>
-        <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+        {/* <MenuProvider> */}
+        <Menu
+          key={item.id}
+        >
+          <MenuTrigger>
+            <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+          </MenuTrigger>
+          <MenuOptions
+            optionsContainerStyle={styles.menuOption}
+          >
+            <MenuOption
+            >
+              <Text style={styles.menuText}>Xem chi tiết</Text>
+            </MenuOption>
+            <MenuOption
+            >
+              <Text style={styles.menuText}>Lưu</Text>
+            </MenuOption>
+          </MenuOptions>
+        </Menu>
+        {/* </MenuProvider> */}
+
       </View>
 
     )
@@ -127,7 +149,28 @@ export default function SearchScreen() {
         <View>
           {
             item.isFollow ?
-              (<View><Icon1 name="dots-three-vertical" size={17} color="#000000" /></View>)
+              (
+                <Menu
+                  key={item.id}
+                >
+                  <MenuTrigger>
+                    <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+                  </MenuTrigger>
+                  <MenuOptions
+                    optionsContainerStyle={styles.menuOption}
+                  >
+                    <MenuOption
+                    >
+                      <Text style={styles.menuText}>Trang cá nhân</Text>
+                    </MenuOption>
+                    <MenuOption
+                      onSelect={() => handleFollow(item.id)}
+                    >
+                      <Text style={styles.menuText}>Hủy theo dõi</Text>
+                    </MenuOption>
+                  </MenuOptions>
+                </Menu>
+              )
               :
               (<TouchableOpacity style={styles.follow}
                 onPress={() => handleFollow(item.id)}
@@ -214,19 +257,26 @@ export default function SearchScreen() {
           </TouchableOpacity>
         </View>
       </View>
-
-      <ScrollView >
-        <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
-        {
-          checkType()
-        }
-      </ScrollView>
+      <MenuProvider>
+        <ScrollView >
+          <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
+          {
+            checkType()
+          }
+        </ScrollView>
+      </MenuProvider>
 
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  menuText: {
+    fontSize: 15
+  },
+  menuOption: {
+    marginTop: 30, borderRadius: 10, paddingLeft: 10, width: 130, marginLeft: -15, paddingTop: 10, paddingBottom: 10
+  },
   searchScreen: {
     backgroundColor: 'white',
     flex: 1
