@@ -16,7 +16,7 @@ interface MessageBottomBarProps {
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
   const [messageContent, setMessageContent] = useState('')
-  
+
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
 
   return (
@@ -65,9 +65,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
         customStyle={{ marginLeft: 'auto' }}
       />
 
-      <CustomizedImagePicker
-        optionsRef={(ref) => setImagePickerOptionsRef(ref)}
-      />
+      <CustomizedImagePicker optionsRef={(ref) => setImagePickerOptionsRef(ref)} />
     </View>
   )
 }

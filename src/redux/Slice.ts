@@ -12,9 +12,9 @@ import { SurveyPostRequest } from '../types/SurveyPost'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null
-  choices: string[],
+  choices: string[]
   questions: Question[]
-  imagesUpload: string[] | null,
+  imagesUpload: string[] | null
   conversations: Conversation[]
   selectConversation: Conversation | null
   userLogin: Student | Faculity | Business | null

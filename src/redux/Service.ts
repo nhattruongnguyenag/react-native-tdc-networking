@@ -23,7 +23,7 @@ export const TDCSocialNetworkAPI = createApi({
         method: 'POST',
         body: data,
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
+          'Content-type': 'application/json; charset=UTF-8'
         }
       })
     }),
@@ -33,7 +33,7 @@ export const TDCSocialNetworkAPI = createApi({
         method: 'POST',
         body: data,
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
+          'Content-type': 'application/json; charset=UTF-8'
         }
       })
     })
@@ -42,8 +42,5 @@ export const TDCSocialNetworkAPI = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { 
-  useAddSurveyPostMutation,
-  useSaveDeviceTokenMutation,
-  useSendFCMNotificationMutation
- } = TDCSocialNetworkAPI
+export const { useAddSurveyPostMutation, useSaveDeviceTokenMutation, useSendFCMNotificationMutation } =
+  TDCSocialNetworkAPI

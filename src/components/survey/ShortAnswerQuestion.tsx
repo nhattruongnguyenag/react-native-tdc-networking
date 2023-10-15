@@ -7,11 +7,7 @@ export default function ShortAnswerQuestion(props: QuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
-      <TextInput
-        editable={false}
-        placeholder='Nhập câu trả lời...'
-        style={styles.ip}
-      />
+      <TextInput editable={false} placeholder='Nhập câu trả lời...' style={styles.ip} />
     </View>
   )
 }

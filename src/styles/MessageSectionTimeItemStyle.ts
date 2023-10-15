@@ -34,8 +34,8 @@ export default StyleSheet.create({
     marginTop: 10
   },
   imagesGroup: {
-    borderRadius: 5,
-  }, 
+    borderRadius: 5
+  },
   imageItem: {
     borderRadius: 3,
     margin: 1
