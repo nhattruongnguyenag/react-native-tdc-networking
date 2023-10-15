@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Business } from '../types/Business'
 import axios, { AxiosResponse } from 'axios'
@@ -30,25 +30,20 @@ import { LOGIN_SCREEN } from '../constants/Screen'
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const [business, setBusiness] = useState<Business>({
-    id: 0,
+  const [business, setBusiness] = useState<
+    Omit<Business, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'roleCodes' | 'isTyping' | 'isMessageConnect'>
+  >({
     password: '',
     representor: '',
     phone: '',
     taxCode: '',
-    code: '',
+    code: Date.now().toString(),
     address: '',
     activeTime: '',
     email: '',
     name: '',
     image: '',
-    status: 0,
-    createdAt: '',
-    updatedAt: '',
-    roleCodes: '',
-    confimPassword: '',
-    isTyping: 0,
-    isMessageConnect: 0
+    confimPassword: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -71,10 +66,12 @@ export default function BusinessRegistrationScreen() {
     })
   }
 
-  const onSubmit = () => {
-    setIsLoading(true)
-    setBusiness({ ...business, code: JSON.stringify(Date.now()), image: JSON.stringify(imagesUpload) })
+  useEffect(() => {
+    setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
+  }, [imagesUpload])
 
+  const onSubmit = useCallback(() => {
+    setIsLoading(true)
     axios
       .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
       .then((response) => {
@@ -88,7 +85,7 @@ export default function BusinessRegistrationScreen() {
         setIsLoading(false)
       })
     console.log(business)
-  }
+  }, [business])
 
   return (
     <ScrollView>
