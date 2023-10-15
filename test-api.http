@@ -1,16 +1,16 @@
 # GET http://localhost:8080/api/conversations/1
 # GET http://localhost:8080/api/users
 
-# POST http://localhost:8080/api/messages HTTP/1.1
-# content-type: application/json
+POST http://localhost:8080/api/messages HTTP/1.1
+content-type: application/json
 
-# {
-#     "senderId": 1,
-#     "receiverId": 2,
-#     "type": "plain/text",
-#     "content": "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers",
-#     "status": 0
-# }
+{
+    "senderId": 1,
+    "receiverId": 2,
+    "type": "plain/text",
+    "content": "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "status": 0
+}
 
 # POST http://localhost:8080/api/notification/token HTTP/1.1
 # content-type: application/json
@@ -30,10 +30,48 @@
 #     "content": "aaaaaaaaaaaaa"
 # }
 
-POST http://localhost:8080/api/device-token HTTP/1.1
-content-type: application/json
+# POST http://localhost:8080/api/device-token HTTP/1.1
+# content-type: application/json
 
-{
-    "userId": 2,
-    "deviceToken": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
-}
+# {
+#     "userId": 2,
+#     "deviceToken": "c-sOaSoiRB2skVFDdaLmRD:APA91bErqFtJPD14VVy-SAUzkvs8HYCN5WBTXa4cOtZILAEQUG9i9YEeavFGvSWzSfO4W9ttcUqE6nwrlHjxZO3jOJ12fnf2OvXg2DaMfGQdCivdtx13nO7UAT_1ghH8Z1NQz-SmSnZX"
+# }
+
+# POST http://localhost:8080/api/posts/survey HTTP/1.1
+# content-type: application/json
+
+# {
+#    "type": "khao-sat",
+#    "title": "Tieu de khao sat",
+#    "description": "Description",
+#    "images": [],
+#    "userId": 1,
+#    "questions": [
+#        {
+#            "type": "tra-loi-ngan",
+#            "title": "Ngôn ngữ lập trình bạn đang sử dụng là gì?"
+#        },
+#        {
+#            "type": "tra-loi-ngan",
+#            "title": "name?"
+#        },
+#        {
+#            "type": "chon-mot-dap-an",
+#            "title": "Bạn có đi làm thêm không?",
+#            "choices": [
+#                "Có",
+#                "Không"
+#            ]
+#        },
+#        {
+#            "type": "chon-nhieu-dap-an",
+#            "title": "Bạn đi làm thêm vào thứ mấy?",
+#            "choices": [
+#                "Thứ 2",
+#                "Thứ 3",
+#                "Thứ 4"
+#            ]
+#        }
+#    ]
+# }

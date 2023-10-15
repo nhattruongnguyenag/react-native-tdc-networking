@@ -58,6 +58,10 @@ export default function MessengerScreen() {
     }
   }, [messageSection])
 
+  useEffect(() => {
+    console.log('image-upload', imagesUpload)
+  }, [imagesUpload])
+
   const onButtonSendPress = useCallback(() => {
     const message = {
       senderId: senderId,

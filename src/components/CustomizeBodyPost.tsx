@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useState, useCallback } from 'react'
-import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE } from '../constants/Color'
+import React, { useCallback, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { COLOR_BLACK, COLOR_TEXT_CREATE_NORMAL_POST } from '../constants/Color'
 
 // Definition props
 export interface PostContent {

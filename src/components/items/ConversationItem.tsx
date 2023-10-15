@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
@@ -34,6 +34,14 @@ export default function ConversationItem({ data }: ConversationItemProps) {
     navigation.navigate(MESSENGER_SCREEN)
   }, [conversations])
 
+  const lastMessageContent = useMemo(() => {
+    if (data?.lastMessageType === 'images') {
+      return '[Hình ảnh]'
+    } 
+
+    return data?.lastMessageContent
+  }, [])
+
   return (
     <Pressable
       onPress={onItemPress}
@@ -55,7 +63,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
           numberOfLines={1}
           ellipsizeMode='tail'
           style={{ fontWeight: data?.countNewMessage ? 'bold' : 'normal' }}>
-          {data?.lastMessageContent}
+          {lastMessageContent}
         </Text>
       </View>
       <View style={styles.conversationExtraInfoGroup}>
