@@ -73,7 +73,8 @@ export default function CreateSurveyPostScreen() {
     else {
       setTitleValidate({
         ...titleValidate,
-        isError: false
+        isError: false,
+        isVisible: false
       })
     }
 
@@ -105,7 +106,8 @@ export default function CreateSurveyPostScreen() {
     else {
       setDescriptionValidate({
         ...descriptionValidate,
-        isError: false
+        isError: false,
+        isVisible: false
       })
     }
 

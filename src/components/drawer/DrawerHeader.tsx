@@ -9,13 +9,13 @@ export default function DrawerHeader() {
   const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
   return (
     <View style={styles.body}>
-      {(userLogin as User).image ? (
+      {userLogin && (userLogin as User).image ? (
         <Avatar.Image size={60} source={{ uri: (userLogin as User).image }} />
       ) : (
         <DefaultAvatar size={60} identifer={userLogin?.name[0]} />
       )}
-      <Text style={styles.textName}>{userLogin?.name}</Text>
-      <Text style={styles.textEmail}>{(userLogin as User).email}</Text>
+      <Text style={styles.textName}>{userLogin ? userLogin?.name : ''}</Text>
+      <Text style={styles.textEmail}>{userLogin ? (userLogin as User).email : ''}</Text>
     </View>
   )
 }
