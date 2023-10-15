@@ -51,14 +51,11 @@ export default function SearchScreen() {
   const [label, setLabel] = useState('Người dùng')
   const [label2, setLabel2] = useState('- - Sinh viên - -')
   const [items, setItems] = useState([
-    { label: 'Người dùng', value: 'user', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }] },
+    { label: 'Người dùng', value: 'user', children: [{ label: '- - Sinh viên - -', value: 'sinh-vien' }, { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' }, { label: '- - Khoa - -', value: 'khoa' }] },
     { label: 'Bài viết', value: 'post', children: [{ label: '- - Bài viết - -', value: 'thong-thuong' }, { label: '- - Khảo sát - -', value: 'khao-sat' }, { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }] }
   ]);
 
-  // useEffect(() => {
-  //   setMasterData([])
-  //   setQty(0)
-  // }, [subjects])
+
 
   const handleSearch = () => {
     console.log(masterData);
@@ -66,19 +63,30 @@ export default function SearchScreen() {
       // console.log(type + ' - ' + search)
       console.log(subjects + '-' + type + '-' + search);
       axios.post(URL, {
+        userId: 12,
         type: type,
         name: search
       }).then(res => {
         setMasterData(res.data.data);
-        setQty(masterData.length)
+        console.log(res.data.data);
+
+        // setQty(masterData.length)
         setSearch('')
       })
     } catch (error) {
       console.error('Lỗi trong quá trình tìm kiếm: ', error);
     }
-
   };
 
+  const handleFollow = (id: number) => {
+    try {
+      axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
+        userId: 12,
+      })
+    } catch (error) {
+      console.error('Lỗi trong quá trình follow: ', error);
+    }
+  }
   //Render Posts Item
   const postItems = (item: any, index: any) => {
     return (
@@ -116,10 +124,12 @@ export default function SearchScreen() {
         </View>
         <View>
           {
-            item.follow ?
+            item.isFollow ?
               (<View><Icon1 name="dots-three-vertical" size={17} color="#000000" /></View>)
               :
-              (<TouchableOpacity style={styles.follow} >
+              (<TouchableOpacity style={styles.follow}
+                // onPress={handleFollow(item.id)}
+              >
                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
               </TouchableOpacity>)
           }
@@ -135,10 +145,16 @@ export default function SearchScreen() {
       case 'doanh-nghiep':
         return masterData.map((item, index) => renderItem(item, index));
         break;
+      case 'khoa':
+        return masterData.map((item, index) => renderItem(item, index));
+        break;
       case 'thong-thuong':
         return masterData.map((item, index) => postItems(item, index));
         break;
       case 'khao-sat':
+        return masterData.map((item, index) => postItems(item, index));
+        break;
+      case 'tuyen-dung':
         return masterData.map((item, index) => postItems(item, index));
         break;
       default:
@@ -200,7 +216,6 @@ export default function SearchScreen() {
       <ScrollView >
         <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
         {
-          // itemsData.map((item, index) => postItems(item, index))
           checkType()
         }
       </ScrollView>
