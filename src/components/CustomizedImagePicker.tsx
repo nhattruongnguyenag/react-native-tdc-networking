@@ -112,7 +112,7 @@ const handleUploadImage = (imagesRequest: Asset[], onResult: (data: any) => void
   }).then(res => {
     console.log("TEST:", res.data)
     onResult((res.data as Data<string[]>).data)
-    
+
   }).catch(error => {
     console.log(error);
   });

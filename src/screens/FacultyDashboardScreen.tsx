@@ -1,39 +1,96 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CustomizeFacultyPost from '../components/CustomizeFacultyPost'
-import { scanFile } from 'react-native-fs'
-import { COLOR_GREY } from '../constants/Color'
-import { commentData, likeData, imageData } from '../components/DataBase'
+import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
+import { userIdTest } from '../components/DataBase'
+import CustomizePost from '../components/post/CustomizePost'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useIsFocused } from '@react-navigation/native'
+import { TYPE_POST_FACULTY } from '../constants/StringVietnamese'
+import { postAPI } from '../api/CallApi'
+import { formatDateTime } from '../utils/FormatTime'
 
 // man hinh hien thi danh sach bai viet cua khoa
+
 export default function FacultyDashboardScreen() {
+
+  // Variable
+
+  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
+  const isFocused = useIsFocused();
+  const [facultyPost, setFacultyPost] = useState([]);
+
+  // Function 
+
+  useEffect(() => {
+    if (isFocused) {
+      const fetchData = async () => {
+        callAPI();
+      }
+      fetchData();
+    }
+  }, [isFocused])
+
+  // Api
+
+  const callAPI = async () => {
+    console.log('call api');
+    try {
+      const temp = await postAPI(apiUrlPost);
+      handleDataClassification(temp);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDataClassification = (temp: any) => {
+    const facultyPost = temp.data.filter((item: any) => item.user['roleCodes'] === TYPE_POST_FACULTY);
+    setFacultyPost(facultyPost);
+  }
+
+  const checkLiked = (likes: [], userId: number) => {
+    let result = false;
+    likes.some((item: any) => {
+      if (item.id === userId) {
+        result = true;
+      }
+    })
+    return result;
+  }
+
+  const renderItem = (item: any) => {
+    return <CustomizePost
+      id={item.id}
+      userId={item.user['id']}
+      name={item.user['name']}
+      avatar={item.user['image']}
+      typeAuthor={null}
+      available={null}
+      timeCreatePost={formatDateTime(item.createdAt)}
+      content={item.content}
+      type={null}
+      isLike={checkLiked(item.likes, userIdTest)}
+      likes={item.likes}
+      comments={item.comment}
+      images={item.images}
+      role={2}
+    />
+
+  }
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <CustomizeFacultyPost
-          id={1}
-          name={'Khoa Công nghệ thông tin - Cao đẳng công nghệ thủ đức '}
-          avatar={
-            'https://scontent.fsgn5-5.fna.fbcdn.net/v/t39.30808-6/301962485_751587722861858_878365837081963762_n.png?_nc_cat=100&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=QxBjD1jObKYAX_7nuhV&_nc_ht=scontent.fsgn5-5.fna&oh=00_AfDx6asvntgVBenxTiZeWy12t1EoOjXnvB6h0N2dc0IfDA&oe=651A9D76'
-          }
-          timeCreatePost={'27/07/2023 9:09'}
-          content={
-            ' danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới bút danh Collodi'
-          }
-          images={imageData}
-          isLike={true}
-          isComment={false}
-          role={2}
-          likes={likeData}
-          comments={commentData}
-        />
-      </ScrollView>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        refreshing={false}
+        onRefresh={() => callAPI()}
+        data={facultyPost}
+        renderItem={({ item }) => renderItem(item)}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR_GREY
+    backgroundColor: COLOR_BOTTOM_AVATAR
   }
 })

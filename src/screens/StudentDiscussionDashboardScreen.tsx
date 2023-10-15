@@ -1,43 +1,117 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
-import React from 'react'
-import CustomizeStudentPost from '../components/CustomizeStudentPost'
-import { COLOR_GREY, COLOR_BLUE_BANNER, COLOR_WHITE } from '../constants/Color'
-import { commentData, likeData, imageData } from '../components/DataBase'
-
-// Constant
-const NAME_GROUP = 'Group by TDC - Trường Cao Đẳng Công Nghệ Thủ Đức'
+import { StyleSheet, Text, View, Image, ScrollView, FlatList, RefreshControl } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constants/Color'
+import { userIdTest } from '../components/DataBase'
+import CustomizePost from '../components/post/CustomizePost'
+import { useIsFocused } from '@react-navigation/native'
+import { useAppSelector } from '../redux/Hook'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
+import { postAPI } from '../api/CallApi'
+import { formatDateTime } from '../utils/FormatTime'
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
+
 export default function StudentDiscussionDashboardScreen() {
+
+  // Variable
+
+  const [refreshing, setRefreshing] = useState(false);
+  const apiUrlLike = SERVER_ADDRESS + 'api/posts/like';
+  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
+  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [studentsPost, setStudentPost] = useState([]);
+  const isFocused = useIsFocused();
+
+  // Function 
+
+  useEffect(() => {
+    if (isFocused) {
+      const fetchData = async () => {
+        callAPI();
+      }
+      fetchData();
+    }
+  }, [isFocused])
+
+  // Api
+
+  const callAPI = async () => {
+    console.log('call api');
+    try {
+      const temp = await postAPI(apiUrlPost);
+      handleDataClassification(temp);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDataClassification = (temp: any) => {
+    const studentPost = temp.data.filter((item: any) => item.user['roleCodes'] === TYPE_POST_STUDENT);
+    setStudentPost(studentPost);
+  }
+
+  const checkLiked = (likes: [], userId: number) => {
+    let result = false;
+    likes.some((item: any) => {
+      if (item.id === userId) {
+        result = true;
+      }
+    })
+    return result;
+  }
+
+  const renderItem = (item: any) => {
+    return <CustomizePost
+      id={item.id}
+      userId={item.user['id']}
+      name={item.user['name']}
+      avatar={item.user['image']}
+      typeAuthor={null}
+      available={null}
+      timeCreatePost={formatDateTime(item.createdAt)}
+      content={item.content}
+      type={null}
+      isLike={checkLiked(item.likes, userIdTest)}
+      likes={item.likes}
+      comments={item.comment}
+      images={item.images}
+      role={1}
+    />
+  }
+
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={callAPI}
+          />
+        }
+      >
         {/* Image banner */}
+
         <Image
           style={styles.imageBanner}
-          source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }}
-        />
+          source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }} />
+        
         {/* Name group */}
+        
         <View style={styles.lineBellowBanner}>
-          <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
+          <Text style={styles.nameOfStudentGroup}>
+            {NAME_GROUP}
+          </Text>
         </View>
-        <CustomizeStudentPost
-          id={1}
-          name={'Nguyễn Hà My'}
-          avatar={'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg'}
-          timeCreatePost={'27/07/2023 9:09'}
-          content={
-            'Chào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họctại trường Trung học Cơ sở Hoàng Hoa Thám. Em là học sinh lớp CD23CD23TT11.'
-          }
-          images={imageData}
-          likes={likeData}
-          comments={commentData}
-          isComment={false}
-          isLike={false}
-          role={1}
+        <FlatList
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          data={studentsPost}
+          renderItem={({ item }) => renderItem(item)}
         />
       </ScrollView>
-    </View>
+    </View >
   )
 }
 
@@ -48,7 +122,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   container: {
-    backgroundColor: COLOR_GREY
+    backgroundColor: COLOR_BOTTOM_AVATAR
   },
   lineBellowBanner: {
     width: '100%',

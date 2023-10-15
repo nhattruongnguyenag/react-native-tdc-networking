@@ -1,7 +1,10 @@
+import { Images } from './Images'
+
 export interface ModalImage {
   name: string
+  userId: number
   avatar: string
-  idImage: number
-  images: { id: number; image: string }[]
-  listImageError: []
+  imageName: string
+  images: Images['images']
+  listImageError: string[]
 }
