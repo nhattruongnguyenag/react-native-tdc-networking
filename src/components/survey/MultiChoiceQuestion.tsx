@@ -8,11 +8,9 @@ export default function MultiChoiceQuestion(props: QuestionProps) {
   return (
     <View style={styles.itemBody}>
       <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
-      {
-        props.data.choices.map((item, index) => {
-          return <CheckboxInputWithTitle label={item} key={index}/>
-        })
-      }
+      {props.data.choices.map((item, index) => {
+        return <CheckboxInputWithTitle label={item} key={index} />
+      })}
     </View>
   )
 }

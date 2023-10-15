@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   body: {
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    width: 200,
+    paddingHorizontal: 30,
     marginStart: 'auto',
     marginEnd: 'auto',
     alignItems: 'center',

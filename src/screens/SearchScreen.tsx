@@ -3,8 +3,8 @@ import React from 'react'
 import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useRoute } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useRoute } from '@react-navigation/native'
 
 const dataNew = [
   {
@@ -98,7 +98,7 @@ export default function SearchScreen() {
   // const route = useRoute()
   // const id = route.params
   // console.log(id);
-  
+
   const [search, setSearch] = useState('')
   const [masterData, setMasterData] = useState([])
   const [filterData, setFilterData] = useState([])

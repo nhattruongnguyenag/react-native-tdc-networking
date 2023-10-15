@@ -8,7 +8,7 @@ export function sortMessageBySections(messageSectionTimes: MessageSectionByTime[
   messageSectionTimes.forEach((messageSectionTimeItem) => {
     if (
       messageSections.length > 0 &&
-      new Date(messageSectionTimeItem.time).getDate() === new Date(messageSections[index].title).getDate()
+      isApproximatelyDay(messageSectionTimeItem.time, messageSectionTimes[index].time)
     ) {
       messageSections[index].data.push(messageSectionTimeItem)
     } else {
@@ -31,8 +31,8 @@ export function sortMessagesByTime(messages: Message[]) {
   messages.forEach((message) => {
     if (
       messageSectionTime.length > 0 &&
-      isEqualTime(message.createdAt, messageSectionTime[index].time) &&
-      message.sender.id === messageSectionTime[index].sender.id
+      isApproximatelyTime(message.createdAt, messageSectionTime[index].time) &&
+      message.type === messageSectionTime[index].type
     ) {
       messageSectionTime[index].messages.push(message)
     } else {
@@ -47,13 +47,23 @@ export function sortMessagesByTime(messages: Message[]) {
     }
   })
 
-  return messageSectionTime
+  return messageSectionTime.reverse()
 }
 
-function isEqualTime(time: string, timeToCompare: string): boolean {
-  if (time && timeToCompare) {
-    return moment(time).format('hh:mm a') == moment(timeToCompare).format('hh:mm a')
+function isApproximatelyTime(time: string, timeToCompare: string): boolean {
+  if (moment(time).hours() === moment(timeToCompare).hours()) {
+    return Math.abs(moment(time).minutes() - moment(timeToCompare).minutes()) <= 1
   }
 
+  return false
+}
+
+function isApproximatelyDay(date: string, compareDate: string): boolean {
+  const formater = 'l'
+
+  if (moment(date).format(formater) === moment(compareDate).format(formater)) {
+    const timeDifferent = Math.abs(moment(date).hours() - moment(compareDate).hours())
+    return timeDifferent < 4
+  }
   return false
 }
