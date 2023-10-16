@@ -35,17 +35,16 @@ export default function SearchScreen() {
 
 
   const handleSearch = () => {
-    console.log(masterData);
     try {
-      // console.log(type + ' - ' + search)
-      console.log(subjects + '-' + type + '-' + search);
+      // console.log(subjects + '-' + type + '-' + search);
       axios.post(URL, {
         userId: 12,
         type: type,
         name: search
       }).then(res => {
         setMasterData(res.data.data);
-        // setQty(masterData.length)
+        setQty(masterData.length)
+        console.log(masterData.length);
         setSearch('')
       })
     } catch (error) {
