@@ -4,6 +4,7 @@ export interface Comment {
   updatedAt: string
   content: string
   user: {
+    id: number
     name: string
     image: string
   }

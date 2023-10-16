@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { Faculity } from '../components/CustomizeFacultyPost'
+import { Faculty } from '../types/Faculty'
 import { Business } from '../types/Business'
 import { Conversation } from '../types/Conversation'
 import { ModalComments } from '../types/ModalComments'
@@ -12,12 +12,12 @@ import { SurveyPostRequest } from '../types/SurveyPost'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null
-  choices: string[],
+  choices: string[]
   questions: Question[]
-  imagesUpload: string[] | null,
+  imagesUpload: string[] | null
   conversations: Conversation[]
   selectConversation: Conversation | null
-  userLogin: Student | Faculity | Business | null
+  userLogin: Student | Faculty | Business | null
   deviceToken: string | null
   isOpenModalImage: boolean
   isOpenModalComments: boolean
@@ -48,7 +48,7 @@ export const TDCSocialNetworkSlice = createSlice({
   name: 'TDCSocialNetwork',
   initialState,
   reducers: {
-    setUserLogin: (state, action: PayloadAction<Student | Faculity | Business>) => {
+    setUserLogin: (state, action: PayloadAction<Student | Faculty | Business>) => {
       state.userLogin = action.payload
     },
     setDeviceToken: (state, action: PayloadAction<string>) => {

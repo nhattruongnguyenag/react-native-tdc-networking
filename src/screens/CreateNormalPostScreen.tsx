@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Image, Pressable, Alert } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Image, Pressable, Alert, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
-import { TEXT_ADD_IMAGES, TEXT_COMPLETE, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_TITLE } from '../constants/StringVietnamese'
+import { TEXT_ADD_IMAGES, TEXT_AGREE, TEXT_CANCEL, TEXT_CHAR, TEXT_COMPLETE, TEXT_CREATE_POST_FAIL, TEXT_CREATE_POST_SUCCESS, TEXT_DEFINITE_QUESTION, TEXT_DETAILED_WARNING_CONTENT_NULL, TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED, TEXT_NOTIFYCATIONS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_TITLE, TEXT_WARNING } from '../constants/StringVietnamese'
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
@@ -12,12 +12,14 @@ import { NormalPost } from '../types/NormalPost'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
-import { imageData } from '../components/DataBase'
-import { isNotBlank } from '../utils/ValidateUtils'
+import { InputTextValidate, isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 
 // man hinh dang bai viet thong 
 export default function CreateNormalPostScreen({ navigation }: any) {
   // Variable
+  const minCharacter = 0;
+  const maxCharacter = 1024;
+  let alertString = null;
   const [isLoading, setIsLoading] = useState(false);
   const [normalPost, setNormalPost] = useState<NormalPost>({
     "userId": 0,
@@ -44,14 +46,10 @@ export default function CreateNormalPostScreen({ navigation }: any) {
 
 
   const handleClickCompleteButton = async () => {
-    if (isNotBlank(content)) {
+    if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), minCharacter, maxCharacter)) {
       try {
-        const arrayImageToPost = [];
-        for (const element of images) {
-          arrayImageToPost.push(element);
-        }
         const data = {
-          "images": arrayImageToPost,
+          "images": images ?? [],
           "type": "thong-thuong",
           "userId": 1,
           "content": content
@@ -64,15 +62,23 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         console.log(status);
         setIsLoading(false);
         if (status === 201) {
-          showAlert('Thông báo', 'Đã tạo bài viết thành công', false)
+          showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_SUCCESS, false)
+          Keyboard.dismiss();
         } else {
-          showAlert('Thông báo', 'Tạo bài viết không thành công', false)
+          showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_FAIL, false)
         }
       } catch (error) {
         console.error('Error:', error);
       }
-    }else{
-      console.log('rong');
+    } else {
+      if (isNotBlank(content.trim()) === false && isLengthInRange(content.trim(), minCharacter, maxCharacter) === false) {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL + 'Và' + TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${maxCharacter}` + TEXT_CHAR;
+      } else if (isNotBlank(content.trim()) === false) {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL;
+      } else {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${maxCharacter} ` + TEXT_CHAR;
+      }
+      Alert.alert(TEXT_CREATE_POST_FAIL, alertString);
     }
 
   }
@@ -83,15 +89,15 @@ export default function CreateNormalPostScreen({ navigation }: any) {
 
   const HandleClickIntoIconBtnArrowLeft = () => {
     console.log('back');
-  }
 
+  }
   const handleLongClickIntoImage = async (imageName: string) => {
     let result: boolean = false;
-    result = await showAlert('Cảnh báo', 'Bạn có thực sự muốn xóa bức ảnh này chứ', true);
+    result = await showAlert(TEXT_WARNING, TEXT_DEFINITE_QUESTION, true);
     if (result) {
       handleDeleteImage(imageName);
     } else {
-      console.log('khong xoa');
+      console.log('không xóa');
     }
   }
 
@@ -103,13 +109,13 @@ export default function CreateNormalPostScreen({ navigation }: any) {
           messenger,
           [
             {
-              text: 'Đồng ý',
+              text: TEXT_AGREE,
               onPress: () => {
                 resolve(true);
               },
             },
             {
-              text: 'Hủy',
+              text: TEXT_CANCEL,
               onPress: () => {
                 resolve(false);
               },
@@ -125,7 +131,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
           messenger,
           [
             {
-              text: 'Đồng ý',
+              text: TEXT_AGREE,
               onPress: () => {
                 resolve(true);
               },

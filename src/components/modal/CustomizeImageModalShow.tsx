@@ -3,7 +3,7 @@ import React from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions';
-import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotify';
+import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 
 export interface CustomizeImageModalShowType {
@@ -30,7 +30,7 @@ export default function CustomizeImageModalShow(props: CustomizeImageModalShowTy
                             }>
                             <Image
                                 style={styles.avatar}
-                                source={{  uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
+                                source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
                             />
                             <Text style={styles.useName} numberOfLines={1}>{props.authorInfo?.name}</Text>
                         </TouchableOpacity>

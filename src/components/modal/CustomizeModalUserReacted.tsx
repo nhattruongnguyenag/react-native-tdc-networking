@@ -4,7 +4,7 @@ import { COLOR_BLACK, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constan
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalUserReaction } from '../../redux/Slice';
-import CustomizeUserReaction from '../post/CustomizeUserReaction';
+import CustomizeUserReaction from '../post/CustomizeUserReactionPost';
 
 const CustomizeModalUserReacted = () => {
     const dispatch = useAppDispatch();

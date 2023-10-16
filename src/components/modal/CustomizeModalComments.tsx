@@ -1,19 +1,18 @@
-import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList } from 'react-native'
+import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList, Alert } from 'react-native'
 import React, { useRef, useState, useEffect } from 'react'
 import { WINDOW_HEIGHT } from '../../utils/SystemDimensions'
 import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import CustomizeComment from '../post/CustomizeComment';
+import CustomizeComment from '../post/CustomizeCommentPost';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalComments } from '../../redux/Slice';
 import { TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT } from '../../constants/StringVietnamese';
-import { userIdTest } from '../DataBase';
 import { Comment } from '../../types/Comment';
 import { formatDateTime } from '../../utils/FormatTime';
-import axios from 'axios';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
-import { callApiComment } from '../../api/CallApi';
+import { callApiComment, deleteCommentApi } from '../../api/CallApi';
+import { isNotBlank } from '../../utils/ValidateUtils';
 
 //  Constant
 const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
@@ -25,8 +24,9 @@ const DRAG_THRESHOLD = 50;
 const CustomizeModalComments = () => {
 
     // Variable
-
+    const urlApiDeleteComment = SERVER_ADDRESS + 'api/posts/comment/delete';
     const urlApiCreateComment = SERVER_ADDRESS + 'api/posts/comment'
+    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
     const inputRef = useRef<any>();
     const [myComment, setMyComment] = useState('');
     const [idReply, setIdReply] = useState(0);
@@ -104,17 +104,19 @@ const CustomizeModalComments = () => {
 
     // Send data to server
     const handleSubmitEvent = async () => {
-        if (myComment.trim() !== '' || myComment.trim() !== null) {
+        if (isNotBlank(myComment)) {
             Keyboard.dismiss();
             const comments = {
                 "postId": modalCommentData?.id,
-                "userId": userIdTest,
+                "userId": userLogin?.id,
                 "content": myComment,
                 "parentCommentId": idReply
             }
             const result = await callApiComment(urlApiCreateComment, comments);
             console.log(result);
             setMyComment('');
+        } else {
+            Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống');
         }
     }
 
@@ -126,8 +128,17 @@ const CustomizeModalComments = () => {
     }
 
     // Delete comments
-    const handleClickToDeleteCommentsEvent = (commentDeleteId: number) => {
-        console.log('delete comment have id: ' + commentDeleteId + " by author have id not finish by hong developer");
+    const handleClickToDeleteCommentsEvent = async (commentDeleteId: number) => {
+        const dataToDeleteComment = {
+            "commentId": commentDeleteId,
+            "postId": modalCommentData?.commentFather[0].postId,
+            "userId": userLogin?.id
+        }
+        console.log('====================================');
+        console.log(JSON.stringify(dataToDeleteComment));
+        console.log('====================================');
+        const result = await deleteCommentApi(urlApiDeleteComment, dataToDeleteComment)
+        console.log(result);
     }
 
     return (
@@ -164,6 +175,7 @@ const CustomizeModalComments = () => {
                                 return item.parentId === null ? <>
                                     <CommentExport
                                         commentItem={item}
+                                        userLoginId={userLogin?.id}
                                         handleClickToCommentReplyEvent={handleClickToCommentReplyEvent}
                                         handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent} />
                                 </> : <></>
@@ -195,6 +207,7 @@ const CustomizeModalComments = () => {
 
 export interface CommentChildrenType {
     commentItem: Comment,
+    userLoginId: number | undefined,
     handleClickToCommentReplyEvent: (id: number) => void,
     handleClickToDeleteCommentsEvent: (idComment: number) => void
 }
@@ -207,8 +220,8 @@ const CommentExport = (item: CommentChildrenType) => {
     }
     return <>
         <CustomizeComment
-            userId={userIdTest}
-            authorCommentId={userIdTest}
+            userId={item.userLoginId}
+            authorCommentId={item.commentItem.user['id']}
             type={item.commentItem.parentId === null ? 0 : 1}
             key={item.commentItem.id}
             id={item.commentItem.id}
@@ -236,7 +249,7 @@ const CommentExport = (item: CommentChildrenType) => {
                                 commentItem={child}
                                 handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
                                 handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
-                            />}
+                                userLoginId={item.userLoginId} />}
                         />
                     </>)
                 }

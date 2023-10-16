@@ -4,7 +4,7 @@ import { COLOR_BLACK, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 export interface CustomizeComment {
-    userId: number,
+    userId: number | undefined,
     authorCommentId: number,
     type: number,
     id: number,

@@ -5,47 +5,19 @@ import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommun
 import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../../constants/Color'
 import { TEXT_LIKE_BY } from '../../constants/StringVietnamese';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
+import { Like } from '../../types/Like';
+import { Comment } from '../../types/Comment';
 
 //  Definition props
 
 export interface BottomPostType {
     id: number,
+    userLoginId: number | undefined,
     role: number,
     handleClickBottomBtnEvent: (a: number | null) => void,
     isLike: boolean,
-    comments: {
-        id: number
-        createdAt: string
-        updatedAt: string
-        content: string
-        user: {
-            name: string
-            image: string
-        }
-        postId: number
-        parentId: number | null
-        childrens:
-        | {
-            id: number
-            createdAt: string
-            updatedAt: string
-            content: string
-            user: {
-                name: string
-                image: string
-            }
-            postId: number
-            parentId: number | null
-            childrens: any | null
-        }[]
-        | null
-    }[] | null,
-    likes:
-    {
-        id: number,
-        name: string,
-        image: string
-    }[],
+    comments: Comment[] | null,
+    likes: Like[],
 
 }
 

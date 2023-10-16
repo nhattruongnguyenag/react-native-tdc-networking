@@ -29,3 +29,16 @@ export const callApiComment = async (urlApiCreateComment: string, data: any): Pr
         throw error;
     }
 }
+
+export const deleteCommentApi = async (urlApiDeleteComment: string, data: any): Promise<number> => {
+    try {
+        const response = await axios.delete(urlApiDeleteComment, {
+            data: data
+        });
+        return response.data.status;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+

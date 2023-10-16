@@ -1,16 +1,19 @@
 import { View, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
 import CustomizeBottomPost from './CustomizeBottomPost';
 import CustomizeBodyPost from './CustomizeBodyPost';
 import CustomizeImagePost from './CustomizeImagePost';
 import { Post } from '../../types/Post';
-import { useAppDispatch } from '../../redux/Hook';
+import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { userIdTest } from '../DataBase';
 import { likeApi } from '../../api/CallApi';
+import { useSelector } from 'react-redux';
+import { stat } from 'react-native-fs';
+import { Like } from '../../types/Like';
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -26,6 +29,7 @@ const CustomizePost = (props: Post) => {
 
     let post = props
     const dispatch = useAppDispatch();
+    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
     //--------------Function area--------------
 
@@ -77,10 +81,21 @@ const CustomizePost = (props: Post) => {
     const handleClickIntoBtnIconLikeEvent = async () => {
         const dataLike = {
             "postId": post.id,
-            "userId": userIdTest
+            "userId": userLogin?.id
         }
         const result = await likeApi(urlLike, dataLike);
         console.log(result);
+    }
+
+
+    const checkLiked = (likes: Like[], userId: number | undefined) => {
+        let result = false;
+        likes.some((item: any) => {
+            if (item.id === userId) {
+                result = true;
+            }
+        })
+        return result;
     }
 
     return (
@@ -113,8 +128,9 @@ const CustomizePost = (props: Post) => {
             {/* Bottom */}
             <CustomizeBottomPost
                 id={post.id}
+                userLoginId={userLogin?.id}
                 role={post.role}
-                isLike={post.isLike}
+                isLike={checkLiked(post.likes, userLogin?.id)}
                 likes={post.likes}
                 comments={post.comments}
                 handleClickBottomBtnEvent={handleClickBottomBtnEvent}

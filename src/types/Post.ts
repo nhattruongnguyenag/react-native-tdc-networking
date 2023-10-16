@@ -1,5 +1,6 @@
 import { Comment } from './Comment'
 import { Images } from './Images'
+import { Like } from './Like'
 
 export interface Post {
   id: number
@@ -11,12 +12,7 @@ export interface Post {
   timeCreatePost: string
   content: string
   type: string | null
-  isLike: boolean
-  likes: {
-    id: number
-    name: string
-    image: string
-  }[]
+  likes: Like[]
   comments: Comment[]
   images: Images['images']
   role: number

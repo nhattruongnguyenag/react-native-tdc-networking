@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, LogBox } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
-import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotify';
+import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotifyPost';
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../../utils/SystemDimensions';
 import { Images } from '../../types/Images';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';

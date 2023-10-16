@@ -9,6 +9,7 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
 import { formatDateTime } from '../utils/FormatTime'
+import { handleDataClassification } from '../utils/DataClassfications'
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
 
@@ -40,26 +41,13 @@ export default function StudentDiscussionDashboardScreen() {
     console.log('call api');
     try {
       const temp = await postAPI(apiUrlPost);
-      handleDataClassification(temp);
+      const result = handleDataClassification(temp, TYPE_POST_STUDENT);
+      setStudentPost(result);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const handleDataClassification = (temp: any) => {
-    const studentPost = temp.data.filter((item: any) => item.user['roleCodes'] === TYPE_POST_STUDENT);
-    setStudentPost(studentPost);
-  }
-
-  const checkLiked = (likes: [], userId: number) => {
-    let result = false;
-    likes.some((item: any) => {
-      if (item.id === userId) {
-        result = true;
-      }
-    })
-    return result;
-  }
 
   const renderItem = (item: any) => {
     return <CustomizePost
@@ -72,7 +60,6 @@ export default function StudentDiscussionDashboardScreen() {
       timeCreatePost={formatDateTime(item.createdAt)}
       content={item.content}
       type={null}
-      isLike={checkLiked(item.likes, userIdTest)}
       likes={item.likes}
       comments={item.comment}
       images={item.images}
@@ -96,9 +83,9 @@ export default function StudentDiscussionDashboardScreen() {
         <Image
           style={styles.imageBanner}
           source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }} />
-        
+
         {/* Name group */}
-        
+
         <View style={styles.lineBellowBanner}>
           <Text style={styles.nameOfStudentGroup}>
             {NAME_GROUP}
