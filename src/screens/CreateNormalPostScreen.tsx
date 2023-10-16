@@ -44,7 +44,6 @@ export default function CreateNormalPostScreen({ navigation }: any) {
     }
   }
 
-
   const handleClickCompleteButton = async () => {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), minCharacter, maxCharacter)) {
       try {
@@ -150,7 +149,13 @@ export default function CreateNormalPostScreen({ navigation }: any) {
 
 
   useEffect(() => {
-    setImages(imagesUpload);
+    if (imagesUpload && imagesUpload.length != 0) {
+      if (images && images.length != 0) {
+        setImages([...images, ...imagesUpload])
+      } else {
+        setImages(imagesUpload)
+      }
+    }
   }, [imagesUpload])
 
   return (

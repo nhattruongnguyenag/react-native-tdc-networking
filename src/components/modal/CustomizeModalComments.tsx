@@ -1,5 +1,5 @@
 import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList, Alert } from 'react-native'
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { WINDOW_HEIGHT } from '../../utils/SystemDimensions'
 import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,6 +13,8 @@ import { formatDateTime } from '../../utils/FormatTime';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { callApiComment, deleteCommentApi } from '../../api/CallApi';
 import { isNotBlank } from '../../utils/ValidateUtils';
+import { Client, Frame } from 'stompjs';
+import { getStompClient } from '../../sockets/SocketClient';
 
 //  Constant
 const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
@@ -24,6 +26,7 @@ const DRAG_THRESHOLD = 50;
 const CustomizeModalComments = () => {
 
     // Variable
+    let stompClient = null;
     const urlApiDeleteComment = SERVER_ADDRESS + 'api/posts/comment/delete';
     const urlApiCreateComment = SERVER_ADDRESS + 'api/posts/comment'
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
@@ -37,6 +40,7 @@ const CustomizeModalComments = () => {
     const lastGestureDy = useRef(0);
 
     // Function
+    useEffect(() => { connectToComments() }, [])
 
     const panResponder = useRef(
         PanResponder.create({
@@ -112,9 +116,10 @@ const CustomizeModalComments = () => {
                 "content": myComment,
                 "parentCommentId": idReply
             }
-            const result = await callApiComment(urlApiCreateComment, comments);
-            console.log(result);
-            setMyComment('');
+            // const result = await callApiComment(urlApiCreateComment, comments);
+            // console.log(result);
+            // setMyComment('');
+            comment(comments);
         } else {
             Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống');
         }
@@ -139,6 +144,35 @@ const CustomizeModalComments = () => {
         console.log('====================================');
         const result = await deleteCommentApi(urlApiDeleteComment, dataToDeleteComment)
         console.log(result);
+    }
+
+    // Socket
+
+    const connectToComments = useCallback(() => {
+        const stompClient: Client = getStompClient()
+        const onConnected = () => {
+            stompClient.subscribe(`/topic/posts/${modalCommentData?.id}`, onMessageReceived)
+            stompClient.send(`/app/posts/${modalCommentData?.id}/comments/listen`)
+        }
+        const onMessageReceived = (payload: any) => {
+            console.log('====================================');
+            console.log(JSON.stringify(payload.body));
+            console.log('====================================');
+        }
+
+        const onError = (err: string | Frame) => {
+            console.log(err)
+        }
+
+        stompClient.connect({}, onConnected, onError)
+    }, [])
+
+    function comment(obj: object) {
+        console.log('send comment', JSON.stringify(obj),'post id',modalCommentData?.id);
+        const stompClient: Client = getStompClient()
+        stompClient.send(`/app/posts/${modalCommentData?.id}/comments`, {}, JSON.stringify({
+            obj
+        }))
     }
 
     return (

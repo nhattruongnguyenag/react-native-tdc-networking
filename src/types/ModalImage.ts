@@ -4,7 +4,7 @@ export interface ModalImage {
   name: string
   userId: number
   avatar: string
-  imageName: string
-  images: Images['images']
-  listImageError: string[]
+  imageIdClicked: number
+  images: Images[]
+  listImageError: number[]
 }

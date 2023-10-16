@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
 import CustomizeBottomPost from './CustomizeBottomPost';
@@ -9,11 +9,10 @@ import { Post } from '../../types/Post';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
-import { userIdTest } from '../DataBase';
 import { likeApi } from '../../api/CallApi';
-import { useSelector } from 'react-redux';
-import { stat } from 'react-native-fs';
 import { Like } from '../../types/Like';
+import { Client, Frame } from 'stompjs';
+import { getStompClient } from '../../sockets/SocketClient';
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -26,11 +25,9 @@ const urlLike = SERVER_ADDRESS + 'api/posts/like';
 const CustomizePost = (props: Post) => {
 
     // Get data 
-
     let post = props
     const dispatch = useAppDispatch();
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-
     //--------------Function area--------------
 
     // Header area
@@ -43,11 +40,11 @@ const CustomizePost = (props: Post) => {
     }
 
     // Image area
-    const handleClickIntoAnyImageEvent = (imageName: string, listImageError: any) => {
+    const handleClickIntoAnyImageEvent = (imageId: number, listImageError: number[]) => {
         dispatch(openModalImage({
             name: props.name,
             userId: props.userId,
-            imageName: imageName,
+            imageIdClicked: imageId,
             avatar: props.avatar,
             images: props.images,
             listImageError: listImageError
@@ -55,7 +52,7 @@ const CustomizePost = (props: Post) => {
     }
 
     // Bottom area 
-    const handleClickBottomBtnEvent = (flag: number | null) => {
+    const handleClickBottomBtnEvent = async (flag: number | null) => {
         if (flag === LIKE_ACTIONS) {
             handleClickIntoBtnIconLikeEvent();
         } else if (flag === COMMENT_ACTIONS) {
@@ -63,13 +60,6 @@ const CustomizePost = (props: Post) => {
         } else if (flag === SHOW_USER_REACTED_ACTIONS) {
             handleClickIntoListUserReactions();
         }
-    }
-
-    const handleClickIntoBtnIconComments = () => {
-        dispatch(openModalComments({
-            id: props.id,
-            commentFather: props.comments
-        }))
     }
 
     const handleClickIntoListUserReactions = () => {
@@ -96,6 +86,13 @@ const CustomizePost = (props: Post) => {
             }
         })
         return result;
+    }
+
+    const handleClickIntoBtnIconComments = () => {
+        dispatch(openModalComments({
+            id: props.id,
+            commentFather: props.comments,
+        }))
     }
 
     return (

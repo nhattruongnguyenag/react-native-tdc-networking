@@ -14,6 +14,6 @@ export interface Post {
   type: string | null
   likes: Like[]
   comments: Comment[]
-  images: Images['images']
+  images: Images[]
   role: number
 }

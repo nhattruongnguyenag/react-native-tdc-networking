@@ -10,7 +10,7 @@ export interface CustomizeImageModalShowType {
     closeModal: () => void,
     data: any,
     authorInfo: any,
-    handleCheckImageHaveError: (id: string) => boolean,
+    handleCheckImageHaveError: (id: number) => boolean,
     handleClickIntoUserNameOrAvatarEvent: () => void
 }
 
@@ -41,12 +41,12 @@ export default function CustomizeImageModalShow(props: CustomizeImageModalShowTy
                     </View>
 
                     {
-                        props.handleCheckImageHaveError(props.data) ? <>
+                        props.handleCheckImageHaveError(props.data.id) ? <>
                             <CustomizeLayoutImageNotify />
                         </> : <>
                             <Image
                                 style={styles.showMainImage}
-                                source={{ uri: SERVER_ADDRESS + `api/images/${props.data}` }} />
+                                source={{ uri: SERVER_ADDRESS + `api/images/${props.data.uri}` }} />
                         </>
                     }
                 </Pressable>

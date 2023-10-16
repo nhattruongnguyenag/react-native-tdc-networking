@@ -15,7 +15,7 @@ LogBox.ignoreAllLogs();
 export interface ImagePostType {
     name: string,
     avatar: string,
-    images: Images['images'],
+    images: Images[],
     handleClickIntoAnyImageEvent: (flag: any, arr: Array<number>) => void
 }
 
@@ -39,10 +39,10 @@ const CustomizeImagePost = (props: ImagePostType) => {
         setListImageError([...listImageError, id])
     }
 
-    const handleCheckImageHaveError = (id: any) => {
+    const handleCheckImageHaveError = (image: any) => {
         let result = false;
         listImageError.some((item: any) => {
-            if (item === id) {
+            if (item === image.id) {
                 result = true
             }
             return result;
@@ -54,7 +54,7 @@ const CustomizeImagePost = (props: ImagePostType) => {
         if (props.images && props.images.length > 0) {
             setNumberImageRemaining(props.images.length - 5);
             try {
-                Image.getSize(props.images[0], (width, height) => {
+                Image.getSize(props.images[0].uri, (width, height) => {
                     if (width > height) {
                         setTypeImageLayout(TYPE_LAYOUT_WIDTH_GREATER_HEIGHT);
                     } else if (height > width) {
@@ -74,7 +74,7 @@ const CustomizeImagePost = (props: ImagePostType) => {
         case 1:
             return (
                 <TouchableOpacity
-                    onPress={() => props.handleClickIntoAnyImageEvent(props.images[0], listImageError)}
+                    onPress={() => props.handleClickIntoAnyImageEvent(props.images[0].id, listImageError)}
                     style={styles.wrapImage}>
                     {
                         handleCheckImageHaveError(props.images[0]) ?
@@ -84,9 +84,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             :
                             <>
                                 <Image
-                                    onError={() => handleAddImageToListError(props.images[0])}
+                                    onError={() => handleAddImageToListError(props.images[0].id)}
                                     style={styles.imageOnePost}
-                                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0]}` }} />
+                                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }} />
                             </>
                     }
                 </TouchableOpacity>
@@ -99,8 +99,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
-                                    onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                    key={item}
+                                    onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                    key={item.id}
                                     style={styles.widthGreaterHeight}
                                 >
                                     {
@@ -111,9 +111,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                             :
                                             <>
                                                 <Image
-                                                    onError={() => handleAddImageToListError(item)}
+                                                    onError={() => handleAddImageToListError(item.id)}
                                                     style={styles.imageOnePost}
-                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                             </>
                                     }
                                 </TouchableOpacity>
@@ -127,8 +127,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
-                                    onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                    key={item}
+                                    onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                    key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
                                     {
@@ -139,9 +139,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                             :
                                             <>
                                                 <Image
-                                                    onError={() => handleAddImageToListError(item)}
+                                                    onError={() => handleAddImageToListError(item.id)}
                                                     style={styles.imageOnePost}
-                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                             </>
                                     }
                                 </TouchableOpacity>
@@ -155,8 +155,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                         {
                             props.images.map((item, index) => (
                                 <TouchableOpacity
-                                    onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                    key={item}
+                                    onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                    key={item.id}
                                     style={styles.heightGreaterWidth}
                                 >
                                     {
@@ -167,9 +167,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                             :
                                             <>
                                                 <Image
-                                                    onError={() => handleAddImageToListError(item)}
+                                                    onError={() => handleAddImageToListError(item.id)}
                                                     style={styles.imageOnePost}
-                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                             </>
                                     }
                                 </TouchableOpacity>
@@ -184,8 +184,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 return (
                     <View style={styles.wrapImage}>
                         <TouchableOpacity
-                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0], listImageError)}
-                            key={props.images[0]}
+                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0].id, listImageError)}
+                            key={props.images[0].id}
                             style={styles.widthGreaterHeight}
                         >
                             {
@@ -196,9 +196,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                     :
                                     <>
                                         <Image
-                                            onError={() => handleAddImageToListError(props.images[0])}
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
                                             style={styles.imageOnePost}
-                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0]}` }} />
+                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }} />
                                     </>
                             }
                         </TouchableOpacity>
@@ -206,8 +206,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(1, 3).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
                                         {
@@ -218,9 +218,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -234,8 +234,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 return (
                     <View style={[styles.wrapImage, styles.wrapImageRow]}>
                         <TouchableOpacity
-                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0], listImageError)}
-                            key={props.images[0]}
+                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0].id, listImageError)}
+                            key={props.images[0].id}
                             style={styles.heightGreaterWidth}
                         >
                             {
@@ -246,9 +246,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                     :
                                     <>
                                         <Image
-                                            onError={() => handleAddImageToListError(props.images[0])}
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
                                             style={styles.imageOnePost}
-                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0]}` }} />
+                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }} />
                                     </>
                             }
                         </TouchableOpacity>
@@ -257,8 +257,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                 props.images.slice(1, 3).map((item, index) => (
 
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
                                         {
@@ -269,9 +269,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -288,8 +288,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                     <View style={[styles.wrapImage, { justifyContent: 'space-between' }]}>
                         {
                             <TouchableOpacity
-                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[0], listImageError)}
-                                key={props.images[0]}
+                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[0].id, listImageError)}
+                                key={props.images[0].id}
                                 style={styles.biggestWithGreaterHeight}
                             >
                                 {
@@ -300,9 +300,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                         :
                                         <>
                                             <Image
-                                                onError={() => handleAddImageToListError(props.images[0])}
+                                                onError={() => handleAddImageToListError(props.images[0].id)}
                                                 style={styles.imageOnePost}
-                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0]}` }} />
+                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }} />
                                         </>
                                 }
                             </TouchableOpacity>
@@ -311,8 +311,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(1, 4).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageBottom}
                                     >
                                         {
@@ -323,9 +323,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -341,8 +341,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 return (
                     <View style={[styles.wrapImage, styles.wrapImageRow]}>
                         <TouchableOpacity
-                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0], listImageError)}
-                            key={props.images[0]}
+                            onPress={() => props.handleClickIntoAnyImageEvent(props.images[0].id, listImageError)}
+                            key={props.images[0].id}
                             style={styles.biggestHeightGreaterWidth}
                         >
                             {
@@ -353,9 +353,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                     :
                                     <>
                                         <Image
-                                            onError={() => handleAddImageToListError(props.images[0])}
+                                            onError={() => handleAddImageToListError(props.images[0].id)}
                                             style={styles.imageOnePost}
-                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0]}` }} />
+                                            source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }} />
                                     </>
                             }
                         </TouchableOpacity>
@@ -363,8 +363,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(1, 4).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageRight}
                                     >
                                         {
@@ -375,9 +375,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -394,8 +394,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                         {
                             props.images.slice(0, 4).map((item, index) => (
                                 <TouchableOpacity
-                                    onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                    key={item}
+                                    onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                    key={item.id}
                                     style={[styles.imageSquare, index % 2 === 0 ? styles.marginRight : null]}
                                 >
                                     {
@@ -406,9 +406,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                             :
                                             <>
                                                 <Image
-                                                    onError={() => handleAddImageToListError(item)}
+                                                    onError={() => handleAddImageToListError(item.id)}
                                                     style={styles.imageOnePost}
-                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                             </>
                                     }
                                 </TouchableOpacity>
@@ -427,8 +427,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
                                         {
@@ -439,9 +439,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -452,8 +452,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(2, 5).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageBottom}
                                     >
                                         {
@@ -464,9 +464,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -483,8 +483,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
                                         {
@@ -495,9 +495,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -508,8 +508,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(2, 5).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageRight}
                                     >
                                         {
@@ -520,9 +520,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -541,8 +541,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.heightGreaterWidth}
                                     >
                                         {
@@ -553,9 +553,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -566,8 +566,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(2, 4).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageBottom}
                                     >
                                         {
@@ -578,9 +578,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -588,9 +588,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             }
 
                             <TouchableOpacity
-                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[4], listImageError)}
+                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[4].id, listImageError)}
                                 style={[styles.smallImageBottom, styles.wrapperLastImageButRemaining]}
-                                key={props.images[4]}
+                                key={props.images[4].id}
                             >
 
                                 {
@@ -604,9 +604,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                         <>
                                             <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
                                             <Image
-                                                onError={() => handleAddImageToListError(props.images[4])}
+                                                onError={() => handleAddImageToListError(props.images[4].id)}
                                                 style={styles.imageOnePost}
-                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[4]}` }} />
+                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[4].uri}` }} />
                                         </>
                                 }
                             </TouchableOpacity>
@@ -620,8 +620,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(0, 2).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.widthGreaterHeight}
                                     >
                                         {
@@ -632,9 +632,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -645,8 +645,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
                             {
                                 props.images.slice(2, 4).map((item, index) => (
                                     <TouchableOpacity
-                                        onPress={() => props.handleClickIntoAnyImageEvent(item, listImageError)}
-                                        key={item}
+                                        onPress={() => props.handleClickIntoAnyImageEvent(item.id, listImageError)}
+                                        key={item.id}
                                         style={styles.smallImageRight}
                                     >
                                         {
@@ -657,16 +657,16 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                                 :
                                                 <>
                                                     <Image
-                                                        onError={() => handleAddImageToListError(item)}
+                                                        onError={() => handleAddImageToListError(item.id)}
                                                         style={styles.imageOnePost}
-                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                                                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }} />
                                                 </>
                                         }
                                     </TouchableOpacity>
                                 ))
                             }
                             <TouchableOpacity
-                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[4], listImageError)}
+                                onPress={() => props.handleClickIntoAnyImageEvent(props.images[4].id, listImageError)}
                                 style={
                                     [styles.smallImageRight, styles.wrapperLastImageButRemaining]}>
 
@@ -681,9 +681,9 @@ const CustomizeImagePost = (props: ImagePostType) => {
                                         <>
                                             <Text style={styles.numberImageRemaining}>+{numberImageRemaining}</Text>
                                             <Image
-                                                onError={() => handleAddImageToListError(props.images[4])}
+                                                onError={() => handleAddImageToListError(props.images[4].id)}
                                                 style={styles.imageOnePost}
-                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[4]}` }} />
+                                                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[4].uri}` }} />
                                         </>
                                 }
                             </TouchableOpacity>

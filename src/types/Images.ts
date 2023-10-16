@@ -1,3 +1,4 @@
 export interface Images {
-  images: string[]
+  id: number
+  uri: string
 }

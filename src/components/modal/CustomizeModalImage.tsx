@@ -11,10 +11,10 @@ const CustomizeModalImage = () => {
     const dispatch = useAppDispatch();
     const [imageActive, setImageActive] = useState(0);
     // Function
-    const handleCheckImageHaveError = (name: string) => {
+    const handleCheckImageHaveError = (id: number) => {
         let result: boolean = false;
-        modalImageData?.listImageError.some((item: string) => {
-            if (item === name) {
+        modalImageData?.listImageError.some((item: number) => {
+            if (item === id) {
                 result = true;
             }
         });
@@ -52,7 +52,7 @@ const CustomizeModalImage = () => {
                 {
                     modalImageData?.images.map((item, index) => (
                         <CustomizeImageModalShow
-                            key={item}
+                            key={item.id}
                             closeModal={closeModal}
                             data={item}
                             authorInfo={modalImageData}
@@ -70,7 +70,7 @@ const CustomizeModalImage = () => {
 
 
                         <Text
-                            key={item}
+                            key={item.id}
                             style={
                                 imageActive == index ? {
                                     marginHorizontal: 2,

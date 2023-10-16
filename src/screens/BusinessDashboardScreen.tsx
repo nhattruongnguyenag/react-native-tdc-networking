@@ -77,8 +77,6 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
-  
-
 
   useEffect(() => {
     if (isFocused) {
@@ -118,8 +116,6 @@ export default function BusinessDashboardScreen() {
       role={0}
     />
   }
-
-
 
   return (
     <View style={styles.container}>
