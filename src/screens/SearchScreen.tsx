@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, Button, Image, TouchableOpacity, Pressable } from 'react-native'
 import React from 'react'
 import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState, useCallback } from "react";
@@ -9,37 +9,13 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 import axios from 'axios';
 
-const itemsData = [
-  {
-    "id": 1,
-    "name": "Ban da dang ky thanh cong!!!",
-    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-    "image": "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg",
-    "follow": false
-  },
-  {
-    "id": 2,
-    "name": "John da dang ky thanh cong!!",
-    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-    "image": "https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg",
-    "follow": true
-  },
-  {
-    "id": 3,
-    "name": "Cong ty .......... vua dang thong tin tuyen dung ",
-    "content": "Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum dolor lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-    "image": "https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg",
-    "follow": false
-  },
-]
+
 
 
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
   //Danh sach tim kiem
-  const [userData, setUserData] = useState([])
-  const [postData, setPostData] = useState([])
   const [masterData, setMasterData] = useState([])
   //Kieu du lieu
   const [search, setSearch] = useState('')
@@ -77,21 +53,10 @@ export default function SearchScreen() {
     }
   };
 
-  const handleFollow = (userFollowId: number) => {
-    console.log(userFollowId);
-
-    try {
-      axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
-        userFollowId: userFollowId,
-        userId: 12,
-      })
-      masterData
-    } catch (error) {
-      console.error('Lỗi trong quá trình follow: ', error);
-    }
-  }
+  
   //Render Posts Item
   const postItems = (item: any, index: any) => {
+    
     return (
       <View
         key={index}
@@ -101,7 +66,7 @@ export default function SearchScreen() {
           <Image
             style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
             source={{ uri: "https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg" }} />
-          <View style={{ marginLeft: 10, width: '75%', zIndex: -99 }}>
+          <View style={{ marginLeft: 10, width: '75%' }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.user.name}</Text>
             <Text>{(item.content).length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
           </View>
@@ -111,7 +76,7 @@ export default function SearchScreen() {
           key={item.id}
         >
           <MenuTrigger>
-            <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+            <View style={{ paddingTop: 15 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
           </MenuTrigger>
           <MenuOptions
             optionsContainerStyle={styles.menuOption}
@@ -133,11 +98,60 @@ export default function SearchScreen() {
     )
   }
 
+const handleFollow = (userFollowId: number) => {
+    console.log(userFollowId);
+
+    try {
+      axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
+        userFollowId: userFollowId,
+        userId: 12,
+      })
+      
+    } catch (error) {
+      console.error('Lỗi trong quá trình follow: ', error);
+    }
+  }
+
+  const isFollowed = (item: any) => {
+    return (
+      <Menu
+        key={item.id}
+      >
+        <MenuTrigger>
+          <View style={{ paddingTop: 10 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
+        </MenuTrigger>
+        <MenuOptions
+          optionsContainerStyle={styles.menuOption}
+        >
+          <MenuOption
+          >
+            <Text style={styles.menuText}>Trang cá nhân</Text>
+          </MenuOption>
+          <MenuOption
+            onSelect={() => handleFollow(item.id)}
+          >
+            <Text style={styles.menuText}>Hủy theo dõi</Text>
+          </MenuOption>
+        </MenuOptions>
+      </Menu>
+    )
+  }
+
+  const isNotFollow = (item: any) => {
+    return (
+
+      <TouchableOpacity style={styles.follow}
+        onPress={() => handleFollow(item.id)}
+      >
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
+      </TouchableOpacity>
+    )
+  }
 
   //Render Items(Users, Business)
   const renderItem = (item: any, index: any) => {
     return (
-      <View
+      <Pressable
         key={index}
         style={styles.item}>
         <View style={styles.item2}>
@@ -150,36 +164,15 @@ export default function SearchScreen() {
           {
             item.isFollow ?
               (
-                <Menu
-                  key={item.id}
-                >
-                  <MenuTrigger>
-                    <View style={{ paddingTop: 20 }}><Icon1 name="dots-three-vertical" size={18} color="#000000" /></View>
-                  </MenuTrigger>
-                  <MenuOptions
-                    optionsContainerStyle={styles.menuOption}
-                  >
-                    <MenuOption
-                    >
-                      <Text style={styles.menuText}>Trang cá nhân</Text>
-                    </MenuOption>
-                    <MenuOption
-                      onSelect={() => handleFollow(item.id)}
-                    >
-                      <Text style={styles.menuText}>Hủy theo dõi</Text>
-                    </MenuOption>
-                  </MenuOptions>
-                </Menu>
+                isFollowed(item)
               )
               :
-              (<TouchableOpacity style={styles.follow}
-                onPress={() => handleFollow(item.id)}
-              >
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
-              </TouchableOpacity>)
+              (
+                isNotFollow(item)
+              )
           }
         </View>
-      </View>
+      </Pressable>
     )
   }
   const checkType = () => {
@@ -257,7 +250,9 @@ export default function SearchScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      <MenuProvider>
+      <MenuProvider
+      
+      >
         <ScrollView >
           <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
           {
@@ -275,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   menuOption: {
-    marginTop: 30, borderRadius: 10, paddingLeft: 10, width: 130, marginLeft: -15, paddingTop: 10, paddingBottom: 10
+    marginTop: 20, borderRadius: 10, paddingLeft: 10, width: 130, marginLeft: -15, paddingTop: 10, paddingBottom: 10
   },
   searchScreen: {
     backgroundColor: 'white',
