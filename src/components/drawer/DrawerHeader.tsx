@@ -6,7 +6,7 @@ import { User } from '../../types/User'
 import DefaultAvatar from '../DefaultAvatar'
 
 export default function DrawerHeader() {
-  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   return (
     <View style={styles.body}>
       {userLogin && (userLogin as User).image ? (

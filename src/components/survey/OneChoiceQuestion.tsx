@@ -12,11 +12,9 @@ export default function OneChoiceQuestion(props: QuestionProps) {
     <View style={styles.itemBody}>
       <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
       <RadioButton.Group onValueChange={(value) => setValue(value)} value={value}>
-        {
-          props.data.choices.map((item, index) => {
-            return <RadioInputWithTitle label={item} value={index.toString()} />
-          })
-        }
+        {props.data.choices.map((item, index) => {
+          return <RadioInputWithTitle label={item} value={index.toString()} />
+        })}
       </RadioButton.Group>
     </View>
   )

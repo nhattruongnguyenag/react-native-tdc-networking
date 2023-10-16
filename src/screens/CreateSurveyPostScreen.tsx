@@ -21,19 +21,19 @@ export interface TextFieldValidate {
 // man hinh dang bai viet khao sat
 export default function CreateSurveyPostScreen() {
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>({
-    textError: "Tiêu đề không được để trống",
+    textError: 'Tiêu đề không được để trống',
     isVisible: false,
     isError: true
   })
 
   const [descriptionValidate, setDescriptionValidate] = useState<InputTextValidate>({
-    textError: "Mô tả không được để trống",
+    textError: 'Mô tả không được để trống',
     isVisible: false,
     isError: true
   })
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const { userLogin, surveyPostRequest } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const defaultSurveyPost: SurveyPostRequest = useMemo(() => {
     return {
@@ -50,71 +50,75 @@ export default function CreateSurveyPostScreen() {
     dispatch(setSurveyPostRequest(defaultSurveyPost))
   }, [])
 
-  const onTitleChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không được để trống"
-      })
-    } else if (isContainSpecialCharacter(value)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không được chứa ký tự đặc biệt"
-      })
-    } else if (!isLengthInRange(value, 1, 255)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không vượt quá 255 ký tự"
-      })
-    }
-    else {
-      setTitleValidate({
-        ...titleValidate,
-        isError: false,
-        isVisible: false
-      })
-    }
+  const onTitleChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không được để trống'
+        })
+      } else if (isContainSpecialCharacter(value)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không được chứa ký tự đặc biệt'
+        })
+      } else if (!isLengthInRange(value, 1, 255)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không vượt quá 255 ký tự'
+        })
+      } else {
+        setTitleValidate({
+          ...titleValidate,
+          isError: false,
+          isVisible: false
+        })
+      }
 
-    if (surveyPostRequest) {
-      dispatch(setSurveyPostRequest({ ...surveyPostRequest, title: value }))
-    }
-  }, [surveyPostRequest?.title, titleValidate])
+      if (surveyPostRequest) {
+        dispatch(setSurveyPostRequest({ ...surveyPostRequest, title: value }))
+      }
+    },
+    [surveyPostRequest?.title, titleValidate]
+  )
 
-  const onDescriptionChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setDescriptionValidate({
-        ...descriptionValidate,
-        isError: true,
-        textError: "Mô tả không được để trống"
-      })
-    } else if (isContainSpecialCharacter(value)) {
-      setDescriptionValidate({
-        ...descriptionValidate,
-        isError: true,
-        textError: "Mô tả không được chứa ký tự đặc biệt"
-      })
-    } else if (!isLengthInRange(value, 1, 255)) {
-      setDescriptionValidate({
-        ...descriptionValidate,
-        isError: true,
-        textError: "Mô tả không vượt quá 255 ký tự"
-      })
-    }
-    else {
-      setDescriptionValidate({
-        ...descriptionValidate,
-        isError: false,
-        isVisible: false
-      })
-    }
+  const onDescriptionChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setDescriptionValidate({
+          ...descriptionValidate,
+          isError: true,
+          textError: 'Mô tả không được để trống'
+        })
+      } else if (isContainSpecialCharacter(value)) {
+        setDescriptionValidate({
+          ...descriptionValidate,
+          isError: true,
+          textError: 'Mô tả không được chứa ký tự đặc biệt'
+        })
+      } else if (!isLengthInRange(value, 1, 255)) {
+        setDescriptionValidate({
+          ...descriptionValidate,
+          isError: true,
+          textError: 'Mô tả không vượt quá 255 ký tự'
+        })
+      } else {
+        setDescriptionValidate({
+          ...descriptionValidate,
+          isError: false,
+          isVisible: false
+        })
+      }
 
-    if (surveyPostRequest) {
-      dispatch(setSurveyPostRequest({ ...surveyPostRequest, description: value }))
-    }
-  }, [surveyPostRequest?.description, descriptionValidate])
+      if (surveyPostRequest) {
+        dispatch(setSurveyPostRequest({ ...surveyPostRequest, description: value }))
+      }
+    },
+    [surveyPostRequest?.description, descriptionValidate]
+  )
 
   const onBtnNextPress = () => {
     if (!titleValidate.isError && !descriptionValidate.isError) {
@@ -133,7 +137,8 @@ export default function CreateSurveyPostScreen() {
         onFocus={() => setTitleValidate({ ...titleValidate, isVisible: true })}
         onChangeText={(value) => onTitleChangeText(value)}
         title='Tiêu đề'
-        placeholder='Nhập tiêu đề...' />
+        placeholder='Nhập tiêu đề...'
+      />
 
       <TextValidate
         customStyle={{ marginLeft: 10 }}
@@ -150,7 +155,8 @@ export default function CreateSurveyPostScreen() {
         placeholder='Nhập mô tả bài viết...'
         multiline={true}
         numberOfLine={7}
-        textInputStyle={styles.textInputStyle} />
+        textInputStyle={styles.textInputStyle}
+      />
 
       <TextValidate
         customStyle={{ marginLeft: 10 }}
@@ -159,13 +165,13 @@ export default function CreateSurveyPostScreen() {
         isVisible={descriptionValidate.isVisible}
       />
 
-
       <ButtonFullWith
         iconName='arrow-right-thin'
         btnStyle={styles.customBtnStyle}
         contentStyle={{ flexDirection: 'row-reverse' }}
         title='Tiếp theo'
-        onPress={() => onBtnNextPress()} />
+        onPress={() => onBtnNextPress()}
+      />
     </View>
   )
 }

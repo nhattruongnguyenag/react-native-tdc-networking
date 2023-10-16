@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { Client, Frame, Message } from 'stompjs'
 import Loading from '../components/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
@@ -78,21 +78,20 @@ export default function MessengerScreen() {
   const messageSectionRenderItems = useCallback(
     (item: MessageSection, sectionIndex: number) => (
       <Fragment key={sectionIndex}>
-        <MessageSectionTitle title={getMessageSectionTitle(item.title)} />
         {item?.data.map((item, itemIndex) => messageRenderItems(item, itemIndex))}
+        <MessageSectionTitle title={getMessageSectionTitle(item.title)} />
       </Fragment>
-    ), [])
-
-  const messageRenderItems = useCallback(
-    (item: MessageSectionByTime, index: number): JSX.Element => {
-      if (item.sender.id == userLogin?.id) {
-        return <MessageSentItem key={index} data={item} />
-      } else {
-        return <MessageReceivedItem key={index} data={item} />
-      }
-    },
+    ),
     []
   )
+
+  const messageRenderItems = useCallback((item: MessageSectionByTime, index: number): JSX.Element => {
+    if (item.sender.id == userLogin?.id) {
+      return <MessageSentItem key={index} data={item} />
+    } else {
+      return <MessageReceivedItem key={index} data={item} />
+    }
+  }, [])
 
   useEffect(() => {
     if (imagesUpload) {
@@ -114,12 +113,17 @@ export default function MessengerScreen() {
         <Loading title={'Đang tải tin nhắn'} />
       ) : (
         <Fragment>
-          <ScrollView ref={scrollViewRef} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-            {messageSection.map((item, index) => messageSectionRenderItems(item, index))}
-            <View style={{ height: 30, backgroundColor: '#fff' }} />
-          </ScrollView>
+          <FlatList
+            inverted
+            initialNumToRender={3}
+            showsVerticalScrollIndicator={false}
+            data={messageSection}
+            renderItem={({ item, index }) => messageSectionRenderItems(item, index)}
+          />
 
-          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.receiver.isTyping) ? 'flex' : 'none' }}>Đang soạn tin...</Text>
+          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.receiver.isTyping) ? 'flex' : 'none' }}>
+            Đang soạn tin...
+          </Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}

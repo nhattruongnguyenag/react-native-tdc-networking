@@ -1,30 +1,84 @@
-import { FlatList, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import CustomizeBusinessPost from '../components/CustomizeBusinessPost'
+import { COLOR_BOTTOM_AVATAR, COLOR_GREY } from '../constants/Color'
+import { likeData, imageData, commentData } from '../components/DataBase'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
-import { useAppSelector } from '../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
-import CustomizePost from '../components/post/CustomizePost'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { useIsFocused } from '@react-navigation/native'
-import { formatDateTime } from '../utils/FormatTime'
-import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
+import messaging from '@react-native-firebase/messaging'
+import { setConversations, setDeviceToken } from '../redux/Slice'
+import { useSaveDeviceTokenMutation } from '../redux/Service'
+import { getStompClient } from '../sockets/SocketClient'
+import { Conversation } from '../types/Conversation'
+import { Client, Frame, Message } from 'stompjs'
 import { postAPI } from '../api/CallApi'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { handleDataClassification } from '../utils/DataClassfications'
+import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
+import { formatDateTime } from '../utils/FormatTime'
+import CustomizePost from '../components/post/CustomizePost'
+import { useIsFocused } from '@react-navigation/native'
+
 // man hinh hien thi bai viet doanh nghiep
-
 export default function BusinessDashboardScreen() {
-
-  // Variable
-
-  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
-  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector((state: { TDCSocialNetworkReducer: any }) => state.TDCSocialNetworkReducer)
-  const [businessPost, setBusinessPost] = useState([]);
+  const [businessPost, setBusinessPost] = useState();
   const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = useState(false);
+  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
+  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
+  const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
+  const dispatch = useAppDispatch()
 
-  // Function 
+  useEffect(() => {
+    const getFCMToken = async () => {
+      try {
+        const token = await messaging().getToken()
+        dispatch(setDeviceToken(token))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getFCMToken()
+  }, [])
+
+
+  const updateUserStatusToOnline = useCallback(() => {
+    const stompClient: Client = getStompClient()
+
+    const onConnected = () => {
+      stompClient.subscribe('/topic/conversations', onMessageReceived)
+      stompClient.send(`/app/conversations/online/${userLogin?.id}`)
+    }
+
+    const onMessageReceived = (payload: Message) => {
+      dispatch(setConversations(JSON.parse(payload.body)))
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
+  useEffect(() => {
+    console.log('device-token', deviceToken)
+    if (userLogin && deviceToken) {
+      updateToken({
+        userId: userLogin.id,
+        deviceToken: deviceToken
+      })
+      updateUserStatusToOnline()
+    }
+  }, [deviceToken])
+
+  
+
 
   useEffect(() => {
     if (isFocused) {
@@ -35,7 +89,6 @@ export default function BusinessDashboardScreen() {
     }
   }, [isFocused])
 
-  // Api
 
   const callAPI = async () => {
     console.log('call api');
@@ -43,7 +96,6 @@ export default function BusinessDashboardScreen() {
       const temp = await postAPI(apiUrlPost);
       const result = handleDataClassification(temp, TYPE_POST_BUSINESS);
       setBusinessPost(result);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +118,8 @@ export default function BusinessDashboardScreen() {
       role={0}
     />
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -91,6 +145,6 @@ export default function BusinessDashboardScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR_BOTTOM_AVATAR,
+    backgroundColor: COLOR_BOTTOM_AVATAR
   }
 })

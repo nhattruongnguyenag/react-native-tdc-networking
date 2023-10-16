@@ -48,9 +48,14 @@ export default function CustomizedImagePicker({ optionsRef, onResult }: ImagePic
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
               launchCamera(options, (res: ImagePickerResponse) => {
                 if (res.assets) {
-                  handleUploadImage(res.assets, onResult ? onResult : (data) => {
-                    dispatch(setImagesUpload(data as string[]))
-                  })
+                  handleUploadImage(
+                    res.assets,
+                    onResult
+                      ? onResult
+                      : (data) => {
+                          dispatch(setImagesUpload(data as string[]))
+                        }
+                  )
                 }
               })
             } else {
@@ -68,9 +73,14 @@ export default function CustomizedImagePicker({ optionsRef, onResult }: ImagePic
 
           launchImageLibrary(options, (res: ImagePickerResponse) => {
             if (res.assets) {
-              handleUploadImage(res.assets, onResult ? onResult : (data) => {
-                dispatch(setImagesUpload(data as string[]))
-              })
+              handleUploadImage(
+                res.assets,
+                onResult
+                  ? onResult
+                  : (data) => {
+                      dispatch(setImagesUpload(data as string[]))
+                    }
+              )
             }
           })
         }
@@ -100,20 +110,22 @@ const handleUploadImage = (imagesRequest: Asset[], onResult: (data: any) => void
     const tempPhoto = {
       uri: item.uri,
       type: item.type,
-      name: item.fileName,
-    };
+      name: item.fileName
+    }
     formData.append('files', tempPhoto)
   })
 
-  axios.post(SERVER_ADDRESS + 'api/upload/images', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).then(res => {
-    console.log("TEST:", res.data)
-    onResult((res.data as Data<string[]>).data)
-
-  }).catch(error => {
-    console.log(error);
-  });
+  axios
+    .post(SERVER_ADDRESS + 'api/upload/images', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((res) => {
+      console.log('TEST:', res.data)
+      onResult((res.data as Data<string[]>).data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }

@@ -147,8 +147,6 @@ export function DrawerNavigator(): JSX.Element {
         }}
         component={StackNavigator}
       />
-
-
     </Drawer.Navigator>
   )
 }
@@ -239,12 +237,7 @@ export function StackNavigator(): JSX.Element {
         component={ReviewSurveyPostScreen}
       />
 
-
-      <RootStack.Screen
-        name={IMAGE_VIEW_SCREEN}
-        options={{ header: () => null }}
-        component={ImageViewScreen}
-      />
+      <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
 
       <RootStack.Screen
         name={CREATE_NORMAL_POST_SCREEN}

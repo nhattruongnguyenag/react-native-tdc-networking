@@ -18,7 +18,7 @@ export default function DefaultAvatar(props: DefaultAvatarProps) {
         justifyContent: 'center'
       }}
     >
-      <Text style={{fontSize: props.size ? props.size > 50 ? 18 : 14 : 18 }}>{props.identifer}</Text>
+      <Text style={{ fontSize: props.size ? (props.size > 50 ? 18 : 14) : 18 }}>{props.identifer}</Text>
     </View>
   )
 }
