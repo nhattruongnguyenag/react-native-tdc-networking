@@ -58,5 +58,4 @@ export const {
   useSaveDeviceTokenMutation,
   useSendFCMNotificationMutation,
   useAddRecruitmentPostMutation
-} =
-  TDCSocialNetworkAPI
+} = TDCSocialNetworkAPI

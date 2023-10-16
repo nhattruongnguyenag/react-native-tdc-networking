@@ -66,8 +66,6 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           labelStyle={{ color: '#f12749' }}
           icon={({ color, focused, size }) => <FontAwesome6Icon name='power-off' size={16} color={'#f12749'} />}
         />
-
-        
       </DrawerContentScrollView>
     </View>
   )

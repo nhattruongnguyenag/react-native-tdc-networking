@@ -38,8 +38,7 @@ const isAllFieldsValid = (validate: CreateRecruitmentPostValidate): boolean => {
 export default function CreateRecruitmentScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [createRecruitmentPostRequest, createRecruitmentPostResponse] = useAddRecruitmentPostMutation()
-  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
-  const [expiration, setExpiration] = useState<Date>(new Date())
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false)
   const expirationRef = useRef<TextInput | null>(null)
   const [createRecruitmentModel, setCreateRecruitmentModel] = useState<RecruitmentPostRequest>({
@@ -99,55 +98,59 @@ export default function CreateRecruitmentScreen() {
     }
   })
 
-  const onTitleChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        title: {
-          ...validate.title,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        title: {
-          ...validate.title,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onTitleChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          title: {
+            ...validate.title,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          title: {
+            ...validate.title,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, title: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, title: value })
+      }
+    },
+    [validate]
+  )
 
-  const onSalaryChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        salary: {
-          ...validate.salary,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        salary: {
-          ...validate.salary,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onSalaryChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          salary: {
+            ...validate.salary,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          salary: {
+            ...validate.salary,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, salary: parseInt(value) })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, salary: parseInt(value) })
+      }
+    },
+    [validate]
+  )
 
   useEffect(() => {
     console.log(moment().isAfter(moment(createRecruitmentModel.expiration)))
@@ -160,8 +163,7 @@ export default function CreateRecruitmentScreen() {
           isVisible: true
         }
       })
-    }
-    else {
+    } else {
       setValidate({
         ...validate,
         expiration: {
@@ -173,136 +175,145 @@ export default function CreateRecruitmentScreen() {
     }
   }, [createRecruitmentModel.expiration])
 
-  const onBenefitChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        benefit: {
-          ...validate.benefit,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        benefit: {
-          ...validate.benefit,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onBenefitChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          benefit: {
+            ...validate.benefit,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          benefit: {
+            ...validate.benefit,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, benefit: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, benefit: value })
+      }
+    },
+    [validate]
+  )
 
-  const onDescriptionChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        desc: {
-          ...validate.desc,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        desc: {
-          ...validate.desc,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onDescriptionChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          desc: {
+            ...validate.desc,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          desc: {
+            ...validate.desc,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, description: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, description: value })
+      }
+    },
+    [validate]
+  )
 
-  const onEmploymentTypeChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        employmentType: {
-          ...validate.employmentType,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        employmentType: {
-          ...validate.employmentType,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onEmploymentTypeChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          employmentType: {
+            ...validate.employmentType,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          employmentType: {
+            ...validate.employmentType,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, employmentType: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, employmentType: value })
+      }
+    },
+    [validate]
+  )
 
-  const onLocationChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        location: {
-          ...validate.location,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        location: {
-          ...validate.location,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onLocationChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          location: {
+            ...validate.location,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          location: {
+            ...validate.location,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, location: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, location: value })
+      }
+    },
+    [validate]
+  )
 
-  const onRequirementChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setValidate({
-        ...validate,
-        requirement: {
-          ...validate.requirement,
-          isError: true,
-          isVisible: true
-        }
-      })
-    }
-    else {
-      setValidate({
-        ...validate,
-        requirement: {
-          ...validate.requirement,
-          isError: false,
-          isVisible: false
-        }
-      })
+  const onRequirementChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          requirement: {
+            ...validate.requirement,
+            isError: true,
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          requirement: {
+            ...validate.requirement,
+            isError: false,
+            isVisible: false
+          }
+        })
 
-      setCreateRecruitmentModel({ ...createRecruitmentModel, requirement: value })
-    }
-  }, [validate])
+        setCreateRecruitmentModel({ ...createRecruitmentModel, requirement: value })
+      }
+    },
+    [validate]
+  )
 
   const onBtnFinishPress = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       createRecruitmentPostRequest(createRecruitmentModel)
     } else {
-
       let key: keyof CreateRecruitmentPostValidate
 
       for (key in validate) {
@@ -342,7 +353,8 @@ export default function CreateRecruitmentScreen() {
         <TextInputWithTitle
           title='Hình thức làm việc'
           placeholder='Hình thức làm việc...'
-          onChangeText={(value) => onEmploymentTypeChangeText(value)} />
+          onChangeText={(value) => onEmploymentTypeChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -373,9 +385,12 @@ export default function CreateRecruitmentScreen() {
           mode='datetime'
           locale='vi'
           open={showDatePicker}
-          date={expiration}
+          date={new Date()}
           onConfirm={(date) => {
-            setCreateRecruitmentModel({ ...createRecruitmentModel, expiration: moment(date).format('YYYY-MM-DD HH:mm') })
+            setCreateRecruitmentModel({
+              ...createRecruitmentModel,
+              expiration: moment(date).format('YYYY-MM-DD HH:mm')
+            })
             expirationRef.current?.blur()
             setShowDatePicker(false)
           }}
@@ -391,7 +406,8 @@ export default function CreateRecruitmentScreen() {
           textInputStyle={{ textAlignVertical: 'top' }}
           title='Địa điểm làm việc'
           placeholder='Địa điểm làm việc...'
-          onChangeText={(value) => onLocationChangeText(value)} />
+          onChangeText={(value) => onLocationChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -406,7 +422,8 @@ export default function CreateRecruitmentScreen() {
           textInputStyle={{ textAlignVertical: 'top' }}
           title='Mô tả công việc'
           placeholder='Mô tả công việc...'
-          onChangeText={(value) => onDescriptionChangeText(value)} />
+          onChangeText={(value) => onDescriptionChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -415,10 +432,7 @@ export default function CreateRecruitmentScreen() {
           isVisible={validate.desc?.isVisible}
         />
 
-        <TextInputWithTitle
-          title='Lương'
-          placeholder='Lương...'
-          onChangeText={(value) => onSalaryChangeText(value)} />
+        <TextInputWithTitle title='Lương' placeholder='Lương...' onChangeText={(value) => onSalaryChangeText(value)} />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -433,7 +447,8 @@ export default function CreateRecruitmentScreen() {
           textInputStyle={{ textAlignVertical: 'top' }}
           title='Yêu cầu'
           placeholder='Yêu cầu...'
-          onChangeText={(value) => onRequirementChangeText(value)} />
+          onChangeText={(value) => onRequirementChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -448,7 +463,8 @@ export default function CreateRecruitmentScreen() {
           textInputStyle={{ textAlignVertical: 'top' }}
           title='Quyền lợi'
           placeholder='Quyền lợi...'
-          onChangeText={(value) => onBenefitChangeText(value)} />
+          onChangeText={(value) => onBenefitChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
