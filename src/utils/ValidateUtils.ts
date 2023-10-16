@@ -28,3 +28,24 @@ export function isLengthInRange(text: string, min: number, max: number): boolean
   const pattern = new RegExp(`^.{${min},${max}}$`)
   return pattern.test(text)
 }
+
+export function isEmail(text: string): boolean {
+  const pattern = /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
+  return pattern.test(text)
+}
+
+export function isPassword(text: string): boolean {
+  const pattern = /^[0-9a-zA-Z]{1,8}$/
+  return pattern.test(text)
+}                           
+
+export function isType(text: string): boolean {
+  const pattern = /^[0-9]{0,253}$/
+  return pattern.test(text)
+}                                               
+
+export function isPhone(text: string): boolean {
+  const pattern =/^\+\d{10}$/
+  return pattern.test(text)
+}
+

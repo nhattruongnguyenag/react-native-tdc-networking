@@ -6,7 +6,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { BUSINESS_REGISTER_SCREEN, STUDENT_REGISTER_SCREEN } from '../constants/Screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-
 const data = [
   { name: 'Sinh viên', value: '1' },
   { name: 'Doanh nghiệp', value: '2' }
@@ -17,9 +16,9 @@ export default function IntermediationScreen() {
   const onChange = () => {
     if (value === '1') {
       navigation.navigate(STUDENT_REGISTER_SCREEN)
-    } else if(value === '2') {
+    } else if (value === '2') {
       navigation.navigate(BUSINESS_REGISTER_SCREEN)
-    }else{
+    } else {
       Alert.alert('Thông báo', 'Hãy chọn hình thức đăng ký!')
     }
   }
@@ -30,11 +29,12 @@ export default function IntermediationScreen() {
         style={{ flex: 1, justifyContent: 'center' }}
         source={{
           uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNtwjdZLBWmBWXc1mzdyqtHgfQAFqUF1zeOw&usqp=CAU'
-          // uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYTg5nI-AoqpyPB4cOzezyIbebOn4qgYptJGstgzDiLetskqJCu6oGwdIXcxlPS___3Y0&usqp=CAU'
         }}
       >
         <View style={styles.group}>
-          <Text style={styles.txt}>Lựa chọn</Text>
+          <View  style={{ alignItems: 'center', marginBottom: 20 }}>
+            <Text style={styles.txt}>Chọn vai trò</Text>
+          </View>
           <Dropdown
             style={styles.dropdown}
             placeholderStyle={styles.placeholderStyle}
@@ -49,12 +49,16 @@ export default function IntermediationScreen() {
               setValue(item.value)
             }}
           />
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity style={styles.btnContinute} onPress={() => navigation.goBack()}>
-              <Text style={styles.txtRegister}><Icon name='undo-alt' size={20}/> Trở lại</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity style={[styles.btnContinute, {marginRight: 5}]} onPress={() => navigation.goBack()}>
+              <Text style={styles.txtRegister}>
+                <Icon name='angle-double-left' size={16} /> Quay lại
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContinute} onPress={() => onChange()}>
-              <Text style={styles.txtRegister}>Tiếp tục <Icon name='arrow-right' size={20}/></Text>
+            <TouchableOpacity style={[styles.btnContinute, {marginLeft: 5}]} onPress={() => onChange()}>
+              <Text style={styles.txtRegister}>
+                Tiếp tục <Icon name='angle-double-right' size={16} />
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -65,7 +69,6 @@ export default function IntermediationScreen() {
 
 const styles = StyleSheet.create({
   group: {
-    marginTop: 100,
     marginHorizontal: 10
   },
   txt: {
