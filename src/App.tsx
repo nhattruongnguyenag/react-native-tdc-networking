@@ -280,16 +280,15 @@ function TopTabNavigator(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    // <MenuProvider>
-    //   <Provider store={store}>
-    //     <PaperProvider>
-    //       <NavigationContainer>
-    //         <DrawerNavigator />
-    //       </NavigationContainer>
-    //     </PaperProvider>
-    //   </Provider>
-    // </MenuProvider>
-    <SearchScreen/>
+    <MenuProvider>
+      <Provider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            <DrawerNavigator />
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
+    </MenuProvider>
   )
 }
 
