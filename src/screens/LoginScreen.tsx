@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { UserLoginRequest } from '../types/UserLoginRequest'
+import { UserLoginRequest } from '../types/request/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
