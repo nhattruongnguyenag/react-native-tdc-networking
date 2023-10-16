@@ -25,10 +25,12 @@ export default function NotificationScreen() {
   const [filterData, setFilterData] = useState([]);
 
   const callData = () => {
-    axios.get(`${SERVER_ADDRESS}/api/notifications`)
+    axios.get(`${SERVER_ADDRESS}/api/notifications/user/12`)
       .then(res => {
         const respo = res.data.data;
         setData(respo)
+        console.log(respo);
+        
       })
       .catch(error => console.log(error));
   }
@@ -81,7 +83,7 @@ export default function NotificationScreen() {
 
   const handleListIsRead = () => {
     try {
-      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 1 })
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 12 })
       callData()
     }
     
@@ -120,9 +122,6 @@ export default function NotificationScreen() {
             }
             onClose={() => setMenuOpen(false)
             }
-          // ref={(ref) => {
-          //   setMenuRef(ref)
-          // }}
           >
             <MenuTrigger
             >
@@ -203,7 +202,6 @@ export default function NotificationScreen() {
               (data !== null ? (
                 data.map((item, index) => (
                   renderItem(item, index)
-                  // <Text>{JSON.stringify(data)}</Text>
                 ))
               ) : null)
               :
