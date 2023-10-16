@@ -51,11 +51,12 @@ const styles = StyleSheet.create({
     height: 40
   },
   appbarContent: {
-    color: '#0065FF', 
-    fontWeight: 'bold', 
+    color: '#0065FF',
+    fontWeight: 'bold',
     fontSize: 20
   },
   appbarAction: {
-    width: 35, height: 35
+    width: 35,
+    height: 35
   }
 })

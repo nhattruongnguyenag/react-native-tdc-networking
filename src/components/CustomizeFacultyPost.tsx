@@ -1,40 +1,45 @@
 import { View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK, COLOR_WHITE, BACKGROUND_COLOR_BOTTOM_ICON } from '../constants/Color'
-import CustomizeHeaderPost from './CustomizeHeaderPost';
-import CustomizeImagePost from './CustomizeImagePost';
-import CustomizeBottomPost from './CustomizeBottomPost';
-import CustomizeBodyPost from './CustomizeBodyPost';
-import { ModalComments } from '../types/ModalComments';
+import {
+  COLOR_TEXT_CREATE_NORMAL_POST,
+  COLOR_BLACK,
+  COLOR_WHITE,
+  BACKGROUND_COLOR_BOTTOM_ICON
+} from '../constants/Color'
+import CustomizeHeaderPost from './CustomizeHeaderPost'
+import CustomizeImagePost from './CustomizeImagePost'
+import CustomizeBottomPost from './CustomizeBottomPost'
+import CustomizeBodyPost from './CustomizeBodyPost'
+import { ModalComments } from '../types/ModalComments'
 export interface Faculity {
-    id: number,
-    name: string,
-    avatar: string,
-    timeCreatePost: string,
-    content: string,
-    images: { id: number, image: string }[],
-    likes: {
-        id: number,
-        name: string,
-        avatar: string
-    }[],
-    isLike: boolean,
-    comments: {
-        id: number
-        name: string
-        avatar: string
-        content: string
-        timeCreated: string
-        commentChildren: {
-            id: number
-            name: string
-            avatar: string
-            content: string
-            timeCreated: string
-        }[]
-    }[],
-    isComment: boolean,
-    role: number
+  id: number
+  name: string
+  avatar: string
+  timeCreatePost: string
+  content: string
+  images: { id: number; image: string }[]
+  likes: {
+    id: number
+    name: string
+    avatar: string
+  }[]
+  isLike: boolean
+  comments: {
+    id: number
+    name: string
+    avatar: string
+    content: string
+    timeCreated: string
+    commentChildren: {
+      id: number
+      name: string
+      avatar: string
+      content: string
+      timeCreated: string
+    }[]
+  }[]
+  isComment: boolean
+  role: number
 }
 
 export const NUM_OF_LINES = 5
@@ -45,63 +50,55 @@ export const HEADER_ICON_SIZE = 15
 export const BOTTOM_ICON_SIZE = 30
 
 const CustomizeFacultyPost = (props: Faculity) => {
-    // Get data 
-    let post = props
+  // Get data
+  let post = props
 
-    // Hooks
-    const [isLike, setLike] = useState(post.isLike);
-    const [isComment, setComment] = useState(post.isComment);
+  // Hooks
+  const [isLike, setLike] = useState(post.isLike)
+  const [isComment, setComment] = useState(post.isComment)
 
-    //  Function area
+  //  Function area
 
-    const handleClickBottomBtnEvent = (type: number | null) => {
-        type === 1 ? (setLike(!isLike)
-        ) : setComment(!isComment)
-        console.log('click into react');
-    }
+  const handleClickBottomBtnEvent = (type: number | null) => {
+    type === 1 ? setLike(!isLike) : setComment(!isComment)
+    console.log('click into react')
+  }
 
-    return (
-        <View style={styles.container}>
-            {/* Header */}
-            <CustomizeHeaderPost
-                name={post.name}
-                avatar={post.avatar}
-                timeCreatePost={post.timeCreatePost}
-                role={post.role}
-                typeAuthor={null}
-                available={null}
-                type={null}
-            />
-            {/* Body */}
-            <CustomizeBodyPost
-                content={post.content}
-            />
-            {/* Image */}
-            <CustomizeImagePost
-                images={post.images}
-                name={post.name}
-                avatar={post.avatar} />
-            {/* Bottom */}
-            <CustomizeBottomPost
-                id={post.id}
-                role={post.role}
-                isLike={false}
-                isComment={true}
-                likes={post.likes}
-                comments={post.comments}
-                handleClickBottomBtnEvent={
-                    handleClickBottomBtnEvent
-                }
-            />
-        </View>
-    )
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <CustomizeHeaderPost
+        name={post.name}
+        avatar={post.avatar}
+        timeCreatePost={post.timeCreatePost}
+        role={post.role}
+        typeAuthor={null}
+        available={null}
+        type={null}
+      />
+      {/* Body */}
+      <CustomizeBodyPost content={post.content} />
+      {/* Image */}
+      <CustomizeImagePost images={post.images} name={post.name} avatar={post.avatar} />
+      {/* Bottom */}
+      <CustomizeBottomPost
+        id={post.id}
+        role={post.role}
+        isLike={false}
+        isComment={true}
+        likes={post.likes}
+        comments={post.comments}
+        handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 5,
-        backgroundColor: COLOR_WHITE,
-        marginBottom: 0.5,
-    },
+  container: {
+    paddingHorizontal: 5,
+    backgroundColor: COLOR_WHITE,
+    marginBottom: 0.5
+  }
 })
 export default CustomizeFacultyPost

@@ -11,13 +11,9 @@ interface ConversationListViewProps {
 }
 
 export default function ConversationListView({ data }: ConversationListViewProps) {
-
   return (
     <ScrollView>
-      <FlatList
-        data={data}
-        renderItem={({ index, item }) => <ConversationItem key={index} data={item}/>}
-      />
+      <FlatList data={data} renderItem={({ index, item }) => <ConversationItem key={index} data={item} />} />
     </ScrollView>
   )
 }

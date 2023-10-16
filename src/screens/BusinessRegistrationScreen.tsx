@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
-
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
   })
@@ -148,5 +147,5 @@ const styles = StyleSheet.create({
   },
   icon1: {
     fontSize: 20
-  },
+  }
 })

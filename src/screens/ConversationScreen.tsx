@@ -15,9 +15,18 @@ function TopTabNavigator(): JSX.Element {
         tabBarInactiveTintColor: '#808080',
         tabBarLabelStyle: styles.tabBarLabelStyle,
         header: null
-      })}>
-      <TopTab.Screen name={ALL_CONVERSATION_TAB} options={{title: 'Tất cả hội thoại'}} component={AllConversationGroupTab} />
-      <TopTab.Screen name={ACTIVE_CONVERSATION_TAB} options={{title: 'Đang hoạt động'}} component={ActiveConversationGroupTab} />
+      })}
+    >
+      <TopTab.Screen
+        name={ALL_CONVERSATION_TAB}
+        options={{ title: 'Tất cả hội thoại' }}
+        component={AllConversationGroupTab}
+      />
+      <TopTab.Screen
+        name={ACTIVE_CONVERSATION_TAB}
+        options={{ title: 'Đang hoạt động' }}
+        component={ActiveConversationGroupTab}
+      />
     </TopTab.Navigator>
   )
 }

@@ -1,5 +1,5 @@
 export interface Data<T> {
-    status: number
-    message: string
-    data: T
+  status: number
+  message: string
+  data: T
 }

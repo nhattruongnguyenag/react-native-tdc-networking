@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Dimensions, StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Pressable, Vibration, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
@@ -10,6 +11,19 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+=======
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
+import Icon1 from 'react-native-vector-icons/Entypo'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { SEACRH_SCREEN } from '../constants/Screen'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+>>>>>>> develop
 
 const { height, width } = Dimensions.get('screen')
 
@@ -17,6 +31,7 @@ const { height, width } = Dimensions.get('screen')
 export default function NotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   // const [menuRef, setMenuRef] = useState<Menu | null>()
+<<<<<<< HEAD
   const [data, setData] = useState([]);
   const [dataIsRead, setDataIsRead] = useState([])
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -55,10 +70,36 @@ export default function NotificationScreen() {
       callData()
     } catch (error) {
       console.error('Error updating name:', error);
+=======
+  const [data, setData] = useState([])
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const [openListIsRead, setOpenListIsRead] = useState(false)
+  const [userId, setUserId] = useState()
+
+  useEffect(() => {
+    axios
+      .get(`${SERVER_ADDRESS}/api/notifications`)
+      .then((res) => {
+        const respo = res.data.data
+        setData(respo)
+      })
+      .catch((error) => console.log(error))
+  }, [])
+
+  const handleIsRead = (isId: any, userId: any) => {
+    try {
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus`, {
+        id: isId,
+        userId: userId
+      })
+    } catch (error) {
+      console.error('Error updating name:', error)
+>>>>>>> develop
     }
   }
 
   const handleDelNotification = (id: number, userId: number) => {
+<<<<<<< HEAD
 
     try {
       axios.delete(`${SERVER_ADDRESS}/api/notifications/`, { data: { id: id, userId: userId } })
@@ -97,6 +138,21 @@ export default function NotificationScreen() {
 
   const handleOpenSearch = () => {
     setOpenSearch(!openSearch);
+=======
+    // console.log(id + ':', userId);
+    try {
+      axios.delete(`${SERVER_ADDRESS}/api/notifications/`, { data: { id: id, userId: userId } })
+    } catch (error) {
+      console.error('Error updating name:', error)
+    }
+  }
+
+  const handleItem = (id: number) => {
+    navigation.navigate(SEACRH_SCREEN, { id: id })
+  }
+  const handleListIsRead = () => {
+    console.log('write')
+>>>>>>> develop
   }
 
   //Render Items
@@ -104,6 +160,7 @@ export default function NotificationScreen() {
     return (
       <View>
         <Pressable
+<<<<<<< HEAD
           onPress={() => handleItem(item.id, item.user.id)}
           key={index}
           style={[styles.item, { backgroundColor: item.status === '1' ? '#ffffff' : '#f3f9ff' }]}>
@@ -137,6 +194,36 @@ export default function NotificationScreen() {
               <MenuOption
                 onSelect={() => handleIsRead(item.id, item.user.id)}
               >
+=======
+          onPress={() => handleItem(item.id)}
+          key={index}
+          style={[styles.item, { backgroundColor: item.status === '0' ? '#ffffff' : '#f3f9ff' }]}
+        >
+          <View style={styles.cont}>
+            <Image style={styles.image} source={{ uri: item.image }} />
+            <View style={styles.content}>
+              <Text style={styles.name}>{item.content}</Text>
+              <Text style={styles.tg}>{item.time}</Text>
+            </View>
+          </View>
+          <Menu
+            style={styles.menu}
+            key={item.id}
+            onOpen={() => setMenuOpen(true)}
+            onClose={() => setMenuOpen(false)}
+            // ref={(ref) => {
+            //   setMenuRef(ref)
+            // }}
+          >
+            <MenuTrigger>
+              <Icon1 name='dots-three-vertical' size={17} color='#000000' />
+            </MenuTrigger>
+            <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
+              <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
+                <Text style={styles.option}>Xóa thông báo</Text>
+              </MenuOption>
+              <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
+>>>>>>> develop
                 <Text style={styles.option}>Đánh dấu chưa đọc</Text>
               </MenuOption>
             </MenuOptions>
@@ -150,6 +237,7 @@ export default function NotificationScreen() {
     <>
       <View style={styles.screen}>
         {/* Select */}
+<<<<<<< HEAD
         <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
             <View style={styles.txtN}>
@@ -213,8 +301,36 @@ export default function NotificationScreen() {
           }
         </ScrollView >
       </View >
+=======
+        <View style={styles.select}>
+          <View style={styles.txtN}>
+            <Text style={styles.txt}>Thông báo</Text>
+          </View>
+          <View style={styles.tick}>
+            <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
+              <Text style={styles.txtTick}>Đánh dấu tất cả đã đọc</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.search}>
+            <TouchableOpacity style={styles.searchButton}>
+              <Text>
+                <Icon name='search' size={20} color='#ffffff' />
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/*  */}
+        <ScrollView style={styles.platList}>
+          {data !== null
+            ? data.map((item, index) =>
+                renderItem(item, index)
+                // <Text>{JSON.stringify(data)}</Text>
+              )
+            : null}
+        </ScrollView>
+      </View>
+>>>>>>> develop
     </>
-
   )
 }
 
@@ -222,6 +338,7 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: '#ffffff',
     flex: 1
+<<<<<<< HEAD
   },
   operation: {
     justifyContent: 'center'
@@ -239,6 +356,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     alignItems: 'center'
+=======
+  },
+  select: {
+    flexDirection: 'row',
+    height: 70
+>>>>>>> develop
   },
   //Text thong báo
   txtN: {
@@ -255,7 +378,7 @@ const styles = StyleSheet.create({
   tick: {
     flex: 3,
     justifyContent: 'center',
-    marginRight: 15,
+    marginRight: 15
   },
   tickButton: {
     backgroundColor: '#0065ff',
@@ -263,12 +386,12 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 6,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   txtTick: {
     color: '#ffffff',
     fontSize: 13,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   //Search
   searchBtn: {
@@ -282,11 +405,15 @@ const styles = StyleSheet.create({
     height: 35,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 6,
+    borderRadius: 6
   },
   //Flatlist
   platList: {
+<<<<<<< HEAD
     width: '100%',
+=======
+    width: '100%'
+>>>>>>> develop
   },
   item: {
     flexDirection: 'row',
@@ -314,11 +441,19 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: 8,
     paddingLeft: 10,
+<<<<<<< HEAD
     width: '80%',
   },
   name: {
     color: '#000000',
     fontSize: 17,
+=======
+    width: '80%'
+  },
+  name: {
+    color: '#000000',
+    fontSize: 17
+>>>>>>> develop
   },
   tg: {
     fontSize: 15,
@@ -326,13 +461,23 @@ const styles = StyleSheet.create({
     paddingBottom: 0
   },
   menu: {
+<<<<<<< HEAD
     justifyContent: 'center',
+=======
+    justifyContent: 'center'
+>>>>>>> develop
   },
   option: {
     fontSize: 15,
     paddingTop: 7,
     paddingBottom: 7,
+<<<<<<< HEAD
     paddingLeft: 5,
   }
 
 })
+=======
+    paddingLeft: 5
+  }
+})
+>>>>>>> develop

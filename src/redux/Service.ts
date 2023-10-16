@@ -1,18 +1,37 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Data } from '../types/Data'
-import { Token } from '../types/Token'
-import { UserLoginRequest } from '../types/UserLoginRequest'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { DeviceToken } from '../types/DeviceToken'
+import { FCMNotificationRequest } from '../types/FCMNotificationRequest'
+import { MessageResponseData } from '../types/MessageResponseData'
+import { SurveyPostRequest } from '../types/SurveyPost'
 
-// https://mocki.io/v1/754d6bc3-3162-4a48-8c14-6191a8895a01
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://mocki.io/v1/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: SERVER_ADDRESS }),
   tagTypes: ['UserLogin'],
   endpoints: (builder) => ({
-    login: builder.query<Data<Token>, void>({
-      query: () => ({
-        url: '754d6bc3-3162-4a48-8c14-6191a8895a01',
-        method: 'GET',
+    saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
+      query: (data) => ({
+        url: 'api/device-token',
+        method: 'POST',
+        body: data
+      })
+    }),
+    sendFCMNotification: builder.mutation<MessageResponseData, FCMNotificationRequest>({
+      query: (data) => ({
+        url: 'api/fcm-notification',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+    }),
+    addSurveyPost: builder.mutation<MessageResponseData, SurveyPostRequest>({
+      query: (data) => ({
+        url: 'api/posts/survey',
+        method: 'POST',
+        body: data,
         headers: {
           'Content-type': 'application/json; charset=UTF-8'
         }
@@ -23,4 +42,5 @@ export const TDCSocialNetworkAPI = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useLoginQuery } = TDCSocialNetworkAPI
+export const { useAddSurveyPostMutation, useSaveDeviceTokenMutation, useSendFCMNotificationMutation } =
+  TDCSocialNetworkAPI

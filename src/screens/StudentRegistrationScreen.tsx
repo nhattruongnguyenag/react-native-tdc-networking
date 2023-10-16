@@ -27,7 +27,6 @@ const dataNganh = [
 
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
-
   const [value, setValue] = useState('')
   const [item, setItem] = useState('')
   const [isCheck, setCheck] = useState({
@@ -56,9 +55,9 @@ export default function StudentRegistrationScreen() {
         </View>
 
         <View style={styles.form}>
-          <TextInputWithTitle title='Họ tên' placeholder='Nhập họ tên...'/>
-          <TextInputWithTitle title='Mã số sinh viên' placeholder='Nhập mã số sinh viên...'/>
-          <TextInputWithTitle title='Email sinh viên' placeholder='Nhập email sinh viên...'/>
+          <TextInputWithTitle title='Họ tên' placeholder='Nhập họ tên...' />
+          <TextInputWithTitle title='Mã số sinh viên' placeholder='Nhập mã số sinh viên...' />
+          <TextInputWithTitle title='Email sinh viên' placeholder='Nhập email sinh viên...' />
           <View style={styles.group}>
             <Text style={styles.txt}>Khoa</Text>
             <Dropdown
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
   icon1: {
     fontSize: 20
   },
-  iconStyle:{
+  iconStyle: {
     width: 30,
     height: 30,
     marginRight: 28

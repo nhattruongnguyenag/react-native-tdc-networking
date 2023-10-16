@@ -5,40 +5,36 @@ import { Button } from 'react-native-paper'
 
 // man hinh dang bai viet tuyen dung
 export default function CreateRecruitmentScreen() {
-  useEffect(() => {
-    
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <SafeAreaView style={styles.body}>
       <ScrollView>
-        <TextInputWithTitle title='Tiêu đề'
-          placeholder='Nhập tiêu đề...' 
-          onChangeText={(value) => console.log(value)}/>
+        <TextInputWithTitle
+          title='Tiêu đề'
+          placeholder='Nhập tiêu đề...'
+          onChangeText={(value) => console.log(value)}
+        />
 
-        <TextInputWithTitle title='Hình thức làm việc'
-          placeholder='Hình thức làm việc...' />
+        <TextInputWithTitle title='Hình thức làm việc' placeholder='Hình thức làm việc...' />
 
-        <TextInputWithTitle title='Thời hạn ứng tuyển'
-          placeholder='Thời hạn ứng tuyển...' />
+        <TextInputWithTitle title='Thời hạn ứng tuyển' placeholder='Thời hạn ứng tuyển...' />
 
-        <TextInputWithTitle title='Địa điểm làm việc'
-          placeholder='Địa điểm làm việc...' />
+        <TextInputWithTitle title='Địa điểm làm việc' placeholder='Địa điểm làm việc...' />
 
-        <TextInputWithTitle title='Mô tả công việc'
-          placeholder='Mô tả công việc...' />
+        <TextInputWithTitle title='Mô tả công việc' placeholder='Mô tả công việc...' />
 
-        <TextInputWithTitle title='Yêu cầu'
-          placeholder='Yêu cầu...' />
+        <TextInputWithTitle title='Yêu cầu' placeholder='Yêu cầu...' />
 
-        <TextInputWithTitle title='Quyền lợi'
-          placeholder='Quyền lợi...' />
+        <TextInputWithTitle title='Quyền lợi' placeholder='Quyền lợi...' />
 
-        <Button icon="plus"
-          mode="contained"
+        <Button
+          icon='plus'
+          mode='contained'
           buttonColor={'#0065FF'}
           style={styles.buttonCreateRecruitment}
-          onPress={() => console.log('Pressed')}>
+          onPress={() => console.log('Pressed')}
+        >
           <Text style={styles.buttonCreateRecruitmentTitle}>Hoàn tất</Text>
         </Button>
       </ScrollView>
