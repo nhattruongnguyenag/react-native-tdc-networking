@@ -6,7 +6,7 @@ import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
 import App from './src/App';
 import { name as appName } from './app.json';
-import  PushNotification, {Importance} from 'react-native-push-notification';
+import PushNotification, { Importance } from 'react-native-push-notification';
 
 PushNotification.configure({
     onNotification: function (notification) {
@@ -17,10 +17,10 @@ PushNotification.configure({
 
 PushNotification.createChannel(
     {
-        channelId: "tdc-social-network-channel",
-        channelName: "Tdc social network channel",
-        playSound: true, 
-        soundName: "default", 
+        channelId: 'channel-id',
+        channelName: 'My channel',
+        channelDescription: 'A channel to categorise your notifications',
+        playSound: true,
         importance: Importance.HIGH,
         vibrate: true,
     },

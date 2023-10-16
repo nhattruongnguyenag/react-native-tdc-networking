@@ -5,6 +5,8 @@ export interface User {
   image: string
   status: number
   createdAt: string
+  isTyping: number
+  isMessageConnect: number
   updatedAt: string
   roleCodes: string
 }

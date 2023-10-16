@@ -1,45 +1,41 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Avatar } from 'react-native-paper'
-import ConversationItem from '../../components/items/ConversationItem'
-import { ScrollView } from 'react-native-gesture-handler'
+import { Client, Frame, Message } from 'stompjs'
 import ConversationListView from '../../components/listviews/ConversationListView'
-import { Client, Frame, Message, over } from 'stompjs'
-import SockJS from 'sockjs-client'
-import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import { Conversation } from '../../types/Conversation'
-import { useAppSelector } from '../../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { setConversations } from '../../redux/Slice'
+import { getStompClient } from '../../sockets/SocketClient'
+import Loading from '../Loading'
 
 export default function AllConversationGroupTab() {
-  const {userLogin} = useAppSelector(state => state.TDCSocialNetworkReducer)
-  const [conversations, setConversations] = useState<Conversation[]>([])
-  useEffect(() => {
-    let stompClient: Client
+  const isFocused = useIsFocused()
+  const [isLoading, setLoading] = useState(false)
+  const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const dispatch = useAppDispatch()
 
-    const connect = () => {
-      const Sock = new SockJS(SERVER_ADDRESS + 'tdc-social-network-ws')
-      stompClient = over(Sock)
+  useEffect(() => {
+    if (isFocused) {
+      const stompClient: Client = getStompClient()
+      stompClient.debug('')
+
+      const onConnected = () => {
+        setLoading(true)
+        stompClient.subscribe('/topic/conversations', onMessageReceived)
+        stompClient.send(`/app/conversations/listen/${userLogin?.id}`)
+      }
+
+      const onMessageReceived = (payload: Message) => {
+        setLoading(false)
+        dispatch(setConversations(JSON.parse(payload.body)))
+      }
+
+      const onError = (err: string | Frame) => {
+        console.log(err)
+      }
+
       stompClient.connect({}, onConnected, onError)
     }
+  }, [isFocused])
 
-    const onConnected = () => {
-      stompClient.subscribe('/topic/conversations', onMessageReceived)
-      stompClient.send('/app/conversations/listen', {}, JSON.stringify(userLogin?.id))
-    }
-
-    const onMessageReceived = (payload: Message) => {
-      const conversations = JSON.parse(payload.body) as Conversation[]
-      setConversations(conversations)
-    }
-
-    const onError = (err: string | Frame) => {
-      console.log(err)
-    }
-
-    connect()
-  }, [])
-  
-  return (
-    <ConversationListView data={conversations}/>
-  )
+  return isLoading ? <Loading title='Đang tải danh sách hội thoại' /> : <ConversationListView data={conversations} />
 }

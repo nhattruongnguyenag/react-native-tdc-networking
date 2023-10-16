@@ -15,25 +15,27 @@ export default function StudentDiscussionDashboardScreen() {
         {/* Image banner */}
         <Image
           style={styles.imageBanner}
-          source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }} />
+          source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }}
+        />
         {/* Name group */}
         <View style={styles.lineBellowBanner}>
-          <Text style={styles.nameOfStudentGroup}>
-            {NAME_GROUP}
-          </Text>
+          <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>
         <CustomizeStudentPost
           id={1}
           name={'Nguyễn Hà My'}
           avatar={'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg'}
           timeCreatePost={'27/07/2023 9:09'}
-          content={'Chào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họctại trường Trung học Cơ sở Hoàng Hoa Thám. Em là học sinh lớp CD23CD23TT11.'}
+          content={
+            'Chào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họcChào mọi người! Sau đây em xin tự giới thiệu về bản thân mình. Em tên là Mạnh Tiểu Vũ. Em sinh ra và lớn lên tại Hà Nội. Hiện nay em đang theo họctại trường Trung học Cơ sở Hoàng Hoa Thám. Em là học sinh lớp CD23CD23TT11.'
+          }
           images={imageData}
           likes={likeData}
           comments={commentData}
           isComment={false}
           isLike={false}
-          role={1} />
+          role={1}
+        />
       </ScrollView>
     </View>
   )

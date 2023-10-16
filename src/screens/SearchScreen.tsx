@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet, Text, View, Button, Image, TouchableOpacity, Pressable } from 'react-native'
 import React from 'react'
 import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
+<<<<<<< HEAD
 import { useEffect, useState, useCallback } from "react";
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -11,10 +12,103 @@ import axios from 'axios';
 
 
 
+=======
+import { useEffect, useState } from 'react'
+import { Dropdown } from 'react-native-element-dropdown'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useRoute } from '@react-navigation/native'
+
+const dataNew = [
+  {
+    id: 1,
+    name: 'Ban da dang ky thanh cong!!!',
+    time: '1 phut truoc',
+    image:
+      'https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg'
+  },
+  {
+    id: 2,
+    name: 'John da dang ky thanh cong!!',
+    time: '2 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+  {
+    id: 3,
+    name: 'Cong ty .......... vua dang thong tin tuyen dung ',
+    time: '3 ngay truoc',
+    image: 'https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg'
+  },
+  {
+    id: 4,
+    name: 'Ban da dang ky thanh cong!!!',
+    time: '4 phut truoc',
+    image:
+      'https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg'
+  },
+  {
+    id: 5,
+    name: 'John da dang ky thanh cong!!',
+    time: '5 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+  {
+    id: 6,
+    name: 'Cong ty .......... vua dang thong tin tuyen dung ',
+    time: '6 ngay truoc',
+    image: 'https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg'
+  },
+  {
+    id: 7,
+    name: 'Ban da dang ky thanh cong!!!',
+    time: '7 phut truoc',
+    image:
+      'https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg'
+  },
+  {
+    id: 8,
+    name: 'John da dang ky thanh cong!!',
+    time: '8 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+
+  {
+    id: 9,
+    name: 'John da dang ky thanh cong!!',
+    time: '9 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+  {
+    id: 10,
+    name: 'John da dang ky thanh cong!!',
+    time: '10 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+  {
+    id: 11,
+    name: 'John da dang ky thanh cong!!',
+    time: '11 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  },
+  {
+    id: 12,
+    name: 'John da dang ky thanh cong!!',
+    time: '12 gio truoc',
+    image:
+      'https://toanthaydinh.com/wp-content/uploads/2020/04/anh-dep-hoa-huong-duong-va-mat-troi_022805970-1-1181x800-6.jpg'
+  }
+]
+>>>>>>> develop
 
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
+<<<<<<< HEAD
   //Danh sach tim kiem
   const [masterData, setMasterData] = useState([])
   //Kieu du lieu
@@ -33,6 +127,23 @@ export default function SearchScreen() {
   ]);
 
 
+=======
+  // const route = useRoute()
+  // const id = route.params
+  // console.log(id);
+
+  const [search, setSearch] = useState('')
+  const [masterData, setMasterData] = useState([])
+  const [filterData, setFilterData] = useState([])
+  const [type, setType] = useState('posts')
+  const [qty, setQty] = useState('')
+  const [value, setValue] = useState(null)
+  const [items, setItems] = useState([
+    { label: '--posts--', value: 'posts' },
+    { label: '--comments--', value: 'comments' },
+    { label: '--albums--', value: 'albums' }
+  ])
+>>>>>>> develop
 
   const handleSearch = () => {
     console.log(masterData);
@@ -53,6 +164,7 @@ export default function SearchScreen() {
     }
   };
 
+<<<<<<< HEAD
   
   //Render Posts Item
   const postItems = (item: any, index: any) => {
@@ -199,6 +311,63 @@ const handleFollow = (userFollowId: number) => {
         console.log('...');
     }
   }
+=======
+  const postItems = (item: any, index: any) => {}
+
+  //Render Items
+  const renderItem = (item: any, index: any) => {
+    return (
+      <View key={index} style={styles.item}>
+        <View style={styles.item2}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: 'https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg'
+            }}
+          />
+          <Text style={styles.name}>{index + '. ' + item.name}</Text>
+        </View>
+        <View>
+          {item.title ? (
+            <TouchableOpacity style={styles.follow}>
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
+            </TouchableOpacity>
+          ) : (
+            <View>
+              <Icon name='dots-three-vertical' size={20} color='#000000' />
+            </View>
+          )}
+        </View>
+      </View>
+    )
+  }
+
+  //
+  const searchFilter = (txt: any) => {
+    if (txt) {
+      const newData = masterData.filter(function (item: any, index: any) {
+        const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+        const textData = txt.toUpperCase()
+        const i = itemData.indexOf(textData) > -1
+        return i
+      })
+      setFilterData(newData)
+      setSearch(txt)
+    } else {
+      setFilterData(masterData)
+      setSearch(txt)
+    }
+  }
+
+  useEffect(() => {
+    setQty(filterData.length + '')
+  })
+
+  const show = () => {
+    console.log(height - height * 0.17)
+  }
+
+>>>>>>> develop
   return (
     <View style={styles.searchScreen}>
       <View style={styles.operation}>
@@ -207,7 +376,11 @@ const handleFollow = (userFollowId: number) => {
           placeholder='Nhập nội dung tìm kiếm...'
           placeholderTextColor='#000000'
           value={search}
+<<<<<<< HEAD
           onChangeText={(txt) => setSearch(txt)}
+=======
+          onChangeText={(txt) => searchFilter(txt)}
+>>>>>>> develop
         ></TextInput>
         <View style={styles.select}>
           <View style={styles.drop}>
@@ -215,6 +388,7 @@ const handleFollow = (userFollowId: number) => {
               style={styles.dropDown}
               data={items}
               value={value}
+<<<<<<< HEAD
               placeholder={label}
               labelField='label'
               valueField='value'
@@ -237,15 +411,27 @@ const handleFollow = (userFollowId: number) => {
               labelField='label'
               valueField='value'
               onChange={item => {
+=======
+              placeholder='-- Doi tuong --'
+              labelField='label'
+              valueField='value'
+              onChange={(item) => {
+>>>>>>> develop
                 setType(item.value)
               }}
             />
           </View>
+<<<<<<< HEAD
           <TouchableOpacity style={styles.btnSearch}
             onPress={handleSearch}
           >
             <Text>
               <Icon name="search" size={25} color="#ffffff" />
+=======
+          <TouchableOpacity style={styles.btnSearch}>
+            <Text>
+              <Icon name='search' size={20} color='#ffffff' />
+>>>>>>> develop
             </Text>
           </TouchableOpacity>
         </View>
@@ -261,6 +447,13 @@ const handleFollow = (userFollowId: number) => {
         </ScrollView>
       </MenuProvider>
 
+<<<<<<< HEAD
+=======
+      <ScrollView>
+        <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
+        {dataNew.map((item, index) => renderItem(item, index))}
+      </ScrollView>
+>>>>>>> develop
     </View>
   )
 }
@@ -291,8 +484,12 @@ const styles = StyleSheet.create({
   },
   select: {
     flexDirection: 'row',
+<<<<<<< HEAD
     paddingTop: 5,
 
+=======
+    paddingTop: 5
+>>>>>>> develop
   },
   qty: {
     fontWeight: 'bold',
@@ -320,8 +517,12 @@ const styles = StyleSheet.create({
   },
   drop: {
     flex: 5,
+<<<<<<< HEAD
     color: 'white',
 
+=======
+    color: 'white'
+>>>>>>> develop
   },
   btnSearch: {
     flex: 1,
@@ -330,6 +531,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+<<<<<<< HEAD
     marginLeft: 10,
     marginTop: 5
   },
@@ -343,6 +545,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     // borderBottomWidth: 0.9,
     // borderBottomColor: 'gray',
+=======
+    marginLeft: 10
+>>>>>>> develop
   },
   item: {
     flexDirection: 'row',
@@ -354,7 +559,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     borderBottomWidth: 0.9,
-    borderBottomColor: 'gray',
+    borderBottomColor: 'gray'
   },
   item2: {
     flexDirection: 'row',
@@ -371,11 +576,15 @@ const styles = StyleSheet.create({
   },
   name: {
     paddingRight: 10,
+<<<<<<< HEAD
     paddingLeft: 10,
     width: '62%',
     fontSize: 17,
     color: '#5A5F5C',
     fontWeight: 'bold'
+=======
+    width: '62%'
+>>>>>>> develop
   },
   follow: {
     height: 30,
@@ -386,11 +595,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontWeight: 'bold',
     paddingLeft: 10,
-    paddingRight: 10,
-
+    paddingRight: 10
   },
   buttonFollow: {
-    backgroundColor: '#f3f9ff',
-  },
-
+    backgroundColor: '#f3f9ff'
+  }
 })

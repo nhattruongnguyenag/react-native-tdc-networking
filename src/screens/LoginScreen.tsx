@@ -32,7 +32,7 @@ import { setUserLogin } from '../redux/Slice'
 
 // man hinh dang nhap
 export default function LoginScreen() {
-  const dispatch  = useAppDispatch()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [userLoginRequest, setUserLoginRequest] = useState<UserLoginRequest>({
     email: '',
@@ -47,25 +47,25 @@ export default function LoginScreen() {
     setIsChecked(!isChecked)
   }
   const handleCheckEmail = (value: any) => {
-    let regexEmail = new RegExp(
-      /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
-    )
+    // let regexEmail = new RegExp(
+    //   /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
+    // )
     setUserLoginRequest({ ...userLoginRequest, email: value })
-    if (!regexEmail.test(userLoginRequest.email)) {
-      setCheckEmail(false)
-    } else {
-      setCheckEmail(true)
-    }
+    // if (!regexEmail.test(userLoginRequest.email)) {
+    //   setCheckEmail(false)
+    // } else {
+    //   setCheckEmail(true)
+    // }
   }
   const handleCheckPassword = (value: any) => {
-    //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
-    const regexPass = /^[0-9]{5}$/
+    // //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
+    // const regexPass = /^[0-9]{5}$/
     setUserLoginRequest({ ...userLoginRequest, password: value })
-    if (!regexPass.test(userLoginRequest.password)) {
-      setCheckPassword(false)
-    } else {
-      setCheckPassword(true)
-    }
+    // if (!regexPass.test(userLoginRequest.password)) {
+    //   setCheckPassword(false)
+    // } else {
+    //   setCheckPassword(true)
+    // }
   }
 
   const onSubmit = () => {
@@ -93,12 +93,10 @@ export default function LoginScreen() {
   }
 
   const isBtnDisabled = useMemo(() => {
-      return userLoginRequest.email == '' ||
-      userLoginRequest.password == '' ||
-      checkEmail == false ||
-      checkPassword == false
-  },[checkEmail,checkPassword,userLoginRequest]) 
-  
+    return false
+    // userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+  }, [checkEmail, checkPassword, userLoginRequest])
+
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -143,10 +141,14 @@ export default function LoginScreen() {
               {!isChecked ? <Text style={{ marginLeft: 10 }}>Hiện</Text> : <Text style={{ marginLeft: 10 }}>Ẩn</Text>}
             </View>
           </View>
-            <TouchableOpacity disabled={isBtnDisabled} style={[styles.btnLogin, {opacity: isBtnDisabled? 0.5: 1}]} onPress={() => onSubmit()}>
-              <Text style={styles.txtB}>Đăng nhập</Text>
-              <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none'}} />
-            </TouchableOpacity>
+          <TouchableOpacity
+            disabled={isBtnDisabled}
+            style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
+            onPress={() => onSubmit()}
+          >
+            <Text style={styles.txtB}>Đăng nhập</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
+          </TouchableOpacity>
           <View style={styles.txt}>
             <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity
