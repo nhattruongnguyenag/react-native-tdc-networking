@@ -46,13 +46,13 @@ export default function CreateRecruitmentScreen() {
     userId: userLogin?.id ?? -1,
     images: [],
     type: 'tuyen-dung',
-    title: '111111',
-    salary: 1111,
-    benefit: '1111111',
-    description: '1111111',
-    employmentType: '111111',
-    location: '1111111',
-    requirement: '1111111',
+    title: '',
+    salary: 0,
+    benefit: '',
+    description: '',
+    employmentType: '',
+    location: '',
+    requirement: '',
     expiration: moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss')
   })
 
