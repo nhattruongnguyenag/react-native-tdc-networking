@@ -1,21 +1,13 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import QuestionTitle from './QuestionTitle'
+import { QuestionProps } from '../../types/Question'
 
-interface ShortAnswerQuestionProps {
-  title?: string
-  onChangeText?: (value: string) => void
-}
-
-export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
+export default function ShortAnswerQuestion(props: QuestionProps) {
   return (
     <View style={styles.group}>
-      <QuestionTitle title='Bạn có đi làm thêm không?' />
-      <TextInput
-        placeholder='Nhập câu trả lời...'
-        style={styles.ip}
-        onChangeText={(value) => props.onChangeText && props.onChangeText(value)}
-      />
+      <QuestionTitle title={`Câu hỏi ${props.index + 1}. ${props.data.title}`} index={props.index} />
+      <TextInput editable={false} placeholder='Nhập câu trả lời...' style={styles.ip} />
     </View>
   )
 }

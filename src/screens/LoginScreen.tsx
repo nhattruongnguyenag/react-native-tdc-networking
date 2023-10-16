@@ -93,10 +93,8 @@ export default function LoginScreen() {
   }
 
   const isBtnDisabled = useMemo(() => {
-    return (
-      false
-      // userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
-    )
+    return false
+    // userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (

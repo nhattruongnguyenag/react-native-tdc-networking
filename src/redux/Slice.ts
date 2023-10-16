@@ -1,15 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { Faculity } from '../components/CustomizeFacultyPost'
-import { Student } from '../types/Student'
 import { Business } from '../types/Business'
-import { ModalImage } from '../types/ModalImage'
-import { ModalComments } from '../types/ModalComments'
-import { ModalUserReaction } from '../types/ModalUserReaction'
 import { Conversation } from '../types/Conversation'
+import { ModalComments } from '../types/ModalComments'
+import { ModalImage } from '../types/ModalImage'
+import { ModalUserReaction } from '../types/ModalUserReaction'
+import { ChoiceProps, Question } from '../types/Question'
+import { Student } from '../types/Student'
+import { SurveyPostRequest } from '../types/SurveyPost'
 
 export interface TDCSocialNetworkState {
-  imagesUpload: string[] | null,
+  surveyPostRequest: SurveyPostRequest | null
+  choices: string[]
+  questions: Question[]
+  imagesUpload: string[] | null
   conversations: Conversation[]
   selectConversation: Conversation | null
   userLogin: Student | Faculity | Business | null
@@ -23,6 +28,9 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  surveyPostRequest: null,
+  choices: ['', '', ''],
+  questions: [],
   imagesUpload: null,
   conversations: [],
   deviceToken: null,
@@ -48,12 +56,37 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setImagesUpload: (state, action: PayloadAction<string[]>) => {
       state.imagesUpload = action.payload
-    }, 
+    },
     setConversations: (state, action: PayloadAction<Conversation[]>) => {
       state.conversations = action.payload
     },
     setSelectConversation: (state, action: PayloadAction<Conversation | null>) => {
       state.selectConversation = action.payload
+    },
+    setSurveyPostRequest: (state, action: PayloadAction<SurveyPostRequest | null>) => {
+      state.surveyPostRequest = action.payload
+    },
+    addQuestion: (state, action: PayloadAction<Question>) => {
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
+      }
+    },
+    deleteQuestion: (state, action: PayloadAction<number>) => {
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions.splice(action.payload, 1)
+      }
+    },
+    addChoice: (state, action: PayloadAction<string>) => {
+      state.choices.push(action.payload)
+    },
+    updateChoice: (state, action: PayloadAction<ChoiceProps>) => {
+      state.choices[action.payload.index] = action.payload.data
+    },
+    deleteChoice: (state, action: PayloadAction<number>) => {
+      state.choices.splice(action.payload, 1)
+    },
+    resetChoices: (state, action: PayloadAction<void>) => {
+      state.choices = ['', '', '']
     },
     openModalImage: (state, action: PayloadAction<ModalImage>) => {
       state.modalImageData = action.payload
@@ -88,6 +121,13 @@ export const {
   setUserLogin,
   setConversations,
   setDeviceToken,
+  setSurveyPostRequest,
+  addQuestion,
+  deleteQuestion,
+  addChoice,
+  updateChoice,
+  deleteChoice,
+  resetChoices,
   openModalImage,
   closeModalImage,
   openModalComments,

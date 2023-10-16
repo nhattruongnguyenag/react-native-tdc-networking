@@ -1,16 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import { useAppDispatch } from '../../redux/Hook'
+import { deleteQuestion } from '../../redux/Slice'
 
 interface QuestionTitleProps {
-  title?: string
+  title: string
+  index: number
 }
 
 export default function QuestionTitle(props: QuestionTitleProps) {
+  const dispatch = useAppDispatch()
+
+  const onBtnDeletePress = () => {
+    dispatch(deleteQuestion(props.index))
+  }
+
   return (
     <View style={styles.body}>
       <Text style={styles.questionTitle}>{props.title}</Text>
-      <IconButton icon='close' size={25} style={styles.btnDelete} onPress={() => console.log('Pressed')} />
+      <IconButton
+        icon='delete'
+        iconColor='#f70000'
+        size={25}
+        style={styles.btnDelete}
+        onPress={() => {
+          onBtnDeletePress()
+        }}
+      />
     </View>
   )
 }

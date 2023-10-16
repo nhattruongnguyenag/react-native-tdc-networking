@@ -10,11 +10,11 @@ export function getMessageSectionTitle(date: string): string {
   let dateConverted = ''
 
   if (today === mesageSectionDate) {
-    dateConverted = 'Hôm nay'
+    dateConverted = 'Hôm nay, ' + moment(date).format('hh:mm a')
   } else if (yesterday == mesageSectionDate) {
-    dateConverted = 'Hôm qua'
+    dateConverted = 'Hôm qua, ' + moment(date).format('hh:mm a')
   } else {
-    dateConverted = capitalizeFirstLetter(mesageSectionDate)
+    dateConverted = capitalizeFirstLetter(moment(date).format('dddd, DD MMM YYYY hh:mm a'))
   }
 
   return dateConverted

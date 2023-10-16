@@ -8,39 +8,34 @@ import { getStompClient } from '../../sockets/SocketClient'
 import Loading from '../Loading'
 
 export default function AllConversationGroupTab() {
+  const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const isFocused = useIsFocused()
   const [isLoading, setLoading] = useState(false)
-  const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (isFocused) {
       const stompClient: Client = getStompClient()
       stompClient.debug('')
-      
+
       const onConnected = () => {
         setLoading(true)
         stompClient.subscribe('/topic/conversations', onMessageReceived)
         stompClient.send(`/app/conversations/listen/${userLogin?.id}`)
       }
-  
+
       const onMessageReceived = (payload: Message) => {
         setLoading(false)
         dispatch(setConversations(JSON.parse(payload.body)))
       }
-  
+
       const onError = (err: string | Frame) => {
         console.log(err)
       }
-  
+
       stompClient.connect({}, onConnected, onError)
     }
-
   }, [isFocused])
 
-  return (
-    isLoading ? <Loading title='Đang tải danh sách hội thoại'/>
-    :
-    <ConversationListView data={conversations} />
-  )
+  return isLoading ? <Loading title='Đang tải danh sách hội thoại' /> : <ConversationListView data={conversations} />
 }

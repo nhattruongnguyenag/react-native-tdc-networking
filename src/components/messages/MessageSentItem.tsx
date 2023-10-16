@@ -1,13 +1,11 @@
 import moment from 'moment'
 import React, { Fragment, useMemo, useState } from 'react'
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
-import ImageView from "react-native-image-viewing"
+import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import MessageSectionTimeItemStyle, {
-  AVATAR_HEIGHT
-} from '../../styles/MessageSectionTimeItemStyle'
+import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
 import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
 import { MessageSectionByTime } from '../../types/MessageSection'
@@ -23,19 +21,16 @@ const messageContentRenderItems = (data: MessageSectionByTime): React.JSX.Elemen
     return imagesMessageRenderItem(data)
   }
 
-  return <View>
-    {
-      data.messages.map((item, index) => (
-        <TextMessageRenderItem message={item}
-          currentIndex={index}
-          lastIndex={data.messages.length - 1}
-        />
-      ))
-    }
-  </View>
+  return (
+    <View>
+      {data.messages.map((item, index) => (
+        <TextMessageRenderItem message={item} currentIndex={index} lastIndex={data.messages.length - 1} />
+      ))}
+    </View>
+  )
 }
 
-interface TextMessageRenderItemProps {
+export interface TextMessageRenderItemProps {
   message: Message
   lastIndex: number
   currentIndex: number
@@ -68,10 +63,13 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
   const [isVisibleMessageStatus, setStatusMessageVisible] = useState(false)
 
   return (
-    <View style={{flex: 1, alignItems: 'flex-end', flexShrink: 1}}>
-      <Pressable style={style} onPress={() => {
+    <View style={{ flex: 1, alignItems: 'flex-end', flexShrink: 1 }}>
+      <Pressable
+        style={style}
+        onPress={() => {
           setStatusMessageVisible(!isVisibleMessageStatus)
-      }}>
+        }}
+      >
         <Text style={[{ color: '#fff' }, MessageSectionTimeItemStyle.messageTextContent]}>{props.message.content}</Text>
         <Text
           style={[
@@ -84,9 +82,10 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
           {moment(props.message.createdAt).format('hh:mm a')}
         </Text>
       </Pressable>
-      <Text style={{marginLeft: 35, display: isVisibleMessageStatus ? 'flex' : 'none' }}>{Boolean(props.message.status) ? 'Đã xem' : 'Đã nhận'}</Text>
+      <Text style={{ marginRight: 15, fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
+        {Boolean(props.message.status) ? 'Đã xem' : 'Đã nhận'}
+      </Text>
     </View>
-
   )
 }
 
@@ -120,15 +119,27 @@ const imagesMessageRenderItem = (data: MessageSectionByTime): React.JSX.Element 
           spacing={1}
           data={images}
           renderItem={({ item, index }) => (
-            <Pressable onPress={() => {
-              setSelectedImageIndex(index)
-              setIsVisible(true)
-            }}>
-              <Image style={MessageSectionTimeItemStyle.imageItem} source={{ uri: SERVER_ADDRESS + 'api/images/' + item, width: images.length - 1 === index ? imageWidth * 2 + 3 : imageWidth, height: imageHeight }} />
+            <Pressable
+              onPress={() => {
+                setSelectedImageIndex(index)
+                setIsVisible(true)
+              }}
+            >
+              <Image
+                style={MessageSectionTimeItemStyle.imageItem}
+                source={{
+                  uri: SERVER_ADDRESS + 'api/images/' + item,
+                  width:
+                    images.length > 1 && images.length % 2 == 1 && index == images.length - 1
+                      ? imageWidth * 2 + 3
+                      : imageWidth,
+                  height: imageHeight
+                }}
+              />
             </Pressable>
           )}
         />
-          <Text style={{marginLeft: 10}}>{Boolean(data.messages[0].status) ? 'Đã xem' : 'Đã nhận'}</Text>
+        <Text style={{ marginLeft: 10, fontSize: 11 }}>{moment(data.messages[0].createdAt).format('hh:mm a')}</Text>
       </View>
 
       <ImageView
@@ -138,7 +149,8 @@ const imagesMessageRenderItem = (data: MessageSectionByTime): React.JSX.Element 
         onRequestClose={() => setIsVisible(false)}
         animationType={'slide'}
         presentationStyle={'formSheet'}
-        doubleTapToZoomEnabled={true} />
+        doubleTapToZoomEnabled={true}
+      />
     </Fragment>
   )
 }
