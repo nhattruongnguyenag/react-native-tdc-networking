@@ -29,8 +29,6 @@ export default function NotificationScreen() {
       .then(res => {
         const respo = res.data.data;
         setData(respo)
-        console.log(respo);
-        
       })
       .catch(error => console.log(error));
   }
