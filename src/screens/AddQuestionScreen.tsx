@@ -12,59 +12,59 @@ import { useAppSelector } from '../redux/Hook'
 
 // man hinh them cau hoi
 export default function AddQuestionScreen() {
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-    const { surveyPostRequest, choices } = useAppSelector(state => state.TDCSocialNetworkReducer)
-    
-    const onBtnBackPress = useCallback(() => {
-        navigation.goBack()
-    }, [])
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { surveyPostRequest, choices } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
-    const onBtnNextPress = useCallback(() => {
-        if (surveyPostRequest?.questions.length === 0) {
-            Alert.alert("Lỗi", "Thêm ít nhất 1 câu hỏi cho bài khảo sát")
-            return
-        }
-        navigation.navigate(REVIEW_SURVEY_POST_SCREEN)
-    }, [surveyPostRequest?.questions])
-    return (
-        <Fragment>
-            <AddQuestionView />
-            <ScrollView style={styles.body}>
-                {
-                    surveyPostRequest?.questions.map((item, index) => {
-                        if (item.type === MULTI_CHOICE_QUESTION) {
-                            return <MultiChoiceQuestion data={item} index={index} />
-                        } else if (item.type === ONE_CHOICE_QUESTION) {
-                            return <OneChoiceQuestion data={item} index={index} />
-                        } else {
-                            return <ShortAnswerQuestion data={item} index={index} />
-                        }
-                    })
-                }
+  const onBtnBackPress = useCallback(() => {
+    navigation.goBack()
+  }, [])
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <ButtonFullWith
-                        btnStyle={{marginRight: 10, width: 140}}
-                        onPress={onBtnBackPress}
-                        iconName='arrow-left-thin'
-                        title='Quay lại' />
+  const onBtnNextPress = useCallback(() => {
+    if (surveyPostRequest?.questions.length === 0) {
+      Alert.alert('Lỗi', 'Thêm ít nhất 1 câu hỏi cho bài khảo sát')
+      return
+    }
+    navigation.navigate(REVIEW_SURVEY_POST_SCREEN)
+  }, [surveyPostRequest?.questions])
+  return (
+    <Fragment>
+      <AddQuestionView />
+      <ScrollView style={styles.body}>
+        {surveyPostRequest?.questions.map((item, index) => {
+          if (item.type === MULTI_CHOICE_QUESTION) {
+            return <MultiChoiceQuestion data={item} index={index} />
+          } else if (item.type === ONE_CHOICE_QUESTION) {
+            return <OneChoiceQuestion data={item} index={index} />
+          } else {
+            return <ShortAnswerQuestion data={item} index={index} />
+          }
+        })}
 
-                    <ButtonFullWith
-                        btnStyle={{marginLeft: 10, width: 140}}
-                        onPress={onBtnNextPress}
-                        iconName='arrow-right-thin'
-                        contentStyle={{ flexDirection: 'row-reverse' }}
-                        title='Tiếp theo' />
-                </View>
-            </ScrollView>
-        </Fragment>
-    )
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <ButtonFullWith
+            btnStyle={{ marginRight: 10, width: 140 }}
+            onPress={onBtnBackPress}
+            iconName='arrow-left-thin'
+            title='Quay lại'
+          />
+
+          <ButtonFullWith
+            btnStyle={{ marginLeft: 10, width: 140 }}
+            onPress={onBtnNextPress}
+            iconName='arrow-right-thin'
+            contentStyle={{ flexDirection: 'row-reverse' }}
+            title='Tiếp theo'
+          />
+        </View>
+      </ScrollView>
+    </Fragment>
+  )
 }
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: '#fff'
-    }
+  body: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff'
+  }
 })

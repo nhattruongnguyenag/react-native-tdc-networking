@@ -19,7 +19,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
   const [active, setActive] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
-  const {conversations} = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   const onItemPressIn = useCallback(() => {
     setActive(true)
@@ -37,7 +37,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
   const lastMessageContent = useMemo(() => {
     if (data?.lastMessageType === 'images') {
       return '[Hình ảnh]'
-    } 
+    }
 
     return data?.lastMessageContent
   }, [])
@@ -59,16 +59,17 @@ export default function ConversationItem({ data }: ConversationItemProps) {
       </View>
       <View style={styles.conversationContentGroup}>
         <Text style={styles.userFullnameTitle}>{data?.receiver?.name}</Text>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode='tail'
-          style={{ fontWeight: data?.countNewMessage ? 'bold' : 'normal' }}>
+        <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontWeight: data?.countNewMessage ? 'bold' : 'normal' }}>
           {lastMessageContent}
         </Text>
       </View>
       <View style={styles.conversationExtraInfoGroup}>
         <Text style={styles.conversationTime}>{getConversationLastUpdate(data?.lastMessageSentAt)}</Text>
-        <Text style={[styles.conversationCountNewMessage, { display: Boolean(data?.countNewMessage) ? 'flex' : 'none' }]}>{data?.countNewMessage}</Text>
+        <Text
+          style={[styles.conversationCountNewMessage, { display: Boolean(data?.countNewMessage) ? 'flex' : 'none' }]}
+        >
+          {data?.countNewMessage}
+        </Text>
       </View>
     </Pressable>
   )

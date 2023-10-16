@@ -37,7 +37,6 @@ export default function BusinessDashboardScreen() {
     getFCMToken()
   }, [])
 
-
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
 

@@ -16,7 +16,7 @@ interface TextInputWithTitleProps {
 export default function TextInputWithTitle(props: TextInputWithTitleProps) {
   return (
     <View style={styles.group}>
-      <Text style={[styles.txt, {display: props.title ? 'flex' : 'none'}]}>{props.title}</Text>
+      <Text style={[styles.txt, { display: props.title ? 'flex' : 'none' }]}>{props.title}</Text>
       <TextInput
         value={props.value}
         onBlur={() => props.onBlur && props.onBlur()}

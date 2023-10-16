@@ -8,7 +8,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { addQuestion, setSurveyPostRequest } from '../../redux/Slice'
 import { Question } from '../../types/Question'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils'
-import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils'
+import {
+  InputTextValidate,
+  isBlank,
+  isContainSpecialCharacter,
+  isLengthInRange,
+  isNotBlank
+} from '../../utils/ValidateUtils'
 import ButtonFullWith from '../buttons/ButtonFullWith'
 import TextInputWithBottomBorder from '../inputs/TextInputWithBottomBorder'
 import TextInputWithTitle from '../inputs/TextInputWithTitle'
@@ -43,35 +49,37 @@ const questionTypes: QuestionType[] = [
 ]
 
 const AddChoices = () => {
-  const { choices } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { choices } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   return (
     <Fragment>
       <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>Lựa chọn</Text>
       <View style={{ paddingHorizontal: 15 }}>
-        {
-          choices.map((item, index) => {
-            return <TextInputWithBottomBorder choice={{
-              index: index,
-              data: item
-            }}
+        {choices.map((item, index) => {
+          return (
+            <TextInputWithBottomBorder
+              choice={{
+                index: index,
+                data: item
+              }}
               totalChoices={choices.length}
-              placeholder={`Lựa chọn ${index + 1}...`} />
-          })
-        }
+              placeholder={`Lựa chọn ${index + 1}...`}
+            />
+          )
+        })}
       </View>
     </Fragment>
   )
 }
 
 export default function AddQuestionView() {
-  const [visible, setVisible] = React.useState(false);
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const { choices, surveyPostRequest } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const [visible, setVisible] = React.useState(false)
+  const showModal = () => setVisible(true)
+  const hideModal = () => setVisible(false)
+  const { choices, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType | null>(null)
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>({
-    textError: "Tiêu đề không được để trống",
+    textError: 'Tiêu đề không được để trống',
     isVisible: false,
     isError: true
   })
@@ -101,7 +109,7 @@ export default function AddQuestionView() {
 
   const onBtnStartAddQuestionPress = () => {
     if (selectedQuestionType === null) {
-      Alert.alert("Lỗi !!!", "Vui lòng chọn loại câu hỏi")
+      Alert.alert('Lỗi !!!', 'Vui lòng chọn loại câu hỏi')
       return
     }
 
@@ -112,7 +120,8 @@ export default function AddQuestionView() {
   useEffect(() => {
     if (selectedQuestionType?.value !== SHORT_ANSWER) {
       setQuestion({
-        ...question, choices: choices.filter(choice => isNotBlank(choice))
+        ...question,
+        choices: choices.filter((choice) => isNotBlank(choice))
       })
     }
   }, [choices])
@@ -126,41 +135,45 @@ export default function AddQuestionView() {
     setSelectedQuestionType(item)
   }
 
-  const onTitleChangeText = useCallback((value: string) => {
-    if (isBlank(value)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không được để trống"
-      })
-    } else if (isContainSpecialCharacter(value)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không được chứa ký tự đặc biệt"
-      })
-    } else if (!isLengthInRange(value, 1, 255)) {
-      setTitleValidate({
-        ...titleValidate,
-        isError: true,
-        textError: "Tiêu đề không vượt quá 255 ký tự"
-      })
-    }
-    else {
-      setTitleValidate({
-        ...titleValidate,
-        isError: false
-      })
+  const onTitleChangeText = useCallback(
+    (value: string) => {
+      if (isBlank(value)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không được để trống'
+        })
+      } else if (isContainSpecialCharacter(value)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không được chứa ký tự đặc biệt'
+        })
+      } else if (!isLengthInRange(value, 1, 255)) {
+        setTitleValidate({
+          ...titleValidate,
+          isError: true,
+          textError: 'Tiêu đề không vượt quá 255 ký tự'
+        })
+      } else {
+        setTitleValidate({
+          ...titleValidate,
+          isError: false
+        })
+
+        setQuestion({
+          ...question,
+          title: value.trim()
+        })
+      }
 
       setQuestion({
-        ...question, title: value.trim()
+        ...question,
+        title: value.trimStart()
       })
-    }
-
-    setQuestion({
-      ...question, title: value.trimStart()
-    })
-  }, [question.title, titleValidate])
+    },
+    [question.title, titleValidate]
+  )
 
   const onBtnCompleteAddQuestionPress = () => {
     if (!titleValidate.isError) {
@@ -195,7 +208,9 @@ export default function AddQuestionView() {
         style={{ backgroundColor: '#0065FF' }}
         onPress={() => {
           onBtnStartAddQuestionPress()
-        }} textColor='#fff'>
+        }}
+        textColor='#fff'
+      >
         <Text style={{ fontSize: 16 }}>Thêm</Text>
       </Button>
 
@@ -203,16 +218,24 @@ export default function AddQuestionView() {
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
           <View style={styles.modalHeader}>
             <Text style={styles.headerTitle}>{selectedQuestionType?.name}</Text>
-            <IconButton icon='close' iconColor='#ff003e' rippleColor={'#fff'} size={22} style={styles.btnClose} onPress={() => {
-              hideModal()
-            }} />
+            <IconButton
+              icon='close'
+              iconColor='#ff003e'
+              rippleColor={'#fff'}
+              size={22}
+              style={styles.btnClose}
+              onPress={() => {
+                hideModal()
+              }}
+            />
           </View>
           <ScrollView style={styles.modalBody}>
             <TextInputWithTitle
               onFocus={() => setTitleValidate({ ...titleValidate, isVisible: true })}
               value={question.title}
               placeholder='Nhập tiêu đề câu hỏi...'
-              onChangeText={(value) => onTitleChangeText(value)} />
+              onChangeText={(value) => onTitleChangeText(value)}
+            />
 
             <TextValidate
               customStyle={{ marginLeft: 10 }}
@@ -221,15 +244,9 @@ export default function AddQuestionView() {
               isVisible={titleValidate.isVisible}
             />
 
-            {
-              question.type !== SHORT_ANSWER &&
-              <AddChoices />
-            }
+            {question.type !== SHORT_ANSWER && <AddChoices />}
             <View style={styles.modalFooter}>
-              <ButtonFullWith
-                iconName='plus'
-                title='Hoàn tất'
-                onPress={() => onBtnCompleteAddQuestionPress()} />
+              <ButtonFullWith iconName='plus' title='Hoàn tất' onPress={() => onBtnCompleteAddQuestionPress()} />
             </View>
           </ScrollView>
         </Modal>

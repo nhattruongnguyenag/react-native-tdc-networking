@@ -1,4 +1,4 @@
 export interface FCMNotificationRequest {
-    userId: number
-    content: string
+  userId: number
+  content: string
 }

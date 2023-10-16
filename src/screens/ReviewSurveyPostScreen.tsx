@@ -14,107 +14,106 @@ import { useAddSurveyPostMutation } from '../redux/Service'
 import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-    const { surveyPostRequest } = useAppSelector(state => state.TDCSocialNetworkReducer)
-    const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
-    const dispatch = useAppDispatch()
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
+  const dispatch = useAppDispatch()
 
-    const onBtnPublishPostPress = () => {
-        if (surveyPostRequest) {
-            addSurvey(surveyPostRequest)
-        }
+  const onBtnPublishPostPress = () => {
+    if (surveyPostRequest) {
+      addSurvey(surveyPostRequest)
     }
+  }
 
-    useEffect(() => {
-        if (addSurveyResult.data) {
-            if (addSurveyResult.data.status === 201 || 200) {
-                Alert.alert("Thành công !!!", "Bài khảo sát đã được lưu")
-                navigation.navigate(TOP_TAB_NAVIGATOR)
-            } else {
-                Alert.alert("Thất bại !!!", "Bài khảo sát thêm thất bại")
-            }
-        }
-    }, [addSurveyResult])
+  useEffect(() => {
+    if (addSurveyResult.data) {
+      if (addSurveyResult.data.status === 201 || 200) {
+        Alert.alert('Thành công !!!', 'Bài khảo sát đã được lưu')
+        navigation.navigate(TOP_TAB_NAVIGATOR)
+      } else {
+        Alert.alert('Thất bại !!!', 'Bài khảo sát thêm thất bại')
+      }
+    }
+  }, [addSurveyResult])
 
-    const onBtnBackPress = useCallback(() => {
-        navigation.pop()
-    }, [])
+  const onBtnBackPress = useCallback(() => {
+    navigation.pop()
+  }, [])
 
+  return (
+    <ScrollView style={styles.body}>
+      <Text style={styles.surveyTitle}>{surveyPostRequest?.title}</Text>
 
-    return (
-        <ScrollView style={styles.body}>
-            <Text style={styles.surveyTitle}>{surveyPostRequest?.title}</Text>
+      <Text style={styles.surveyDesc}>{surveyPostRequest?.description}</Text>
 
-            <Text style={styles.surveyDesc}>{surveyPostRequest?.description}</Text>
+      <Text style={styles.textTitle}>Câu hỏi</Text>
 
-            <Text style={styles.textTitle}>Câu hỏi</Text>
+      <View style={styles.questionWrapper}>
+        {surveyPostRequest?.questions.map((item, index) => {
+          if (item.type === MULTI_CHOICE_QUESTION) {
+            return <MultiChoiceQuestion data={item} index={index} />
+          } else if (item.type === ONE_CHOICE_QUESTION) {
+            return <OneChoiceQuestion data={item} index={index} />
+          } else {
+            return <ShortAnswerQuestion data={item} index={index} />
+          }
+        })}
+      </View>
 
-            <View style={styles.questionWrapper}>
-                {
-                    surveyPostRequest?.questions.map((item, index) => {
-                        if (item.type === MULTI_CHOICE_QUESTION) {
-                            return <MultiChoiceQuestion data={item} index={index} />
-                        } else if (item.type === ONE_CHOICE_QUESTION) {
-                            return <OneChoiceQuestion data={item} index={index} />
-                        } else {
-                            return <ShortAnswerQuestion data={item} index={index} />
-                        }
-                    })
-                }
-            </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <ButtonFullWith
+          btnStyle={{ marginRight: 10, width: 140 }}
+          onPress={onBtnBackPress}
+          iconName='arrow-left-thin'
+          title='Quay lại'
+        />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <ButtonFullWith
-                    btnStyle={{ marginRight: 10, width: 140 }}
-                    onPress={onBtnBackPress}
-                    iconName='arrow-left-thin'
-                    title='Quay lại' />
-
-                <ButtonFullWith
-                    btnStyle={{ marginLeft: 10, width: 140 }}
-                    onPress={onBtnPublishPostPress}
-                    iconName='plus'
-                    title='Hoàn tất' />
-            </View>
-        </ScrollView>
-    )
+        <ButtonFullWith
+          btnStyle={{ marginLeft: 10, width: 140 }}
+          onPress={onBtnPublishPostPress}
+          iconName='plus'
+          title='Hoàn tất'
+        />
+      </View>
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 5
-    },
-    textInputStyle: {
-        textAlignVertical: 'top',
-        paddingTop: 15,
-        marginBottom: 10
-    },
-    textTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#fff',
-        backgroundColor: '#0065FF',
-        marginTop: 15,
-        marginHorizontal: 5,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 4
-    },
-    questionWrapper: {
-        paddingHorizontal: 5
-    },
-    surveyTitle: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        color: '#000',
-        marginStart: 5,
-        marginTop: 15
-    },
-    surveyDesc: {
-        marginStart: 5,
-        marginTop: 10,
-        fontSize: 16
-    }
+  body: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 5
+  },
+  textInputStyle: {
+    textAlignVertical: 'top',
+    paddingTop: 15,
+    marginBottom: 10
+  },
+  textTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    backgroundColor: '#0065FF',
+    marginTop: 15,
+    marginHorizontal: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 4
+  },
+  questionWrapper: {
+    paddingHorizontal: 5
+  },
+  surveyTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#000',
+    marginStart: 5,
+    marginTop: 15
+  },
+  surveyDesc: {
+    marginStart: 5,
+    marginTop: 10,
+    fontSize: 16
+  }
 })

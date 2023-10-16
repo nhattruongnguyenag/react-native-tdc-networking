@@ -8,7 +8,6 @@ import { LOGIN_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setUserLogin } from '../redux/Slice'
 
-
 // man hinh splash
 export default function SplashScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -17,20 +16,22 @@ export default function SplashScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      AsyncStorage.getItem(USER_LOGIN_KEY).then(json => {
-        if (json) {
-          const userLogin = JSON.parse(json)
-          if (userLogin) {
-            console.log("user-login")
-            dispatch(setUserLogin(userLogin))
-            navigation.replace(TOP_TAB_NAVIGATOR)
+      AsyncStorage.getItem(USER_LOGIN_KEY)
+        .then((json) => {
+          if (json) {
+            const userLogin = JSON.parse(json)
+            if (userLogin) {
+              console.log('user-login')
+              dispatch(setUserLogin(userLogin))
+              navigation.replace(TOP_TAB_NAVIGATOR)
+            }
+          } else {
+            navigation.replace(LOGIN_SCREEN)
           }
-        } else {
-          navigation.replace(LOGIN_SCREEN)
-        }
-      }).catch(err => console.log(err))
+        })
+        .catch((err) => console.log(err))
     }, 3000)
-  },[])
+  }, [])
 
   return (
     <View>

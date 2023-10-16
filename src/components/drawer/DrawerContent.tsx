@@ -30,24 +30,28 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <DrawerItem
-          style={{marginStart: 14}}
-          label={"Thêm khảo sát"}
+          style={{ marginStart: 14 }}
+          label={'Thêm khảo sát'}
           onPress={() => {
             navigation.navigate(CREATE_SURVEY_SCREEN)
           }}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (<FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />)} />
-        
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />
+          )}
+        />
+
         <DrawerItem
-          style={{marginStart: 14}}
-          label={"Đăng xuất"}
+          style={{ marginStart: 14 }}
+          label={'Đăng xuất'}
           onPress={() => {
             logout()
           }}
           labelStyle={{ color: '#f12749' }}
-          icon={({ color, focused, size }) => (<FontAwesome6Icon name='power-off' size={16} color={'#f12749'} />)} />
+          icon={({ color, focused, size }) => <FontAwesome6Icon name='power-off' size={16} color={'#f12749'} />}
+        />
       </DrawerContentScrollView>
     </View>
   )

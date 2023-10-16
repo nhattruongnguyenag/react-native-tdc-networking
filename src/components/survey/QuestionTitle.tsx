@@ -19,9 +19,15 @@ export default function QuestionTitle(props: QuestionTitleProps) {
   return (
     <View style={styles.body}>
       <Text style={styles.questionTitle}>{props.title}</Text>
-      <IconButton icon='delete' iconColor='#f70000' size={25} style={styles.btnDelete} onPress={() => {
-        onBtnDeletePress()
-      }} />
+      <IconButton
+        icon='delete'
+        iconColor='#f70000'
+        size={25}
+        style={styles.btnDelete}
+        onPress={() => {
+          onBtnDeletePress()
+        }}
+      />
     </View>
   )
 }
