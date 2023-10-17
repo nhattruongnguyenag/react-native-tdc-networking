@@ -9,5 +9,5 @@ export interface User {
   isMessageConnect: number
   updatedAt: string
   roleCodes: string
-  code : string
+  code: string
 }
