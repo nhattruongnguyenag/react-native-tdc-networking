@@ -9,13 +9,14 @@ import axios from 'axios'
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
 
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const {userLogin} = useAppSelector((state) => state.TDCSocialNetworkReducer)
   // const [menuRef, setMenuRef] = useState<Menu | null>()
   const [data, setData] = useState([]);
   const [dataIsRead, setDataIsRead] = useState([])
@@ -23,9 +24,11 @@ export default function NotificationScreen() {
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
   const [filterData, setFilterData] = useState([]);
-
+  
   const callData = () => {
-    axios.get(`${SERVER_ADDRESS}/api/notifications/user/12`)
+    axios.post(`${SERVER_ADDRESS}/api/notifications/user/`, {
+      id: userLogin?.id
+    })
       .then(res => {
         const respo = res.data.data;
         setData(respo)
@@ -195,7 +198,6 @@ export default function NotificationScreen() {
         </View>
         {/*  */}
         <ScrollView style={styles.platList}>
-<<<<<<< HEAD
           {
             search === '' ?
               (data !== null ? (
@@ -208,12 +210,6 @@ export default function NotificationScreen() {
                 filterData.map((item, index) => (
                   renderItem(item, index)
                 ))
-=======
-          {data !== null
-            ? data.map(
-                (item, index) => renderItem(item, index)
-                // <Text>{JSON.stringify(data)}</Text>
->>>>>>> develop
               )
           }
         </ScrollView >
