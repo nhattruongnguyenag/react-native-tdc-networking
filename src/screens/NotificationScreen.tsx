@@ -195,6 +195,7 @@ export default function NotificationScreen() {
         </View>
         {/*  */}
         <ScrollView style={styles.platList}>
+<<<<<<< HEAD
           {
             search === '' ?
               (data !== null ? (
@@ -207,6 +208,12 @@ export default function NotificationScreen() {
                 filterData.map((item, index) => (
                   renderItem(item, index)
                 ))
+=======
+          {data !== null
+            ? data.map(
+                (item, index) => renderItem(item, index)
+                // <Text>{JSON.stringify(data)}</Text>
+>>>>>>> develop
               )
           }
         </ScrollView >
