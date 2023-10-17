@@ -1,41 +1,20 @@
-import { useIsFocused } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { Client, Frame, Message } from 'stompjs'
+import React, { useEffect } from 'react'
 import ConversationListView from '../../components/listviews/ConversationListView'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { useGetConversationsByUserIdQuery } from '../../redux/Service'
 import { setConversations } from '../../redux/Slice'
-import { getStompClient } from '../../sockets/SocketClient'
-import Loading from '../Loading'
 
 export default function AllConversationGroupTab() {
   const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const isFocused = useIsFocused()
-  const [isLoading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
+  const { data, isSuccess } = useGetConversationsByUserIdQuery(userLogin ? userLogin.id : -1)
 
   useEffect(() => {
-    if (isFocused) {
-      const stompClient: Client = getStompClient()
-      stompClient.debug('')
-
-      const onConnected = () => {
-        setLoading(true)
-        stompClient.subscribe('/topic/conversations', onMessageReceived)
-        stompClient.send(`/app/conversations/listen/${userLogin?.id}`)
-      }
-
-      const onMessageReceived = (payload: Message) => {
-        setLoading(false)
-        dispatch(setConversations(JSON.parse(payload.body)))
-      }
-
-      const onError = (err: string | Frame) => {
-        console.log(err)
-      }
-
-      stompClient.connect({}, onConnected, onError)
+    console.log(data)
+    if (data && isSuccess) {
+      dispatch(setConversations(data))
     }
-  }, [isFocused])
+  }, [data])
 
-  return isLoading ? <Loading title='Đang tải danh sách hội thoại' /> : <ConversationListView data={conversations} />
+  return <ConversationListView data={conversations} />
 }
