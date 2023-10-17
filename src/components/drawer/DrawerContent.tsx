@@ -11,7 +11,7 @@ import React, { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
-import { CREATE_SURVEY_SCREEN, LOGIN_SCREEN } from '../../constants/Screen'
+import { CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, LOGIN_SCREEN } from '../../constants/Screen'
 import Divider from '../Divider'
 import DrawerHeader from './DrawerHeader'
 
@@ -45,6 +45,20 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
 
         <DrawerItem
           style={{ marginStart: 14 }}
+          label={'Thêm tin tuyển dụng'}
+          onPress={() => {
+            navigation.navigate(CREATE_RECRUITMENT_SCREEN)
+          }}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />
+          )}
+        />
+
+        <DrawerItem
+          style={{ marginStart: 14 }}
           label={'Đăng xuất'}
           onPress={() => {
             logout()
@@ -56,5 +70,3 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
     </View>
   )
 }
-
-const styles = StyleSheet.create({})
