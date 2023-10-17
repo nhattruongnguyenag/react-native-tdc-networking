@@ -124,8 +124,8 @@ export default function NotificationScreen() {
         {/*  */}
         <ScrollView style={styles.platList}>
           {data !== null
-            ? data.map((item, index) =>
-                renderItem(item, index)
+            ? data.map(
+                (item, index) => renderItem(item, index)
                 // <Text>{JSON.stringify(data)}</Text>
               )
             : null}
