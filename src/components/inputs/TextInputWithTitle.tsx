@@ -11,6 +11,7 @@ interface TextInputWithTitleProps {
   onFocus?: () => void
   onBlur?: () => void
   value?: string
+  textInputRef?: React.LegacyRef<TextInput>
 }
 
 export default function TextInputWithTitle(props: TextInputWithTitleProps) {
@@ -18,6 +19,7 @@ export default function TextInputWithTitle(props: TextInputWithTitleProps) {
     <View style={styles.group}>
       <Text style={[styles.txt, { display: props.title ? 'flex' : 'none' }]}>{props.title}</Text>
       <TextInput
+        ref={props.textInputRef}
         value={props.value}
         onBlur={() => props.onBlur && props.onBlur()}
         onFocus={() => props.onFocus && props.onFocus()}
