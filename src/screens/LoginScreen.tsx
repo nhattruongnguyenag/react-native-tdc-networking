@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { UserLoginRequest } from '../types/request/UserLoginRequest'
+import { UserLoginRequest } from '../types/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
@@ -22,7 +22,7 @@ import { Faculty } from '../types/Faculty'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
 import { COLOR_BTN_BLUE } from '../constants/Color'
@@ -153,7 +153,7 @@ export default function LoginScreen() {
             <Text>Chưa có tài khoản? </Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate(INTERMEDIATIOO_SCREEN)
+                navigation.navigate(TOP_TAB_NAVIGATOR)
               }}
             >
               <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Đăng ký</Text>

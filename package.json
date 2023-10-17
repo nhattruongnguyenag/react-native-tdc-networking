@@ -44,7 +44,6 @@
     "react-native-camera": "^4.2.1",
     "react-native-camera-hooks": "^0.5.3",
     "react-native-check-box": "^2.1.7",
-    "react-native-date-picker": "^4.3.4-alpha.0",
     "react-native-element-dropdown": "^2.10.0",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.9.0",

@@ -20,9 +20,6 @@ export interface TextFieldValidate {
 
 // man hinh dang bai viet khao sat
 export default function CreateSurveyPostScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const dispatch = useAppDispatch()
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>({
     textError: 'Tiêu đề không được để trống',
     isVisible: false,
@@ -35,6 +32,9 @@ export default function CreateSurveyPostScreen() {
     isError: true
   })
 
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const dispatch = useAppDispatch()
   const defaultSurveyPost: SurveyPostRequest = useMemo(() => {
     return {
       type: 'khao-sat',

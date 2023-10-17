@@ -1,4 +1,4 @@
-import { Message } from './Message'
+import { Message } from './Messages'
 import { User } from './User'
 
 export interface MessageSection {

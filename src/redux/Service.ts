@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { DeviceToken } from '../types/DeviceToken'
-import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
-import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
-import { MessageResponseData } from '../types/response/MessageResponseData'
+import { FCMNotificationRequest } from '../types/FCMNotificationRequest'
+import { MessageResponseData } from '../types/MessageResponseData'
 import { SurveyPostRequest } from '../types/SurveyPost'
 
 export const TDCSocialNetworkAPI = createApi({
@@ -37,25 +36,11 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       })
-    }),
-    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPostRequest>({
-      query: (data) => ({
-        url: 'api/posts/recruitment',
-        method: 'POST',
-        body: data,
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8'
-        }
-      })
     })
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {
-  useAddSurveyPostMutation,
-  useSaveDeviceTokenMutation,
-  useSendFCMNotificationMutation,
-  useAddRecruitmentPostMutation
-} = TDCSocialNetworkAPI
+export const { useAddSurveyPostMutation, useSaveDeviceTokenMutation, useSendFCMNotificationMutation } =
+  TDCSocialNetworkAPI

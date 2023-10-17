@@ -6,5 +6,5 @@ import { useAppSelector } from '../../redux/Hook'
 
 export default function ActiveConversationGroupTab() {
   const { conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  return <ConversationListView data={conversations.filter((conversation) => conversation.receiver.status === 1)} />
+  return <ConversationListView data={conversations.filter(conversation => conversation.receiver.status === 1)} />
 }
