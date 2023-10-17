@@ -22,7 +22,7 @@ export default function SearchScreen() {
   const [subjects, setSubjects] = useState('user')
   const [type, setType] = useState('sinh-vien')
   const [qty, setQty] = useState(0)
-  let URL = `${SERVER_ADDRESS}/api/find/${subjects}`
+  let URL = `${SERVER_ADDRESS}api/find/${subjects}`
   //Xu ly dropdown
   const [value, setValue] = useState(null);
   const [label, setLabel] = useState('Người dùng')
@@ -38,7 +38,7 @@ export default function SearchScreen() {
     try {
       // console.log(subjects + '-' + type + '-' + search);
       axios.post(URL, {
-        userId: 12,
+        userId: 1,
         type: type,
         name: search
       }).then(res => {
