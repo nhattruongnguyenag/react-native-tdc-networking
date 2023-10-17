@@ -84,7 +84,7 @@ export default function NotificationScreen() {
 
   const handleListIsRead = () => {
     try {
-      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: 12 })
+      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus/all`, { userId: userLogin?.id })
       callData()
     }
     
