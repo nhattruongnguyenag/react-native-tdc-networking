@@ -1,28 +1,38 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect } from 'react'
-import CustomizeBusinessPost from '../components/CustomizeBusinessPost'
-import { COLOR_GREY } from '../constants/Color'
-import { likeData, imageData, commentData } from '../components/DataBase'
+import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setConversations, setDeviceToken } from '../redux/Slice'
+import { setConversations, setDeviceToken, updatePostWhenHaveChangeComment } from '../redux/Slice'
 import { useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
-import { Conversation } from '../types/Conversation'
 import { Client, Frame, Message } from 'stompjs'
+import { postAPI } from '../api/CallApi'
+import { handleDataClassification } from '../utils/DataClassfications'
+import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
+import { formatDateTime } from '../utils/FormatTime'
+import CustomizePost from '../components/post/CustomizePost'
+import { LikeAction } from '../types/LikeActions'
+import { API_URL_POST } from '../constants/Path'
 
+let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
-
 export default function BusinessDashboardScreen() {
-  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector(
+
+  // Variable
+
+  const [businessPost, setBusinessPost] = useState();
+  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
   const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
+
+  // Function area
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -33,7 +43,6 @@ export default function BusinessDashboardScreen() {
         console.log(error)
       }
     }
-
     getFCMToken()
   }, [])
 
@@ -67,59 +76,93 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
+  const getDataBusinessApi = async () => {
+    try {
+      const data = await postAPI(API_URL_POST);
+      const result = handleDataClassification(data, TYPE_POST_BUSINESS);
+      setBusinessPost(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/${TYPE_POST_BUSINESS}`, onMessageReceived)
+      stompClient.send(`/app/posts/${TYPE_POST_BUSINESS}/listen`)
+    }
+    const onMessageReceived = (payload: any) => {
+      setBusinessPost(JSON.parse(payload.body))
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
+  const likeAction = (obj: LikeAction) => {
+    obj.code = TYPE_POST_BUSINESS;
+    like(obj);
+  }
+
+  const like = useCallback((likeData: LikeAction) => {
+    console.log(JSON.stringify(likeData));
+    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+  }, [])
+
+  useEffect(() => {
+    getDataBusinessApi();
+    dispatch(updatePostWhenHaveChangeComment(false))
+  }, [updatePost])
+
+  const renderItem = (item: any) => {
+    return <CustomizePost
+      id={item.id}
+      userId={item.user['id']}
+      name={item.user['name']}
+      avatar={item.user['image']}
+      typeAuthor={'Doanh Nghiệp'}
+      available={null}
+      timeCreatePost={formatDateTime(item.createdAt)}
+      content={item.content}
+      type={null}
+      likes={item.likes}
+      comments={item.comment}
+      commentQty={item.commentQuantity}
+      images={item.images}
+      role={0}
+      likeAction={likeAction}
+    />
+  }
+
+
+
   return (
     <View style={styles.container}>
-      {isOpenModalImage && <CustomizeModalImage />}
-      {isOpenModalUserReaction && <CustomizeModalUserReacted />}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <CustomizeBusinessPost
-          id={1}
-          name={'Google VN'}
-          avatar={
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png'
-          }
-          typeAuthor={'Doanh Nghiệp'}
-          available={true}
-          timeCreatePost={'27/07/2023 9:09'}
-          content={
-            ' danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới bút danh Collodi'
-          }
-          type={'tuyển dụng'}
-          isLike={true}
-          isComment={true}
-          likes={likeData}
-          comments={commentData}
-          images={imageData}
-          role={0}
-        />
-        <CustomizeBusinessPost
-          id={1}
-          name={'Google VN'}
-          avatar={
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png'
-          }
-          typeAuthor={'Doanh Nghiệp'}
-          available={true}
-          timeCreatePost={'27/07/2023 9:09'}
-          content={
-            ' danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới danh CollodiNhững cuộc phiêu lưu của Pinocchio, được xuất bản năm 1883, là cuốn tiểu thuyết dành cho thiếu nhi của tác giả người Ý Carlo Lorenini d dưới bút danh Collodi'
-          }
-          type={'tuyển dụng'}
-          isLike={true}
-          isComment={false}
-          likes={likeData}
-          comments={commentData}
-          images={imageData}
-          role={0}
-        />
-      </ScrollView>
-      {isOpenModalComments && <CustomizeModalComments />}
+      {
+        isOpenModalImage && <CustomizeModalImage />
+      }
+      {
+        isOpenModalUserReaction && <CustomizeModalUserReacted />
+      }
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        refreshing={false}
+        onRefresh={() => getDataBusinessApi()}
+        data={businessPost}
+        renderItem={({ item }) => renderItem(item)}
+      />
+      {
+        isOpenModalComments && <CustomizeModalComments />
+      }
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR_GREY
+    backgroundColor: COLOR_BOTTOM_AVATAR
   }
 })

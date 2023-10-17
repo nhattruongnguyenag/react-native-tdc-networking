@@ -75,6 +75,7 @@ export default function MessengerScreen() {
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
     setMessageContent('')
   }, [messageContent])
+  
 
   const messageSectionRenderItems = useCallback(
     (item: MessageSection, sectionIndex: number) => (

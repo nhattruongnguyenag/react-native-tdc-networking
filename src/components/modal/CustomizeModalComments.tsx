@@ -1,282 +1,360 @@
-import {
-  Keyboard,
-  Platform,
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  PanResponder,
-  Modal,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  SafeAreaView
-} from 'react-native'
-import React, { useRef, useState, useEffect } from 'react'
-import { WINDOW_HEIGHT } from '../../utils'
-import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
-import IconAntDesign from 'react-native-vector-icons/AntDesign'
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
-import CustomizeComment from '../CustomizeComment'
-import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { closeModalComments } from '../../redux/Slice'
+import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList, Alert } from 'react-native'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
+import { WINDOW_HEIGHT } from '../../utils/SystemDimensions'
+import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import CustomizeComment from '../post/CustomizeCommentPost';
+import { useAppDispatch, useAppSelector } from '../../redux/Hook';
+import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
+import { TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT } from '../../constants/StringVietnamese';
+import { Comment } from '../../types/Comment';
+import { formatDateTime } from '../../utils/FormatTime';
+import { SERVER_ADDRESS } from '../../constants/SystemConstant';
+import { callApiComment, deleteCommentApi } from '../../api/CallApi';
+import { isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
+import { Client, Frame } from 'stompjs';
+import { getStompClient } from '../../sockets/SocketClient';
+
 //  Constant
-const TEXT_PLACEHOLDER = 'hãy nhập tin nhắn của bạn'
-const TEXT_TITLE = 'Bình luận'
-const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.8
-const BOTTOM_SHEET_MIN_HEIGHT = WINDOW_HEIGHT * 0.5
-const MAX_UPWARD_TRANSLATE_Y = BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT
-const MAX_DOWNWARD_TRANSLATE_Y = 0
-const DRAG_THRESHOLD = 50
-const TEXT_SEE_MORE_COMMENTS = 'Xem thêm bình luận'
-const TEXT_HIDDEN_COMMENTS = 'Ẩn bớt bình luận'
+const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
+const BOTTOM_SHEET_MIN_HEIGHT = WINDOW_HEIGHT * 0.5;
+const MAX_UPWARD_TRANSLATE_Y = BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT;
+const MAX_DOWNWARD_TRANSLATE_Y = 0;
+const DRAG_THRESHOLD = 50;
+let stompClient: Client
 const CustomizeModalComments = () => {
-  const inputRef = useRef<any>()
-  const [myComment, setMyComment] = useState('')
-  const [idReply, setIdReply] = useState(-1)
-  const [keyboardStatus, setKeyboardStatus] = useState(false)
-  const { modalCommentData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const dispatch = useAppDispatch()
-  //
-  const animatedValue = useRef(new Animated.Value(0)).current
-  const lastGestureDy = useRef(0)
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: (e, gesture) => {
-        animatedValue.setOffset(lastGestureDy.current)
-      },
-      onPanResponderMove: (e, gesture) => {
-        animatedValue.setValue(gesture.dy)
-      },
-      onPanResponderRelease: (e, gesture) => {
-        animatedValue.flattenOffset()
-        if (gesture.dy > 0) {
-          if (gesture.dy <= DRAG_THRESHOLD) {
-            springAnimation('up')
-          } else {
-            springAnimation('down')
-          }
+    const { modalCommentData, updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const [haveChange, setHaveChange] = useState(false);
+    // Variable
+    const [comments, setComments] = useState();
+    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+    const inputRef = useRef<any>();
+    const [myComment, setMyComment] = useState<string>('');
+    const [idReply, setIdReply] = useState(0);
+    const [keyboardStatus, setKeyboardStatus] = useState(false);
+    const dispatch = useAppDispatch();
+    const animatedValue = useRef(new Animated.Value(0)).current;
+    const lastGestureDy = useRef(0);
+
+    const panResponder = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderGrant: (e, gesture) => {
+                animatedValue.setOffset(lastGestureDy.current)
+            },
+            onPanResponderMove: (e, gesture) => {
+                animatedValue.setValue(gesture.dy);
+            },
+            onPanResponderRelease: (e, gesture) => {
+                animatedValue.flattenOffset()
+                if (gesture.dy > 0) {
+                    if (gesture.dy <= DRAG_THRESHOLD) {
+                        springAnimation('up')
+                    } else {
+                        springAnimation('down')
+                    }
+                } else {
+                    if (gesture.dy >= -DRAG_THRESHOLD) {
+                        springAnimation('down')
+                    } else {
+                        springAnimation('up')
+                    }
+                }
+            }
+        }),
+    ).current
+
+
+    const bottomSheetAnimation = {
+        transform: [{
+            translateY: animatedValue.interpolate({
+                inputRange: [MAX_UPWARD_TRANSLATE_Y, MAX_DOWNWARD_TRANSLATE_Y],
+                outputRange: [MAX_UPWARD_TRANSLATE_Y, MAX_DOWNWARD_TRANSLATE_Y],
+                extrapolate: 'clamp'
+            })
+        }]
+    }
+
+    const springAnimation = (direction: 'up' | 'down') => {
+        lastGestureDy.current = direction === 'down' ? MAX_DOWNWARD_TRANSLATE_Y : MAX_UPWARD_TRANSLATE_Y
+        Animated.spring(animatedValue, {
+            toValue: lastGestureDy.current,
+            useNativeDriver: true,
+        }).start();
+    }
+
+    const handleClickIntoBtnIconClose = async () => {
+        dispatch(closeModalComments());
+        if (haveChange) {
+            dispatch(updatePostWhenHaveChangeComment(true))
+        }
+
+    }
+
+    useEffect(() => {
+        const showSubscription = Keyboard.addListener('keyboardDidShow', (e: any) => {
+            setKeyboardStatus(true);
+            springAnimation('up');
+        });
+        const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardStatus(false);
+        });
+        return () => {
+            showSubscription.remove();
+            hideSubscription.remove();
+        };
+    }, [keyboardStatus]);
+
+    // Send data to server
+    const handleSubmitEvent = () => {
+        if (isNotBlank(myComment.trim()) && isLengthInRange(myComment, 1, 1024,)) {
+            setHaveChange(true);
+            Keyboard.dismiss();
+            const newComment = {
+                postId: modalCommentData?.id,
+                userId: userLogin?.id,
+                content: myComment,
+                parentCommentId: idReply
+            }
+            createComment(newComment);
         } else {
-          if (gesture.dy >= -DRAG_THRESHOLD) {
-            springAnimation('down')
-          } else {
-            springAnimation('up')
-          }
+            Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống và không được quá 1024 ký tự');
         }
-      }
-    })
-  ).current
-
-  const bottomSheetAnimation = {
-    transform: [
-      {
-        translateY: animatedValue.interpolate({
-          inputRange: [MAX_UPWARD_TRANSLATE_Y, MAX_DOWNWARD_TRANSLATE_Y],
-          outputRange: [MAX_UPWARD_TRANSLATE_Y, MAX_DOWNWARD_TRANSLATE_Y],
-          extrapolate: 'clamp'
-        })
-      }
-    ]
-  }
-
-  const springAnimation = (direction: 'up' | 'down') => {
-    lastGestureDy.current = direction === 'down' ? MAX_DOWNWARD_TRANSLATE_Y : MAX_UPWARD_TRANSLATE_Y
-    Animated.spring(animatedValue, {
-      toValue: lastGestureDy.current,
-      useNativeDriver: true
-    }).start()
-  }
-
-  const handleClickIntoBtnIconClose = () => {
-    dispatch(closeModalComments())
-  }
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', (e: any) => {
-      setKeyboardStatus(true)
-      springAnimation('up')
-    })
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardStatus(false)
-    })
-    return () => {
-      showSubscription.remove()
-      hideSubscription.remove()
     }
-  }, [keyboardStatus])
 
-  // Send data to server
-  const handleSubmitEvent = () => {
-    setMyComment('')
-    Keyboard.dismiss()
-    const data = {
-      id_post: modalCommentData?.id,
-      id_comments_reply: idReply,
-      comments: myComment
+    // Reply comment
+    const handleClickToCommentReplyEvent = (commentReplyId: number) => {
+        console.log(commentReplyId);
+        setIdReply(commentReplyId);
+        inputRef.current.focus();
     }
-    console.log('====================================')
-    console.log('DATA ' + JSON.stringify(data))
-    console.log('====================================')
-  }
 
-  const handleClickToCommentReplyEven = (id: number) => {
-    setIdReply(id)
-    inputRef.current.focus()
-  }
+    // Delete comments
+    const handleClickToDeleteCommentsEvent = async (commentDeleteId: number) => {
+        const dataToDeleteComment = {
+            "commentId": commentDeleteId,
+            "postId": modalCommentData?.id,
+            "userId": userLogin?.id
+        }
+        deleteComment(dataToDeleteComment);
+    }
 
-  return (
-    <Modal animationType='slide' transparent statusBarTranslucent={true}>
-      <View style={styles.container}>
-        <Animated.View style={[styles.bottomSheet, bottomSheetAnimation]}>
-          <View style={styles.dragHandleArea} {...panResponder.panHandlers}>
-            <View style={styles.dragHandle}>
-              <Text style={styles.headerTitle}>{TEXT_TITLE}</Text>
-            </View>
-            <TouchableOpacity onPress={() => handleClickIntoBtnIconClose()} style={styles.btnIconClose}>
-              <IconAntDesign name='close' size={25} color={COLOR_BLACK} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.containerComments}>
-            <ScrollView
-              automaticallyAdjustKeyboardInsets={true}
-              contentContainerStyle={{ paddingBottom: '50%' }}
-              showsVerticalScrollIndicator={false}
-            >
-              {modalCommentData?.commentFather.map((item, index) => {
-                const [seeMore, setSeeMore] = useState(false)
-                return (
-                  <>
-                    <CustomizeComment
-                      type={0}
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      content={item.content}
-                      avatar={item.avatar}
-                      timeCreated={item.timeCreated}
-                      handleClickToCommentReplyEven={handleClickToCommentReplyEven}
-                    />
-                    {item.commentChildren.length !== 0 && seeMore
-                      ? item.commentChildren?.map((item, index) => (
-                          <CustomizeComment
-                            type={1}
-                            key={item.id}
-                            id={item.id}
-                            name={item.name}
-                            content={item.content}
-                            avatar={item.avatar}
-                            timeCreated={item.timeCreated}
-                            handleClickToCommentReplyEven={handleClickToCommentReplyEven}
-                          />
-                        ))
-                      : item.commentChildren.length !== 0 && (
-                          <TouchableOpacity onPress={() => setSeeMore(true)}>
-                            <Text style={styles.txtActivity}>{TEXT_SEE_MORE_COMMENTS}</Text>
-                          </TouchableOpacity>
-                        )}
-                    {seeMore && (
-                      <TouchableOpacity onPress={() => setSeeMore(false)}>
-                        <Text style={styles.txtActivity}>{TEXT_HIDDEN_COMMENTS}</Text>
-                      </TouchableOpacity>
-                    )}
-                  </>
-                )
-              })}
-            </ScrollView>
-          </View>
-        </Animated.View>
-        <SafeAreaView
-          style={keyboardStatus ? [styles.textInput, { bottom: '41%' }] : [styles.textInput, { bottom: '0%' }]}
+    // Socket
+    useEffect(() => {
+        stompClient = getStompClient()
+        const onConnected = () => {
+            stompClient.subscribe(`/topic/posts/${modalCommentData?.id}`, onMessageReceived)
+            stompClient.send(`/app/posts/${modalCommentData?.id}/comments/listen`)
+        }
+        const onMessageReceived = (payload: any) => {
+            setComments(JSON.parse(payload.body));
+        }
+
+        const onError = (err: string | Frame) => {
+            console.log(err)
+        }
+        stompClient.connect({}, onConnected, onError)
+    }, [])
+
+    const createComment = useCallback((newComment: object) => {
+        stompClient.send(`/app/posts/${modalCommentData?.id}/comments`, {}, JSON.stringify(newComment))
+        setMyComment('');
+    }, [myComment])
+
+    const deleteComment = useCallback((comment: object) => {
+        setHaveChange(true);
+        stompClient.send(`/app/posts/${modalCommentData?.id}/comments/delete`, {}, JSON.stringify(comment))
+        setMyComment('');
+    }, [myComment])
+
+    return (
+        <Modal
+            animationType='slide'
+            transparent
+            statusBarTranslucent={true}
         >
-          <TextInput
-            ref={inputRef}
-            value={myComment}
-            onChangeText={(value) => {
-              setMyComment(value)
-            }}
-            placeholderTextColor={COLOR_BLACK}
-            style={styles.txtPlaceholder}
-            placeholder={TEXT_PLACEHOLDER}
-          />
-          <TouchableOpacity onPress={() => handleSubmitEvent()}>
-            <IconFontAwesome name='send' size={25} color={COLOR_BUTTON} />
-          </TouchableOpacity>
-        </SafeAreaView>
-      </View>
-    </Modal>
-  )
+            <View style={styles.container}>
+                <Animated.View style={[styles.bottomSheet, bottomSheetAnimation]}>
+                    <View style={styles.dragHandleArea}
+                        {...panResponder.panHandlers}>
+                        <View style={styles.dragHandle}>
+                            <Text style={styles.headerTitle}>{TEXT_TITLE_COMMENT}</Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => handleClickIntoBtnIconClose()}
+                            style={styles.btnIconClose}
+                        >
+                            <IconAntDesign
+                                name='close' size={25} color={COLOR_BLACK} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.containerComments}>
+                        <FlatList
+                            refreshing={false}
+                            onRefresh={() => { console.log('call api comment pls') }}
+                            automaticallyAdjustKeyboardInsets={true}
+                            contentContainerStyle={{ paddingBottom: '50%' }}
+                            showsVerticalScrollIndicator={false}
+                            data={comments}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => {
+                                return item.parentId === null ? <>
+                                    <CommentExport
+                                        commentItem={item}
+                                        userLoginId={userLogin?.id}
+                                        handleClickToCommentReplyEvent={handleClickToCommentReplyEvent}
+                                        handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent} />
+                                </> : <></>
+                            }}
+                        />
+                    </View>
+                </Animated.View>
+                <SafeAreaView style={keyboardStatus ? [styles.textInput, { bottom: '41%' }] : [styles.textInput, { bottom: '0%' }]}>
+                    <TextInput
+                        ref={inputRef}
+                        value={myComment}
+                        onChangeText={(value) => {
+                            setMyComment(value)
+                        }}
+                        placeholderTextColor={COLOR_BLACK}
+                        style={styles.txtPlaceholder}
+                        placeholder={TEXT_PLACEHOLDER_INPUT_COMMENT}
+                    />
+                    <TouchableOpacity
+                        onPress={() => handleSubmitEvent()}>
+                        <IconFontAwesome
+                            name='send' size={25} color={COLOR_BUTTON} />
+                    </TouchableOpacity>
+                </SafeAreaView>
+            </View >
+        </Modal >
+    )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLOR_MODAL
-  },
-  bottomSheet: {
-    position: 'absolute',
-    width: '100%',
-    height: BOTTOM_SHEET_MAX_HEIGHT,
-    bottom: BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT,
-    backgroundColor: COLOR_WHITE,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    ...Platform.select({
-      android: { elevation: 3 },
-      ios: {
-        shadowColor: COLOR_BLACK,
-        shadowOpacity: 1,
-        shadowRadius: 6,
-        shadowOffset: {
-          width: 2,
-          height: 2
+
+export interface CommentChildrenType {
+    commentItem: Comment,
+    userLoginId: number | undefined,
+    handleClickToCommentReplyEvent: (id: number) => void,
+    handleClickToDeleteCommentsEvent: (idComment: number) => void
+}
+
+const CommentExport = (item: CommentChildrenType) => {
+    const hasChildren = item.commentItem.childrens && item.commentItem.childrens.length > 0;
+    const [seeMore, setSeeMore] = useState(false);
+    const handleSeeMoreClick = () => {
+        setSeeMore(!seeMore);
+    }
+    return <>
+        <CustomizeComment
+            userId={item.userLoginId}
+            authorCommentId={item.commentItem.user['id']}
+            type={item.commentItem.parentId === null ? 0 : 1}
+            key={item.commentItem.id}
+            id={item.commentItem.id}
+            name={item.commentItem.user.name}
+            content={item.commentItem.content}
+            avatar={item.commentItem.user.image}
+            timeCreated={formatDateTime(item.commentItem.createdAt)}
+            handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
+            handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
+        />
+        {
+            hasChildren && (<>
+                <TouchableOpacity
+                    onPress={() => { setSeeMore(!seeMore) }}
+                    style={styles.txtActivity}
+                >
+                    <Text style={{ color: COLOR_GREY }}>{seeMore ? TEXT_HIDDEN_COMMENTS : TEXT_SEE_MORE_COMMENTS}</Text>
+                </TouchableOpacity>
+                {
+                    seeMore && (<>
+                        <FlatList
+                            data={item.commentItem.childrens}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item: child }) => <CommentExport
+                                commentItem={child}
+                                handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
+                                handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
+                                userLoginId={item.userLoginId} />}
+                        />
+                    </>)
+                }
+            </>
+            )
         }
-      }
-    })
-  },
-  dragHandleArea: {
-    width: '100%',
-    height: 50,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 0.2,
-    borderColor: COLOR_GREY
-  },
-  dragHandle: {
-    width: 100,
-    height: 20,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  btnIconClose: {
-    position: 'absolute',
-    right: 20
-  },
-  headerTitle: {
-    color: COLOR_BLACK,
-    fontWeight: 'bold',
-    fontSize: 16
-  },
-  containerComments: {},
-  txtActivity: {
-    color: COLOR_GREY,
-    marginLeft: 55
-  },
-  textInput: {
-    position: 'absolute',
-    backgroundColor: 'rgb(250 250 250)',
-    height: 60,
-    width: '100%',
-    borderTopWidth: 0.2,
-    borderTopColor: COLOR_GREY,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  txtPlaceholder: {
-    width: '90%',
-    height: '100%',
-    paddingLeft: 20
-  }
+    </>
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: COLOR_MODAL
+    },
+    bottomSheet: {
+        position: 'absolute',
+        width: '100%',
+        height: BOTTOM_SHEET_MAX_HEIGHT,
+        bottom: BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT,
+        backgroundColor: COLOR_WHITE,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        ...Platform.select({
+            android: { elevation: 3 },
+            ios: {
+                shadowColor: COLOR_BLACK,
+                shadowOpacity: 1,
+                shadowRadius: 6,
+                shadowOffset: {
+                    width: 2,
+                    height: 2,
+                },
+            },
+        })
+    },
+    dragHandleArea: {
+        width: '100%',
+        height: 50,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: "center",
+        borderBottomWidth: 0.2,
+        borderColor: COLOR_GREY
+    },
+    dragHandle: {
+        width: 100,
+        height: 20,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    btnIconClose: {
+        position: 'absolute',
+        right: 20
+    },
+    headerTitle: {
+        color: COLOR_BLACK,
+        fontWeight: 'bold',
+        fontSize: 16
+    },
+    containerComments: {
+    },
+    txtActivity: {
+        color: COLOR_GREY,
+        marginLeft: 55
+    },
+    textInput: {
+        position: "absolute",
+        backgroundColor: 'rgb(250 250 250)',
+        height: 60,
+        width: '100%',
+        borderTopWidth: 0.2,
+        borderTopColor: COLOR_GREY,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    txtPlaceholder: {
+        width: '90%', height: '100%', paddingLeft: 20
+    }
 })
 export default CustomizeModalComments
