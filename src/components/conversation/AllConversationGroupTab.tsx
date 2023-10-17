@@ -7,7 +7,9 @@ import { setConversations } from '../../redux/Slice'
 export default function AllConversationGroupTab() {
   const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
-  const { data, isSuccess } = useGetConversationsByUserIdQuery(userLogin ? userLogin.id : -1)
+  const { data, isSuccess } = useGetConversationsByUserIdQuery(userLogin ? userLogin.id : -1, {
+    pollingInterval: 3000
+  })
 
   useEffect(() => {
     console.log(data)
