@@ -38,11 +38,28 @@ import {
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/TextValidate'
 
-export interface TextFieldValidate {
-  textError: string
-  textSuccess: string
-  isError: boolean
-  isVisible: boolean
+interface RegisterBusiness {
+  name: InputTextValidate
+  email: InputTextValidate
+  representor: InputTextValidate
+  taxCode: InputTextValidate
+  phone: InputTextValidate
+  address: InputTextValidate
+  activeTime: InputTextValidate
+  password: InputTextValidate
+  confimPassword: InputTextValidate
+}
+
+const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
+  let key: keyof RegisterBusiness
+
+  for (key in validate) {
+    if (validate[key].isError) {
+      return false
+    }
+  }
+
+  return true
 }
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
@@ -64,306 +81,425 @@ export default function BusinessRegistrationScreen() {
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [nameValidate, setNameValidate] = useState<InputTextValidate>({
-    textError: 'Tên không được để trống',
-    isVisible: false,
-    isError: true
+  const [validate, setValidate] = useState<RegisterBusiness>({
+    name: {
+      textError: 'Tên không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    representor: {
+      textError: 'Tên người đại diện không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    email: {
+      textError: 'Email không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    taxCode: {
+      textError: 'Mã số thuế không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    address: {
+      textError: 'Địa chỉ không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    phone: {
+      textError: 'Số điện thoại không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    activeTime: {
+      textError: 'Thời gian hoạt động không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    password: {
+      textError: 'Mật khẩu không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    confimPassword: {
+      textError: 'Nhập lại mật khẩu không được để trống',
+      isVisible: false,
+      isError: true
+    }
   })
-  const [representorValidate, setRepresentorValidate] = useState<InputTextValidate>({
-    textError: 'Tên người đại diện không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [emailValidate, setEmailValidate] = useState<InputTextValidate>({
-    textError: 'Email không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [taxCodeValidate, setTaxCodeValidate] = useState<InputTextValidate>({
-    textError: 'Mã số thuế không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [addressValidate, setAddressValidate] = useState<InputTextValidate>({
-    textError: 'Địa chỉ không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [phoneValidate, setPhoneValidate] = useState<InputTextValidate>({
-    textError: 'Số điện thoại không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [activeTimeValidate, setActiveTimeValidate] = useState<InputTextValidate>({
-    textError: 'Thời gian hoạt động không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [passwordValidate, setPasswordValidate] = useState<InputTextValidate>({
-    textError: 'Mật khẩu không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [confirmPasswordValidate, setConfirmPasswordValidate] = useState<InputTextValidate>({
-    textError: 'Nhập lại mật khẩu không được để trống',
-    isVisible: false,
-    isError: true
-  })
-
   const handleNameChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, name: value })
       if (isBlank(value)) {
-        setNameValidate({
-          ...nameValidate,
-          isError: true,
-          textError: 'Tên công ty không được để trống'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            isVisible: true
+          }
         })
       } else if (isContainSpecialCharacter(value)) {
-        setNameValidate({
-          ...nameValidate,
-          isError: true,
-          textError: 'Tên công ty không được chứa ký tự đặc biệt'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            isVisible: true,
+            textError: 'Tên công ty không chứa ký tự đặt biệt'
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setNameValidate({
-          ...nameValidate,
-          isError: true,
-          textError: 'Tên công ty không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            isVisible: true,
+            textError: 'Tên công ty không vượt quá 255 ký tự'
+          }
         })
       } else {
-        setNameValidate({
-          ...nameValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.name, nameValidate]
+    [validate]
   )
   const handleRepresentoreChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, representor: value })
       if (isBlank(value)) {
-        setRepresentorValidate({
-          ...representorValidate,
-          isError: true,
-          textError: 'Tên người đại diện không được để trống'
+        setValidate({
+          ...validate,
+          representor: {
+            ...validate.representor,
+            isError: true,
+            isVisible: true,
+            textError: 'Tên người đại diện không được để trống'
+          }
         })
       } else if (isContainSpecialCharacter(value)) {
-        setRepresentorValidate({
-          ...representorValidate,
-          isError: true,
-          textError: 'Tên người đại diện không được chứa ký tự đặc biệt'
+        setValidate({
+          ...validate,
+          representor: {
+            ...validate.representor,
+            isError: true,
+            textError: 'Tên người đại diện không được chứa ký tự đặc biệt',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setRepresentorValidate({
-          ...representorValidate,
-          isError: true,
-          textError: 'Tên người đại diện không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          representor: {
+            ...validate.representor,
+            isError: true,
+            textError: 'Tên người đại diện không vượt quá 255 ký tự',
+            isVisible: true
+          }
         })
       } else {
-        setRepresentorValidate({
-          ...representorValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          representor: {
+            ...validate.representor,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.representor, representorValidate]
+    [validate]
   )
   const handleEmailChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, email: value })
       if (isBlank(value)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email không được để trống'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            textError: 'Email không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            textError: 'Email không vượt quá 255 ký tự',
+            isVisible: true
+          }
         })
       } else if (!isEmail(value)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email sai định dạng'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            textError: 'Email sai định dạng',
+            isVisible: true
+          }
         })
       } else {
-        setEmailValidate({
-          ...emailValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.email, emailValidate]
+    [validate]
   )
   const handlePasswordChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, password: value })
       if (isBlank(value)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu không được để trống'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isError: true,
+            textError: 'Mật khẩu không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu không vượt quá 8 ký tự'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isError: true,
+            textError: 'Mật khẩu không vượt quá 8 ký tự',
+            isVisible: true
+          }
         })
       } else if (!isPassword(value)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu sai định dạng'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isError: true,
+            textError: 'Mật khẩu sai định dạng',
+            isVisible: true
+          }
         })
       } else {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.password, passwordValidate]
+    [validate]
   )
   const handleConfirmPasswordChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, confimPassword: value })
       if (isBlank(value)) {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: true,
-          textError: 'Trường nhập lại mật khẩu không được để trống'
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isError: true,
+            textError: 'Trường nhập lại mật khẩu không được để trống',
+            isVisible: true
+          }
         })
-      } else if (business.confimPassword == business.password) {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: true,
-          textError: 'Trường nhập lại mật khẩu phải trùng với mật khẩu'
+      } else if (value != business.password) {
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isError: true,
+            textError: 'Trường nhập lại mật khẩu phải trùng với mật khẩu',
+            isVisible: true
+          }
         })
       } else {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.confimPassword, confirmPasswordValidate]
+    [validate]
   )
   const handleTaxCodeChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, taxCode: value })
       if (isBlank(value)) {
-        setTaxCodeValidate({
-          ...taxCodeValidate,
-          isError: true,
-          textError: 'Mã số thuế không được để trống'
+        setValidate({
+          ...validate,
+          taxCode: {
+            ...validate.taxCode,
+            isError: true,
+            textError: 'Mã số thuế không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setTaxCodeValidate({
-          ...taxCodeValidate,
-          isError: true,
-          textError: 'Mã số thuế không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          taxCode: {
+            ...validate.taxCode,
+            isError: true,
+            textError: 'Mã số thuế không vượt quá 255 ký tự',
+            isVisible: true
+          }
         })
       } else if (!isType(value)) {
-        setTaxCodeValidate({
-          ...taxCodeValidate,
-          isError: true,
-          textError: 'Mã số thuế sai định dạng'
+        setValidate({
+          ...validate,
+          taxCode: {
+            ...validate.taxCode,
+            isError: true,
+            textError: 'Mã số thuế sai định dạng',
+            isVisible: true
+          }
         })
       } else {
-        setTaxCodeValidate({
-          ...taxCodeValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          taxCode: {
+            ...validate.taxCode,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.taxCode, taxCodeValidate]
+    [validate]
   )
   const handleAddressChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, address: value })
       if (isBlank(value)) {
-        setAddressValidate({
-          ...addressValidate,
-          isError: true,
-          textError: 'Địa chỉ không được để trống'
+        setValidate({
+          ...validate,
+          address: {
+            ...validate.address,
+            isError: true,
+            textError: 'Địa chỉ không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setAddressValidate({
-          ...addressValidate,
-          isError: true,
-          textError: 'Địa chỉ không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          address: {
+            ...validate.address,
+            isError: true,
+            textError: 'Địa chỉ không vượt quá 255 ký tự',
+            isVisible: true
+          }
         })
       } else {
-        setAddressValidate({
-          ...addressValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          address: {
+            ...validate.address,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.address, addressValidate]
+    [validate]
   )
   const handlePhoneChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, phone: value })
       if (isBlank(value)) {
-        setPhoneValidate({
-          ...phoneValidate,
-          isError: true,
-          textError: 'Số điện thoại không được để trống'
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: 'Số điện thoại không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isPhone(value)) {
-        setPhoneValidate({
-          ...phoneValidate,
-          isError: true,
-          textError: 'Số điện thoại sai định dạng'
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: 'Số điện thoại sai định dạng',
+            isVisible: true
+          }
         })
       } else {
-        setPhoneValidate({
-          ...phoneValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.phone, phoneValidate]
+    [validate]
   )
   const handleActiveTimeChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, activeTime: value })
       if (isBlank(value)) {
-        setActiveTimeValidate({
-          ...activeTimeValidate,
-          isError: true,
-          textError: 'Thời gian hoạt động không được để trống'
+        setValidate({
+          ...validate,
+          activeTime: {
+            ...validate.activeTime,
+            isError: true,
+            textError: 'Thời gian hoạt động không được để trống',
+            isVisible: true
+          }
         })
       } else if (!isType(value)) {
-        setActiveTimeValidate({
-          ...activeTimeValidate,
-          isError: true,
-          textError: 'Thời gian hoạt động sai định dạng'
+        setValidate({
+          ...validate,
+          activeTime: {
+            ...validate.activeTime,
+            isError: true,
+            textError: 'Thời gian hoạt động sai định dạng',
+            isVisible: true
+          }
         })
       } else {
-        setActiveTimeValidate({
-          ...activeTimeValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          activeTime: {
+            ...validate.activeTime,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [business.activeTime, activeTimeValidate]
+    [validate]
   )
   const [isLoading, setIsLoading] = useState(false)
   const [isCheck, setCheck] = useState({
@@ -389,48 +525,30 @@ export default function BusinessRegistrationScreen() {
   }, [imagesUpload])
 
   const onSubmit = useCallback(() => {
-    if (
-      !nameValidate.isError &&
-      !emailValidate.isError &&
-      !representorValidate.isError &&
-      !passwordValidate.isError &&
-      !confirmPasswordValidate.isError &&
-      !taxCodeValidate.isError &&
-      !addressValidate.isError &&
-      !phoneValidate.isError &&
-      !activeTimeValidate.isError
-    ) {
+    if (isAllFieldsValid(validate)) {
       setIsLoading(true)
       axios
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
-          Alert.alert('Đăng ký thành công', 'Thành công')
           setIsLoading(false)
+          navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
           Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
           setIsLoading(false)
         })
-    } else if (nameValidate.isError) {
-      setNameValidate({ ...nameValidate, isVisible: true })
-    } else if (emailValidate.isError) {
-      setEmailValidate({ ...emailValidate, isVisible: true })
-    } else if (representorValidate.isError) {
-      setRepresentorValidate({ ...representorValidate, isVisible: true })
-    } else if (taxCodeValidate.isError) {
-      setTaxCodeValidate({ ...taxCodeValidate, isVisible: true })
-    } else if (addressValidate.isError) {
-      setAddressValidate({ ...addressValidate, isVisible: true })
-    } else if (phoneValidate.isError) {
-      setPhoneValidate({ ...phoneValidate, isVisible: true })
-    } else if (activeTimeValidate.isError) {
-      setActiveTimeValidate({ ...activeTimeValidate, isVisible: true })
-    } else if (passwordValidate.isError) {
-      setPasswordValidate({ ...passwordValidate, isVisible: true })
-    } else if (confirmPasswordValidate.isError) {
-      setConfirmPasswordValidate({ ...confirmPasswordValidate, isVisible: true })
+    } else{
+      let key: keyof RegisterBusiness
+
+      for (key in validate) {
+        if (validate[key].isError) {
+          validate[key].isVisible = true
+        }
+      }
+
+      setValidate({ ...validate })
     }
-  }, [business])
+  }, [validate])
 
   return (
     <ScrollView>
@@ -445,114 +563,114 @@ export default function BusinessRegistrationScreen() {
         </View>
         <View>
           <TextInputWithTitle
+            value={business.name}
             title='Tên doanh nghiệp'
             placeholder='Nhập tên doanh nghiệp...'
-            onFocus={() => setNameValidate({ ...nameValidate, isVisible: true })}
             onChangeText={(value) => handleNameChange(value)}
-            textInputStyle={!nameValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={nameValidate.textError}
-            isError={nameValidate.isError}
-            isVisible={nameValidate.isVisible}
+            textError={validate.name?.textError}
+            isError={validate.name?.isError}
+            isVisible={validate.name?.isVisible}
           />
           <TextInputWithTitle
+            value={business.email}
             title='Email'
             placeholder='Nhập email...'
-            onFocus={() => setEmailValidate({ ...emailValidate, isVisible: true })}
             onChangeText={(value) => handleEmailChange(value)}
-            textInputStyle={!emailValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={emailValidate.textError}
-            isError={emailValidate.isError}
-            isVisible={emailValidate.isVisible}
+            textError={validate.email?.textError}
+            isError={validate.email?.isError}
+            isVisible={validate.email?.isVisible}
           />
 
           <TextInputWithTitle
+            value={business.representor}
             title='Họ tên người đại diện'
             placeholder='Nhập họ tên người đại diện...'
-            onFocus={() => setRepresentorValidate({ ...representorValidate, isVisible: true })}
             onChangeText={(value) => handleRepresentoreChange(value)}
-            textInputStyle={!representorValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={representorValidate.textError}
-            isError={representorValidate.isError}
-            isVisible={representorValidate.isVisible}
+            textError={validate.representor?.textError}
+            isError={validate.representor?.isError}
+            isVisible={validate.representor?.isVisible}
           />
 
           <TextInputWithTitle
+            value={business.taxCode}
             title='Mã số thuế'
             placeholder='Nhập mã số thuế...'
-            onFocus={() => setTaxCodeValidate({ ...taxCodeValidate, isVisible: true })}
             onChangeText={(value) => handleTaxCodeChange(value)}
-            textInputStyle={!taxCodeValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={taxCodeValidate.textError}
-            isError={taxCodeValidate.isError}
-            isVisible={taxCodeValidate.isVisible}
+            textError={validate.taxCode?.textError}
+            isError={validate.taxCode?.isError}
+            isVisible={validate.taxCode?.isVisible}
           />
 
           <TextInputWithTitle
+            value={business.address}
             title='Địa chỉ'
             placeholder='Nhập địa chỉ...'
-            onFocus={() => setAddressValidate({ ...addressValidate, isVisible: true })}
             onChangeText={(value) => handleAddressChange(value)}
-            textInputStyle={!addressValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
           />
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={addressValidate.textError}
-            isError={addressValidate.isError}
-            isVisible={addressValidate.isVisible}
+            textError={validate.address?.textError}
+            isError={validate.address?.isError}
+            isVisible={validate.address?.isVisible}
           />
 
           <TextInputWithTitle
+            value={business.phone}
             title='Điện thoại'
             placeholder='Nhập số điện thoại...'
-            onFocus={() => setPhoneValidate({ ...phoneValidate, isVisible: true })}
             onChangeText={(value) => handlePhoneChange(value)}
-            textInputStyle={!phoneValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={phoneValidate.textError}
-            isError={phoneValidate.isError}
-            isVisible={phoneValidate.isVisible}
+            textError={validate.phone?.textError}
+            isError={validate.phone?.isError}
+            isVisible={validate.phone?.isVisible}
           />
 
           <TextInputWithTitle
+            value={business.activeTime}
             title='Thời gian hoạt động'
             placeholder='Nhập thời gian hoạt động...'
-            onFocus={() => setActiveTimeValidate({ ...activeTimeValidate, isVisible: true })}
             onChangeText={(value) => handleActiveTimeChange(value)}
-            textInputStyle={!activeTimeValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={activeTimeValidate.textError}
-            isError={activeTimeValidate.isError}
-            isVisible={activeTimeValidate.isVisible}
+            textError={validate.activeTime?.textError}
+            isError={validate.activeTime?.isError}
+            isVisible={validate.activeTime?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Mật khẩu đăng ký</Text>
             <TextInput
+              value={business.password}
               placeholder='Nhập mật khẩu đăng ký...'
-              style={[styles.ip, {borderColor: !passwordValidate.isError ? '#228b22' : '#97A1B0'}]}
+              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
-              onFocus={() => setPasswordValidate({ ...passwordValidate, isVisible: true })}
               onChangeText={(value) => handlePasswordChange(value)}
             />
             <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
@@ -562,18 +680,18 @@ export default function BusinessRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={passwordValidate.textError}
-            isError={passwordValidate.isError}
-            isVisible={passwordValidate.isVisible}
+            textError={validate.password?.textError}
+            isError={validate.password?.isError}
+            isVisible={validate.password?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Nhập lại mật khẩu</Text>
             <TextInput
+              value={business.confimPassword}
               placeholder='Nhập lại mật khẩu...'
-              style={[styles.ip, {borderColor: !confirmPasswordValidate.isError ? '#228b22' : '#97A1B0'}]}
+              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
-              onFocus={() => setConfirmPasswordValidate({ ...confirmPasswordValidate, isVisible: true })}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
             />
 
@@ -584,9 +702,9 @@ export default function BusinessRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={confirmPasswordValidate.textError}
-            isError={confirmPasswordValidate.isError}
-            isVisible={confirmPasswordValidate.isVisible}
+            textError={validate.confimPassword?.textError}
+            isError={validate.confimPassword?.isError}
+            isVisible={validate.confimPassword?.isVisible}
           />
 
           <View style={styles.group}>
@@ -651,7 +769,7 @@ const styles = StyleSheet.create({
   },
   ip: {
     fontSize: 18,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#97A1B0',
     paddingLeft: 10,
     borderRadius: 10,
