@@ -21,7 +21,6 @@ export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 export const BOTTOM_ICON_SIZE = 30
 
-
 const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
 
     // Get data 

@@ -9,6 +9,7 @@ import { ModalUserReaction } from '../types/ModalUserReaction'
 import { ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
+import { UpdatePost } from '../types/updatePost'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null
@@ -25,6 +26,7 @@ export interface TDCSocialNetworkState {
   modalImageData: ModalImage | null
   modalCommentData: ModalComments | null
   modalUserReactionData: ModalUserReaction | null
+  updatePost: boolean
 }
 
 const initialState: TDCSocialNetworkState = {
@@ -41,7 +43,8 @@ const initialState: TDCSocialNetworkState = {
   isOpenModalUserReaction: false,
   modalImageData: null,
   modalCommentData: null,
-  modalUserReactionData: null
+  modalUserReactionData: null,
+  updatePost: false
 }
 
 export const TDCSocialNetworkSlice = createSlice({
@@ -109,6 +112,9 @@ export const TDCSocialNetworkSlice = createSlice({
     closeModalUserReaction: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
     },
+    updatePostWhenHaveChangeComment: (state, action: PayloadAction<boolean>) => {
+      state.updatePost = action.payload
+    },
     listenConversationsSoket: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
     }
@@ -134,7 +140,8 @@ export const {
   closeModalComments,
   openModalUserReaction,
   closeModalUserReaction,
-  setSelectConversation
+  setSelectConversation,
+  updatePostWhenHaveChangeComment
 } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer

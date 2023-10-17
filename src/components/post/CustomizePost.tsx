@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost';
 import CustomizeBottomPost from './CustomizeBottomPost';
@@ -8,27 +8,19 @@ import CustomizeImagePost from './CustomizeImagePost';
 import { Post } from '../../types/Post';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice';
-import { SERVER_ADDRESS } from '../../constants/SystemConstant';
-import { likeApi } from '../../api/CallApi';
 import { Like } from '../../types/Like';
-import { Client, Frame } from 'stompjs';
-import { getStompClient } from '../../sockets/SocketClient';
 import { LikeAction } from '../../types/LikeActions';
+import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables';
 
 // Constant
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
-const GO_TO_PROFILE_ACTIONS = 0;
-const LIKE_ACTIONS = 0;
-const COMMENT_ACTIONS = 1;
-const SHOW_USER_REACTED_ACTIONS = 2;
-const urlLike = SERVER_ADDRESS + 'api/posts/like';
 const CustomizePost = (props: Post) => {
 
     // Get data 
     let post = props
     const dispatch = useAppDispatch();
-    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     //--------------Function area--------------
 
     // Header area
@@ -54,11 +46,11 @@ const CustomizePost = (props: Post) => {
 
     // Bottom area 
     const handleClickBottomBtnEvent = async (flag: number | null) => {
-        if (flag === LIKE_ACTIONS) {
+        if (flag === LIKE_ACTION) {
             handleClickIntoBtnIconLikeEvent();
-        } else if (flag === COMMENT_ACTIONS) {
+        } else if (flag === COMMENT_ACTION) {
             handleClickIntoBtnIconComments();
-        } else if (flag === SHOW_USER_REACTED_ACTIONS) {
+        } else if (flag === SHOW_LIST_USER_REACTED) {
             handleClickIntoListUserReactions();
         }
     }
@@ -69,7 +61,6 @@ const CustomizePost = (props: Post) => {
         }))
     }
 
-
     const handleClickIntoBtnIconLikeEvent = async () => {
         const dataLike: LikeAction = {
             code: '',
@@ -78,7 +69,6 @@ const CustomizePost = (props: Post) => {
         }
         props.likeAction(dataLike)
     }
-
 
     const checkLiked = (likes: Like[], userId: number | undefined) => {
         let result = false;
@@ -92,7 +82,7 @@ const CustomizePost = (props: Post) => {
 
     const handleClickIntoBtnIconComments = () => {
         dispatch(openModalComments({
-            id: props.id
+            id: props.id,
         }))
     }
 

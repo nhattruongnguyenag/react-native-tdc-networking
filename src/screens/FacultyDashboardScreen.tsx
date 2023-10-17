@@ -2,8 +2,6 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { useIsFocused } from '@react-navigation/native'
 import { TYPE_POST_FACULTY } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
 import { formatDateTime } from '../utils/FormatTime'
@@ -11,28 +9,33 @@ import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
+import { API_URL_POST } from '../constants/Path'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
 
   // Variable
-  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
+  const { updatePost } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
+  const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([]);
 
-  // Function 
+  // Function
+
   // Api
   const callAPI = async () => {
-    console.log('call api');
     try {
-      const temp = await postAPI(apiUrlPost);
+      const temp = await postAPI(API_URL_POST);
       const result = handleDataClassification(temp, TYPE_POST_FACULTY);
       setFacultyPost(result);
     } catch (error) {
       console.log(error);
     }
   }
-
 
   // Socket
   useEffect(() => {
@@ -42,7 +45,6 @@ export default function FacultyDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
     }
     const onMessageReceived = (payload: any) => {
-      console.log('lay du lieu');
       setFacultyPost(JSON.parse(payload.body))
     }
 
@@ -52,11 +54,17 @@ export default function FacultyDashboardScreen() {
     stompClient.connect({}, onConnected, onError)
   }, [])
 
-
   const likeAction = (obj: LikeAction) => {
     obj.code = TYPE_POST_FACULTY;
     like(obj);
   }
+
+
+  useEffect(() => {
+    callAPI()
+    dispatch(updatePostWhenHaveChangeComment(false))
+  }, [updatePost])
+
 
   const like = useCallback((likeData: LikeAction) => {
     console.log(JSON.stringify(likeData));

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../../constants/Color'
@@ -7,6 +7,7 @@ import { TEXT_LIKE_BY } from '../../constants/StringVietnamese';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { Like } from '../../types/Like';
 import { Comment } from '../../types/Comment';
+import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables';
 
 //  Definition props
 
@@ -23,7 +24,6 @@ export interface BottomPostType {
 
 // Constant
 const BOTTOM_ICON_SIZE = 30
-
 const CustomizeBottomPost = (props: BottomPostType) => {
     // Variable
     const numberUserReacted: number = props.likes?.length
@@ -32,7 +32,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
             <View style={[styles.wrapBottomLeft, styles.row]}>
                 <View style={styles.wrapIconAndTextBottom}>
                     <TouchableOpacity
-                        onPress={() => props.handleClickBottomBtnEvent(0)}>
+                        onPress={() => props.handleClickBottomBtnEvent(LIKE_ACTION)}>
                         {
                             !props.isLike ?
                                 (
@@ -52,7 +52,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                 </View>
                 <View style={[styles.wrapIconAndTextBottom, styles.iconRight]}>
                     <TouchableOpacity
-                        onPress={() => props.handleClickBottomBtnEvent(1)}
+                        onPress={() => props.handleClickBottomBtnEvent(COMMENT_ACTION)}
                     >
                         <IconMaterialCommunityIcons name='comment-outline' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
                     </TouchableOpacity>
@@ -72,7 +72,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                 {
                     numberUserReacted > 3 ?
                         <TouchableOpacity
-                            onPress={() => props.handleClickBottomBtnEvent(2)}
+                            onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
                             style={styles.avatarUserReactedContainer}>
                             <Image
                                 style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}

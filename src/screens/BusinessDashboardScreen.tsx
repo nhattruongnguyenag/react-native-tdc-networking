@@ -1,38 +1,38 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import CustomizeBusinessPost from '../components/CustomizeBusinessPost'
-import { COLOR_BOTTOM_AVATAR, COLOR_GREY } from '../constants/Color'
-import { likeData, imageData, commentData } from '../components/DataBase'
+import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setConversations, setDeviceToken } from '../redux/Slice'
+import { setConversations, setDeviceToken, updatePostWhenHaveChangeComment } from '../redux/Slice'
 import { useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
-import { Conversation } from '../types/Conversation'
 import { Client, Frame, Message } from 'stompjs'
 import { postAPI } from '../api/CallApi'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { handleDataClassification } from '../utils/DataClassfications'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import { formatDateTime } from '../utils/FormatTime'
 import CustomizePost from '../components/post/CustomizePost'
-import { useIsFocused } from '@react-navigation/native'
 import { LikeAction } from '../types/LikeActions'
+import { API_URL_POST } from '../constants/Path'
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
+
+  // Variable
+
   const [businessPost, setBusinessPost] = useState();
-  const apiUrlPost = SERVER_ADDRESS + 'api/posts';
-  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector(
+  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
   const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
+
+  // Function area
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -43,10 +43,8 @@ export default function BusinessDashboardScreen() {
         console.log(error)
       }
     }
-
     getFCMToken()
   }, [])
-
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
@@ -78,18 +76,16 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
-  const callAPI = async () => {
-    console.log('call api');
+  const getDataBusinessApi = async () => {
     try {
-      const temp = await postAPI(apiUrlPost);
-      const result = handleDataClassification(temp, TYPE_POST_BUSINESS);
+      const data = await postAPI(API_URL_POST);
+      const result = handleDataClassification(data, TYPE_POST_BUSINESS);
       setBusinessPost(result);
     } catch (error) {
       console.log(error);
     }
   }
 
-  // Socket
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
@@ -97,7 +93,6 @@ export default function BusinessDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_BUSINESS}/listen`)
     }
     const onMessageReceived = (payload: any) => {
-      console.log('lay du lieu');
       setBusinessPost(JSON.parse(payload.body))
     }
 
@@ -117,6 +112,11 @@ export default function BusinessDashboardScreen() {
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
+  useEffect(() => {
+    getDataBusinessApi();
+    dispatch(updatePostWhenHaveChangeComment(false))
+  }, [updatePost])
+
   const renderItem = (item: any) => {
     return <CustomizePost
       id={item.id}
@@ -133,9 +133,7 @@ export default function BusinessDashboardScreen() {
       commentQty={item.commentQuantity}
       images={item.images}
       role={0}
-      likeAction={
-        likeAction
-      }
+      likeAction={likeAction}
     />
   }
 
@@ -152,7 +150,7 @@ export default function BusinessDashboardScreen() {
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}
-        onRefresh={() => callAPI()}
+        onRefresh={() => getDataBusinessApi()}
         data={businessPost}
         renderItem={({ item }) => renderItem(item)}
       />

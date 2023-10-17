@@ -6,7 +6,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomizeComment from '../post/CustomizeCommentPost';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
-import { closeModalComments } from '../../redux/Slice';
+import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
 import { TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
 import { formatDateTime } from '../../utils/FormatTime';
@@ -24,12 +24,10 @@ const MAX_DOWNWARD_TRANSLATE_Y = 0;
 const DRAG_THRESHOLD = 50;
 let stompClient: Client
 const CustomizeModalComments = () => {
-    const { modalCommentData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-
+    const { modalCommentData, updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const [haveChange, setHaveChange] = useState(false);
     // Variable
     const [comments, setComments] = useState();
-    const urlApiDeleteComment = SERVER_ADDRESS + 'api/posts/comment/delete';
-    const urlApiCreateComment = SERVER_ADDRESS + 'api/posts/comment'
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
     const inputRef = useRef<any>();
     const [myComment, setMyComment] = useState<string>('');
@@ -67,6 +65,7 @@ const CustomizeModalComments = () => {
         }),
     ).current
 
+
     const bottomSheetAnimation = {
         transform: [{
             translateY: animatedValue.interpolate({
@@ -85,8 +84,12 @@ const CustomizeModalComments = () => {
         }).start();
     }
 
-    const handleClickIntoBtnIconClose = () => {
+    const handleClickIntoBtnIconClose = async () => {
         dispatch(closeModalComments());
+        if (haveChange) {
+            dispatch(updatePostWhenHaveChangeComment(true))
+        }
+
     }
 
     useEffect(() => {
@@ -104,8 +107,9 @@ const CustomizeModalComments = () => {
     }, [keyboardStatus]);
 
     // Send data to server
-    const handleSubmitEvent = async () => {
+    const handleSubmitEvent = () => {
         if (isNotBlank(myComment.trim()) && isLengthInRange(myComment, 1, 1024,)) {
+            setHaveChange(true);
             Keyboard.dismiss();
             const newComment = {
                 postId: modalCommentData?.id,
@@ -159,6 +163,7 @@ const CustomizeModalComments = () => {
     }, [myComment])
 
     const deleteComment = useCallback((comment: object) => {
+        setHaveChange(true);
         stompClient.send(`/app/posts/${modalCommentData?.id}/comments/delete`, {}, JSON.stringify(comment))
         setMyComment('');
     }, [myComment])

@@ -8,11 +8,10 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
-import { NormalPost } from '../types/NormalPost'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
-import { InputTextValidate, isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
+import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 
 // man hinh dang bai viet thong 
 export default function CreateNormalPostScreen({ navigation }: any) {
@@ -21,12 +20,6 @@ export default function CreateNormalPostScreen({ navigation }: any) {
   const maxCharacter = 1024;
   let alertString = null;
   const [isLoading, setIsLoading] = useState(false);
-  const [normalPost, setNormalPost] = useState<NormalPost>({
-    "userId": 0,
-    "type": "thong-thuong",
-    "images": [],
-    "content": ''
-  });
   const [content, setContent] = useState('');
   const [images, setImages] = useState<any>([]);
   const apiUrl = SERVER_ADDRESS + 'api/posts/normal';
@@ -213,7 +206,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
                   <Pressable
                     onLongPress={() => handleLongClickIntoImage(item)}
                     onPress={() => { console.log(123) }}
-                    key={index}
+                    key={index.toString()}
                     style={styles.wrapImage}
                   >
                     <Image
