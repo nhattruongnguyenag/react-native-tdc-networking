@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LOGIN_SCREEN } from '../constants/Screen'
 import { COLOR_BTN_BLUE } from '../constants/Color'
 import { Student } from '../types/Student'
@@ -36,6 +37,27 @@ import {
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/TextValidate'
 
+interface RegisterStudent {
+  name: InputTextValidate
+  email: InputTextValidate
+  studentCode: InputTextValidate
+  major: InputTextValidate
+  facultyName: InputTextValidate
+  password: InputTextValidate
+  confimPassword: InputTextValidate
+}
+
+const isAllFieldsValid = (validate: RegisterStudent): boolean => {
+  let key: keyof RegisterStudent
+
+  for (key in validate) {
+    if (validate[key].isError) {
+      return false
+    }
+  }
+
+  return true
+}
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -67,43 +89,45 @@ export default function StudentRegistrationScreen() {
       ]
     }
   ])
-  const datas = [{ id: '', name: '' }]
+
   const [dataNganhRequest, setDataNganhRequest] = useState([{ id: '', name: '' }])
   const [isLoading, setIsLoading] = useState(false)
-  const [studentNameValidate, setStudentNameValidate] = useState<InputTextValidate>({
-    textError: 'Tên sinh viên không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [studentCodeValidate, setStudentCodeValidate] = useState<InputTextValidate>({
-    textError: 'Mã số sinh viên không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [emailValidate, setEmailValidate] = useState<InputTextValidate>({
-    textError: 'Email không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [facultyNameValidate, setFacultyNameValidate] = useState<InputTextValidate>({
-    textError: 'Tên khoa không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [majorValidate, setMajorValidate] = useState<InputTextValidate>({
-    textError: 'Tên ngành không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [passwordValidate, setPasswordValidate] = useState<InputTextValidate>({
-    textError: 'Mật khẩu không được để trống',
-    isVisible: false,
-    isError: true
-  })
-  const [confirmPasswordValidate, setConfirmPasswordValidate] = useState<InputTextValidate>({
-    textError: 'Nhập lại mật khẩu không được để trống',
-    isVisible: false,
-    isError: true
+  const [validate, setValidate] = useState<RegisterStudent>({
+    name: {
+      textError: 'Tên sinh viên không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    email: {
+      textError: 'Email không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    studentCode: {
+      textError: 'Mã số sinh viên không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    facultyName: {
+      textError: 'Tên khoa không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    major: {
+      textError: 'Tên ngành không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    password: {
+      textError: 'Mật khẩu không được để trống',
+      isVisible: false,
+      isError: true
+    },
+    confimPassword: {
+      textError: 'Nhập lại mật khẩu không được để trống',
+      isVisible: false,
+      isError: true
+    }
   })
   const [value, setValue] = useState('')
   const [item, setItem] = useState('')
@@ -127,208 +151,295 @@ export default function StudentRegistrationScreen() {
     (value: string) => {
       setStudent({ ...student, name: value })
       if (isBlank(value)) {
-        setStudentNameValidate({
-          ...studentNameValidate,
-          isError: true,
-          textError: 'Tên sinh viên không được để trống'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            isVisible: true,
+            textError: 'Tên sinh viên không được để trống'
+          }
         })
       } else if (isContainSpecialCharacter(value)) {
-        setStudentNameValidate({
-          ...studentNameValidate,
-          isError: true,
-          textError: 'Tên sinh viên không được chứa ký tự đặc biệt'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            textError: 'Tên sinh viên không được chứa ký tự đặc biệt',
+            isVisible: true
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setStudentNameValidate({
-          ...studentNameValidate,
-          isError: true,
-          textError: 'Tên sinh viên không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: true,
+            textError: 'Tên sinh viên không vượt quá 255 ký tự',
+            isVisible: true
+          }
         })
       } else {
-        setStudentNameValidate({
-          ...studentNameValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          name: {
+            ...validate.name,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.name, studentCodeValidate]
+    [validate]
   )
   const handleStudentCodeChange = useCallback(
     (value: string) => {
       const stCode = new RegExp(/^[0-9]{5}[a-zA-Z]{2}[0-9]{4}$/)
       setStudent({ ...student, studentCode: value })
       if (isBlank(value)) {
-        setStudentCodeValidate({
-          ...studentCodeValidate,
-          isError: true,
-          textError: 'Mã số sinh viên không được để trống'
+        setValidate({
+          ...validate,
+          studentCode: {
+            ...validate.studentCode,
+            isError: true,
+            isVisible: true,
+            textError: 'Mã số sinh viên không được để trống'
+          }
         })
       } else if (isContainSpecialCharacter(value)) {
-        setStudentCodeValidate({
-          ...studentCodeValidate,
-          isError: true,
-          textError: 'Mã số sinh viên không được chứa ký tự đặc biệt'
+        setValidate({
+          ...validate,
+          studentCode: {
+            ...validate.studentCode,
+            isError: true,
+            isVisible: true,
+            textError: 'Mã số sinh viên không được chứa ký tự đặc biệt'
+          }
         })
       } else if (!stCode.test(value)) {
-        setStudentCodeValidate({
-          ...studentCodeValidate,
-          isError: true,
-          textError: 'Mã sinh viên không đúng định dạng'
+        setValidate({
+          ...validate,
+          studentCode: {
+            ...validate.studentCode,
+            isError: true,
+            isVisible: true,
+            textError: 'Mã sinh viên không đúng định dạng'
+          }
         })
       } else if (!isLengthInRange(value, 1, 12)) {
-        setStudentCodeValidate({
-          ...studentCodeValidate,
-          isError: true,
-          textError: 'Mã sinh viên không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          studentCode: {
+            ...validate.studentCode,
+            isError: true,
+            isVisible: true,
+            textError: 'Mã sinh viên không vượt quá 255 ký tự'
+          }
         })
       } else {
-        setStudentCodeValidate({
-          ...studentCodeValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          studentCode: {
+            ...validate.studentCode,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.studentCode, studentCodeValidate]
+    [validate]
   )
   const handleEmailChange = useCallback(
     (value: string) => {
       setStudent({ ...student, email: value })
       if (isBlank(value)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email không được để trống'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            isVisible: true,
+            textError: 'Email không được để trống'
+          }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email không vượt quá 255 ký tự'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            isVisible: true,
+            textError: 'Email không vượt quá 255 ký tự'
+          }
         })
       } else if (!isEmail(value)) {
-        setEmailValidate({
-          ...emailValidate,
-          isError: true,
-          textError: 'Email sai định dạng'
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: true,
+            isVisible: true,
+            textError: 'Email sai định dạng'
+          }
         })
       } else {
-        setEmailValidate({
-          ...emailValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          email: {
+            ...validate.email,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.email, emailValidate]
+    [validate]
   )
   const handlePasswordChange = useCallback(
     (value: string) => {
       setStudent({ ...student, password: value })
       if (isBlank(value)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu không được để trống'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isVisible: true,
+            isError: true,
+            textError: 'Mật khẩu không được để trống'
+          }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu không vượt quá 8 ký tự'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isVisible: true,
+            isError: true,
+            textError: 'Mật khẩu không vượt quá 8 ký tự'
+          }
         })
       } else if (!isPassword(value)) {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: true,
-          textError: 'Mật khẩu sai định dạng'
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isVisible: true,
+            isError: true,
+            textError: 'Mật khẩu sai định dạng'
+          }
         })
       } else {
-        setPasswordValidate({
-          ...passwordValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          password: {
+            ...validate.password,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.password, passwordValidate]
+    [validate]
   )
   const handleConfirmPasswordChange = useCallback(
     (value: string) => {
       setStudent({ ...student, confimPassword: value })
       if (isBlank(value)) {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: true,
-          textError: 'Trường nhập lại mật khẩu không được để trống'
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isVisible: true,
+            isError: true,
+            textError: 'Trường nhập lại mật khẩu không được để trống'
+          }
         })
-      } else if (student.confimPassword == student.password) {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: true,
-          textError: 'Mật khẩu không đúng'
+      } else if (value != student.password) {
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isVisible: true,
+            isError: true,
+            textError: 'Mật khẩu không đúng'
+          }
         })
       } else {
-        setConfirmPasswordValidate({
-          ...confirmPasswordValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          confimPassword: {
+            ...validate.confimPassword,
+            isVisible: false,
+            isError: false
+          }
         })
       }
     },
-    [student.confimPassword, confirmPasswordValidate]
+    [validate]
   )
   const handleMajorNameChange = useCallback(
     (value: string) => {
       setStudent({ ...student, major: value })
       if (isBlank(value)) {
-        setMajorValidate({
-          ...majorValidate,
-          isError: true,
-          textError: 'Tên khoa không được để trống'
+        setValidate({
+          ...validate,
+          major: {
+            ...validate.major,
+            isError: true,
+            isVisible: true,
+            textError: 'Tên khoa không được để trống'
+          }
         })
       } else {
-        setMajorValidate({
-          ...majorValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          major: {
+            ...validate.major,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.major, majorValidate]
+    [validate]
   )
   const handleFacultyNameChange = useCallback(
     (value: string) => {
       setStudent({ ...student, facultyName: value })
       if (isBlank(value)) {
-        setFacultyNameValidate({
-          ...facultyNameValidate,
-          isError: true,
-          textError: 'Tên khoa không được để trống'
+        setValidate({
+          ...validate,
+          facultyName: {
+            ...validate.facultyName,
+            isVisible: true,
+            isError: true,
+            textError: 'Tên khoa không được để trống'
+          }
         })
       } else {
-        setFacultyNameValidate({
-          ...facultyNameValidate,
-          isError: false,
-          isVisible: false
+        setValidate({
+          ...validate,
+          facultyName: {
+            ...validate.facultyName,
+            isError: false,
+            isVisible: false
+          }
         })
       }
     },
-    [student.facultyName, facultyNameValidate]
+    [validate]
   )
   useEffect(() => {
     axios
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
-        datas.shift()
         setDataRequest(response.data.data)
         dataRequest.map((data) => {
-          data.majors.map((item) => {
-            datas.push(item)
-          })
+          if (data.name === student.facultyName) {
+            setDataNganhRequest(data.majors)
+          }
         })
-        setDataNganhRequest(datas)
       })
       .catch((error) => {
         console.log(error)
@@ -338,58 +449,33 @@ export default function StudentRegistrationScreen() {
   useEffect(() => {
     setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
-
-  const isCheckValidate = useMemo(() => {
-    return (
-      !studentNameValidate.isError &&
-      !studentCodeValidate.isError &&
-      !emailValidate.isError &&
-      !facultyNameValidate.isError &&
-      !majorValidate.isError &&
-      !passwordValidate.isError &&
-      !confirmPasswordValidate.isError
-    )
-  }, [
-    studentNameValidate,
-    studentCodeValidate,
-    emailValidate,
-    majorValidate,
-    facultyNameValidate,
-    passwordValidate,
-    confirmPasswordValidate,
-    student
-  ])
+  
   const onSubmit = useCallback(() => {
-    if (isCheckValidate) {
+    if (isAllFieldsValid(validate)) {
       setIsLoading(true)
       axios
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
-          console.log(response.status)
-          Alert.alert('Đăng ký thành công', 'Thành công')
           setIsLoading(false)
+          navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
           console.log(error)
           Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
           setIsLoading(false)
         })
-    } else if (studentNameValidate.isError) {
-      setStudentNameValidate({ ...studentNameValidate, isVisible: true })
-    } else if (studentCodeValidate.isError) {
-      setStudentCodeValidate({ ...studentCodeValidate, isVisible: true })
-    } else if (emailValidate.isError) {
-      setEmailValidate({ ...emailValidate, isVisible: true })
-    } else if (facultyNameValidate.isError) {
-      setFacultyNameValidate({ ...facultyNameValidate, isVisible: true })
-    } else if (majorValidate.isError) {
-      setMajorValidate({ ...majorValidate, isVisible: true })
-    } else if (passwordValidate.isError) {
-      setPasswordValidate({ ...passwordValidate, isVisible: true })
-    } else if (confirmPasswordValidate.isError) {
-      setConfirmPasswordValidate({ ...confirmPasswordValidate, isVisible: true })
+    } else {
+      let key: keyof RegisterStudent
+
+      for (key in validate) {
+        if (validate[key].isError) {
+          validate[key].isVisible = true
+        }
+      }
+
+      setValidate({ ...validate })
     }
-  }, [student])
+  }, [validate])
 
   return (
     <ScrollView>
@@ -405,54 +491,54 @@ export default function StudentRegistrationScreen() {
 
         <View style={styles.form}>
           <TextInputWithTitle
+            value={student.name}
             title='Họ tên'
             placeholder='Nhập họ tên...'
-            onFocus={() => setStudentNameValidate({ ...studentNameValidate, isVisible: true })}
             onChangeText={(value) => handleStudentNameChange(value)}
-            textInputStyle={!studentNameValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={studentNameValidate.textError}
-            isError={studentNameValidate.isError}
-            isVisible={studentNameValidate.isVisible}
+            textError={validate.name?.textError}
+            isError={validate.name?.isError}
+            isVisible={validate.name?.isVisible}
           />
 
           <TextInputWithTitle
+            value={student.studentCode}
             title='Mã số sinh viên'
             placeholder='Nhập mã số sinh viên...'
-            onFocus={() => setStudentCodeValidate({ ...studentCodeValidate, isVisible: true })}
             onChangeText={(value) => handleStudentCodeChange(value)}
-            textInputStyle={!studentCodeValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={studentCodeValidate.textError}
-            isError={studentCodeValidate.isError}
-            isVisible={studentCodeValidate.isVisible}
+            textError={validate.studentCode?.textError}
+            isError={validate.studentCode?.isError}
+            isVisible={validate.studentCode?.isVisible}
           />
 
           <TextInputWithTitle
+            value={student.email}
             title='Email sinh viên'
             placeholder='Nhập email sinh viên...'
-            onFocus={() => setEmailValidate({ ...emailValidate, isVisible: true })}
             onChangeText={(value) => handleEmailChange(value)}
-            textInputStyle={!emailValidate.isError? styles.textInput : styles.ip}
+            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
           />
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={emailValidate.textError}
-            isError={emailValidate.isError}
-            isVisible={emailValidate.isVisible}
+            textError={validate.email?.textError}
+            isError={validate.email?.isError}
+            isVisible={validate.email?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Khoa</Text>
             <Dropdown
-              style={[styles.dropdown, {borderColor: !facultyNameValidate.isError ? '#228b22' : '#97A1B0'}]}
+              style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -464,7 +550,6 @@ export default function StudentRegistrationScreen() {
               placeholder='Chọn khoa...'
               searchPlaceholder='Tìm kiếm...'
               value={value}
-              onFocus={() => setFacultyNameValidate({ ...facultyNameValidate, isVisible: true })}
               onChange={(item) => {
                 setValue(item.id)
                 handleFacultyNameChange(item.name)
@@ -474,15 +559,16 @@ export default function StudentRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={facultyNameValidate.textError}
-            isError={facultyNameValidate.isError}
-            isVisible={facultyNameValidate.isVisible}
+            textError={validate.facultyName?.textError}
+            isError={validate.facultyName?.isError}
+            isVisible={validate.facultyName?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Ngành học</Text>
             <Dropdown
-              style={[styles.dropdown, {borderColor: !majorValidate.isError ? '#228b22' : '#97A1B0'}]}
+              placeholder='Chọn ngành học...'
+              style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -491,10 +577,8 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              placeholder='Chọn ngành học...'
               searchPlaceholder='Tìm kiếm...'
               value={item}
-              onFocus={() => setMajorValidate({ ...majorValidate, isVisible: true })}
               onChange={(item) => {
                 setItem(item.id)
                 handleMajorNameChange(item.name)
@@ -504,18 +588,18 @@ export default function StudentRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={majorValidate.textError}
-            isError={majorValidate.isError}
-            isVisible={majorValidate.isVisible}
+            textError={validate.major?.textError}
+            isError={validate.major?.isError}
+            isVisible={validate.major?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Mật khẩu đăng ký</Text>
             <TextInput
+              value={student.password}
               placeholder='Nhập mật khẩu đăng ký...'
-              style={[styles.ip, {borderColor: !passwordValidate.isError ? '#228b22' : '#97A1B0'}]}
+              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
-              onFocus={() => setPasswordValidate({ ...passwordValidate, isVisible: true })}
               onChangeText={(value) => handlePasswordChange(value)}
             ></TextInput>
             <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
@@ -525,18 +609,18 @@ export default function StudentRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={passwordValidate.textError}
-            isError={passwordValidate.isError}
-            isVisible={passwordValidate.isVisible}
+            textError={validate.password?.textError}
+            isError={validate.password?.isError}
+            isVisible={validate.password?.isVisible}
           />
 
           <View style={styles.group}>
             <Text style={styles.txt}>Nhập lại mật khẩu</Text>
             <TextInput
+              value={student.confimPassword}
               placeholder='Nhập lại mật khẩu...'
-              style={[styles.ip, {borderColor: !confirmPasswordValidate.isError ? '#228b22' : '#97A1B0'}]}
+              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
-              onFocus={() => setConfirmPasswordValidate({ ...confirmPasswordValidate, isVisible: true })}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
             />
 
@@ -547,9 +631,9 @@ export default function StudentRegistrationScreen() {
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
-            textError={confirmPasswordValidate.textError}
-            isError={confirmPasswordValidate.isError}
-            isVisible={confirmPasswordValidate.isVisible}
+            textError={validate.confimPassword?.textError}
+            isError={validate.confimPassword?.isError}
+            isVisible={validate.confimPassword?.isVisible}
           />
 
           <View style={styles.group}>

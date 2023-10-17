@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { UserLoginRequest } from '../types/request/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
@@ -18,7 +18,6 @@ import { Token } from '../types/Token'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Student } from '../types/Student'
 import { Business } from '../types/Business'
-import { Faculty } from '../types/Faculty'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -29,6 +28,8 @@ import { COLOR_BTN_BLUE } from '../constants/Color'
 import { useAppDispatch } from '../redux/Hook'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setUserLogin } from '../redux/Slice'
+import { Faculity } from '../components/CustomizeFacultyPost'
+import { isEmail, isPassword } from '../utils/ValidateUtils'
 
 // man hinh dang nhap
 export default function LoginScreen() {
@@ -42,30 +43,25 @@ export default function LoginScreen() {
   const [checkPassword, setCheckPassword] = useState(true)
   const [isChecked, setIsChecked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
   const handleCheckBoxToggle = () => {
     setIsChecked(!isChecked)
   }
+
   const handleCheckEmail = (value: any) => {
-    // let regexEmail = new RegExp(
-    //   /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
-    // )
     setUserLoginRequest({ ...userLoginRequest, email: value })
-    // if (!regexEmail.test(userLoginRequest.email)) {
-    //   setCheckEmail(false)
-    // } else {
-    //   setCheckEmail(true)
-    // }
+    if (!isEmail(value)) {
+      setCheckEmail(false)
+    } else {
+      setCheckEmail(true)
+    }
   }
   const handleCheckPassword = (value: any) => {
-    // //const regexPass = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
-    // const regexPass = /^[0-9]{5}$/
     setUserLoginRequest({ ...userLoginRequest, password: value })
-    // if (!regexPass.test(userLoginRequest.password)) {
-    //   setCheckPassword(false)
-    // } else {
-    //   setCheckPassword(true)
-    // }
+    if (!isPassword(value)) {
+      setCheckPassword(false)
+    } else {
+      setCheckPassword(true)
+    }
   }
 
   const onSubmit = () => {
@@ -75,7 +71,7 @@ export default function LoginScreen() {
       .then((loginResponse) => {
         const token = loginResponse.data.data.token
         axios
-          .get<void, AxiosResponse<Data<Student | Faculty | Business>>>(SERVER_ADDRESS + `api/users/token/${token}`)
+          .get<void, AxiosResponse<Data<Student | Business | Faculity>>>(SERVER_ADDRESS + `api/users/token/${token}`)
           .then((response) => {
             if (response.status == 200) {
               setIsLoading(false)
@@ -93,8 +89,7 @@ export default function LoginScreen() {
   }
 
   const isBtnDisabled = useMemo(() => {
-    return false
-    // userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+    return userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (
