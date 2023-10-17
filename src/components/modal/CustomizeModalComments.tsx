@@ -12,7 +12,7 @@ import { Comment } from '../../types/Comment';
 import { formatDateTime } from '../../utils/FormatTime';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { callApiComment, deleteCommentApi } from '../../api/CallApi';
-import { isNotBlank } from '../../utils/ValidateUtils';
+import { isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
 import { Client, Frame } from 'stompjs';
 import { getStompClient } from '../../sockets/SocketClient';
 
@@ -22,25 +22,22 @@ const BOTTOM_SHEET_MIN_HEIGHT = WINDOW_HEIGHT * 0.5;
 const MAX_UPWARD_TRANSLATE_Y = BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT;
 const MAX_DOWNWARD_TRANSLATE_Y = 0;
 const DRAG_THRESHOLD = 50;
-
+let stompClient: Client
 const CustomizeModalComments = () => {
+    const { modalCommentData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
     // Variable
-    let stompClient = null;
+    const [comments, setComments] = useState();
     const urlApiDeleteComment = SERVER_ADDRESS + 'api/posts/comment/delete';
     const urlApiCreateComment = SERVER_ADDRESS + 'api/posts/comment'
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
     const inputRef = useRef<any>();
-    const [myComment, setMyComment] = useState('');
+    const [myComment, setMyComment] = useState<string>('');
     const [idReply, setIdReply] = useState(0);
     const [keyboardStatus, setKeyboardStatus] = useState(false);
-    const { modalCommentData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const dispatch = useAppDispatch();
     const animatedValue = useRef(new Animated.Value(0)).current;
     const lastGestureDy = useRef(0);
-
-    // Function
-    useEffect(() => { connectToComments() }, [])
 
     const panResponder = useRef(
         PanResponder.create({
@@ -108,20 +105,17 @@ const CustomizeModalComments = () => {
 
     // Send data to server
     const handleSubmitEvent = async () => {
-        if (isNotBlank(myComment)) {
+        if (isNotBlank(myComment.trim()) && isLengthInRange(myComment, 1, 1024,)) {
             Keyboard.dismiss();
-            const comments = {
-                "postId": modalCommentData?.id,
-                "userId": userLogin?.id,
-                "content": myComment,
-                "parentCommentId": idReply
+            const newComment = {
+                postId: modalCommentData?.id,
+                userId: userLogin?.id,
+                content: myComment,
+                parentCommentId: idReply
             }
-            // const result = await callApiComment(urlApiCreateComment, comments);
-            // console.log(result);
-            // setMyComment('');
-            comment(comments);
+            createComment(newComment);
         } else {
-            Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống');
+            Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống và không được quá 1024 ký tự');
         }
     }
 
@@ -136,44 +130,38 @@ const CustomizeModalComments = () => {
     const handleClickToDeleteCommentsEvent = async (commentDeleteId: number) => {
         const dataToDeleteComment = {
             "commentId": commentDeleteId,
-            "postId": modalCommentData?.commentFather[0].postId,
+            "postId": modalCommentData?.id,
             "userId": userLogin?.id
         }
-        console.log('====================================');
-        console.log(JSON.stringify(dataToDeleteComment));
-        console.log('====================================');
-        const result = await deleteCommentApi(urlApiDeleteComment, dataToDeleteComment)
-        console.log(result);
+        deleteComment(dataToDeleteComment);
     }
 
     // Socket
-
-    const connectToComments = useCallback(() => {
-        const stompClient: Client = getStompClient()
+    useEffect(() => {
+        stompClient = getStompClient()
         const onConnected = () => {
             stompClient.subscribe(`/topic/posts/${modalCommentData?.id}`, onMessageReceived)
             stompClient.send(`/app/posts/${modalCommentData?.id}/comments/listen`)
         }
         const onMessageReceived = (payload: any) => {
-            console.log('====================================');
-            console.log(JSON.stringify(payload.body));
-            console.log('====================================');
+            setComments(JSON.parse(payload.body));
         }
 
         const onError = (err: string | Frame) => {
             console.log(err)
         }
-
         stompClient.connect({}, onConnected, onError)
     }, [])
 
-    function comment(obj: object) {
-        console.log('send comment', JSON.stringify(obj),'post id',modalCommentData?.id);
-        const stompClient: Client = getStompClient()
-        stompClient.send(`/app/posts/${modalCommentData?.id}/comments`, {}, JSON.stringify({
-            obj
-        }))
-    }
+    const createComment = useCallback((newComment: object) => {
+        stompClient.send(`/app/posts/${modalCommentData?.id}/comments`, {}, JSON.stringify(newComment))
+        setMyComment('');
+    }, [myComment])
+
+    const deleteComment = useCallback((comment: object) => {
+        stompClient.send(`/app/posts/${modalCommentData?.id}/comments/delete`, {}, JSON.stringify(comment))
+        setMyComment('');
+    }, [myComment])
 
     return (
         <Modal
@@ -203,7 +191,7 @@ const CustomizeModalComments = () => {
                             automaticallyAdjustKeyboardInsets={true}
                             contentContainerStyle={{ paddingBottom: '50%' }}
                             showsVerticalScrollIndicator={false}
-                            data={modalCommentData?.commentFather}
+                            data={comments}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => {
                                 return item.parentId === null ? <>

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, FlatList, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import { userIdTest } from '../components/DataBase'
 import CustomizePost from '../components/post/CustomizePost'
@@ -10,9 +10,12 @@ import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
 import { formatDateTime } from '../utils/FormatTime'
 import { handleDataClassification } from '../utils/DataClassfications'
+import { Client, Frame } from 'stompjs'
+import { getStompClient } from '../sockets/SocketClient'
+import { LikeAction } from '../types/LikeActions'
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
-
+let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
 
   // Variable
@@ -20,23 +23,10 @@ export default function StudentDiscussionDashboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const apiUrlLike = SERVER_ADDRESS + 'api/posts/like';
   const apiUrlPost = SERVER_ADDRESS + 'api/posts';
-  const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [studentsPost, setStudentPost] = useState([]);
-  const isFocused = useIsFocused();
 
   // Function 
-
-  useEffect(() => {
-    if (isFocused) {
-      const fetchData = async () => {
-        callAPI();
-      }
-      fetchData();
-    }
-  }, [isFocused])
-
   // Api
-
   const callAPI = async () => {
     console.log('call api');
     try {
@@ -48,6 +38,34 @@ export default function StudentDiscussionDashboardScreen() {
     }
   }
 
+  // Socket
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/${TYPE_POST_STUDENT}`, onMessageReceived)
+      stompClient.send(`/app/posts/${TYPE_POST_STUDENT}/listen`)
+    }
+    const onMessageReceived = (payload: any) => {
+      console.log('lay du lieu');
+      setStudentPost(JSON.parse(payload.body))
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
+
+  const likeAction = (obj: LikeAction) => {
+    obj.code = TYPE_POST_STUDENT;
+    like(obj);
+  }
+
+  const like = useCallback((likeData: LikeAction) => {
+    console.log(JSON.stringify(likeData));
+    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+  }, [])
 
   const renderItem = (item: any) => {
     return <CustomizePost
@@ -62,8 +80,10 @@ export default function StudentDiscussionDashboardScreen() {
       type={null}
       likes={item.likes}
       comments={item.comment}
+      commentQty={item.commentQuantity}
       images={item.images}
       role={1}
+      likeAction={likeAction}
     />
   }
 

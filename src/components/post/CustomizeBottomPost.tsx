@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../../constants/Color'
@@ -18,7 +18,7 @@ export interface BottomPostType {
     isLike: boolean,
     comments: Comment[] | null,
     likes: Like[],
-
+    commentQty: number
 }
 
 // Constant
@@ -58,7 +58,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                     </TouchableOpacity>
                     <Text>
                         {
-                            props.comments?.length
+                            props.commentQty
                         }
                     </Text>
                 </View>

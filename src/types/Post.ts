@@ -1,6 +1,7 @@
 import { Comment } from './Comment'
 import { Images } from './Images'
 import { Like } from './Like'
+import { LikeAction } from './LikeActions'
 
 export interface Post {
   id: number
@@ -14,6 +15,8 @@ export interface Post {
   type: string | null
   likes: Like[]
   comments: Comment[]
+  commentQty: number
   images: Images[]
   role: number
+  likeAction: (data: LikeAction) => void
 }

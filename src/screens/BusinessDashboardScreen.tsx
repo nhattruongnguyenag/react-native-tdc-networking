@@ -20,11 +20,12 @@ import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import { formatDateTime } from '../utils/FormatTime'
 import CustomizePost from '../components/post/CustomizePost'
 import { useIsFocused } from '@react-navigation/native'
+import { LikeAction } from '../types/LikeActions'
 
+let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   const [businessPost, setBusinessPost] = useState();
-  const isFocused = useIsFocused();
   const apiUrlPost = SERVER_ADDRESS + 'api/posts';
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
@@ -77,17 +78,6 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
-
-  useEffect(() => {
-    if (isFocused) {
-      const fetchData = async () => {
-        callAPI();
-      }
-      fetchData();
-    }
-  }, [isFocused])
-
-
   const callAPI = async () => {
     console.log('call api');
     try {
@@ -98,6 +88,34 @@ export default function BusinessDashboardScreen() {
       console.log(error);
     }
   }
+
+  // Socket
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/${TYPE_POST_BUSINESS}`, onMessageReceived)
+      stompClient.send(`/app/posts/${TYPE_POST_BUSINESS}/listen`)
+    }
+    const onMessageReceived = (payload: any) => {
+      console.log('lay du lieu');
+      setBusinessPost(JSON.parse(payload.body))
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
+  const likeAction = (obj: LikeAction) => {
+    obj.code = TYPE_POST_BUSINESS;
+    like(obj);
+  }
+
+  const like = useCallback((likeData: LikeAction) => {
+    console.log(JSON.stringify(likeData));
+    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+  }, [])
 
   const renderItem = (item: any) => {
     return <CustomizePost
@@ -112,10 +130,16 @@ export default function BusinessDashboardScreen() {
       type={null}
       likes={item.likes}
       comments={item.comment}
+      commentQty={item.commentQuantity}
       images={item.images}
       role={0}
+      likeAction={
+        likeAction
+      }
     />
   }
+
+
 
   return (
     <View style={styles.container}>

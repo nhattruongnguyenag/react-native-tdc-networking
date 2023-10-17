@@ -13,6 +13,7 @@ import { likeApi } from '../../api/CallApi';
 import { Like } from '../../types/Like';
 import { Client, Frame } from 'stompjs';
 import { getStompClient } from '../../sockets/SocketClient';
+import { LikeAction } from '../../types/LikeActions';
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -68,13 +69,14 @@ const CustomizePost = (props: Post) => {
         }))
     }
 
+
     const handleClickIntoBtnIconLikeEvent = async () => {
-        const dataLike = {
-            "postId": post.id,
-            "userId": userLogin?.id
+        const dataLike: LikeAction = {
+            code: '',
+            postId: post.id,
+            userId: userLogin?.id ?? 0
         }
-        const result = await likeApi(urlLike, dataLike);
-        console.log(result);
+        props.likeAction(dataLike)
     }
 
 
@@ -90,8 +92,7 @@ const CustomizePost = (props: Post) => {
 
     const handleClickIntoBtnIconComments = () => {
         dispatch(openModalComments({
-            id: props.id,
-            commentFather: props.comments,
+            id: props.id
         }))
     }
 
@@ -129,8 +130,9 @@ const CustomizePost = (props: Post) => {
                 role={post.role}
                 isLike={checkLiked(post.likes, userLogin?.id)}
                 likes={post.likes}
-                comments={post.comments}
+                comments={props.comments}
                 handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+                commentQty={post.commentQty}
             />
         </View>
     )
