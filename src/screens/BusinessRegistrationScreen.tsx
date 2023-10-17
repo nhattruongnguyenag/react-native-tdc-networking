@@ -436,7 +436,12 @@ export default function BusinessRegistrationScreen() {
     <ScrollView>
       <SafeAreaView>
         <View style={styles.header}>
-          <Text style={styles.txtHeader}>Đăng ký doanh nghiệp</Text>
+          <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
+            <Icon name='chevron-left' size={20} color={'#ffff'} />
+          </TouchableOpacity>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.txtHeader}>Đăng ký doanh nghiệp</Text>
+          </View>
         </View>
         <View>
           <TextInputWithTitle
@@ -444,6 +449,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập tên doanh nghiệp...'
             onFocus={() => setNameValidate({ ...nameValidate, isVisible: true })}
             onChangeText={(value) => handleNameChange(value)}
+            textInputStyle={!nameValidate.isError? styles.textInput : styles.ip}
           />
           <TextValidate
             customStyle={{ marginLeft: 10 }}
@@ -456,6 +462,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập email...'
             onFocus={() => setEmailValidate({ ...emailValidate, isVisible: true })}
             onChangeText={(value) => handleEmailChange(value)}
+            textInputStyle={!emailValidate.isError? styles.textInput : styles.ip}
           />
 
           <TextValidate
@@ -470,6 +477,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập họ tên người đại diện...'
             onFocus={() => setRepresentorValidate({ ...representorValidate, isVisible: true })}
             onChangeText={(value) => handleRepresentoreChange(value)}
+            textInputStyle={!representorValidate.isError? styles.textInput : styles.ip}
           />
 
           <TextValidate
@@ -484,6 +492,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập mã số thuế...'
             onFocus={() => setTaxCodeValidate({ ...taxCodeValidate, isVisible: true })}
             onChangeText={(value) => handleTaxCodeChange(value)}
+            textInputStyle={!taxCodeValidate.isError? styles.textInput : styles.ip}
           />
 
           <TextValidate
@@ -498,6 +507,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập địa chỉ...'
             onFocus={() => setAddressValidate({ ...addressValidate, isVisible: true })}
             onChangeText={(value) => handleAddressChange(value)}
+            textInputStyle={!addressValidate.isError? styles.textInput : styles.ip}
           />
           <TextValidate
             customStyle={{ marginLeft: 10 }}
@@ -511,6 +521,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập số điện thoại...'
             onFocus={() => setPhoneValidate({ ...phoneValidate, isVisible: true })}
             onChangeText={(value) => handlePhoneChange(value)}
+            textInputStyle={!phoneValidate.isError? styles.textInput : styles.ip}
           />
 
           <TextValidate
@@ -525,6 +536,7 @@ export default function BusinessRegistrationScreen() {
             placeholder='Nhập thời gian hoạt động...'
             onFocus={() => setActiveTimeValidate({ ...activeTimeValidate, isVisible: true })}
             onChangeText={(value) => handleActiveTimeChange(value)}
+            textInputStyle={!activeTimeValidate.isError? styles.textInput : styles.ip}
           />
 
           <TextValidate
@@ -538,7 +550,7 @@ export default function BusinessRegistrationScreen() {
             <Text style={styles.txt}>Mật khẩu đăng ký</Text>
             <TextInput
               placeholder='Nhập mật khẩu đăng ký...'
-              style={styles.ip}
+              style={[styles.ip, {borderColor: !passwordValidate.isError ? '#228b22' : '#97A1B0'}]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onFocus={() => setPasswordValidate({ ...passwordValidate, isVisible: true })}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -559,7 +571,7 @@ export default function BusinessRegistrationScreen() {
             <Text style={styles.txt}>Nhập lại mật khẩu</Text>
             <TextInput
               placeholder='Nhập lại mật khẩu...'
-              style={styles.ip}
+              style={[styles.ip, {borderColor: !confirmPasswordValidate.isError ? '#228b22' : '#97A1B0'}]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onFocus={() => setConfirmPasswordValidate({ ...confirmPasswordValidate, isVisible: true })}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -616,7 +628,7 @@ export default function BusinessRegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { backgroundColor: COLOR_BTN_BLUE, alignItems: 'center' },
+  header: { backgroundColor: COLOR_BTN_BLUE, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
   txtHeader: {
     color: '#ffffff',
     paddingVertical: 10,
@@ -690,5 +702,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20
+  },
+  textInput: {
+    borderColor: '#228b22',
+    borderWidth: 2
   }
 })
