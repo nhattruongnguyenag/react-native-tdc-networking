@@ -8,9 +8,9 @@ import { getStompClient } from '../../sockets/SocketClient'
 import Loading from '../Loading'
 
 export default function AllConversationGroupTab() {
+  const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const isFocused = useIsFocused()
   const [isLoading, setLoading] = useState(false)
-  const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
 
   useEffect(() => {

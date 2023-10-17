@@ -7,7 +7,8 @@ import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSectionTitle from '../components/messages/MessageSectionTitle'
 import MessageSentItem from '../components/messages/MessageSentItem'
-import { useAppSelector } from '../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Messages'
 import { MessageSection, MessageSectionByTime } from '../types/MessageSection'
@@ -115,7 +116,7 @@ export default function MessengerScreen() {
         <Fragment>
           <FlatList
             inverted
-            initialNumToRender={3}
+            initialNumToRender={1}
             showsVerticalScrollIndicator={false}
             data={messageSection}
             renderItem={({ item, index }) => messageSectionRenderItems(item, index)}
