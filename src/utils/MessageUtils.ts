@@ -33,6 +33,7 @@ export function sortMessagesByTime(messages: Message[]) {
       messageSectionTime.length > 0 &&
       isApproximatelyTime(message.createdAt, messageSectionTime[index].time) &&
       message.type === messageSectionTime[index].type
+      && message.sender.id === messageSectionTime[index].sender.id
     ) {
       messageSectionTime[index].messages.push(message)
     } else {

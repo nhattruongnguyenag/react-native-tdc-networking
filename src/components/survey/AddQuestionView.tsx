@@ -7,7 +7,6 @@ import { BACKGROUND_BLUE } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { addQuestion, setSurveyPostRequest } from '../../redux/Slice'
 import { Question } from '../../types/Question'
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils'
 import {
   InputTextValidate,
   isBlank,

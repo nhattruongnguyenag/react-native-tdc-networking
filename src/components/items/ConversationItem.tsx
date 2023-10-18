@@ -40,7 +40,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
     }
 
     return data?.lastMessageContent
-  }, [])
+  }, [conversations])
 
   return (
     <Pressable

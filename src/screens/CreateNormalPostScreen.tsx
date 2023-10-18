@@ -1,92 +1,259 @@
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Image } from 'react-native'
-import React from 'react'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, Image, Pressable, Alert, Keyboard } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
+import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
+import { TEXT_ADD_IMAGES, TEXT_AGREE, TEXT_CANCEL, TEXT_CHAR, TEXT_COMPLETE, TEXT_CREATE_POST_FAIL, TEXT_CREATE_POST_SUCCESS, TEXT_DEFINITE_QUESTION, TEXT_DETAILED_WARNING_CONTENT_NULL, TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED, TEXT_NOTIFYCATIONS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_TITLE, TEXT_WARNING } from '../constants/StringVietnamese'
+import IconEntypo from 'react-native-vector-icons/Entypo';
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
+import ActionSheet from 'react-native-actionsheet'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import { useAppSelector } from '../redux/Hook'
+import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 
-const { width, height } = Dimensions.get('screen')
-const TEXT_COMPLETE = 'Hoàn tất'
-const TEXT_TITLE = 'Thêm bài viết'
-const TEXT_INPUT_PLACEHOLDER = 'Hãy nhập nội dung bài viết.'
-const TEXT_ADD_IMAGES = 'Thêm hình ảnh'
-// man hinh dang bai viet thong thuong
+// man hinh dang bai viet thong 
 export default function CreateNormalPostScreen({ navigation }: any) {
+  // Variable
+  const minCharacter = 0;
+  const maxCharacter = 1024;
+  let alertString = null;
+  const [isLoading, setIsLoading] = useState(false);
+  const [content, setContent] = useState('');
+  const [images, setImages] = useState<any>([]);
+  const apiUrl = SERVER_ADDRESS + 'api/posts/normal';
+  const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
+  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
   // Function area
-  const handleClickPickerImageButton = () => {
-    console.log('change to picker images screen')
+  const handlePutDataAPI = async (postData: any): Promise<number> => {
+    try {
+      const response = await axios.post(apiUrl, postData);
+      return response.data.status;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
   }
 
-  const handleClickCompleteButton = () => {
-    console.log('Finish')
+  const handleClickCompleteButton = async () => {
+    if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), minCharacter, maxCharacter)) {
+      try {
+        const data = {
+          "images": images ?? [],
+          "type": "thong-thuong",
+          "userId": 1,
+          "content": content
+        }
+        // Send 
+        const status = await handlePutDataAPI(data);
+        // Reset data
+        setContent('');
+        setImages([]);
+        console.log(status);
+        setIsLoading(false);
+        if (status === 201) {
+          showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_SUCCESS, false)
+          Keyboard.dismiss();
+        } else {
+          showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_FAIL, false)
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      if (isNotBlank(content.trim()) === false && isLengthInRange(content.trim(), minCharacter, maxCharacter) === false) {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL + 'Và' + TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${maxCharacter}` + TEXT_CHAR;
+      } else if (isNotBlank(content.trim()) === false) {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL;
+      } else {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${maxCharacter} ` + TEXT_CHAR;
+      }
+      Alert.alert(TEXT_CREATE_POST_FAIL, alertString);
+    }
+
   }
 
   const handleClickBackIcon = () => {
-    console.log('Back')
+    console.log('Back');
   }
 
+  const HandleClickIntoIconBtnArrowLeft = () => {
+    console.log('back');
+
+  }
+  const handleLongClickIntoImage = async (imageName: string) => {
+    let result: boolean = false;
+    result = await showAlert(TEXT_WARNING, TEXT_DEFINITE_QUESTION, true);
+    if (result) {
+      handleDeleteImage(imageName);
+    } else {
+      console.log('không xóa');
+    }
+  }
+
+  const showAlert = async (title: string, messenger: string, QA: boolean) => {
+    if (QA) {
+      return new Promise<boolean>((resolve) => {
+        Alert.alert(
+          title,
+          messenger,
+          [
+            {
+              text: TEXT_AGREE,
+              onPress: () => {
+                resolve(true);
+              },
+            },
+            {
+              text: TEXT_CANCEL,
+              onPress: () => {
+                resolve(false);
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      });
+    } else {
+      return new Promise<boolean>((resolve) => {
+        Alert.alert(
+          title,
+          messenger,
+          [
+            {
+              text: TEXT_AGREE,
+              onPress: () => {
+                resolve(true);
+              },
+            }
+          ],
+          { cancelable: false }
+        );
+      });
+    }
+  };
+
+  const handleDeleteImage = (imageName: string) => {
+    const newImage = images.filter((item: any) => item !== imageName);
+    setImages(newImage);
+  }
+
+
+  useEffect(() => {
+    if (imagesUpload && imagesUpload.length != 0) {
+      if (images && images.length != 0) {
+        setImages([...images, ...imagesUpload])
+      } else {
+        setImages(imagesUpload)
+      }
+    }
+  }, [imagesUpload])
+
   return (
-    <View style={styles.container}>
-      {/* Tab bar area */}
-      {/* Wrap tab bar */}
-      <View style={styles.tabBarContainer}>
-        {/* Tab bar */}
-        <View style={styles.wrapTabBar}>
-          <IconButton
-            iconSize={18}
-            iconName='chevron-left'
-            iconColor={COLOR_BLACK}
-            onPress={handleClickBackIcon}
-            inactiveBackgroundColor='#ffffff00'
-            activeBackgroundColor='#ffffff1a'
+    <>
+      <CustomizeModalLoading
+        visible={isLoading}
+      />
+      <View style={styles.container}>
+        {/* Tab bar area */}
+        {/* Wrap tab bar */}
+        <View style={styles.tabBarContainer}>
+          {/* Tab bar */}
+          <View style={styles.wrapTabBar}>
+            <TouchableOpacity
+              onPress={() => HandleClickIntoIconBtnArrowLeft()}>
+              <IconEntypo
+                name={'chevron-left'}
+                size={25}
+                color={COLOR_BLACK}
+              />
+            </TouchableOpacity>
+            <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
+            <TouchableOpacity
+              onPress={handleClickCompleteButton}
+              style={styles.wrapTabBarBtnRight}>
+              <Text style={styles.tabBarBtnRightTxt}>
+                {
+                  TEXT_COMPLETE
+                }
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* Body */}
+        <View style={[styles.wrapperBody, { paddingBottom: images != null && images.length > 0 ? WINDOW_HEIGHT * 0.3 : 0 }]}>
+          <TextInput
+            value={content}
+            onChangeText={(value) => setContent(value)}
+            scrollEnabled={false}
+            style={styles.txtBody}
+            placeholder={TEXT_PLACEHOLDER_INPUT_COMMENT}
+            placeholderTextColor={COLOR_BLACK}
+            multiline={true}
+            textAlignVertical='top'
           />
-          <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
-          <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
-            <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
+        </View>
+        {/* Bottom */}
+        {
+          images != null && images.length != 0 && <View style={styles.wrapperBodyImage}>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal>
+              {
+                images.length != 0 && images.map((item: any, index: number) => (
+                  <Pressable
+                    onLongPress={() => handleLongClickIntoImage(item)}
+                    onPress={() => { console.log(123) }}
+                    key={index.toString()}
+                    style={styles.wrapImage}
+                  >
+                    <Image
+                      style={styles.image}
+
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                  </Pressable>
+                ))
+              }
+            </ScrollView>
+          </View>
+        }
+        <View style={styles.bottomContainer}>
+          <TouchableOpacity
+            onPress={() => imagePickerOption?.show()}
+          >
+            <View style={styles.wrapBottom}>
+              <IconButton
+                iconSize={18}
+                iconName='images'
+                iconColor='#fff'
+                onPress={() => imagePickerOption?.show()}
+                inactiveBackgroundColor='#ffffff00'
+                activeBackgroundColor='#ffffff1a'
+              />
+              <CustomizedImagePicker
+                optionsRef={(ref) => setImagePickerOption(ref)} />
+              <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
-      {/* Body */}
-      <View style={styles.wrapperBody}>
-        <TextInput
-          scrollEnabled={false}
-          style={styles.txtBody}
-          placeholder={TEXT_INPUT_PLACEHOLDER}
-          placeholderTextColor={COLOR_BLACK}
-          multiline={true}
-        />
-        {/* images container when user post images */}
-        <View style={styles.wrapperBodyImage}>{/* TODO */}</View>
-      </View>
-      {/* Bottom */}
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity onPress={handleClickPickerImageButton}>
-          <View style={styles.wrapBottom}>
-            <IconButton
-              iconSize={18}
-              iconName='images'
-              iconColor='#fff'
-              onPress={() => {}}
-              inactiveBackgroundColor='#ffffff00'
-              activeBackgroundColor='#ffffff1a'
-            />
-            <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: width,
-    height: height
+    width: '100%',
+    height: SCREEN_HEIGHT,
   },
   tabBarContainer: {
     borderLeftWidth1: 1,
     borderRightWidth1: 1,
     borderBottomWidth: 1,
-    borderColor: COLOR_BORDER
+    borderColor: COLOR_BORDER,
+    width: '100%'
   },
   // Header
   tabBarTxt: {
@@ -95,11 +262,12 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   wrapTabBar: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: height * 0.08,
+    height: SCREEN_HEIGHT * 0.08,
     alignItems: 'center',
-    marginHorizontal: 10
+    paddingHorizontal: 10,
   },
   wrapTabBarBtnRight: {
     width: 77,
@@ -115,32 +283,46 @@ const styles = StyleSheet.create({
   },
   // Body
   wrapperBody: {
-    height: height * 0.75
+    height: SCREEN_HEIGHT * 0.75,
+    zIndex: 999,
   },
   txtBody: {
     color: COLOR_BLACK,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    width: '100%',
+    height: '100%',
   },
+  // Image
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  wrapImage: {
+    width: 150,
+    height: 200,
+    padding: 2,
+    zIndex: 999,
+  }
   // Bottom
-  wrapBottom: {
+  , wrapBottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   bottomText: {
     color: COLOR_WHITE,
     fontWeight: '700'
   },
   bottomContainer: {
-    height: height * 0.07,
+    height: SCREEN_HEIGHT * 0.07,
     backgroundColor: COLOR_BUTTON,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   wrapperBodyImage: {
-    width: '100%',
-    height: '40%',
+    zIndex: 999,
+    backgroundColor: COLOR_WHITE,
     position: 'absolute',
-    bottom: 0
+    bottom: '18%',
   }
 })

@@ -26,6 +26,7 @@ import {
   BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
+  CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
   CREATE_SURVEY_SCREEN,
   DRAWER_TAB_NAVIGATOR,
@@ -65,6 +66,7 @@ import ImageViewScreen from './screens/ImageViewScreen'
 import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
+import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -93,6 +95,7 @@ export type RootStackParamList = {
 
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
+  CREATE_NORMAL_POST_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -246,6 +249,12 @@ export function StackNavigator(): JSX.Element {
         component={ReviewSurveyPostScreen}
       />
 
+
+      <RootStack.Screen
+        name={CREATE_NORMAL_POST_SCREEN}
+        options={{ header: () => null }}
+        component={CreateNormalPostScreen}
+      />
 
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>

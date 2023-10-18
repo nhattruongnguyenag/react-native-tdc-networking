@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { Client, Frame, Message } from 'stompjs'
@@ -18,16 +18,21 @@ import { sortMessageBySections, sortMessagesByTime } from '../utils/MessageUtils
 let stompClient: Client
 
 export default function MessengerScreen() {
-  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userLogin, imagesUpload, selectConversation } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const textInputMessageRef = useRef<TextInput | null>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [isLoading, setLoading] = useState(false)
   const [messageSection, setMessageSection] = useState<MessageSection[]>([])
   const [messageContent, setMessageContent] = useState<string>('')
-  const { selectConversation, deviceToken } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const dispatch = useAppDispatch()
 
-  const senderId = selectConversation?.sender?.id
-  const receiverId = selectConversation?.receiver?.id
+  const senderId = useMemo(() => {
+    return selectConversation?.sender?.id
+  }, [selectConversation])
+
+  const receiverId = useMemo(() => {
+    return selectConversation?.receiver?.id
+  }, [selectConversation])
 
   useEffect(() => {
     stompClient = getStompClient()
@@ -72,9 +77,12 @@ export default function MessengerScreen() {
       status: 0
     }
 
+    console.log(senderId, receiverId)
+
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
     setMessageContent('')
   }, [messageContent])
+
 
   const messageSectionRenderItems = useCallback(
     (item: MessageSection, sectionIndex: number) => (
@@ -95,7 +103,7 @@ export default function MessengerScreen() {
   }, [])
 
   useEffect(() => {
-    if (imagesUpload) {
+    if (imagesUpload && imagesUpload.length > 0) {
       const message = {
         senderId: senderId,
         receiverId: receiverId,
@@ -105,6 +113,7 @@ export default function MessengerScreen() {
       }
 
       stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
+      dispatch(setImagesUpload([]))
     }
   }, [imagesUpload])
 

@@ -6,7 +6,7 @@ import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotify'
 import { openModalImage, closeModalImage } from '../redux/Slice'
 import { useAppDispatch } from '../redux/Hook'
 import { act } from 'react-test-renderer'
-import { WINDOW_HEIGHT } from '../utils'
+import { WINDOW_HEIGHT } from '../utils/SystemDimensions'
 // Hide log warning to export image error
 LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
 LogBox.ignoreAllLogs() //Ignore all log notifications

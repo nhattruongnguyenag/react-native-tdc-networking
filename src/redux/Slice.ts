@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { Faculity } from '../components/CustomizeFacultyPost'
+import { Faculty } from '../types/Faculty'
 import { Business } from '../types/Business'
 import { Conversation } from '../types/Conversation'
 import { ModalComments } from '../types/ModalComments'
@@ -9,6 +9,7 @@ import { ModalUserReaction } from '../types/ModalUserReaction'
 import { ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
+import { UpdatePost } from '../types/updatePost'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null
@@ -17,7 +18,7 @@ export interface TDCSocialNetworkState {
   imagesUpload: string[] | null
   conversations: Conversation[]
   selectConversation: Conversation | null
-  userLogin: Student | Faculity | Business | null
+  userLogin: Student | Faculty | Business | null
   deviceToken: string | null
   isOpenModalImage: boolean
   isOpenModalComments: boolean
@@ -25,6 +26,7 @@ export interface TDCSocialNetworkState {
   modalImageData: ModalImage | null
   modalCommentData: ModalComments | null
   modalUserReactionData: ModalUserReaction | null
+  updatePost: boolean
 }
 
 const initialState: TDCSocialNetworkState = {
@@ -41,14 +43,15 @@ const initialState: TDCSocialNetworkState = {
   isOpenModalUserReaction: false,
   modalImageData: null,
   modalCommentData: null,
-  modalUserReactionData: null
+  modalUserReactionData: null,
+  updatePost: false
 }
 
 export const TDCSocialNetworkSlice = createSlice({
   name: 'TDCSocialNetwork',
   initialState,
   reducers: {
-    setUserLogin: (state, action: PayloadAction<Student | Faculity | Business>) => {
+    setUserLogin: (state, action: PayloadAction<Student | Faculty | Business>) => {
       state.userLogin = action.payload
     },
     setDeviceToken: (state, action: PayloadAction<string>) => {
@@ -109,6 +112,9 @@ export const TDCSocialNetworkSlice = createSlice({
     closeModalUserReaction: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
     },
+    updatePostWhenHaveChangeComment: (state, action: PayloadAction<boolean>) => {
+      state.updatePost = action.payload
+    },
     listenConversationsSoket: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
     }
@@ -134,7 +140,8 @@ export const {
   closeModalComments,
   openModalUserReaction,
   closeModalUserReaction,
-  setSelectConversation
+  setSelectConversation,
+  updatePostWhenHaveChangeComment
 } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer
