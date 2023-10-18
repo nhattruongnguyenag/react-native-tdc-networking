@@ -60,12 +60,21 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
-    stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+    // stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+    //   userId: userLogin?.id,
+    //   type: type,
+    //   name: search,
+    //   userFollowId: null
+    // }))
+    axios.post(URL, {
       userId: userLogin?.id,
       type: type,
       name: search,
-      userFollowId: null
-    }))
+    }).then(response => {
+      setMasterData(response.data.data);
+      setQty(masterData.length)
+      setSearch('')
+    })
   };
 
 
