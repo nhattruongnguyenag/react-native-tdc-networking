@@ -1,61 +1,105 @@
-import { ParamListBase, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import axios from 'axios'
+import { Dimensions, StyleSheet, Text, View, Image, SafeAreaView, ScrollView, Pressable, Vibration, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
-import Icon1 from 'react-native-vector-icons/Entypo'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import { SEACRH_SCREEN } from '../constants/Screen'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon1 from 'react-native-vector-icons/Entypo';
+import Icon2 from 'react-native-vector-icons/AntDesign';
+import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import axios from 'axios'
+import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
 
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const {userLogin} = useAppSelector((state) => state.TDCSocialNetworkReducer)
   // const [menuRef, setMenuRef] = useState<Menu | null>()
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
+  const [dataIsRead, setDataIsRead] = useState([])
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const [openListIsRead, setOpenListIsRead] = useState(false)
-  const [userId, setUserId] = useState()
-
-  useEffect(() => {
-    axios
-      .get(`${SERVER_ADDRESS}/api/notifications`)
-      .then((res) => {
-        const respo = res.data.data
+  const [search, setSearch] = useState('')
+  const [openSearch, setOpenSearch] = useState(false)
+  const [filterData, setFilterData] = useState([]);
+  
+  const callData = () => {
+    axios.post(`${SERVER_ADDRESS}api/notifications/user/`, {
+      id: userLogin?.id
+    })
+      .then(res => {
+        const respo = res.data.data;
+        console.log(respo)
+        
         setData(respo)
       })
-      .catch((error) => console.log(error))
+      .catch(error => console.log(error));
+  }
+  useEffect(() => {
+    callData()
   }, [])
 
-  const handleIsRead = (isId: any, userId: any) => {
+  useEffect(() => {
+    axios.get(`${SERVER_ADDRESS}api/notifications/find?content=${search}`)
+      .then(res => {
+        const respo = res.data.data
+        setFilterData(respo)
+      })
+  }, [search])
+
+  const handleIsRead = (id: any, userId: any) => {
     try {
-      axios.put(`${SERVER_ADDRESS}/api/notifications/changeStatus`, {
-        id: isId,
+      axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/makeNotSeen`, {
+        id: id,
         userId: userId
       })
+      callData()
     } catch (error) {
-      console.error('Error updating name:', error)
+      console.error('Error updating name:', error);
     }
   }
 
   const handleDelNotification = (id: number, userId: number) => {
-    // console.log(id + ':', userId);
+
     try {
-      axios.delete(`${SERVER_ADDRESS}/api/notifications/`, { data: { id: id, userId: userId } })
+      axios.delete(`${SERVER_ADDRESS}api/notifications/`, { data: { id: id, userId: userId } })
+      callData()
     } catch (error) {
-      console.error('Error updating name:', error)
+      console.error('Error updating name:', error);
     }
   }
 
-  const handleItem = (id: number) => {
-    navigation.navigate(SEACRH_SCREEN, { id: id })
+  const handleItem = (id: number, userId: number) => {
+    try {
+      // navigation.navigate('Man hinh muon den', { id: id })
+      axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
+        id: id,
+        userId: userId
+      })
+      callData()
+    } catch (error) {
+      console.error('Error updating name:', error);
+    }
   }
+
   const handleListIsRead = () => {
-    console.log('write')
+    try {
+      axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/all`, { userId: userLogin?.id })
+      callData()
+    }
+    
+    catch(error) {
+     console.log(error)}
+  }
+
+  const handleDelSearch = () => {
+    setSearch('')
+  }
+
+  const handleOpenSearch = () => {
+    setOpenSearch(!openSearch);
   }
 
   //Render Items
@@ -63,34 +107,39 @@ export default function NotificationScreen() {
     return (
       <View>
         <Pressable
-          onPress={() => handleItem(item.id)}
+          onPress={() => handleItem(item.id, item.user.id)}
           key={index}
-          style={[styles.item, { backgroundColor: item.status === '0' ? '#ffffff' : '#f3f9ff' }]}
-        >
+          style={[styles.item, { backgroundColor: item.status === '1' ? '#ffffff' : '#f3f9ff' }]}>
           <View style={styles.cont}>
-            <Image style={styles.image} source={{ uri: item.image }} />
+            <Image
+              style={styles.image}
+              source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s' }} />
             <View style={styles.content}>
               <Text style={styles.name}>{item.content}</Text>
-              <Text style={styles.tg}>{item.time}</Text>
+              <Text style={styles.tg}>15 phut truoc</Text>
             </View>
           </View>
-          <Menu
-            style={styles.menu}
+          <Menu style={styles.menu}
             key={item.id}
-            onOpen={() => setMenuOpen(true)}
-            onClose={() => setMenuOpen(false)}
-            // ref={(ref) => {
-            //   setMenuRef(ref)
-            // }}
+            onOpen={() => setMenuOpen(true)
+            }
+            onClose={() => setMenuOpen(false)
+            }
           >
-            <MenuTrigger>
-              <Icon1 name='dots-three-vertical' size={17} color='#000000' />
+            <MenuTrigger
+            >
+              <Icon1 name="dots-three-vertical" size={17} color="#000000" />
             </MenuTrigger>
-            <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
-              <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
+            <MenuOptions
+              optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
+              <MenuOption
+                onSelect={() => handleDelNotification(item.id, item.user.id)}
+              >
                 <Text style={styles.option}>Xóa thông báo</Text>
               </MenuOption>
-              <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
+              <MenuOption
+                onSelect={() => handleIsRead(item.id, item.user.id)}
+              >
                 <Text style={styles.option}>Đánh dấu chưa đọc</Text>
               </MenuOption>
             </MenuOptions>
@@ -104,33 +153,69 @@ export default function NotificationScreen() {
     <>
       <View style={styles.screen}>
         {/* Select */}
-        <View style={styles.select}>
-          <View style={styles.txtN}>
-            <Text style={styles.txt}>Thông báo</Text>
+        <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
+          <View style={styles.select}>
+            <View style={styles.txtN}>
+              <Text style={styles.txt}>Thông báo</Text>
+            </View>
+            <View style={styles.tick}>
+              <TouchableOpacity style={styles.tickButton}
+                onPress={handleListIsRead}
+              >
+                <Text style={styles.txtTick}>
+                  Đánh dấu tất cả đã đọc
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.searchBtn}>
+              <TouchableOpacity style={styles.searchButton}
+                onPress={handleOpenSearch}
+              >
+                <Text>
+                  <Icon name="search" size={20} color="#ffffff" />
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.tick}>
-            <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
-              <Text style={styles.txtTick}>Đánh dấu tất cả đã đọc</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.search}>
-            <TouchableOpacity style={styles.searchButton}>
-              <Text>
-                <Icon name='search' size={20} color='#ffffff' />
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {openSearch && (<View >
+            <TextInput
+              value={search}
+              style={styles.search}
+              placeholder='Tìm kiếm thông báo...'
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={(i) => setSearch(i)}
+            />
+            {
+              search != '' ?
+                (<Pressable
+                  style={{ position: 'absolute', right: 0, paddingRight: 30, marginTop: 20 }}
+                  onPress={handleDelSearch}>
+                  <Icon2 name="closecircleo" size={18} color="grey" />
+                </Pressable>) : null
+            }
+
+          </View>)}
+
         </View>
         {/*  */}
         <ScrollView style={styles.platList}>
-          {data !== null
-            ? data.map(
-                (item, index) => renderItem(item, index)
-                // <Text>{JSON.stringify(data)}</Text>
+          {
+            search === '' ?
+              (data !== null ? (
+                data.map((item, index) => (
+                  renderItem(item, index)
+                ))
+              ) : null)
+              :
+              (
+                filterData.map((item, index) => (
+                  renderItem(item, index)
+                ))
               )
-            : null}
-        </ScrollView>
-      </View>
+          }
+        </ScrollView >
+      </View >
     </>
   )
 }
@@ -140,9 +225,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     flex: 1
   },
+  operation: {
+    justifyContent: 'center'
+  },
   select: {
     flexDirection: 'row',
-    height: 70
+  },
+  search: {
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    paddingLeft: 15,
+    paddingRight: 50,
+    backgroundColor: '#d9d9d9',
+    borderRadius: 5,
+    height: 40,
+    alignItems: 'center'
   },
   //Text thong báo
   txtN: {
@@ -175,7 +273,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   //Search
-  search: {
+  searchBtn: {
     flex: 1,
     justifyContent: 'center',
     marginLeft: 5
@@ -190,7 +288,7 @@ const styles = StyleSheet.create({
   },
   //Flatlist
   platList: {
-    width: '100%'
+    width: '100%',
   },
   item: {
     flexDirection: 'row',
@@ -218,11 +316,11 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: 8,
     paddingLeft: 10,
-    width: '80%'
+    width: '80%',
   },
   name: {
     color: '#000000',
-    fontSize: 17
+    fontSize: 17,
   },
   tg: {
     fontSize: 15,
@@ -230,12 +328,13 @@ const styles = StyleSheet.create({
     paddingBottom: 0
   },
   menu: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   option: {
     fontSize: 15,
     paddingTop: 7,
     paddingBottom: 7,
-    paddingLeft: 5
+    paddingLeft: 5,
   }
+
 })
