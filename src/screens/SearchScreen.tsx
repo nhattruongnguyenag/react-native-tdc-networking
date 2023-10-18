@@ -4,17 +4,21 @@ import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState, useCallback } from "react";
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useAppSelector } from '../redux/Hook'
 import Icon1 from 'react-native-vector-icons/Entypo';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 import axios from 'axios';
+import { Client, Frame, Message } from 'stompjs'
+import { getStompClient } from '../sockets/SocketClient'
 
 
-
+let stompClient: Client
 
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //Danh sach tim kiem
   const [masterData, setMasterData] = useState([])
   //Kieu du lieu
@@ -33,29 +37,50 @@ export default function SearchScreen() {
   ]);
 
 
+  useEffect(() => {
+    stompClient = getStompClient()
 
-  const handleSearch = () => {
-    try {
-      // console.log(subjects + '-' + type + '-' + search);
-      axios.post(URL, {
-        userId: 1,
-        type: type,
-        name: search
-      }).then(res => {
-        setMasterData(res.data.data);
-        setQty(masterData.length)
-        console.log(masterData.length);
-        setSearch('')
-      })
-    } catch (error) {
-      console.error('Lỗi trong quá trình tìm kiếm: ', error);
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
     }
+
+    const onMessageReceived = (payload: any) => {
+      console.log(payload.body)
+      setMasterData(JSON.parse(payload.body));
+      setQty(masterData.length)
+      setSearch('')
+    }
+
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+
+    stompClient.connect({}, onConnected, onError)
+  }, [])
+
+  //Search
+  const handleSearch = () => {
+    // stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+    //   userId: userLogin?.id,
+    //   type: type,
+    //   name: search,
+    //   userFollowId: null
+    // }))
+    axios.post(URL, {
+      userId: userLogin?.id,
+      type: type,
+      name: search,
+    }).then(response => {
+      setMasterData(response.data.data);
+      setQty(masterData.length)
+      setSearch('')
+    })
   };
 
-  
+
   //Render Posts Item
   const postItems = (item: any, index: any) => {
-    
+
     return (
       <View
         key={index}
@@ -97,18 +122,14 @@ export default function SearchScreen() {
     )
   }
 
-const handleFollow = (userFollowId: number) => {
-    console.log(userFollowId);
-
-    try {
-      axios.post(`${SERVER_ADDRESS}/api/users/follow`, {
-        userFollowId: userFollowId,
-        userId: 12,
-      })
-      
-    } catch (error) {
-      console.error('Lỗi trong quá trình follow: ', error);
-    }
+  //Follow
+  const handleFollow = (userFollowId: number) => {
+    stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+      userId: userLogin?.id,
+      type: type,
+      name: search,
+      userFollowId: userFollowId
+    }))
   }
 
   const isFollowed = (item: any) => {
@@ -138,7 +159,6 @@ const handleFollow = (userFollowId: number) => {
 
   const isNotFollow = (item: any) => {
     return (
-
       <TouchableOpacity style={styles.follow}
         onPress={() => handleFollow(item.id)}
       >
@@ -250,7 +270,7 @@ const handleFollow = (userFollowId: number) => {
         </View>
       </View>
       <MenuProvider
-      
+
       >
         <ScrollView >
           <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
