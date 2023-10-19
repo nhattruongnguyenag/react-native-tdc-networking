@@ -9,7 +9,6 @@ import { ModalUserReaction } from '../types/ModalUserReaction'
 import { ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
-import { UpdatePost } from '../types/updatePost'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null

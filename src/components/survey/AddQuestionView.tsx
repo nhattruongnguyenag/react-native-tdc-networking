@@ -3,9 +3,8 @@ import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Button, IconButton, Modal, Portal } from 'react-native-paper'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
-import { BACKGROUND_BLUE } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { addQuestion, setSurveyPostRequest } from '../../redux/Slice'
+import { addQuestion, resetChoices } from '../../redux/Slice'
 import { Question } from '../../types/Question'
 import {
   InputTextValidate,
@@ -178,6 +177,7 @@ export default function AddQuestionView() {
     if (!titleValidate.isError) {
       dispatch(addQuestion(question))
       clearQuestion()
+      dispatch(resetChoices())
       setSelectedQuestionType(null)
       setTitleValidate({ ...titleValidate, isError: true, isVisible: false })
       hideModal()
