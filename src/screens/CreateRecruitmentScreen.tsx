@@ -370,7 +370,7 @@ export default function CreateRecruitmentScreen() {
             setShowDatePicker(true)
           }}
           title='Thời hạn ứng tuyển'
-          placeholder={moment().format('YYYY-MM-DD HH:mm')}
+          placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
         />
 
         <TextValidate
@@ -389,7 +389,7 @@ export default function CreateRecruitmentScreen() {
           onConfirm={(date) => {
             setCreateRecruitmentModel({
               ...createRecruitmentModel,
-              expiration: moment(date).format('YYYY-MM-DD HH:mm')
+              expiration: moment(date).format('YYYY-MM-DD HH:mm:ss')
             })
             expirationRef.current?.blur()
             setShowDatePicker(false)
