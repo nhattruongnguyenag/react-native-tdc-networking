@@ -3,11 +3,12 @@ import React from 'react'
 
 interface MessageSectionTitleProps {
   title?: string
+  visible?: boolean
 }
 
 export default function MessageSectionTitle(props: MessageSectionTitleProps) {
   return (
-    <View style={styles.body}>
+    <View style={[styles.body, { display: Boolean(props.visible) ? 'flex' : 'none' }]}>
       <Text>{props.title}</Text>
     </View>
   )

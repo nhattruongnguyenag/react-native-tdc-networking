@@ -32,7 +32,7 @@ export default function IntermediationScreen() {
         }}
       >
         <View style={styles.group}>
-          <View  style={{ alignItems: 'center', marginBottom: 20 }}>
+          <View style={{ alignItems: 'center', marginBottom: 20 }}>
             <Text style={styles.txt}>Chọn vai trò</Text>
           </View>
           <Dropdown
@@ -50,12 +50,12 @@ export default function IntermediationScreen() {
             }}
           />
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <TouchableOpacity style={[styles.btnContinute, {marginRight: 5}]} onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={[styles.btnContinute, { marginRight: 5 }]} onPress={() => navigation.goBack()}>
               <Text style={styles.txtRegister}>
                 <Icon name='angle-double-left' size={16} /> Quay lại
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.btnContinute, {marginLeft: 5}]} onPress={() => onChange()}>
+            <TouchableOpacity style={[styles.btnContinute, { marginLeft: 5 }]} onPress={() => onChange()}>
               <Text style={styles.txtRegister}>
                 Tiếp tục <Icon name='angle-double-right' size={16} />
               </Text>

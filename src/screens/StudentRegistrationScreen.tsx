@@ -449,7 +449,7 @@ export default function StudentRegistrationScreen() {
   useEffect(() => {
     setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
-  
+
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
