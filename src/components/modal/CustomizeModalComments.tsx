@@ -7,14 +7,15 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomizeComment from '../post/CustomizeCommentPost';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
-import { TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT } from '../../constants/StringVietnamese';
+import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
 import { formatDateTime } from '../../utils/FormatTime';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { callApiComment, deleteCommentApi } from '../../api/CallApi';
-import { isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
+import { isBlank, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
 import { Client, Frame } from 'stompjs';
 import { getStompClient } from '../../sockets/SocketClient';
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../../constants/Variables';
 
 //  Constant
 const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
@@ -108,7 +109,7 @@ const CustomizeModalComments = () => {
 
     // Send data to server
     const handleSubmitEvent = () => {
-        if (isNotBlank(myComment.trim()) && isLengthInRange(myComment, 1, 1024,)) {
+        if (isNotBlank(myComment.trim()) && isLengthInRange(myComment, NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
             setHaveChange(true);
             Keyboard.dismiss();
             const newComment = {
@@ -118,14 +119,20 @@ const CustomizeModalComments = () => {
                 parentCommentId: idReply
             }
             createComment(newComment);
+            setIdReply(0);
         } else {
-            Alert.alert('Tạo bình luận thất bại', 'nội dung bình luận không thể để trống và không được quá 1024 ký tự');
+            if (isBlank(myComment.trim()) && isLengthInRange(myComment, NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
+                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NULL + " và " + TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED + NUMBER_MAX_CHARACTER + " " + TEXT_CHAR);
+            } else if (isBlank(myComment.trim())) {
+                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NULL);
+            } else {
+                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED + NUMBER_MAX_CHARACTER + " " + TEXT_CHAR);
+            }
         }
     }
 
     // Reply comment
     const handleClickToCommentReplyEvent = (commentReplyId: number) => {
-        console.log(commentReplyId);
         setIdReply(commentReplyId);
         inputRef.current.focus();
     }
@@ -148,6 +155,9 @@ const CustomizeModalComments = () => {
             stompClient.send(`/app/posts/${modalCommentData?.id}/comments/listen`)
         }
         const onMessageReceived = (payload: any) => {
+            console.log('====================================');
+            console.log(JSON.stringify(payload.body));
+            console.log('====================================');
             setComments(JSON.parse(payload.body));
         }
 
@@ -199,7 +209,7 @@ const CustomizeModalComments = () => {
                             data={comments}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => {
-                                return item.parentId === null ? <>
+                                return item.parent === null ? <>
                                     <CommentExport
                                         commentItem={item}
                                         userLoginId={userLogin?.id}
@@ -247,9 +257,10 @@ const CommentExport = (item: CommentChildrenType) => {
     }
     return <>
         <CustomizeComment
+            tagName={item.commentItem.parent}
             userId={item.userLoginId}
             authorCommentId={item.commentItem.user['id']}
-            type={item.commentItem.parentId === null ? 0 : 1}
+            type={item.commentItem.parent === null ? 0 : 1}
             key={item.commentItem.id}
             id={item.commentItem.id}
             name={item.commentItem.user.name}

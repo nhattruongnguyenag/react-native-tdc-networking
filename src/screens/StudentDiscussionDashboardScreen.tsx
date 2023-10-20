@@ -45,6 +45,9 @@ export default function StudentDiscussionDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_STUDENT}/listen`)
     }
     const onMessageReceived = (payload: any) => {
+      console.log('================S====================');
+      console.log(JSON.stringify(payload.body));
+      console.log('====================================');
       setStudentPost(JSON.parse(payload.body))
     }
 

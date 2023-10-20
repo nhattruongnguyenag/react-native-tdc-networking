@@ -1,9 +1,10 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
-import { COLOR_BLACK, COLOR_GREY } from '../../constants/Color'
+import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 export interface CustomizeComment {
+    tagName: any,
     userId: number | undefined,
     authorCommentId: number,
     type: number,
@@ -66,6 +67,7 @@ const CustomizeComment = (props: CustomizeComment) => {
                     </Text>
                 </TouchableOpacity>
                 <Text style={styles.content}>
+                    <Text style={styles.tagName}>@{props.tagName['name']} </Text>
                     {
                         props.content
                     }
@@ -119,6 +121,9 @@ const styles = StyleSheet.create({
     },
     reply: {
         color: COLOR_BLACK, marginLeft: 20, fontWeight: 'bold'
+    },
+    tagName: {
+        color: COLOR_BUTTON
     }
 })
 export default CustomizeComment

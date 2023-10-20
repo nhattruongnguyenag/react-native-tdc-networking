@@ -93,6 +93,9 @@ export default function BusinessDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_BUSINESS}/listen`)
     }
     const onMessageReceived = (payload: any) => {
+      console.log('=================B===================');
+      console.log(JSON.stringify(payload.body));
+      console.log('====================================');
       setBusinessPost(JSON.parse(payload.body))
     }
 

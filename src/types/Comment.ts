@@ -9,6 +9,9 @@ export interface Comment {
     image: string
   }
   postId: number
-  parentId: number | null
+  parent: {
+    parentId: number
+    name: string
+  } | null
   childrens: Comment[]
 }
