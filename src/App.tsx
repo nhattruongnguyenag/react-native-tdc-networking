@@ -236,7 +236,7 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
-      
+
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Thêm câu hỏi' /> }}
@@ -248,7 +248,6 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Xem lại bài viết' /> }}
         component={ReviewSurveyPostScreen}
       />
-
 
       <RootStack.Screen
         name={CREATE_NORMAL_POST_SCREEN}

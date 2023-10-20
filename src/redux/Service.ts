@@ -13,7 +13,7 @@ export const TDCSocialNetworkAPI = createApi({
   tagTypes: ['UserLogin'],
   endpoints: (builder) => ({
     getConversationsByUserId: builder.query<Conversation[], number>({
-      query: (userId) => `api/conversations/${userId}`,
+      query: (userId) => `api/conversations/${userId}`
     }),
     saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
       query: (data) => ({

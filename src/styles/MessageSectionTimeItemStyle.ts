@@ -5,8 +5,7 @@ export const MESSAGE_DATE_MARGIN_LEFT_OR_RIGHT = AVATAR_HEIGHT + 25
 
 export default StyleSheet.create({
   body: {
-    display: 'flex',
-    marginTop: 10
+    display: 'flex'
   },
   wrapperContentGroup: {
     flex: 1,
@@ -30,10 +29,10 @@ export default StyleSheet.create({
     marginEnd: 'auto'
   },
   messageContentWrapper: {
-    flexShrink: 1,
-    marginTop: 10
+    flexShrink: 1
   },
   imagesGroup: {
+    flexDirection: 'row',
     borderRadius: 5
   },
   imageItem: {
