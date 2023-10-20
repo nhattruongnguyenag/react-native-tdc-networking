@@ -28,8 +28,8 @@ import { COLOR_BTN_BLUE } from '../constants/Color'
 import { useAppDispatch } from '../redux/Hook'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setUserLogin } from '../redux/Slice'
-import { Faculity } from '../components/CustomizeFacultyPost'
 import { isEmail, isPassword } from '../utils/ValidateUtils'
+import { Faculty } from '../types/Faculty'
 
 // man hinh dang nhap
 export default function LoginScreen() {
@@ -71,7 +71,7 @@ export default function LoginScreen() {
       .then((loginResponse) => {
         const token = loginResponse.data.data.token
         axios
-          .get<void, AxiosResponse<Data<Student | Business | Faculity>>>(SERVER_ADDRESS + `api/users/token/${token}`)
+          .get<void, AxiosResponse<Data<Student | Faculty | Business>>>(SERVER_ADDRESS + `api/users/token/${token}`)
           .then((response) => {
             if (response.status == 200) {
               setIsLoading(false)
@@ -89,7 +89,9 @@ export default function LoginScreen() {
   }
 
   const isBtnDisabled = useMemo(() => {
-    return userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+    return (
+      userLoginRequest.email == '' || userLoginRequest.password == '' || checkEmail == false || checkPassword == false
+    )
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (
@@ -133,7 +135,7 @@ export default function LoginScreen() {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <CheckBox checkBoxColor='green' isChecked={isChecked} onClick={() => handleCheckBoxToggle()} />
-              {!isChecked ? <Text style={{ marginLeft: 10 }}>Hiện</Text> : <Text style={{ marginLeft: 10 }}>Ẩn</Text>}
+              <Text style={{ marginLeft: 10 }}>{isChecked ? 'Hiện' : 'Ẩn'}</Text>
             </View>
           </View>
           <TouchableOpacity
