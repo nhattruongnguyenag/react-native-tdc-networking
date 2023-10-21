@@ -9,6 +9,7 @@ import { ModalUserReaction } from '../types/ModalUserReaction'
 import { ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
+import { Message } from '../types/Message'
 
 export interface TDCSocialNetworkState {
   surveyPostRequest: SurveyPostRequest | null
@@ -16,6 +17,7 @@ export interface TDCSocialNetworkState {
   questions: Question[]
   imagesUpload: string[] | null
   conversations: Conversation[]
+  conversationMessages: Message[]
   selectConversation: Conversation | null
   userLogin: Student | Faculty | Business | null
   deviceToken: string | null
@@ -29,6 +31,7 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  conversationMessages: [],
   surveyPostRequest: null,
   choices: ['', '', ''],
   questions: [],
@@ -64,6 +67,9 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setSelectConversation: (state, action: PayloadAction<Conversation | null>) => {
       state.selectConversation = action.payload
+    },
+    setConversationMessages: (state, action: PayloadAction<Message[]>) => {
+      state.conversationMessages = action.payload
     },
     setSurveyPostRequest: (state, action: PayloadAction<SurveyPostRequest | null>) => {
       state.surveyPostRequest = action.payload
@@ -125,6 +131,7 @@ export const {
   setImagesUpload,
   setUserLogin,
   setConversations,
+  setConversationMessages,
   setDeviceToken,
   setSurveyPostRequest,
   addQuestion,

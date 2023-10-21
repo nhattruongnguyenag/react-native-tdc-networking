@@ -537,7 +537,7 @@ export default function BusinessRegistrationScreen() {
           Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
           setIsLoading(false)
         })
-    } else{
+    } else {
       let key: keyof RegisterBusiness
 
       for (key in validate) {

@@ -22,7 +22,6 @@ import SkeletonPost from './SkeletonPost'
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
-
   // Variable
   const [isLoading, setIsLoading] = useState(false);
   const [businessPost, setBusinessPost] = useState([]);
@@ -87,11 +86,11 @@ export default function BusinessDashboardScreen() {
 
   const getDataBusinessApi = async () => {
     try {
-      const data = await postAPI(API_URL_POST);
-      const result = handleDataClassification(data, TYPE_POST_BUSINESS);
-      setBusinessPost(result);
+      const data = await postAPI(API_URL_POST)
+      const result = handleDataClassification(data, TYPE_POST_BUSINESS)
+      setBusinessPost(result)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -112,8 +111,8 @@ export default function BusinessDashboardScreen() {
   }, [])
 
   const likeAction = (obj: LikeAction) => {
-    obj.code = TYPE_POST_BUSINESS;
-    like(obj);
+    obj.code = TYPE_POST_BUSINESS
+    like(obj)
   }
 
   const like = useCallback((likeData: LikeAction) => {
@@ -121,28 +120,30 @@ export default function BusinessDashboardScreen() {
   }, [])
 
   useEffect(() => {
-    getDataBusinessApi();
+    getDataBusinessApi()
     dispatch(updatePostWhenHaveChangeComment(false))
   }, [updatePost])
 
   const renderItem = (item: any) => {
-    return <CustomizePost
-      id={item.id}
-      userId={item.user['id']}
-      name={item.user['name']}
-      avatar={item.user['image']}
-      typeAuthor={'Doanh Nghiệp'}
-      available={null}
-      timeCreatePost={formatDateTime(item.createdAt)}
-      content={item.content}
-      type={null}
-      likes={item.likes}
-      comments={item.comment}
-      commentQty={item.commentQuantity}
-      images={item.images}
-      role={0}
-      likeAction={likeAction}
-    />
+    return (
+      <CustomizePost
+        id={item.id}
+        userId={item.user['id']}
+        name={item.user['name']}
+        avatar={item.user['image']}
+        typeAuthor={'Doanh Nghiệp'}
+        available={null}
+        timeCreatePost={formatDateTime(item.createdAt)}
+        content={item.content}
+        type={null}
+        likes={item.likes}
+        comments={item.comment}
+        commentQty={item.commentQuantity}
+        images={item.images}
+        role={0}
+        likeAction={likeAction}
+      />
+    )
   }
 
   return (
@@ -163,9 +164,7 @@ export default function BusinessDashboardScreen() {
         data={businessPost}
         renderItem={({ item }) => renderItem(item)}
       />
-      {
-        isOpenModalComments && <CustomizeModalComments />
-      }
+      {isOpenModalComments && <CustomizeModalComments />}
     </View>
   )
 }

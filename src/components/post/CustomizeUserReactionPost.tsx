@@ -4,41 +4,38 @@ import { COLOR_BLACK } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
 export interface CustomizeUserReactionType {
-    id: number,
-    name: string,
-    avatar: string,
-    handleClickIntoUserReactedEvent: (userId: number) => void
+  id: number
+  name: string
+  avatar: string
+  handleClickIntoUserReactedEvent: (userId: number) => void
 }
 
 const CustomizeUserReaction = (props: CustomizeUserReactionType) => {
-    return (
-        <>
-            <TouchableOpacity
-                onPress={() => props.handleClickIntoUserReactedEvent(props.id)}
-                style={styles.container}>
-                <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
-                <Text style={styles.txtName}>{props.name}</Text>
-            </TouchableOpacity>
-        </>
-    )
-
+  return (
+    <>
+      <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
+        <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+        <Text style={styles.txtName}>{props.name}</Text>
+      </TouchableOpacity>
+    </>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-    },
-    avatar: {
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-    },
-    txtName: {
-        color: COLOR_BLACK,
-        paddingLeft: 10,
-    }
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5
+  },
+  avatar: {
+    height: 40,
+    width: 40,
+    borderRadius: 20
+  },
+  txtName: {
+    color: COLOR_BLACK,
+    paddingLeft: 10
+  }
 })
 
-export default CustomizeUserReaction;
+export default CustomizeUserReaction

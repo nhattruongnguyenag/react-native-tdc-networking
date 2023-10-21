@@ -17,14 +17,13 @@ import SkeletonPost from './SkeletonPost'
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
-
   // Variable
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
   const dispatch = useAppDispatch()
-  const [facultyPost, setFacultyPost] = useState([]);
+  const [facultyPost, setFacultyPost] = useState([])
 
   // Function
 
@@ -39,11 +38,11 @@ export default function FacultyDashboardScreen() {
   // Api
   const callAPI = async () => {
     try {
-      const temp = await postAPI(API_URL_POST);
-      const result = handleDataClassification(temp, TYPE_POST_FACULTY);
-      setFacultyPost(result);
+      const temp = await postAPI(API_URL_POST)
+      const result = handleDataClassification(temp, TYPE_POST_FACULTY)
+      setFacultyPost(result)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -65,40 +64,39 @@ export default function FacultyDashboardScreen() {
   }, [])
 
   const likeAction = (obj: LikeAction) => {
-    obj.code = TYPE_POST_FACULTY;
-    like(obj);
+    obj.code = TYPE_POST_FACULTY
+    like(obj)
   }
-
 
   useEffect(() => {
     callAPI()
     dispatch(updatePostWhenHaveChangeComment(false))
   }, [updatePost])
 
-
   const like = useCallback((likeData: LikeAction) => {
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
   const renderItem = (item: any) => {
-    return <CustomizePost
-      id={item.id}
-      userId={item.user['id']}
-      name={item.user['name']}
-      avatar={item.user['image']}
-      typeAuthor={null}
-      available={null}
-      timeCreatePost={formatDateTime(item.createdAt)}
-      content={item.content}
-      type={null}
-      likes={item.likes}
-      comments={item.comment}
-      commentQty={item.commentQuantity}
-      images={item.images}
-      role={2}
-      likeAction={likeAction}
-    />
-
+    return (
+      <CustomizePost
+        id={item.id}
+        userId={item.user['id']}
+        name={item.user['name']}
+        avatar={item.user['image']}
+        typeAuthor={null}
+        available={null}
+        timeCreatePost={formatDateTime(item.createdAt)}
+        content={item.content}
+        type={null}
+        likes={item.likes}
+        comments={item.comment}
+        commentQty={item.commentQuantity}
+        images={item.images}
+        role={2}
+        likeAction={likeAction}
+      />
+    )
   }
   return (
     <View style={styles.container}>

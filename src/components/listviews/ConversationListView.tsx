@@ -8,7 +8,5 @@ interface ConversationListViewProps {
 }
 
 export default function ConversationListView({ data }: ConversationListViewProps) {
-  return (
-    <FlatList data={data} renderItem={({ index, item }) => <ConversationItem key={index} data={item} />} />
-  )
+  return <FlatList data={data} renderItem={({ index, item }) => <ConversationItem key={index} data={item} />} />
 }
