@@ -12,12 +12,14 @@ import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
+import SkeletonPost from './SkeletonPost'
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
 
   // Variable
+  const [isLoading, setIsLoading] = useState(false);
   const { updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
@@ -26,6 +28,15 @@ export default function StudentDiscussionDashboardScreen() {
   const [studentsPost, setStudentPost] = useState([]);
 
   // Function 
+
+  useEffect(() => {
+    if (studentsPost.length > 0) {
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [studentsPost])
+
   // Api
   const callAPI = async () => {
     try {
@@ -45,9 +56,6 @@ export default function StudentDiscussionDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_STUDENT}/listen`)
     }
     const onMessageReceived = (payload: any) => {
-      console.log('================S====================');
-      console.log(JSON.stringify(payload.body));
-      console.log('====================================');
       setStudentPost(JSON.parse(payload.body))
     }
 
@@ -70,7 +78,6 @@ export default function StudentDiscussionDashboardScreen() {
 
 
   const like = useCallback((likeData: LikeAction) => {
-    console.log(JSON.stringify(likeData));
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
@@ -118,6 +125,9 @@ export default function StudentDiscussionDashboardScreen() {
             {NAME_GROUP}
           </Text>
         </View>
+        {
+          isLoading && <SkeletonPost />
+        }
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}

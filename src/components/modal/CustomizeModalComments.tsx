@@ -155,9 +155,6 @@ const CustomizeModalComments = () => {
             stompClient.send(`/app/posts/${modalCommentData?.id}/comments/listen`)
         }
         const onMessageReceived = (payload: any) => {
-            console.log('====================================');
-            console.log(JSON.stringify(payload.body));
-            console.log('====================================');
             setComments(JSON.parse(payload.body));
         }
 
@@ -201,8 +198,6 @@ const CustomizeModalComments = () => {
                     </View>
                     <View style={styles.containerComments}>
                         <FlatList
-                            refreshing={false}
-                            onRefresh={() => { console.log('call api comment pls') }}
                             automaticallyAdjustKeyboardInsets={true}
                             contentContainerStyle={{ paddingBottom: '50%' }}
                             showsVerticalScrollIndicator={false}
