@@ -10,8 +10,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/ty
 import React, { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
+import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
-import { CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, LOGIN_SCREEN } from '../../constants/Screen'
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, LOGIN_SCREEN } from '../../constants/Screen'
 import Divider from '../Divider'
 import DrawerHeader from './DrawerHeader'
 
@@ -54,6 +55,20 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           labelStyle={{ color: '#0088ff' }}
           icon={({ color, focused, size }) => (
             <FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />
+          )}
+        />
+
+        <DrawerItem
+          style={{ marginStart: 14 }}
+          label={'Thêm bài viết'}
+          onPress={() => {
+            navigation.navigate(CREATE_NORMAL_POST_SCREEN)
+          }}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <IoniconsIcon name='create-sharp' size={16} color={'#0088ff'} />
           )}
         />
 

@@ -14,23 +14,8 @@ import React, { useEffect, useState } from 'react'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
-import {
-  TEXT_ADD_IMAGES,
-  TEXT_AGREE,
-  TEXT_CANCEL,
-  TEXT_CHAR,
-  TEXT_COMPLETE,
-  TEXT_CREATE_POST_FAIL,
-  TEXT_CREATE_POST_SUCCESS,
-  TEXT_DEFINITE_QUESTION,
-  TEXT_DETAILED_WARNING_CONTENT_NULL,
-  TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED,
-  TEXT_NOTIFYCATIONS,
-  TEXT_PLACEHOLDER_INPUT_COMMENT,
-  TEXT_TITLE,
-  TEXT_WARNING
-} from '../constants/StringVietnamese'
-import IconEntypo from 'react-native-vector-icons/Entypo'
+import { TEXT_ADD_IMAGES, TEXT_AGREE, TEXT_CANCEL, TEXT_CHAR, TEXT_COMPLETE, TEXT_CREATE_POST_FAIL, TEXT_CREATE_POST_SUCCESS, TEXT_DEFINITE_QUESTION, TEXT_DETAILED_WARNING_CONTENT_NULL, TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED, TEXT_INPUT_PLACEHOLDER, TEXT_NOTIFYCATIONS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_TITLE, TEXT_WARNING } from '../constants/StringVietnamese'
+import IconEntypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
@@ -38,17 +23,16 @@ import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
 
 // man hinh dang bai viet thong
 export default function CreateNormalPostScreen({ navigation }: any) {
   // Variable
-  const minCharacter = 0
-  const maxCharacter = 1024
-  let alertString = null
-  const [isLoading, setIsLoading] = useState(false)
-  const [content, setContent] = useState('')
-  const [images, setImages] = useState<any>([])
-  const apiUrl = SERVER_ADDRESS + 'api/posts/normal'
+  let alertString = null;
+  const [isLoading, setIsLoading] = useState(false);
+  const [content, setContent] = useState('');
+  const [images, setImages] = useState<any>([]);
+  const apiUrl = SERVER_ADDRESS + 'api/posts/normal';
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
@@ -64,7 +48,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
   }
 
   const handleClickCompleteButton = async () => {
-    if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), minCharacter, maxCharacter)) {
+    if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
       try {
         const data = {
           images: images ?? [],
@@ -89,31 +73,19 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         console.error('Error:', error)
       }
     } else {
-      if (
-        isNotBlank(content.trim()) === false &&
-        isLengthInRange(content.trim(), minCharacter, maxCharacter) === false
-      ) {
-        alertString =
-          TEXT_DETAILED_WARNING_CONTENT_NULL +
-          'Và' +
-          TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED +
-          `${maxCharacter}` +
-          TEXT_CHAR
+      if (isNotBlank(content.trim()) === false && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER) === false) {
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL + 'Và' + TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${NUMBER_MAX_CHARACTER}` + TEXT_CHAR;
       } else if (isNotBlank(content.trim()) === false) {
         alertString = TEXT_DETAILED_WARNING_CONTENT_NULL
       } else {
-        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${maxCharacter} ` + TEXT_CHAR
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${NUMBER_MAX_CHARACTER} ` + TEXT_CHAR;
       }
       Alert.alert(TEXT_CREATE_POST_FAIL, alertString)
     }
   }
 
-  const handleClickBackIcon = () => {
-    console.log('Back')
-  }
-
   const HandleClickIntoIconBtnArrowLeft = () => {
-    console.log('back')
+    navigation.goBack();
   }
   const handleLongClickIntoImage = async (imageName: string) => {
     let result: boolean = false
@@ -209,7 +181,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
             onChangeText={(value) => setContent(value)}
             scrollEnabled={false}
             style={styles.txtBody}
-            placeholder={TEXT_PLACEHOLDER_INPUT_COMMENT}
+            placeholder={TEXT_INPUT_PLACEHOLDER}
             placeholderTextColor={COLOR_BLACK}
             multiline={true}
             textAlignVertical='top'
