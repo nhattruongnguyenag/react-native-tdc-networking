@@ -10,7 +10,9 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice'
 import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
-import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables'
+import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
+import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
+import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -91,50 +93,115 @@ const CustomizePost = (props: Post) => {
     )
   }
 
-  return (
-    <View style={styles.container}>
-      {/* Header */}
-      <CustomizeHeaderPost
-        name={post.name}
-        avatar={post.avatar}
-        typeAuthor={post.typeAuthor}
-        available={post.available}
-        timeCreatePost={post.timeCreatePost}
-        type={post.type}
-        role={post.role}
-        handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-      />
-      {/* Body */}
-      <CustomizeBodyPost content={post.content} />
-      {/* Image */}
-      {post.images && post.images.length > 0 && (
-        <CustomizeImagePost
-          images={post.images}
-          handleClickIntoAnyImageEvent={handleClickIntoAnyImageEvent}
+  const handleClickBtnSeeDetailEvent = (idPost: number) => {
+    console.log('====================================');
+    console.log('bai post recruitment have id ' + idPost);
+    console.log('====================================');
+  }
+
+  switch (post.type) {
+    case TYPE_NORMAL_POST:
+      return (
+        <View style={styles.container}>
+          {/* Header */}
+          <CustomizeHeaderPost
+            name={post.name}
+            avatar={post.avatar}
+            typeAuthor={post.typeAuthor}
+            available={post.available}
+            timeCreatePost={post.timeCreatePost}
+            type={post.type}
+            role={post.role}
+            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          />
+          {/* Body */}
+          <CustomizeBodyPost content={post.content} />
+          {/* Image */}
+          {post.images && post.images.length > 0 && (
+            <CustomizeImagePost
+              images={post.images}
+              handleClickIntoAnyImageEvent={handleClickIntoAnyImageEvent}
+              name={post.name}
+              avatar={post.avatar}
+            />
+          )}
+          {/* Bottom */}
+          <CustomizeBottomPost
+            id={post.id}
+            userLoginId={userLogin?.id}
+            role={post.role}
+            isLike={checkLiked(post.likes, userLogin?.id)}
+            likes={post.likes}
+            comments={props.comments}
+            handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+            commentQty={post.commentQty}
+          />
+        </View>
+      )
+    case TYPE_RECRUITMENT_POST:
+      return (
+        <View style={styles.container}>
+          <CustomizeRecruitmentPost
+            id={post.id}
+            image={post.avatar}
+            name={post.name}
+            type={post.type}
+            location={post.location ?? ''}
+            title={post.title ?? ''}
+            expiration={post.expiration ?? ''}
+            salary={post.salary ?? ''}
+            employmentType={post.employmentType ?? ''}
+            handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
+            createdAt={props.timeCreatePost}
+            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          />
+          {/* Bottom */}
+          <CustomizeBottomPost
+            id={post.id}
+            userLoginId={userLogin?.id}
+            role={post.role}
+            isLike={checkLiked(post.likes, userLogin?.id)}
+            likes={post.likes}
+            comments={props.comments}
+            handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+            commentQty={post.commentQty}
+          />
+        </View>
+      )
+    case TYPE_SURVEY_POST:
+      return <View style={styles.container}>
+        <CustomizeSurveyPost
+          id={post.id}
+          image={post.avatar}
           name={post.name}
-          avatar={post.avatar}
+          type={post.type}
+          title={post.title ?? ''}
+          handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
+          createdAt={props.timeCreatePost}
+          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          description={props.description ?? ''}  />
+        {/* Bottom */}
+        <CustomizeBottomPost
+          id={post.id}
+          userLoginId={userLogin?.id}
+          role={post.role}
+          isLike={checkLiked(post.likes, userLogin?.id)}
+          likes={post.likes}
+          comments={props.comments}
+          handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+          commentQty={post.commentQty}
         />
-      )}
-      {/* Bottom */}
-      <CustomizeBottomPost
-        id={post.id}
-        userLoginId={userLogin?.id}
-        role={post.role}
-        isLike={checkLiked(post.likes, userLogin?.id)}
-        likes={post.likes}
-        comments={props.comments}
-        handleClickBottomBtnEvent={handleClickBottomBtnEvent}
-        commentQty={post.commentQty}
-      />
-    </View>
-  )
+      </View>
+    default:
+      return null;
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 5,
     backgroundColor: COLOR_WHITE,
-    marginBottom: 40
+    marginBottom: 20
   },
   wrapHeader: {
     flexDirection: 'row',

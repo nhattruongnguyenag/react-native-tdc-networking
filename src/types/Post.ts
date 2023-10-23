@@ -4,6 +4,7 @@ import { Like } from './Like'
 import { LikeAction } from './LikeActions'
 
 export interface Post {
+  // Normal post
   id: number
   userId: number
   name: string
@@ -12,11 +13,18 @@ export interface Post {
   available: boolean | null
   timeCreatePost: string
   content: string
-  type: string | null
+  type: string
   likes: Like[]
   comments: Comment[]
   commentQty: number
   images: Images[]
-  role: number
+  role: string
   likeAction: (data: LikeAction) => void
+  // Recruitment post
+  location: string | null
+  title: string | null
+  expiration: string | null
+  salary: string | null
+  employmentType: string | null
+  description: string | null
 }

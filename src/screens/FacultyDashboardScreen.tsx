@@ -12,7 +12,7 @@ import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
-import SkeletonPost from './SkeletonPost'
+import SkeletonPost from '../components/SkeletonPost'
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
@@ -88,13 +88,19 @@ export default function FacultyDashboardScreen() {
         available={null}
         timeCreatePost={formatDateTime(item.createdAt)}
         content={item.content}
-        type={null}
+        type={item.type}
         likes={item.likes}
         comments={item.comment}
         commentQty={item.commentQuantity}
         images={item.images}
-        role={2}
+        role={item.user['roleCodes']}
         likeAction={likeAction}
+        location={item.location ?? null}
+        title={item.title ?? null}
+        expiration={item.expiration ?? null}
+        salary={item.salary ?? null}
+        employmentType={item.employmentType ?? null}
+        description={item.description ?? null}
       />
     )
   }
