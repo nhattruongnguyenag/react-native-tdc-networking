@@ -67,6 +67,7 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -308,6 +309,7 @@ function App(): JSX.Element {
         </PaperProvider>
       </Provider>
     </MenuProvider>
+    // <ListFollowScreen/>
   )
 }
 

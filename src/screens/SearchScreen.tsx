@@ -14,6 +14,18 @@ import { getStompClient } from '../sockets/SocketClient'
 
 let stompClient: Client
 
+const listItems = [
+  {
+    name: "Nguyen Van A",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF7VqDI9XrM9Q8mrXi8O7vfV-sbvdg4PmEohPtjpHiMA&s",
+    isFollowed: true
+  },
+  {
+    name: "Nguyen Van B",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF7VqDI9XrM9Q8mrXi8O7vfV-sbvdg4PmEohPtjpHiMA&s",
+    isFollowed: false
+  }
+]
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
@@ -74,23 +86,24 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
-    // stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
-    //   userId: userLogin?.id,
-    //   type: type,
-    //   name: search,
-    //   userFollowId: null
-    // }))
-    axios
-      .post(URL, {
-        userId: userLogin?.id,
-        type: type,
-        name: search
-      })
-      .then((response) => {
-        setMasterData(response.data.data)
-        setQty(masterData.length)
-        setSearch('')
-      })
+    stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+      userId: userLogin?.id,
+      type: type,
+      name: search,
+      userFollowId: null
+    }))
+    
+    // axios
+    //   .post(URL, {
+    //     userId: userLogin?.id,
+    //     type: type,
+    //     name: search
+    //   })
+    //   .then((response) => {
+    //     setMasterData(response.data.data)
+    //     setQty(masterData.length)
+    //     setSearch('')
+    //   })
   }
 
   //Render Posts Item
@@ -172,6 +185,7 @@ export default function SearchScreen() {
     )
   }
 
+ 
   //Render Items(Users, Business)
   const renderItem = (item: any, index: any) => {
     return (
