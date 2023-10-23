@@ -17,13 +17,14 @@ import { formatDateTime } from '../utils/FormatTime'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
+import SkeletonPost from './SkeletonPost'
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
-
-  const [businessPost, setBusinessPost] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+  const [businessPost, setBusinessPost] = useState([]);
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
@@ -44,6 +45,14 @@ export default function BusinessDashboardScreen() {
     }
     getFCMToken()
   }, [])
+
+  useEffect(() => {
+    if (businessPost.length > 0) {
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [businessPost])
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
@@ -107,7 +116,6 @@ export default function BusinessDashboardScreen() {
   }
 
   const like = useCallback((likeData: LikeAction) => {
-    console.log(JSON.stringify(likeData))
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
@@ -140,8 +148,15 @@ export default function BusinessDashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {isOpenModalImage && <CustomizeModalImage />}
-      {isOpenModalUserReaction && <CustomizeModalUserReacted />}
+      {
+        isOpenModalImage && <CustomizeModalImage />
+      }
+      {
+        isOpenModalUserReaction && <CustomizeModalUserReacted />
+      }
+      {
+        isLoading && <SkeletonPost />
+      }
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}

@@ -12,16 +12,28 @@ import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
+import SkeletonPost from './SkeletonPost'
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
-  const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [isLoading, setIsLoading] = useState(false);
+  const { updatePost } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
 
   // Function
+
+  useEffect(() => {
+    if (facultyPost.length > 0) {
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [facultyPost])
 
   // Api
   const callAPI = async () => {
@@ -62,7 +74,6 @@ export default function FacultyDashboardScreen() {
   }, [updatePost])
 
   const like = useCallback((likeData: LikeAction) => {
-    console.log(JSON.stringify(likeData))
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
@@ -89,6 +100,9 @@ export default function FacultyDashboardScreen() {
   }
   return (
     <View style={styles.container}>
+      {
+        isLoading && <SkeletonPost />
+      }
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}
