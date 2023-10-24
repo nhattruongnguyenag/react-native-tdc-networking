@@ -48,7 +48,7 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
                     </View>
                     <View style={styles.rightContainerBottom}>
                         <View style={[styles.rowAndCenter, styles.item]}>
-                            <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} /><Text style={styles.address}>{' '}{formatDateTime(props.createdAt)}</Text>
+                            <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} /><Text style={styles.address}>{' '}{props.createdAt}</Text>
                         </View>
                     </View>
                 </View>
@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
     bottomButton: {
         flexDirection: 'row',
         backgroundColor: COLOR_BLUE_BANNER,
-        padding: 4,
+        padding: 8,
         alignItems: 'center',
         marginVertical: 5,
-        width: '45%',
+        width: '40%',
         borderRadius: 5
     },
     item: {

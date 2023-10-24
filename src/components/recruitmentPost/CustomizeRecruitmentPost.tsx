@@ -136,10 +136,10 @@ const styles = StyleSheet.create({
     bottomButton: {
         flexDirection: 'row',
         backgroundColor: COLOR_BLUE_BANNER,
-        padding: 4,
+        padding: 8,
         alignItems: 'center',
         marginVertical: 5,
-        width: '30%',
+        width: '32%',
         borderRadius: 5
     },
     item: {
