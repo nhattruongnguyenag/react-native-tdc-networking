@@ -33,4 +33,6 @@ export const TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED = 'nội dung bình lu�
 export const TEXT_SEE_DETAIL = 'Xem chi tiết';
 export const TEXT_JOIN_SURVEY = 'Tham gia khảo sát';
 export const TEXT_SURVEY = 'khảo sát';
-export const TEXT_RECRUITMENT = 'Tuyển dụng'; 
+export const TEXT_RECRUITMENT = 'Tuyển dụng';
+export const TEXT_SURVEY_TITLE = 'Tiêu đề khảo sát';
+export const TEXT_SURVEY_CONTENT = 'Nội dung khảo sát';

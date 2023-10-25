@@ -32,7 +32,7 @@ export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
             <View style={styles.container}>
                 <View style={styles.leftContainer}>
                     <TouchableOpacity
-                    onPress={()=>props.handleClickIntoAvatarAndNameAndMenuEvent(0)}>
+                        onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}>
                         <Image
                             style={styles.avatar}
                             source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
@@ -40,10 +40,10 @@ export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
                 </View>
                 <View style={styles.rightContainer}>
                     <View style={styles.rightContainerTopTitle}>
-                        <Text style={styles.name}>{props.name}{' '}<Text style={styles.textTypePost}>{TEXT_RECRUITMENT}</Text></Text>
+                        <Text style={styles.name}>{props.name}{' '}<View><Text style={[styles.itemType, styles.textTypePost]}>{TEXT_RECRUITMENT}</Text></View></Text>
                         <View style={styles.menu}>
                             <TouchableOpacity
-                            onPress={()=>props.handleClickIntoAvatarAndNameAndMenuEvent(1)}>
+                                onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(1)}>
                                 <EntypoIcon name='dots-three-vertical' size={ICON_SIZE} color={COLOR_BLACK} />
                             </TouchableOpacity>
                         </View>
@@ -56,12 +56,14 @@ export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
                         <View style={styles.rightContainerBottom3Info}>
                             <View style={[styles.rowAndCenter, styles.item]}>
                                 <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} />
-                                <Text style={styles.timeCreated}>{' '}{numberDayPassed(props.createdAt)} ngày trước</Text>
+                                <Text style={styles.timeCreated}>{' '}{numberDayPassed(props.createdAt)}</Text>
                             </View>
+
                             <View style={styles.rowAndCenter}>
                                 <FontAwesome6Icon name='money-bill-1' size={ICON_SIZE} color={COLOR_GREY} />
-                                <Text style={styles.salary}>{' '}{formatVietNamCurrency(props.salary)} $/M</Text>
+                                <Text style={styles.salary}>{' '}{formatVietNamCurrency(props.salary)}{' '}vnd/ Tháng</Text>
                             </View>
+
                             <View style={styles.rowAndCenter}>
                                 <FontAwesome6Icon name='bag-shopping' size={ICON_SIZE} color={COLOR_GREY} />
                                 <Text>{' '}{props.employmentType}</Text>
@@ -72,8 +74,8 @@ export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
                         <TouchableOpacity
                             onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
                             <View style={styles.bottomButton}>
-                                <AntDesignIcon name='right' size={ICON_SIZE} color={COLOR_WHITE} />
                                 <Text style={{ color: COLOR_WHITE }}>{TEXT_SEE_DETAIL}</Text>
+                                <AntDesignIcon style={styles.iconArrow} name='right' size={ICON_SIZE} color={COLOR_WHITE} />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -88,7 +90,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         paddingTop: 10,
-        padding: 5,
         backgroundColor: COLOR_WHITE
     },
     leftContainer: {
@@ -106,32 +107,29 @@ const styles = StyleSheet.create({
         width: '95%',
         fontWeight: 'bold',
         color: COLOR_BLACK,
-        fontSize: 16
-    },
-    type: {
-        width: '5%',
-        backgroundColor: 'orange',
+        fontSize: 16,
     },
     menu: {
-
+        width: '5%',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
     },
     textTypePost: {
-        flex: 1,
-        color: COLOR_WHITE,
-        fontWeight: '300',
         backgroundColor: COLOR_SUCCESS,
-        fontSize: 14
+        paddingHorizontal: 10,
+        borderRadius: 5,
     },
     rightContainerBottom: {
-        width: '95%'
+        width: '95%',
     },
     rightContainerBottom3Info: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'space-between'
     },
     rowAndCenter: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     bottomButton: {
         flexDirection: 'row',
@@ -146,13 +144,14 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     },
     address: {
-        color: COLOR_GREY
+        color: COLOR_GREY,
+        paddingLeft: 5,
     },
     careerTitle: {
         color: COLOR_GREY
     },
     timeCreated: {
-        color: COLOR_GREY
+        color: COLOR_GREY,
     },
     salary: {
         color: COLOR_GREY
@@ -161,6 +160,15 @@ const styles = StyleSheet.create({
         color: COLOR_GREY
     },
     rightContainerTopTitle: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '100%',
+    },
+    itemType: {
+        color: COLOR_WHITE,
+        fontWeight: '300',
+        fontSize: 14,
+    },
+    iconArrow: {
+        paddingLeft: 2,
     }
 })

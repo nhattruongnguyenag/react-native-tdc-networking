@@ -131,7 +131,9 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   wrapMenu: {
-    width: '5%'
+    width: '5%',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   }
 })
 export default CustomizeHeaderPost

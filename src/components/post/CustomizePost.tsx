@@ -13,6 +13,7 @@ import { LikeAction } from '../../types/LikeActions'
 import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
+import { formatDateTime } from '../../utils/FormatTime'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -20,8 +21,8 @@ export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
   // Get data
   let post = props
-  const dispatch = useAppDispatch()
   const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const dispatch = useAppDispatch()
   //--------------Function area--------------
 
   // Header area
@@ -109,13 +110,15 @@ const CustomizePost = (props: Post) => {
             avatar={post.avatar}
             typeAuthor={post.typeAuthor}
             available={post.available}
-            timeCreatePost={post.timeCreatePost}
+            timeCreatePost={formatDateTime(post.timeCreatePost)}
             type={post.type}
             role={post.role}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
           />
           {/* Body */}
-          <CustomizeBodyPost content={post.content} />
+          <View style={styles.bodyWrap}>
+            <CustomizeBodyPost content={post.content} />
+          </View>
           {/* Image */}
           {post.images && post.images.length > 0 && (
             <CustomizeImagePost
@@ -179,7 +182,7 @@ const CustomizePost = (props: Post) => {
           handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
           createdAt={props.timeCreatePost}
           handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-          description={props.description ?? ''}  />
+          description={props.description ?? ''} />
         {/* Bottom */}
         <CustomizeBottomPost
           id={post.id}
@@ -199,7 +202,7 @@ const CustomizePost = (props: Post) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     backgroundColor: COLOR_WHITE,
     marginBottom: 20
   },
@@ -207,6 +210,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 300
+  },
+  bodyWrap: {
+    marginVertical: 10
   }
 })
 export default CustomizePost
