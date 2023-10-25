@@ -17,7 +17,8 @@ import { formatDateTime } from '../utils/FormatTime'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
-import SkeletonPost from './SkeletonPost'
+import SkeletonPost from '../components/SkeletonPost'
+import CustomizeRecruitmentPost from '../components/recruitmentPost/CustomizeRecruitmentPost'
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
@@ -135,13 +136,19 @@ export default function BusinessDashboardScreen() {
         available={null}
         timeCreatePost={formatDateTime(item.createdAt)}
         content={item.content}
-        type={null}
+        type={item.type}
         likes={item.likes}
         comments={item.comment}
         commentQty={item.commentQuantity}
         images={item.images}
-        role={0}
+        role={item.user['roleCodes']}
         likeAction={likeAction}
+        location={item.location ?? null}
+        title={item.title ?? null}
+        expiration={item.expiration ?? null}
+        salary={item.salary ?? null}
+        employmentType={item.employmentType ?? null}
+        description={item.description ?? null}
       />
     )
   }
@@ -165,6 +172,7 @@ export default function BusinessDashboardScreen() {
         renderItem={({ item }) => renderItem(item)}
       />
       {isOpenModalComments && <CustomizeModalComments />}
+      {/* <CustomizeRecruitmentPost /> */}
     </View>
   )
 }

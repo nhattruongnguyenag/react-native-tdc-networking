@@ -3,7 +3,7 @@ import React from 'react'
 import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-export interface CustomizeComment {
+export interface CustomizeCommentType {
     tagName: any,
     userId: number | undefined,
     authorCommentId: number,
@@ -17,7 +17,7 @@ export interface CustomizeComment {
     handleClickToDeleteCommentsEvent: (idComments: number) => void
 }
 
-const CustomizeComment = (props: CustomizeComment) => {
+const CustomizeComment = (props: CustomizeCommentType) => {
     return props.type === 0 ?
         (<View style={styles.containerType0}>
             <TouchableOpacity>

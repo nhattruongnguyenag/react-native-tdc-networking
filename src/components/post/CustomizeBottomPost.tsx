@@ -14,7 +14,7 @@ import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../const
 export interface BottomPostType {
   id: number
   userLoginId: number | undefined
-  role: number
+  role: string
   handleClickBottomBtnEvent: (a: number | null) => void
   isLike: boolean
   comments: Comment[] | null

@@ -4,6 +4,8 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
+import { GO_TO_MENU_ACTIONS, GO_TO_PROFILE_ACTIONS } from '../../constants/Variables'
 
 export interface HeaderPostPropsType {
   name: string
@@ -12,7 +14,7 @@ export interface HeaderPostPropsType {
   available: boolean | null
   timeCreatePost: string
   type: string | null
-  role: number
+  role: string
   handleClickIntoAvatarAndNameAndMenuEvent: (flag: number) => void
 }
 
@@ -30,7 +32,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
       <View style={styles.wrapAvatar}>
         <TouchableOpacity
           // Go to profile screen
-          onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}
+          onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
           <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
         </TouchableOpacity>
@@ -38,13 +40,13 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
       <View style={styles.wrapName}>
         <TouchableOpacity
           // Go to profile screen
-          onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}
+          onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
           {/* Name */}
           <Text style={[styles.headerBusinessName, styles.headerItem]}>
             {post.name}
             <Text> </Text>
-            {post.role !== 1 && (
+            {post.role !== TYPE_POST_STUDENT && (
               <IconAntDesign
                 name='checkcircle'
                 size={HEADER_ICON_SIZE}
@@ -58,7 +60,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           {/* Time created post */}
           <Text style={[styles.headerCenterTimePost, styles.headerItem]}>{post.timeCreatePost}</Text>
           {/* Type author */}
-          {post.role === 0 && (
+          {post.role === TYPE_POST_BUSINESS && (
             <View style={styles.headerCenterType}>
               <Text style={styles.headerTxt}>{post.typeAuthor}</Text>
             </View>
@@ -66,7 +68,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         </View>
       </View>
       <View style={styles.wrapMenu}>
-        <TouchableOpacity onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(1)}>
+        <TouchableOpacity onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_MENU_ACTIONS)}>
           <IconEntypo name='dots-three-vertical' size={HEADER_ICON_SIZE} color={COLOR_BLACK} />
         </TouchableOpacity>
       </View>

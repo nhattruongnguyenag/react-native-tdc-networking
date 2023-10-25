@@ -3,14 +3,14 @@ import React from 'react'
 import { COLOR_BLACK } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
-export interface CustomizeUserReactionType {
+export interface UserReactionType {
   id: number
   name: string
   avatar: string
   handleClickIntoUserReactedEvent: (userId: number) => void
 }
 
-const CustomizeUserReaction = (props: CustomizeUserReactionType) => {
+const CustomizeUserReaction = (props: UserReactionType) => {
   return (
     <>
       <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
