@@ -73,7 +73,7 @@ export default function SearchScreen() {
   //Search
   const handleSearch = () => {
     if (subjects == 'user') {
-      
+
       stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
         userId: userLogin?.id,
         type: type,
@@ -81,7 +81,7 @@ export default function SearchScreen() {
         userFollowId: null
       }))
     }
-    else{
+    else {
       axios
         .post(URL, {
           userId: userLogin?.id,
@@ -91,7 +91,7 @@ export default function SearchScreen() {
         .then((response) => {
           setMasterData(response.data.data)
           console.log(masterData);
-          
+
           setQty(masterData.length)
           setSearch('')
         })
@@ -101,38 +101,8 @@ export default function SearchScreen() {
   //Render Posts Item
   const postItems = (item: any, index: any) => {
     return (
-      <View key={index} style={styles.itemPost1}>
-        <View style={{ flexDirection: 'row' }}>
-          <Image
-            style={{ width: 70, height: 70, borderRadius: 50, borderWidth: 1.5, borderColor: '#48AF7B' }}
-            source={{
-              uri: 'https://file1.dangcongsan.vn/DATA/0/2018/10/68___gi%E1%BA%BFng_l%C3%A0ng_qu%E1%BA%A3ng_ph%C3%BA_c%E1%BA%A7u__%E1%BB%A9ng_h%C3%B2a___%E1%BA%A3nh_vi%E1%BA%BFt_m%E1%BA%A1nh-16_51_07_908.jpg'
-            }}
-          />
-          <View style={{ marginLeft: 10, width: '75%' }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#5A5F5C' }}>{item.user.name}</Text>
-            <Text>{item.content.length > 120 ? `${item.content.substring(0, 120)}...` : item.content}</Text>
-          </View>
-        </View>
-        {/* <MenuProvider> */}
-        <Menu key={item.id}>
-          <MenuTrigger>
-            <View style={{ paddingTop: 15 }}>
-              <Icon1 name='dots-three-vertical' size={18} color='#000000' />
-            </View>
-          </MenuTrigger>
-          <MenuOptions optionsContainerStyle={styles.menuOption}>
-            <MenuOption>
-              <Text style={styles.menuText}>Xem chi tiết</Text>
-            </MenuOption>
-            <MenuOption>
-              <Text style={styles.menuText}>Lưu</Text>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-        {/* </MenuProvider> */}
-      </View>
-  )
+      <view></view>
+    )
   }
 
   //Follow
@@ -161,15 +131,6 @@ export default function SearchScreen() {
         return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
         break
       case 'thong-thuong':
-        //     id: number
-        // image: string
-        // type: string
-        // user: {
-        //   id: number
-        //   name: string
-        //   image: string
-        // }
-        // content: string
         return masterData.map((item: any, index) =>
           <PostNormalItem
             id={item.id}

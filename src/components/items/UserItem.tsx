@@ -16,7 +16,6 @@ export interface UserItemType {
 export default function UserItem(props: UserItemType) {
   let item = props
 
-
   const isFollowed = () => {
     return (
       <Menu key={item.id}>

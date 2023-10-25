@@ -300,16 +300,16 @@ function TopTabNavigator(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    <MenuProvider>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            <DrawerNavigator />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
-    </MenuProvider>
-    // <ListFollowScreen/>
+    // <MenuProvider>
+    //   <Provider store={store}>
+    //     <PaperProvider>
+    //       <NavigationContainer>
+    //         <DrawerNavigator />
+    //       </NavigationContainer>
+    //     </PaperProvider>
+    //   </Provider>
+    // </MenuProvider>
+    <ListFollowScreen/>
   )
 }
 
