@@ -1,11 +1,72 @@
 import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
-import React, { useState } from 'react'
-import { TextInput } from 'react-native-gesture-handler'
+import React, { useState, useEffect } from 'react'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Icon2 from 'react-native-vector-icons/AntDesign'
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import UserItem from "../components/items/UserItem";
+import { MenuProvider } from 'react-native-popup-menu'
+import CustomizeHeaderFollow from '../components/follow/CustomizeHeaderFollow'
+
 
 const ListFollowScreen = () => {
+  // const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [search, setSearch] = useState('')
+  const [items, setItems] = useState([
+    {
+      label: 'Đang theo dõi',
+      value: 'me',
+    },
+    {
+      label: 'Đang theo dõi bạn',
+      value: 'other'
+    }
+  ])
+  const [type, setType] = useState('me')
+  const [data, setData] = useState([])
+  console.log(items);
+  
+
+  useEffect(() => {
+    axios.post(`${SERVER_ADDRESS}api/users/follow/${type}`, {
+      id: 12,
+    }).then(response => {
+      setData(response.data.data)
+      // console.log(data);
+    })
+  }, [type])
+
+  // useEffect(() => {
+  //   stompClient = getStompClient()
+  //   const onConnected = () => {
+  //     stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
+  //   }
+  //   const onMessageReceived = (payload: any) => {
+  //     console.log(payload.body)
+  //     setMasterData(JSON.parse(payload.body))
+  //     setQty(masterData.length)
+  //     setSearch('')
+  //   }
+  //   const onError = (err: string | Frame) => {
+  //     console.log(err)
+  //   }
+  //   stompClient.connect({}, onConnected, onError)
+  // }, [])
+
+  const handleFollow = (userFollowId: number) => {
+    // stompClient.send(
+    //   `/app/find/user/follow`,
+    //   {},
+    //   JSON.stringify({
+    //     userId: userLogin?.id,
+    //     type: type,
+    //     name: search,
+    //     userFollowId: userFollowId
+    //   })
+    // )
+  }
 
   const handleDelSearch = () => {
     setSearch('')
@@ -13,15 +74,21 @@ const ListFollowScreen = () => {
 
 
   return (
-    <View >
-      <View style={styles.container}>
+    <View style={styles.screen}>
+      {/* <View style={styles.container}>
         <View style={styles.follow}>
-          <TouchableOpacity style={styles.following}>
-            <Text style={styles.txt_following}>Đang theo dõi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.followed}>
-            <Text style={styles.txt_following}>Đang theo dõi bạn</Text>
-          </TouchableOpacity>
+          {
+            items.map((tab) => (
+              <TouchableOpacity
+                style={[
+                  styles.following,
+                  type === tab.value ? styles.click : styles.noClick]}
+                onPress={() => setType(tab.value)}
+              >
+                <Text style={[styles.txt_following, type === tab.value ? {color: '#033C9B'} : {}]}>{tab.label}</Text>
+              </TouchableOpacity>
+            ))
+          }
         </View>
         <View style={styles.search}>
           <TextInput
@@ -38,13 +105,32 @@ const ListFollowScreen = () => {
               <Icon2 name='closecircleo' size={18} color='grey' />
             </Pressable>
           ) : null}
+
         </View>
-      </View>
+      </View> */}
+      <CustomizeHeaderFollow
+        search={search}
+        setSearch={setSearch}
+        items={items}
+        type={type}
+        setType={setType}
+        handleDelSearch={handleDelSearch}
+      />
+      <MenuProvider>
+        <ScrollView >
+          {
+            data.map((item: any, index) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
+          }
+        </ScrollView>
+      </MenuProvider>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   container: {
     marginTop: 20,
     marginLeft: 20,
@@ -62,16 +148,28 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 10,
   },
-  followed: {
-    width: 183,
-    height: 40,
+  noClick: {
     backgroundColor: '#DBDBDB',
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10
   },
+
+  click: {
+    backgroundColor: '#CCE7F8',
+    color: '#033C9B',
+    borderWidth: 2,
+    borderColor: '#002667'
+
+  },
+  // followed: {
+  //   width: 183,
+  //   height: 40,
+  //   backgroundColor: '#DBDBDB',
+  //   borderRadius: 50,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginLeft: 10
+  // },
   txt_following: {
     fontSize: 16,
     fontWeight: 'bold',
