@@ -9,6 +9,7 @@ import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { formatDateTime, numberDayPassed } from '../../utils/FormatTime'
 import CustomizeBodyPost from '../CustomizeBodyPost'
 import { TEXT_JOIN_SURVEY, TEXT_SURVEY, TEXT_SURVEY_CONTENT, TEXT_SURVEY_TITLE } from '../../constants/StringVietnamese'
+import DefaultAvatar from '../DefaultAvatar'
 
 export interface RecruitmentPostType {
     id: number,
@@ -31,9 +32,12 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
                 <View style={styles.leftContainer}>
                     <TouchableOpacity
                         onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}>
-                        <Image
-                            style={styles.avatar}
-                            source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
+                        {
+                            props.image != null ?
+                                <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
+                                :
+                                <DefaultAvatar size={43} identifer={props.name[0]} />
+                        }
                     </TouchableOpacity>
                 </View>
                 <View style={styles.rightContainer}>
