@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
+import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { Question } from '../types/Question'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
@@ -14,6 +16,9 @@ export const TDCSocialNetworkAPI = createApi({
   endpoints: (builder) => ({
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
+    }),
+    getQuestionsFromSurveyPost: builder.query<Data<{questions: Question[]}>, number>({
+      query: (postId) => `api/posts/survey/${postId}`
     }),
     saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
       query: (data) => ({
@@ -58,6 +63,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,
   useAddSurveyPostMutation,
   useSaveDeviceTokenMutation,

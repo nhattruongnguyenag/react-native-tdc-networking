@@ -7,6 +7,7 @@ export interface Question {
 export interface QuestionProps {
   data: Question
   index: number
+  isDisableDeleteBtn?: boolean
 }
 
 export interface ChoiceProps {

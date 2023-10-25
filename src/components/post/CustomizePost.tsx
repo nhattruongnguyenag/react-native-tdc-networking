@@ -13,6 +13,10 @@ import { LikeAction } from '../../types/LikeActions'
 import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { RootStackParamList } from '../../App'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -21,6 +25,7 @@ const CustomizePost = (props: Post) => {
   // Get data
   let post = props
   const dispatch = useAppDispatch()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //--------------Function area--------------
 
@@ -94,9 +99,7 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSeeDetailEvent = (idPost: number) => {
-    console.log('====================================');
-    console.log('bai post recruitment have id ' + idPost);
-    console.log('====================================');
+    navigation.navigate(SURVEY_CONDUCT_SCREEN, {surveyPostId: idPost})
   }
 
   switch (post.type) {

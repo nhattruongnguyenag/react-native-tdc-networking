@@ -54,6 +54,7 @@ export default function FacultyDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
     }
     const onMessageReceived = (payload: any) => {
+      console.log(payload.body);
       setFacultyPost(JSON.parse(payload.body))
     }
 

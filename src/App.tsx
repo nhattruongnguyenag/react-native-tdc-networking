@@ -42,6 +42,7 @@ import {
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
+  SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
@@ -67,6 +68,7 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import SurveyConductScreen from './screens/SurveyConductScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -92,10 +94,10 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
-
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: undefined
+  SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -247,6 +249,13 @@ export function StackNavigator(): JSX.Element {
         name={REVIEW_SURVEY_POST_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Xem lại bài viết' /> }}
         component={ReviewSurveyPostScreen}
+      />
+
+
+      <RootStack.Screen
+        name={SURVEY_CONDUCT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Khảo sát' /> }}
+        component={SurveyConductScreen}
       />
 
       <RootStack.Screen
