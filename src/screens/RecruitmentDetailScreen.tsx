@@ -1,15 +1,52 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { COLOR_BLACK } from '../constants/Color'
+import { COLOR_BLACK, COLOR_GREY } from '../constants/Color'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import { formatVietNamCurrency } from '../utils/FormatCurrency'
+import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 
-export default function RecruitmentDetailScreen() {
+export default function RecruitmentDetailScreen({ route }: any) {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { idPost } = route.params
+  const [dataRecruitmentDetail, setDataRecruitmentDetail] = useState({
+    createdAt: '',
+    salary: '',
+    expiration: '',
+    location: '',
+    employmentType: '',
+    benefit: '',
+    description: '',
+    requirement: ''
+  })
+  useEffect(() => {
+    if (idPost) {
+      axios
+        .get(SERVER_ADDRESS + `api/posts/recruitment/${idPost}`)
+        .then((recruitment) => {
+          setDataRecruitmentDetail(recruitment.data.data)
+          console.log(dataRecruitmentDetail)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }, [])
+
+  const onSubmit = () => {
+    Alert.alert('Thông báo', 'Nộp đơn úng tuyển thành công')
+    navigation.goBack()
+  }
   return (
     <ScrollView>
       <View style={styles.header}>
-        <TouchableOpacity style={{ left: -100 }}>
+        <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
           <Icon name='chevron-left' size={20} color={'#000'} />
         </TouchableOpacity>
         <View style={{ alignItems: 'center' }}>
@@ -20,32 +57,42 @@ export default function RecruitmentDetailScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.group}>
           <View style={styles.item}>
-            <Text style={styles.txt}>Ngày cập nhật</Text>
-            <Text>10/10/2010</Text>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Hình thức</Text>
-            <Text>Nhân viên chính thức</Text>
+            <Text style={styles.txt}>Hình thức làm việc</Text>
+            <View style={styles.iconRecuitment}>
+              <Icon name='briefcase' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.employmentType}</Text>
+            </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Lương</Text>
-            <Text>Lương thỏa thuận</Text>
+            <View style={styles.iconRecuitment}>
+              <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}>
+                {' '}
+                {formatVietNamCurrency(dataRecruitmentDetail.salary)} $/M{}
+              </Text>
+            </View>
           </View>
           <View style={styles.item}>
-            <Text style={styles.txt}>Kinh nghiệm</Text>
-            <Text>1 năm kinh nghiệm</Text>
+            <Text style={styles.txt}>Vị trí tuyển dụng</Text>
+            <View style={styles.iconRecuitment}>
+              <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}> Trưởng phòng</Text>
+            </View>
           </View>
           <View style={styles.item}>
-            <Text style={styles.txt}>Cấp bậc</Text>
-            <Text>Trưởng phòng</Text>
+            <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
+            <View style={styles.iconRecuitment}>
+              <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.expiration}</Text>
+            </View>
           </View>
           <View style={styles.item}>
-            <Text style={styles.txt}>Hạn nộp</Text>
-            <Text>11/11/2010</Text>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Địa chỉ</Text>
-            <Text>TP Hồ Chí Minh</Text>
+            <Text style={styles.txt}>Địa chỉ làm việc</Text>
+            <View style={styles.iconRecuitment}>
+              <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.location}</Text>
+            </View>
           </View>
         </View>
 
@@ -54,29 +101,18 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.headerWelfare}>Phúc lợi</Text>
           </View>
           <View style={styles.welfare}>
-            <Text style={styles.welfareTxt}>Chế độ bảo hiểm</Text>
-            <Text style={styles.welfareTxt}>Lương tháng 13</Text>
-            <Text style={styles.welfareTxt}>Trợ cấp đi lại</Text>
-            <Text style={styles.welfareTxt}>Môi trường thân thiện</Text>
+            <Text style={styles.welfareTxt}>{dataRecruitmentDetail.benefit}</Text>
           </View>
         </View>
 
         <View style={styles.group1}>
           <View>
-            <Text style={styles.headerWelfare}>Mô tả</Text>
+            <Text style={styles.headerWelfare}>Mô tả công việc</Text>
           </View>
           <View>
             <View style={styles.description}>
               <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
+              <Text style={{ color: COLOR_BLACK }}>{dataRecruitmentDetail.description}</Text>
             </View>
           </View>
         </View>
@@ -88,15 +124,7 @@ export default function RecruitmentDetailScreen() {
           <View>
             <View style={styles.description}>
               <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
+              <Text style={{ color: COLOR_BLACK }}>{dataRecruitmentDetail.requirement}</Text>
             </View>
           </View>
         </View>
@@ -108,22 +136,14 @@ export default function RecruitmentDetailScreen() {
           <View>
             <View style={styles.description}>
               <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
-            </View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Quản lý điện toán ryherydh dfghfghfg dfhgfdh</Text>
+              <Text style={{ color: COLOR_BLACK }}>Không có</Text>
             </View>
           </View>
         </View>
       </SafeAreaView>
 
       <View>
-        <TouchableOpacity style={styles.btnRecruitment}>
+        <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
           <Text style={styles.txtRecruitment}>Nộp đơn ứng tuyển</Text>
         </TouchableOpacity>
       </View>
@@ -132,9 +152,7 @@ export default function RecruitmentDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // marginHorizontal: 20
-  },
+  container: {},
   txtHeader: {
     color: COLOR_BLACK,
     paddingVertical: 10,
@@ -155,9 +173,9 @@ const styles = StyleSheet.create({
   item: {
     padding: 10,
     marginHorizontal: 10,
-    backgroundColor: '#fff',
-    marginVertical: 5,
-    borderRadius: 10
+    marginVertical: 1,
+    borderRadius: 10,
+    borderBottomWidth: 1
   },
   txt: {
     color: COLOR_BLACK,
@@ -182,7 +200,7 @@ const styles = StyleSheet.create({
     color: COLOR_BLACK,
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    marginBottom:5
+    marginBottom: 5
   },
   group1: {
     marginHorizontal: 10,
@@ -212,6 +230,9 @@ const styles = StyleSheet.create({
   txtRecruitment: {
     color: '#ffff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
+  },
+  iconRecuitment:{
+    flexDirection: 'row', alignItems: 'center', marginTop: 2 
   }
 })
