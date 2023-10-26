@@ -10,9 +10,20 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice'
 import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
-import { COMMENT_ACTION, GO_TO_PROFILE_ACTIONS, LIKE_ACTION, SHOW_LIST_USER_REACTED, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
+import {
+  COMMENT_ACTION,
+  GO_TO_PROFILE_ACTIONS,
+  LIKE_ACTION,
+  SHOW_LIST_USER_REACTED,
+  TYPE_NORMAL_POST,
+  TYPE_RECRUITMENT_POST,
+  TYPE_SURVEY_POST
+} from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RECRUITMENT_DETAIL_SCREEN } from '../../constants/Screen'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -21,6 +32,7 @@ const CustomizePost = (props: Post) => {
   // Get data
   let post = props
   const dispatch = useAppDispatch()
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //--------------Function area--------------
 
@@ -94,9 +106,13 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSeeDetailEvent = (idPost: number) => {
-    console.log('====================================');
-    console.log('bai post recruitment have id ' + idPost);
-    console.log('====================================');
+    console.log('====================================')
+    console.log('bai post recruitment have id ' + idPost)
+    console.log('====================================')
+  }
+
+  const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
+    navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { idPost: idPost })
   }
 
   switch (post.type) {
@@ -151,7 +167,7 @@ const CustomizePost = (props: Post) => {
             expiration={post.expiration ?? ''}
             salary={post.salary ?? ''}
             employmentType={post.employmentType ?? ''}
-            handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
+            handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
             createdAt={props.timeCreatePost}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
           />
@@ -169,31 +185,34 @@ const CustomizePost = (props: Post) => {
         </View>
       )
     case TYPE_SURVEY_POST:
-      return <View style={styles.container}>
-        <CustomizeSurveyPost
-          id={post.id}
-          image={post.avatar}
-          name={post.name}
-          type={post.type}
-          title={post.title ?? ''}
-          handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
-          createdAt={props.timeCreatePost}
-          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-          description={props.description ?? ''}  />
-        {/* Bottom */}
-        <CustomizeBottomPost
-          id={post.id}
-          userLoginId={userLogin?.id}
-          role={post.role}
-          isLike={checkLiked(post.likes, userLogin?.id)}
-          likes={post.likes}
-          comments={props.comments}
-          handleClickBottomBtnEvent={handleClickBottomBtnEvent}
-          commentQty={post.commentQty}
-        />
-      </View>
+      return (
+        <View style={styles.container}>
+          <CustomizeSurveyPost
+            id={post.id}
+            image={post.avatar}
+            name={post.name}
+            type={post.type}
+            title={post.title ?? ''}
+            handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
+            createdAt={props.timeCreatePost}
+            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+            description={props.description ?? ''}
+          />
+          {/* Bottom */}
+          <CustomizeBottomPost
+            id={post.id}
+            userLoginId={userLogin?.id}
+            role={post.role}
+            isLike={checkLiked(post.likes, userLogin?.id)}
+            likes={post.likes}
+            comments={props.comments}
+            handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+            commentQty={post.commentQty}
+          />
+        </View>
+      )
     default:
-      return null;
+      return null
   }
 }
 
