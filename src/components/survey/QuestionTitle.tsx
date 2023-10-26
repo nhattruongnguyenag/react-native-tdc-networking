@@ -7,6 +7,7 @@ import { deleteQuestion } from '../../redux/Slice'
 interface QuestionTitleProps {
   title: string
   index: number
+  isDisableBtnDelete?: boolean
 }
 
 export default function QuestionTitle(props: QuestionTitleProps) {
@@ -23,7 +24,7 @@ export default function QuestionTitle(props: QuestionTitleProps) {
         icon='delete'
         iconColor='#f70000'
         size={25}
-        style={styles.btnDelete}
+        style={[styles.btnDelete, { display: Boolean(props.isDisableBtnDelete) ? 'none' : 'flex' }]}
         onPress={() => {
           onBtnDeletePress()
         }}

@@ -21,6 +21,7 @@ import {
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
+import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { formatDateTime } from '../../utils/FormatTime'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -108,11 +109,11 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-    console.log('survey');
+    navigation.navigate(SURVEY_CONDUCT_SCREEN, {surveyPostId: idPost})
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-
+    navigation.navigate(RECRUITMENT_DETAIL_SCREEN, {postId: idPost})
   }
 
   switch (post.type) {
