@@ -254,7 +254,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={SURVEY_CONDUCT_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Khảo sát' /> }}
+        options={{ header: () => <ToolbarWithBackPress title='Thực hiện khảo sát' /> }}
         component={SurveyConductScreen}
       />
 

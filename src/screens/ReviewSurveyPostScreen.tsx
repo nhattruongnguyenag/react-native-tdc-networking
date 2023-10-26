@@ -15,7 +15,7 @@ import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { surveyPostRequest } = useAppSelector(state => state.TDCSocialNetworkReducer)
   const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
 
   useEffect(() => {

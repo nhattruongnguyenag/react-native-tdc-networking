@@ -5,17 +5,19 @@ import { Question, QuestionProps } from '../../types/Question'
 
 interface ShortAnswerQuestionProps extends QuestionProps {
   isEnableTextInput?: boolean
+  onTextChange?: (value: string) => void
 }
 
 export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle
-        title={`Câu hỏi ${props.index + 1}. ${props.data.title}`}
-        index={props.index}
+        title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+        index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />
       <TextInput
+        onChangeText={(value) => props.onTextChange && props.onTextChange(value)}
         editable={Boolean(props.isEnableTextInput)}
         placeholder='Nhập câu trả lời...'
         style={styles.ip} />

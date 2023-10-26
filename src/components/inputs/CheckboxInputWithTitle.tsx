@@ -4,27 +4,25 @@ import { Checkbox, RadioButton } from 'react-native-paper'
 
 interface CheckboxInputWithTitleProps {
   label?: string
-  onPress?: (check: boolean) => void
+  onPress?: () => void
 }
 
 export default function CheckboxInputWithTitle(props: CheckboxInputWithTitleProps) {
   const [checked, setChecked] = useState(false)
-
-  useEffect(() => {
-    props.onPress && props.onPress(checked)
-  }, [checked])
 
   return (
     <View style={styles.radioInputBody}>
       <Checkbox.Android
         onPress={() => {
           setChecked(!checked)
+          props.onPress && props.onPress()
         }}
         status={checked ? 'checked' : 'unchecked'}
       />
       <Pressable
         onPress={() => {
           setChecked(!checked)
+          props.onPress && props.onPress()
         }}>
         <Text style={styles.radioInputTitle}>{props.label ?? ''}</Text>
       </Pressable>
