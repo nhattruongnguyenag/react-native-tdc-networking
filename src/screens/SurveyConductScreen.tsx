@@ -75,7 +75,7 @@ export default function SurveyConductScreen() {
                 } else if (question.type === MULTI_CHOICE_QUESTION) {
                     textError = 'Vui lòng chọn ít nhất một câu trả lời'
                 } else if (question.type === ONE_CHOICE_QUESTION) {
-                    textError = 'Vui lòng chọn câu trả lời'
+                    textError = 'Vui lòng chọn một câu trả lời'
                 }
 
                 tempValidates.push({

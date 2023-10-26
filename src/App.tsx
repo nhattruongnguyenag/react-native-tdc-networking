@@ -37,6 +37,7 @@ import {
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
+  RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
@@ -69,6 +70,7 @@ import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
+import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -98,6 +100,7 @@ export type RootStackParamList = {
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
+  RECRUITMENT_DETAIL_SCREEN: {postId: number} | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -173,6 +176,13 @@ export function StackNavigator(): JSX.Element {
         }
       }}
     >
+      
+      <RootStack.Screen
+        name={RECRUITMENT_DETAIL_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng'/> }}
+        component={RecruitmentDetailScreen}
+      />
+
       <RootStack.Screen
         name={TOP_TAB_NAVIGATOR}
         options={{

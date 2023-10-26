@@ -12,8 +12,5 @@ export const formatDateTime = (originalDateString: string): any => {
 }
 
 export const numberDayPassed = (originalDateString: string) => {
-  const timeCreated = moment(originalDateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
-  const timeCurrent = moment()
-  const duration = moment.duration(timeCurrent.diff(timeCreated)).asDays()
-  return Math.floor(duration)
+  return moment(originalDateString).fromNow()
 }

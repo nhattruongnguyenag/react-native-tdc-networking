@@ -8,7 +8,8 @@ import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { formatDateTime, numberDayPassed } from '../../utils/FormatTime'
 import CustomizeBodyPost from '../CustomizeBodyPost'
-import { TEXT_JOIN_SURVEY, TEXT_SURVEY } from '../../constants/StringVietnamese'
+import { TEXT_JOIN_SURVEY, TEXT_SURVEY, TEXT_SURVEY_CONTENT, TEXT_SURVEY_TITLE } from '../../constants/StringVietnamese'
+import DefaultAvatar from '../DefaultAvatar'
 
 export interface RecruitmentPostType {
     id: number,
@@ -31,14 +32,17 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
                 <View style={styles.leftContainer}>
                     <TouchableOpacity
                         onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}>
-                        <Image
-                            style={styles.avatar}
-                            source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
+                        {
+                            props.image != null ?
+                                <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
+                                :
+                                <DefaultAvatar size={43} identifer={props.name[0]} />
+                        }
                     </TouchableOpacity>
                 </View>
                 <View style={styles.rightContainer}>
                     <View style={styles.rightContainerTopTitle}>
-                        <Text style={styles.name}>{props.name}{' '}<Text style={styles.textTypePost}>{TEXT_SURVEY}</Text></Text>
+                        <Text style={styles.name}>{props.name}{' '}<View><Text style={[styles.itemType, styles.textTypePost]}>{TEXT_SURVEY}</Text></View></Text>
                         <View style={styles.menu}>
                             <TouchableOpacity
                                 onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(1)}>
@@ -55,16 +59,15 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
             </View>
             <View style={styles.contentContainer}>
                 <View>
-                    <Text style={styles.item}>Tiêu đề khảo sát: <Text style={styles.title}>{props.title}</Text></Text>
-                    <Text style={styles.item}>Nội dung khảo sát:</Text>
+                    <Text style={styles.title}>{props.title}</Text>
                     <CustomizeBodyPost content={props.description} />
                 </View>
                 <View>
                     <TouchableOpacity
                         onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
                         <View style={styles.bottomButton}>
+                            <Text style={styles.txtBtn}>{TEXT_JOIN_SURVEY}</Text>
                             <AntDesignIcon name='right' size={ICON_SIZE} color={COLOR_WHITE} />
-                            <Text style={{ color: COLOR_WHITE }}>{TEXT_JOIN_SURVEY}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -78,7 +81,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         paddingTop: 10,
-        padding: 5,
         backgroundColor: COLOR_WHITE
     },
     leftContainer: {
@@ -93,27 +95,28 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     name: {
-        width: '95%',
         fontWeight: 'bold',
         color: COLOR_BLACK,
-        fontSize: 16
-    },
-    type: {
-        width: '5%',
-        backgroundColor: 'orange',
+        fontSize: 16,
+        width: '95%',
     },
     menu: {
-
+        width: '5%',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
     },
     textTypePost: {
-        flex: 1,
+        backgroundColor: COLOR_SUCCESS,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+    },
+    itemType: {
         color: COLOR_WHITE,
         fontWeight: '300',
-        backgroundColor: COLOR_SUCCESS,
-        fontSize: 14
+        fontSize: 14,
     },
     rightContainerBottom: {
-        width: '95%'
+        width: '95%',
     },
     rightContainerBottom3Info: {
         flexDirection: 'row',
@@ -130,22 +133,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 5,
         width: '40%',
-        borderRadius: 5
+        borderRadius: 5,
+        marginTop: 15,
     },
     item: {
         marginVertical: 2,
-        color: COLOR_GREY
+        color: COLOR_BLACK,
+        fontWeight: "bold",
     },
     address: {
         color: COLOR_GREY
     },
     rightContainerTopTitle: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     contentContainer: {
-        paddingHorizontal: 15,
     },
     title: {
-        color: COLOR_BLACK
+        color: COLOR_BLACK,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        marginTop: 15
+    },
+    txtBtn: {
+        color: COLOR_WHITE,
+        paddingRight: 5,
     }
 })

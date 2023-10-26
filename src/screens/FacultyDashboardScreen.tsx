@@ -86,7 +86,7 @@ export default function FacultyDashboardScreen() {
         avatar={item.user['image']}
         typeAuthor={null}
         available={null}
-        timeCreatePost={formatDateTime(item.createdAt)}
+        timeCreatePost={item.createdAt}
         content={item.content}
         type={item.type}
         likes={item.likes}
