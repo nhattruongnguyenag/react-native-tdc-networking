@@ -45,15 +45,6 @@ export default function RecruitmentDetailScreen({ route }: any) {
   }
   return (
     <ScrollView>
-      <View style={styles.header}>
-        <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
-          <Icon name='chevron-left' size={20} color={'#000'} />
-        </TouchableOpacity>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.txtHeader}>Chi tiết tuyển dụng</Text>
-        </View>
-      </View>
-
       <SafeAreaView style={styles.container}>
         <View style={styles.group}>
           <View style={styles.item}>
@@ -69,7 +60,7 @@ export default function RecruitmentDetailScreen({ route }: any) {
               <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
               <Text style={{ color: COLOR_BLACK }}>
                 {' '}
-                {formatVietNamCurrency(dataRecruitmentDetail.salary)} $/M{}
+                {formatVietNamCurrency(dataRecruitmentDetail.salary)} $/M{ }
               </Text>
             </View>
           </View>
@@ -232,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
-  iconRecuitment:{
-    flexDirection: 'row', alignItems: 'center', marginTop: 2 
+  iconRecuitment: {
+    flexDirection: 'row', alignItems: 'center', marginTop: 2
   }
 })

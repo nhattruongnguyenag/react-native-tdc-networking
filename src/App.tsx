@@ -178,7 +178,7 @@ export function StackNavigator(): JSX.Element {
       
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
-        options={{ header: () => null }}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng'/> }}
         component={RecruitmentDetailScreen}
       />
 
