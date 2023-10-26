@@ -109,14 +109,11 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-    console.log('survey');
-    
     navigation.navigate(SURVEY_CONDUCT_SCREEN, {surveyPostId: idPost})
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, {postId: idPost})
-    console.log('recruitment');
   }
 
   switch (post.type) {
