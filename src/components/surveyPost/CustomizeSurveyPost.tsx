@@ -59,9 +59,7 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
             </View>
             <View style={styles.contentContainer}>
                 <View>
-                    <Text style={styles.item}>{TEXT_SURVEY_TITLE}:</Text>
                     <Text style={styles.title}>{props.title}</Text>
-                    <Text style={styles.item}>{TEXT_SURVEY_CONTENT}:</Text>
                     <CustomizeBodyPost content={props.description} />
                 </View>
                 <View>
@@ -152,7 +150,10 @@ const styles = StyleSheet.create({
     contentContainer: {
     },
     title: {
-        color: COLOR_BLACK
+        color: COLOR_BLACK,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        marginTop: 15
     },
     txtBtn: {
         color: COLOR_WHITE,
