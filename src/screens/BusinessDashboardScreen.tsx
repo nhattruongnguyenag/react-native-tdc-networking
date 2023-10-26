@@ -134,7 +134,7 @@ export default function BusinessDashboardScreen() {
         avatar={item.user['image']}
         typeAuthor={'Doanh Nghiệp'}
         available={null}
-        timeCreatePost={formatDateTime(item.createdAt)}
+        timeCreatePost={item.createdAt}
         content={item.content}
         type={item.type}
         likes={item.likes}

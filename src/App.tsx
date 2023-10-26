@@ -94,12 +94,10 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
-
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: undefined
-
-  RECRUITMENT_DETAIL_SCREEN: undefined
+  RECRUITMENT_DETAIL_SCREEN: {postId: number} | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
