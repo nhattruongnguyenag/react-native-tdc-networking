@@ -31,7 +31,7 @@ export function isLengthInRange(text: string, min: number, max: number): boolean
 
 export function isEmail(text: string): boolean {
   const pattern =
-    /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
+    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
   return pattern.test(text)
 }
 
