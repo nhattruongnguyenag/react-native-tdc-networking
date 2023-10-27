@@ -8,8 +8,11 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import UserItem from "../components/items/UserItem";
 import { MenuProvider } from 'react-native-popup-menu'
-import CustomizeHeaderFollow from '../components/follow/CustomizeHeaderFollow'
 
+import { Client, Frame, Message } from 'stompjs'
+import { getStompClient } from '../sockets/SocketClient'
+
+let stompClient: Client
 
 const ListFollowScreen = () => {
   // const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -17,55 +20,61 @@ const ListFollowScreen = () => {
   const [items, setItems] = useState([
     {
       label: 'Đang theo dõi',
-      value: 'me',
+      value: 'following',
     },
     {
       label: 'Đang theo dõi bạn',
-      value: 'other'
+      value: 'follower'
     }
   ])
-  const [type, setType] = useState('me')
+  const [type, setType] = useState('following')
   const [data, setData] = useState([])
-  console.log(items);
-  
 
-  useEffect(() => {
-    axios.post(`${SERVER_ADDRESS}api/users/follow/${type}`, {
-      id: 12,
-    }).then(response => {
-      setData(response.data.data)
-      // console.log(data);
-    })
-  }, [type])
 
   // useEffect(() => {
-  //   stompClient = getStompClient()
-  //   const onConnected = () => {
-  //     stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
-  //   }
-  //   const onMessageReceived = (payload: any) => {
-  //     console.log(payload.body)
-  //     setMasterData(JSON.parse(payload.body))
-  //     setQty(masterData.length)
-  //     setSearch('')
-  //   }
-  //   const onError = (err: string | Frame) => {
-  //     console.log(err)
-  //   }
-  //   stompClient.connect({}, onConnected, onError)
-  // }, [])
+  //   console.log('hello');
+  //   axios.post(`${SERVER_ADDRESS}api/users/follow/${type}`, {
+  //     id: 12,
+  //   }).then(response => {
+  //     setData(response.data.data)
+  //     // console.log(data);
+  //   })
+  // }, [type])
+
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/user/detail/follow/${type}`, onMessageReceived)
+      stompClient.send(
+        `/app/user/detail/follow/${type}`,
+        {},
+        JSON.stringify({
+          userId: 12,
+        })
+      )
+    }
+    const onMessageReceived = (payload: any) => {
+      setData(JSON.parse(payload.body))
+    }
+    const onError = (err: string | Frame) => {
+      console.log('Loi ko lay dc du lieu')
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [type])
+
+
 
   const handleFollow = (userFollowId: number) => {
-    // stompClient.send(
-    //   `/app/find/user/follow`,
-    //   {},
-    //   JSON.stringify({
-    //     userId: userLogin?.id,
-    //     type: type,
-    //     name: search,
-    //     userFollowId: userFollowId
-    //   })
-    // )
+    console.log('Alo');
+    
+    stompClient.send(
+      `/app/user/detail/follow/${type}`,
+      {},
+      JSON.stringify({
+        userId: 12,
+        userFollowId: userFollowId
+      })
+    )
   }
 
   const handleDelSearch = () => {
@@ -75,17 +84,21 @@ const ListFollowScreen = () => {
 
   return (
     <View style={styles.screen}>
-      {/* <View style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.follow}>
           {
-            items.map((tab) => (
+            items.map((tab, index) => (
               <TouchableOpacity
+                key={index}
                 style={[
                   styles.following,
                   type === tab.value ? styles.click : styles.noClick]}
-                onPress={() => setType(tab.value)}
+                onPress={() => {
+                  // onNavigate(tab.value)
+                  setType(tab.value)
+                }}
               >
-                <Text style={[styles.txt_following, type === tab.value ? {color: '#033C9B'} : {}]}>{tab.label}</Text>
+                <Text style={[styles.txt_following, type === tab.value ? { color: '#033C9B' } : {}]}>{tab.label}</Text>
               </TouchableOpacity>
             ))
           }
@@ -105,21 +118,14 @@ const ListFollowScreen = () => {
               <Icon2 name='closecircleo' size={18} color='grey' />
             </Pressable>
           ) : null}
-
         </View>
-      </View> */}
-      <CustomizeHeaderFollow
-        search={search}
-        setSearch={setSearch}
-        items={items}
-        type={type}
-        setType={setType}
-        handleDelSearch={handleDelSearch}
-      />
+      </View>
       <MenuProvider>
         <ScrollView >
           {
-            data.map((item: any, index) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
+            data !== null
+              ? data.map((item: any) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
+              : null
           }
         </ScrollView>
       </MenuProvider>
