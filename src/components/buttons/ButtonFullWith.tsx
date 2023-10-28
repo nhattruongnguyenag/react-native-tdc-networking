@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, View } from 'react-native'
+import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native'
 import React from 'react'
 import { Button } from 'react-native-paper'
 import { ViewStyle } from 'react-native'
@@ -9,6 +9,7 @@ interface ButtonFullWithProps {
   contentStyle?: StyleProp<ViewStyle>
   iconName: string
   btnStyle?: StyleProp<ViewStyle>
+  textColor?: string
 }
 
 export default function ButtonFullWith(props: ButtonFullWithProps) {
@@ -18,11 +19,11 @@ export default function ButtonFullWith(props: ButtonFullWithProps) {
       icon={props.iconName}
       mode='elevated'
       buttonColor={'#0065FF'}
-      textColor={'#fff'}
+      textColor={props.textColor ? props.textColor : '#fff'}
       style={[styles.buttonCreateRecruitment, props.btnStyle]}
       onPress={() => props.onPress && props.onPress()}
     >
-      <Text style={styles.buttonCreateRecruitmentTitle}>{props.title}</Text>
+      <Text style={[styles.buttonCreateRecruitmentTitle]}>{props.title}</Text>
     </Button>
   )
 }

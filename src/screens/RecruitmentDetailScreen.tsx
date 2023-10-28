@@ -12,6 +12,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { formatVietNamCurrency } from '../utils/FormatCurrency'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
+import { JOB_APPLY_SCREEN } from '../constants/Screen'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -33,7 +34,6 @@ export default function RecruitmentDetailScreen() {
         .get(SERVER_ADDRESS + `api/posts/recruitment/${postId}`)
         .then((recruitment) => {
           setDataRecruitmentDetail(recruitment.data.data)
-          console.log(dataRecruitmentDetail)
         })
         .catch((error) => {
           console.log(error)
@@ -42,8 +42,9 @@ export default function RecruitmentDetailScreen() {
   }, [postId])
 
   const onSubmit = () => {
-    Alert.alert('Thông báo', 'Nộp đơn úng tuyển thành công')
-    navigation.goBack()
+    navigation.navigate(JOB_APPLY_SCREEN, {recruitmentPostId: postId})
+    // Alert.alert('Thông báo', 'Nộp đơn úng tuyển thành công')
+    // navigation.goBack()
   }
   return (
     <ScrollView>
