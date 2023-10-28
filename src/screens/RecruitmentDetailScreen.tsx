@@ -12,6 +12,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { formatVietNamCurrency } from '../utils/FormatCurrency'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
+import { formatDateTime } from '../utils/FormatTime'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -25,7 +26,8 @@ export default function RecruitmentDetailScreen() {
     employmentType: '',
     benefit: '',
     description: '',
-    requirement: ''
+    requirement: '',
+    title: ''
   })
   useEffect(() => {
     if (postId) {
@@ -50,6 +52,13 @@ export default function RecruitmentDetailScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.group}>
           <View style={styles.item}>
+            <Text style={styles.txt}>Vị trí tuyển dụng</Text>
+            <View style={styles.iconRecuitment}>
+              <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
+              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.title}</Text>
+            </View>
+          </View>
+          <View style={styles.item}>
             <Text style={styles.txt}>Hình thức làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='briefcase' size={16} color={COLOR_GREY} />
@@ -62,29 +71,23 @@ export default function RecruitmentDetailScreen() {
               <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
               <Text style={{ color: COLOR_BLACK }}>
                 {' '}
-                {formatVietNamCurrency(dataRecruitmentDetail.salary)} $/M{ }
+                {formatVietNamCurrency(dataRecruitmentDetail.salary)} ${}
               </Text>
             </View>
           </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Vị trí tuyển dụng</Text>
-            <View style={styles.iconRecuitment}>
-              <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> Trưởng phòng</Text>
-            </View>
-          </View>
+
           <View style={styles.item}>
             <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
             <View style={styles.iconRecuitment}>
               <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.expiration}</Text>
+              <Text style={{ color: COLOR_BLACK }}>{' '}{formatDateTime(dataRecruitmentDetail.expiration)}</Text>
             </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Địa chỉ làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.location}</Text>
+              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.location}</Text>
             </View>
           </View>
         </View>
@@ -226,6 +229,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   iconRecuitment: {
-    flexDirection: 'row', alignItems: 'center', marginTop: 2
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2
   }
 })
