@@ -24,9 +24,9 @@ interface QuestionType {
   value: string
 }
 
-export const SHORT_ANSWER = '1'
-export const ONE_CHOICE_QUESTION = '2'
-export const MULTI_CHOICE_QUESTION = '3'
+export const SHORT_ANSWER = 'tra-loi-ngan'
+export const ONE_CHOICE_QUESTION = 'chon-mot-dap-an'
+export const MULTI_CHOICE_QUESTION = 'chon-nhieu-dap-an'
 
 const questionTypes: QuestionType[] = [
   {

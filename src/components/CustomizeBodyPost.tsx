@@ -37,7 +37,7 @@ const CustomizeBodyPost = (props: PostContent) => {
   }
 
   return (
-    <View style={styles.wrapBody}>
+    <View>
       {/* Post content */}
       <Text onTextLayout={onTextLayout} style={styles.bodyContent} numberOfLines={seeMore ? NUM_OF_LINES : undefined}>
         {props.content}
@@ -53,9 +53,6 @@ const styles = StyleSheet.create({
   },
   bodyContent: {
     color: COLOR_BLACK
-  },
-  wrapBody: {
-    paddingVertical: 10
   }
 })
 export default CustomizeBodyPost

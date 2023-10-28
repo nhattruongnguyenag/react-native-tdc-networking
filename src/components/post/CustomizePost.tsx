@@ -21,19 +21,22 @@ import {
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
+import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { formatDateTime } from '../../utils/FormatTime'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RECRUITMENT_DETAIL_SCREEN } from '../../constants/Screen'
+import { RootStackParamList } from '../../App'
 
 // Constant
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Get data
   let post = props
-  const dispatch = useAppDispatch()
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const dispatch = useAppDispatch()
   //--------------Function area--------------
 
   // Header area
@@ -105,14 +108,12 @@ const CustomizePost = (props: Post) => {
     )
   }
 
-  const handleClickBtnSeeDetailEvent = (idPost: number) => {
-    console.log('====================================')
-    console.log('bai post recruitment have id ' + idPost)
-    console.log('====================================')
+  const handleClickBtnSurveyDetailEvent = (idPost: number) => {
+    navigation.navigate(SURVEY_CONDUCT_SCREEN, {surveyPostId: idPost})
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-    navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { idPost: idPost })
+    navigation.navigate(RECRUITMENT_DETAIL_SCREEN, {postId: idPost})
   }
 
   switch (post.type) {
@@ -125,13 +126,15 @@ const CustomizePost = (props: Post) => {
             avatar={post.avatar}
             typeAuthor={post.typeAuthor}
             available={post.available}
-            timeCreatePost={post.timeCreatePost}
+            timeCreatePost={formatDateTime(post.timeCreatePost)}
             type={post.type}
             role={post.role}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
           />
           {/* Body */}
-          <CustomizeBodyPost content={post.content} />
+          <View style={styles.bodyWrap}>
+            <CustomizeBodyPost content={post.content} />
+          </View>
           {/* Image */}
           {post.images && post.images.length > 0 && (
             <CustomizeImagePost
@@ -185,32 +188,29 @@ const CustomizePost = (props: Post) => {
         </View>
       )
     case TYPE_SURVEY_POST:
-      return (
-        <View style={styles.container}>
-          <CustomizeSurveyPost
-            id={post.id}
-            image={post.avatar}
-            name={post.name}
-            type={post.type}
-            title={post.title ?? ''}
-            handleClickBtnSeeDetailEvent={handleClickBtnSeeDetailEvent}
-            createdAt={props.timeCreatePost}
-            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-            description={props.description ?? ''}
-          />
-          {/* Bottom */}
-          <CustomizeBottomPost
-            id={post.id}
-            userLoginId={userLogin?.id}
-            role={post.role}
-            isLike={checkLiked(post.likes, userLogin?.id)}
-            likes={post.likes}
-            comments={props.comments}
-            handleClickBottomBtnEvent={handleClickBottomBtnEvent}
-            commentQty={post.commentQty}
-          />
-        </View>
-      )
+      return <View style={styles.container}>
+        <CustomizeSurveyPost
+          id={post.id}
+          image={post.avatar}
+          name={post.name}
+          type={post.type}
+          title={post.title ?? ''}
+          handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
+          createdAt={props.timeCreatePost}
+          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          description={props.description ?? ''} />
+        {/* Bottom */}
+        <CustomizeBottomPost
+          id={post.id}
+          userLoginId={userLogin?.id}
+          role={post.role}
+          isLike={checkLiked(post.likes, userLogin?.id)}
+          likes={post.likes}
+          comments={props.comments}
+          handleClickBottomBtnEvent={handleClickBottomBtnEvent}
+          commentQty={post.commentQty}
+        />
+      </View>
     default:
       return null
   }
@@ -218,7 +218,7 @@ const CustomizePost = (props: Post) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     backgroundColor: COLOR_WHITE,
     marginBottom: 20
   },
@@ -226,6 +226,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 300
+  },
+  bodyWrap: {
+    marginVertical: 10
   }
 })
 export default CustomizePost

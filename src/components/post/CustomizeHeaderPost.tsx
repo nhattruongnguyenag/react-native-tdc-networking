@@ -6,6 +6,7 @@ import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../..
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
 import { GO_TO_MENU_ACTIONS, GO_TO_PROFILE_ACTIONS } from '../../constants/Variables'
+import DefaultAvatar from '../DefaultAvatar'
 
 export interface HeaderPostPropsType {
   name: string
@@ -34,7 +35,12 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           // Go to profile screen
           onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
-          <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
+          {
+            props.avatar != null ?
+              <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
+              :
+              <DefaultAvatar size={43} identifer={props.name[0]} />
+          }
         </TouchableOpacity>
       </View>
       <View style={styles.wrapName}>
@@ -131,7 +137,9 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   wrapMenu: {
-    width: '5%'
+    width: '5%',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   }
 })
 export default CustomizeHeaderPost
