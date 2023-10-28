@@ -1,8 +1,7 @@
-import { View, Text, Pressable, StyleSheet, Image, Button, TouchableHighlight } from 'react-native'
+import { View, Text, Pressable, StyleSheet, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
 import Icon1 from 'react-native-vector-icons/Entypo'
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 
 export interface UserItemType {
   id: number;
@@ -38,11 +37,11 @@ export default function UserItem(props: UserItemType) {
   // handleFollow(item.id)
   const isNotFollow = () => {
     return (
-      <Pressable style={styles.follow}
+      <TouchableOpacity style={styles.follow}
       onPress={() => item.handleFollow(item.id)}
       >
         <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
-      </Pressable>
+      </TouchableOpacity>
     )
   }
 
