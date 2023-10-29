@@ -11,8 +11,39 @@ import { MenuProvider } from 'react-native-popup-menu'
 
 import { Client, Frame, Message } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { LIST_FOLLOWER, LIST_FOLLOWING } from '../constants/Screen'
+import FollowingList from '../components/follow/FollowingList'
+import FollowerList from '../components/follow/FollowerList'
 
 let stompClient: Client
+
+
+const TopTab = createMaterialTopTabNavigator()
+
+function TopTabNavigator(): JSX.Element {
+  return (
+    <TopTab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: '#0065FF',
+        tabBarInactiveTintColor: '#808080',
+        tabBarLabelStyle: styles.tabBarLabelStyle,
+        header: null
+      })}
+    >
+      <TopTab.Screen
+        name={LIST_FOLLOWING}
+        options={{ title: 'Đang theo dõi' }}
+        component={FollowingList}
+      />
+      <TopTab.Screen
+        name={LIST_FOLLOWER}
+        options={{ title: 'Đang theo dõi bạn' }}
+        component={FollowerList}
+      />
+    </TopTab.Navigator>
+  )
+}
 
 const ListFollowScreen = () => {
   // const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -84,7 +115,8 @@ const ListFollowScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.container}>
+      <TopTabNavigator />
+      {/* <View style={styles.container}>
         <View style={styles.follow}>
           {
             items.map((tab, index) => (
@@ -119,8 +151,8 @@ const ListFollowScreen = () => {
             </Pressable>
           ) : null}
         </View>
-      </View>
-      <MenuProvider>
+      </View> */}
+      {/* <MenuProvider>
         <ScrollView >
           {
             data !== null
@@ -128,7 +160,7 @@ const ListFollowScreen = () => {
               : null
           }
         </ScrollView>
-      </MenuProvider>
+      </MenuProvider> */}
     </View>
   )
 }
@@ -136,6 +168,11 @@ const ListFollowScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  tabBarLabelStyle: {
+    fontWeight: 'bold',
+    textTransform: 'none',
+    fontSize: 16
   },
   container: {
     marginTop: 20,

@@ -34,6 +34,7 @@ import {
   FOLLOWING_SCREEN,
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
+  LIST_FOLLOW_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
@@ -93,6 +94,9 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
+  LIST_FOLLOW_SCREEN: undefined
+
+
 
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
@@ -256,6 +260,12 @@ export function StackNavigator(): JSX.Element {
         component={CreateNormalPostScreen}
       />
 
+      <RootStack.Screen
+        name={LIST_FOLLOW_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách theo dõi' /> }}
+        component={ListFollowScreen}
+      />
+
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>
   )
@@ -300,16 +310,16 @@ function TopTabNavigator(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    // <MenuProvider>
-    //   <Provider store={store}>
-    //     <PaperProvider>
-    //       <NavigationContainer>
-    //         <DrawerNavigator />
-    //       </NavigationContainer>
-    //     </PaperProvider>
-    //   </Provider>
-    // </MenuProvider>
-    <ListFollowScreen/>
+    <MenuProvider>
+      <Provider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            <DrawerNavigator />
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
+    </MenuProvider>
+    // <ListFollowScreen/>
   )
 }
 
