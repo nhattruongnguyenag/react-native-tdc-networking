@@ -30,8 +30,7 @@ export function isLengthInRange(text: string, min: number, max: number): boolean
 }
 
 export function isEmail(text: string): boolean {
-  const pattern =
-    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+  const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
   return pattern.test(text)
 }
 

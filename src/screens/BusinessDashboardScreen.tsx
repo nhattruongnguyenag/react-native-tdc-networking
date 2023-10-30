@@ -24,8 +24,8 @@ let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
-  const [isLoading, setIsLoading] = useState(false);
-  const [businessPost, setBusinessPost] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [businessPost, setBusinessPost] = useState([])
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
@@ -155,15 +155,9 @@ export default function BusinessDashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {
-        isOpenModalImage && <CustomizeModalImage />
-      }
-      {
-        isOpenModalUserReaction && <CustomizeModalUserReacted />
-      }
-      {
-        isLoading && <SkeletonPost />
-      }
+      {isOpenModalImage && <CustomizeModalImage />}
+      {isOpenModalUserReaction && <CustomizeModalUserReacted />}
+      {isLoading && <SkeletonPost />}
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}

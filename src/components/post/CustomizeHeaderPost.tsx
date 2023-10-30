@@ -35,12 +35,11 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           // Go to profile screen
           onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
-          {
-            props.avatar != null ?
-              <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
-              :
-              <DefaultAvatar size={43} identifer={props.name[0]} />
-          }
+          {props.avatar != null ? (
+            <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
+          ) : (
+            <DefaultAvatar size={43} identifer={props.name[0]} />
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.wrapName}>
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
   wrapMenu: {
     width: '5%',
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   }
 })
 export default CustomizeHeaderPost

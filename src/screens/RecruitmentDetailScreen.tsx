@@ -12,6 +12,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { formatVietNamCurrency } from '../utils/FormatCurrency'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
+import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
 
 export default function RecruitmentDetailScreen() {
@@ -35,7 +36,6 @@ export default function RecruitmentDetailScreen() {
         .get(SERVER_ADDRESS + `api/posts/recruitment/${postId}`)
         .then((recruitment) => {
           setDataRecruitmentDetail(recruitment.data.data)
-          console.log(dataRecruitmentDetail)
         })
         .catch((error) => {
           console.log(error)
@@ -44,8 +44,7 @@ export default function RecruitmentDetailScreen() {
   }, [postId])
 
   const onSubmit = () => {
-    Alert.alert('Thông báo', 'Nộp đơn úng tuyển thành công')
-    navigation.goBack()
+    navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
   }
   return (
     <ScrollView>
@@ -55,14 +54,14 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.txt}>Vị trí tuyển dụng</Text>
             <View style={styles.iconRecuitment}>
               <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.title}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.title}</Text>
             </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Hình thức làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='briefcase' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.employmentType}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.employmentType}</Text>
             </View>
           </View>
           <View style={styles.item}>
@@ -80,14 +79,14 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
             <View style={styles.iconRecuitment}>
               <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>{' '}{formatDateTime(dataRecruitmentDetail.expiration)}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {formatDateTime(dataRecruitmentDetail.expiration)}</Text>
             </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Địa chỉ làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>{' '}{dataRecruitmentDetail.location}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.location}</Text>
             </View>
           </View>
         </View>

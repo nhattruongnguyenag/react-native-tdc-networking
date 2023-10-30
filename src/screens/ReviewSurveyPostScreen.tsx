@@ -15,7 +15,7 @@ import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const { surveyPostRequest } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
 
   useEffect(() => {
@@ -50,21 +50,11 @@ export default function ReviewSurveyPostScreen() {
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion
-              data={item}
-              index={index}
-              isDisableDeleteBtn
-            />
+            return <MultiChoiceQuestion data={item} index={index} isDisableDeleteBtn />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion
-              data={item}
-              index={index}
-              isDisableDeleteBtn/>
+            return <OneChoiceQuestion data={item} index={index} isDisableDeleteBtn />
           } else {
-            return <ShortAnswerQuestion
-              data={item}
-              index={index}
-              isDisableDeleteBtn />
+            return <ShortAnswerQuestion data={item} index={index} isDisableDeleteBtn />
           }
         })}
       </View>

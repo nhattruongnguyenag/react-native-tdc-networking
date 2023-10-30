@@ -18,10 +18,8 @@ import SkeletonPost from '../components/SkeletonPost'
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
-  const [isLoading, setIsLoading] = useState(false);
-  const { updatePost } = useAppSelector(
-    (state) => state.TDCSocialNetworkReducer
-  )
+  const [isLoading, setIsLoading] = useState(false)
+  const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
 
@@ -54,6 +52,7 @@ export default function FacultyDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
     }
     const onMessageReceived = (payload: any) => {
+      console.log(payload.body)
       setFacultyPost(JSON.parse(payload.body))
     }
 
@@ -106,9 +105,7 @@ export default function FacultyDashboardScreen() {
   }
   return (
     <View style={styles.container}>
-      {
-        isLoading && <SkeletonPost />
-      }
+      {isLoading && <SkeletonPost />}
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}

@@ -29,16 +29,15 @@ const CustomizeBottomPost = (props: BottomPostType) => {
   // Variable
   const numberUserReacted: number = props.likes?.length
   const renderItem = (item: any) => {
-    return item.image != null ?
+    return item.image != null ? (
       <Image
         key={item.id}
         style={[styles.avatarUserReacted]}
         source={{ uri: SERVER_ADDRESS + `api/images/${item.image}` }}
       />
-      :
-      <DefaultAvatar
-        key={item.id}
-        size={30} identifer={item.name[0]} />
+    ) : (
+      <DefaultAvatar key={item.id} size={30} identifer={item.name[0]} />
+    )
   }
   return (
     <View style={styles.wrapBottom}>
@@ -67,33 +66,32 @@ const CustomizeBottomPost = (props: BottomPostType) => {
             onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
             style={styles.avatarUserReactedContainer}
           >
-
-            {props.likes[0].image != null ?
+            {props.likes[0].image != null ? (
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[0].image}` }}
               />
-              :
+            ) : (
               <DefaultAvatar size={30} identifer={props.likes[0].name[0]} />
-            }
+            )}
 
-            {props.likes[0].image != null ?
+            {props.likes[0].image != null ? (
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[1].image}` }}
               />
-              :
+            ) : (
               <DefaultAvatar size={30} identifer={props.likes[1].name[0]} />
-            }
+            )}
 
-            {props.likes[0].image != null ?
+            {props.likes[0].image != null ? (
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[2].image}` }}
               />
-              :
+            ) : (
               <DefaultAvatar size={30} identifer={props.likes[2].name[0]} />
-            }
+            )}
             <View style={[styles.avatarUserReacted, styles.numberUserReactedRemaining, styles.absolute]}>
               {numberUserReacted <= 9 ? (
                 <>
@@ -108,9 +106,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
           </TouchableOpacity>
         ) : (
           <>
-            <TouchableOpacity
-              onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
-            >
+            <TouchableOpacity onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}>
               <FlatList
                 style={styles.wrapAvatarBottomRight}
                 keyExtractor={(item) => item.id.toString()}

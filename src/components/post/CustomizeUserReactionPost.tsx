@@ -15,12 +15,11 @@ const CustomizeUserReaction = (props: UserReactionType) => {
   return (
     <>
       <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
-        {
-          props.avatar != null ?
-            <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
-            :
-            <DefaultAvatar size={40} identifer={props.name[0]}/>
-        }
+        {props.avatar != null ? (
+          <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+        ) : (
+          <DefaultAvatar size={40} identifer={props.name[0]} />
+        )}
         <Text style={styles.txtName}>{props.name}</Text>
       </TouchableOpacity>
     </>

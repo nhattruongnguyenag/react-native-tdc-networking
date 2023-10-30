@@ -23,7 +23,8 @@ export default function CheckboxInputWithTitle(props: CheckboxInputWithTitleProp
         onPress={() => {
           setChecked(!checked)
           props.onPress && props.onPress()
-        }}>
+        }}
+      >
         <Text style={styles.radioInputTitle}>{props.label ?? ''}</Text>
       </Pressable>
     </View>

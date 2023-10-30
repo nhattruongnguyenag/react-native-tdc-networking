@@ -20,7 +20,8 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
         onChangeText={(value) => props.onTextChange && props.onTextChange(value)}
         editable={Boolean(props.isEnableTextInput)}
         placeholder='Nhập câu trả lời...'
-        style={styles.ip} />
+        style={styles.ip}
+      />
     </View>
   )
 }

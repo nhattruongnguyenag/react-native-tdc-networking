@@ -5,6 +5,7 @@ import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
 import { Question } from '../types/Question'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
+import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
@@ -19,7 +20,7 @@ export const TDCSocialNetworkAPI = createApi({
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
     }),
-    getQuestionsFromSurveyPost: builder.query<Data<{questions: QuestionResponse[]}>, number>({
+    getQuestionsFromSurveyPost: builder.query<Data<{ questions: QuestionResponse[] }>, number>({
       query: (postId) => `api/posts/survey/${postId}`
     }),
     saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
@@ -68,6 +69,16 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       })
+    }),
+    jobApply: builder.mutation<MessageResponseData, JobApplyRequest>({
+      query: (data) => ({
+        url: 'api/job/apply',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
     })
   })
 })
@@ -81,5 +92,6 @@ export const {
   useSaveDeviceTokenMutation,
   useSendFCMNotificationMutation,
   useAddRecruitmentPostMutation,
-  useAddSurveyConductAnswerMutation
+  useAddSurveyConductAnswerMutation,
+  useJobApplyMutation
 } = TDCSocialNetworkAPI

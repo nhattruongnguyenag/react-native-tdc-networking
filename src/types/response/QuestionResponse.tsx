@@ -1,4 +1,4 @@
-import { Base } from "../Base"
+import { Base } from '../Base'
 
 export interface QuestionResponse extends Base {
   type: string
