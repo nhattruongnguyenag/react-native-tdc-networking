@@ -39,9 +39,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   questionTitle: {
+    flex: 1,
     color: '#000',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   btnDelete: {
     marginStart: 'auto',
