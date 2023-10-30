@@ -12,8 +12,6 @@ export interface FollowListViewProps {
 }
 
 export default function ConversationListView({ data, handleFollow }: FollowListViewProps) {
-    // let props = data
-    
     return (
         <ScrollView>
             {
@@ -21,5 +19,4 @@ export default function ConversationListView({ data, handleFollow }: FollowListV
             }
         </ScrollView>
     )
-    //   return <FlatList data={data} renderItem={({ index, item }) => <ConversationItem key={index} data={item} />} />
 }

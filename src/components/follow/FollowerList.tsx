@@ -4,6 +4,7 @@ import { useAppSelector } from '../../redux/Hook'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../../sockets/SocketClient'
 import FollowListView from '../../components/listviews/FollowListView'
+import { useIsFocused } from '@react-navigation/native'
 
 
 let stompClient: Client
@@ -11,6 +12,7 @@ const FollowerList = () => {
     const [data, setData] = useState([])
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     console.log(userLogin?.id);
+    const isFocused = useIsFocused()
     
 
     useEffect(() => {
@@ -27,14 +29,13 @@ const FollowerList = () => {
         }
         const onMessageReceived = (payload: any) => {
           setData(JSON.parse(payload.body))
-          console.log(data);
-          
         }
         const onError = (err: string | Frame) => {
           console.log('Loi ko lay dc du lieu')
         }
         stompClient.connect({}, onConnected, onError)
-      }, [])
+      }, [isFocused])
+
 
       const handleFollow = (userFollowId: number) => {
         console.log('abc');
