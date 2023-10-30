@@ -9,4 +9,4 @@ import {
 } from './Screen'
 
 export const INITIAL_SCREEN = LIST_FOLLOW_SCREEN
-export const SERVER_ADDRESS = "http://192.168.2.84:8080/";
+export const SERVER_ADDRESS = "http://192.168.10.105:8080/";
