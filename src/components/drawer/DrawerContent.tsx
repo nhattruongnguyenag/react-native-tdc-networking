@@ -12,7 +12,12 @@ import { StyleSheet, View } from 'react-native'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, LOGIN_SCREEN } from '../../constants/Screen'
+import {
+  CREATE_NORMAL_POST_SCREEN,
+  CREATE_RECRUITMENT_SCREEN,
+  CREATE_SURVEY_SCREEN,
+  LOGIN_SCREEN
+} from '../../constants/Screen'
 import Divider from '../Divider'
 import DrawerHeader from './DrawerHeader'
 
@@ -67,9 +72,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <IoniconsIcon name='create-sharp' size={16} color={'#0088ff'} />
-          )}
+          icon={({ color, focused, size }) => <IoniconsIcon name='create-sharp' size={16} color={'#0088ff'} />}
         />
 
         <DrawerItem

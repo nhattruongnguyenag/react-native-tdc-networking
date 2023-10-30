@@ -1,4 +1,4 @@
-import { QuestionResponse } from "./response/QuestionResponse"
+import { QuestionResponse } from './response/QuestionResponse'
 
 export interface Question {
   type: string

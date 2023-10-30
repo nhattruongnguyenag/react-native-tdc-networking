@@ -84,24 +84,10 @@ export default function MessengerScreen() {
       }
 
       if (item.sender.id == userLogin?.id) {
-        return (
-          <MessageSentItem
-            key={index}
-            data={item}
-            index={index}
-            dayHeaderVisible={dayHeaderVisible}
-          />
-        )
+        return <MessageSentItem key={index} data={item} index={index} dayHeaderVisible={dayHeaderVisible} />
       }
 
-      return (
-        <MessageReceivedItem
-          key={index}
-          data={item}
-          index={index}
-          dayHeaderVisible={dayHeaderVisible}
-        />
-      )
+      return <MessageReceivedItem key={index} data={item} index={index} dayHeaderVisible={dayHeaderVisible} />
     },
     [conversationMessages]
   )

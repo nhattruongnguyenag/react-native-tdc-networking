@@ -11,10 +11,8 @@ interface RadioInputWithTitleProps {
 export default function RadioInputWithTitle(props: RadioInputWithTitleProps) {
   return (
     <View style={styles.radioInputBody}>
-      <RadioButton
-        value={props.value ?? ''} />
-      <Pressable
-        onPress={() => props.onPress && props.onPress()}>
+      <RadioButton value={props.value ?? ''} />
+      <Pressable onPress={() => props.onPress && props.onPress()}>
         <Text style={styles.radioInputTitle}>{props.label ?? ''}</Text>
       </Pressable>
     </View>

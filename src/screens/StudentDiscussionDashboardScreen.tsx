@@ -18,15 +18,13 @@ import SkeletonPost from '../components/SkeletonPost'
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
   // Variable
-  const [isLoading, setIsLoading] = useState(false);
-  const { updatePost } = useAppSelector(
-    (state) => state.TDCSocialNetworkReducer
-  )
+  const [isLoading, setIsLoading] = useState(false)
+  const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const [refreshing, setRefreshing] = useState(false)
   const [studentsPost, setStudentPost] = useState([])
 
-  // Function 
+  // Function
 
   useEffect(() => {
     if (studentsPost.length > 0) {
@@ -124,9 +122,7 @@ export default function StudentDiscussionDashboardScreen() {
         <View style={styles.lineBellowBanner}>
           <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>
-        {
-          isLoading && <SkeletonPost />
-        }
+        {isLoading && <SkeletonPost />}
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}

@@ -5,7 +5,7 @@ import { QuestionProps } from '../../types/Question'
 import RadioInputWithTitle from '../inputs/RadioInputWithTitle'
 import QuestionTitle from './QuestionTitle'
 
-interface OneChoiceQuestionProps extends QuestionProps{
+interface OneChoiceQuestionProps extends QuestionProps {
   onChangeValue?: (choice: number[]) => void
 }
 
@@ -25,36 +25,33 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />
       <RadioButton.Group
-        onValueChange={
-          (value) => {
-            setValue(value)
-            if (props.dataResponse) {
-              setSelectedChoiceIds([parseInt(value)])
-            }
-          }}
-        value={value}>
-
-        {
-          props.data?.choices &&
+        onValueChange={(value) => {
+          setValue(value)
+          if (props.dataResponse) {
+            setSelectedChoiceIds([parseInt(value)])
+          }
+        }}
+        value={value}
+      >
+        {(props.data?.choices &&
           props.data.choices.map((item, index) => {
-            return <RadioInputWithTitle
-              label={item}
-              value={item} />
-          })
-          ||
-          props.dataResponse?.choices &&
-          props.dataResponse.choices.map((item, index) => {
-            return <RadioInputWithTitle
-              onPress={() => {
-                setValue(item.voteQuestionId.toString())
-                if (props.dataResponse) {
-                  setSelectedChoiceIds([parseInt(item.voteQuestionId.toString())])
-                }
-              }}
-              label={item.content}
-              value={item.voteQuestionId.toString()} />
-          })
-        }
+            return <RadioInputWithTitle label={item} value={item} />
+          })) ||
+          (props.dataResponse?.choices &&
+            props.dataResponse.choices.map((item, index) => {
+              return (
+                <RadioInputWithTitle
+                  onPress={() => {
+                    setValue(item.voteQuestionId.toString())
+                    if (props.dataResponse) {
+                      setSelectedChoiceIds([parseInt(item.voteQuestionId.toString())])
+                    }
+                  }}
+                  label={item.content}
+                  value={item.voteQuestionId.toString()}
+                />
+              )
+            }))}
       </RadioButton.Group>
     </View>
   )

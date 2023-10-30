@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     color: COLOR_BLACK
   },
   wrapBody: {
-    paddingVertical: 10,
+    paddingVertical: 10
   }
 })
 export default CustomizeBodyPost

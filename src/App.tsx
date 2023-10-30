@@ -179,7 +179,6 @@ export function StackNavigator(): JSX.Element {
         }
       }}
     >
-
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng' /> }}
@@ -263,7 +262,6 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Xem lại bài viết' /> }}
         component={ReviewSurveyPostScreen}
       />
-
 
       <RootStack.Screen
         name={SURVEY_CONDUCT_SCREEN}

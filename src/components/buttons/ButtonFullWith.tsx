@@ -10,12 +10,14 @@ interface ButtonFullWithProps {
   iconName: string
   btnStyle?: StyleProp<ViewStyle>
   textColor?: string
+  disable?: boolean
 }
 
 export default function ButtonFullWith(props: ButtonFullWithProps) {
   return (
     <Button
-      contentStyle={[props.contentStyle ? props.contentStyle : {}]}
+      disabled={Boolean(props.disable)}
+      contentStyle={[props.contentStyle]}
       icon={props.iconName}
       mode='elevated'
       buttonColor={'#0065FF'}
