@@ -21,12 +21,12 @@ import {
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
-import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { formatDateTime } from '../../utils/FormatTime'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RECRUITMENT_DETAIL_SCREEN } from '../../constants/Screen'
+import { PROFILE_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
+import CustomizeCreatePostToolbar from '../CustomizeCreatePostToolbar'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -35,14 +35,20 @@ const CustomizePost = (props: Post) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Get data
   let post = props
-  const { userLogin, isOpenModalComments } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   //--------------Function area--------------
 
   // Header area
   const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
     if (flag === GO_TO_PROFILE_ACTIONS) {
-      console.log('go to profile user have id: ' + post.userId)
+      if (userIdOfProfileNow !== post.userId) {
+        if (currentScreenNowIsProfileScreen) {
+          navigation.replace(PROFILE_SCREEN, { userId: post.userId })
+        } else {
+          navigation.navigate(PROFILE_SCREEN, { userId: post.userId })
+        }
+      }
     } else {
       console.log('show menu')
     }
@@ -109,11 +115,11 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-    navigation.navigate(SURVEY_CONDUCT_SCREEN, {surveyPostId: idPost})
+    console.log('survey');
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-    navigation.navigate(RECRUITMENT_DETAIL_SCREEN, {postId: idPost})
+
   }
 
   switch (post.type) {
@@ -229,6 +235,6 @@ const styles = StyleSheet.create({
   },
   bodyWrap: {
     marginVertical: 10
-  }
+  },
 })
 export default CustomizePost

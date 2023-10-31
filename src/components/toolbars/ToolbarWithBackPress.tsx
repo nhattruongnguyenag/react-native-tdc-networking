@@ -3,6 +3,8 @@ import { ParamListBase, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import IconButton from '../buttons/IconButton'
+import { useAppDispatch } from '../../redux/Hook'
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen } from '../../redux/Slice'
 
 interface ToolbarWithBackPressProps {
   title: string
@@ -10,13 +12,19 @@ interface ToolbarWithBackPressProps {
 
 export default function ToolbarWithBackPress({ title }: ToolbarWithBackPressProps) {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>()
+  const dispatch = useAppDispatch();
+  const handleGoBack = () => {
+    navigation.goBack();
+    dispatch(goToProfileScreen(0));
+    dispatch(setCurrentScreenNowIsProfileScreen(false));
+  }
   return (
     <View style={styles.toolbarBody}>
       <IconButton
         iconSize={18}
         iconName='chevron-left'
         iconColor='#000'
-        onPress={() => navigation.goBack()}
+        onPress={() => handleGoBack()}
         inactiveBackgroundColor='#ffffff00'
         activeBackgroundColor='#ffffff1a'
         customStyle={styles.backBtnStyle}

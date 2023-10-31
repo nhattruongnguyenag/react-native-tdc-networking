@@ -51,8 +51,9 @@ export default function CreateNormalPostScreen({ navigation }: any) {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
       try {
         const data = {
-          images: images ?? [],
           type: 'thong-thuong',
+          groupId: 1,
+          images: images ?? [],
           userId: 1,
           content: content
         }

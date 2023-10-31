@@ -3,6 +3,7 @@ import React from 'react'
 import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import DefaultAvatar from '../DefaultAvatar'
 export interface CustomizeCommentType {
     tagName: any,
     userId: number | undefined,
@@ -15,18 +16,31 @@ export interface CustomizeCommentType {
     timeCreated: string,
     handleClickToCommentReplyEvent: (id: number) => void,
     handleClickToDeleteCommentsEvent: (idComments: number) => void
+    handleClickToAvatarAndName: (userId:number) => void
 }
 
 const CustomizeComment = (props: CustomizeCommentType) => {
     return props.type === 0 ?
         (<View style={styles.containerType0}>
-            <TouchableOpacity>
-                <Image
-                    style={styles.avatarType0}
-                    source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+            <TouchableOpacity
+                onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
+            >
+                {
+                    props.avatar != null ? <>
+                        <Image
+                            style={styles.avatarType0}
+                            source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
+                        />
+                    </> : <>
+                        <DefaultAvatar size={43} identifer={props.name[0]} />
+                    </>
+
+                }
             </TouchableOpacity>
             <View style={styles.wrapBody}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
+                >
                     <Text style={styles.name}>
                         {props.name}
                     </Text>
@@ -55,13 +69,24 @@ const CustomizeComment = (props: CustomizeCommentType) => {
         </View>)
         :
         (<View style={styles.containerType1}>
-            <TouchableOpacity>
-                <Image
-                    style={styles.avatarType1}
-                    source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+            <TouchableOpacity
+                onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
+            >
+                {
+                    props.avatar != null ? <>
+                        <Image
+                            style={styles.avatarType1}
+                            source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+                    </> : <>
+                        <DefaultAvatar size={30} identifer={props.name[0]} />
+                    </>
+                }
+
             </TouchableOpacity>
             <View style={styles.wrapBody}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
+                >
                     <Text style={styles.name}>
                         {props.name}
                     </Text>

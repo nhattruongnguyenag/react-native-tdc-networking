@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
@@ -13,17 +13,22 @@ import { Client, Frame, Message } from 'stompjs'
 import { postAPI } from '../api/CallApi'
 import { handleDataClassification } from '../utils/DataClassfications'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
-import { formatDateTime } from '../utils/FormatTime'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { API_URL_POST } from '../constants/Path'
 import SkeletonPost from '../components/SkeletonPost'
-import CustomizeRecruitmentPost from '../components/recruitmentPost/CustomizeRecruitmentPost'
+import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../App'
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
+  const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [businessPost, setBusinessPost] = useState([]);
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
@@ -32,7 +37,7 @@ export default function BusinessDashboardScreen() {
   const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
-
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Function area
 
   useEffect(() => {
@@ -48,7 +53,7 @@ export default function BusinessDashboardScreen() {
   }, [])
 
   useEffect(() => {
-    if (businessPost.length > 0) {
+    if (businessPost.length > 0 || isCalled) {
       setIsLoading(false)
     } else {
       setIsLoading(true)
@@ -63,7 +68,7 @@ export default function BusinessDashboardScreen() {
       stompClient.send(`/app/conversations/online/${userLogin?.id}`)
     }
 
-    const onMessageReceived = (payload: Message) => {
+    const onMessageReceived = async (payload: Message) => {
       dispatch(setConversations(JSON.parse(payload.body)))
     }
 
@@ -103,6 +108,7 @@ export default function BusinessDashboardScreen() {
     }
     const onMessageReceived = (payload: any) => {
       setBusinessPost(JSON.parse(payload.body))
+      setIsCalled(true);
     }
 
     const onError = (err: string | Frame) => {
@@ -124,6 +130,20 @@ export default function BusinessDashboardScreen() {
     getDataBusinessApi()
     dispatch(updatePostWhenHaveChangeComment(false))
   }, [updatePost])
+
+  const handleClickToCreateButtonEvent = (type: string) => {
+    if (type === TYPE_NORMAL_POST) {
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+    } else if (type === TYPE_RECRUITMENT_POST) {
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+    } else {
+      navigation.navigate(CREATE_SURVEY_SCREEN);
+    }
+  }
+
+  const handleClickIntoAvatar = () => {
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+  }
 
   const renderItem = (item: any) => {
     return (
@@ -153,7 +173,10 @@ export default function BusinessDashboardScreen() {
     )
   }
 
+
   return (
+
+
     <View style={styles.container}>
       {
         isOpenModalImage && <CustomizeModalImage />
@@ -164,21 +187,41 @@ export default function BusinessDashboardScreen() {
       {
         isLoading && <SkeletonPost />
       }
-      <FlatList
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshing={false}
-        onRefresh={() => getDataBusinessApi()}
-        data={businessPost}
-        renderItem={({ item }) => renderItem(item)}
-      />
+        refreshControl={<RefreshControl
+          refreshing={false}
+          onRefresh={() => getDataBusinessApi()}
+        />}
+      >
+        {/* Create post area */}
+        <View style={styles.toolbarCreatePost}>
+          <CustomizeCreatePostToolbar
+            role={userLogin?.roleCodes ?? ''}
+            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+            handleClickIntoAvatar={handleClickIntoAvatar}
+            image={userLogin?.image ?? null}
+            name={userLogin?.name ?? ''}
+          />
+        </View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+          data={businessPost}
+          renderItem={({ item }) => renderItem(item)}
+        />
+      </ScrollView>
       {isOpenModalComments && <CustomizeModalComments />}
-      {/* <CustomizeRecruitmentPost /> */}
     </View>
+
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR_BOTTOM_AVATAR
+  },
+  toolbarCreatePost: {
+    marginBottom: 20,
   }
 })

@@ -5,16 +5,30 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { closeModalUserReaction } from '../../redux/Slice'
 import CustomizeUserReaction from '../post/CustomizeUserReactionPost'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../../App'
+import { PROFILE_SCREEN } from '../../constants/Screen'
 
 const CustomizeModalUserReacted = () => {
+  const { userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
+
   const handleClickIntoBtnIconClose = () => {
     dispatch(closeModalUserReaction())
   }
 
   // Function
-  const handleClickIntoUserReactedEvent = (id: number) => {
-    console.log('go to user profile have id ' + id)
+  const handleClickIntoUserReactedEvent = (userId: number) => {
+    if (userIdOfProfileNow !== userId) {
+      handleClickIntoBtnIconClose()
+      if (currentScreenNowIsProfileScreen) {
+        navigation.replace(PROFILE_SCREEN, { userId: userId })
+      } else {
+        navigation.navigate(PROFILE_SCREEN, { userId: userId })
+      }
+    }
   }
 
   const { modalUserReactionData } = useAppSelector((state) => state.TDCSocialNetworkReducer)

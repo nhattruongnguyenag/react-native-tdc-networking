@@ -10,7 +10,7 @@ import { formatDateTime, numberDayPassed } from '../../utils/FormatTime'
 import CustomizeBodyPost from '../CustomizeBodyPost'
 import { TEXT_JOIN_SURVEY, TEXT_SURVEY, TEXT_SURVEY_CONTENT, TEXT_SURVEY_TITLE } from '../../constants/StringVietnamese'
 import DefaultAvatar from '../DefaultAvatar'
-
+import FeatherIcon from 'react-native-vector-icons/Feather'
 export interface RecruitmentPostType {
     id: number,
     createdAt: string,
@@ -52,7 +52,7 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
                     </View>
                     <View style={styles.rightContainerBottom}>
                         <View style={[styles.rowAndCenter, styles.item]}>
-                            <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} /><Text style={styles.address}>{' '}{props.createdAt}</Text>
+                            <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} /><Text style={styles.address}>{' '}{formatDateTime(props.createdAt)}</Text>
                         </View>
                     </View>
                 </View>
@@ -67,7 +67,7 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
                         onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
                         <View style={styles.bottomButton}>
                             <Text style={styles.txtBtn}>{TEXT_JOIN_SURVEY}</Text>
-                            <AntDesignIcon name='right' size={ICON_SIZE} color={COLOR_WHITE} />
+                            <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     bottomButton: {
         flexDirection: 'row',
         backgroundColor: COLOR_BLUE_BANNER,
-        padding: 8,
+        padding: 5,
         alignItems: 'center',
         marginVertical: 5,
         width: '40%',

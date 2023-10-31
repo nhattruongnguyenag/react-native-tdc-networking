@@ -1,5 +1,6 @@
 import { StyleSheet, View, SafeAreaView, Dimensions, ScrollView } from 'react-native'
 import React from 'react'
+import StudentProfileScreen from './ProfileScreen'
 
 
 const images = [

@@ -36,3 +36,4 @@ export const TEXT_SURVEY = 'khảo sát';
 export const TEXT_RECRUITMENT = 'Tuyển dụng';
 export const TEXT_SURVEY_TITLE = 'Tiêu đề khảo sát';
 export const TEXT_SURVEY_CONTENT = 'Nội dung khảo sát';
+export const TEXT_UN_UPDATE = 'chưa được cập nhật';

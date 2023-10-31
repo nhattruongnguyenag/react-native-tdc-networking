@@ -10,12 +10,14 @@ import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux
 import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
 import { formatDateTime } from '../../utils/FormatTime';
-import { SERVER_ADDRESS } from '../../constants/SystemConstant';
-import { callApiComment, deleteCommentApi } from '../../api/CallApi';
 import { isBlank, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
 import { Client, Frame } from 'stompjs';
 import { getStompClient } from '../../sockets/SocketClient';
 import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../../constants/Variables';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
+import { PROFILE_SCREEN } from '../../constants/Screen';
 
 //  Constant
 const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
@@ -25,7 +27,8 @@ const MAX_DOWNWARD_TRANSLATE_Y = 0;
 const DRAG_THRESHOLD = 50;
 let stompClient: Client
 const CustomizeModalComments = () => {
-    const { modalCommentData, updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const { modalCommentData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const [haveChange, setHaveChange] = useState(false);
     // Variable
     const [comments, setComments] = useState();
@@ -147,6 +150,18 @@ const CustomizeModalComments = () => {
         deleteComment(dataToDeleteComment);
     }
 
+    // 
+    const handleClickToAvatarAndName = (userId: number) => {
+        if (userIdOfProfileNow !== userId) {
+            dispatch(closeModalComments());
+            if (currentScreenNowIsProfileScreen) {
+                navigation.replace(PROFILE_SCREEN, { userId: userId })
+            } else {
+                navigation.navigate(PROFILE_SCREEN, { userId: userId })
+            }
+        }
+    }
+
     // Socket
     useEffect(() => {
         stompClient = getStompClient()
@@ -209,7 +224,9 @@ const CustomizeModalComments = () => {
                                         commentItem={item}
                                         userLoginId={userLogin?.id}
                                         handleClickToCommentReplyEvent={handleClickToCommentReplyEvent}
-                                        handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent} />
+                                        handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent}
+                                        handleClickToAvatarAndName={handleClickToAvatarAndName}
+                                    />
                                 </> : <></>
                             }}
                         />
@@ -241,7 +258,8 @@ export interface CommentChildrenType {
     commentItem: Comment,
     userLoginId: number | undefined,
     handleClickToCommentReplyEvent: (id: number) => void,
-    handleClickToDeleteCommentsEvent: (idComment: number) => void
+    handleClickToDeleteCommentsEvent: (idComment: number) => void,
+    handleClickToAvatarAndName: (userId: number) => void,
 }
 
 const CommentExport = (item: CommentChildrenType) => {
@@ -264,6 +282,7 @@ const CommentExport = (item: CommentChildrenType) => {
             timeCreated={formatDateTime(item.commentItem.createdAt)}
             handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
             handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
+            handleClickToAvatarAndName={item.handleClickToAvatarAndName}
         />
         {
             hasChildren && (<>
@@ -282,7 +301,8 @@ const CommentExport = (item: CommentChildrenType) => {
                                 commentItem={child}
                                 handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
                                 handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
-                                userLoginId={item.userLoginId} />}
+                                userLoginId={item.userLoginId}
+                                handleClickToAvatarAndName={item.handleClickToAvatarAndName} />}
                         />
                     </>)
                 }

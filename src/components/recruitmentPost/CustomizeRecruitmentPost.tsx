@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -78,8 +79,8 @@ export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
                         <TouchableOpacity
                             onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
                             <View style={styles.bottomButton}>
-                                <Text style={{ color: COLOR_WHITE }}>{TEXT_SEE_DETAIL}</Text>
-                                <AntDesignIcon style={styles.iconArrow} name='right' size={ICON_SIZE} color={COLOR_WHITE} />
+                                <Text style={styles.txtBtnSeeMore}>{TEXT_SEE_DETAIL}</Text>
+                                <FeatherIcon style={styles.iconArrow} name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     bottomButton: {
         flexDirection: 'row',
         backgroundColor: COLOR_BLUE_BANNER,
-        padding: 8,
+        padding: 5,
         alignItems: 'center',
         marginVertical: 5,
         width: '32%',
@@ -174,5 +175,8 @@ const styles = StyleSheet.create({
     },
     iconArrow: {
         paddingLeft: 2,
+    },
+    txtBtnSeeMore: {
+        color: COLOR_WHITE
     }
 })

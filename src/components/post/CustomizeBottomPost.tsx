@@ -36,9 +36,11 @@ const CustomizeBottomPost = (props: BottomPostType) => {
         source={{ uri: SERVER_ADDRESS + `api/images/${item.image}` }}
       />
       :
-      <DefaultAvatar
-        key={item.id}
-        size={30} identifer={item.name[0]} />
+      <View style={styles.avatarUserReactedDefault}>
+        <DefaultAvatar
+          key={item.id}
+          size={30} identifer={item.name[0]} />
+      </View>
   }
   return (
     <View style={styles.wrapBottom}>
@@ -200,6 +202,9 @@ const styles = StyleSheet.create({
   },
   wrapAvatarBottomRight: {
     flexDirection: 'row'
+  },
+  avatarUserReactedDefault:{
+    margin:1,
   }
 })
 export default CustomizeBottomPost

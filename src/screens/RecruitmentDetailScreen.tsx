@@ -4,19 +4,17 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BLACK, COLOR_GREY } from '../constants/Color'
-import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { formatVietNamCurrency } from '../utils/FormatCurrency'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
-import { RootStackParamList } from '../App'
 
-export default function RecruitmentDetailScreen() {
-  const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
+export default function RecruitmentDetailScreen({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const postId = route.params?.postId ?? 0
+  const { idPost } = route.params
   const [dataRecruitmentDetail, setDataRecruitmentDetail] = useState({
     createdAt: '',
     salary: '',
@@ -28,9 +26,9 @@ export default function RecruitmentDetailScreen() {
     requirement: ''
   })
   useEffect(() => {
-    if (postId) {
+    if (idPost) {
       axios
-        .get(SERVER_ADDRESS + `api/posts/recruitment/${postId}`)
+        .get(SERVER_ADDRESS + `api/posts/recruitment/${idPost}`)
         .then((recruitment) => {
           setDataRecruitmentDetail(recruitment.data.data)
           console.log(dataRecruitmentDetail)
@@ -39,7 +37,7 @@ export default function RecruitmentDetailScreen() {
           console.log(error)
         })
     }
-  }, [postId])
+  }, [])
 
   const onSubmit = () => {
     Alert.alert('Thông báo', 'Nộp đơn úng tuyển thành công')

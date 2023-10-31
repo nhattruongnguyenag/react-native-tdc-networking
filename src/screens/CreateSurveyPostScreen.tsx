@@ -42,8 +42,7 @@ export default function CreateSurveyPostScreen() {
       description: '',
       images: [],
       userId: userLogin?.id ?? -1,
-      questions: [],
-      groupId: 1
+      questions: []
     }
   }, [])
 
