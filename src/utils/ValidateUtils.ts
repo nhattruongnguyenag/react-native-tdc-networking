@@ -24,7 +24,6 @@ export function isNotBlank(text: string): boolean {
 }
 
 export function isLengthInRange(text: string, min: number, max: number): boolean {
-  console.log(`/^.{${min},${max}}$/g`)
   const pattern = new RegExp(`^.{${min},${max}}$`)
   return pattern.test(text)
 }
