@@ -45,7 +45,8 @@ import {
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
   SURVEY_CONDUCT_SCREEN,
-  TOP_TAB_NAVIGATOR
+  TOP_TAB_NAVIGATOR,
+  PROFILE_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -73,6 +74,7 @@ import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -104,6 +106,7 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  PROFILE_SCREEN: { userId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -279,6 +282,12 @@ export function StackNavigator(): JSX.Element {
         name={CREATE_NORMAL_POST_SCREEN}
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
+      />
+
+      <RootStack.Screen
+        name={PROFILE_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
+        component={ProfileScreen}
       />
 
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
