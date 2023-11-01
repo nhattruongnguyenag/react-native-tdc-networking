@@ -195,15 +195,18 @@ export default function BusinessDashboardScreen() {
         />}
       >
         {/* Create post area */}
-        <View style={styles.toolbarCreatePost}>
-          <CustomizeCreatePostToolbar
-            role={userLogin?.roleCodes ?? ''}
-            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-            handleClickIntoAvatar={handleClickIntoAvatar}
-            image={userLogin?.image ?? null}
-            name={userLogin?.name ?? ''}
-          />
-        </View>
+        {
+          userLogin?.roleCodes === TYPE_POST_BUSINESS ?
+            <View style={styles.toolbarCreatePost}>
+              <CustomizeCreatePostToolbar
+                role={userLogin?.roleCodes ?? ''}
+                handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+                handleClickIntoAvatar={handleClickIntoAvatar}
+                image={userLogin?.image ?? null}
+                name={userLogin?.name ?? ''}
+              />
+            </View> : null
+        }
         <FlatList
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}

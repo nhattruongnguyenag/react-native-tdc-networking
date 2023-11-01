@@ -150,15 +150,19 @@ export default function StudentDiscussionDashboardScreen() {
         <View style={styles.lineBellowBanner}>
           <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>
-        <View style={styles.toolbarCreatePost}>
-          <CustomizeCreatePostToolbar
-            role={userLogin?.roleCodes ?? ''}
-            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-            handleClickIntoAvatar={handleClickIntoAvatar}
-            image={userLogin?.image ?? null}
-            name={userLogin?.name ?? ''}
-          />
-        </View>
+        {/* Create post */}
+        {
+          userLogin?.roleCodes === TYPE_POST_STUDENT ?
+            <View style={styles.toolbarCreatePost}>
+              <CustomizeCreatePostToolbar
+                role={userLogin?.roleCodes ?? ''}
+                handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+                handleClickIntoAvatar={handleClickIntoAvatar}
+                image={userLogin?.image ?? null}
+                name={userLogin?.name ?? ''}
+              />
+            </View> : null
+        }
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}

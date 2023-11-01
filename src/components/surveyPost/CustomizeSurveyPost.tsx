@@ -11,9 +11,13 @@ import CustomizeBodyPost from '../CustomizeBodyPost'
 import { TEXT_JOIN_SURVEY, TEXT_SURVEY, TEXT_SURVEY_CONTENT, TEXT_SURVEY_TITLE } from '../../constants/StringVietnamese'
 import DefaultAvatar from '../DefaultAvatar'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import CustomizeHeaderPost from '../post/CustomizeHeaderPost'
+import { TYPE_SURVEY_POST_TXT } from '../../constants/Variables'
 export interface RecruitmentPostType {
     id: number,
+    role: string,
     createdAt: string,
+    typeAuthor: string,
     image: string,
     name: string,
     type: string,
@@ -29,40 +33,20 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.leftContainer}>
-                    <TouchableOpacity
-                        onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(0)}>
-                        {
-                            props.image != null ?
-                                <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
-                                :
-                                <DefaultAvatar size={43} identifer={props.name[0]} />
-                        }
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.rightContainer}>
-                    <View style={styles.rightContainerTopTitle}>
-                        <Text style={styles.name}>{props.name}{' '}<View><Text style={[styles.itemType, styles.textTypePost]}>{TEXT_SURVEY}</Text></View></Text>
-                        <View style={styles.menu}>
-                            <TouchableOpacity
-                                onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(1)}>
-                                <EntypoIcon name='dots-three-vertical' size={ICON_SIZE} color={COLOR_BLACK} />
-                            </TouchableOpacity>
-                        </View>
+                <CustomizeHeaderPost
+                    name={props.name}
+                    avatar={props.image}
+                    typeAuthor={TYPE_SURVEY_POST_TXT}
+                    available={null}
+                    timeCreatePost={formatDateTime(props.createdAt)}
+                    type={props.type}
+                    role={props.role}
+                    handleClickIntoAvatarAndNameAndMenuEvent={props.handleClickIntoAvatarAndNameAndMenuEvent} />
+                <View style={styles.contentContainer}>
+                    <View>
+                        <Text style={styles.title}>{props.title}</Text>
+                        <CustomizeBodyPost content={props.description} />
                     </View>
-                    <View style={styles.rightContainerBottom}>
-                        <View style={[styles.rowAndCenter, styles.item]}>
-                            <AntDesignIcon name='clockcircleo' size={ICON_SIZE} color={COLOR_GREY} /><Text style={styles.address}>{' '}{formatDateTime(props.createdAt)}</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.contentContainer}>
-                <View>
-                    <Text style={styles.title}>{props.title}</Text>
-                    <CustomizeBodyPost content={props.description} />
-                </View>
-                <View>
                     <TouchableOpacity
                         onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
                         <View style={styles.bottomButton}>
@@ -78,9 +62,10 @@ export default function CustomizeSurveyPost(props: RecruitmentPostType) {
 
 const styles = StyleSheet.create({
     container: {
+    },
+    containerSurvey: {
         flexDirection: 'row',
         width: '100%',
-        paddingTop: 10,
         backgroundColor: COLOR_WHITE
     },
     leftContainer: {

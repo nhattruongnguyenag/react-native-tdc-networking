@@ -140,15 +140,18 @@ export default function FacultyDashboardScreen() {
         />}
       >
         {/* Create post area */}
-        <View style={styles.toolbarCreatePost}>
-          <CustomizeCreatePostToolbar
-            role={userLogin?.roleCodes ?? ''}
-            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-            handleClickIntoAvatar={handleClickIntoAvatar}
-            image={userLogin?.image ?? null}
-            name={userLogin?.name ?? ''}
-          />
-        </View>
+        {
+          userLogin?.roleCodes === TYPE_POST_FACULTY ? <View style={styles.toolbarCreatePost}>
+            <CustomizeCreatePostToolbar
+              role={userLogin?.roleCodes ?? ''}
+              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+              handleClickIntoAvatar={handleClickIntoAvatar}
+              image={userLogin?.image ?? null}
+              name={userLogin?.name ?? ''}
+            />
+          </View> : null
+        }
+
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}

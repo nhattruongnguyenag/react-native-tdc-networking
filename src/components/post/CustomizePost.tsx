@@ -26,7 +26,6 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
-import CustomizeCreatePostToolbar from '../CustomizeCreatePostToolbar'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -130,9 +129,9 @@ const CustomizePost = (props: Post) => {
           <CustomizeHeaderPost
             name={post.name}
             avatar={post.avatar}
-            typeAuthor={post.typeAuthor}
             available={post.available}
             timeCreatePost={formatDateTime(post.timeCreatePost)}
+            typeAuthor={post.typeAuthor}
             type={post.type}
             role={post.role}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
@@ -179,6 +178,8 @@ const CustomizePost = (props: Post) => {
             handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
             createdAt={props.timeCreatePost}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+            role={post.role}
+            typeAuthor={post.typeAuthor}
           />
           {/* Bottom */}
           <CustomizeBottomPost
@@ -204,7 +205,10 @@ const CustomizePost = (props: Post) => {
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           createdAt={props.timeCreatePost}
           handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-          description={props.description ?? ''} />
+          description={props.description ?? ''}
+          typeAuthor={post.typeAuthor  ?? ''}
+          role={post.role ?? ''}
+        />
         {/* Bottom */}
         <CustomizeBottomPost
           id={post.id}
