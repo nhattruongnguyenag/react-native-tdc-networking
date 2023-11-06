@@ -5,9 +5,14 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { closeModalImage } from '../../redux/Slice'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import CustomizeImageModalShow from './CustomizeImageModalShow'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../../App'
+import { PROFILE_SCREEN } from '../../constants/Screen'
 
 const CustomizeModalImage = () => {
-  const { modalImageData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const [imageActive, setImageActive] = useState(0)
   // Function
@@ -35,7 +40,14 @@ const CustomizeModalImage = () => {
   }
 
   const handleClickIntoUserNameOrAvatarEvent = () => {
-    console.log('Go to user profile have id ' + modalImageData?.userId)
+    if (userIdOfProfileNow !== modalImageData?.userId) {
+      closeModal();
+      if (currentScreenNowIsProfileScreen) {
+        navigation.replace(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0 })
+      } else {
+        navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0 })
+      }
+    }
   }
 
   return (
@@ -63,20 +75,8 @@ const CustomizeModalImage = () => {
             key={item.id}
             style={
               imageActive == index
-                ? {
-                    marginHorizontal: 2,
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: '#fff'
-                  }
-                : {
-                    marginHorizontal: 2,
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: 'black'
-                  }
+                ? styles.nodeActive
+                : styles.nodeUnActive
             }
           ></Text>
         ))}
@@ -88,6 +88,7 @@ const CustomizeModalImage = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     position: 'absolute',
     bottom: '15%',
     width: '100%',
@@ -145,6 +146,22 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontWeight: 'bold',
     width: '75%'
+  },
+  nodeActive: {
+    margin: 2,
+    marginHorizontal: 2,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#fff'
+  },
+  nodeUnActive: {
+    marginHorizontal: 2,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'black',
+    margin: 2,
   }
 })
 export default CustomizeModalImage
