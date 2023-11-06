@@ -47,6 +47,7 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  SURVEY_RESULT_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -75,6 +76,7 @@ import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import SurveyResultScreen from './screens/SurveyResultScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -107,6 +109,7 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   PROFILE_SCREEN: { userId: number } | undefined
+  SURVEY_RESULT_SCREEN: {surveyPostId: number} | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -289,6 +292,13 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
         component={ProfileScreen}
       />
+
+      <RootStack.Screen
+        name={SURVEY_RESULT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
+        component={SurveyResultScreen}
+      />
+
 
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>
