@@ -117,7 +117,8 @@ const CustomizePost = (props: Post) => {
   const handleClickIntoBtnIconComments = () => {
     dispatch(
       openModalComments({
-        id: props.id
+        id: props.id,
+        commentFather: []
       })
     )
   }
