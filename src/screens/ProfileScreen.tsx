@@ -5,7 +5,6 @@ import axios from 'axios';
 import { API_URL_GET_POST_BY_USER_ID, API_URL_LIKE } from '../constants/Path';
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
-import { Client } from 'stompjs';
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
 import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, updatePostWhenHaveChangeComment } from '../redux/Slice';
@@ -71,28 +70,28 @@ const ProfileScreen = ({ route }: any) => {
     const renderItem = (item: any) => {
         return (
             <CustomizePost
-                    id={item.id}
-                    userId={item.user['id']}
-                    name={item.user['name']}
-                    avatar={item.user['image']}
-                    typeAuthor={'Doanh Nghiệp'}
-                    available={null}
-                    timeCreatePost={item.createdAt}
-                    content={item.content}
-                    type={item.type}
-                    likes={item.likes}
-                    comments={item.comment}
-                    commentQty={item.commentQuantity}
-                    images={item.images}
-                    role={item.user['roleCodes']}
-                    likeAction={likeAction}
-                    location={item.location ?? null}
-                    title={item.title ?? null}
-                    expiration={item.expiration ?? null}
-                    salary={item.salary ?? null}
-                    employmentType={item.employmentType ?? null}
-                    description={item.description ?? null}
-                />
+                id={item.id}
+                userId={item.user['id']}
+                name={item.user['name']}
+                avatar={item.user['image']}
+                typeAuthor={'Doanh Nghiệp'}
+                available={null}
+                timeCreatePost={item.createdAt}
+                content={item.content}
+                type={item.type}
+                likes={item.likes}
+                comments={item.comment}
+                commentQty={item.commentQuantity}
+                images={item.images}
+                role={item.user['roleCodes']}
+                likeAction={likeAction}
+                location={item.location ?? null}
+                title={item.title ?? null}
+                expiration={item.expiration ?? null}
+                salary={item.salary ?? null}
+                employmentType={item.employmentType ?? null}
+                description={item.description ?? null}
+            />
         )
     }
 

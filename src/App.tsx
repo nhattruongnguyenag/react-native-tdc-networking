@@ -4,7 +4,7 @@
  *
  * @format
  */
-
+import Toast from 'react-native-toast-message';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
@@ -47,6 +47,7 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  OPTION_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -75,6 +76,7 @@ import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import OptionScreen from './screens/OptionScreen';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -107,6 +109,7 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   PROFILE_SCREEN: { userId: number } | undefined
+  OPTION_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -290,6 +293,12 @@ export function StackNavigator(): JSX.Element {
         component={ProfileScreen}
       />
 
+      <RootStack.Screen
+        name={OPTION_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='' /> }}
+        component={OptionScreen}
+      />
+
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>
   )
@@ -334,15 +343,18 @@ function TopTabNavigator(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    <MenuProvider>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            <DrawerNavigator />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
-    </MenuProvider>
+    <>
+      <MenuProvider>
+        <Provider store={store}>
+          <PaperProvider>
+            <NavigationContainer>
+              <DrawerNavigator />
+            </NavigationContainer>
+          </PaperProvider>
+        </Provider>
+      </MenuProvider>
+      <Toast />
+    </>
   )
 }
 

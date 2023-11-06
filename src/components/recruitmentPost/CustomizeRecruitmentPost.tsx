@@ -7,41 +7,22 @@ import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE 
 import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { TEXT_SEE_DETAIL } from '../../constants/StringVietnamese'
-import CustomizeHeaderPost from '../post/CustomizeHeaderPost'
-import { TYPE_RECRUITMENT_POST_TEXT } from '../../constants/Variables'
 
 export interface RecruitmentPostType {
   id: number,
-  typeAuthor: string | null,
-  role: string,
   createdAt: string,
-  image: string,
-  name: string,
-  type: string,
   location: string,
   title: string,
-  expiration: string,
   salary: string,
   employmentType: string,
   handleClickBtnSeeDetailEvent: (id: number) => void
-  handleClickIntoAvatarAndNameAndMenuEvent: (id: number) => void
 }
 // Constant
 const ICON_SIZE = 15;
-export default function CustomizeRecruitmentPost(props: RecruitmentPostType) {
+export default function CustomizeRecruitmentPost(props: Readonly<RecruitmentPostType>) {
 
   return (
     <View>
-      <CustomizeHeaderPost
-        name={props.name}
-        avatar={props.image}
-        typeAuthor={TYPE_RECRUITMENT_POST_TEXT}
-        available={null}
-        timeCreatePost={''}
-        type={props.type}
-        role={props.role}
-        handleClickIntoAvatarAndNameAndMenuEvent={props.handleClickIntoAvatarAndNameAndMenuEvent}
-      />
       <View style={styles.containerContentRecruitment}>
         <View style={styles.leftContainer}>
         </View>
@@ -90,6 +71,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: COLOR_WHITE,
     flexDirection: 'row',
+    marginTop:10,
   },
   leftContainer: {
     width: '15%',
