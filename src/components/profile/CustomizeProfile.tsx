@@ -6,6 +6,10 @@ import { TEXT_UN_UPDATE, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDEN
 import CustomizeBodyStudentProfile from './CustomizeBodyStudentProfile'
 import CustomizeBodyBusinessProfile from './CustomizeBodyBusinessProfile'
 import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../../constants/Variables'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../../App'
+import { OPTION_SCREEN } from '../../constants/Screen'
 
 export interface CustomizeProfileType {
     data: Object[]
@@ -14,6 +18,7 @@ export interface CustomizeProfileType {
 }
 
 const CustomizeProfile = (props: CustomizeProfileType) => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     // Variable
     let body;
     // Function
@@ -25,8 +30,12 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
         } else if (flag === CALL_ACTION) {
             console.log('call');
         } else {
-            console.log('menu');
+            handleClickIntoButtonMenu3dotEvent();
         }
+    }
+
+    const handleClickIntoButtonMenu3dotEvent = () => {
+        navigation.navigate(OPTION_SCREEN);
     }
 
     const handleClickIntoHeaderComponentEvent = (flag: number) => {
@@ -85,18 +94,18 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
     }
 
     return (
-            <View style={styles.container}>
-                <CustomizeHeaderProfile
-                    background={'https://tramhoa.com/wp-content/uploads/2022/09/bo-hoa-huong-duong-dep2-2.jpg'}
-                    avatar={props.userData.image}
-                    name={props.userData.name}
-                    handleClickIntoHeaderComponentEvent={
-                        handleClickIntoHeaderComponentEvent
-                    } />
-                {
-                    body
-                }
-            </View >
+        <View style={styles.container}>
+            <CustomizeHeaderProfile
+                background={'https://tramhoa.com/wp-content/uploads/2022/09/bo-hoa-huong-duong-dep2-2.jpg'}
+                avatar={props.userData.image}
+                name={props.userData.name}
+                handleClickIntoHeaderComponentEvent={
+                    handleClickIntoHeaderComponentEvent
+                } />
+            {
+                body
+            }
+        </View >
     )
 }
 

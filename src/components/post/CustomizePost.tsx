@@ -11,13 +11,19 @@ import { openModalComments, openModalImage, openModalUserReaction } from '../../
 import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
 import {
+  CLICK_DELETE_POST_EVENT,
+  CLICK_SAVE_POST_EVENT,
+  CLICK_SEE_LIST_CV_POST_EVENT,
+  CLICK_SEE_RESULT_POST_EVENT,
   COMMENT_ACTION,
   GO_TO_PROFILE_ACTIONS,
   LIKE_ACTION,
   SHOW_LIST_USER_REACTED,
   TYPE_NORMAL_POST,
   TYPE_RECRUITMENT_POST,
-  TYPE_SURVEY_POST
+  TYPE_RECRUITMENT_POST_TEXT,
+  TYPE_SURVEY_POST,
+  TYPE_SURVEY_POST_TXT
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
@@ -26,6 +32,10 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
+import { savePostAPI } from '../../api/CallApi'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import Toast from 'react-native-toast-message'
+import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
 
 // Constant
 export const NUM_OF_LINES = 5
@@ -36,7 +46,6 @@ const CustomizePost = (props: Post) => {
   let post = props
   const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
-  //--------------Function area--------------
 
   // Header area
   const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
@@ -108,7 +117,8 @@ const CustomizePost = (props: Post) => {
   const handleClickIntoBtnIconComments = () => {
     dispatch(
       openModalComments({
-        id: props.id
+        id: props.id,
+        commentFather: []
       })
     )
   }
@@ -121,6 +131,78 @@ const CustomizePost = (props: Post) => {
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
+  const showToast = (status: number) => {
+    if (status === 200) {
+      Toast.show({
+        type: 'success',
+        text1: TEXT_NOTIFYCATIONS,
+        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
+      });
+    } else if (status === 400) {
+      Toast.show({
+        type: 'error',
+        text1: TEXT_NOTIFYCATIONS,
+        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
+      });
+    } else {
+      Toast.show({
+        type: 'warning',
+        text1: TEXT_NOTIFYCATIONS,
+        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
+      });
+    }
+  }
+
+  const handleClickMenuOption = (flag: number) => {
+    switch (flag) {
+      case CLICK_SAVE_POST_EVENT:
+        handleSavePost();
+        break
+      case CLICK_DELETE_POST_EVENT:
+        handleDeletePost();
+        break
+      case CLICK_SEE_LIST_CV_POST_EVENT:
+        handleSeeListCvPost();
+        break
+      case CLICK_SEE_RESULT_POST_EVENT:
+        handleSeeResultSurveyPost();
+        break
+      default:
+        return '';
+    }
+  }
+
+  const handleSavePost = async () => {
+    const data = {
+      "userId": userLogin?.id,
+      "postId": post.id
+    }
+    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
+    showToast(status);
+  }
+
+
+  const handleDeletePost = () => {
+    console.log('====================================');
+    console.log('handleDeletePost' + post.id);
+    console.log('====================================');
+  }
+
+  const handleSeeListCvPost = () => {
+    console.log('====================================');
+    console.log('handleSeeListCvPost' + post.id);
+    console.log('====================================');
+  }
+
+
+  const handleSeeResultSurveyPost = () => {
+    console.log('====================================');
+    console.log('handleSeeResultSurveyPost' + post.id);
+    console.log('====================================');
+  }
+
+
+
 
   switch (post.type) {
     case TYPE_NORMAL_POST:
@@ -128,6 +210,7 @@ const CustomizePost = (props: Post) => {
         <View style={styles.container}>
           {/* Header */}
           <CustomizeHeaderPost
+            userId={post.userId}
             name={post.name}
             avatar={post.avatar}
             available={post.available}
@@ -135,6 +218,7 @@ const CustomizePost = (props: Post) => {
             typeAuthor={post.typeAuthor}
             type={post.type}
             role={post.role}
+            handleClickMenuOption={handleClickMenuOption}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
           />
           {/* Body */}
@@ -166,21 +250,26 @@ const CustomizePost = (props: Post) => {
     case TYPE_RECRUITMENT_POST:
       return (
         <View style={styles.container}>
+          <CustomizeHeaderPost
+            userId={post.userId}
+            name={post.name}
+            avatar={post.avatar}
+            typeAuthor={TYPE_RECRUITMENT_POST_TEXT}
+            available={null}
+            timeCreatePost={''}
+            type={post.type}
+            role={post.role}
+            handleClickMenuOption={handleClickMenuOption}
+            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          />
           <CustomizeRecruitmentPost
             id={post.id}
-            image={post.avatar}
-            name={post.name}
-            type={post.type}
             location={post.location ?? ''}
             title={post.title ?? ''}
-            expiration={post.expiration ?? ''}
             salary={post.salary ?? ''}
             employmentType={post.employmentType ?? ''}
             handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
             createdAt={props.timeCreatePost}
-            handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-            role={post.role}
-            typeAuthor={post.typeAuthor}
           />
           {/* Bottom */}
           <CustomizeBottomPost
@@ -197,18 +286,22 @@ const CustomizePost = (props: Post) => {
       )
     case TYPE_SURVEY_POST:
       return <View style={styles.container}>
+        <CustomizeHeaderPost
+          userId={post.userId}
+          name={post.name}
+          avatar={post.avatar}
+          typeAuthor={TYPE_SURVEY_POST_TXT}
+          available={null}
+          timeCreatePost={formatDateTime(post.timeCreatePost)}
+          type={post.type}
+          role={post.role}
+          handleClickMenuOption={handleClickMenuOption}
+          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent} />
         <CustomizeSurveyPost
           id={post.id}
-          image={post.avatar}
-          name={post.name}
-          type={post.type}
           title={post.title ?? ''}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
-          createdAt={props.timeCreatePost}
-          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
           description={props.description ?? ''}
-          typeAuthor={post.typeAuthor ?? ''}
-          role={post.role ?? ''}
         />
         {/* Bottom */}
         <CustomizeBottomPost
