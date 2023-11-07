@@ -23,12 +23,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
-import { Text } from 'react-native-paper'
+import { useIsFocused } from '@react-navigation/native';
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
   const code = 'group_connect_business';
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +42,7 @@ export default function BusinessDashboardScreen() {
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Function area
+
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -130,11 +132,11 @@ export default function BusinessDashboardScreen() {
   useEffect(() => {
     getDataBusinessApi()
     dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost])
+  }, [updatePost, isFocused])
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 2 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {

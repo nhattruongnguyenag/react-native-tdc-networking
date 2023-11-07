@@ -15,51 +15,51 @@ export interface HeaderProfileType {
 }
 export default function CustomizeHeaderProfile(props: HeaderProfileType) {
   return (
-      <View>
-        <Pressable
-          onPress={() => props.handleClickIntoHeaderComponentEvent(SEE_BACKGROUND)}
-        >
-          <Image
-            style={styles.imageBackground}
-            source={{ uri: props.background }} />
-          <View style={styles.wrapperCameraBackground}>
-            <Pressable
-              onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
-              style={[styles.btnUploadImageBackground, styles.border]}>
-              <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-            </Pressable>
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => props.handleClickIntoHeaderComponentEvent(SEE_AVATAR)}
-        >
-          {
-            props.avatar != null ?
-              <View
-                style={[styles.imageAvatarWrapper, styles.border]}
-              >
-                <Image
-                  style={styles.avatar}
-                  source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
-                />
-                <Pressable
-                  onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
-                  style={[styles.btnUploadImageAvatar, styles.border]}>
-                  <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-                </Pressable>
-              </View>
-              :
-              <View style={styles.imageAvatarWrapper}>
-                <DefaultAvatar identifer={props.name[0]} size={120} />
-                <Pressable
-                  onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
-                  style={[styles.btnUploadImageAvatar, styles.border]}>
-                  <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-                </Pressable>
-              </View>
-          }
-        </Pressable>
-      </View>
+    <View>
+      <Pressable
+        onPress={() => props.handleClickIntoHeaderComponentEvent(SEE_BACKGROUND)}
+      >
+        <Image
+          style={styles.imageBackground}
+          source={{ uri: SERVER_ADDRESS + `api/images/${props.background}` }} />
+        <View style={styles.wrapperCameraBackground}>
+          <Pressable
+            onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
+            style={[styles.btnUploadImageBackground, styles.border]}>
+            <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
+          </Pressable>
+        </View>
+      </Pressable>
+      <Pressable
+        onPress={() => props.handleClickIntoHeaderComponentEvent(SEE_AVATAR)}
+      >
+        {
+          props.avatar != null ?
+            <View
+              style={[styles.imageAvatarWrapper, styles.border]}
+            >
+              <Image
+                style={styles.avatar}
+                source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
+              />
+              <Pressable
+                onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
+                style={[styles.btnUploadImageAvatar, styles.border]}>
+                <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
+              </Pressable>
+            </View>
+            :
+            <View style={styles.imageAvatarWrapper}>
+              <DefaultAvatar identifer={props.name[0]} size={120} />
+              <Pressable
+                onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
+                style={[styles.btnUploadImageAvatar, styles.border]}>
+                <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
+              </Pressable>
+            </View>
+        }
+      </Pressable>
+    </View>
   )
 }
 

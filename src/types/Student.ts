@@ -6,4 +6,5 @@ export interface Student extends User {
   major: string
   studentCode: string
   confimPassword: string
+  facultyGroupCode: string
 }

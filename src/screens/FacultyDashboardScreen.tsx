@@ -4,11 +4,10 @@ import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
 import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
-import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_FACULTY_POST, API_URL_POST } from '../constants/Path'
+import { API_URL_FACULTY_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
@@ -18,17 +17,19 @@ import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCR
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
+import { useIsFocused } from '@react-navigation/native';
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
-  const code = 'group_cong_nghe_thong_tin';
+  const code = (userLogin?.roleCodes == TYPE_POST_STUDENT || userLogin?.roleCodes == TYPE_POST_FACULTY) ? userLogin.facultyGroupCode : '';
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -41,6 +42,11 @@ export default function FacultyDashboardScreen() {
     }
   }, [facultyPost])
 
+
+  useEffect(() => {
+    getDataFacultyApi();
+  }, [isFocused])
+
   // Api
   const getDataFacultyApi = async () => {
     try {
@@ -49,6 +55,7 @@ export default function FacultyDashboardScreen() {
     } catch (error) {
       console.log(error)
     }
+    setIsCalled(true)
   }
 
   // Socket
@@ -85,7 +92,7 @@ export default function FacultyDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: userLogin?.facultyGroupId ?? 0 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {
@@ -139,7 +146,7 @@ export default function FacultyDashboardScreen() {
       >
         {/* Create post area */}
         {
-          userLogin?.roleCodes === TYPE_POST_FACULTY ? <View style={styles.toolbarCreatePost}>
+          (userLogin?.roleCodes === TYPE_POST_FACULTY || userLogin?.roleCodes === TYPE_POST_STUDENT) ? <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar
               role={userLogin?.roleCodes ?? ''}
               handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}

@@ -45,8 +45,9 @@ import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_SURVEY_POST } from '../constants/Variables'
 
 // man hinh dang bai viet thong
-export default function CreateNormalPostScreen({ navigation }: any) {
+export default function CreateNormalPostScreen({ navigation, route }: any) {
   // Variable
+  const { group } = route.params
   let alertString = null
   const [isLoading, setIsLoading] = useState(false)
   const [content, setContent] = useState('')
@@ -66,22 +67,6 @@ export default function CreateNormalPostScreen({ navigation }: any) {
     }
   }
 
-  const checkGroupId = (role: string) => {
-    switch (role) {
-      case TYPE_POST_BUSINESS:
-        return 2;
-
-      case TYPE_POST_STUDENT:
-        return 1;
-
-      case TYPE_POST_FACULTY:
-        return userLogin
-
-      default:
-        break;
-    }
-  }
-
   const handleClickCompleteButton = async () => {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
       try {
@@ -90,11 +75,8 @@ export default function CreateNormalPostScreen({ navigation }: any) {
           type: 'thong-thuong',
           userId: userLogin?.id,
           content: content,
-          groupId: checkGroupId(userLogin?.roleCodes ?? ''),
+          groupId: group,
         }
-        console.log('====================================');
-        console.log(userLogin);
-        console.log('====================================');
         // Send
         const status = await handlePutDataAPI(data)
         // Reset data
@@ -105,6 +87,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         if (status === 201) {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_SUCCESS, false)
           Keyboard.dismiss()
+          navigation.goBack();
         } else {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_FAIL, false)
         }
