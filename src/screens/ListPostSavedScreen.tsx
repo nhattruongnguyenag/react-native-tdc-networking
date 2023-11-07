@@ -4,16 +4,8 @@ import { Dropdown } from 'react-native-element-dropdown'
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { Post } from '../types/Post';
-import { ScrollView } from 'react-native-gesture-handler';
-import PDF from 'react-native-pdf';
-import DocumentPicker from 'react-native-document-picker';
-import { FileUploadRequest } from '../types/request/FileUploadRequest';
 import SavePostListView from '../components/listviews/SavePostListView';
 
-// interface SorceInteface{
-//   uri: string
-//   cache: boolean
-// }
 
 const ListPostSavedScreen = () => {
   const [data, setData] = useState<Post[]>([])
@@ -39,11 +31,7 @@ const ListPostSavedScreen = () => {
       value: 'tuyen-dung',
     }
   ])
-  // const [sourcePDF , setSource]= useState<SorceInteface>({
-  //   uri: '',
-  //   cache: true
-  // })
-  // const source = { uri: `${SERVER_ADDRESS}api/files/43_TB 148_HP GDQP HK he (1).pdf`, cache: true };
+
   useEffect(() => {
     axios
       .get(`${SERVER_ADDRESS}api/posts/user/save/12`)
@@ -64,16 +52,6 @@ const ListPostSavedScreen = () => {
     setDataType(dt)
   }
 
-  // useEffect(() => {
-  //     axios
-  //     .get(`${SERVER_ADDRESS}api/job/1`)
-  //     .then((response) => {
-  //       console.log(response.data.data.cvUrl);
-  //       setSource({ uri: `${SERVER_ADDRESS}api/files/${response.data.data.cvUrl}`, cache: true })
-  //     })
-  // }, [])
-  
-
   return (
     <View style={styles.searchScreen}>
 
@@ -92,23 +70,6 @@ const ListPostSavedScreen = () => {
         />
       </View>
       <SavePostListView data={data} dataType={dataType} type={type}/>
-      {/* <PDF
-        trustAllCerts={false}
-        source={sourcePDF}
-        onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`)
-        }}
-        onPageChanged={(page, numberOfPages) => {
-          console.log(`Current page: ${page}`)
-        }}
-        onError={(error) => {
-          console.log(error)
-        }}
-        onPressLink={(uri) => {
-          console.log(`Link pressed: ${uri}`)
-        }}
-        style={{ flex: 1 }}
-      /> */}
     </View>
   )
 }
