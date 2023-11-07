@@ -47,6 +47,7 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  DETAIL_JOB_APPLY,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -75,6 +76,7 @@ import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -107,6 +109,7 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   PROFILE_SCREEN: { userId: number } | undefined
+  DETAIL_JOB_APPLY: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -290,11 +293,17 @@ export function StackNavigator(): JSX.Element {
         component={ProfileScreen}
       />
 
+      <RootStack.Screen
+        name={DETAIL_JOB_APPLY}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        component={DetailJobApplyScreen}
+      />
+
       <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
     </RootStack.Navigator>
   )
 }
-
+// DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
   return (
     <TopTab.Navigator
