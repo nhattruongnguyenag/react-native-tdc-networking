@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     marginTop: 15,
-    marginBottom: 50,
+    marginBottom: 20,
   },
   dropDown: {
     flex: 1,

@@ -75,11 +75,8 @@ import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
-<<<<<<< HEAD
 import ListPostSavedScreen from './screens/ListPostSavedScreen'
-=======
 import ProfileScreen from './screens/ProfileScreen'
->>>>>>> develop
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -111,11 +108,8 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
-<<<<<<< HEAD
   LIST_POST_SAVED_SCREEN: undefined
-=======
   PROFILE_SCREEN: { userId: number } | undefined
->>>>>>> develop
 }
 
 const TopTab = createMaterialTopTabNavigator()
