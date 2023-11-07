@@ -1,12 +1,13 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
-import { GO_TO_MENU_ACTIONS, GO_TO_PROFILE_ACTIONS } from '../../constants/Variables'
+import { GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../../constants/Variables'
 import DefaultAvatar from '../DefaultAvatar'
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 
 export interface HeaderPostPropsType {
   name: string
@@ -27,7 +28,42 @@ export const BOTTOM_ICON_SIZE = 30
 const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
   // Get data
   let post = props
+  const [menuOption, setMenuOption] = useState<JSX.Element>();
+  useEffect(() => {
+    if (props.type === TYPE_NORMAL_POST) {
+      setMenuOption(
+          <MenuOption>
+            <Text style={styles.menuText}>Lưu bài viết</Text>
+          </MenuOption>
+      )
+    } else if (props.type === TYPE_RECRUITMENT_POST) {
+      setMenuOption(
+        <>
+          <MenuOption>
+            <Text style={styles.menuText}>Lưu bài viết</Text>
+          </MenuOption>
+          <MenuOption>
+            <Text style={styles.menuText}>Xem danh sách cv</Text>
+          </MenuOption>
+        </>
+      )
+    } else {
+      setMenuOption(
+        <>
+          <MenuOption>
+            <Text style={styles.menuText}>Lưu bài viết</Text>
+          </MenuOption>
+          <MenuOption>
+            <Text style={styles.menuText}>Xem kết quả khảo sát</Text>
+          </MenuOption>
+        </>
+      )
+    }
+  }, [])
 
+  useEffect(() => {
+
+  }, [])
   return (
     <View style={[styles.wrapHeader]}>
       <View style={styles.wrapAvatar}>
@@ -35,11 +71,12 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           // Go to profile screen
           onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
-          {props.avatar != null ? (
-            <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
-          ) : (
-            <DefaultAvatar size={43} identifer={props.name[0]} />
-          )}
+          {
+            props.avatar != null ?
+              <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
+              :
+              <DefaultAvatar size={43} identifer={props.name[0]} />
+          }
         </TouchableOpacity>
       </View>
       <View style={styles.wrapName}>
@@ -73,9 +110,16 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         </View>
       </View>
       <View style={styles.wrapMenu}>
-        <TouchableOpacity onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_MENU_ACTIONS)}>
-          <IconEntypo name='dots-three-vertical' size={HEADER_ICON_SIZE} color={COLOR_BLACK} />
-        </TouchableOpacity>
+        <Menu>
+          <MenuTrigger>
+            <View style={{ paddingTop: 15 }}>
+              <IconEntypo name='dots-three-vertical' size={HEADER_ICON_SIZE} color={COLOR_BLACK} />
+            </View>
+          </MenuTrigger>
+          <MenuOptions optionsContainerStyle={styles.menuOption}>
+            {menuOption}
+          </MenuOptions>
+        </Menu>
       </View>
     </View>
   )
@@ -138,7 +182,20 @@ const styles = StyleSheet.create({
   wrapMenu: {
     width: '5%',
     flexDirection: 'column',
-    alignItems: 'flex-end'
-  }
+    alignItems: 'flex-end',
+  },
+  menuText: {
+    fontSize: 15
+  },
+  menuOption: {
+    marginTop: 20,
+    borderRadius: 10,
+    paddingLeft: 10,
+    width: 130,
+    marginLeft: -15,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+
 })
 export default CustomizeHeaderPost

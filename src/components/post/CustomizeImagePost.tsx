@@ -77,17 +77,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
           style={styles.wrapImage}
         >
           {handleCheckImageHaveError(props.images[0]) ? (
-            <>
-              <CustomizeLayoutImageNotify />
-            </>
+            <CustomizeLayoutImageNotify />
           ) : (
-            <>
-              <Image
-                onError={() => handleAddImageToListError(props.images[0].id)}
-                style={styles.imageOnePost}
-                source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
-              />
-            </>
+            <Image
+              onError={() => handleAddImageToListError(props.images[0].id)}
+              style={styles.imageOnePost}
+              source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
+            />
           )}
         </TouchableOpacity>
       )
@@ -103,17 +99,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 style={styles.widthGreaterHeight}
               >
                 {handleCheckImageHaveError(item) ? (
-                  <>
-                    <CustomizeLayoutImageNotify />
-                  </>
+                  <CustomizeLayoutImageNotify />
                 ) : (
-                  <>
-                    <Image
-                      onError={() => handleAddImageToListError(item.id)}
-                      style={styles.imageOnePost}
-                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                    />
-                  </>
+                  <Image
+                    onError={() => handleAddImageToListError(item.id)}
+                    style={styles.imageOnePost}
+                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                  />
                 )}
               </TouchableOpacity>
             ))}
@@ -129,17 +121,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 style={styles.heightGreaterWidth}
               >
                 {handleCheckImageHaveError(item) ? (
-                  <>
-                    <CustomizeLayoutImageNotify />
-                  </>
+                  <CustomizeLayoutImageNotify />
                 ) : (
-                  <>
-                    <Image
-                      onError={() => handleAddImageToListError(item.id)}
-                      style={styles.imageOnePost}
-                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                    />
-                  </>
+                  <Image
+                    onError={() => handleAddImageToListError(item.id)}
+                    style={styles.imageOnePost}
+                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                  />
                 )}
               </TouchableOpacity>
             ))}
@@ -155,17 +143,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 style={styles.heightGreaterWidth}
               >
                 {handleCheckImageHaveError(item) ? (
-                  <>
-                    <CustomizeLayoutImageNotify />
-                  </>
+                  <CustomizeLayoutImageNotify />
                 ) : (
-                  <>
-                    <Image
-                      onError={() => handleAddImageToListError(item.id)}
-                      style={styles.imageOnePost}
-                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                    />
-                  </>
+                  <Image
+                    onError={() => handleAddImageToListError(item.id)}
+                    style={styles.imageOnePost}
+                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                  />
                 )}
               </TouchableOpacity>
             ))}
@@ -183,17 +167,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
               style={styles.widthGreaterHeight}
             >
               {handleCheckImageHaveError(props.images[0]) ? (
-                <>
-                  <CustomizeLayoutImageNotify />
-                </>
+                <CustomizeLayoutImageNotify />
               ) : (
-                <>
-                  <Image
-                    onError={() => handleAddImageToListError(props.images[0].id)}
-                    style={styles.imageOnePost}
-                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
-                  />
-                </>
+                <Image
+                  onError={() => handleAddImageToListError(props.images[0].id)}
+                  style={styles.imageOnePost}
+                  source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
+                />
               )}
             </TouchableOpacity>
             <View style={[styles.widthGreaterHeight, styles.wrapImageRow, styles.justifyContent]}>
@@ -204,17 +184,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.heightGreaterWidth}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -230,17 +206,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
               style={styles.heightGreaterWidth}
             >
               {handleCheckImageHaveError(props.images[0]) ? (
-                <>
-                  <CustomizeLayoutImageNotify />
-                </>
+                <CustomizeLayoutImageNotify />
               ) : (
-                <>
-                  <Image
-                    onError={() => handleAddImageToListError(props.images[0].id)}
-                    style={styles.imageOnePost}
-                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
-                  />
-                </>
+                <Image
+                  onError={() => handleAddImageToListError(props.images[0].id)}
+                  style={styles.imageOnePost}
+                  source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
+                />
               )}
             </TouchableOpacity>
             <View style={[styles.heightGreaterWidth, styles.justifyContent]}>
@@ -251,17 +223,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.widthGreaterHeight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -281,17 +249,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 style={styles.biggestWithGreaterHeight}
               >
                 {handleCheckImageHaveError(props.images[0]) ? (
-                  <>
-                    <CustomizeLayoutImageNotify />
-                  </>
+                  <CustomizeLayoutImageNotify />
                 ) : (
-                  <>
-                    <Image
-                      onError={() => handleAddImageToListError(props.images[0].id)}
-                      style={styles.imageOnePost}
-                      source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
-                    />
-                  </>
+                  <Image
+                    onError={() => handleAddImageToListError(props.images[0].id)}
+                    style={styles.imageOnePost}
+                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
+                  />
                 )}
               </TouchableOpacity>
             }
@@ -303,17 +267,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageBottom}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -330,17 +290,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
               style={styles.biggestHeightGreaterWidth}
             >
               {handleCheckImageHaveError(props.images[0]) ? (
-                <>
-                  <CustomizeLayoutImageNotify />
-                </>
+                <CustomizeLayoutImageNotify />
               ) : (
-                <>
-                  <Image
-                    onError={() => handleAddImageToListError(props.images[0].id)}
-                    style={styles.imageOnePost}
-                    source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
-                  />
-                </>
+                <Image
+                  onError={() => handleAddImageToListError(props.images[0].id)}
+                  style={styles.imageOnePost}
+                  source={{ uri: SERVER_ADDRESS + `api/images/${props.images[0].uri}` }}
+                />
               )}
             </TouchableOpacity>
             <View style={styles.rightWrapImageFour}>
@@ -351,17 +307,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageRight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -379,17 +331,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                 style={[styles.imageSquare, index % 2 === 0 ? styles.marginRight : null]}
               >
                 {handleCheckImageHaveError(item) ? (
-                  <>
-                    <CustomizeLayoutImageNotify />
-                  </>
+                  <CustomizeLayoutImageNotify />
                 ) : (
-                  <>
-                    <Image
-                      onError={() => handleAddImageToListError(item.id)}
-                      style={styles.imageOnePost}
-                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                    />
-                  </>
+                  <Image
+                    onError={() => handleAddImageToListError(item.id)}
+                    style={styles.imageOnePost}
+                    source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                  />
                 )}
               </TouchableOpacity>
             ))}
@@ -410,17 +358,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.heightGreaterWidth}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -433,17 +377,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageBottom}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -461,17 +401,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.widthGreaterHeight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -484,17 +420,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageRight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -515,17 +447,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.heightGreaterWidth}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -538,17 +466,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageBottom}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -589,17 +513,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.widthGreaterHeight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -612,17 +532,13 @@ const CustomizeImagePost = (props: ImagePostType) => {
                   style={styles.smallImageRight}
                 >
                   {handleCheckImageHaveError(item) ? (
-                    <>
-                      <CustomizeLayoutImageNotify />
-                    </>
+                    <CustomizeLayoutImageNotify />
                   ) : (
-                    <>
-                      <Image
-                        onError={() => handleAddImageToListError(item.id)}
-                        style={styles.imageOnePost}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
-                      />
-                    </>
+                    <Image
+                      onError={() => handleAddImageToListError(item.id)}
+                      style={styles.imageOnePost}
+                      source={{ uri: SERVER_ADDRESS + `api/images/${item.uri}` }}
+                    />
                   )}
                 </TouchableOpacity>
               ))}

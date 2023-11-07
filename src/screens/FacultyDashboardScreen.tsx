@@ -1,10 +1,9 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, View, RefreshControl } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
 import { TYPE_POST_FACULTY } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
-import { formatDateTime } from '../utils/FormatTime'
 import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
@@ -13,20 +12,30 @@ import { API_URL_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
+import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../App'
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
-  const [isLoading, setIsLoading] = useState(false)
-  const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [isCalled, setIsCalled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { updatePost, userLogin } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   // Function
 
   useEffect(() => {
-    if (facultyPost.length > 0) {
+    if (facultyPost.length > 0 || isCalled) {
       setIsLoading(false)
     } else {
       setIsLoading(true)
@@ -34,7 +43,7 @@ export default function FacultyDashboardScreen() {
   }, [facultyPost])
 
   // Api
-  const callAPI = async () => {
+  const getDataFacultyApi = async () => {
     try {
       const temp = await postAPI(API_URL_POST)
       const result = handleDataClassification(temp, TYPE_POST_FACULTY)
@@ -52,8 +61,8 @@ export default function FacultyDashboardScreen() {
       stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
     }
     const onMessageReceived = (payload: any) => {
-      console.log(payload.body)
       setFacultyPost(JSON.parse(payload.body))
+      setIsCalled(true)
     }
 
     const onError = (err: string | Frame) => {
@@ -68,13 +77,27 @@ export default function FacultyDashboardScreen() {
   }
 
   useEffect(() => {
-    callAPI()
+    getDataFacultyApi()
     dispatch(updatePostWhenHaveChangeComment(false))
   }, [updatePost])
 
   const like = useCallback((likeData: LikeAction) => {
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
+
+  const handleClickToCreateButtonEvent = (type: string) => {
+    if (type === TYPE_NORMAL_POST) {
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+    } else if (type === TYPE_RECRUITMENT_POST) {
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+    } else {
+      navigation.navigate(CREATE_SURVEY_SCREEN);
+    }
+  }
+
+  const handleClickIntoAvatar = () => {
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+  }
 
   const renderItem = (item: any) => {
     return (
@@ -103,16 +126,39 @@ export default function FacultyDashboardScreen() {
       />
     )
   }
+
   return (
     <View style={styles.container}>
-      {isLoading && <SkeletonPost />}
-      <FlatList
+      {
+        isLoading && <SkeletonPost />
+      }
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshing={false}
-        onRefresh={() => callAPI()}
-        data={facultyPost}
-        renderItem={({ item }) => renderItem(item)}
-      />
+        refreshControl={<RefreshControl
+          refreshing={false}
+          onRefresh={() => getDataFacultyApi()}
+        />}
+      >
+        {/* Create post area */}
+        {
+          userLogin?.roleCodes === TYPE_POST_FACULTY ? <View style={styles.toolbarCreatePost}>
+            <CustomizeCreatePostToolbar
+              role={userLogin?.roleCodes ?? ''}
+              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+              handleClickIntoAvatar={handleClickIntoAvatar}
+              image={userLogin?.image ?? null}
+              name={userLogin?.name ?? ''}
+            />
+          </View> : null
+        }
+
+        <FlatList
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          data={facultyPost}
+          renderItem={({ item }) => renderItem(item)}
+        />
+      </ScrollView>
     </View>
   )
 }
@@ -120,5 +166,8 @@ export default function FacultyDashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR_BOTTOM_AVATAR
+  },
+  toolbarCreatePost: {
+    marginBottom: 20,
   }
 })
