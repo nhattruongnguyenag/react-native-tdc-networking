@@ -29,7 +29,10 @@ import {
   TEXT_NOTIFYCATIONS,
   TEXT_PLACEHOLDER_INPUT_COMMENT,
   TEXT_TITLE,
-  TEXT_WARNING
+  TEXT_WARNING,
+  TYPE_POST_BUSINESS,
+  TYPE_POST_FACULTY,
+  TYPE_POST_STUDENT
 } from '../constants/StringVietnamese'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import axios from 'axios'
@@ -39,7 +42,7 @@ import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
-import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_SURVEY_POST } from '../constants/Variables'
 
 // man hinh dang bai viet thong
 export default function CreateNormalPostScreen({ navigation }: any) {
@@ -63,15 +66,35 @@ export default function CreateNormalPostScreen({ navigation }: any) {
     }
   }
 
+  const checkGroupId = (role: string) => {
+    switch (role) {
+      case TYPE_POST_BUSINESS:
+        return 2;
+
+      case TYPE_POST_STUDENT:
+        return 1;
+
+      case TYPE_POST_FACULTY:
+        return userLogin
+
+      default:
+        break;
+    }
+  }
+
   const handleClickCompleteButton = async () => {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
       try {
         const data = {
           images: images ?? [],
           type: 'thong-thuong',
-          userId: 1,
-          content: content
+          userId: userLogin?.id,
+          content: content,
+          groupId: checkGroupId(userLogin?.roleCodes ?? ''),
         }
+        console.log('====================================');
+        console.log(userLogin);
+        console.log('====================================');
         // Send
         const status = await handlePutDataAPI(data)
         // Reset data
