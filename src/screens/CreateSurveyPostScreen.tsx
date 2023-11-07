@@ -9,7 +9,14 @@ import { ADD_QUESTION_SCREEN } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setSurveyPostRequest } from '../redux/Slice'
 import { SurveyPostRequest } from '../types/SurveyPost'
-import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isNotBlank, isNotContainSpecialCharacter } from '../utils/ValidateUtils'
+import {
+  InputTextValidate,
+  isBlank,
+  isContainSpecialCharacter,
+  isLengthInRange,
+  isNotBlank,
+  isNotContainSpecialCharacter
+} from '../utils/ValidateUtils'
 
 interface CreateSurveyPostScreenValidate {
   title: InputTextValidate
@@ -90,17 +97,17 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setTitleError("Tiêu đề không được để trống")
+        setTitleError('Tiêu đề không được để trống')
         return
       }
 
       if (isContainSpecialCharacter(value)) {
-        setTitleError("Tiêu đề không được để trống")
+        setTitleError('Tiêu đề không được để trống')
         return
       }
 
       if (!isLengthInRange(value, 1, 255)) {
-        setTitleError("Tiêu đề không vượt quá 255 ký tự")
+        setTitleError('Tiêu đề không vượt quá 255 ký tự')
         return
       }
 
@@ -124,17 +131,17 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setDescriptionError("Mô tả không được để trống")
+        setDescriptionError('Mô tả không được để trống')
         return
       }
 
       if (isContainSpecialCharacter(value)) {
-        setDescriptionError("Mô tả không được để trống")
+        setDescriptionError('Mô tả không được để trống')
         return
       }
 
       if (!isLengthInRange(value, 1, 255)) {
-        setDescriptionError("Mô tả không vượt quá 255 ký tự")
+        setDescriptionError('Mô tả không vượt quá 255 ký tự')
         return
       }
 
@@ -166,9 +173,8 @@ export default function CreateSurveyPostScreen() {
         }
       }
 
-      setValidate({...validate})
+      setValidate({ ...validate })
     }
-
   }
 
   return (

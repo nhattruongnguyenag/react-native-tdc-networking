@@ -11,8 +11,10 @@ import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 
 const CustomizeModalImage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const dispatch = useAppDispatch()
   const [imageActive, setImageActive] = useState(0)
   // Function
@@ -41,7 +43,7 @@ const CustomizeModalImage = () => {
 
   const handleClickIntoUserNameOrAvatarEvent = () => {
     if (userIdOfProfileNow !== modalImageData?.userId) {
-      closeModal();
+      closeModal()
       if (currentScreenNowIsProfileScreen) {
         navigation.replace(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0 })
       } else {
@@ -71,14 +73,7 @@ const CustomizeModalImage = () => {
       </ScrollView>
       <View style={styles.container}>
         {modalImageData?.images.map((item, index) => (
-          <Text
-            key={item.id}
-            style={
-              imageActive == index
-                ? styles.nodeActive
-                : styles.nodeUnActive
-            }
-          ></Text>
+          <Text key={item.id} style={imageActive == index ? styles.nodeActive : styles.nodeUnActive}></Text>
         ))}
       </View>
     </Modal>
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: 'black',
-    margin: 2,
+    margin: 2
   }
 })
 export default CustomizeModalImage

@@ -10,98 +10,78 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import { FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
 
 export interface BusinessProfileType {
-  handleClickButtonEvent: (flag: number) => void,
-  timeWork: string,
-  TaxIdentificationNumber: string,
-  representative: string,
-  address: string,
-  phone: string,
-  email: string,
-  name: string,
+  handleClickButtonEvent: (flag: number) => void
+  timeWork: string
+  TaxIdentificationNumber: string
+  representative: string
+  address: string
+  phone: string
+  email: string
+  name: string
   numberPost: number
 }
 
 export default function CustomizeBodyBusinessProfile(props: BusinessProfileType) {
   return (
-      <View style={styles.containerInfo}>
-        {/* Name */}
-        <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
-        {/* Btn action */}
-        <View style={[styles.buttonContainer, styles.paddingBottom]}>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
-            style={[styles.buttonAction,
-            styles.marginRightBtnAction]}
-          >
-            <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
-            <Text style={styles.txtContentBtn}>
-              Gửi tin nhắn
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
-            style={[styles.buttonAction,
-            styles.marginRightBtnAction]}
-          >
-            <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
-            <Text style={styles.txtContentBtn}>
-              Theo dõi
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-            style={[
-              styles.marginRightBtnAction, styles.btnOption]}
-          >
-            <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-          </TouchableOpacity>
-        </View>
-        {/* Info */}
-        <View>
-          <View style={styles.infoContainer}>
-            <IconIonicons
-              style={styles.iconInfo}
-              name='time-outline' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Thời gian hoạt động: {props.timeWork}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFontAwesome
-              style={styles.iconInfo}
-              name='barcode' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Mã số thuế: {props.TaxIdentificationNumber}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFeather
-              style={styles.iconInfo}
-              name='user' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Người đại diện: {props.representative}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconEvilIcons
-              style={styles.iconInfo}
-              name='location' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Địa chỉ: {props.address}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFeather
-              style={styles.iconInfo}
-              name='phone-call' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFontisto
-              style={styles.iconInfo}
-              name='email' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Email: {props.email}</Text>
-          </View>
-        </View>
-        {/* Number post */}
-        <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
-        {/* Post */}
+    <View style={styles.containerInfo}>
+      {/* Name */}
+      <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
+      {/* Btn action */}
+      <View style={[styles.buttonContainer, styles.paddingBottom]}>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
+          style={[styles.buttonAction, styles.marginRightBtnAction]}
+        >
+          <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
+          <Text style={styles.txtContentBtn}>Gửi tin nhắn</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
+          style={[styles.buttonAction, styles.marginRightBtnAction]}
+        >
+          <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
+          <Text style={styles.txtContentBtn}>Theo dõi</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+          style={[styles.marginRightBtnAction, styles.btnOption]}
+        >
+          <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+        </TouchableOpacity>
       </View>
+      {/* Info */}
+      <View>
+        <View style={styles.infoContainer}>
+          <IconIonicons style={styles.iconInfo} name='time-outline' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Thời gian hoạt động: {props.timeWork}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFontAwesome style={styles.iconInfo} name='barcode' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Mã số thuế: {props.TaxIdentificationNumber}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFeather style={styles.iconInfo} name='user' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Người đại diện: {props.representative}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconEvilIcons style={styles.iconInfo} name='location' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Địa chỉ: {props.address}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFeather style={styles.iconInfo} name='phone-call' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFontisto style={styles.iconInfo} name='email' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Email: {props.email}</Text>
+        </View>
+      </View>
+      {/* Number post */}
+      <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
+      {/* Post */}
+    </View>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -124,12 +104,12 @@ const styles = StyleSheet.create({
   },
   containerInfo: {
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   name: {
     color: COLOR_BLACK,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 20
   },
   buttonAction: {
     backgroundColor: COLOR_BTN_BLUE,
@@ -137,7 +117,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 6,
     borderRadius: 7,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   btnOption: {
     backgroundColor: COLOR_GREY_FEEBLE,
@@ -145,14 +125,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 7,
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   txtContentBtn: {
     color: COLOR_WHITE,
-    paddingLeft: 5,
+    paddingLeft: 5
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   paddingVertical: {
     paddingVertical: 7,
@@ -163,22 +143,22 @@ const styles = StyleSheet.create({
     paddingBottom: 7
   },
   itemInfo: {
-    paddingVertical: 1,
+    paddingVertical: 1
   },
   marginRightBtnAction: {
-    marginRight: 15,
+    marginRight: 15
   },
   infoContainer: {
     flexDirection: 'row',
     // alignItems: 'center',
-    paddingVertical: 1,
+    paddingVertical: 1
   },
   iconInfo: {
     marginRight: 5,
-    width: '5%',
+    width: '5%'
   },
   textInfo: {
     color: COLOR_BLACK,
-    width: '95%',
+    width: '95%'
   }
 })

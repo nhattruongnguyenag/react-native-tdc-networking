@@ -12,11 +12,11 @@ interface ToolbarWithBackPressProps {
 
 export default function ToolbarWithBackPress({ title }: ToolbarWithBackPressProps) {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>()
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const handleGoBack = () => {
-    navigation.goBack();
-    dispatch(goToProfileScreen(0));
-    dispatch(setCurrentScreenNowIsProfileScreen(false));
+    navigation.goBack()
+    dispatch(goToProfileScreen(0))
+    dispatch(setCurrentScreenNowIsProfileScreen(false))
   }
   return (
     <View style={styles.toolbarBody}>

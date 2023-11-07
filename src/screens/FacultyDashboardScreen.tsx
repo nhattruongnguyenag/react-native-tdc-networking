@@ -14,7 +14,12 @@ import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import {
+  CREATE_NORMAL_POST_SCREEN,
+  CREATE_RECRUITMENT_SCREEN,
+  CREATE_SURVEY_SCREEN,
+  PROFILE_SCREEN
+} from '../constants/Screen'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
@@ -23,11 +28,9 @@ import { RootStackParamList } from '../App'
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
-  const [isCalled, setIsCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { updatePost, userLogin } = useAppSelector(
-    (state) => state.TDCSocialNetworkReducer
-  )
+  const [isCalled, setIsCalled] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { updatePost, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -87,11 +90,11 @@ export default function FacultyDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN)
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN)
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN)
     }
   }
 
@@ -129,19 +132,14 @@ export default function FacultyDashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {
-        isLoading && <SkeletonPost />
-      }
+      {isLoading && <SkeletonPost />}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl
-          refreshing={false}
-          onRefresh={() => getDataFacultyApi()}
-        />}
+        refreshControl={<RefreshControl refreshing={false} onRefresh={() => getDataFacultyApi()} />}
       >
         {/* Create post area */}
-        {
-          userLogin?.roleCodes === TYPE_POST_FACULTY ? <View style={styles.toolbarCreatePost}>
+        {userLogin?.roleCodes === TYPE_POST_FACULTY ? (
+          <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar
               role={userLogin?.roleCodes ?? ''}
               handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
@@ -149,8 +147,8 @@ export default function FacultyDashboardScreen() {
               image={userLogin?.image ?? null}
               name={userLogin?.name ?? ''}
             />
-          </View> : null
-        }
+          </View>
+        ) : null}
 
         <FlatList
           scrollEnabled={false}
@@ -168,6 +166,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BOTTOM_AVATAR
   },
   toolbarCreatePost: {
-    marginBottom: 20,
+    marginBottom: 20
   }
 })

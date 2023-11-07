@@ -17,23 +17,26 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import {
+  CREATE_NORMAL_POST_SCREEN,
+  CREATE_RECRUITMENT_SCREEN,
+  CREATE_SURVEY_SCREEN,
+  PROFILE_SCREEN
+} from '../constants/Screen'
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
   // Variable
-  const [isCalled, setIsCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { updatePost, userLogin } = useAppSelector(
-    (state) => state.TDCSocialNetworkReducer
-  )
+  const [isCalled, setIsCalled] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { updatePost, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
   const [refreshing, setRefreshing] = useState(false)
   const [studentsPost, setStudentPost] = useState([])
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
-  // Function 
+  // Function
   useEffect(() => {
     if (studentsPost.length > 0 || isCalled) {
       setIsLoading(false)
@@ -85,14 +88,13 @@ export default function StudentDiscussionDashboardScreen() {
     stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
-
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN)
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN)
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN)
     }
   }
 
@@ -130,14 +132,10 @@ export default function StudentDiscussionDashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {
-        isLoading && <SkeletonPost />
-      }
+      {isLoading && <SkeletonPost />}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => getDataStudentApi()} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => getDataStudentApi()} />}
       >
         {/* Image banner */}
         <Image
@@ -151,18 +149,17 @@ export default function StudentDiscussionDashboardScreen() {
           <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>
         {/* Create post */}
-        {
-          userLogin?.roleCodes === TYPE_POST_STUDENT ?
-            <View style={styles.toolbarCreatePost}>
-              <CustomizeCreatePostToolbar
-                role={userLogin?.roleCodes ?? ''}
-                handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-                handleClickIntoAvatar={handleClickIntoAvatar}
-                image={userLogin?.image ?? null}
-                name={userLogin?.name ?? ''}
-              />
-            </View> : null
-        }
+        {userLogin?.roleCodes === TYPE_POST_STUDENT ? (
+          <View style={styles.toolbarCreatePost}>
+            <CustomizeCreatePostToolbar
+              role={userLogin?.roleCodes ?? ''}
+              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+              handleClickIntoAvatar={handleClickIntoAvatar}
+              image={userLogin?.image ?? null}
+              name={userLogin?.name ?? ''}
+            />
+          </View>
+        ) : null}
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -194,6 +191,6 @@ const styles = StyleSheet.create({
     color: COLOR_WHITE
   },
   toolbarCreatePost: {
-    marginBottom: 20,
+    marginBottom: 20
   }
 })

@@ -22,15 +22,14 @@ export default function CustomizeImageModalShow(props: CustomizeImageModalShowTy
         {/* Header */}
         <View style={styles.wrapHeaderModalImage}>
           <TouchableOpacity style={styles.userInfoRight} onPress={() => props.handleClickIntoUserNameOrAvatarEvent()}>
-            {
-              props.authorInfo?.avatar != null ?
-                <Image
-                  style={styles.avatar}
-                  source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
-                />
-                :
-                <DefaultAvatar identifer={props.authorInfo.name[0]} size={40} />
-            }
+            {props.authorInfo?.avatar != null ? (
+              <Image
+                style={styles.avatar}
+                source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
+              />
+            ) : (
+              <DefaultAvatar identifer={props.authorInfo.name[0]} size={40} />
+            )}
             <Text style={styles.useName} numberOfLines={1}>
               {props.authorInfo?.name}
             </Text>

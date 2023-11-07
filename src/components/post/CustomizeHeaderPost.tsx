@@ -28,13 +28,13 @@ export const BOTTOM_ICON_SIZE = 30
 const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
   // Get data
   let post = props
-  const [menuOption, setMenuOption] = useState<JSX.Element>();
+  const [menuOption, setMenuOption] = useState<JSX.Element>()
   useEffect(() => {
     if (props.type === TYPE_NORMAL_POST) {
       setMenuOption(
-          <MenuOption>
-            <Text style={styles.menuText}>Lưu bài viết</Text>
-          </MenuOption>
+        <MenuOption>
+          <Text style={styles.menuText}>Lưu bài viết</Text>
+        </MenuOption>
       )
     } else if (props.type === TYPE_RECRUITMENT_POST) {
       setMenuOption(
@@ -61,9 +61,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
     }
   }, [])
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, [])
   return (
     <View style={[styles.wrapHeader]}>
       <View style={styles.wrapAvatar}>
@@ -71,12 +69,11 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           // Go to profile screen
           onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
-          {
-            props.avatar != null ?
-              <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
-              :
-              <DefaultAvatar size={43} identifer={props.name[0]} />
-          }
+          {props.avatar != null ? (
+            <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
+          ) : (
+            <DefaultAvatar size={43} identifer={props.name[0]} />
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.wrapName}>
@@ -116,9 +113,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
               <IconEntypo name='dots-three-vertical' size={HEADER_ICON_SIZE} color={COLOR_BLACK} />
             </View>
           </MenuTrigger>
-          <MenuOptions optionsContainerStyle={styles.menuOption}>
-            {menuOption}
-          </MenuOptions>
+          <MenuOptions optionsContainerStyle={styles.menuOption}>{menuOption}</MenuOptions>
         </Menu>
       </View>
     </View>
@@ -182,7 +177,7 @@ const styles = StyleSheet.create({
   wrapMenu: {
     width: '5%',
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   menuText: {
     fontSize: 15
@@ -195,7 +190,6 @@ const styles = StyleSheet.create({
     marginLeft: -15,
     paddingTop: 10,
     paddingBottom: 10
-  },
-
+  }
 })
 export default CustomizeHeaderPost

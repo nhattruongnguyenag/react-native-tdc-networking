@@ -21,16 +21,21 @@ import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import {
+  CREATE_NORMAL_POST_SCREEN,
+  CREATE_RECRUITMENT_SCREEN,
+  CREATE_SURVEY_SCREEN,
+  PROFILE_SCREEN
+} from '../constants/Screen'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
-  const [isCalled, setIsCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [businessPost, setBusinessPost] = useState([]);
+  const [isCalled, setIsCalled] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [businessPost, setBusinessPost] = useState([])
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
@@ -108,7 +113,7 @@ export default function BusinessDashboardScreen() {
     }
     const onMessageReceived = (payload: any) => {
       setBusinessPost(JSON.parse(payload.body))
-      setIsCalled(true);
+      setIsCalled(true)
     }
 
     const onError = (err: string | Frame) => {
@@ -133,11 +138,11 @@ export default function BusinessDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN)
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN)
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN)
     }
   }
 
@@ -173,40 +178,27 @@ export default function BusinessDashboardScreen() {
     )
   }
 
-
   return (
-
-
     <View style={styles.container}>
-      {
-        isOpenModalImage && <CustomizeModalImage />
-      }
-      {
-        isOpenModalUserReaction && <CustomizeModalUserReacted />
-      }
-      {
-        isLoading && <SkeletonPost />
-      }
+      {isOpenModalImage && <CustomizeModalImage />}
+      {isOpenModalUserReaction && <CustomizeModalUserReacted />}
+      {isLoading && <SkeletonPost />}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl
-          refreshing={false}
-          onRefresh={() => getDataBusinessApi()}
-        />}
+        refreshControl={<RefreshControl refreshing={false} onRefresh={() => getDataBusinessApi()} />}
       >
         {/* Create post area */}
-        {
-          userLogin?.roleCodes === TYPE_POST_BUSINESS ?
-            <View style={styles.toolbarCreatePost}>
-              <CustomizeCreatePostToolbar
-                role={userLogin?.roleCodes ?? ''}
-                handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-                handleClickIntoAvatar={handleClickIntoAvatar}
-                image={userLogin?.image ?? null}
-                name={userLogin?.name ?? ''}
-              />
-            </View> : null
-        }
+        {userLogin?.roleCodes === TYPE_POST_BUSINESS ? (
+          <View style={styles.toolbarCreatePost}>
+            <CustomizeCreatePostToolbar
+              role={userLogin?.roleCodes ?? ''}
+              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+              handleClickIntoAvatar={handleClickIntoAvatar}
+              image={userLogin?.image ?? null}
+              name={userLogin?.name ?? ''}
+            />
+          </View>
+        ) : null}
         <FlatList
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
@@ -216,7 +208,6 @@ export default function BusinessDashboardScreen() {
       </ScrollView>
       {isOpenModalComments && <CustomizeModalComments />}
     </View>
-
   )
 }
 
@@ -225,6 +216,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BOTTOM_AVATAR
   },
   toolbarCreatePost: {
-    marginBottom: 20,
+    marginBottom: 20
   }
 })

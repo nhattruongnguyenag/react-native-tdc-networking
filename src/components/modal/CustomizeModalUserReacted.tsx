@@ -11,7 +11,9 @@ import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 
 const CustomizeModalUserReacted = () => {
-  const { userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
 
