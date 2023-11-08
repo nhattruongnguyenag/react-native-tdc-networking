@@ -30,7 +30,12 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { formatDateTime } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import {
+  LIST_JOB_APPLY_SCREEN,
+  PROFILE_SCREEN,
+  RECRUITMENT_DETAIL_SCREEN,
+  SURVEY_CONDUCT_SCREEN
+} from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -44,7 +49,9 @@ const CustomizePost = (props: Post) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Get data
   let post = props
-  const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const dispatch = useAppDispatch()
 
   // Header area
@@ -333,6 +340,6 @@ const styles = StyleSheet.create({
   },
   bodyWrap: {
     marginVertical: 10
-  },
+  }
 })
 export default CustomizePost
