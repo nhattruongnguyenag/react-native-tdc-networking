@@ -1,4 +1,4 @@
-import { SPLASH_SCREEN } from './Screen'
+import { DETAIL_JOB_APPLY, SPLASH_SCREEN } from './Screen'
 
-export const INITIAL_SCREEN = SPLASH_SCREEN
-export const SERVER_ADDRESS = 'http://192.168.1.4:8080/'
+export const INITIAL_SCREEN = DETAIL_JOB_APPLY
+export const SERVER_ADDRESS = 'http://192.168.0.112:8080/'

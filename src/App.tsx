@@ -47,6 +47,7 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  DETAIL_JOB_APPLY,
   OPTION_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
@@ -76,6 +77,7 @@ import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 
 const vi = require('moment/locale/vi')
@@ -109,6 +111,7 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   PROFILE_SCREEN: { userId: number } | undefined
+  DETAIL_JOB_APPLY: undefined
   OPTION_SCREEN: undefined
 }
 
@@ -294,6 +297,11 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={DETAIL_JOB_APPLY}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        component={DetailJobApplyScreen} />
+        
+      <RootStack.Screen
         name={OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='' /> }}
         component={OptionScreen}
@@ -303,7 +311,7 @@ export function StackNavigator(): JSX.Element {
     </RootStack.Navigator>
   )
 }
-
+// DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
   return (
     <TopTab.Navigator
