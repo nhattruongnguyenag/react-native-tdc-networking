@@ -6,7 +6,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { TYPE_NORMAL_POST, TYPE_NORMAL_POST_TEXT, TYPE_RECRUITMENT_POST, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST, TYPE_SURVEY_POST_TXT } from '../constants/Variables'
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
+import { TEXT_PLACEHOLDER_CREATE_ANY_POST, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import DefaultAvatar from './DefaultAvatar'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 
@@ -20,7 +20,7 @@ export interface CreatePostToolbarType {
 
 export default function CustomizeCreatePostToolbar(props: CreatePostToolbarType) {
     const [typeChoose, setTypeChoose] = useState(TYPE_NORMAL_POST);
-    // Function
+
     const handleClickChooseTypePost = (typePost: string) => {
         setTypeChoose(typePost);
     }
@@ -51,7 +51,9 @@ export default function CustomizeCreatePostToolbar(props: CreatePostToolbarType)
                         onPress={() => props.handleClickToCreateButtonEvent(typeChoose)}
                         style={styles.wrapInput}>
                         <Text style={styles.txtInput}>
-                            Hay nhap noi dung bai viet
+                            {
+                                TEXT_PLACEHOLDER_CREATE_ANY_POST
+                            }
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -21,7 +21,6 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
-
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao

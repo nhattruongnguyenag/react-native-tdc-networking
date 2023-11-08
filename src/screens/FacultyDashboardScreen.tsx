@@ -2,13 +2,12 @@ import { FlatList, ScrollView, StyleSheet, View, RefreshControl } from 'react-na
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_FACULTY } from '../constants/StringVietnamese'
+import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
-import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_POST } from '../constants/Path'
+import { API_URL_FACULTY_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
@@ -18,21 +17,22 @@ import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCR
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
+import { useIsFocused } from '@react-navigation/native';
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+  const code = (userLogin?.roleCodes == TYPE_POST_STUDENT || userLogin?.roleCodes == TYPE_POST_FACULTY) ? userLogin.facultyGroupCode : '';
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-
-  // Function
 
   useEffect(() => {
     if (facultyPost.length > 0 || isCalled) {
@@ -42,23 +42,28 @@ export default function FacultyDashboardScreen() {
     }
   }, [facultyPost])
 
+
+  useEffect(() => {
+    getDataFacultyApi();
+  }, [isFocused])
+
   // Api
   const getDataFacultyApi = async () => {
     try {
-      const temp = await postAPI(API_URL_POST)
-      const result = handleDataClassification(temp, TYPE_POST_FACULTY)
-      setFacultyPost(result)
+      const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
+      setFacultyPost(data.data)
     } catch (error) {
       console.log(error)
     }
+    setIsCalled(true)
   }
 
   // Socket
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/${TYPE_POST_FACULTY}`, onMessageReceived)
-      stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
+      stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
+      stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
     }
     const onMessageReceived = (payload: any) => {
       setFacultyPost(JSON.parse(payload.body))
@@ -82,12 +87,12 @@ export default function FacultyDashboardScreen() {
   }, [updatePost])
 
   const like = useCallback((likeData: LikeAction) => {
-    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+    stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: userLogin?.facultyGroupId ?? 0 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {
@@ -141,7 +146,7 @@ export default function FacultyDashboardScreen() {
       >
         {/* Create post area */}
         {
-          userLogin?.roleCodes === TYPE_POST_FACULTY ? <View style={styles.toolbarCreatePost}>
+          (userLogin?.roleCodes === TYPE_POST_FACULTY || userLogin?.roleCodes === TYPE_POST_STUDENT) ? <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar
               role={userLogin?.roleCodes ?? ''}
               handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
