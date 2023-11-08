@@ -34,6 +34,7 @@ import {
   FOLLOWING_SCREEN,
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
+  LIST_FOLLOW_SCREEN,
   JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
@@ -74,6 +75,7 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
@@ -106,6 +108,7 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
+  LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
@@ -299,6 +302,12 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={LIST_FOLLOW_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách theo dõi' /> }}
+        component={ListFollowScreen}
+      />
+
+      <RootStack.Screen
         name={PROFILE_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
         component={ProfileScreen}
@@ -308,7 +317,7 @@ export function StackNavigator(): JSX.Element {
         name={DETAIL_JOB_APPLY}
         options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
         component={DetailJobApplyScreen} />
-        
+
       <RootStack.Screen
         name={OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='' /> }}
