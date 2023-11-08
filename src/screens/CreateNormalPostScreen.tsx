@@ -29,7 +29,10 @@ import {
   TEXT_NOTIFYCATIONS,
   TEXT_PLACEHOLDER_INPUT_COMMENT,
   TEXT_TITLE,
-  TEXT_WARNING
+  TEXT_WARNING,
+  TYPE_POST_BUSINESS,
+  TYPE_POST_FACULTY,
+  TYPE_POST_STUDENT
 } from '../constants/StringVietnamese'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import axios from 'axios'
@@ -39,11 +42,12 @@ import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
-import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_SURVEY_POST } from '../constants/Variables'
 
 // man hinh dang bai viet thong
-export default function CreateNormalPostScreen({ navigation }: any) {
+export default function CreateNormalPostScreen({ navigation, route }: any) {
   // Variable
+  const { group } = route.params
   let alertString = null
   const [isLoading, setIsLoading] = useState(false)
   const [content, setContent] = useState('')
@@ -69,8 +73,9 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         const data = {
           images: images ?? [],
           type: 'thong-thuong',
-          userId: 1,
-          content: content
+          userId: userLogin?.id,
+          content: content,
+          groupId: group,
         }
         // Send
         const status = await handlePutDataAPI(data)
@@ -82,6 +87,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         if (status === 201) {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_SUCCESS, false)
           Keyboard.dismiss()
+          navigation.goBack();
         } else {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_FAIL, false)
         }

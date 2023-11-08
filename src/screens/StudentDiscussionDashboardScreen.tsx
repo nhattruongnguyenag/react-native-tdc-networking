@@ -8,7 +8,7 @@ import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_POST } from '../constants/Path'
+import { API_URL_POST, API_URL_STUDENT_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
@@ -18,11 +18,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import { useIsFocused } from '@react-navigation/native';
 
 // man hinh hien thi danh sach bai viet thao luan cua sinh vien
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
+  const code = 'group_tdc';
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost, userLogin } = useAppSelector(
@@ -45,9 +48,8 @@ export default function StudentDiscussionDashboardScreen() {
   // Api
   const getDataStudentApi = async () => {
     try {
-      const temp = await postAPI(API_URL_POST)
-      const result = handleDataClassification(temp, TYPE_POST_STUDENT)
-      setStudentPost(result)
+      const data = await postAPI(API_URL_STUDENT_POST + userLogin?.id)
+      setStudentPost(data.data)
     } catch (error) {
       console.log(error)
     }
@@ -57,8 +59,8 @@ export default function StudentDiscussionDashboardScreen() {
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/${TYPE_POST_STUDENT}`, onMessageReceived)
-      stompClient.send(`/app/posts/${TYPE_POST_STUDENT}/listen`)
+      stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
+      stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
     }
     const onMessageReceived = (payload: any) => {
       setStudentPost(JSON.parse(payload.body))
@@ -79,16 +81,16 @@ export default function StudentDiscussionDashboardScreen() {
   useEffect(() => {
     getDataStudentApi()
     dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost])
+  }, [updatePost, isFocused])
 
   const like = useCallback((likeData: LikeAction) => {
-    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+    stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 1 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {

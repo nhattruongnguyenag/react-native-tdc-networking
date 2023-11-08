@@ -76,7 +76,11 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[0].image}` }}
               />
               :
-              <DefaultAvatar size={30} identifer={props.likes[0].name[0]} />
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[0].name[0]} />
+              </View>
             }
 
             {props.likes[0].image != null ?
@@ -85,7 +89,11 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[1].image}` }}
               />
               :
-              <DefaultAvatar size={30} identifer={props.likes[1].name[0]} />
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[1].name[0]} />
+              </View>
             }
 
             {props.likes[0].image != null ?
@@ -94,27 +102,31 @@ const CustomizeBottomPost = (props: BottomPostType) => {
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[2].image}` }}
               />
               :
-              <DefaultAvatar size={30} identifer={props.likes[2].name[0]} />
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[2].name[0]} />
+              </View>
             }
             <View style={[styles.avatarUserReacted, styles.numberUserReactedRemaining, styles.absolute]}>
               {numberUserReacted <= 9 ? (
-                  <Text style={styles.txtNumberUserReactedRemaining}>+{numberUserReacted - 3}</Text>
+                <Text style={styles.txtNumberUserReactedRemaining}>+{numberUserReacted - 3}</Text>
               ) : (
-                  <Text style={styles.txtNumberUserReactedRemaining}>9+</Text>
+                <Text style={styles.txtNumberUserReactedRemaining}>9+</Text>
               )}
             </View>
           </TouchableOpacity>
         ) : (
-            <TouchableOpacity
-              onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
-            >
-              <FlatList
-                style={styles.wrapAvatarBottomRight}
-                keyExtractor={(item) => item.id.toString()}
-                data={props.likes}
-                renderItem={({ item }) => renderItem(item)}
-              />
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
+          >
+            <FlatList
+              style={styles.wrapAvatarBottomRight}
+              keyExtractor={(item) => item.id.toString()}
+              data={props.likes}
+              renderItem={({ item }) => renderItem(item)}
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -192,13 +204,13 @@ const styles = StyleSheet.create({
   },
   avatarUserReactedContainer: {
     width: 100,
-    height: '100%'
+    height: '100%',
   },
   wrapAvatarBottomRight: {
     flexDirection: 'row'
   },
-  avatarUserReactedDefault:{
-    margin:1,
+  avatarUserReactedDefault: {
+    margin: 1,
   }
 })
 export default CustomizeBottomPost

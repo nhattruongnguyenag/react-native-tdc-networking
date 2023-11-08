@@ -1,40 +1,22 @@
-import {StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
-import { formatDateTime} from '../../utils/FormatTime'
 import CustomizeBodyPost from '../CustomizeBodyPost'
-import { TEXT_JOIN_SURVEY} from '../../constants/StringVietnamese'
+import { TEXT_JOIN_SURVEY } from '../../constants/StringVietnamese'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import CustomizeHeaderPost from '../post/CustomizeHeaderPost'
-import { TYPE_SURVEY_POST_TXT } from '../../constants/Variables'
+
 export interface RecruitmentPostType {
   id: number,
-  role: string,
-  createdAt: string,
-  typeAuthor: string,
-  image: string,
-  name: string,
-  type: string,
   title: string,
   description: string,
   handleClickBtnSeeDetailEvent: (id: number) => void
-  handleClickIntoAvatarAndNameAndMenuEvent: (id: number) => void
 }
 // Constant
 const ICON_SIZE = 15;
-export default function CustomizeSurveyPost(props: RecruitmentPostType) {
+export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>) {
 
   return (
     <View style={styles.container}>
-      <CustomizeHeaderPost
-        name={props.name}
-        avatar={props.image}
-        typeAuthor={TYPE_SURVEY_POST_TXT}
-        available={null}
-        timeCreatePost={formatDateTime(props.createdAt)}
-        type={props.type}
-        role={props.role}
-        handleClickIntoAvatarAndNameAndMenuEvent={props.handleClickIntoAvatarAndNameAndMenuEvent} />
       <View style={styles.contentContainer}>
         <View>
           <Text style={styles.title}>{props.title}</Text>
@@ -108,10 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BLUE_BANNER,
     padding: 5,
     alignItems: 'center',
-    marginVertical: 5,
     width: '40%',
     borderRadius: 5,
-    marginTop: 15,
   },
   item: {
     marginVertical: 2,
