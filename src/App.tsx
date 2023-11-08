@@ -110,7 +110,7 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
-  LIST_JOB_APPLY_SCREEN: undefined
+  LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   PROFILE_SCREEN: { userId: number } | undefined
   OPTION_SCREEN: undefined
 }
@@ -292,7 +292,7 @@ export function StackNavigator(): JSX.Element {
       
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Danh sách ứng tuyển'/> }}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển'/> }}
         component={ListJobApplyScreen}
       />
 

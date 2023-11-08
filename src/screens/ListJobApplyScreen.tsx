@@ -1,94 +1,92 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BLACK, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
 import { Image } from 'react-native'
+import { useRoute, RouteProp } from '@react-navigation/native'
+import axios from 'axios'
+import { RootStackParamList } from '../App'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import DefaultAvatar from '../components/DefaultAvatar'
 
 export default function ListJobApplyScreen() {
+  const [listJob, setListJob] = useState([
+    {
+      id: 0,
+      user: {
+        image: '',
+        name: '',
+        phone: '',
+        address: '',
+        email: ''
+      }
+    }
+  ])
+  const route = useRoute<RouteProp<RootStackParamList, 'LIST_JOB_APPLY_SCREEN'>>()
+  const postId = route.params?.postId ?? 0
+  useEffect(() => {
+    if (postId) {
+      axios
+        .get(SERVER_ADDRESS + 'api/job/post/' + postId)
+        .then((response) => {
+          setListJob(response.data.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }, [postId])
+
+  const handleGetDetailJobApply = (cvId: number) => {
+    console.log('CV được chọn' + cvId)
+  }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ marginVertical: 10 }}>
       <ScrollView>
-        <View style={styles.header}>
-          <Icon name='skyatlas' style={styles.icon}></Icon>
-          <Text style={styles.txtHeader}>Ứng viên</Text>
-          <Icon name='skyatlas' style={styles.icon}></Icon>
-        </View>
-        <TouchableOpacity>
-          <View style={styles.form}>
+        {listJob.map((item, index) => (
+          <View style={styles.form} key={index}>
             <View>
               <View style={styles.group}>
                 <View style={{ flex: 3 }}>
-                  <Image source={require('../assets/login/login.png')} style={styles.img} />
+                  {item.user.image == '' ? (
+                    <DefaultAvatar size={80} identifer={item.user.name[0]} />
+                  ) : (
+                    <Image source={{ uri: SERVER_ADDRESS + `api/images/${item.user.image}` }} style={styles.img} />
+                  )}
                 </View>
                 <View style={styles.item}>
-                  <Text style={styles.txt}>Nguyễn Thị Diệu</Text>
+                  <Text style={styles.txt}>{item.user.name}</Text>
                   <View>
-                    <View style={styles.itemChild}>
-                      <Icon name='phone-alt' style={styles.iconItem}></Icon>
-                      <Text style={styles.lbl}>2345346457</Text>
-                    </View>
+                    {item.user.phone != '' ? (
+                      <View style={styles.itemChild}>
+                        <Icon name='phone-alt' style={styles.iconItem}></Icon>
+                        <Text style={styles.lbl}>{item.user.phone}</Text>
+                      </View>
+                    ) : (
+                      ''
+                    )}
                     <View style={styles.itemChild}>
                       <Icon name='envelope' style={styles.iconItem}></Icon>
-                      <Text style={styles.lbl}>abc@gmail.com</Text>
+                      <Text style={styles.lbl}>{item.user.email}</Text>
                     </View>
+                    <TouchableOpacity onPress={() => handleGetDetailJobApply(item.id)}>
+                      <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
+                        <Icon name='file-pdf' style={[styles.iconItem, { color: COLOR_SUCCESS }]}></Icon>
+                        <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>Xem chi tiết cv</Text>
+                        <Icon
+                          name='angle-double-right'
+                          style={[styles.iconItem, { color: COLOR_SUCCESS, marginLeft: 5 }]}
+                        ></Icon>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </View>
-                <View style={styles.check}>
-                  <Text style={styles.txtCheck}>Đã xem</Text>
-                </View>
-              </View>
-              <View style={styles.bottom}>
-                <View style={styles.itemChild}>
-                  <Icon name='map-marker-alt' style={styles.iconItem}></Icon>
-                  <Text style={styles.lbl}>TP Hồ Chí Minh</Text>
-                </View>
-                <View style={styles.itemChild}>
-                  <Icon name='briefcase' style={styles.iconItem}></Icon>
-                  <Text style={styles.lbl}>Công nghệ thông tin</Text>
                 </View>
               </View>
             </View>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={[styles.form,{backgroundColor:'#e0ffff'}]}>
-            <View>
-              <View style={styles.group}>
-                <View style={{ flex: 3 }}>
-                  <Image source={require('../assets/login/login.png')} style={styles.img} />
-                </View>
-                <View style={styles.item}>
-                  <Text style={styles.txt}>Nguyễn Thị Diệu</Text>
-                  <View>
-                    <View style={styles.itemChild}>
-                      <Icon name='phone-alt' style={styles.iconItem}></Icon>
-                      <Text style={styles.lbl}>2345346457</Text>
-                    </View>
-                    <View style={styles.itemChild}>
-                      <Icon name='envelope' style={styles.iconItem}></Icon>
-                      <Text style={styles.lbl}>abc@gmail.com</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={[styles.check, {backgroundColor:'#32cd32'}]}>
-                  <Text style={styles.txtCheck}>Chưa xem</Text>
-                </View>
-              </View>
-              <View style={styles.bottom}>
-                <View style={styles.itemChild}>
-                  <Icon name='map-marker-alt' style={styles.iconItem}></Icon>
-                  <Text style={styles.lbl}>TP Hồ Chí Minh</Text>
-                </View>
-                <View style={styles.itemChild}>
-                  <Icon name='briefcase' style={styles.iconItem}></Icon>
-                  <Text style={styles.lbl}>Công nghệ thông tin</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+        ))}
       </ScrollView>
     </SafeAreaView>
   )
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical:5
+    marginVertical: 5
   },
   icon: {
     fontSize: 16,
@@ -120,12 +118,10 @@ const styles = StyleSheet.create({
   group: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-around',
-    borderBottomColor: COLOR_GREY,
-    borderBottomWidth: 1
+    justifyContent: 'space-around'
   },
   item: {
-    flex: 6
+    flex: 7
   },
   txt: {
     fontWeight: 'bold',
@@ -134,9 +130,7 @@ const styles = StyleSheet.create({
   },
   form: {
     margin: 10,
-   
     borderRadius: 10,
-    
     padding: 10,
     backgroundColor: COLOR_WHITE
   },
@@ -151,24 +145,14 @@ const styles = StyleSheet.create({
     color: COLOR_GREY,
     marginRight: 10
   },
-  check: {
-    flex: 2,
-    backgroundColor: '#f08080',
-    borderRadius: 5,
-    padding: 5,
-    alignItems: 'center',
-  },
-  txtCheck:{
-    color:COLOR_WHITE,
-    fontWeight:'bold'
-  },
   bottom: {
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around'
   },
-  itemChild:{
-    flexDirection: 'row', alignItems: 'center' 
+  itemChild: {
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })

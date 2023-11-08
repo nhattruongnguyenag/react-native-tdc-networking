@@ -199,6 +199,7 @@ const CustomizePost = (props: Post) => {
     console.log('====================================');
     console.log('handleSeeListCvPost' + post.id);
     console.log('====================================');
+    navigation.navigate('LIST_JOB_APPLY_SCREEN', {postId: post.id})
   }
 
 
