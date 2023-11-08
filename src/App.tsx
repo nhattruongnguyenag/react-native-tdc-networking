@@ -35,6 +35,7 @@ import {
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
   JOB_APPLY_SCREEN,
+  LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
@@ -76,6 +77,7 @@ import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
+import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
@@ -110,6 +112,7 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  LIST_POST_SAVED_SCREEN: undefined
   PROFILE_SCREEN: { userId: number } | undefined
   DETAIL_JOB_APPLY: undefined
   OPTION_SCREEN: undefined
@@ -282,6 +285,11 @@ export function StackNavigator(): JSX.Element {
         name={JOB_APPLY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Ứng tuyển' /> }}
         component={JobApplyScreen}
+      />
+      <RootStack.Screen
+        name={LIST_POST_SAVED_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Lưu' /> }}
+        component={ListPostSavedScreen}
       />
 
       <RootStack.Screen
