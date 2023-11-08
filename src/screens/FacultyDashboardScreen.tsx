@@ -1,60 +1,73 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, View, RefreshControl } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_FACULTY } from '../constants/StringVietnamese'
+import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
-import { formatDateTime } from '../utils/FormatTime'
-import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_POST } from '../constants/Path'
+import { API_URL_FACULTY_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
-import SkeletonPost from './SkeletonPost'
+import SkeletonPost from '../components/SkeletonPost'
+import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../App'
+import { useIsFocused } from '@react-navigation/native';
 
 // man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
+  const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { updatePost } = useAppSelector(
+  const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+  const code = (userLogin?.roleCodes == TYPE_POST_STUDENT || userLogin?.roleCodes == TYPE_POST_FACULTY) ? userLogin.facultyGroupCode : '';
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
-
-  // Function
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   useEffect(() => {
-    if (facultyPost.length > 0) {
+    if (facultyPost.length > 0 || isCalled) {
       setIsLoading(false)
     } else {
       setIsLoading(true)
     }
   }, [facultyPost])
 
+
+  useEffect(() => {
+    getDataFacultyApi();
+  }, [isFocused])
+
   // Api
-  const callAPI = async () => {
+  const getDataFacultyApi = async () => {
     try {
-      const temp = await postAPI(API_URL_POST)
-      const result = handleDataClassification(temp, TYPE_POST_FACULTY)
-      setFacultyPost(result)
+      const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
+      setFacultyPost(data.data)
     } catch (error) {
       console.log(error)
     }
+    setIsCalled(true)
   }
 
   // Socket
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/${TYPE_POST_FACULTY}`, onMessageReceived)
-      stompClient.send(`/app/posts/${TYPE_POST_FACULTY}/listen`)
+      stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
+      stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
     }
     const onMessageReceived = (payload: any) => {
       setFacultyPost(JSON.parse(payload.body))
+      setIsCalled(true)
     }
 
     const onError = (err: string | Frame) => {
@@ -69,13 +82,27 @@ export default function FacultyDashboardScreen() {
   }
 
   useEffect(() => {
-    callAPI()
+    getDataFacultyApi()
     dispatch(updatePostWhenHaveChangeComment(false))
   }, [updatePost])
 
   const like = useCallback((likeData: LikeAction) => {
-    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+    stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
   }, [])
+
+  const handleClickToCreateButtonEvent = (type: string) => {
+    if (type === TYPE_NORMAL_POST) {
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: userLogin?.facultyGroupId ?? 0 });
+    } else if (type === TYPE_RECRUITMENT_POST) {
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+    } else {
+      navigation.navigate(CREATE_SURVEY_SCREEN);
+    }
+  }
+
+  const handleClickIntoAvatar = () => {
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+  }
 
   const renderItem = (item: any) => {
     return (
@@ -86,30 +113,57 @@ export default function FacultyDashboardScreen() {
         avatar={item.user['image']}
         typeAuthor={null}
         available={null}
-        timeCreatePost={formatDateTime(item.createdAt)}
+        timeCreatePost={item.createdAt}
         content={item.content}
-        type={null}
+        type={item.type}
         likes={item.likes}
         comments={item.comment}
         commentQty={item.commentQuantity}
         images={item.images}
-        role={2}
+        role={item.user['roleCodes']}
         likeAction={likeAction}
+        location={item.location ?? null}
+        title={item.title ?? null}
+        expiration={item.expiration ?? null}
+        salary={item.salary ?? null}
+        employmentType={item.employmentType ?? null}
+        description={item.description ?? null}
       />
     )
   }
+
   return (
     <View style={styles.container}>
       {
         isLoading && <SkeletonPost />
       }
-      <FlatList
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshing={false}
-        onRefresh={() => callAPI()}
-        data={facultyPost}
-        renderItem={({ item }) => renderItem(item)}
-      />
+        refreshControl={<RefreshControl
+          refreshing={false}
+          onRefresh={() => getDataFacultyApi()}
+        />}
+      >
+        {/* Create post area */}
+        {
+          (userLogin?.roleCodes === TYPE_POST_FACULTY || userLogin?.roleCodes === TYPE_POST_STUDENT) ? <View style={styles.toolbarCreatePost}>
+            <CustomizeCreatePostToolbar
+              role={userLogin?.roleCodes ?? ''}
+              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+              handleClickIntoAvatar={handleClickIntoAvatar}
+              image={userLogin?.image ?? null}
+              name={userLogin?.name ?? ''}
+            />
+          </View> : null
+        }
+
+        <FlatList
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          data={facultyPost}
+          renderItem={({ item }) => renderItem(item)}
+        />
+      </ScrollView>
     </View>
   )
 }
@@ -117,5 +171,8 @@ export default function FacultyDashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR_BOTTOM_AVATAR
+  },
+  toolbarCreatePost: {
+    marginBottom: 20,
   }
 })

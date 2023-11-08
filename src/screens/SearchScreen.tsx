@@ -73,7 +73,6 @@ export default function SearchScreen() {
   //Search
   const handleSearch = () => {
     if (subjects == 'user') {
-
       stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
         userId: userLogin?.id,
         type: type,
@@ -170,7 +169,7 @@ export default function SearchScreen() {
               data={items}
               value={value}
               placeholder={label}
-              labelField='label'
+              labelField='label'  
               valueField='value'
               onChange={(item) => {
                 setMasterData([])

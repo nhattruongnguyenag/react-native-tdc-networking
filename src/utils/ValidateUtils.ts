@@ -24,14 +24,12 @@ export function isNotBlank(text: string): boolean {
 }
 
 export function isLengthInRange(text: string, min: number, max: number): boolean {
-  console.log(`/^.{${min},${max}}$/g`)
   const pattern = new RegExp(`^.{${min},${max}}$`)
   return pattern.test(text)
 }
 
 export function isEmail(text: string): boolean {
-  const pattern =
-    /^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+?((?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$/
+  const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
   return pattern.test(text)
 }
 

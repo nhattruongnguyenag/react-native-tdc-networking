@@ -28,6 +28,8 @@ export interface TDCSocialNetworkState {
   modalCommentData: ModalComments | null
   modalUserReactionData: ModalUserReaction | null
   updatePost: boolean
+  userIdOfProfileNow: number
+  currentScreenNowIsProfileScreen: boolean
 }
 
 const initialState: TDCSocialNetworkState = {
@@ -46,7 +48,9 @@ const initialState: TDCSocialNetworkState = {
   modalImageData: null,
   modalCommentData: null,
   modalUserReactionData: null,
-  updatePost: false
+  updatePost: false,
+  userIdOfProfileNow: 0,
+  currentScreenNowIsProfileScreen: false
 }
 
 export const TDCSocialNetworkSlice = createSlice({
@@ -117,6 +121,12 @@ export const TDCSocialNetworkSlice = createSlice({
     closeModalUserReaction: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
     },
+    goToProfileScreen: (state, action: PayloadAction<number>) => {
+      state.userIdOfProfileNow = action.payload
+    },
+    setCurrentScreenNowIsProfileScreen: (state, action: PayloadAction<boolean>) => {
+      state.currentScreenNowIsProfileScreen = action.payload
+    },
     updatePostWhenHaveChangeComment: (state, action: PayloadAction<boolean>) => {
       state.updatePost = action.payload
     },
@@ -147,7 +157,9 @@ export const {
   openModalUserReaction,
   closeModalUserReaction,
   setSelectConversation,
-  updatePostWhenHaveChangeComment
+  updatePostWhenHaveChangeComment,
+  goToProfileScreen,
+  setCurrentScreenNowIsProfileScreen
 } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer

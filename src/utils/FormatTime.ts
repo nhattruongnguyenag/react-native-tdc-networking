@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const formatDateTime = (originalDateString: string): any => {
   const originalDate = new Date(originalDateString)
   const day = originalDate.getDate()
@@ -7,4 +9,8 @@ export const formatDateTime = (originalDateString: string): any => {
   const minute = originalDate.getMinutes()
   const formattedTime = `${day}/${month}/${year} ${hour}:${minute}`
   return formattedTime
+}
+
+export const numberDayPassed = (originalDateString: string) => {
+  return moment(originalDateString).fromNow()
 }
