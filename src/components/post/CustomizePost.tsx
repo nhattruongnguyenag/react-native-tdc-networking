@@ -132,7 +132,7 @@ const CustomizePost = (props: Post) => {
   }
 
   const showToast = (status: number) => {
-    if (status === 200) {
+    if (status === 201) {
       Toast.show({
         type: 'success',
         text1: TEXT_NOTIFYCATIONS,
