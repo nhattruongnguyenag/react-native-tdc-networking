@@ -19,3 +19,7 @@ export const SEE_BACKGROUND = 0;
 export const SEE_AVATAR = 1;
 export const CLICK_CAMERA_AVATAR_EVENT = 2;
 export const CLICK_CAMERA_BACKGROUND_EVENT = 3;
+export const CLICK_SAVE_POST_EVENT = 0;
+export const CLICK_DELETE_POST_EVENT = 1;
+export const CLICK_SEE_RESULT_POST_EVENT = 2;
+export const CLICK_SEE_LIST_CV_POST_EVENT = 3;
