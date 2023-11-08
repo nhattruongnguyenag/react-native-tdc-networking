@@ -16,7 +16,6 @@ const DetailJobApplyScreen = () => {
     uri: '',
     cache: true
   })
-  // const source = { uri: `${SERVER_ADDRESS}api/files/43_TB 148_HP GDQP HK he (1).pdf`, cache: true };
   useEffect(() => {
       axios
       .get(`${SERVER_ADDRESS}api/job/1`)
@@ -29,22 +28,9 @@ const DetailJobApplyScreen = () => {
 
   return (
     <View style={styles.detailJobAppyScreen}>
-
       <PDF
         trustAllCerts={false}
         source={sourcePDF}
-        onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`)
-        }}
-        onPageChanged={(page, numberOfPages) => {
-          console.log(`Current page: ${page}`)
-        }}
-        onError={(error) => {
-          console.log(error)
-        }}
-        onPressLink={(uri) => {
-          console.log(`Link pressed: ${uri}`)
-        }}
         style={{ flex: 1 }}
       />
     </View>
