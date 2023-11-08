@@ -15,7 +15,7 @@ import { handleDataClassification } from '../utils/DataClassfications'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_POST } from '../constants/Path'
+import { API_URL_BUSINESS_POST, API_URL_POST } from '../constants/Path'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { useNavigation } from '@react-navigation/native'
@@ -23,11 +23,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { useIsFocused } from '@react-navigation/native';
 
 let stompClient: Client
 // man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
   // Variable
+  const isFocused = useIsFocused();
+  const code = 'group_connect_business';
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [businessPost, setBusinessPost] = useState([]);
@@ -39,6 +42,7 @@ export default function BusinessDashboardScreen() {
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Function area
+
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -92,9 +96,8 @@ export default function BusinessDashboardScreen() {
 
   const getDataBusinessApi = async () => {
     try {
-      const data = await postAPI(API_URL_POST)
-      const result = handleDataClassification(data, TYPE_POST_BUSINESS)
-      setBusinessPost(result)
+      const data = await postAPI(API_URL_BUSINESS_POST + userLogin?.id)
+      setBusinessPost(data.data)
     } catch (error) {
       console.log(error)
     }
@@ -103,8 +106,8 @@ export default function BusinessDashboardScreen() {
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/${TYPE_POST_BUSINESS}`, onMessageReceived)
-      stompClient.send(`/app/posts/${TYPE_POST_BUSINESS}/listen`)
+      stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
+      stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
     }
     const onMessageReceived = (payload: any) => {
       setBusinessPost(JSON.parse(payload.body))
@@ -123,17 +126,17 @@ export default function BusinessDashboardScreen() {
   }
 
   const like = useCallback((likeData: LikeAction) => {
-    stompClient.send(`/app/posts/${likeData.code}/like`, {}, JSON.stringify(likeData))
+    stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
   }, [])
 
   useEffect(() => {
     getDataBusinessApi()
     dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost])
+  }, [updatePost, isFocused])
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN);
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 2 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {

@@ -41,3 +41,13 @@ export const deleteCommentApi = async (urlApiDeleteComment: string, data: any): 
     throw error
   }
 }
+
+export const savePostAPI = async (urlSavePost: string, data: any) => {
+  try {
+    const response = await axios.post(urlSavePost, data);
+    return response.data.status;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
