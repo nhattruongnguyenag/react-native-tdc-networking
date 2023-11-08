@@ -34,8 +34,10 @@ import {
   FOLLOWING_SCREEN,
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
+  LIST_FOLLOW_SCREEN,
   JOB_APPLY_SCREEN,
   LIST_JOB_APPLY_SCREEN,
+  LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
@@ -48,6 +50,7 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  DETAIL_JOB_APPLY,
   OPTION_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
@@ -73,11 +76,14 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ListJobApplyScreen from './screens/ListJobApplyScreen'
+import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 
 const vi = require('moment/locale/vi')
@@ -104,6 +110,7 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
+  LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
@@ -111,7 +118,9 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
+  LIST_POST_SAVED_SCREEN: undefined
   PROFILE_SCREEN: { userId: number } | undefined
+  DETAIL_JOB_APPLY: undefined
   OPTION_SCREEN: undefined
 }
 
@@ -283,6 +292,11 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Ứng tuyển' /> }}
         component={JobApplyScreen}
       />
+      <RootStack.Screen
+        name={LIST_POST_SAVED_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Lưu' /> }}
+        component={ListPostSavedScreen}
+      />
 
       <RootStack.Screen
         name={CREATE_NORMAL_POST_SCREEN}
@@ -297,10 +311,21 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={LIST_FOLLOW_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách theo dõi' /> }}
+        component={ListFollowScreen}
+      />
+
+      <RootStack.Screen
         name={PROFILE_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
         component={ProfileScreen}
       />
+
+      <RootStack.Screen
+        name={DETAIL_JOB_APPLY}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        component={DetailJobApplyScreen} />
 
       <RootStack.Screen
         name={OPTION_SCREEN}
@@ -312,7 +337,7 @@ export function StackNavigator(): JSX.Element {
     </RootStack.Navigator>
   )
 }
-
+// DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
   return (
     <TopTab.Navigator

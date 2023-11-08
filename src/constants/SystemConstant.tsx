@@ -1,4 +1,4 @@
-import { SPLASH_SCREEN } from './Screen'
+import { SPLASH_SCREEN, LIST_POST_SAVED_SCREEN } from './Screen'
 
 export const INITIAL_SCREEN = SPLASH_SCREEN
 export const SERVER_ADDRESS = 'http://192.168.194.155:8080/'
