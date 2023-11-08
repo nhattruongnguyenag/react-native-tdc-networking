@@ -5,13 +5,16 @@ import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BLACK, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
 import { Image } from 'react-native'
-import { useRoute, RouteProp } from '@react-navigation/native'
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { RootStackParamList } from '../App'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import DefaultAvatar from '../components/DefaultAvatar'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { DETAIL_JOB_APPLY } from '../constants/Screen'
 
 export default function ListJobApplyScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const [listJob, setListJob] = useState([
     {
       id: 0,
@@ -19,9 +22,9 @@ export default function ListJobApplyScreen() {
         image: '',
         name: '',
         phone: '',
-        address: '',
         email: ''
-      }
+      },
+      cvUrl: ''
     }
   ])
   const route = useRoute<RouteProp<RootStackParamList, 'LIST_JOB_APPLY_SCREEN'>>()
@@ -41,6 +44,7 @@ export default function ListJobApplyScreen() {
 
   const handleGetDetailJobApply = (cvId: number) => {
     console.log('CV được chọn' + cvId)
+    navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
   return (
     <SafeAreaView style={{ marginVertical: 10 }}>
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   item: {
-    flex: 7
+    flex: 8
   },
   txt: {
     fontWeight: 'bold',

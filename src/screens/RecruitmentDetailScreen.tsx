@@ -70,7 +70,7 @@ export default function RecruitmentDetailScreen() {
               <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
               <Text style={{ color: COLOR_BLACK }}>
                 {' '}
-                {formatVietNamCurrency(dataRecruitmentDetail.salary)} ${}
+                {formatVietNamCurrency(dataRecruitmentDetail.salary)} vnd/tháng{}
               </Text>
             </View>
           </View>
@@ -123,18 +123,6 @@ export default function RecruitmentDetailScreen() {
             </View>
           </View>
         </View>
-
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Thông tin khác</Text>
-          </View>
-          <View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>Không có</Text>
-            </View>
-          </View>
-        </View>
       </SafeAreaView>
 
       <View>
@@ -179,7 +167,8 @@ const styles = StyleSheet.create({
   },
   welfare: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginLeft: 10
   },
   welfareTxt: {
     backgroundColor: '#3cb371',

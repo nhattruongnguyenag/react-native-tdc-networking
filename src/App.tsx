@@ -120,7 +120,7 @@ export type RootStackParamList = {
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   LIST_POST_SAVED_SCREEN: undefined
   PROFILE_SCREEN: { userId: number } | undefined
-  DETAIL_JOB_APPLY: undefined
+  DETAIL_JOB_APPLY: { cvId: number } | undefined
   OPTION_SCREEN: undefined
 }
 
