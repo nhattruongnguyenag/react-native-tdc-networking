@@ -10,6 +10,7 @@ import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
 import { QuestionResponse } from '../types/response/QuestionResponse'
+import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 
 export const TDCSocialNetworkAPI = createApi({
@@ -79,6 +80,11 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       })
+    }),
+    getSurveyResult: builder.query<Data<SurveyItemResult[]>, number>({
+      query: (surveyPostId) => ({
+        url: `api/posts/survey/${surveyPostId}/result`
+      })
     })
   })
 })
@@ -86,6 +92,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,
   useAddSurveyPostMutation,
