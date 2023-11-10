@@ -36,9 +36,10 @@ export default function SurveyConductScreen() {
         answers: []
     })
 
-    const { data, isFetching, isSuccess } = useGetQuestionsFromSurveyPostQuery(route.params?.surveyPostId ?? -1, {
-        pollingInterval: 1000
-    })
+    const postId = route.params?.surveyPostId ?? -1
+    const userId = userLogin?.id ?? -1
+
+    const { data, isFetching, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId })
 
     const onBtnPublishPostPress = () => {
         if (isAllFieldValid(validates)) {
@@ -106,8 +107,9 @@ export default function SurveyConductScreen() {
                 {data?.data.questions.map((item, index) => {
                     if (item.type === MULTI_CHOICE_QUESTION) {
                         return (
-                            <Fragment>
+                            <Fragment key={index.toString()}>
                                 <MultiChoiceQuestion
+                                    conductMode
                                     dataResponse={item}
                                     index={index}
                                     isDisableDeleteBtn
@@ -139,8 +141,9 @@ export default function SurveyConductScreen() {
                         )
                     } else if (item.type === ONE_CHOICE_QUESTION) {
                         return (
-                            <Fragment>
+                            <Fragment key={index.toString()}>
                                 <OneChoiceQuestion
+                                    conductMode
                                     dataResponse={item}
                                     index={index}
                                     isDisableDeleteBtn
@@ -172,8 +175,9 @@ export default function SurveyConductScreen() {
                         )
                     } else {
                         return (
-                            <Fragment>
+                            <Fragment key={index.toString()}>
                                 <ShortAnswerQuestion
+                                    conductMode
                                     onTextChange={(value) => {
                                         if (isNotBlank(value.trim())) {
                                             surveyConductRequest.answers[index].content = value

@@ -43,7 +43,7 @@ function OptionSurveyQuesionResult(props: OptionSurveyQuesionResultProps) {
         tooltipVisible: false
       }
     })
-  }, [])
+  }, [props.data])
 
   return (
     <View>

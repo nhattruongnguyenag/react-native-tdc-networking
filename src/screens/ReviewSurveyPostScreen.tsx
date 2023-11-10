@@ -9,9 +9,8 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
-import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyPostMutation } from '../redux/Service'
-import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -30,6 +29,7 @@ export default function ReviewSurveyPostScreen() {
   }, [addSurveyResult])
 
   const onBtnPublishPostPress = () => {
+    console.log(JSON.stringify(surveyPostRequest))
     if (surveyPostRequest) {
       addSurvey(surveyPostRequest)
     }
@@ -50,11 +50,20 @@ export default function ReviewSurveyPostScreen() {
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion data={item} index={index} isDisableDeleteBtn />
+            return <MultiChoiceQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion data={item} index={index} isDisableDeleteBtn />
+            return <OneChoiceQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           } else {
-            return <ShortAnswerQuestion data={item} index={index} isDisableDeleteBtn />
+            return <ShortAnswerQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           }
         })}
       </View>

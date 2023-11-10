@@ -4,6 +4,7 @@ export interface Question {
   type: string
   title: string
   choices: string[]
+  required: number
 }
 
 export interface QuestionProps {
@@ -11,6 +12,8 @@ export interface QuestionProps {
   dataResponse?: QuestionResponse
   index?: number
   isDisableDeleteBtn?: boolean
+  reviewMode?: boolean
+  conductMode?: boolean
 }
 
 export interface ChoiceProps {

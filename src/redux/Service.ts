@@ -9,7 +9,7 @@ import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
-import { QuestionResponse } from '../types/response/QuestionResponse'
+import { QuestionResponse, SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 
@@ -21,8 +21,8 @@ export const TDCSocialNetworkAPI = createApi({
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
     }),
-    getQuestionsFromSurveyPost: builder.query<Data<{ questions: QuestionResponse[] }>, number>({
-      query: (postId) => `api/posts/survey/${postId}`
+    getQuestionsFromSurveyPost: builder.query<Data<SurveyResponse>, { postId: number, userLogin: number }>({
+      query: ({ postId, userLogin }) => `api/posts/survey?postId=${postId}&userLogin=${userLogin}`
     }),
     saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
       query: (data) => ({

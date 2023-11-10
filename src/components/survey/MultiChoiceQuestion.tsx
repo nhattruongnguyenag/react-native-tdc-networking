@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
+import QuestionBottomBarOptions from './QuestionBottomBarOptions'
 import QuestionTitle from './QuestionTitle'
 
 interface MultiChoiceQuestionProps extends QuestionProps {
@@ -42,6 +43,7 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
               />
             )
           }))}
+      <QuestionBottomBarOptions index={props.index} />
     </View>
   )
 }
