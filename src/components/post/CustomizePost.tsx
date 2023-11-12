@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost'
 import CustomizeBottomPost from './CustomizeBottomPost'
@@ -27,7 +27,7 @@ import {
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
-import { formatDateTime } from '../../utils/FormatTime'
+import { formatDateTime, numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
@@ -214,7 +214,7 @@ const CustomizePost = (props: Post) => {
             name={post.name}
             avatar={post.avatar}
             available={post.available}
-            timeCreatePost={formatDateTime(post.timeCreatePost)}
+            timeCreatePost={numberDayPassed(post.timeCreatePost)}
             typeAuthor={post.typeAuthor}
             type={post.type}
             role={post.role}
@@ -230,18 +230,12 @@ const CustomizePost = (props: Post) => {
             <CustomizeImagePost
               images={post.images}
               handleClickIntoAnyImageEvent={handleClickIntoAnyImageEvent}
-              name={post.name}
-              avatar={post.avatar}
             />
           )}
           {/* Bottom */}
           <CustomizeBottomPost
-            id={post.id}
-            userLoginId={userLogin?.id}
-            role={post.role}
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
-            comments={props.comments}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
           />
@@ -273,12 +267,8 @@ const CustomizePost = (props: Post) => {
           />
           {/* Bottom */}
           <CustomizeBottomPost
-            id={post.id}
-            userLoginId={userLogin?.id}
-            role={post.role}
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
-            comments={props.comments}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
           />
@@ -292,7 +282,7 @@ const CustomizePost = (props: Post) => {
           avatar={post.avatar}
           typeAuthor={TYPE_SURVEY_POST_TXT}
           available={null}
-          timeCreatePost={formatDateTime(post.timeCreatePost)}
+          timeCreatePost={numberDayPassed(post.timeCreatePost)}
           type={post.type}
           role={post.role}
           handleClickMenuOption={handleClickMenuOption}
@@ -305,12 +295,8 @@ const CustomizePost = (props: Post) => {
         />
         {/* Bottom */}
         <CustomizeBottomPost
-          id={post.id}
-          userLoginId={userLogin?.id}
-          role={post.role}
           isLike={checkLiked(post.likes, userLogin?.id)}
           likes={post.likes}
-          comments={props.comments}
           handleClickBottomBtnEvent={handleClickBottomBtnEvent}
           commentQty={post.commentQty}
         />

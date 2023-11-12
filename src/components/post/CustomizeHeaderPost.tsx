@@ -10,7 +10,7 @@ import DefaultAvatar from '../DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
 
-export interface HeaderPostPropsType {
+interface HeaderPostPropsType {
   userId: number
   name: string
   avatar: string
@@ -29,7 +29,6 @@ export const HEADER_ICON_SIZE = 15
 export const BOTTOM_ICON_SIZE = 30
 
 const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
-  // Get data
   const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   let post = props
   const [menuOption, setMenuOption] = useState<JSX.Element>();

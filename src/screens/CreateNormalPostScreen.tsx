@@ -27,22 +27,18 @@ import {
   TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED,
   TEXT_INPUT_PLACEHOLDER,
   TEXT_NOTIFYCATIONS,
-  TEXT_PLACEHOLDER_INPUT_COMMENT,
   TEXT_TITLE,
   TEXT_WARNING,
-  TYPE_POST_BUSINESS,
-  TYPE_POST_FACULTY,
-  TYPE_POST_STUDENT
 } from '../constants/StringVietnamese'
 import IconEntypo from 'react-native-vector-icons/Entypo'
-import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
-import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_SURVEY_POST } from '../constants/Variables'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { handlePutDataAPI } from '../api/CallApi'
 
 // man hinh dang bai viet thong
 export default function CreateNormalPostScreen({ navigation, route }: any) {
@@ -56,17 +52,6 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
-  // Function area
-  const handlePutDataAPI = async (postData: any): Promise<number> => {
-    try {
-      const response = await axios.post(apiUrl, postData)
-      return response.data.status
-    } catch (error) {
-      console.error('Error:', error)
-      throw error
-    }
-  }
-
   const handleClickCompleteButton = async () => {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
       try {
@@ -75,11 +60,9 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           type: 'thong-thuong',
           userId: userLogin?.id,
           content: content,
-          groupId: group,
+          groupId: group === -1 ? null : group,
         }
-        // Send
-        const status = await handlePutDataAPI(data)
-        // Reset data
+        const status = await handlePutDataAPI(apiUrl, data)
         setContent('')
         setImages([])
         console.log(status)

@@ -1,4 +1,4 @@
-import { FlatList, View, ScrollView, RefreshControl, Text } from 'react-native'
+import { FlatList, View, ScrollView, RefreshControl, StyleSheet } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
 import { API_URL_GET_POST_BY_USER_ID, API_URL_LIKE } from '../constants/Path';
@@ -8,9 +8,19 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook';
 import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, updatePostWhenHaveChangeComment } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
+import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar';
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfileScreen = ({ route }: any) => {
-    const [type, setType] = useState<Number>();
+    const isFocused = useIsFocused();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const [type, setType] = useState<number>();
     const [userId, setUserId] = useState<number>(route.params.userId);
     const [post, setPost] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState();
@@ -35,9 +45,7 @@ const ProfileScreen = ({ route }: any) => {
     }, [])
 
     const getPostByUserIdAPI = useCallback(() => {
-        // Set userId profile now
         dispatch(goToProfileScreen(userId))
-        // Get data
         axios.get(API_URL_GET_POST_BY_USER_ID + userId)
             .then((response) => {
                 try {
@@ -51,6 +59,7 @@ const ProfileScreen = ({ route }: any) => {
                     setPost([]);
                     setType(2)
                 }
+                setIsLoading(false);
             }).catch((error) => {
                 console.log(error);
             })
@@ -59,7 +68,7 @@ const ProfileScreen = ({ route }: any) => {
     useEffect(() => {
         setIsLoading(true);
         getPostByUserIdAPI();
-    }, [getPostByUserIdAPI])
+    }, [getPostByUserIdAPI, isFocused])
 
     const likeAction = (obj: LikeAction) => {
         like(obj)
@@ -78,13 +87,27 @@ const ProfileScreen = ({ route }: any) => {
         })
     }, [])
 
+    const handleClickToCreateButtonEvent = (type: string) => {
+        if (type === TYPE_NORMAL_POST) {
+            navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: -1 });
+        } else if (type === TYPE_RECRUITMENT_POST) {
+            navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+        } else {
+            navigation.navigate(CREATE_SURVEY_SCREEN);
+        }
+    }
+
+    const handleClickIntoAvatar = () => {
+        navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    }
+
     const renderItem = (item: any) => {
         return (
             <CustomizePost
                 id={item.id}
-                userId={post[0].user['id']}
-                name={post[0].user['name']}
-                avatar={post[0].user['image']}
+                userId={item.user['id']}
+                name={item.user['name']}
+                avatar={item.user['image']}
                 typeAuthor={'Doanh Nghiệp'}
                 available={null}
                 timeCreatePost={item.createdAt}
@@ -94,7 +117,7 @@ const ProfileScreen = ({ route }: any) => {
                 comments={item.comment}
                 commentQty={item.commentQuantity}
                 images={item.images}
-                role={post[0].user['roleCodes']}
+                role={item.user['roleCodes']}
                 likeAction={likeAction}
                 location={item.location ?? null}
                 title={item.title ?? null}
@@ -139,6 +162,18 @@ const ProfileScreen = ({ route }: any) => {
                 }
 
                 {
+                    (userLogin?.id === userId) ? <View style={styles.wrapperCreateNormalPostToolbar}>
+                        <CustomizeCreatePostToolbar
+                            role={userLogin?.roleCodes ?? ''}
+                            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+                            handleClickIntoAvatar={handleClickIntoAvatar}
+                            image={userLogin?.image ?? null}
+                            name={userLogin?.name ?? ''}
+                        />
+                    </View> : null
+                }
+
+                {
                     post.length !== 0 && type === 1 ? <FlatList
                         scrollEnabled={false}
                         showsVerticalScrollIndicator={false}
@@ -152,5 +187,10 @@ const ProfileScreen = ({ route }: any) => {
     )
 }
 
+const styles = StyleSheet.create({
+    wrapperCreateNormalPostToolbar: {
+        marginBottom: 20
+    }
+})
 export default ProfileScreen
 

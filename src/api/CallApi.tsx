@@ -10,38 +10,6 @@ export const postAPI = async (apiUrlPost: string) => {
   }
 }
 
-export const likeApi = async (urlLike: string, dataLike: any): Promise<number> => {
-  try {
-    const response = await axios.post(urlLike, dataLike)
-    return response.data.status
-  } catch (error) {
-    console.error('Error:', error)
-    throw error
-  }
-}
-
-export const callApiComment = async (urlApiCreateComment: string, data: any): Promise<number> => {
-  try {
-    const response = await axios.post(urlApiCreateComment, data)
-    return response.data.status
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-}
-
-export const deleteCommentApi = async (urlApiDeleteComment: string, data: any): Promise<number> => {
-  try {
-    const response = await axios.delete(urlApiDeleteComment, {
-      data: data
-    })
-    return response.data.status
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-}
-
 export const savePostAPI = async (urlSavePost: string, data: any) => {
   try {
     const response = await axios.post(urlSavePost, data);
@@ -49,5 +17,15 @@ export const savePostAPI = async (urlSavePost: string, data: any) => {
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export const handlePutDataAPI = async (apiUrl: string, postData: any): Promise<number> => {
+  try {
+    const response = await axios.post(apiUrl, postData)
+    return response.data.status
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
   }
 }

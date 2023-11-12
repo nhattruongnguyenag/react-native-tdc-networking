@@ -9,7 +9,7 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
 
-export interface BusinessProfileType {
+interface BusinessProfileType {
   handleClickButtonEvent: (flag: number) => void,
   timeWork: string,
   TaxIdentificationNumber: string,
@@ -21,84 +21,84 @@ export interface BusinessProfileType {
   numberPost: number
 }
 
-export default function CustomizeBodyBusinessProfile(props: BusinessProfileType) {
+export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessProfileType>) {
   return (
-      <View style={styles.containerInfo}>
-        {/* Name */}
-        <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
-        {/* Btn action */}
-        <View style={[styles.buttonContainer, styles.paddingBottom]}>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
-            style={[styles.buttonAction,
-            styles.marginRightBtnAction]}
-          >
-            <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
-            <Text style={styles.txtContentBtn}>
-              Gửi tin nhắn
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
-            style={[styles.buttonAction,
-            styles.marginRightBtnAction]}
-          >
-            <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
-            <Text style={styles.txtContentBtn}>
-              Theo dõi
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-            style={[
-              styles.marginRightBtnAction, styles.btnOption]}
-          >
-            <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-          </TouchableOpacity>
-        </View>
-        {/* Info */}
-        <View>
-          <View style={styles.infoContainer}>
-            <IconIonicons
-              style={styles.iconInfo}
-              name='time-outline' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Thời gian hoạt động: {props.timeWork}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFontAwesome
-              style={styles.iconInfo}
-              name='barcode' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Mã số thuế: {props.TaxIdentificationNumber}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFeather
-              style={styles.iconInfo}
-              name='user' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Người đại diện: {props.representative}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconEvilIcons
-              style={styles.iconInfo}
-              name='location' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Địa chỉ: {props.address}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFeather
-              style={styles.iconInfo}
-              name='phone-call' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <IconFontisto
-              style={styles.iconInfo}
-              name='email' size={20} color={COLOR_BLACK} />
-            <Text style={styles.textInfo}>Email: {props.email}</Text>
-          </View>
-        </View>
-        {/* Number post */}
-        <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
-        {/* Post */}
+    <View style={styles.containerInfo}>
+      {/* Name */}
+      <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
+      {/* Btn action */}
+      <View style={[styles.buttonContainer, styles.paddingBottom]}>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
+          style={[styles.buttonAction,
+          styles.marginRightBtnAction]}
+        >
+          <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
+          <Text style={styles.txtContentBtn}>
+            Gửi tin nhắn
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
+          style={[styles.buttonAction,
+          styles.marginRightBtnAction]}
+        >
+          <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
+          <Text style={styles.txtContentBtn}>
+            Theo dõi
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+          style={[
+            styles.marginRightBtnAction, styles.btnOption]}
+        >
+          <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+        </TouchableOpacity>
       </View>
+      {/* Info */}
+      <View>
+        <View style={styles.infoContainer}>
+          <IconIonicons
+            style={styles.iconInfo}
+            name='time-outline' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Thời gian hoạt động: {props.timeWork}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFontAwesome
+            style={styles.iconInfo}
+            name='barcode' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Mã số thuế: {props.TaxIdentificationNumber}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFeather
+            style={styles.iconInfo}
+            name='user' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Người đại diện: {props.representative}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconEvilIcons
+            style={styles.iconInfo}
+            name='location' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Địa chỉ: {props.address}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFeather
+            style={styles.iconInfo}
+            name='phone-call' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <IconFontisto
+            style={styles.iconInfo}
+            name='email' size={20} color={COLOR_BLACK} />
+          <Text style={styles.textInfo}>Email: {props.email}</Text>
+        </View>
+      </View>
+      {/* Number post */}
+      <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
+      {/* Post */}
+    </View>
   )
 }
 

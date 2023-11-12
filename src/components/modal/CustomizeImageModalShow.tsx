@@ -7,7 +7,7 @@ import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../DefaultAvatar'
 
-export interface CustomizeImageModalShowType {
+interface ImageModalShowType {
   closeModal: () => void
   data: any
   authorInfo: any
@@ -15,7 +15,7 @@ export interface CustomizeImageModalShowType {
   handleClickIntoUserNameOrAvatarEvent: () => void
 }
 
-export default function CustomizeImageModalShow(props: CustomizeImageModalShowType) {
+export default function CustomizeImageModalShow(props: Readonly<ImageModalShowType>) {
   return (
     <TouchableOpacity onPress={() => props.closeModal()} style={styles.wrapperContent}>
       <Pressable style={styles.containerContent}>

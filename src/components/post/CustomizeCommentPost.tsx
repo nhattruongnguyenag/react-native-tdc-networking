@@ -4,7 +4,7 @@ import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../DefaultAvatar'
-export interface CustomizeCommentType {
+interface CustomizeCommentType {
     tagName: any,
     userId: number | undefined,
     authorCommentId: number,

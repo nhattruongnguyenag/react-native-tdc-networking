@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { COLOR_BTN_BLUE, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../constants/Color'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -18,7 +18,7 @@ export interface CreatePostToolbarType {
     handleClickIntoAvatar: () => void
 }
 
-export default function CustomizeCreatePostToolbar(props: CreatePostToolbarType) {
+export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToolbarType>) {
     const [typeChoose, setTypeChoose] = useState(TYPE_NORMAL_POST);
 
     const handleClickChooseTypePost = (typePost: string) => {

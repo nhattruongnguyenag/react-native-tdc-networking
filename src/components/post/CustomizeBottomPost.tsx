@@ -6,28 +6,19 @@ import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_W
 import { TEXT_LIKE_BY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Like } from '../../types/Like'
-import { Comment } from '../../types/Comment'
 import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables'
 import DefaultAvatar from '../DefaultAvatar'
-
-//  Definition props
-
-export interface BottomPostType {
-  id: number
-  userLoginId: number | undefined
-  role: string
+interface BottomPostType {
   handleClickBottomBtnEvent: (a: number | null) => void
   isLike: boolean
-  comments: Comment[] | null
   likes: Like[]
   commentQty: number
 }
 
-// Constant
 const BOTTOM_ICON_SIZE = 30
 const CustomizeBottomPost = (props: BottomPostType) => {
-  // Variable
   const numberUserReacted: number = props.likes?.length
+  const formatLikeQty: string = props.likes?.length > 1000 ? props.likes?.length / 1000 + 'k' : props.likes?.length + ''
   const renderItem = (item: any) => {
     return item.image != null ?
       <Image
@@ -53,7 +44,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
               <IconAntDesign name='like1' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
             )}
           </TouchableOpacity>
-          <Text>{props.likes?.length}</Text>
+          <Text>{formatLikeQty}</Text>
         </View>
         <View style={[styles.wrapIconAndTextBottom, styles.iconRight]}>
           <TouchableOpacity onPress={() => props.handleClickBottomBtnEvent(COMMENT_ACTION)}>

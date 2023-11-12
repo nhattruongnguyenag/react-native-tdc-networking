@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
 import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
-import { formatDateTime } from '../../utils/FormatTime';
+import { numberDayPassed } from '../../utils/FormatTime';
 import { isBlank, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
 import { Client, Frame } from 'stompjs';
 import { getStompClient } from '../../sockets/SocketClient';
@@ -279,7 +279,7 @@ const CommentExport = (item: CommentChildrenType) => {
             name={item.commentItem.user.name}
             content={item.commentItem.content}
             avatar={item.commentItem.user.image}
-            timeCreated={formatDateTime(item.commentItem.createdAt)}
+            timeCreated={numberDayPassed(item.commentItem.createdAt)}
             handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
             handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
             handleClickToAvatarAndName={item.handleClickToAvatarAndName}

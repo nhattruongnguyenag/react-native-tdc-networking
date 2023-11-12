@@ -10,8 +10,6 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { OPTION_SCREEN } from '../../constants/Screen'
-import { useEffect } from 'react'
-import { Text } from 'react-native-paper'
 
 export interface CustomizeProfileType {
     data: Object[]

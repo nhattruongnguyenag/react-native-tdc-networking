@@ -7,7 +7,7 @@ import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import { CALL_ACTION, FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
 
-export interface StudentProfileType {
+interface StudentProfileType {
     handleClickButtonEvent: (flag: number) => void,
     position: string,
     phone: string,
@@ -15,7 +15,7 @@ export interface StudentProfileType {
     numberPost: number,
     name: string
 }
-export default function CustomizeBodyStudentProfile(props: StudentProfileType) {
+export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfileType>) {
     return (
             <View style={styles.containerInfo}>
                 {/* Name */}

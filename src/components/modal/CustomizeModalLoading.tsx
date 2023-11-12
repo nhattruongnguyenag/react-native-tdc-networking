@@ -6,7 +6,7 @@ export interface CustomizeModalLoadingType {
   visible: boolean
 }
 
-export default function CustomizeModalLoading(props: CustomizeModalLoadingType) {
+export default function CustomizeModalLoading(props: Readonly<CustomizeModalLoadingType>) {
   return (
     <Modal visible={props.visible} transparent statusBarTranslucent={true}>
       <View style={styles.container}>
