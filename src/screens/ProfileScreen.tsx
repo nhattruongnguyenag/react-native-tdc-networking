@@ -108,7 +108,7 @@ const ProfileScreen = ({ route }: any) => {
 
     return (
         <View>
-            <CustomizeModalLoading visible={isLoading} />
+            {/* <CustomizeModalLoading visible={isLoading} /> */}
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 refreshControl={

@@ -152,9 +152,11 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
           )}
         </View>
       </View>
-      <Text style={{ marginRight: 50, fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
-        {Boolean(props.message.status) ? 'Đã xem' : 'Đã nhận'}
-      </Text>
+      <View style={styles.messageStatus}>
+        <Text style={{textAlign: 'right', fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
+          {Boolean(props.message.status) ? 'Đã xem' : 'Đã nhận'}
+        </Text>
+      </View>
     </View>
   )
 }
@@ -293,5 +295,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     backgroundColor: 'red',
     flex: 1
+  },
+  messageStatus: {
+    marginRight: 50
   }
 })

@@ -30,7 +30,10 @@ export default function ConversationItem({ data }: ConversationItemProps) {
   }, [])
 
   const onItemPress = useCallback(() => {
-    dispatch(setSelectConversation(data))
+    dispatch(setSelectConversation({
+      receiver: data.receiver,
+      sender: data.sender
+    }))
     navigation.navigate(MESSENGER_SCREEN)
   }, [conversations])
 
