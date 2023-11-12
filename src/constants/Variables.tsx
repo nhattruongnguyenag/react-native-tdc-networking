@@ -23,3 +23,4 @@ export const CLICK_SAVE_POST_EVENT = 0;
 export const CLICK_DELETE_POST_EVENT = 1;
 export const CLICK_SEE_RESULT_POST_EVENT = 2;
 export const CLICK_SEE_LIST_CV_POST_EVENT = 3;
+export const CLICK_UNSAVE_POST_EVENT = 4;

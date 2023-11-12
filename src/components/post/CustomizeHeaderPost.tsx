@@ -5,7 +5,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
-import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../../constants/Variables'
+import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, CLICK_UNSAVE_POST_EVENT, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../../constants/Variables'
 import DefaultAvatar from '../DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
@@ -42,9 +42,15 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           </MenuOption>)
       } else {
         setMenuOption(
-          <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)} >
-            <Text style={styles.menuText}>Lưu bài viết</Text>
-          </MenuOption>
+          <>
+            <MenuOption
+              onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)}>
+              <Text style={styles.menuText}>Lưu bài viết</Text>
+            </MenuOption>
+            <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_UNSAVE_POST_EVENT)} >
+              <Text style={styles.menuText}>Huy luu</Text>
+            </MenuOption>
+          </>
         )
       }
     } else if (props.type === TYPE_RECRUITMENT_POST) {
@@ -61,10 +67,15 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         )
       } else {
         setMenuOption(
-          <MenuOption
-            onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)}>
-            <Text style={styles.menuText}>Lưu bài viết</Text>
-          </MenuOption>
+          <>
+            <MenuOption
+              onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)}>
+              <Text style={styles.menuText}>Lưu bài viết</Text>
+            </MenuOption>
+            <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_UNSAVE_POST_EVENT)} >
+              <Text style={styles.menuText}>Huy luu</Text>
+            </MenuOption>
+          </>
         )
       }
     } else {
@@ -81,9 +92,14 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         )
       } else {
         setMenuOption(
-          <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)}>
-            <Text style={styles.menuText}>Lưu bài viết</Text>
-          </MenuOption>
+          <>
+            <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_SAVE_POST_EVENT)}>
+              <Text style={styles.menuText}>Lưu bài viết</Text>
+            </MenuOption>
+            <MenuOption onSelect={() => props.handleClickMenuOption(CLICK_UNSAVE_POST_EVENT)} >
+              <Text style={styles.menuText}>Huy luu</Text>
+            </MenuOption>
+          </>
         )
       }
     }

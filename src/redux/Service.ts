@@ -11,12 +11,16 @@ import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
 import { QuestionResponse } from '../types/response/QuestionResponse'
 import { SurveyPostRequest } from '../types/SurveyPost'
+import { Post } from '../types/Post'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
   baseQuery: fetchBaseQuery({ baseUrl: SERVER_ADDRESS }),
   tagTypes: ['UserLogin'],
   endpoints: (builder) => ({
+    getDataSavedByUserId: builder.query<Data<Post[]>, number >({
+      query: (userId) => `api/posts/user/save/${userId}`
+    }),
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
     }),
@@ -86,6 +90,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetDataSavedByUserIdQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,
   useAddSurveyPostMutation,

@@ -15,6 +15,7 @@ import {
   CLICK_SAVE_POST_EVENT,
   CLICK_SEE_LIST_CV_POST_EVENT,
   CLICK_SEE_RESULT_POST_EVENT,
+  CLICK_UNSAVE_POST_EVENT,
   COMMENT_ACTION,
   GO_TO_PROFILE_ACTIONS,
   LIKE_ACTION,
@@ -36,11 +37,16 @@ import { savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import Toast from 'react-native-toast-message'
 import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
-
+import { getStompClient } from '../../sockets/SocketClient'
+import { Client } from 'stompjs'
+let stompClient: Client
+export interface PropsType {
+  handleUnSave: (post_id: number) => void
+}
 // Constant
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
-const CustomizePost = (props: Post) => {
+const CustomizePost = (props: Post, prev : PropsType) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Get data
   let post = props
@@ -167,11 +173,14 @@ const CustomizePost = (props: Post) => {
       case CLICK_SEE_RESULT_POST_EVENT:
         handleSeeResultSurveyPost();
         break
+      case CLICK_UNSAVE_POST_EVENT:
+        handleUnSave(props.id)
       default:
         return '';
     }
   }
 
+  
   const handleSavePost = async () => {
     const data = {
       "userId": userLogin?.id,
@@ -181,6 +190,15 @@ const CustomizePost = (props: Post) => {
     showToast(status);
   }
 
+  const handleUnSave = async (post_id: number) => {
+    const data = {
+      "userId": 12,
+      "postId": post_id
+    }
+    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
+    console.log(post_id);
+    
+  }
 
   const handleDeletePost = () => {
     console.log('====================================');
