@@ -9,9 +9,12 @@ import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, 
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
-import { OPTION_SCREEN } from '../../constants/Screen'
+import { MESSENGER_SCREEN, OPTION_SCREEN } from '../../constants/Screen'
 import { useEffect } from 'react'
 import { Text } from 'react-native-paper'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { setSelectConversation } from '../../redux/Slice'
+import { User } from '../../types/User'
 
 export interface CustomizeProfileType {
     data: Object[]
@@ -20,13 +23,22 @@ export interface CustomizeProfileType {
 }
 
 const CustomizeProfile = (props: CustomizeProfileType) => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const {userLogin} = useAppSelector(state => state.TDCSocialNetworkReducer)
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const dispatch = useAppDispatch()
     // Variable
     // Function
 
     const handleClickButtonEvent = (flag: number) => {
         if (flag === MESSENGER_ACTION) {
-            console.log('chat');
+            if (userLogin && props.userData) {
+                dispatch(setSelectConversation({
+                    receiver: props.userData as User,
+                    sender: userLogin
+                }))
+            }
+            console.log(props.userData)
+            navigation.navigate(MESSENGER_SCREEN)
         } else if (flag === FOLLOW_ACTION) {
             console.log('follow');
         } else if (flag === CALL_ACTION) {
