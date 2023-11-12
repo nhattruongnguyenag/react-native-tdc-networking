@@ -4,6 +4,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
+import Loading from '../components/Loading'
 import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION, SHORT_ANSWER } from '../components/survey/AddQuestionView'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
@@ -39,7 +40,7 @@ export default function SurveyConductScreen() {
     const postId = route.params?.surveyPostId ?? -1
     const userId = userLogin?.id ?? -1
 
-    const { data, isFetching, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId })
+    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId })
 
     const onBtnPublishPostPress = () => {
         if (isAllFieldValid(validates)) {
@@ -67,7 +68,7 @@ export default function SurveyConductScreen() {
     }
 
     useEffect(() => {
-        if (data && !isFetching && isSuccess) {
+        if (data && isSuccess) {
             let answer: AnswerRequest[] = []
             let tempValidates: InputTextValidate[] = []
             for (let question of data.data.questions) {
@@ -104,130 +105,138 @@ export default function SurveyConductScreen() {
     }, [data])
 
     return (
-        <ScrollView style={styles.body}>
-            <View style={styles.questionWrapper}>
-                {data?.data.questions.map((item, index) => {
-                    if (item.type === MULTI_CHOICE_QUESTION) {
-                        return (
-                            <Fragment key={index.toString()}>
-                                <MultiChoiceQuestion
-                                    conductMode
-                                    dataResponse={item}
-                                    index={index}
-                                    isDisableDeleteBtn
-                                    onChangeValue={(choices) => {
-                                        if (surveyConductRequest.answers[index]) {
-                                            if (choices.length > 0) {
-                                                surveyConductRequest.answers[index].choices_ids = choices
-                                                let tempValidates = [...validates]
-                                                tempValidates[index].isError = false
-                                                tempValidates[index].isVisible = false
-                                                setValidates(tempValidates)
-                                            } else {
-                                                let tempValidates = [...validates]
-                                                tempValidates[index].isError = true
-                                                tempValidates[index].isVisible = true
-                                                setValidates(tempValidates)
-                                            }
-                                        }
-                                    }}
-                                />
+        <Fragment>
+            {
+                isLoading ?
+                    <Loading title='Đang tải dữ liệu...' />
+                    :
+                    <ScrollView style={styles.body}>
+                        <View style={styles.questionWrapper}>
+                            {data?.data.questions.map((item, index) => {
+                                if (item.type === MULTI_CHOICE_QUESTION) {
+                                    return (
+                                        <Fragment key={index.toString()}>
+                                            <MultiChoiceQuestion
+                                                conductMode
+                                                dataResponse={item}
+                                                index={index}
+                                                isDisableDeleteBtn
+                                                onChangeValue={(choices) => {
+                                                    if (surveyConductRequest.answers[index]) {
+                                                        if (choices.length > 0) {
+                                                            surveyConductRequest.answers[index].choices_ids = choices
+                                                            let tempValidates = [...validates]
+                                                            tempValidates[index].isError = false
+                                                            tempValidates[index].isVisible = false
+                                                            setValidates(tempValidates)
+                                                        } else {
+                                                            let tempValidates = [...validates]
+                                                            tempValidates[index].isError = true
+                                                            tempValidates[index].isVisible = true
+                                                            setValidates(tempValidates)
+                                                        }
+                                                    }
+                                                }}
+                                            />
 
-                                <TextValidate
-                                    customStyle={{ marginStart: 7 }}
-                                    textError={validates[index] ? validates[index].textError : ''}
-                                    isVisible={validates[index] ? validates[index].isVisible : false}
-                                    isError={validates[index] ? validates[index].isError : true}
-                                />
-                            </Fragment>
-                        )
-                    } else if (item.type === ONE_CHOICE_QUESTION) {
-                        return (
-                            <Fragment key={index.toString()}>
-                                <OneChoiceQuestion
-                                    conductMode
-                                    dataResponse={item}
-                                    index={index}
-                                    isDisableDeleteBtn
-                                    onChangeValue={(choices) => {
-                                        if (surveyConductRequest.answers[index]) {
-                                            if (choices.length > 0) {
-                                                surveyConductRequest.answers[index].choices_ids = choices
-                                                let tempValidates = [...validates]
-                                                tempValidates[index].isError = false
-                                                tempValidates[index].isVisible = false
-                                                setValidates(tempValidates)
-                                            } else {
-                                                let tempValidates = [...validates]
-                                                tempValidates[index].isError = true
-                                                tempValidates[index].isVisible = true
-                                                setValidates(tempValidates)
-                                            }
-                                        }
-                                    }}
-                                />
+                                            <TextValidate
+                                                customStyle={{ marginStart: 7 }}
+                                                textError={validates[index] ? validates[index].textError : ''}
+                                                isVisible={validates[index] ? validates[index].isVisible : false}
+                                                isError={validates[index] ? validates[index].isError : true}
+                                            />
+                                        </Fragment>
+                                    )
+                                } else if (item.type === ONE_CHOICE_QUESTION) {
+                                    return (
+                                        <Fragment key={index.toString()}>
+                                            <OneChoiceQuestion
+                                                conductMode
+                                                dataResponse={item}
+                                                index={index}
+                                                isDisableDeleteBtn
+                                                onChangeValue={(choices) => {
+                                                    if (surveyConductRequest.answers[index]) {
+                                                        if (choices.length > 0) {
+                                                            surveyConductRequest.answers[index].choices_ids = choices
+                                                            let tempValidates = [...validates]
+                                                            tempValidates[index].isError = false
+                                                            tempValidates[index].isVisible = false
+                                                            setValidates(tempValidates)
+                                                        } else {
+                                                            let tempValidates = [...validates]
+                                                            tempValidates[index].isError = true
+                                                            tempValidates[index].isVisible = true
+                                                            setValidates(tempValidates)
+                                                        }
+                                                    }
+                                                }}
+                                            />
 
-                                <TextValidate
-                                    customStyle={{ marginStart: 7 }}
-                                    textError={validates[index] ? validates[index].textError : ''}
-                                    isVisible={validates[index] ? validates[index].isVisible : false}
-                                    isError={validates[index] ? validates[index].isError : true}
-                                />
-                            </Fragment>
-                        )
-                    } else {
-                        return (
-                            <Fragment key={index.toString()}>
-                                <ShortAnswerQuestion
-                                    conductMode
-                                    onTextChange={(value) => {
-                                        if (isNotBlank(value.trim())) {
-                                            surveyConductRequest.answers[index].content = value
-                                            let tempValidates = [...validates]
-                                            tempValidates[index].isError = false
-                                            tempValidates[index].isVisible = false
-                                            setValidates(tempValidates)
-                                        } else {
-                                            let tempValidates = [...validates]
-                                            tempValidates[index].isError = true
-                                            tempValidates[index].isVisible = true
-                                            setValidates(tempValidates)
-                                        }
-                                    }}
-                                    dataResponse={item}
-                                    index={index}
-                                    isDisableDeleteBtn
-                                    isEnableTextInput
-                                />
+                                            <TextValidate
+                                                customStyle={{ marginStart: 7 }}
+                                                textError={validates[index] ? validates[index].textError : ''}
+                                                isVisible={validates[index] ? validates[index].isVisible : false}
+                                                isError={validates[index] ? validates[index].isError : true}
+                                            />
+                                        </Fragment>
+                                    )
+                                } else {
+                                    return (
+                                        <Fragment key={index.toString()}>
+                                            <ShortAnswerQuestion
+                                                conductMode
+                                                onTextChange={(value) => {
+                                                    if (isNotBlank(value.trim())) {
+                                                        surveyConductRequest.answers[index].content = value
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index].isError = false
+                                                        tempValidates[index].isVisible = false
+                                                        setValidates(tempValidates)
+                                                    } else {
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index].isError = true
+                                                        tempValidates[index].isVisible = true
+                                                        setValidates(tempValidates)
+                                                    }
+                                                }}
+                                                dataResponse={item}
+                                                index={index}
+                                                isDisableDeleteBtn
+                                                isEnableTextInput
+                                            />
 
-                                <TextValidate
-                                    customStyle={{ marginStart: 7 }}
-                                    textError={validates[index] ? validates[index].textError : ''}
-                                    isVisible={validates[index] ? validates[index].isVisible : false}
-                                    isError={validates[index] ? validates[index].isError : true}
-                                />
-                            </Fragment>
-                        )
-                    }
-                })}
-            </View>
+                                            <TextValidate
+                                                customStyle={{ marginStart: 7 }}
+                                                textError={validates[index] ? validates[index].textError : ''}
+                                                isVisible={validates[index] ? validates[index].isVisible : false}
+                                                isError={validates[index] ? validates[index].isError : true}
+                                            />
+                                        </Fragment>
+                                    )
+                                }
+                            })}
+                        </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <ButtonFullWith
-                    btnStyle={{ marginRight: 10, width: 140 }}
-                    onPress={onBtnBackPress}
-                    iconName='arrow-left-thin'
-                    title='Quay lại'
-                />
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <ButtonFullWith
+                                textColor='#000'
+                                btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
+                                onPress={onBtnBackPress}
+                                iconName='arrow-left-thin'
+                                title='Quay lại'
+                            />
 
-                <ButtonFullWith
-                    btnStyle={{ marginLeft: 10, width: 140 }}
-                    onPress={onBtnPublishPostPress}
-                    iconName='plus'
-                    title='Hoàn tất'
-                />
-            </View>
-        </ScrollView>
+                            <ButtonFullWith
+                                btnStyle={{ marginLeft: 10, width: 140 }}
+                                onPress={onBtnPublishPostPress}
+                                iconName='plus'
+                                title='Hoàn tất'
+                            />
+                        </View>
+                    </ScrollView>
+            }
+        </Fragment>
     )
 }
 

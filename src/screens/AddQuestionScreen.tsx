@@ -54,7 +54,8 @@ export default function AddQuestionScreen() {
 
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <ButtonFullWith
-            btnStyle={{ marginRight: 10, width: 140 }}
+            textColor='#000'
+            btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
             onPress={onBtnBackPress}
             iconName='arrow-left-thin'
             title='Quay lại'
