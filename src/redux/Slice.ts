@@ -83,6 +83,11 @@ export const TDCSocialNetworkSlice = createSlice({
         state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
       }
     },
+    updateQuestion: (state, action: PayloadAction<{index: number, question: Question}>) => {
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions[action.payload.index] = action.payload.question
+      }
+    },
     deleteQuestion: (state, action: PayloadAction<number>) => {
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions.splice(action.payload, 1)
@@ -145,6 +150,7 @@ export const {
   setDeviceToken,
   setSurveyPostRequest,
   addQuestion,
+  updateQuestion,
   deleteQuestion,
   addChoice,
   updateChoice,
