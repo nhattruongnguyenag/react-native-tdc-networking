@@ -53,10 +53,6 @@ export default function MessengerScreen() {
     stompClient.connect({}, onConnected, onError)
   }, [])
 
-  useEffect(() => {
-    console.log('image-upload', imagesUpload)
-  }, [imagesUpload])
-
   const onButtonSendPress = useCallback(() => {
     const message = {
       senderId: senderId,

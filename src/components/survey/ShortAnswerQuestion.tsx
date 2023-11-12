@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import QuestionTitle from './QuestionTitle'
 import { Question, QuestionProps } from '../../types/Question'
+import QuestionBottomBarOptions from './QuestionBottomBarOptions'
 
 interface ShortAnswerQuestionProps extends QuestionProps {
   isEnableTextInput?: boolean
@@ -12,6 +13,7 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle
+        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
         title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
@@ -22,6 +24,12 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
         placeholder='Nhập câu trả lời...'
         style={styles.ip}
       />
+      {
+        props.editMode && <QuestionBottomBarOptions
+          reviewMode={props.reviewMode}
+          conductMode={props.conductMode}
+          index={props.index} />
+      }
     </View>
   )
 }

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import { QuestionProps } from '../../types/Question'
 import RadioInputWithTitle from '../inputs/RadioInputWithTitle'
+import QuestionBottomBarOptions from './QuestionBottomBarOptions'
 import QuestionTitle from './QuestionTitle'
 
 interface OneChoiceQuestionProps extends QuestionProps {
@@ -53,6 +54,12 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
               )
             }))}
       </RadioButton.Group>
+      {
+        props.editMode && <QuestionBottomBarOptions
+          reviewMode={props.reviewMode}
+          conductMode={props.conductMode}
+          index={props.index} />
+      }
     </View>
   )
 }

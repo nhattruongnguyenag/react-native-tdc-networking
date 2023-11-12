@@ -31,7 +31,7 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { formatDateTime } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -160,6 +160,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
   }
 
   const handleClickMenuOption = (flag: number) => {
+    console.log(flag)
     switch (flag) {
       case CLICK_SAVE_POST_EVENT:
         handleSavePost();
@@ -214,13 +215,8 @@ const CustomizePost = (props: Post, prev : PropsType) => {
 
 
   const handleSeeResultSurveyPost = () => {
-    console.log('====================================');
-    console.log('handleSeeResultSurveyPost' + post.id);
-    console.log('====================================');
+    navigation.navigate(SURVEY_RESULT_SCREEN, { surveyPostId: post.id })
   }
-
-
-
 
   switch (post.type) {
     case TYPE_NORMAL_POST:
