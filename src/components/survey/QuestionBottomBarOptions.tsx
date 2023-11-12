@@ -7,6 +7,7 @@ import ToggleSwitch from 'toggle-switch-react-native'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
+    editMode?: boolean
     reviewMode?: boolean
     conductMode?: boolean
 }
@@ -38,10 +39,10 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
     }, [switchToggle])
 
     useEffect(() => {
-        console.log(surveyPostRequest)
+        console.log('on change required', surveyPostRequest)
     }, [surveyPostRequest])
     return (
-        <View style={[styles.body, {display: props.reviewMode || props.conductMode ? 'none' : 'flex'}]}>
+        <View style={[styles.body, { display: props.reviewMode || props.conductMode ? 'none' : 'flex' }]}>
             <IconButton
                 icon='delete'
                 iconColor='#f70000'
@@ -53,7 +54,7 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
             />
 
             <ToggleSwitch
-                isOn={props.reviewMode || props.conductMode ? Boolean([...surveyPostRequest?.questions ?? []][props.index ?? -1].required) : switchToggle}
+                isOn={switchToggle}
                 onColor="green"
                 offColor="gray"
                 label="Bắt buộc"

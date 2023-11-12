@@ -43,7 +43,12 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
               />
             )
           }))}
-      <QuestionBottomBarOptions index={props.index} />
+      {
+        props.editMode && <QuestionBottomBarOptions
+          reviewMode={props.reviewMode}
+          conductMode={props.conductMode}
+          index={props.index} />
+      }
     </View>
   )
 }

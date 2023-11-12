@@ -14,6 +14,7 @@ export interface QuestionProps {
   isDisableDeleteBtn?: boolean
   reviewMode?: boolean
   conductMode?: boolean
+  editMode?: boolean
 }
 
 export interface ChoiceProps {

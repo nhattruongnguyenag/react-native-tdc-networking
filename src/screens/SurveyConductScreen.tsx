@@ -45,11 +45,13 @@ export default function SurveyConductScreen() {
         if (isAllFieldValid(validates)) {
             surveyConductRequestAPI(surveyConductRequest)
         } else {
-            for (let validate of validates) {
+            const tempValidates = [...validates]
+            for (let validate of tempValidates) {
                 if (validate.isError) {
                     validate.isVisible = true
                 }
             }
+            setValidates(tempValidates)
         }
     }
 
@@ -87,7 +89,7 @@ export default function SurveyConductScreen() {
 
                 tempValidates.push({
                     textError: textError,
-                    isError: true,
+                    isError: Boolean(question.required),
                     isVisible: false
                 })
             }

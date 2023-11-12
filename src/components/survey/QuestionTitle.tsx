@@ -12,10 +12,13 @@ interface QuestionTitleProps {
 }
 
 export default function QuestionTitle(props: QuestionTitleProps) {
-    return (
+  return (
     <View style={styles.body}>
       <Text style={styles.questionTitle}>{props.title}</Text>
-      <Text style={[{color: 'red'}]}>*</Text>
+      {
+        Boolean(props.required)
+        && <Text style={[{ color: 'red' }]}>*</Text>
+      }
     </View>
   )
 }

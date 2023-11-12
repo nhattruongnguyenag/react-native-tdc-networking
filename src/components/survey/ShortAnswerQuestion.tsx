@@ -13,7 +13,7 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle
-        required={props.data?.required}
+        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
         title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
@@ -24,10 +24,12 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
         placeholder='Nhập câu trả lời...'
         style={styles.ip}
       />
-      <QuestionBottomBarOptions
-        reviewMode={props.reviewMode}
-        conductMode={props.conductMode}
-        index={props.index} />
+      {
+        props.editMode && <QuestionBottomBarOptions
+          reviewMode={props.reviewMode}
+          conductMode={props.conductMode}
+          index={props.index} />
+      }
     </View>
   )
 }

@@ -54,7 +54,12 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
               )
             }))}
       </RadioButton.Group>
-      <QuestionBottomBarOptions index={props.index} />
+      {
+        props.editMode && <QuestionBottomBarOptions
+          reviewMode={props.reviewMode}
+          conductMode={props.conductMode}
+          index={props.index} />
+      }
     </View>
   )
 }

@@ -32,11 +32,23 @@ export default function AddQuestionScreen() {
       <ScrollView style={styles.body}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion data={item} index={index} />
+            return <MultiChoiceQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion data={item} index={index} />
+            return <OneChoiceQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           } else {
-            return <ShortAnswerQuestion data={item} index={index} />
+            return <ShortAnswerQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           }
         })}
 
