@@ -4,11 +4,10 @@ import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constant
 import CustomizePost from '../components/post/CustomizePost'
 import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
-import { handleDataClassification } from '../utils/DataClassfications'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_POST, API_URL_STUDENT_POST } from '../constants/Path'
+import { API_URL_STUDENT_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
@@ -20,10 +19,8 @@ import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { useIsFocused } from '@react-navigation/native';
 
-// man hinh hien thi danh sach bai viet thao luan cua sinh vien
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
-  // Variable
   const isFocused = useIsFocused();
   const code = 'group_tdc';
   const [isCalled, setIsCalled] = useState(false);
@@ -36,7 +33,6 @@ export default function StudentDiscussionDashboardScreen() {
   const [studentsPost, setStudentPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  // Function 
   useEffect(() => {
     if (studentsPost.length > 0 || isCalled) {
       setIsLoading(false)
@@ -45,7 +41,6 @@ export default function StudentDiscussionDashboardScreen() {
     }
   }, [studentsPost])
 
-  // Api
   const getDataStudentApi = async () => {
     try {
       const data = await postAPI(API_URL_STUDENT_POST + userLogin?.id)
@@ -99,7 +94,7 @@ export default function StudentDiscussionDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -126,6 +121,8 @@ export default function StudentDiscussionDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }
@@ -135,6 +132,7 @@ export default function StudentDiscussionDashboardScreen() {
       {
         isLoading && <SkeletonPost />
       }
+      
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
@@ -148,7 +146,6 @@ export default function StudentDiscussionDashboardScreen() {
         />
 
         {/* Name group */}
-
         <View style={styles.lineBellowBanner}>
           <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>

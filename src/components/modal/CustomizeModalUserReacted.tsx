@@ -11,7 +11,7 @@ import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 
 const CustomizeModalUserReacted = () => {
-  const { userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userIdOfProfileNow, currentScreenNowIsProfileScreen, modalUserReactionData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
 
@@ -19,19 +19,16 @@ const CustomizeModalUserReacted = () => {
     dispatch(closeModalUserReaction())
   }
 
-  // Function
   const handleClickIntoUserReactedEvent = (userId: number) => {
     if (userIdOfProfileNow !== userId) {
       handleClickIntoBtnIconClose()
       if (currentScreenNowIsProfileScreen) {
-        navigation.replace(PROFILE_SCREEN, { userId: userId })
+        navigation.replace(PROFILE_SCREEN, { userId: userId, group: modalUserReactionData?.group ?? '' })
       } else {
-        navigation.navigate(PROFILE_SCREEN, { userId: userId })
+        navigation.navigate(PROFILE_SCREEN, { userId: userId, group: modalUserReactionData?.group ?? '' })
       }
     }
   }
-
-  const { modalUserReactionData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   return (
     <Modal transparent statusBarTranslucent={true}>

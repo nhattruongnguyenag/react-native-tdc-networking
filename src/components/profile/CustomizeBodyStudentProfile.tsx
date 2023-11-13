@@ -7,7 +7,7 @@ import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import { CALL_ACTION, FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
 
-export interface StudentProfileType {
+interface StudentProfileType {
     handleClickButtonEvent: (flag: number) => void,
     position: string,
     phone: string,
@@ -15,76 +15,76 @@ export interface StudentProfileType {
     numberPost: number,
     name: string
 }
-export default function CustomizeBodyStudentProfile(props: StudentProfileType) {
+export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfileType>) {
     return (
-            <View style={styles.containerInfo}>
-                {/* Name */}
-                <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
-                {/* Btn action */}
-                <View style={[styles.buttonContainer, styles.paddingBottom]}>
-                    <TouchableOpacity
-                        onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
-                        style={[styles.buttonAction,
-                        styles.marginRightBtnAction]}
-                    >
-                        <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
-                        <Text style={styles.txtContentBtn}>
-                            Gửi tin nhắn
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => props.handleClickButtonEvent(CALL_ACTION)}
-                        style={[styles.buttonAction,
-                        styles.marginRightBtnAction]}
-                    >
-                        <IconEntypo name='phone' size={20} color={COLOR_WHITE} />
-                        <Text style={styles.txtContentBtn}>
-                            Gọi điện
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
-                        style={[styles.buttonAction,
-                        styles.marginRightBtnAction]}
-                    >
-                        <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
-                        <Text style={styles.txtContentBtn}>
-                            Theo dõi
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-                        style={[
-                            styles.marginRightBtnAction, styles.btnOption]}
-                    >
-                        <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-                    </TouchableOpacity>
-                </View>
-                {/* Info */}
-                <View>
-                    <View style={styles.infoContainer}>
-                        <IconIonicons
-                            style={styles.iconInfo}
-                            name='bag-remove-outline' size={20} color={COLOR_BLACK} />
-                        <Text style={styles.textInfo}>Chức vụ: {props.position}</Text>
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <IconFeather
-                            style={styles.iconInfo}
-                            name='phone-call' size={20} color={COLOR_BLACK} />
-                        <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <IconFontisto
-                            style={styles.iconInfo}
-                            name='email' size={20} color={COLOR_BLACK} />
-                        <Text style={styles.textInfo}>Email: {props.email}</Text>
-                    </View>
-                </View>
-                {/* Number post */}
-                <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
-                {/* Post */}
+        <View style={styles.containerInfo}>
+            {/* Name */}
+            <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
+            {/* Btn action */}
+            <View style={[styles.buttonContainer, styles.paddingBottom]}>
+                <TouchableOpacity
+                    onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
+                    style={[styles.buttonAction,
+                    styles.marginRightBtnAction]}
+                >
+                    <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
+                    <Text style={styles.txtContentBtn}>
+                        Gửi tin nhắn
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.handleClickButtonEvent(CALL_ACTION)}
+                    style={[styles.buttonAction,
+                    styles.marginRightBtnAction]}
+                >
+                    <IconEntypo name='phone' size={20} color={COLOR_WHITE} />
+                    <Text style={styles.txtContentBtn}>
+                        Gọi điện
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
+                    style={[styles.buttonAction,
+                    styles.marginRightBtnAction]}
+                >
+                    <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
+                    <Text style={styles.txtContentBtn}>
+                        Theo dõi
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+                    style={[
+                        styles.marginRightBtnAction, styles.btnOption]}
+                >
+                    <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+                </TouchableOpacity>
             </View>
+            {/* Info */}
+            <View>
+                <View style={styles.infoContainer}>
+                    <IconIonicons
+                        style={styles.iconInfo}
+                        name='bag-remove-outline' size={20} color={COLOR_BLACK} />
+                    <Text style={styles.textInfo}>Chức vụ: Sinh viên</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                    <IconFeather
+                        style={styles.iconInfo}
+                        name='phone-call' size={20} color={COLOR_BLACK} />
+                    <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                    <IconFontisto
+                        style={styles.iconInfo}
+                        name='email' size={20} color={COLOR_BLACK} />
+                    <Text style={styles.textInfo}>Email: {props.email}</Text>
+                </View>
+            </View>
+            {/* Number post */}
+            <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
+            {/* Post */}
+        </View>
     )
 }
 
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     infoContainer: {
         flexDirection: 'row',
         // alignItems: 'center',
-        paddingVertical: 1,
+        paddingVertical: 3,
     },
     iconInfo: {
         marginRight: 5,

@@ -39,3 +39,4 @@ export const TEXT_SURVEY_CONTENT = 'Nội dung khảo sát'
 export const TEXT_UN_UPDATE = 'chưa được cập nhật';
 export const TEXT_PLACEHOLDER_CREATE_ANY_POST = 'Hãy nhập nội dung bài viết';
 export const TEXT_NOTIFICATION_SAVE_SUCCESS = 'Lưu bài viết thành công';
+export const TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT = 'Khu vực không khả dụng với tài khoản này !'

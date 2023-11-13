@@ -9,3 +9,8 @@ export interface Conversation extends Base {
   lastMessageSentAt: string
   lastMessageType: string
 }
+
+export interface SelectedConversation {
+  sender: User
+  receiver: User
+}

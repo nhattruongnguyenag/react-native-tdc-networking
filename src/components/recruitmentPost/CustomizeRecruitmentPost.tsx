@@ -8,7 +8,7 @@ import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { TEXT_SEE_DETAIL } from '../../constants/StringVietnamese'
 
-export interface RecruitmentPostType {
+interface RecruitmentPostType {
   id: number,
   createdAt: string,
   location: string,

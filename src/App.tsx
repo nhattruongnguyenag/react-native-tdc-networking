@@ -52,6 +52,7 @@ import {
   PROFILE_SCREEN,
   DETAIL_JOB_APPLY,
   OPTION_SCREEN,
+  SURVEY_RESULT_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -85,6 +86,7 @@ import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
+import SurveyResultScreen from './screens/SurveyResultScreen';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -118,10 +120,11 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
-  LIST_POST_SAVED_SCREEN: undefined
-  PROFILE_SCREEN: { userId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
+  PROFILE_SCREEN: { userId: number, group: string } | undefined
+  LIST_POST_SAVED_SCREEN: undefined
   OPTION_SCREEN: undefined
+  SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -235,7 +238,10 @@ export function StackNavigator(): JSX.Element {
         component={MessengerScreen}
       />
 
-      <RootStack.Screen name={LOGIN_SCREEN} options={{ header: () => null }} component={LoginScreen} />
+      <RootStack.Screen
+        name={LOGIN_SCREEN}
+        options={{ header: () => null }}
+        component={LoginScreen} />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -267,7 +273,10 @@ export function StackNavigator(): JSX.Element {
         component={CreateSurveyPostScreen}
       />
 
-      <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
+      <RootStack.Screen
+        name={IMAGE_VIEW_SCREEN}
+        options={{ header: () => null }}
+        component={ImageViewScreen} />
 
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
@@ -333,7 +342,16 @@ export function StackNavigator(): JSX.Element {
         component={OptionScreen}
       />
 
-      <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
+      <RootStack.Screen
+        name={SPLASH_SCREEN}
+        options={{ header: () => null }}
+        component={SplashScreen} />
+
+      <RootStack.Screen
+        name={SURVEY_RESULT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
+        component={SurveyResultScreen}
+      />
     </RootStack.Navigator>
   )
 }

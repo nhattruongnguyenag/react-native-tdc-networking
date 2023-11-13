@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { Faculty } from '../types/Faculty'
 import { Business } from '../types/Business'
-import { Conversation } from '../types/Conversation'
+import { Conversation, SelectedConversation } from '../types/Conversation'
 import { ModalComments } from '../types/ModalComments'
 import { ModalImage } from '../types/ModalImage'
 import { ModalUserReaction } from '../types/ModalUserReaction'
@@ -18,7 +18,7 @@ export interface TDCSocialNetworkState {
   imagesUpload: string[] | null
   conversations: Conversation[]
   conversationMessages: Message[]
-  selectConversation: Conversation | null
+  selectConversation: SelectedConversation | null
   userLogin: Student | Faculty | Business | null
   deviceToken: string | null
   isOpenModalImage: boolean
@@ -50,7 +50,7 @@ const initialState: TDCSocialNetworkState = {
   modalUserReactionData: null,
   updatePost: false,
   userIdOfProfileNow: 0,
-  currentScreenNowIsProfileScreen: false
+  currentScreenNowIsProfileScreen: false,
 }
 
 export const TDCSocialNetworkSlice = createSlice({
@@ -69,7 +69,7 @@ export const TDCSocialNetworkSlice = createSlice({
     setConversations: (state, action: PayloadAction<Conversation[]>) => {
       state.conversations = action.payload
     },
-    setSelectConversation: (state, action: PayloadAction<Conversation | null>) => {
+    setSelectConversation: (state, action: PayloadAction<SelectedConversation | null>) => {
       state.selectConversation = action.payload
     },
     setConversationMessages: (state, action: PayloadAction<Message[]>) => {
@@ -81,6 +81,11 @@ export const TDCSocialNetworkSlice = createSlice({
     addQuestion: (state, action: PayloadAction<Question>) => {
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
+      }
+    },
+    updateQuestion: (state, action: PayloadAction<{index: number, question: Question}>) => {
+      if (state.surveyPostRequest) {
+        state.surveyPostRequest.questions[action.payload.index] = action.payload.question
       }
     },
     deleteQuestion: (state, action: PayloadAction<number>) => {
@@ -145,6 +150,7 @@ export const {
   setDeviceToken,
   setSurveyPostRequest,
   addQuestion,
+  updateQuestion,
   deleteQuestion,
   addChoice,
   updateChoice,

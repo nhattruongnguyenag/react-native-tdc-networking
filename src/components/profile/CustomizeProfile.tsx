@@ -5,66 +5,27 @@ import CustomizeBodyFacultyProfile from './CustomizeBodyFacultyProfile'
 import { TEXT_UN_UPDATE, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
 import CustomizeBodyStudentProfile from './CustomizeBodyStudentProfile'
 import CustomizeBodyBusinessProfile from './CustomizeBodyBusinessProfile'
-import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../../constants/Variables'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
-import { OPTION_SCREEN } from '../../constants/Screen'
-import { useEffect } from 'react'
-import { Text } from 'react-native-paper'
 
 export interface CustomizeProfileType {
     data: Object[]
     role: string
     userData: any
+    handleClickButtonEvent: (a: number) => void
+    handleClickIntoHeaderComponentEvent: (a: number) => void
 }
 
 const CustomizeProfile = (props: CustomizeProfileType) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    // Variable
-    // Function
-
-    const handleClickButtonEvent = (flag: number) => {
-        if (flag === MESSENGER_ACTION) {
-            console.log('chat');
-        } else if (flag === FOLLOW_ACTION) {
-            console.log('follow');
-        } else if (flag === CALL_ACTION) {
-            console.log('call');
-        } else {
-            handleClickIntoButtonMenu3dotEvent();
-        }
-    }
-
-    const handleClickIntoButtonMenu3dotEvent = () => {
-        navigation.navigate(OPTION_SCREEN);
-    }
-
-    const handleClickIntoHeaderComponentEvent = (flag: number) => {
-        switch (flag) {
-            case CLICK_CAMERA_AVATAR_EVENT:
-                console.log('CLICK_CAMERA_AVATAR_EVENT');
-                break;
-            case CLICK_CAMERA_BACKGROUND_EVENT:
-                console.log('CLICK_CAMERA_BACKGROUND_EVENT');
-                break;
-            case SEE_AVATAR:
-                console.log('SEE_AVATAR');
-                break;
-            case SEE_BACKGROUND:
-                console.log('SEE_BACKGROUND');
-                break;
-            default:
-                break;
-        }
-    }
 
     const getBody = () => {
         let body;
         switch (props.role) {
             case TYPE_POST_STUDENT:
                 body = <CustomizeBodyStudentProfile
-                    handleClickButtonEvent={handleClickButtonEvent}
+                    handleClickButtonEvent={props.handleClickButtonEvent}
                     position={props.userData.position ?? TEXT_UN_UPDATE}
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
@@ -73,7 +34,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                 break;
             case TYPE_POST_BUSINESS:
                 body = <CustomizeBodyBusinessProfile
-                    handleClickButtonEvent={handleClickButtonEvent}
+                    handleClickButtonEvent={props.handleClickButtonEvent}
                     timeWork={props.userData.timeWork ?? TEXT_UN_UPDATE}
                     TaxIdentificationNumber={props.userData.TaxIdentificationNumber ?? TEXT_UN_UPDATE}
                     representative={props.userData.representative ?? TEXT_UN_UPDATE}
@@ -85,7 +46,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                 break;
             case TYPE_POST_FACULTY:
                 body = <CustomizeBodyFacultyProfile
-                    handleClickButtonEvent={handleClickButtonEvent}
+                    handleClickButtonEvent={props.handleClickButtonEvent}
                     timeWork={props.userData.timeWork ?? TEXT_UN_UPDATE}
                     address={props.userData.address ?? TEXT_UN_UPDATE}
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
@@ -99,17 +60,16 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
         return body
     }
 
-
     return (
         <View>
             {
                 props.userData && <View style={styles.container}>
                     <CustomizeHeaderProfile
-                        background={'4f1df6f082f3d8849a598ae3d9cd6c4a.jpg'}
+                        background={props.userData.image}
                         avatar={props.userData.image}
                         name={props.userData.name}
                         handleClickIntoHeaderComponentEvent={
-                            handleClickIntoHeaderComponentEvent
+                            props.handleClickIntoHeaderComponentEvent
                         } />
                     {
                         getBody()
@@ -119,7 +79,6 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
