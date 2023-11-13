@@ -103,6 +103,10 @@ const ProfileScreen = ({ route }: any) => {
         navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: group })
     }
 
+    const handleUnSave = () => {
+        
+    }
+
     const renderItem = (item: any) => {
         return (
             <CustomizePost
@@ -128,7 +132,8 @@ const ProfileScreen = ({ route }: any) => {
                 employmentType={item.employmentType ?? null}
                 description={item.description ?? null}
                 isSave={item.isSave}
-                group={group}
+                group={group} 
+                handleUnSave={handleUnSave}                
             />
         )
     }

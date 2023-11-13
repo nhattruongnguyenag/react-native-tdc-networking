@@ -15,6 +15,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { LIST_FOLLOWER, LIST_FOLLOWING } from '../constants/Screen'
 import FollowingList from '../components/follow/FollowingList'
 import FollowerList from '../components/follow/FollowerList'
+import { TEXT_STATUS_FOLLOWER, TEXT_STATUS_FOLLOWING } from '../constants/StringVietnamese'
 
 let stompClient: Client
 
@@ -33,12 +34,12 @@ function TopTabNavigator(): JSX.Element {
     >
       <TopTab.Screen
         name={LIST_FOLLOWING}
-        options={{ title: 'Đang theo dõi' }}
+        options={{ title: TEXT_STATUS_FOLLOWING }}
         component={FollowingList}
       />
       <TopTab.Screen
         name={LIST_FOLLOWER}
-        options={{ title: 'Đang theo dõi bạn' }}
+        options={{ title: TEXT_STATUS_FOLLOWER }}
         component={FollowerList}
       />
     </TopTab.Navigator>

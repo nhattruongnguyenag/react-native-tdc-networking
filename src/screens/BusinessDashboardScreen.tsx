@@ -144,6 +144,10 @@ export default function BusinessDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
+  const handleUnsave= () => {
+
+  }
+
   const renderItem = (item: any) => {
     return (
       <CustomizePost
@@ -169,8 +173,9 @@ export default function BusinessDashboardScreen() {
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
         isSave={item.isSave}
-        group={code}
-      />
+        group={code} 
+        handleUnSave={handleUnsave}       
+        />
     )
   }
 

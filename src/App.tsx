@@ -87,6 +87,7 @@ import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
+import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_ } from './constants/StringVietnamese';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -222,7 +223,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={SEACRH_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Tìm kiếm' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_SEARCH_} /> }}
         component={SearchScreen}
       />
 
@@ -303,7 +304,7 @@ export function StackNavigator(): JSX.Element {
       />
       <RootStack.Screen
         name={LIST_POST_SAVED_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Lưu' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_SAVE} /> }}
         component={ListPostSavedScreen}
       />
 
@@ -321,7 +322,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={LIST_FOLLOW_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Danh sách theo dõi' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_FOLLOW} /> }}
         component={ListFollowScreen}
       />
 

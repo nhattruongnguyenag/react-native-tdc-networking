@@ -13,6 +13,9 @@ import { Client, Frame, Message } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import UserItem from "../components/items/UserItem";
 import PostNormalItem from '../components/items/PostNormalItem'
+import { LABEL_POST_BUSINESS, LABEL_POST_FACULTY, LABEL_POST_NORMAL, LABEL_POST_RECRUITMENT, LABEL_POST_STUDENT, LABEL_POST_SURVEY, TEXT_SEARCH, TEXT_SUBJECT_POST, TEXT_SUBJECT_USER, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_NORMAL, TYPE_POST_RECRUITMENT, TYPE_POST_STUDENT, TYPE_POST_SURVEY } from '../constants/StringVietnamese'
+import CustomizePost from '../components/post/CustomizePost'
+import { LikeAction } from '../types/LikeActions'
 
 let stompClient: Client
 
@@ -25,30 +28,30 @@ export default function SearchScreen() {
   //Kieu du lieu
   const [search, setSearch] = useState('')
   const [subjects, setSubjects] = useState('user')
-  const [type, setType] = useState('sinh-vien')
+  const [type, setType] = useState(TYPE_POST_STUDENT)
   const [qty, setQty] = useState(0)
   let URL = `${SERVER_ADDRESS}api/find/post`
   //Xu ly dropdown
   const [value, setValue] = useState(null)
-  const [label, setLabel] = useState('Người dùng')
-  const [label2, setLabel2] = useState('- - Sinh viên - -')
+  const [label, setLabel] = useState(TEXT_SUBJECT_USER)
+  const [label2, setLabel2] = useState(`- - ${LABEL_POST_STUDENT} - -`)
   const [items, setItems] = useState([
     {
-      label: 'Người dùng',
+      label: TEXT_SUBJECT_USER,
       value: 'user',
       children: [
-        { label: '- - Sinh viên - -', value: 'sinh-vien' },
-        { label: '- - Doanh nghiệp - -', value: 'doanh-nghiep' },
-        { label: '- - Khoa - -', value: 'khoa' }
+        { label: `- - ${LABEL_POST_STUDENT} - -`, value: TYPE_POST_STUDENT },
+        { label: `- - ${LABEL_POST_BUSINESS} - -`, value: TYPE_POST_BUSINESS },
+        { label: `- - ${LABEL_POST_FACULTY} - -`, value: TYPE_POST_FACULTY }
       ]
     },
     {
-      label: 'Bài viết',
+      label: TEXT_SUBJECT_POST,
       value: 'post',
       children: [
-        { label: '- - Bài viết - -', value: 'thong-thuong' },
-        { label: '- - Khảo sát - -', value: 'khao-sat' },
-        { label: '- - Tin tuyển dụng - -', value: 'tuyen-dung' }
+        { label: `- - ${LABEL_POST_NORMAL} - -`, value: TYPE_POST_NORMAL },
+        { label: `- - ${LABEL_POST_SURVEY} - -`, value: TYPE_POST_SURVEY },
+        { label: `- - ${LABEL_POST_RECRUITMENT} - -`, value: TYPE_POST_RECRUITMENT }
       ]
     }
   ])
@@ -83,7 +86,7 @@ export default function SearchScreen() {
     else {
       axios
         .post(URL, {
-          userId: userLogin?.id,
+          userLogin: userLogin?.id,
           type: type,
           name: search
         })
@@ -118,35 +121,50 @@ export default function SearchScreen() {
     )
   }
 
+  const likeAction = (obj: LikeAction) => {
+  }
+
+  const handleUnSave = () => {}
+
   const checkType = () => {
-    switch (type) {
-      case 'sinh-vien':
+    switch (subjects) {
+      case 'user':
         return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
         break
-      case 'doanh-nghiep':
-        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
-        break
-      case 'khoa':
-        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
-        break
-      case 'thong-thuong':
-        return masterData.map((item: any, index) =>
-          <PostNormalItem
-            id={item.id}
-            image={item.image}
-            type={item.type}
-            content={item.content}
-            user={{
-              id: item.user.id,
-              name: item.user.name,
-              image: item.user.image
-            }} />)
-        break
-      case 'khao-sat':
-        return masterData.map((item, index) => postItems(item, index))
-        break
-      case 'tuyen-dung':
-        return masterData.map((item, index) => postItems(item, index))
+      case 'post':
+        return (
+          <>
+            {masterData != null &&
+              masterData.map((item: any) => (
+                <CustomizePost
+                  id={item.id}
+                  userId={item.user['id']}
+                  name={item.user['name']}
+                  avatar={item.user['image']}
+                  typeAuthor={'Doanh Nghiệp'}
+                  available={null}
+                  timeCreatePost={item.createdAt}
+                  content={item.content}
+                  type={item.type}
+                  likes={item.likes}
+                  comments={item.comment}
+                  commentQty={item.commentQuantity}
+                  images={item.images}
+                  role={item.user['roleCodes']}
+                  likeAction={likeAction}
+                  location={item.location ?? null}
+                  title={item.title ?? null}
+                  expiration={item.expiration ?? null}
+                  salary={item.salary ?? null}
+                  employmentType={item.employmentType ?? null}
+                  description={item.description ?? null}
+                  isSave={item.isSave}
+                  group={''}
+                  handleUnSave={handleUnSave}
+                />
+              ))}
+          </>
+        )
         break
       default:
         console.log('...')
@@ -157,7 +175,7 @@ export default function SearchScreen() {
       <View style={styles.operation}>
         <TextInput
           style={styles.search}
-          placeholder='Nhập nội dung tìm kiếm...'
+          placeholder={TEXT_SEARCH}
           placeholderTextColor='#000000'
           value={search}
           onChangeText={(txt) => setSearch(txt)}
@@ -169,20 +187,20 @@ export default function SearchScreen() {
               data={items}
               value={value}
               placeholder={label}
-              labelField='label'  
+              labelField='label'
               valueField='value'
               onChange={(item) => {
                 setMasterData([])
                 setQty(0)
                 setLabel(item.label)
                 setSubjects(item.value)
-                setType(item.label === 'Bài viết' ? items[1].children[0].value : items[0].children[0].value)
-                setLabel2(item.label === 'Bài viết' ? items[1].children[0].label : items[0].children[0].label)
+                setType(item.label === TEXT_SUBJECT_POST ? items[1].children[0].value : items[0].children[0].value)
+                setLabel2(item.label === TEXT_SUBJECT_POST ? items[1].children[0].label : items[0].children[0].label)
               }}
             />
             <Dropdown
               style={[styles.dropDown2]}
-              data={label === 'Bài viết' ? items[1].children : items[0].children}
+              data={label === TEXT_SUBJECT_POST ? items[1].children : items[0].children}
               value={value}
               placeholder={label2}
               labelField='label'
@@ -201,7 +219,6 @@ export default function SearchScreen() {
       </View>
       <MenuProvider>
         <ScrollView>
-          <Text style={styles.qty}>Kết quả tìm kiếm ({qty})</Text>
           {checkType()}
         </ScrollView>
       </MenuProvider>

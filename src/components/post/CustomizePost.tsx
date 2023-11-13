@@ -161,6 +161,7 @@ const CustomizePost = (props: Post) => {
         break
       case CLICK_DELETE_POST_EVENT:
         handleSavePost();
+        post.handleUnSave(post.id);
         break
       case CLICK_SEE_LIST_CV_POST_EVENT:
         handleSeeListCvPost();

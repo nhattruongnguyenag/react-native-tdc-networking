@@ -100,6 +100,8 @@ export default function FacultyDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
+  const handleUnSave = () => {}
+
   const renderItem = (item: any) => {
     return (
       <CustomizePost
@@ -126,6 +128,7 @@ export default function FacultyDashboardScreen() {
         description={item.description ?? null}
         isSave={item.isSave}
         group={code}
+        handleUnSave={handleUnSave}
       />
     )
   }

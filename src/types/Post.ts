@@ -27,4 +27,5 @@ export interface Post {
   description: string | null
   isSave: number
   group: string
+  handleUnSave: (post_id: number) => void | undefined
 }
