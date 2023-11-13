@@ -14,12 +14,14 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
 import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
+import { useAppSelector } from '../redux/Hook'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const postId = route.params?.postId ?? 0
-  const [dataRecruitmentDetail, setDataRecruitmentDetail] = useState({
+  const [data, setData] = useState({
     createdAt: '',
     salary: '',
     expiration: '',
@@ -30,12 +32,15 @@ export default function RecruitmentDetailScreen() {
     requirement: '',
     title: ''
   })
+  const [result, setResult] = useState([data.benefit])
+  const [description, setDescription] = useState([data.description])
+  const [requirement, setRequirement] = useState([data.requirement])
   useEffect(() => {
     if (postId) {
       axios
-        .get(SERVER_ADDRESS + `api/posts/recruitment/${postId}`)
+        .get(SERVER_ADDRESS + `api/posts/recruitment?postId=${postId}&&userLogin=${userLogin?.id}`)
         .then((recruitment) => {
-          setDataRecruitmentDetail(recruitment.data.data)
+          setData(recruitment.data.data)
         })
         .catch((error) => {
           console.log(error)
@@ -46,6 +51,13 @@ export default function RecruitmentDetailScreen() {
   const onSubmit = () => {
     navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
   }
+
+  useEffect(() => {
+    setResult(data.benefit.split(','))
+    setDescription(data.description.split(','))
+    setRequirement(data.requirement.split(','))
+  }, [data.benefit, data.description, data.requirement])
+  
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -54,14 +66,14 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.txt}>Vị trí tuyển dụng</Text>
             <View style={styles.iconRecuitment}>
               <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.title}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {data.title}</Text>
             </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Hình thức làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='briefcase' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.employmentType}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
             </View>
           </View>
           <View style={styles.item}>
@@ -70,7 +82,7 @@ export default function RecruitmentDetailScreen() {
               <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
               <Text style={{ color: COLOR_BLACK }}>
                 {' '}
-                {formatVietNamCurrency(dataRecruitmentDetail.salary)} vnd/tháng{}
+                {formatVietNamCurrency(data.salary)} vnd/tháng{}
               </Text>
             </View>
           </View>
@@ -79,14 +91,14 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
             <View style={styles.iconRecuitment}>
               <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {formatDateTime(dataRecruitmentDetail.expiration)}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
             </View>
           </View>
           <View style={styles.item}>
             <Text style={styles.txt}>Địa chỉ làm việc</Text>
             <View style={styles.iconRecuitment}>
               <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {dataRecruitmentDetail.location}</Text>
+              <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
             </View>
           </View>
         </View>
@@ -96,7 +108,11 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.headerWelfare}>Phúc lợi</Text>
           </View>
           <View style={styles.welfare}>
-            <Text style={styles.welfareTxt}>{dataRecruitmentDetail.benefit}</Text>
+            {result
+              .filter((item) => item !== '')
+              .map((item, index) => (
+                <Text style={styles.welfareTxt} key={index}>{item}</Text>
+              ))}
           </View>
         </View>
 
@@ -105,10 +121,14 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.headerWelfare}>Mô tả công việc</Text>
           </View>
           <View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>{dataRecruitmentDetail.description}</Text>
-            </View>
+            {description
+              .filter((item) => item !== '')
+              .map((item, index) => (
+                <View style={styles.description} key={index}>
+                  <Icon name='circle' style={styles.icon} />
+                  <Text style={{ color: COLOR_BLACK }}>{item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}</Text>
+                </View>
+              ))}
           </View>
         </View>
 
@@ -117,10 +137,16 @@ export default function RecruitmentDetailScreen() {
             <Text style={styles.headerWelfare}>Yêu cầu công việc</Text>
           </View>
           <View>
-            <View style={styles.description}>
-              <Icon name='circle' style={styles.icon} />
-              <Text style={{ color: COLOR_BLACK }}>{dataRecruitmentDetail.requirement}</Text>
-            </View>
+            {requirement
+              .filter((item) => item !== '')
+              .map((item, index) => (
+                <View style={styles.description} key={index}>
+                  <Icon name='circle' style={styles.icon} />
+                  <Text style={{ color: COLOR_BLACK }} >
+                    {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                  </Text>
+                </View>
+              ))}
           </View>
         </View>
       </SafeAreaView>
@@ -166,6 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   welfare: {
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: 10
@@ -192,16 +219,16 @@ const styles = StyleSheet.create({
     flex: 1
   },
   description: {
-    flexDirection: 'row',
+    flexDirection:'row',
     alignItems: 'flex-start',
-    marginLeft: 10
+    marginHorizontal: 10
   },
   icon: {
     fontSize: 5,
     backgroundColor: COLOR_BLACK,
     borderRadius: 10,
     top: 7,
-    marginRight: 5
+    margin: 5
   },
   btnRecruitment: {
     backgroundColor: '#3cb371',
@@ -218,7 +245,7 @@ const styles = StyleSheet.create({
   },
   iconRecuitment: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: 2
   }
 })
