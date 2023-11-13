@@ -36,6 +36,7 @@ import {
   INTERMEDIATIOO_SCREEN,
   LIST_FOLLOW_SCREEN,
   JOB_APPLY_SCREEN,
+  LIST_JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
@@ -80,6 +81,7 @@ import ListFollowScreen from './screens/ListFollowScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
+import ListJobApplyScreen from './screens/ListJobApplyScreen'
 import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
@@ -117,9 +119,10 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
+  DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
   LIST_POST_SAVED_SCREEN: undefined
-  DETAIL_JOB_APPLY: undefined
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
 }
@@ -308,6 +311,12 @@ export function StackNavigator(): JSX.Element {
         name={CREATE_NORMAL_POST_SCREEN}
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
+      />
+      
+      <RootStack.Screen
+        name={LIST_JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển'/> }}
+        component={ListJobApplyScreen}
       />
 
       <RootStack.Screen

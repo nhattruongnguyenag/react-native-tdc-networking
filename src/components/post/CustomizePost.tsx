@@ -30,7 +30,7 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import {LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -42,7 +42,9 @@ export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   let post = props
-  const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector(
+    (state) => state.TDCSocialNetworkReducer
+  )
   const dispatch = useAppDispatch()
 
   const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
@@ -184,6 +186,7 @@ const CustomizePost = (props: Post) => {
     console.log('====================================');
     console.log('handleSeeListCvPost' + post.id);
     console.log('====================================');
+    navigation.navigate(LIST_JOB_APPLY_SCREEN, {postId: post.id})
   }
 
   const handleSeeResultSurveyPost = () => {
@@ -306,6 +309,6 @@ const styles = StyleSheet.create({
   },
   bodyWrap: {
     marginVertical: 10
-  },
+  }
 })
 export default CustomizePost

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Business } from '../types/Business'
 import axios, { AxiosResponse } from 'axios'
@@ -34,9 +34,12 @@ import {
   isLengthInRange,
   isPassword,
   isPhone,
+  isTime,
   isType
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/TextValidate'
+import DatePicker from 'react-native-date-picker'
+import moment from 'moment'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -64,6 +67,8 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [timeStart, setTimeStart] = useState('07:00')
+  const [timeEnd, setTimeEnd] = useState('17:00')
   const [business, setBusiness] = useState<
     Omit<Business, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'roleCodes' | 'isTyping' | 'isMessageConnect'>
   >({
@@ -73,14 +78,14 @@ export default function BusinessRegistrationScreen() {
     taxCode: '',
     code: Date.now().toString(),
     address: '',
-    activeTime: '',
+    activeTime: timeStart + '-' + timeEnd,
     email: '',
     name: '',
     image: '',
     confimPassword: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
     name: {
       textError: 'Tên không được để trống',
@@ -113,7 +118,7 @@ export default function BusinessRegistrationScreen() {
       isError: true
     },
     activeTime: {
-      textError: 'Thời gian hoạt động không được để trống',
+      textError: 'Thời gian hoạt động sai định dạng',
       isVisible: false,
       isError: true
     },
@@ -128,6 +133,10 @@ export default function BusinessRegistrationScreen() {
       isError: true
     }
   })
+  const [showDatePickerStart, setShowDatePickerStart] = useState<boolean>(false)
+  const [showDatePickerEnd, setShowDatePickerEnd] = useState<boolean>(false)
+  const timeStartRef = useRef<TextInput | null>(null)
+  const timeEndRef = useRef<TextInput | null>(null)
   const handleNameChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, name: value })
@@ -219,6 +228,28 @@ export default function BusinessRegistrationScreen() {
     },
     [validate]
   )
+  const handleCheckEmail = useCallback(() => {
+    axios
+      .post(SERVER_ADDRESS + `api/users/check?email=${business.email}`)
+      .then((response) => {
+        if (response.data.data == 0) {
+          setValidate({
+            ...validate,
+            email: {
+              ...validate.email,
+              isError: true,
+              textError: 'Email đã được sử dụng',
+              isVisible: true
+            }
+          })
+        }
+        console.log(response.data.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [business.email])
+
   const handleEmailChange = useCallback(
     (value: string) => {
       setBusiness({ ...business, email: value })
@@ -465,42 +496,7 @@ export default function BusinessRegistrationScreen() {
     },
     [validate]
   )
-  const handleActiveTimeChange = useCallback(
-    (value: string) => {
-      setBusiness({ ...business, activeTime: value })
-      if (isBlank(value)) {
-        setValidate({
-          ...validate,
-          activeTime: {
-            ...validate.activeTime,
-            isError: true,
-            textError: 'Thời gian hoạt động không được để trống',
-            isVisible: true
-          }
-        })
-      } else if (!isType(value)) {
-        setValidate({
-          ...validate,
-          activeTime: {
-            ...validate.activeTime,
-            isError: true,
-            textError: 'Thời gian hoạt động sai định dạng',
-            isVisible: true
-          }
-        })
-      } else {
-        setValidate({
-          ...validate,
-          activeTime: {
-            ...validate.activeTime,
-            isError: false,
-            isVisible: false
-          }
-        })
-      }
-    },
-    [validate]
-  )
+  
   const [isLoading, setIsLoading] = useState(false)
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
@@ -521,16 +517,42 @@ export default function BusinessRegistrationScreen() {
   }
 
   useEffect(() => {
+    if (!isTime(timeStart, timeEnd)) {
+      setValidate({
+        ...validate,
+        activeTime: {
+          ...validate.activeTime,
+          isError: true,
+          textError: 'Thời gian hoạt động sai định dạng',
+          isVisible: true
+        }
+      })
+    } else {
+      setBusiness({ ...business, activeTime: timeStart + '-' + timeEnd})
+      setValidate({
+        ...validate,
+        activeTime: {
+          ...validate.activeTime,
+          isError: false,
+          isVisible: false
+        }
+      })
+    }
+  }, [timeStart, timeEnd])
+ 
+  useEffect(() => {
     setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
 
   const onSubmit = useCallback(() => {
+    console.log(business.activeTime)
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
       axios
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
           setIsLoading(false)
+          Alert.alert('Thông báo', 'Đăng ký thành công')
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
@@ -545,7 +567,6 @@ export default function BusinessRegistrationScreen() {
           validate[key].isVisible = true
         }
       }
-
       setValidate({ ...validate })
     }
   }, [validate])
@@ -575,11 +596,13 @@ export default function BusinessRegistrationScreen() {
             isError={validate.name?.isError}
             isVisible={validate.name?.isVisible}
           />
+
           <TextInputWithTitle
             value={business.email}
             title='Email'
             placeholder='Nhập email...'
             onChangeText={(value) => handleEmailChange(value)}
+            onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
           />
 
@@ -648,14 +671,63 @@ export default function BusinessRegistrationScreen() {
             isError={validate.phone?.isError}
             isVisible={validate.phone?.isVisible}
           />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+            <TextInputWithTitle
+              value={timeStart}
+              textInputRef={timeStartRef}
+              onFocus={() => {
+                setShowDatePickerStart(true)
+              }}
+              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+              title='Thời gian bắt đầu'
+              placeholder={moment().format('HH:mm')}
+            />
+            <Text style={styles.txt}>đến</Text>
+            <DatePicker
+              modal
+              mode='time'
+              locale='vi'
+              open={showDatePickerStart}
+              date={new Date()}
+              onConfirm={(time) => {
+                setTimeStart(moment(time).format('HH:mm'))
+                timeStartRef.current?.blur()
+                setShowDatePickerStart(false)
+              }}
+              onCancel={() => {
+                timeStartRef.current?.blur()
+                setShowDatePickerStart(false)
+              }}
+            />
 
-          <TextInputWithTitle
-            value={business.activeTime}
-            title='Thời gian hoạt động'
-            placeholder='Nhập thời gian hoạt động...'
-            onChangeText={(value) => handleActiveTimeChange(value)}
-            textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-          />
+            <TextInputWithTitle
+              value={timeEnd}
+              textInputRef={timeEndRef}
+              onFocus={() => {
+                setShowDatePickerEnd(true)
+              }}
+              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+              title='Thời gian kết thúc'
+              placeholder={moment().format('HH:mm')}
+            />
+
+            <DatePicker
+              modal
+              mode='time'
+              locale='vi'
+              open={showDatePickerEnd}
+              date={new Date()}
+              onConfirm={(time) => {
+                setTimeEnd(moment(time).format('HH:mm'))
+                timeEndRef.current?.blur()
+                setShowDatePickerEnd(false)
+              }}
+              onCancel={() => {
+                timeEndRef.current?.blur()
+                setShowDatePickerEnd(false)
+              }}
+            />
+          </View>
 
           <TextValidate
             customStyle={{ marginLeft: 10 }}
