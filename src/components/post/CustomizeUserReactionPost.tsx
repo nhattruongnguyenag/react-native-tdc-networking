@@ -1,10 +1,10 @@
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../DefaultAvatar'
 
-export interface UserReactionType {
+interface UserReactionType {
   id: number
   name: string
   avatar: string

@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
-import CustomizeBodyPost from '../CustomizeBodyPost'
 import { TEXT_JOIN_SURVEY } from '../../constants/StringVietnamese'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import CustomizeBodyPost from '../post/CustomizeBodyPost'
 
-export interface RecruitmentPostType {
+interface RecruitmentPostType {
   id: number,
   title: string,
   description: string,
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
-// Constant
+
 const ICON_SIZE = 15;
 export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>) {
 

@@ -1,8 +1,8 @@
-import { FlatList, ScrollView, StyleSheet, View, RefreshControl } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, View, RefreshControl, Text } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
+import { TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { postAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
@@ -19,10 +19,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useIsFocused } from '@react-navigation/native';
 
-// man hinh hien thi danh sach bai viet cua khoa
 let stompClient: Client
 export default function FacultyDashboardScreen() {
-  // Variable
+
   const isFocused = useIsFocused();
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +41,10 @@ export default function FacultyDashboardScreen() {
     }
   }, [facultyPost])
 
-
   useEffect(() => {
     getDataFacultyApi();
   }, [isFocused])
 
-  // Api
   const getDataFacultyApi = async () => {
     try {
       const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
@@ -58,7 +55,6 @@ export default function FacultyDashboardScreen() {
     setIsCalled(true)
   }
 
-  // Socket
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
@@ -101,7 +97,7 @@ export default function FacultyDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -128,12 +124,14 @@ export default function FacultyDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }
 
   return (
-    <View style={styles.container}>
+    userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
       {
         isLoading && <SkeletonPost />
       }
@@ -164,6 +162,8 @@ export default function FacultyDashboardScreen() {
           renderItem={({ item }) => renderItem(item)}
         />
       </ScrollView>
+    </View> : <View style={styles.containerNotification}>
+      <Text>{TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT}</Text>
     </View>
   )
 }
@@ -174,5 +174,10 @@ const styles = StyleSheet.create({
   },
   toolbarCreatePost: {
     marginBottom: 20,
+  },
+  containerNotification: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

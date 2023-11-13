@@ -1,5 +1,6 @@
 export interface ModalComments {
   id: number
+  group: string
   commentFather: {
     id: number
     name: string

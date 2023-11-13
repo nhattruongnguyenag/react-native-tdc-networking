@@ -1,15 +1,17 @@
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_WHITE } from '../../constants/Color'
+import { COLOR_BLACK, COLOR_WHITE } from '../../constants/Color'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../utils/SystemDimensions'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
-export interface ModalBigImageShowType {
+interface ModalBigImageShowType {
     visible: boolean,
-    image: string
+    image: string,
+    handleCloseModal: () => void
 }
 export default function CustomizeModalBigImageShow(props: Readonly<ModalBigImageShowType>) {
+
     return (
         <Modal statusBarTranslucent={true} visible={props.visible}>
             <View style={styles.container}>
@@ -17,7 +19,9 @@ export default function CustomizeModalBigImageShow(props: Readonly<ModalBigImage
                 <Image
                     style={styles.image}
                     source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
-                <TouchableOpacity style={styles.buttonClose}>
+                <TouchableOpacity
+                    onPress={() => props.handleCloseModal()}
+                    style={styles.buttonClose}>
                     <IconAntDesign name='closesquare' size={30} color={COLOR_WHITE} />
                 </TouchableOpacity>
             </View>

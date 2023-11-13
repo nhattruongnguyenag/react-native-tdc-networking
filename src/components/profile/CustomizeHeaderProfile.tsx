@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, Image, Pressable } from 'react-native'
+import { StyleSheet, View, Image, Pressable } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import DefaultAvatar from '../DefaultAvatar'
@@ -7,13 +7,13 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import { SCREEN_HEIGHT } from '../../utils/SystemDimensions'
 import { CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, SEE_AVATAR, SEE_BACKGROUND } from '../../constants/Variables'
 
-export interface HeaderProfileType {
+interface HeaderProfileType {
   background: string,
   avatar: string | null,
   name: string,
   handleClickIntoHeaderComponentEvent: (flag: number) => void
 }
-export default function CustomizeHeaderProfile(props: HeaderProfileType) {
+export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType>) {
   return (
     <View>
       <Pressable
@@ -66,7 +66,8 @@ export default function CustomizeHeaderProfile(props: HeaderProfileType) {
 const styles = StyleSheet.create({
   imageBackground: {
     height: SCREEN_HEIGHT * 0.25,
-    objectFit: 'cover'
+    objectFit: 'cover',
+    backgroundColor: COLOR_GREY_FEEBLE
   },
   imageAvatarWrapper: {
     width: 120,

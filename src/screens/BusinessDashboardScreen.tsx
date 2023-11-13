@@ -11,11 +11,10 @@ import { useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
 import { postAPI } from '../api/CallApi'
-import { handleDataClassification } from '../utils/DataClassfications'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_BUSINESS_POST, API_URL_POST } from '../constants/Path'
+import { API_URL_BUSINESS_POST } from '../constants/Path'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { useNavigation } from '@react-navigation/native'
@@ -26,9 +25,8 @@ import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { useIsFocused } from '@react-navigation/native';
 
 let stompClient: Client
-// man hinh hien thi bai viet doanh nghiep
 export default function BusinessDashboardScreen() {
-  // Variable
+
   const isFocused = useIsFocused();
   const code = 'group_connect_business';
   const [isCalled, setIsCalled] = useState(false);
@@ -41,8 +39,6 @@ export default function BusinessDashboardScreen() {
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  // Function area
-
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -145,7 +141,7 @@ export default function BusinessDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -172,14 +168,13 @@ export default function BusinessDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }
 
-
   return (
-
-
     <View style={styles.container}>
       {
         isOpenModalImage && <CustomizeModalImage />

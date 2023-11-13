@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, LogBox } from 'react-n
 import React, { useEffect, useState } from 'react'
 import { COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotifyPost'
-import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../../utils/SystemDimensions'
+import { SCREEN_HEIGHT} from '../../utils/SystemDimensions'
 import { Images } from '../../types/Images'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
@@ -12,9 +12,7 @@ LogBox.ignoreAllLogs()
 
 // Definition props
 
-export interface ImagePostType {
-  name: string
-  avatar: string
+interface ImagePostType {
   images: Images[]
   handleClickIntoAnyImageEvent: (flag: any, arr: Array<number>) => void
 }

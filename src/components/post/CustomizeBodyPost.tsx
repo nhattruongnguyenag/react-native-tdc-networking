@@ -3,19 +3,14 @@ import React, { useState, useCallback } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK } from '../../constants/Color'
 import { TEXT_HIDE_LESS, TEXT_SEE_MORE } from '../../constants/StringVietnamese'
 
-// Definition props
-export interface PostContentType {
+interface PostContentType {
   content: string
 }
 
 export const NUM_OF_LINES = 5
 const CustomizeBodyPost = (props: PostContentType) => {
-  // Variable
-
   const [showMore, setShowMore] = useState(false)
   const [seeMore, setSeeMore] = useState(true)
-
-  // Function
 
   const onTextLayout = useCallback((e: any) => {
     setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES)
@@ -39,11 +34,9 @@ const CustomizeBodyPost = (props: PostContentType) => {
 
   return (
     <View style={styles.wrapBody}>
-      {/* Post content */}
       <Text onTextLayout={onTextLayout} style={styles.bodyContent} numberOfLines={seeMore ? NUM_OF_LINES : undefined}>
         {props.content}
       </Text>
-      {/* See more text */}
       <Text onPress={handleClickSeeMoreEvent}>{processShow()}</Text>
     </View>
   )

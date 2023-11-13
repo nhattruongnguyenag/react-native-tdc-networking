@@ -43,9 +43,9 @@ const CustomizeModalImage = () => {
     if (userIdOfProfileNow !== modalImageData?.userId) {
       closeModal();
       if (currentScreenNowIsProfileScreen) {
-        navigation.replace(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0 })
+        navigation.replace(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
       } else {
-        navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0 })
+        navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
       }
     }
   }
