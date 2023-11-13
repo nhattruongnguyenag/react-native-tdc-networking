@@ -141,7 +141,7 @@ export default function BusinessDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -168,6 +168,8 @@ export default function BusinessDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }

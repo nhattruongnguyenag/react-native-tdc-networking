@@ -11,7 +11,7 @@ interface RecruitmentPostType {
   description: string,
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
-// Constant
+
 const ICON_SIZE = 15;
 export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>) {
 

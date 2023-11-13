@@ -25,4 +25,6 @@ export interface Post {
   salary: string | null
   employmentType: string | null
   description: string | null
+  isSave: number
+  group: string
 }

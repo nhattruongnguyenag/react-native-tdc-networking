@@ -97,7 +97,7 @@ export default function FacultyDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -124,6 +124,8 @@ export default function FacultyDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }
@@ -173,9 +175,9 @@ const styles = StyleSheet.create({
   toolbarCreatePost: {
     marginBottom: 20,
   },
-  containerNotification:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
+  containerNotification: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

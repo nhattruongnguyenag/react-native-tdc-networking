@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import React from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost'
@@ -7,7 +7,7 @@ import CustomizeBodyPost from './CustomizeBodyPost'
 import CustomizeImagePost from './CustomizeImagePost'
 import { Post } from '../../types/Post'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice'
+import { openModalComments, openModalImage, openModalUserReaction, updatePostWhenHaveChangeComment } from '../../redux/Slice'
 import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
 import {
@@ -27,7 +27,7 @@ import {
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
-import { formatDateTime, numberDayPassed } from '../../utils/FormatTime'
+import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
@@ -37,24 +37,21 @@ import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import Toast from 'react-native-toast-message'
 import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
 
-// Constant
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  // Get data
   let post = props
   const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
 
-  // Header area
   const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
     if (flag === GO_TO_PROFILE_ACTIONS) {
       if (userIdOfProfileNow !== post.userId) {
         if (currentScreenNowIsProfileScreen) {
-          navigation.replace(PROFILE_SCREEN, { userId: post.userId })
+          navigation.replace(PROFILE_SCREEN, { userId: post.userId, group: post.group })
         } else {
-          navigation.navigate(PROFILE_SCREEN, { userId: post.userId })
+          navigation.navigate(PROFILE_SCREEN, { userId: post.userId, group: post.group })
         }
       }
     } else {
@@ -62,10 +59,10 @@ const CustomizePost = (props: Post) => {
     }
   }
 
-  // Image area
   const handleClickIntoAnyImageEvent = (imageId: number, listImageError: number[]) => {
     dispatch(
       openModalImage({
+        group: post.group,
         name: props.name,
         userId: props.userId,
         imageIdClicked: imageId,
@@ -76,7 +73,6 @@ const CustomizePost = (props: Post) => {
     )
   }
 
-  // Bottom area
   const handleClickBottomBtnEvent = async (flag: number | null) => {
     if (flag === LIKE_ACTION) {
       handleClickIntoBtnIconLikeEvent()
@@ -90,6 +86,7 @@ const CustomizePost = (props: Post) => {
   const handleClickIntoListUserReactions = () => {
     dispatch(
       openModalUserReaction({
+        group: post.group,
         likes: props.likes
       })
     )
@@ -118,6 +115,7 @@ const CustomizePost = (props: Post) => {
     dispatch(
       openModalComments({
         id: props.id,
+        group: post.group,
         commentFather: []
       })
     )
@@ -159,7 +157,7 @@ const CustomizePost = (props: Post) => {
         handleSavePost();
         break
       case CLICK_DELETE_POST_EVENT:
-        handleDeletePost();
+        handleSavePost();
         break
       case CLICK_SEE_LIST_CV_POST_EVENT:
         handleSeeListCvPost();
@@ -178,14 +176,7 @@ const CustomizePost = (props: Post) => {
       "postId": post.id
     }
     const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
-    showToast(status);
-  }
-
-
-  const handleDeletePost = () => {
-    console.log('====================================');
-    console.log('handleDeletePost' + post.id);
-    console.log('====================================');
+    updatePostData();
   }
 
   const handleSeeListCvPost = () => {
@@ -194,21 +185,20 @@ const CustomizePost = (props: Post) => {
     console.log('====================================');
   }
 
-
   const handleSeeResultSurveyPost = () => {
     console.log('====================================');
     console.log('handleSeeResultSurveyPost' + post.id);
     console.log('====================================');
   }
 
-
-
+  const updatePostData = () => {
+    dispatch(updatePostWhenHaveChangeComment(true))
+  }
 
   switch (post.type) {
     case TYPE_NORMAL_POST:
       return (
         <View style={styles.container}>
-          {/* Header */}
           <CustomizeHeaderPost
             userId={post.userId}
             name={post.name}
@@ -220,19 +210,17 @@ const CustomizePost = (props: Post) => {
             role={post.role}
             handleClickMenuOption={handleClickMenuOption}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+            isSave={post.isSave}
           />
-          {/* Body */}
           <View style={styles.bodyWrap}>
             <CustomizeBodyPost content={post.content} />
           </View>
-          {/* Image */}
           {post.images && post.images.length > 0 && (
             <CustomizeImagePost
               images={post.images}
               handleClickIntoAnyImageEvent={handleClickIntoAnyImageEvent}
             />
           )}
-          {/* Bottom */}
           <CustomizeBottomPost
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
@@ -255,6 +243,7 @@ const CustomizePost = (props: Post) => {
             role={post.role}
             handleClickMenuOption={handleClickMenuOption}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+            isSave={post.isSave}
           />
           <CustomizeRecruitmentPost
             id={post.id}
@@ -265,7 +254,6 @@ const CustomizePost = (props: Post) => {
             handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
             createdAt={props.timeCreatePost}
           />
-          {/* Bottom */}
           <CustomizeBottomPost
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
@@ -286,14 +274,14 @@ const CustomizePost = (props: Post) => {
           type={post.type}
           role={post.role}
           handleClickMenuOption={handleClickMenuOption}
-          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent} />
+          handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
+          isSave={post.isSave} />
         <CustomizeSurveyPost
           id={post.id}
           title={post.title ?? ''}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
         />
-        {/* Bottom */}
         <CustomizeBottomPost
           isLike={checkLiked(post.likes, userLogin?.id)}
           likes={post.likes}

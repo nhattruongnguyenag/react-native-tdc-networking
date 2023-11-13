@@ -108,7 +108,7 @@ export type RootStackParamList = {
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
-  PROFILE_SCREEN: { userId: number } | undefined
+  PROFILE_SCREEN: { userId: number, group: string } | undefined
   OPTION_SCREEN: undefined
 }
 

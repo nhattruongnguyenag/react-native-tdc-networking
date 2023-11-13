@@ -169,74 +169,75 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
 
   return (
     <>
-      <CustomizeModalLoading visible={isLoading} />
-      <View style={styles.container}>
-        {/* Tab bar area */}
-        {/* Wrap tab bar */}
-        <View style={styles.tabBarContainer}>
-          {/* Tab bar */}
-          <View style={styles.wrapTabBar}>
-            <TouchableOpacity onPress={() => HandleClickIntoIconBtnArrowLeft()}>
-              <IconEntypo name={'chevron-left'} size={25} color={COLOR_BLACK} />
-            </TouchableOpacity>
-            <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
-            <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
-              <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* Body */}
-        <View
-          style={[styles.wrapperBody, { paddingBottom: images != null && images.length > 0 ? WINDOW_HEIGHT * 0.3 : 0 }]}
-        >
-          <TextInput
-            value={content}
-            onChangeText={(value) => setContent(value)}
-            scrollEnabled={false}
-            style={styles.txtBody}
-            placeholder={TEXT_INPUT_PLACEHOLDER}
-            placeholderTextColor={COLOR_BLACK}
-            multiline={true}
-            textAlignVertical='top'
-          />
-        </View>
-        {/* Bottom */}
-        {images != null && images.length != 0 && (
-          <View style={styles.wrapperBodyImage}>
-            <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-              {images.length != 0 &&
-                images.map((item: any, index: number) => (
-                  <Pressable
-                    onLongPress={() => handleLongClickIntoImage(item)}
-                    onPress={() => {
-                      console.log(123)
-                    }}
-                    key={index.toString()}
-                    style={styles.wrapImage}
-                  >
-                    <Image style={styles.image} source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
-                  </Pressable>
-                ))}
-            </ScrollView>
-          </View>
-        )}
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={() => imagePickerOption?.show()}>
-            <View style={styles.wrapBottom}>
-              <IconButton
-                iconSize={18}
-                iconName='images'
-                iconColor='#fff'
-                onPress={() => imagePickerOption?.show()}
-                inactiveBackgroundColor='#ffffff00'
-                activeBackgroundColor='#ffffff1a'
-              />
-              <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-              <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
+      {
+        isLoading ? <CustomizeModalLoading /> : <View style={styles.container}>
+          {/* Tab bar area */}
+          {/* Wrap tab bar */}
+          <View style={styles.tabBarContainer}>
+            {/* Tab bar */}
+            <View style={styles.wrapTabBar}>
+              <TouchableOpacity onPress={() => HandleClickIntoIconBtnArrowLeft()}>
+                <IconEntypo name={'chevron-left'} size={25} color={COLOR_BLACK} />
+              </TouchableOpacity>
+              <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
+              <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
+                <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
+          {/* Body */}
+          <View
+            style={[styles.wrapperBody, { paddingBottom: images != null && images.length > 0 ? WINDOW_HEIGHT * 0.3 : 0 }]}
+          >
+            <TextInput
+              value={content}
+              onChangeText={(value) => setContent(value)}
+              scrollEnabled={false}
+              style={styles.txtBody}
+              placeholder={TEXT_INPUT_PLACEHOLDER}
+              placeholderTextColor={COLOR_BLACK}
+              multiline={true}
+              textAlignVertical='top'
+            />
+          </View>
+          {/* Bottom */}
+          {images != null && images.length != 0 && (
+            <View style={styles.wrapperBodyImage}>
+              <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                {images.length != 0 &&
+                  images.map((item: any, index: number) => (
+                    <Pressable
+                      onLongPress={() => handleLongClickIntoImage(item)}
+                      onPress={() => {
+                        console.log(123)
+                      }}
+                      key={index.toString()}
+                      style={styles.wrapImage}
+                    >
+                      <Image style={styles.image} source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                    </Pressable>
+                  ))}
+              </ScrollView>
+            </View>
+          )}
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity onPress={() => imagePickerOption?.show()}>
+              <View style={styles.wrapBottom}>
+                <IconButton
+                  iconSize={18}
+                  iconName='images'
+                  iconColor='#fff'
+                  onPress={() => imagePickerOption?.show()}
+                  inactiveBackgroundColor='#ffffff00'
+                  activeBackgroundColor='#ffffff1a'
+                />
+                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      }
     </>
   )
 }

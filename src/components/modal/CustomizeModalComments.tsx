@@ -155,9 +155,9 @@ const CustomizeModalComments = () => {
         if (userIdOfProfileNow !== userId) {
             dispatch(closeModalComments());
             if (currentScreenNowIsProfileScreen) {
-                navigation.replace(PROFILE_SCREEN, { userId: userId })
+                navigation.replace(PROFILE_SCREEN, { userId: userId, group: modalCommentData?.group ?? '' })
             } else {
-                navigation.navigate(PROFILE_SCREEN, { userId: userId })
+                navigation.navigate(PROFILE_SCREEN, { userId: userId, group: modalCommentData?.group ?? '' })
             }
         }
     }

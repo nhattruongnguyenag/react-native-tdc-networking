@@ -1,4 +1,4 @@
-import { FlatList, View, ScrollView, RefreshControl, StyleSheet } from 'react-native'
+import { FlatList, View, ScrollView, RefreshControl, StyleSheet, Text } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
 import { API_URL_GET_POST_BY_USER_ID, API_URL_LIKE } from '../constants/Path';
@@ -9,21 +9,28 @@ import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, updatePostWhenHa
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar';
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
+import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, OPTION_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
+import CustomizeModalBigImageShow from '../components/modal/CustomizeModalBigImageShow';
 import { useIsFocused } from '@react-navigation/native';
+import { Student } from '../types/Student';
+import { Faculty } from '../types/Faculty';
+import { Business } from '../types/Business';
+import IconAntDesign from 'react-native-vector-icons/AntDesign'
+import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 
 const ProfileScreen = ({ route }: any) => {
+    const [imageToShow, setImageToShow] = useState<string>('');
+    const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-    const [type, setType] = useState<number>();
-    const [userId, setUserId] = useState<number>(route.params.userId);
+    const { userId, group } = route.params;
     const [post, setPost] = useState<any[]>([]);
-    const [userInfo, setUserInfo] = useState();
+    const [userInfo, setUserInfo] = useState<Student | Faculty | Business | null>();
     const [typeAuthorPost, setTypeAuthorPost] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer);
@@ -46,19 +53,15 @@ const ProfileScreen = ({ route }: any) => {
 
     const getPostByUserIdAPI = useCallback(() => {
         dispatch(goToProfileScreen(userId))
-        axios.get(API_URL_GET_POST_BY_USER_ID + userId)
+        axios.post(API_URL_GET_POST_BY_USER_ID, {
+            "userId": userId,
+            "groupCode": group,
+            "userLogin": userLogin?.id
+        })
             .then((response) => {
-                try {
-                    setTypeAuthorPost(response.data.data[0].user['roleCodes']);
-                    setUserInfo(response.data.data[0].user);
-                    setPost(response.data.data);
-                    setType(1)
-                } catch (error) {
-                    setTypeAuthorPost(response.data.data[0].roleCodes);
-                    setUserInfo(response.data.data[0]);
-                    setPost([]);
-                    setType(2)
-                }
+                setTypeAuthorPost(response.data.data.user['roleCodes']);
+                setUserInfo(response.data.data.user);
+                setPost(response.data.data.posts);
                 setIsLoading(false);
             }).catch((error) => {
                 console.log(error);
@@ -98,7 +101,7 @@ const ProfileScreen = ({ route }: any) => {
     }
 
     const handleClickIntoAvatar = () => {
-        navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+        navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: group })
     }
 
     const renderItem = (item: any) => {
@@ -125,64 +128,110 @@ const ProfileScreen = ({ route }: any) => {
                 salary={item.salary ?? null}
                 employmentType={item.employmentType ?? null}
                 description={item.description ?? null}
+                isSave={item.isSave}
+                group={group}
             />
         )
     }
 
+    const handleClickButtonEvent = (flag: number) => {
+        if (flag === MESSENGER_ACTION) {
+            console.log('chat');
+        } else if (flag === FOLLOW_ACTION) {
+            console.log('follow');
+        } else if (flag === CALL_ACTION) {
+            console.log('call');
+        } else {
+            handleClickIntoButtonMenu3dotEvent();
+        }
+    }
+
+    const handleClickIntoButtonMenu3dotEvent = () => {
+        navigation.navigate(OPTION_SCREEN);
+    }
+
+    const handleClickIntoHeaderComponentEvent = (flag: number) => {
+        switch (flag) {
+            case CLICK_CAMERA_AVATAR_EVENT:
+                console.log('CLICK_CAMERA_AVATAR_EVENT');
+                break;
+            case CLICK_CAMERA_BACKGROUND_EVENT:
+                console.log('CLICK_CAMERA_BACKGROUND_EVENT');
+                break;
+            case SEE_AVATAR:
+                // setImageToShow(userInfo?.image ?? '')
+                setIsShowAvatar(true)
+                break;
+            case SEE_BACKGROUND:
+                // setImageToShow(userInfo?.background ?? '')
+                setIsShowAvatar(true)
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleCloseModal = () => {
+        setIsShowAvatar(false);
+    }
+
     return (
         <View>
-            <CustomizeModalLoading visible={isLoading} />
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={false}
-                        onRefresh={() => {
-                            getPostByUserIdAPI();
-                        }}
-                    />
-                }
-            >
-
-                {
-                    post[0] !== null && <>
-                        {
-                            type === 1 ? <CustomizeProfile
-                                data={post}
-                                role={typeAuthorPost}
-                                userData={userInfo}
-                            /> : <CustomizeProfile
-                                data={post}
-                                role={typeAuthorPost}
-                                userData={userInfo}
+            {
+                isLoading ? <CustomizeModalLoading /> : <>
+                    <CustomizeModalBigImageShow
+                        visible={isShowAvatar}
+                        image={userInfo?.image ?? ''}
+                        handleCloseModal={handleCloseModal} />
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={false}
+                                onRefresh={() => {
+                                    getPostByUserIdAPI();
+                                }}
                             />
                         }
-                    </>
+                    >
+                        {
+                            post[0] !== null && <>
+                                {
+                                    <CustomizeProfile
+                                        data={post}
+                                        role={typeAuthorPost}
+                                        userData={userInfo}
+                                        handleClickButtonEvent={handleClickButtonEvent}
+                                        handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
+                                }
+                            </>
+                        }
 
-                }
+                        <View style={styles.titlePostArea}>
+                            <Text style={styles.txtTitlePostArea}>
+                                {
+                                    userInfo?.name
+                                }
+                                {' '}
+                                <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
+                                {' '}
+                                {
+                                    group
+                                }
+                            </Text>
+                        </View>
 
-                {
-                    (userLogin?.id === userId) ? <View style={styles.wrapperCreateNormalPostToolbar}>
-                        <CustomizeCreatePostToolbar
-                            role={userLogin?.roleCodes ?? ''}
-                            handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-                            handleClickIntoAvatar={handleClickIntoAvatar}
-                            image={userLogin?.image ?? null}
-                            name={userLogin?.name ?? ''}
-                        />
-                    </View> : null
-                }
-
-                {
-                    post.length !== 0 && type === 1 ? <FlatList
-                        scrollEnabled={false}
-                        showsVerticalScrollIndicator={false}
-                        data={post}
-                        renderItem={({ item }) => renderItem(item)}
-                    /> : null
-                }
-
-            </ScrollView>
+                        {
+                            post.length !== 0 && <FlatList
+                                scrollEnabled={false}
+                                showsVerticalScrollIndicator={false}
+                                data={post}
+                                renderItem={({ item }) => renderItem(item)}
+                            />
+                        }
+                    </ScrollView>
+                </>
+            }
         </View>
     )
 }
@@ -190,6 +239,15 @@ const ProfileScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
     wrapperCreateNormalPostToolbar: {
         marginBottom: 20
+    },
+    titlePostArea: {
+        backgroundColor: COLOR_WHITE,
+        paddingVertical: 5,
+        marginBottom: 1,
+        paddingLeft: 10,
+    },
+    txtTitlePostArea: {
+        color: COLOR_BLACK
     }
 })
 export default ProfileScreen

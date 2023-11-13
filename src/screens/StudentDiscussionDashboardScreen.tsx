@@ -7,7 +7,7 @@ import { postAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import {API_URL_STUDENT_POST } from '../constants/Path'
+import { API_URL_STUDENT_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
@@ -94,7 +94,7 @@ export default function StudentDiscussionDashboardScreen() {
   }
 
   const handleClickIntoAvatar = () => {
-    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0 })
+    navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const renderItem = (item: any) => {
@@ -121,6 +121,8 @@ export default function StudentDiscussionDashboardScreen() {
         salary={item.salary ?? null}
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
       />
     )
   }

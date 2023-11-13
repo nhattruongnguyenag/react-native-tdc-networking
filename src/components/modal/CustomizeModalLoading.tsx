@@ -2,13 +2,9 @@ import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 
-export interface CustomizeModalLoadingType {
-  visible: boolean
-}
-
-export default function CustomizeModalLoading(props: Readonly<CustomizeModalLoadingType>) {
+export default function CustomizeModalLoading() {
   return (
-    <Modal visible={props.visible} transparent statusBarTranslucent={true}>
+    <Modal visible={true} transparent statusBarTranslucent={true}>
       <View style={styles.container}>
         <ActivityIndicator size={50} color={COLOR_WHITE} />
       </View>

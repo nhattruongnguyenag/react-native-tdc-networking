@@ -50,7 +50,7 @@ const initialState: TDCSocialNetworkState = {
   modalUserReactionData: null,
   updatePost: false,
   userIdOfProfileNow: 0,
-  currentScreenNowIsProfileScreen: false
+  currentScreenNowIsProfileScreen: false,
 }
 
 export const TDCSocialNetworkSlice = createSlice({

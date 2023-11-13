@@ -66,7 +66,8 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
 const styles = StyleSheet.create({
   imageBackground: {
     height: SCREEN_HEIGHT * 0.25,
-    objectFit: 'cover'
+    objectFit: 'cover',
+    backgroundColor: COLOR_GREY_FEEBLE
   },
   imageAvatarWrapper: {
     width: 120,
