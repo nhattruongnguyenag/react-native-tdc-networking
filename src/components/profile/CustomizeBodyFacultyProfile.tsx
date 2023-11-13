@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     infoContainer: {
         flexDirection: 'row',
         // alignItems: 'center',
-        paddingVertical: 1,
+        paddingVertical: 3,
     },
     iconInfo: {
         marginRight: 5,

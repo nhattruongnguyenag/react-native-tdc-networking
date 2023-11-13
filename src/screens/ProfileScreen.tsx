@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook';
 import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, updatePostWhenHaveChangeComment } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
-import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar';
 import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, OPTION_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
@@ -194,18 +193,12 @@ const ProfileScreen = ({ route }: any) => {
                             />
                         }
                     >
-                        {
-                            post[0] !== null && <>
-                                {
-                                    <CustomizeProfile
-                                        data={post}
-                                        role={typeAuthorPost}
-                                        userData={userInfo}
-                                        handleClickButtonEvent={handleClickButtonEvent}
-                                        handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
-                                }
-                            </>
-                        }
+                        <CustomizeProfile
+                            data={post}
+                            role={typeAuthorPost}
+                            userData={userInfo}
+                            handleClickButtonEvent={handleClickButtonEvent}
+                            handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
 
                         <View style={styles.titlePostArea}>
                             <Text style={styles.txtTitlePostArea}>
