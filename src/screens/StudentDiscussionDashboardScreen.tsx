@@ -132,6 +132,7 @@ export default function StudentDiscussionDashboardScreen() {
       {
         isLoading && <SkeletonPost />
       }
+      
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
@@ -145,7 +146,6 @@ export default function StudentDiscussionDashboardScreen() {
         />
 
         {/* Name group */}
-
         <View style={styles.lineBellowBanner}>
           <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
         </View>

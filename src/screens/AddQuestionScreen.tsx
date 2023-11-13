@@ -32,17 +32,30 @@ export default function AddQuestionScreen() {
       <ScrollView style={styles.body}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion data={item} index={index} />
+            return <MultiChoiceQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion data={item} index={index} />
+            return <OneChoiceQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           } else {
-            return <ShortAnswerQuestion data={item} index={index} />
+            return <ShortAnswerQuestion
+              editMode
+              data={item}
+              index={index}
+            />
           }
         })}
 
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <ButtonFullWith
-            btnStyle={{ marginRight: 10, width: 140 }}
+            textColor='#000'
+            btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
             onPress={onBtnBackPress}
             iconName='arrow-left-thin'
             title='Quay lại'

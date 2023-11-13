@@ -34,7 +34,9 @@ import {
   FOLLOWING_SCREEN,
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
+  LIST_FOLLOW_SCREEN,
   JOB_APPLY_SCREEN,
+  LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
@@ -47,7 +49,9 @@ import {
   SURVEY_CONDUCT_SCREEN,
   TOP_TAB_NAVIGATOR,
   PROFILE_SCREEN,
+  DETAIL_JOB_APPLY,
   OPTION_SCREEN,
+  SURVEY_RESULT_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -72,11 +76,15 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
+import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
+import SurveyResultScreen from './screens/SurveyResultScreen';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -102,6 +110,7 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
+  LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
   CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
@@ -109,7 +118,10 @@ export type RootStackParamList = {
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
+  LIST_POST_SAVED_SCREEN: undefined
+  DETAIL_JOB_APPLY: undefined
   OPTION_SCREEN: undefined
+  SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -223,7 +235,10 @@ export function StackNavigator(): JSX.Element {
         component={MessengerScreen}
       />
 
-      <RootStack.Screen name={LOGIN_SCREEN} options={{ header: () => null }} component={LoginScreen} />
+      <RootStack.Screen
+        name={LOGIN_SCREEN}
+        options={{ header: () => null }}
+        component={LoginScreen} />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -255,7 +270,10 @@ export function StackNavigator(): JSX.Element {
         component={CreateSurveyPostScreen}
       />
 
-      <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
+      <RootStack.Screen
+        name={IMAGE_VIEW_SCREEN}
+        options={{ header: () => null }}
+        component={ImageViewScreen} />
 
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
@@ -280,11 +298,22 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Ứng tuyển' /> }}
         component={JobApplyScreen}
       />
+      <RootStack.Screen
+        name={LIST_POST_SAVED_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Lưu' /> }}
+        component={ListPostSavedScreen}
+      />
 
       <RootStack.Screen
         name={CREATE_NORMAL_POST_SCREEN}
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
+      />
+
+      <RootStack.Screen
+        name={LIST_FOLLOW_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách theo dõi' /> }}
+        component={ListFollowScreen}
       />
 
       <RootStack.Screen
@@ -294,16 +323,30 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={DETAIL_JOB_APPLY}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        component={DetailJobApplyScreen} />
+
+      <RootStack.Screen
         name={OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='' /> }}
         component={OptionScreen}
       />
 
-      <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
+      <RootStack.Screen
+        name={SPLASH_SCREEN}
+        options={{ header: () => null }}
+        component={SplashScreen} />
+
+      <RootStack.Screen
+        name={SURVEY_RESULT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
+        component={SurveyResultScreen}
+      />
     </RootStack.Navigator>
   )
 }
-
+// DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
   return (
     <TopTab.Navigator

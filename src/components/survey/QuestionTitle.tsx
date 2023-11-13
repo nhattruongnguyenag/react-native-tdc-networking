@@ -5,30 +5,20 @@ import { useAppDispatch } from '../../redux/Hook'
 import { deleteQuestion } from '../../redux/Slice'
 
 interface QuestionTitleProps {
+  required?: number,
   title: string
   index: number
   isDisableBtnDelete?: boolean
 }
 
 export default function QuestionTitle(props: QuestionTitleProps) {
-  const dispatch = useAppDispatch()
-
-  const onBtnDeletePress = () => {
-    dispatch(deleteQuestion(props.index))
-  }
-
   return (
     <View style={styles.body}>
       <Text style={styles.questionTitle}>{props.title}</Text>
-      <IconButton
-        icon='delete'
-        iconColor='#f70000'
-        size={25}
-        style={[styles.btnDelete, { display: Boolean(props.isDisableBtnDelete) ? 'none' : 'flex' }]}
-        onPress={() => {
-          onBtnDeletePress()
-        }}
-      />
+      {
+        Boolean(props.required)
+        && <Text style={[{ color: 'red' }]}>*</Text>
+      }
     </View>
   )
 }
@@ -43,9 +33,5 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  btnDelete: {
-    marginStart: 'auto',
-    marginEnd: 0
   }
 })

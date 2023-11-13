@@ -213,7 +213,6 @@ const ProfileScreen = ({ route }: any) => {
                                 }
                             </Text>
                         </View>
-
                         {
                             post.length !== 0 && <FlatList
                                 scrollEnabled={false}

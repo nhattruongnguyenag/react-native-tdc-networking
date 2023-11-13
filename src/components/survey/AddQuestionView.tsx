@@ -85,7 +85,8 @@ export default function AddQuestionView() {
   const defaultQuestion: Question = {
     title: '',
     type: '',
-    choices: []
+    choices: [],
+    required: 1
   }
 
   const [question, setQuestion] = useState<Question>(defaultQuestion)
@@ -123,10 +124,6 @@ export default function AddQuestionView() {
       })
     }
   }, [choices])
-
-  useEffect(() => {
-    console.log(surveyPostRequest)
-  }, [surveyPostRequest])
 
   const onQuestionTypeDropdownChange = (item: QuestionType) => {
     setQuestion({ ...question, type: item.value })
