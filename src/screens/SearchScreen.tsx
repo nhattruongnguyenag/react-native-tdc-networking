@@ -13,6 +13,8 @@ import { Client, Frame, Message } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import UserItem from "../components/items/UserItem";
 import PostNormalItem from '../components/items/PostNormalItem'
+import CustomizePost from '../components/post/CustomizePost'
+import { LikeAction } from '../types/LikeActions'
 
 let stompClient: Client
 
@@ -74,7 +76,7 @@ export default function SearchScreen() {
   const handleSearch = () => {
     if (subjects == 'user') {
       stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
-        userId: userLogin?.id,
+        userId: userLogin?.id ?? 12,
         type: type,
         name: search,
         userFollowId: null
@@ -83,7 +85,7 @@ export default function SearchScreen() {
     else {
       axios
         .post(URL, {
-          userId: userLogin?.id,
+          userLogin: userLogin?.id ?? 12,
           type: type,
           name: search
         })
@@ -118,36 +120,80 @@ export default function SearchScreen() {
     )
   }
 
+  const likeAction = (obj: LikeAction) => {
+  }
+
+  const handleUnSave = () => {
+
+  }
+
   const checkType = () => {
-    switch (type) {
-      case 'sinh-vien':
+    switch (subjects) {
+      case 'user':
         return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
         break
-      case 'doanh-nghiep':
-        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
-        break
-      case 'khoa':
-        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
-        break
-      case 'thong-thuong':
-        return masterData.map((item: any, index) =>
-          <PostNormalItem
-            id={item.id}
-            image={item.image}
-            type={item.type}
-            content={item.content}
-            user={{
-              id: item.user.id,
-              name: item.user.name,
-              image: item.user.image
-            }} />)
-        break
-      case 'khao-sat':
-        return masterData.map((item, index) => postItems(item, index))
-        break
-      case 'tuyen-dung':
-        return masterData.map((item, index) => postItems(item, index))
-        break
+      case 'post':
+        return (
+          <>
+            {masterData != null &&
+              masterData.map((item: any) => (
+                <CustomizePost
+                  post={{
+                    id: item.id,
+                    userId: item.user['id'],
+                    name: item.user['name'],
+                    avatar: item.user['image'],
+                    typeAuthor: 'Doanh Nghiệp',
+                    available: null,
+                    timeCreatePost: item.createdAt,
+                    content: item.content,
+                    type: item.type,
+                    likes: item.likes,
+                    comments: item.comment,
+                    commentQty: item.commentQuantity,
+                    images: item.images,
+                    role: item.user['roleCodes'],
+                    likeAction: likeAction,
+                    location: item.location ?? null,
+                    title: item.title ?? null,
+                    expiration: item.expiration ?? null,
+                    salary: item.salary ?? null,
+                    employmentType: item.employmentType ?? null,
+                    description: item.description ?? null
+                  }}
+                  handleUnSave={handleUnSave}
+                />
+              ))}
+          </>
+        )
+      // case 'sinh-vien':
+      //   return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
+      //   break
+      // case 'doanh-nghiep':
+      //   return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
+      //   break
+      // case 'khoa':
+      //   return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
+      //   break
+      // case 'thong-thuong':
+      //   return masterData.map((item: any, index) =>
+      //     <PostNormalItem
+      //       id={item.id}
+      //       image={item.image}
+      //       type={item.type}
+      //       content={item.content}
+      //       user={{
+      //         id: item.user.id,
+      //         name: item.user.name,
+      //         image: item.user.image
+      //       }} />)
+      //   break
+      // case 'khao-sat':
+      //   return masterData.map((item, index) => postItems(item, index))
+      //   break
+      // case 'tuyen-dung':
+      //   return masterData.map((item, index) => postItems(item, index))
+      //   break
       default:
         console.log('...')
     }
@@ -169,7 +215,7 @@ export default function SearchScreen() {
               data={items}
               value={value}
               placeholder={label}
-              labelField='label'  
+              labelField='label'
               valueField='value'
               onChange={(item) => {
                 setMasterData([])

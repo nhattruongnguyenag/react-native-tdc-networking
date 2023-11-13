@@ -13,85 +13,82 @@ import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useGetDataSavedByUserIdQuery } from '../redux/Service';
 import { useAppSelector } from '../redux/Hook';
+import Toast from 'react-native-toast-message';
 
 
 
 
 let stompClient: Client
 const ListPostSavedScreen = () => {
-  // const [data, setData] = useState<Post[]>([])
-  // const [dataSearch, setDataType] = useState<Post[]>([])
+  const [data, setData] = useState<Post[]>([])
+  const [dataSearch, setDataType] = useState<Post[]>([])
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [search, setSearch] = useState('')
   const [value, setValue] = useState(null)
 
-  const { data, isFetching } = useGetDataSavedByUserIdQuery(12, {
-    pollingInterval: 1000
-  }) 
-
   const likeAction = (obj: LikeAction) => {
   }
 
-  // useEffect(() => {
-  //   stompClient = getStompClient()
-  //   const onConnected = () => {
-  //     stompClient.subscribe(`/topic/posts/save/page`, onMessageReceived)
-  //   }
-  //   const onMessageReceived = (payload: any) => {
-  //     setData(JSON.parse(payload.body))
-  //   }
-  //   const onError = (err: string | Frame) => {
-  //     console.log(err)
-  //   }
-  //   stompClient.connect({}, onConnected, onError)
-  // }, [])
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/save/page`, onMessageReceived)
+    }
+    const onMessageReceived = (payload: any) => {
+      setData(JSON.parse(payload.body))
+    }
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
 
-  // const handleUnSave = (post_id: number) => {
-  //   stompClient.send(
-  //     `/app/posts/user/unsave`,
-  //     {},
-  //     JSON.stringify({
-  //       userId: 12,
-  //       postId: post_id
-  //     })
-  //   )
-  // }
-
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${SERVER_ADDRESS}api/posts/user/save/12`)
-  //     .then((response) => {
-  //       setData(response.data.data)
-  //     })
-  // }, [])
-
-  const onInputSearch = (i: string) => {
-    setSearch(i)
+  const handleUnSave = (post_id: number) => {
+    stompClient.send(
+      `/app/posts/user/unsave`,
+      {},
+      JSON.stringify({
+        userId: 12,
+        postId: post_id
+      })
+    )
   }
 
-  // useEffect(() => {
-  //   if (search.trim() === '') {
-  //     axios
-  //       .get(`${SERVER_ADDRESS}api/posts/user/save/12`)
-  //       .then((response) => {
-  //         setData(response.data.data)
-  //       })
-  //   }
-  //   const dataSearch = []
-  //   for (let index = 0; index < data.length; index++) {
-  //     if (data[index].type == 'thong-thuong') {
-  //       if (data[index].content.includes(search)) {
-  //         dataSearch.push(data[index])
-  //       }
-  //     } else {
-  //       if (data[index].title?.includes(search)) {
-  //         dataSearch.push(data[index])
-  //       }
-  //     }
-  //   }
-  //   setData(dataSearch)
-  // }, [search])
+
+  useEffect(() => {
+    axios
+      .get(`${SERVER_ADDRESS}api/posts/user/save/12`)
+      .then((response) => {
+        setData(response.data.data)
+      })
+  }, [])
+
+  // const onInputSearch = (i: string) => {
+  //   setSearch(i)
+  // }
+
+  useEffect(() => {
+    if (search.trim() === '') {
+      axios
+        .get(`${SERVER_ADDRESS}api/posts/user/save/12`)
+        .then((response) => {
+          setData(response.data.data)
+        })
+    }
+    const dataSearch = []
+    for (let index = 0; index < data.length; index++) {
+      if (data[index].type == 'thong-thuong') {
+        if (data[index].content.includes(search)) {
+          dataSearch.push(data[index])
+        }
+      } else {
+        if (data[index].title?.includes(search)) {
+          dataSearch.push(data[index])
+        }
+      }
+    }
+    setData(dataSearch)
+  }, [search])
 
 
   // const getDataSavedApi = async () => {
@@ -114,49 +111,49 @@ const ListPostSavedScreen = () => {
         <TextInput
           value={search}
           style={styles.txt_input} placeholder='Tìm kiếm ...'
-          onChangeText={(i) => onInputSearch(i)}
+          onChangeText={(i) => setSearch(i)}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
       </View>
       <ScrollView
-        // showsVerticalScrollIndicator={false}
-        // refreshControl={<RefreshControl
-        //   refreshing={false}
-        //   // onRefresh={() => getDataSavedApi()}
-        // />}
+      // showsVerticalScrollIndicator={false}
+      // refreshControl={<RefreshControl
+      //   refreshing={false}
+      //   // onRefresh={() => getDataSavedApi()}
+      // />}
       >
 
         {
-          data?.data.map((item: any) =>
-            <>
-              <CustomizePost
-                id={item.id}
-                userId={item.user['id']}
-                name={item.user['name']}
-                avatar={item.user['image']}
-                typeAuthor={'Doanh Nghiệp'}
-                available={null}
-                timeCreatePost={item.createdAt}
-                content={item.content}
-                type={item.type}
-                likes={item.likes}
-                comments={item.comment}
-                commentQty={item.commentQuantity}
-                images={item.images}
-                role={item.user['roleCodes']}
-                likeAction={likeAction}
-                location={item.location ?? null}
-                title={item.title ?? null}
-                expiration={item.expiration ?? null}
-                salary={item.salary ?? null}
-                employmentType={item.employmentType ?? null}
-                description={item.description ?? null}
-              />
-            </>
+          data.map((item: any) =>
+            <CustomizePost
+              post={{
+                id: item.id,
+                userId: item.user['id'],
+                name: item.user['name'],
+                avatar: item.user['image'],
+                typeAuthor: 'Doanh Nghiệp',
+                available: null,
+                timeCreatePost: item.createdAt,
+                content: item.content,
+                type: item.type,
+                likes: item.likes,
+                comments: item.comment,
+                commentQty: item.commentQuantity,
+                images: item.images,
+                role: item.user['roleCodes'],
+                likeAction: likeAction,
+                location: item.location ?? null,
+                title: item.title ?? null,
+                expiration: item.expiration ?? null,
+                salary: item.salary ?? null,
+                employmentType: item.employmentType ?? null,
+                description: item.description ?? null
+              }}
+              handleUnSave={handleUnSave}
+            />
           )
         }
       </ScrollView>
-
     </View>
   )
 }

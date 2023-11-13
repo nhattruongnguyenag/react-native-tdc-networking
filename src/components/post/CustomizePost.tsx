@@ -40,16 +40,17 @@ import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../consta
 import { getStompClient } from '../../sockets/SocketClient'
 import { Client } from 'stompjs'
 let stompClient: Client
-export interface PropsType {
+export interface PostType {
+  post: Post
   handleUnSave: (post_id: number) => void
 }
 // Constant
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
-const CustomizePost = (props: Post, prev : PropsType) => {
+const CustomizePost = (props: PostType) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   // Get data
-  let post = props
+  let post = props.post
   const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
 
@@ -72,11 +73,11 @@ const CustomizePost = (props: Post, prev : PropsType) => {
   const handleClickIntoAnyImageEvent = (imageId: number, listImageError: number[]) => {
     dispatch(
       openModalImage({
-        name: props.name,
-        userId: props.userId,
+        name: post.name,
+        userId: post.userId,
         imageIdClicked: imageId,
-        avatar: props.avatar,
-        images: props.images,
+        avatar: post.avatar,
+        images: post.images,
         listImageError: listImageError
       })
     )
@@ -96,7 +97,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
   const handleClickIntoListUserReactions = () => {
     dispatch(
       openModalUserReaction({
-        likes: props.likes
+        likes: post.likes
       })
     )
   }
@@ -107,7 +108,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
       postId: post.id,
       userId: userLogin?.id ?? 0
     }
-    props.likeAction(dataLike)
+    post.likeAction(dataLike)
   }
 
   const checkLiked = (likes: Like[], userId: number | undefined) => {
@@ -123,7 +124,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
   const handleClickIntoBtnIconComments = () => {
     dispatch(
       openModalComments({
-        id: props.id,
+        id: post.id,
         commentFather: []
       })
     )
@@ -175,7 +176,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
         handleSeeResultSurveyPost();
         break
       case CLICK_UNSAVE_POST_EVENT:
-        handleUnSave(props.id)
+        props.handleUnSave(post.id)
       default:
         return '';
     }
@@ -184,21 +185,11 @@ const CustomizePost = (props: Post, prev : PropsType) => {
   
   const handleSavePost = async () => {
     const data = {
-      "userId": userLogin?.id,
+      "userId": 12,
       "postId": post.id
     }
     const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
     showToast(status);
-  }
-
-  const handleUnSave = async (post_id: number) => {
-    const data = {
-      "userId": 12,
-      "postId": post_id
-    }
-    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
-    console.log(post_id);
-    
   }
 
   const handleDeletePost = () => {
@@ -255,7 +246,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
             role={post.role}
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
-            comments={props.comments}
+            comments={post.comments}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
           />
@@ -283,7 +274,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
             salary={post.salary ?? ''}
             employmentType={post.employmentType ?? ''}
             handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
-            createdAt={props.timeCreatePost}
+            createdAt={post.timeCreatePost}
           />
           {/* Bottom */}
           <CustomizeBottomPost
@@ -292,7 +283,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
             role={post.role}
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
-            comments={props.comments}
+            comments={post.comments}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
           />
@@ -315,7 +306,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
           id={post.id}
           title={post.title ?? ''}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
-          description={props.description ?? ''}
+          description={post.description ?? ''}
         />
         {/* Bottom */}
         <CustomizeBottomPost
@@ -324,7 +315,7 @@ const CustomizePost = (props: Post, prev : PropsType) => {
           role={post.role}
           isLike={checkLiked(post.likes, userLogin?.id)}
           likes={post.likes}
-          comments={props.comments}
+          comments={post.comments}
           handleClickBottomBtnEvent={handleClickBottomBtnEvent}
           commentQty={post.commentQty}
         />
