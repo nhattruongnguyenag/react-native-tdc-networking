@@ -44,6 +44,27 @@ export function isType(text: string): boolean {
 }
 
 export function isPhone(text: string): boolean {
-  const pattern = /^\+\d{10}$/
+  const pattern = /^\+84|0\d{9}$/
   return pattern.test(text)
+}
+
+export function isTime(timeStart: string, timeEnd: string): boolean {
+  if (parseInt(timeStart) >= 12 && parseInt(timeEnd) >= 12) {
+    if (parseInt(timeStart) < parseInt(timeEnd)) {
+      return true
+    }
+  } else if (parseInt(timeStart) <= 11 && parseInt(timeEnd) <= 11) {
+    if (parseInt(timeStart) < parseInt(timeEnd)) {
+      return true
+    }
+  } else if (parseInt(timeStart) <= 11 && parseInt(timeEnd) >= 12) {
+    if (parseInt(timeStart) < parseInt(timeEnd)) {
+      return true
+    }
+  } else if (parseInt(timeStart) >= 12 && parseInt(timeEnd) <= 11) {
+    if (parseInt(timeStart) > parseInt(timeEnd)) {
+      return true
+    }
+  }
+  return false
 }
