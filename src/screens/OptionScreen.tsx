@@ -5,6 +5,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { LIST_FOLLOW_SCREEN, LIST_POST_SAVED_SCREEN } from '../constants/Screen'
 import { ScrollView } from 'react-native-gesture-handler'
+import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon2 from 'react-native-vector-icons/Fontisto'
+import { TEXT_FOLLOW, TEXT_SAVE } from '../constants/StringVietnamese'
 
 export default function OptionScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -19,10 +22,10 @@ export default function OptionScreen() {
         <View style={styles.screen}>
             <ScrollView>
                 <Pressable style={styles.item} onPress={handleFollowItem}>
-                    <Text style={styles.txt}><Icon1 name='account-eye' size={26} color='red' />   Theo dõi</Text>
+                    <Text style={styles.txt}><Icon1 name='account-eye' size={26} color='red' />   {TEXT_FOLLOW}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleSaveItem}>
-                    <Text style={styles.txt}><Icon2 name='bookmark-alt' size={26} color='#8a2be2' />     Lưu</Text>
+                    <Text style={styles.txt}><Icon2 name='bookmark-alt' size={26} color='#8a2be2' />     {TEXT_SAVE}</Text>
                 </Pressable>
             </ScrollView>
         </View>

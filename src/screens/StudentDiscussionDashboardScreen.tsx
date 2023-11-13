@@ -97,6 +97,8 @@ export default function StudentDiscussionDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
+  const handleUnSave = () => {}
+
   const renderItem = (item: any) => {
     return (
       <CustomizePost
@@ -123,6 +125,7 @@ export default function StudentDiscussionDashboardScreen() {
         description={item.description ?? null}
         isSave={item.isSave}
         group={code}
+        handleUnSave={handleUnSave}
       />
     )
   }
