@@ -52,6 +52,7 @@ export default function CreateRecruitmentScreen() {
     employmentType: '',
     location: '',
     requirement: '',
+    groupId: 2,
     expiration: moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss')
   })
 

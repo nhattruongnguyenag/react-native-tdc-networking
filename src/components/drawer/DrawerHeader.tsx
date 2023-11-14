@@ -4,13 +4,15 @@ import { Avatar, Divider } from 'react-native-paper'
 import { useAppSelector } from '../../redux/Hook'
 import { User } from '../../types/User'
 import DefaultAvatar from '../DefaultAvatar'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
 export default function DrawerHeader() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
   return (
     <View style={styles.body}>
       {userLogin && (userLogin as User).image ? (
-        <Avatar.Image size={60} source={{ uri: (userLogin as User).image }} />
+        <Avatar.Image size={60} source={{ uri: SERVER_ADDRESS + 'api/images/' + (userLogin as User).image  }} />
       ) : (
         <DefaultAvatar size={60} identifer={userLogin?.name[0]} />
       )}
