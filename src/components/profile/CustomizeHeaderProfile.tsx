@@ -34,7 +34,7 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
         onPress={() => props.handleClickIntoHeaderComponentEvent(SEE_AVATAR)}
       >
         {
-          props.avatar != null ?
+          Boolean(props.avatar) ?
             <View
               style={[styles.imageAvatarWrapper, styles.border]}
             >

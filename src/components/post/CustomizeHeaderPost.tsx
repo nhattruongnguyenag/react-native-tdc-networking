@@ -83,7 +83,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           // Go to profile screen
           onPress={() => props.handleClickIntoAvatarAndNameAndMenuEvent(GO_TO_PROFILE_ACTIONS)}
         >
-          {props.avatar != null ? (
+          {props.avatar ? (
             <Image style={styles.headerAvatar} source={{ uri: SERVER_ADDRESS + `api/images/${post.avatar}` }} />
           ) : (
             <DefaultAvatar size={43} identifer={props.name[0]} />

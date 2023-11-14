@@ -10,4 +10,5 @@ export interface RecruitmentPostRequest {
   location: string
   requirement: string
   expiration: string
+  groupId: number
 }
