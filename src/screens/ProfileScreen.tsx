@@ -5,11 +5,11 @@ import { API_URL_GET_POST_BY_USER_ID, API_URL_LIKE } from '../constants/Path';
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, updatePostWhenHaveChangeComment } from '../redux/Slice';
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setSelectConversation, updatePostWhenHaveChangeComment } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
 import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, OPTION_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, MESSENGER_SCREEN, OPTION_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
@@ -21,6 +21,7 @@ import { Business } from '../types/Business';
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { getGroupForPost } from '../utils/GetGroup';
+import { User } from '../types/User';
 
 const ProfileScreen = ({ route }: any) => {
     const [imageToShow, setImageToShow] = useState<string>('');
@@ -142,7 +143,14 @@ const ProfileScreen = ({ route }: any) => {
 
     const handleClickButtonEvent = (flag: number) => {
         if (flag === MESSENGER_ACTION) {
-            console.log('chat');
+            if (userLogin && userInfo) {
+                dispatch(setSelectConversation({
+                    receiver: userInfo as User,
+                    sender: userLogin
+                }))
+            }
+            console.log(userInfo)
+            navigation.navigate(MESSENGER_SCREEN)
         } else if (flag === FOLLOW_ACTION) {
             console.log('follow');
         } else if (flag === CALL_ACTION) {
