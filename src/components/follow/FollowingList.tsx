@@ -28,7 +28,7 @@ const FollowingList = () => {
         `/app/user/detail/follow/following`,
         {},
         JSON.stringify({
-          userId: 12,
+          userId: userLogin?.id,
         })
       )
     }
@@ -46,7 +46,7 @@ const FollowingList = () => {
       `/app/user/detail/follow/following`,
       {},
       JSON.stringify({
-        userId: 12,
+        userId: userLogin?.id,
         userFollowId: userFollowId
       })
     )
@@ -61,7 +61,7 @@ const FollowingList = () => {
       `/app/user/detail/follow/following/search`,
       {},
       JSON.stringify({
-        userId: 12,
+        userId: userLogin?.id,
         search: search
       })
     )
