@@ -20,7 +20,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
   const numberUserReacted: number = props.likes?.length
   const formatLikeQty: string = props.likes?.length > 1000 ? props.likes?.length / 1000 + 'k' : props.likes?.length + ''
   const renderItem = (item: any) => {
-    return item.image != null ?
+    return Boolean(item.image) ?
       <Image
         key={item.id}
         style={[styles.avatarUserReacted]}
@@ -61,7 +61,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
             style={styles.avatarUserReactedContainer}
           >
 
-            {props.likes[0].image != null ?
+            {Boolean(props.likes[0].image) ?
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[0].image}` }}
@@ -74,7 +74,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
               </View>
             }
 
-            {props.likes[0].image != null ?
+            {Boolean(props.likes[0].image) ?
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[1].image}` }}
@@ -87,7 +87,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
               </View>
             }
 
-            {props.likes[0].image != null ?
+            {Boolean(props.likes[0].image) ?
               <Image
                 style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[2].image}` }}

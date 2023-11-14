@@ -39,7 +39,7 @@ export default function StudentDiscussionDashboardScreen() {
     } else {
       setIsLoading(true)
     }
-  }, [studentsPost])
+  }, [studentsPost, isCalled])
 
   const getDataStudentApi = async () => {
     try {
@@ -48,6 +48,7 @@ export default function StudentDiscussionDashboardScreen() {
     } catch (error) {
       console.log(error)
     }
+    setIsCalled(true)
   }
 
   // Socket
@@ -97,7 +98,7 @@ export default function StudentDiscussionDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnSave = () => {}
+  const handleUnSave = () => { }
 
   const renderItem = (item: any) => {
     return (
@@ -135,7 +136,7 @@ export default function StudentDiscussionDashboardScreen() {
       {
         isLoading && <SkeletonPost />
       }
-      
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
@@ -154,7 +155,7 @@ export default function StudentDiscussionDashboardScreen() {
         </View>
         {/* Create post */}
         {
-          userLogin?.roleCodes === TYPE_POST_STUDENT ?
+          userLogin?.roleCodes.includes(TYPE_POST_STUDENT) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}
