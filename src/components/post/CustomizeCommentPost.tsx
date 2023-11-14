@@ -26,7 +26,7 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                 onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
             >
                 {
-                    props.avatar != null ?
+                    Boolean(props.avatar) ?
                         <Image
                             style={styles.avatarType0}
                             source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
@@ -72,7 +72,7 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                 onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
             >
                 {
-                    props.avatar != null ?
+                    Boolean(props.avatar) ?
                         <Image
                             style={styles.avatarType1}
                             source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />

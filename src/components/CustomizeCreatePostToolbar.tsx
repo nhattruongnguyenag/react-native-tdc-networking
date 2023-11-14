@@ -33,7 +33,7 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
                         onPress={() => props.handleClickIntoAvatar()}
                     >
                         {
-                            props.image !== null ?
+                            Boolean(props.image) ?
                                 <Image
                                     style={styles.avatar}
                                     source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }}
