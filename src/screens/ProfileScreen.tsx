@@ -24,6 +24,7 @@ import { getGroupForPost } from '../utils/GetGroup';
 
 const ProfileScreen = ({ route }: any) => {
     const [imageToShow, setImageToShow] = useState<string>('');
+    const [isCalled, setIsCalled] = useState(false);
     const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -42,10 +43,10 @@ const ProfileScreen = ({ route }: any) => {
     }, [updatePost])
 
     useEffect(() => {
-        if (post.length != 0) {
+        if (post.length != 0 || isCalled) {
             setIsLoading(false);
         }
-    }, [post])
+    }, [post, isCalled])
 
     useEffect(() => {
         dispatch(setCurrentScreenNowIsProfileScreen(true));

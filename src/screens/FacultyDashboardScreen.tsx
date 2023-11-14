@@ -39,7 +39,7 @@ export default function FacultyDashboardScreen() {
     } else {
       setIsLoading(true)
     }
-  }, [facultyPost])
+  }, [facultyPost, isCalled])
 
   useEffect(() => {
     getDataFacultyApi();
