@@ -20,9 +20,11 @@ import { Faculty } from '../types/Faculty';
 import { Business } from '../types/Business';
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
+import { getGroupForPost } from '../utils/GetGroup';
 
 const ProfileScreen = ({ route }: any) => {
     const [imageToShow, setImageToShow] = useState<string>('');
+    const [isCalled, setIsCalled] = useState(false);
     const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -41,10 +43,10 @@ const ProfileScreen = ({ route }: any) => {
     }, [updatePost])
 
     useEffect(() => {
-        if (post.length != 0) {
+        if (post.length != 0 || isCalled) {
             setIsLoading(false);
         }
-    }, [post])
+    }, [post, isCalled])
 
     useEffect(() => {
         dispatch(setCurrentScreenNowIsProfileScreen(true));
@@ -104,7 +106,7 @@ const ProfileScreen = ({ route }: any) => {
     }
 
     const handleUnSave = () => {
-        
+
     }
 
     const renderItem = (item: any) => {
@@ -132,8 +134,8 @@ const ProfileScreen = ({ route }: any) => {
                 employmentType={item.employmentType ?? null}
                 description={item.description ?? null}
                 isSave={item.isSave}
-                group={group} 
-                handleUnSave={handleUnSave}                
+                group={group}
+                handleUnSave={handleUnSave}
             />
         )
     }
@@ -214,7 +216,7 @@ const ProfileScreen = ({ route }: any) => {
                                 <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
                                 {' '}
                                 {
-                                    group
+                                    getGroupForPost(group)
                                 }
                             </Text>
                         </View>
