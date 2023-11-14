@@ -23,7 +23,7 @@ export default function CustomizeImageModalShow(props: Readonly<ImageModalShowTy
         <View style={styles.wrapHeaderModalImage}>
           <TouchableOpacity style={styles.userInfoRight} onPress={() => props.handleClickIntoUserNameOrAvatarEvent()}>
             {
-              props.authorInfo?.avatar != null ?
+              Boolean(props.authorInfo?.avatar) ?
                 <Image
                   style={styles.avatar}
                   source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
