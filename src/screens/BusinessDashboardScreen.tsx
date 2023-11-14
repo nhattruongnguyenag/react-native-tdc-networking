@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native'
+import { FlatList, StyleSheet, View, RefreshControl, ScrollView, Text } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
@@ -58,7 +58,7 @@ export default function BusinessDashboardScreen() {
     } else {
       setIsLoading(true)
     }
-  }, [businessPost,isCalled])
+  }, [businessPost, isCalled])
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
@@ -145,7 +145,7 @@ export default function BusinessDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnsave= () => {
+  const handleUnsave = () => {
 
   }
 
@@ -174,9 +174,9 @@ export default function BusinessDashboardScreen() {
         employmentType={item.employmentType ?? null}
         description={item.description ?? null}
         isSave={item.isSave}
-        group={code} 
-        handleUnSave={handleUnsave}       
-        />
+        group={code}
+        handleUnSave={handleUnsave}
+      />
     )
   }
 
@@ -200,7 +200,7 @@ export default function BusinessDashboardScreen() {
       >
         {/* Create post area */}
         {
-          userLogin?.roleCodes === TYPE_POST_BUSINESS ?
+          userLogin?.roleCodes.includes(TYPE_POST_BUSINESS) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}

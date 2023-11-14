@@ -155,7 +155,7 @@ export default function StudentDiscussionDashboardScreen() {
         </View>
         {/* Create post */}
         {
-          userLogin?.roleCodes === TYPE_POST_STUDENT ?
+          userLogin?.roleCodes.includes(TYPE_POST_STUDENT) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}

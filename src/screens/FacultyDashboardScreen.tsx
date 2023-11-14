@@ -28,7 +28,7 @@ export default function FacultyDashboardScreen() {
   const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
-  const code = (userLogin?.roleCodes == TYPE_POST_STUDENT || userLogin?.roleCodes == TYPE_POST_FACULTY) ? userLogin.facultyGroupCode : '';
+  const code = (userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '';
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -100,7 +100,7 @@ export default function FacultyDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnSave = () => {}
+  const handleUnSave = () => { }
 
   const renderItem = (item: any) => {
     return (
