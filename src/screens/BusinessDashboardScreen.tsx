@@ -58,7 +58,7 @@ export default function BusinessDashboardScreen() {
     } else {
       setIsLoading(true)
     }
-  }, [businessPost])
+  }, [businessPost,isCalled])
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
@@ -97,6 +97,7 @@ export default function BusinessDashboardScreen() {
     } catch (error) {
       console.log(error)
     }
+    setIsCalled(true);
   }
 
   useEffect(() => {
