@@ -39,7 +39,7 @@ export default function FacultyDashboardScreen() {
     } else {
       setIsLoading(true)
     }
-  }, [facultyPost])
+  }, [facultyPost, isCalled])
 
   useEffect(() => {
     getDataFacultyApi();
@@ -101,6 +101,7 @@ export default function FacultyDashboardScreen() {
   }
 
   const handleUnSave = () => {}
+  console.log(userLogin?.roleCodes);
 
   const renderItem = (item: any) => {
     return (
@@ -147,7 +148,7 @@ export default function FacultyDashboardScreen() {
       >
         {/* Create post area */}
         {
-          (userLogin?.roleCodes === TYPE_POST_FACULTY || userLogin?.roleCodes === TYPE_POST_STUDENT) ? <View style={styles.toolbarCreatePost}>
+          (userLogin?.roleCodes.includes(TYPE_POST_FACULTY) || userLogin?.roleCodes.includes(TYPE_POST_STUDENT)) ? <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar
               role={userLogin?.roleCodes ?? ''}
               handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
