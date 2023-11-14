@@ -21,7 +21,8 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
-
+import { TEXT_NOTIFICATION, TEXT_NOTIFICATION_ALL_READ, TEXT_NOTIFICATION_DELETE, TEXT_NOTIFICATION_NOT_READ } from '../constants/StringVietnamese'
+import moment from 'moment'
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
@@ -43,8 +44,6 @@ export default function NotificationScreen() {
       })
       .then((res) => {
         const respo = res.data.data
-        console.log(respo)
-
         setData(respo)
       })
       .catch((error) => console.log(error))
@@ -129,7 +128,7 @@ export default function NotificationScreen() {
             />
             <View style={styles.content}>
               <Text style={styles.name}>{item.content}</Text>
-              <Text style={styles.tg}>15 phut truoc</Text>
+              <Text style={styles.tg}>{moment(item.createddate).fromNow()}</Text>
             </View>
           </View>
           <Menu style={styles.menu} key={item.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
@@ -138,10 +137,10 @@ export default function NotificationScreen() {
             </MenuTrigger>
             <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
               <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
-                <Text style={styles.option}>Xóa thông báo</Text>
+                <Text style={styles.option}>{TEXT_NOTIFICATION_DELETE}</Text>
               </MenuOption>
               <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
-                <Text style={styles.option}>Đánh dấu chưa đọc</Text>
+                <Text style={styles.option}>{TEXT_NOTIFICATION_NOT_READ}</Text>
               </MenuOption>
             </MenuOptions>
           </Menu>
@@ -157,11 +156,11 @@ export default function NotificationScreen() {
         <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
             <View style={styles.txtN}>
-              <Text style={styles.txt}>Thông báo</Text>
+              <Text style={styles.txt}>{TEXT_NOTIFICATION}</Text>
             </View>
             <View style={styles.tick}>
               <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
-                <Text style={styles.txtTick}>Đánh dấu tất cả đã đọc</Text>
+                <Text style={styles.txtTick}>{TEXT_NOTIFICATION_ALL_READ}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.searchBtn}>

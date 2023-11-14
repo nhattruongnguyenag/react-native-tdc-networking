@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -6,27 +6,33 @@ import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_W
 import { TEXT_LIKE_BY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Like } from '../../types/Like'
-import { Comment } from '../../types/Comment'
 import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables'
-
-//  Definition props
-
-export interface BottomPostType {
-  id: number
-  userLoginId: number | undefined
-  role: number
+import DefaultAvatar from '../DefaultAvatar'
+interface BottomPostType {
   handleClickBottomBtnEvent: (a: number | null) => void
   isLike: boolean
-  comments: Comment[] | null
   likes: Like[]
   commentQty: number
 }
 
-// Constant
 const BOTTOM_ICON_SIZE = 30
 const CustomizeBottomPost = (props: BottomPostType) => {
-  // Variable
   const numberUserReacted: number = props.likes?.length
+  const formatLikeQty: string = props.likes?.length > 1000 ? props.likes?.length / 1000 + 'k' : props.likes?.length + ''
+  const renderItem = (item: any) => {
+    return Boolean(item.image) ?
+      <Image
+        key={item.id}
+        style={[styles.avatarUserReacted]}
+        source={{ uri: SERVER_ADDRESS + `api/images/${item.image}` }}
+      />
+      :
+      <View style={styles.avatarUserReactedDefault}>
+        <DefaultAvatar
+          key={item.id}
+          size={30} identifer={item.name[0]} />
+      </View>
+  }
   return (
     <View style={styles.wrapBottom}>
       <View style={[styles.wrapBottomLeft, styles.row]}>
@@ -38,7 +44,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
               <IconAntDesign name='like1' size={BOTTOM_ICON_SIZE} color={COLOR_BLACK} />
             )}
           </TouchableOpacity>
-          <Text>{props.likes?.length}</Text>
+          <Text>{formatLikeQty}</Text>
         </View>
         <View style={[styles.wrapIconAndTextBottom, styles.iconRight]}>
           <TouchableOpacity onPress={() => props.handleClickBottomBtnEvent(COMMENT_ACTION)}>
@@ -54,42 +60,64 @@ const CustomizeBottomPost = (props: BottomPostType) => {
             onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
             style={styles.avatarUserReactedContainer}
           >
-            <Image
-              style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
-              source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[0].image}` }}
-            />
-            <Image
-              style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
-              source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[1].image}` }}
-            />
-            <Image
-              style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
-              source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[2].image}` }}
-            />
+
+            {Boolean(props.likes[0].image) ?
+              <Image
+                style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
+                source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[0].image}` }}
+              />
+              :
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedOne, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[0].name[0]} />
+              </View>
+            }
+
+            {Boolean(props.likes[0].image) ?
+              <Image
+                style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
+                source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[1].image}` }}
+              />
+              :
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedTwo, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[1].name[0]} />
+              </View>
+            }
+
+            {Boolean(props.likes[0].image) ?
+              <Image
+                style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
+                source={{ uri: SERVER_ADDRESS + `api/images/${props.likes[2].image}` }}
+              />
+              :
+              <View
+                style={[styles.avatarUserReacted, styles.avatarUserReactedThree, styles.absolute]}
+              >
+                <DefaultAvatar size={27} identifer={props.likes[2].name[0]} />
+              </View>
+            }
             <View style={[styles.avatarUserReacted, styles.numberUserReactedRemaining, styles.absolute]}>
               {numberUserReacted <= 9 ? (
-                <>
-                  <Text style={styles.txtNumberUserReactedRemaining}>+{numberUserReacted - 3}</Text>
-                </>
+                <Text style={styles.txtNumberUserReactedRemaining}>+{numberUserReacted - 3}</Text>
               ) : (
-                <>
-                  <Text style={styles.txtNumberUserReactedRemaining}>9+</Text>
-                </>
+                <Text style={styles.txtNumberUserReactedRemaining}>9+</Text>
               )}
             </View>
           </TouchableOpacity>
         ) : (
-          <>
-            <TouchableOpacity onPress={() => props.handleClickBottomBtnEvent(2)} style={styles.wrapAvatarBottomRight}>
-              {props.likes.map((item, index) => (
-                <Image
-                  key={item.id}
-                  style={[styles.avatarUserReacted]}
-                  source={{ uri: SERVER_ADDRESS + `api/images/${item.image}` }}
-                />
-              ))}
-            </TouchableOpacity>
-          </>
+          <TouchableOpacity
+            onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}
+          >
+            <FlatList
+              style={styles.wrapAvatarBottomRight}
+              keyExtractor={(item) => item.id.toString()}
+              data={props.likes}
+              renderItem={({ item }) => renderItem(item)}
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -167,10 +195,13 @@ const styles = StyleSheet.create({
   },
   avatarUserReactedContainer: {
     width: 100,
-    height: '100%'
+    height: '100%',
   },
   wrapAvatarBottomRight: {
     flexDirection: 'row'
+  },
+  avatarUserReactedDefault: {
+    margin: 1,
   }
 })
 export default CustomizeBottomPost

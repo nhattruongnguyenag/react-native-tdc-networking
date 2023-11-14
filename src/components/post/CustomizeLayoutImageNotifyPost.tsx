@@ -7,12 +7,10 @@ import { COLOR_BLACK, COLOR_IMAGE_ERROR } from '../../constants/Color'
 const TEXT_IMAGE_ERROR = `Count't Load Activity`
 const CustomizeLayoutImageNotify = () => {
   return (
-    <>
-      <View style={styles.container}>
-        <Ionicons name='refresh-outline' size={30} color={COLOR_BLACK} />
-        <Text>{TEXT_IMAGE_ERROR}</Text>
-      </View>
-    </>
+    <View style={styles.container}>
+      <Ionicons name='refresh-outline' size={30} color={COLOR_BLACK} />
+      <Text>{TEXT_IMAGE_ERROR}</Text>
+    </View>
   )
 }
 const styles = StyleSheet.create({

@@ -1,23 +1,27 @@
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import DefaultAvatar from '../DefaultAvatar'
 
-export interface CustomizeUserReactionType {
+interface UserReactionType {
   id: number
   name: string
   avatar: string
   handleClickIntoUserReactedEvent: (userId: number) => void
 }
 
-const CustomizeUserReaction = (props: CustomizeUserReactionType) => {
+const CustomizeUserReaction = (props: UserReactionType) => {
   return (
-    <>
-      <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
-        <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
-        <Text style={styles.txtName}>{props.name}</Text>
-      </TouchableOpacity>
-    </>
+    <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
+      {
+        Boolean(props.avatar) ?
+          <Image style={styles.avatar} source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }} />
+          :
+          <DefaultAvatar size={40} identifer={props.name[0]} />
+      }
+      <Text style={styles.txtName}>{props.name}</Text>
+    </TouchableOpacity>
   )
 }
 

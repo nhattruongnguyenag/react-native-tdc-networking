@@ -4,7 +4,7 @@
  *
  * @format
  */
-
+import Toast from 'react-native-toast-message';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
@@ -34,15 +34,25 @@ import {
   FOLLOWING_SCREEN,
   IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN,
+  LIST_FOLLOW_SCREEN,
+  JOB_APPLY_SCREEN,
+  LIST_JOB_APPLY_SCREEN,
+  LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN,
+  RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
-  TOP_TAB_NAVIGATOR
+  SURVEY_CONDUCT_SCREEN,
+  TOP_TAB_NAVIGATOR,
+  PROFILE_SCREEN,
+  DETAIL_JOB_APPLY,
+  OPTION_SCREEN,
+  SURVEY_RESULT_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -67,6 +77,17 @@ import IntermediationScreen from './screens/IntermediationScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
+import SurveyConductScreen from './screens/SurveyConductScreen'
+import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
+import JobApplyScreen from './screens/JobApplyScreen'
+import ListJobApplyScreen from './screens/ListJobApplyScreen'
+import ListPostSavedScreen from './screens/ListPostSavedScreen'
+import ProfileScreen from './screens/ProfileScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
+import OptionScreen from './screens/OptionScreen';
+import SurveyResultScreen from './screens/SurveyResultScreen';
+import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_ } from './constants/StringVietnamese';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -92,10 +113,19 @@ export type RootStackParamList = {
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
-
+  LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: undefined
+  CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
+  SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
+  RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
+  DETAIL_JOB_APPLY: { cvId: number } | undefined
+  PROFILE_SCREEN: { userId: number, group: string } | undefined
+  LIST_POST_SAVED_SCREEN: undefined
+  OPTION_SCREEN: undefined
+  SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -172,6 +202,12 @@ export function StackNavigator(): JSX.Element {
       }}
     >
       <RootStack.Screen
+        name={RECRUITMENT_DETAIL_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng' /> }}
+        component={RecruitmentDetailScreen}
+      />
+
+      <RootStack.Screen
         name={TOP_TAB_NAVIGATOR}
         options={{
           title: 'TDC Social Network',
@@ -187,7 +223,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={SEACRH_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Tìm kiếm' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_SEARCH_} /> }}
         component={SearchScreen}
       />
 
@@ -203,7 +239,10 @@ export function StackNavigator(): JSX.Element {
         component={MessengerScreen}
       />
 
-      <RootStack.Screen name={LOGIN_SCREEN} options={{ header: () => null }} component={LoginScreen} />
+      <RootStack.Screen
+        name={LOGIN_SCREEN}
+        options={{ header: () => null }}
+        component={LoginScreen} />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -235,7 +274,10 @@ export function StackNavigator(): JSX.Element {
         component={CreateSurveyPostScreen}
       />
 
-      <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
+      <RootStack.Screen
+        name={IMAGE_VIEW_SCREEN}
+        options={{ header: () => null }}
+        component={ImageViewScreen} />
 
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
@@ -250,16 +292,71 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={SURVEY_CONDUCT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Thực hiện khảo sát' /> }}
+        component={SurveyConductScreen}
+      />
+
+      <RootStack.Screen
+        name={JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Ứng tuyển' /> }}
+        component={JobApplyScreen}
+      />
+      <RootStack.Screen
+        name={LIST_POST_SAVED_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_SAVE} /> }}
+        component={ListPostSavedScreen}
+      />
+
+      <RootStack.Screen
         name={CREATE_NORMAL_POST_SCREEN}
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
       />
+      
+      <RootStack.Screen
+        name={LIST_JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển'/> }}
+        component={ListJobApplyScreen}
+      />
 
-      <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
+      <RootStack.Screen
+        name={LIST_FOLLOW_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_FOLLOW} /> }}
+        component={ListFollowScreen}
+      />
+
+      <RootStack.Screen
+        name={PROFILE_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
+        component={ProfileScreen}
+      />
+
+      <RootStack.Screen
+        name={DETAIL_JOB_APPLY}
+        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        component={DetailJobApplyScreen} />
+
+      <RootStack.Screen
+        name={OPTION_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='' /> }}
+        component={OptionScreen}
+      />
+
+      <RootStack.Screen
+        name={SPLASH_SCREEN}
+        options={{ header: () => null }}
+        component={SplashScreen} />
+
+      <RootStack.Screen
+        name={SURVEY_RESULT_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
+        component={SurveyResultScreen}
+      />
     </RootStack.Navigator>
   )
 }
-
+// DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
   return (
     <TopTab.Navigator
@@ -299,15 +396,18 @@ function TopTabNavigator(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    <MenuProvider>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            <DrawerNavigator />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
-    </MenuProvider>
+    <>
+      <MenuProvider>
+        <Provider store={store}>
+          <PaperProvider>
+            <NavigationContainer>
+              <DrawerNavigator />
+            </NavigationContainer>
+          </PaperProvider>
+        </Provider>
+      </MenuProvider>
+      <Toast />
+    </>
   )
 }
 

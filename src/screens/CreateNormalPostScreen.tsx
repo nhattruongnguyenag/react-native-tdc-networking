@@ -14,9 +14,23 @@ import React, { useEffect, useState } from 'react'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
-import { TEXT_ADD_IMAGES, TEXT_AGREE, TEXT_CANCEL, TEXT_CHAR, TEXT_COMPLETE, TEXT_CREATE_POST_FAIL, TEXT_CREATE_POST_SUCCESS, TEXT_DEFINITE_QUESTION, TEXT_DETAILED_WARNING_CONTENT_NULL, TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED, TEXT_INPUT_PLACEHOLDER, TEXT_NOTIFYCATIONS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_TITLE, TEXT_WARNING } from '../constants/StringVietnamese'
-import IconEntypo from 'react-native-vector-icons/Entypo';
-import axios from 'axios'
+import {
+  TEXT_ADD_IMAGES,
+  TEXT_AGREE,
+  TEXT_CANCEL,
+  TEXT_CHAR,
+  TEXT_COMPLETE,
+  TEXT_CREATE_POST_FAIL,
+  TEXT_CREATE_POST_SUCCESS,
+  TEXT_DEFINITE_QUESTION,
+  TEXT_DETAILED_WARNING_CONTENT_NULL,
+  TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED,
+  TEXT_INPUT_PLACEHOLDER,
+  TEXT_NOTIFYCATIONS,
+  TEXT_TITLE,
+  TEXT_WARNING,
+} from '../constants/StringVietnamese'
+import IconEntypo from 'react-native-vector-icons/Entypo'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
 import ActionSheet from 'react-native-actionsheet'
@@ -24,28 +38,19 @@ import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { handlePutDataAPI } from '../api/CallApi'
 
 // man hinh dang bai viet thong
-export default function CreateNormalPostScreen({ navigation }: any) {
+export default function CreateNormalPostScreen({ navigation, route }: any) {
   // Variable
-  let alertString = null;
-  const [isLoading, setIsLoading] = useState(false);
-  const [content, setContent] = useState('');
-  const [images, setImages] = useState<any>([]);
-  const apiUrl = SERVER_ADDRESS + 'api/posts/normal';
+  const { group } = route.params
+  let alertString = null
+  const [isLoading, setIsLoading] = useState(false)
+  const [content, setContent] = useState('')
+  const [images, setImages] = useState<any>([])
+  const apiUrl = SERVER_ADDRESS + 'api/posts/normal'
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-
-  // Function area
-  const handlePutDataAPI = async (postData: any): Promise<number> => {
-    try {
-      const response = await axios.post(apiUrl, postData)
-      return response.data.status
-    } catch (error) {
-      console.error('Error:', error)
-      throw error
-    }
-  }
 
   const handleClickCompleteButton = async () => {
     if (isNotBlank(content.trim()) && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
@@ -53,12 +58,11 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         const data = {
           images: images ?? [],
           type: 'thong-thuong',
-          userId: 1,
-          content: content
+          userId: userLogin?.id,
+          content: content,
+          groupId: group === -1 ? null : group,
         }
-        // Send
-        const status = await handlePutDataAPI(data)
-        // Reset data
+        const status = await handlePutDataAPI(apiUrl, data)
         setContent('')
         setImages([])
         console.log(status)
@@ -66,6 +70,7 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         if (status === 201) {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_SUCCESS, false)
           Keyboard.dismiss()
+          navigation.goBack();
         } else {
           showAlert(TEXT_NOTIFYCATIONS, TEXT_CREATE_POST_FAIL, false)
         }
@@ -73,19 +78,27 @@ export default function CreateNormalPostScreen({ navigation }: any) {
         console.error('Error:', error)
       }
     } else {
-      if (isNotBlank(content.trim()) === false && isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER) === false) {
-        alertString = TEXT_DETAILED_WARNING_CONTENT_NULL + 'Và' + TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${NUMBER_MAX_CHARACTER}` + TEXT_CHAR;
+      if (
+        isNotBlank(content.trim()) === false &&
+        isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER) === false
+      ) {
+        alertString =
+          TEXT_DETAILED_WARNING_CONTENT_NULL +
+          'Và' +
+          TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED +
+          `${NUMBER_MAX_CHARACTER}` +
+          TEXT_CHAR
       } else if (isNotBlank(content.trim()) === false) {
         alertString = TEXT_DETAILED_WARNING_CONTENT_NULL
       } else {
-        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${NUMBER_MAX_CHARACTER} ` + TEXT_CHAR;
+        alertString = TEXT_DETAILED_WARNING_CONTENT_NUMBER_LIMITED + `${NUMBER_MAX_CHARACTER} ` + TEXT_CHAR
       }
       Alert.alert(TEXT_CREATE_POST_FAIL, alertString)
     }
   }
 
   const HandleClickIntoIconBtnArrowLeft = () => {
-    navigation.goBack();
+    navigation.goBack()
   }
   const handleLongClickIntoImage = async (imageName: string) => {
     let result: boolean = false
@@ -156,74 +169,75 @@ export default function CreateNormalPostScreen({ navigation }: any) {
 
   return (
     <>
-      <CustomizeModalLoading visible={isLoading} />
-      <View style={styles.container}>
-        {/* Tab bar area */}
-        {/* Wrap tab bar */}
-        <View style={styles.tabBarContainer}>
-          {/* Tab bar */}
-          <View style={styles.wrapTabBar}>
-            <TouchableOpacity onPress={() => HandleClickIntoIconBtnArrowLeft()}>
-              <IconEntypo name={'chevron-left'} size={25} color={COLOR_BLACK} />
-            </TouchableOpacity>
-            <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
-            <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
-              <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* Body */}
-        <View
-          style={[styles.wrapperBody, { paddingBottom: images != null && images.length > 0 ? WINDOW_HEIGHT * 0.3 : 0 }]}
-        >
-          <TextInput
-            value={content}
-            onChangeText={(value) => setContent(value)}
-            scrollEnabled={false}
-            style={styles.txtBody}
-            placeholder={TEXT_INPUT_PLACEHOLDER}
-            placeholderTextColor={COLOR_BLACK}
-            multiline={true}
-            textAlignVertical='top'
-          />
-        </View>
-        {/* Bottom */}
-        {images != null && images.length != 0 && (
-          <View style={styles.wrapperBodyImage}>
-            <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-              {images.length != 0 &&
-                images.map((item: any, index: number) => (
-                  <Pressable
-                    onLongPress={() => handleLongClickIntoImage(item)}
-                    onPress={() => {
-                      console.log(123)
-                    }}
-                    key={index.toString()}
-                    style={styles.wrapImage}
-                  >
-                    <Image style={styles.image} source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
-                  </Pressable>
-                ))}
-            </ScrollView>
-          </View>
-        )}
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={() => imagePickerOption?.show()}>
-            <View style={styles.wrapBottom}>
-              <IconButton
-                iconSize={18}
-                iconName='images'
-                iconColor='#fff'
-                onPress={() => imagePickerOption?.show()}
-                inactiveBackgroundColor='#ffffff00'
-                activeBackgroundColor='#ffffff1a'
-              />
-              <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-              <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
+      {
+        isLoading ? <CustomizeModalLoading /> : <View style={styles.container}>
+          {/* Tab bar area */}
+          {/* Wrap tab bar */}
+          <View style={styles.tabBarContainer}>
+            {/* Tab bar */}
+            <View style={styles.wrapTabBar}>
+              <TouchableOpacity onPress={() => HandleClickIntoIconBtnArrowLeft()}>
+                <IconEntypo name={'chevron-left'} size={25} color={COLOR_BLACK} />
+              </TouchableOpacity>
+              <Text style={styles.tabBarTxt}>{TEXT_TITLE}</Text>
+              <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
+                <Text style={styles.tabBarBtnRightTxt}>{TEXT_COMPLETE}</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
+          {/* Body */}
+          <View
+            style={[styles.wrapperBody, { paddingBottom: images != null && images.length > 0 ? WINDOW_HEIGHT * 0.3 : 0 }]}
+          >
+            <TextInput
+              value={content}
+              onChangeText={(value) => setContent(value)}
+              scrollEnabled={false}
+              style={styles.txtBody}
+              placeholder={TEXT_INPUT_PLACEHOLDER}
+              placeholderTextColor={COLOR_BLACK}
+              multiline={true}
+              textAlignVertical='top'
+            />
+          </View>
+          {/* Bottom */}
+          {images != null && images.length != 0 && (
+            <View style={styles.wrapperBodyImage}>
+              <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                {images.length != 0 &&
+                  images.map((item: any, index: number) => (
+                    <Pressable
+                      onLongPress={() => handleLongClickIntoImage(item)}
+                      onPress={() => {
+                        console.log(123)
+                      }}
+                      key={index.toString()}
+                      style={styles.wrapImage}
+                    >
+                      <Image style={styles.image} source={{ uri: SERVER_ADDRESS + `api/images/${item}` }} />
+                    </Pressable>
+                  ))}
+              </ScrollView>
+            </View>
+          )}
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity onPress={() => imagePickerOption?.show()}>
+              <View style={styles.wrapBottom}>
+                <IconButton
+                  iconSize={18}
+                  iconName='images'
+                  iconColor='#fff'
+                  onPress={() => imagePickerOption?.show()}
+                  inactiveBackgroundColor='#ffffff00'
+                  activeBackgroundColor='#ffffff1a'
+                />
+                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <Text style={styles.bottomText}>{TEXT_ADD_IMAGES}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      }
     </>
   )
 }

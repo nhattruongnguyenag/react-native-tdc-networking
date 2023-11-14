@@ -12,11 +12,20 @@ export interface Post {
   available: boolean | null
   timeCreatePost: string
   content: string
-  type: string | null
+  type: string
   likes: Like[]
   comments: Comment[]
   commentQty: number
   images: Images[]
-  role: number
+  role: string
   likeAction: (data: LikeAction) => void
+  location: string | null
+  title: string | null
+  expiration: string | null
+  salary: string | null
+  employmentType: string | null
+  description: string | null
+  isSave: number
+  group: string
+  handleUnSave: (post_id: number) => void | undefined
 }

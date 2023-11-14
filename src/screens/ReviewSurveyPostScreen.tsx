@@ -9,21 +9,13 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
-import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyPostMutation } from '../redux/Service'
-import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
-  const dispatch = useAppDispatch()
-
-  const onBtnPublishPostPress = () => {
-    if (surveyPostRequest) {
-      addSurvey(surveyPostRequest)
-    }
-  }
 
   useEffect(() => {
     if (addSurveyResult.data) {
@@ -35,6 +27,13 @@ export default function ReviewSurveyPostScreen() {
       }
     }
   }, [addSurveyResult])
+
+  const onBtnPublishPostPress = () => {
+    console.log(JSON.stringify(surveyPostRequest))
+    if (surveyPostRequest) {
+      addSurvey(surveyPostRequest)
+    }
+  }
 
   const onBtnBackPress = useCallback(() => {
     navigation.pop()
@@ -51,18 +50,28 @@ export default function ReviewSurveyPostScreen() {
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion data={item} index={index} />
+            return <MultiChoiceQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion data={item} index={index} />
+            return <OneChoiceQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           } else {
-            return <ShortAnswerQuestion data={item} index={index} />
+            return <ShortAnswerQuestion
+              key={index}
+              reviewMode
+              data={item} index={index} isDisableDeleteBtn />
           }
         })}
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <ButtonFullWith
-          btnStyle={{ marginRight: 10, width: 140 }}
+          textColor='#000'
+          btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
           onPress={onBtnBackPress}
           iconName='arrow-left-thin'
           title='Quay lại'

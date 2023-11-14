@@ -5,8 +5,9 @@ import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import DefaultAvatar from '../DefaultAvatar'
 
-export interface CustomizeImageModalShowType {
+interface ImageModalShowType {
   closeModal: () => void
   data: any
   authorInfo: any
@@ -14,39 +15,38 @@ export interface CustomizeImageModalShowType {
   handleClickIntoUserNameOrAvatarEvent: () => void
 }
 
-export default function CustomizeImageModalShow(props: CustomizeImageModalShowType) {
+export default function CustomizeImageModalShow(props: Readonly<ImageModalShowType>) {
   return (
-    <>
-      <TouchableOpacity onPress={() => props.closeModal()} style={styles.wrapperContent}>
-        <Pressable style={styles.containerContent}>
-          {/* Header */}
-          <View style={styles.wrapHeaderModalImage}>
-            <TouchableOpacity style={styles.userInfoRight} onPress={() => props.handleClickIntoUserNameOrAvatarEvent()}>
-              <Image
-                style={styles.avatar}
-                source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
-              />
-              <Text style={styles.useName} numberOfLines={1}>
-                {props.authorInfo?.name}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.closeModal()}>
-              <IconAntDesign name='close' size={20} color={COLOR_BLACK} />
-            </TouchableOpacity>
-          </View>
+    <TouchableOpacity onPress={() => props.closeModal()} style={styles.wrapperContent}>
+      <Pressable style={styles.containerContent}>
+        {/* Header */}
+        <View style={styles.wrapHeaderModalImage}>
+          <TouchableOpacity style={styles.userInfoRight} onPress={() => props.handleClickIntoUserNameOrAvatarEvent()}>
+            {
+              Boolean(props.authorInfo?.avatar) ?
+                <Image
+                  style={styles.avatar}
+                  source={{ uri: SERVER_ADDRESS + `api/images/${props.authorInfo?.avatar}` }}
+                />
+                :
+                <DefaultAvatar identifer={props.authorInfo.name[0]} size={40} />
+            }
+            <Text style={styles.useName} numberOfLines={1}>
+              {props.authorInfo?.name}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => props.closeModal()}>
+            <IconAntDesign name='close' size={20} color={COLOR_BLACK} />
+          </TouchableOpacity>
+        </View>
 
-          {props.handleCheckImageHaveError(props.data.id) ? (
-            <>
-              <CustomizeLayoutImageNotify />
-            </>
-          ) : (
-            <>
-              <Image style={styles.showMainImage} source={{ uri: SERVER_ADDRESS + `api/images/${props.data.uri}` }} />
-            </>
-          )}
-        </Pressable>
-      </TouchableOpacity>
-    </>
+        {props.handleCheckImageHaveError(props.data.id) ? (
+          <CustomizeLayoutImageNotify />
+        ) : (
+          <Image style={styles.showMainImage} source={{ uri: SERVER_ADDRESS + `api/images/${props.data.uri}` }} />
+        )}
+      </Pressable>
+    </TouchableOpacity>
   )
 }
 

@@ -9,13 +9,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LOGIN_SCREEN } from '../constants/Screen'
 import { COLOR_BTN_BLUE } from '../constants/Color'
 import { Student } from '../types/Student'
@@ -62,9 +61,12 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 export default function StudentRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [student, setStudent] = useState<
-    Omit<Student, 'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect'>
+    Omit<
+      Student,
+      'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect' | 'facultyGroupCode'
+    >
   >({
     id: 0,
     password: '',
@@ -250,6 +252,26 @@ export default function StudentRegistrationScreen() {
     },
     [validate]
   )
+  const handleCheckEmail = useCallback(() => {
+    axios
+      .post(SERVER_ADDRESS + `api/users/check?email=${student.email}`)
+      .then((response) => {
+        if (response.data.data == 0) {
+          setValidate({
+            ...validate,
+            email: {
+              ...validate.email,
+              isError: true,
+              textError: 'Email đã được sử dụng',
+              isVisible: true
+            }
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [student.email])
   const handleEmailChange = useCallback(
     (value: string) => {
       setStudent({ ...student, email: value })
@@ -457,6 +479,7 @@ export default function StudentRegistrationScreen() {
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
+          Alert.alert('Thông báo', 'Đăng ký thành công')
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
@@ -525,6 +548,7 @@ export default function StudentRegistrationScreen() {
             title='Email sinh viên'
             placeholder='Nhập email sinh viên...'
             onChangeText={(value) => handleEmailChange(value)}
+            onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
           />
 

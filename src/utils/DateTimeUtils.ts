@@ -25,8 +25,6 @@ export function getConversationLastUpdate(date: string): string {
   const today = moment()
   const mesageSectionDate = moment(date)
 
-  let dateConverted = ''
-
   if (today.date() === mesageSectionDate.date()) {
     formater = 'hh:mm a'
   } else if (today.month() === mesageSectionDate.month()) {
