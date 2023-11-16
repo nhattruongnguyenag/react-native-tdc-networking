@@ -5,7 +5,7 @@ import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 interface ImageModalShowType {
   closeModal: () => void

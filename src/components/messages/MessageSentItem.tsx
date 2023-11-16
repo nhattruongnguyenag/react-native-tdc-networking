@@ -4,6 +4,7 @@ import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from '
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
+import { MESSAGE_ITEM_STATUS_RECEIVED, MESSAGE_ITEM_STATUS_SEEN } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
 import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
@@ -11,7 +12,7 @@ import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
 import { getMessageSectionTitle } from '../../utils/DateTimeUtils'
 import { isApproximatelyTime } from '../../utils/MessageUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import MessageSectionTitle from './MessageSectionTitle'
 const BACKGROUND_COLOR = '#6942f4'
 
@@ -154,7 +155,7 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
       </View>
       <View style={styles.messageStatus}>
         <Text style={{textAlign: 'right', fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
-          {Boolean(props.message.status) ? 'Đã xem' : 'Đã nhận'}
+          {Boolean(props.message.status) ? MESSAGE_ITEM_STATUS_SEEN : MESSAGE_ITEM_STATUS_RECEIVED}
         </Text>
       </View>
     </View>

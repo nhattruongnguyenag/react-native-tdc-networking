@@ -7,7 +7,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { TYPE_NORMAL_POST, TYPE_NORMAL_POST_TEXT, TYPE_RECRUITMENT_POST, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST, TYPE_SURVEY_POST_TXT } from '../constants/Variables'
 import { TEXT_PLACEHOLDER_CREATE_ANY_POST, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import DefaultAvatar from './DefaultAvatar'
+import DefaultAvatar from './common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 
 export interface CreatePostToolbarType {

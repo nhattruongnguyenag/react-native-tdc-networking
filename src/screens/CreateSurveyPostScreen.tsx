@@ -4,8 +4,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
 import { ADD_QUESTION_SCREEN } from '../constants/Screen'
+import { SURVEY_SAVE_BUTTON_GO_NEXT, SURVEY_SAVE_DESC_EMPTY_VALIDATE, SURVEY_SAVE_DESC_OVER_255_CHARACTERS_VALIDATE, SURVEY_SAVE_DESC_PLACEHOLDER, SURVEY_SAVE_DESC_TITLE, SURVEY_SAVE_TITLE_EMPTY_VALIDATE, SURVEY_SAVE_TITLE_OVER_255_CHARACTERS_VALIDATE, SURVEY_SAVE_TITLE_PLACEHOLDER, SURVEY_SAVE_TITLE_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setSurveyPostRequest } from '../redux/Slice'
 import { SurveyPostRequest } from '../types/SurveyPost'
@@ -35,12 +36,12 @@ export default function CreateSurveyPostScreen() {
   const dispatch = useAppDispatch()
   const [validate, setValidate] = useState<CreateSurveyPostScreenValidate>({
     title: {
-      textError: 'Tiêu đề không được để trống',
+      textError: SURVEY_SAVE_TITLE_EMPTY_VALIDATE,
       isVisible: false,
       isError: true
     },
     description: {
-      textError: 'Mô tả không được để trống',
+      textError: SURVEY_SAVE_DESC_EMPTY_VALIDATE,
       isVisible: false,
       isError: true
     }
@@ -90,17 +91,17 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setTitleError("Tiêu đề không được để trống")
+        setTitleError(SURVEY_SAVE_TITLE_EMPTY_VALIDATE)
         return
       }
 
       if (isContainSpecialCharacter(value)) {
-        setTitleError("Tiêu đề không được để trống")
+        setTitleError(SURVEY_SAVE_TITLE_EMPTY_VALIDATE)
         return
       }
 
       if (!isLengthInRange(value, 1, 255)) {
-        setTitleError("Tiêu đề không vượt quá 255 ký tự")
+        setTitleError(SURVEY_SAVE_TITLE_OVER_255_CHARACTERS_VALIDATE)
         return
       }
 
@@ -124,17 +125,13 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setDescriptionError("Mô tả không được để trống")
+        setDescriptionError(SURVEY_SAVE_DESC_EMPTY_VALIDATE)
         return
       }
 
-      if (isContainSpecialCharacter(value)) {
-        setDescriptionError("Mô tả không được để trống")
-        return
-      }
 
       if (!isLengthInRange(value, 1, 255)) {
-        setDescriptionError("Mô tả không vượt quá 255 ký tự")
+        setDescriptionError(SURVEY_SAVE_DESC_OVER_255_CHARACTERS_VALIDATE)
         return
       }
 
@@ -176,8 +173,8 @@ export default function CreateSurveyPostScreen() {
       <TextInputWithTitle
         value={surveyPostRequest?.title ?? ''}
         onChangeText={(value) => onTitleChangeText(value)}
-        title='Tiêu đề'
-        placeholder='Nhập tiêu đề...'
+        title={SURVEY_SAVE_TITLE_TITLE}
+        placeholder={SURVEY_SAVE_TITLE_PLACEHOLDER}
       />
 
       <TextValidate
@@ -190,8 +187,8 @@ export default function CreateSurveyPostScreen() {
       <TextInputWithTitle
         value={surveyPostRequest?.description ?? ''}
         onChangeText={(value) => onDescriptionChangeText(value)}
-        title='Mô tả'
-        placeholder='Nhập mô tả bài viết...'
+        title={SURVEY_SAVE_DESC_TITLE}
+        placeholder={SURVEY_SAVE_DESC_PLACEHOLDER}
         multiline={true}
         numberOfLine={7}
         textInputStyle={styles.textInputStyle}
@@ -208,7 +205,7 @@ export default function CreateSurveyPostScreen() {
         iconName='arrow-right-thin'
         btnStyle={styles.customBtnStyle}
         contentStyle={{ flexDirection: 'row-reverse' }}
-        title='Tiếp theo'
+        title={SURVEY_SAVE_BUTTON_GO_NEXT}
         onPress={() => onBtnNextPress()}
       />
     </View>

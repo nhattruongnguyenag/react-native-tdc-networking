@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ACTIVE_CONVERSATION_TAB, ALL_CONVERSATION_TAB } from '../constants/Screen'
 import AllConversationGroupTab from '../components/conversation/AllConversationGroupTab'
 import ActiveConversationGroupTab from '../components/conversation/ActiveConversationGroupTab'
+import { ALL_ACTIVE_CONVERSATION_TAB_TITLE, ALL_CONVERSATION_TAB_TITLE } from '../constants/StringVietnamese'
 
 const TopTab = createMaterialTopTabNavigator()
 
@@ -19,12 +20,12 @@ function TopTabNavigator(): JSX.Element {
     >
       <TopTab.Screen
         name={ALL_CONVERSATION_TAB}
-        options={{ title: 'Tất cả hội thoại' }}
+        options={{ title: ALL_CONVERSATION_TAB_TITLE }}
         component={AllConversationGroupTab}
       />
       <TopTab.Screen
         name={ACTIVE_CONVERSATION_TAB}
-        options={{ title: 'Đang hoạt động' }}
+        options={{ title: ALL_ACTIVE_CONVERSATION_TAB_TITLE }}
         component={ActiveConversationGroupTab}
       />
     </TopTab.Navigator>

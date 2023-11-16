@@ -9,7 +9,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { RootStackParamList } from '../App'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import DefaultAvatar from '../components/DefaultAvatar'
+import DefaultAvatar from '../components/common/DefaultAvatar'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { DETAIL_JOB_APPLY } from '../constants/Screen'
 

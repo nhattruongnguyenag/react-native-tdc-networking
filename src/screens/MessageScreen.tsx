@@ -3,10 +3,11 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { Client, Frame, Message } from 'stompjs'
-import Loading from '../components/Loading'
+import Loading from '../components/common/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSentItem from '../components/messages/MessageSentItem'
+import { MESSAGE_SCREEN_LOADER_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setConversationMessages, setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
@@ -106,7 +107,7 @@ export default function MessengerScreen() {
   return (
     <View style={styles.body}>
       {isLoading ? (
-        <Loading title={'Đang tải tin nhắn'} />
+        <Loading title={MESSAGE_SCREEN_LOADER_TITLE} />
       ) : (
         <Fragment>
           <FlatList
@@ -116,10 +117,6 @@ export default function MessengerScreen() {
             data={conversationMessages}
             renderItem={({ item, index }) => messageRenderItems(item, index)}
           />
-
-          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.receiver.isTyping) ? 'flex' : 'none' }}>
-            Đang soạn tin...
-          </Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}

@@ -6,7 +6,7 @@ import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../..
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
 import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
 

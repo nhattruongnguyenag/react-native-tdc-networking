@@ -3,7 +3,7 @@ import React from 'react'
 import { Avatar, Divider } from 'react-native-paper'
 import { useAppSelector } from '../../redux/Hook'
 import { User } from '../../types/User'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 
 export default function DrawerHeader() {

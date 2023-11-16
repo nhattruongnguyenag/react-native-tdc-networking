@@ -7,7 +7,7 @@ import { TEXT_LIKE_BY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Like } from '../../types/Like'
 import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 interface BottomPostType {
   handleClickBottomBtnEvent: (a: number | null) => void
   isLike: boolean

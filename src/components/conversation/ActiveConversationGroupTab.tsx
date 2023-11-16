@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ConversationListView from '../../components/listviews/ConversationListView'
-import Loading from '../Loading'
+import Loading from '../common/Loading'
 import { useAppSelector } from '../../redux/Hook'
 
 export default function ActiveConversationGroupTab() {

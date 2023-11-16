@@ -7,7 +7,7 @@ import { PURPLE_COLOR } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { getUserStatus } from '../../utils/DateTimeUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 const AVATAR_HEIGHT = 40
 

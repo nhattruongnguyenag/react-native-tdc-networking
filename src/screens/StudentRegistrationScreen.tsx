@@ -34,7 +34,7 @@ import {
   isLengthInRange,
   isPassword
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
 
 interface RegisterStudent {
   name: InputTextValidate
