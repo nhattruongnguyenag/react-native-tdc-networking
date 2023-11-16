@@ -35,6 +35,49 @@ import {
   isPassword
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
+import {
+  TEXT_ALERT_REGISTER_FAILT,
+  TEXT_ALERT_REGISTER_SUCCESS,
+  TEXT_ERROR_CHECKSAMEEMAIL,
+  TEXT_ERROR_CONFIMPASSWORD,
+  TEXT_ERROR_CONFIMPASS_MATCHPASS,
+  TEXT_ERROR_EMAIL_NOTFORMAT,
+  TEXT_ERROR_EMAIL_NOTIMPTY,
+  TEXT_ERROR_EMAIL_NOTLENGTH,
+  TEXT_ERROR_FACULITYNOTEMPTY,
+  TEXT_ERROR_MAJORNAME,
+  TEXT_ERROR_MAJORNAME_NOTEMPTY,
+  TEXT_ERROR_PASSWORD_NOTFORMAT,
+  TEXT_ERROR_PASSWORD_NOTIMPTY,
+  TEXT_ERROR_PASSWORD_NOTLENGTH,
+  TEXT_ERROR_STUDENTCODE,
+  TEXT_ERROR_STUDENTCODE_NOTFORMAT,
+  TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER,
+  TEXT_ERROR_STUDENTNAME,
+  TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
+  TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
+  TEXT_IMAGE_PICKER,
+  TEXT_LOGIN,
+  TEXT_PLACEHOLDER_CONFIMPASS,
+  TEXT_PLACEHOLDER_EMAIL,
+  TEXT_PLACEHOLDER_FACULITY,
+  TEXT_PLACEHOLDER_FACULiTY_SEARCH,
+  TEXT_PLACEHOLDER_MAJOR,
+  TEXT_PLACEHOLDER_PASSWORD,
+  TEXT_PLACEHOLDER_STUDENTCODE,
+  TEXT_PLACEHOLDER_STUDENTNAME,
+  TEXT_REGISTER,
+  TEXT_REQUEST_LOGIN,
+  TEXT_TITLE_CONFIMPASS,
+  TEXT_TITLE_EMAIL_REGISTER,
+  TEXT_TITLE_FACULITY,
+  TEXT_TITLE_MAJOR,
+  TEXT_TITLE_NITIFICATION,
+  TEXT_TITLE_PASSWORD,
+  TEXT_TITLE_REGISTER_STUDENT,
+  TEXT_TITLE_STUDENTCODE,
+  TEXT_TITLE_STUDENTNAME
+} from '../constants/StringVietnamese'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -96,37 +139,37 @@ export default function StudentRegistrationScreen() {
   const [isLoading, setIsLoading] = useState(false)
   const [validate, setValidate] = useState<RegisterStudent>({
     name: {
-      textError: 'Tên sinh viên không được để trống',
+      textError: TEXT_ERROR_STUDENTNAME,
       isVisible: false,
       isError: true
     },
     email: {
-      textError: 'Email không được để trống',
+      textError: TEXT_ERROR_EMAIL_NOTIMPTY,
       isVisible: false,
       isError: true
     },
     studentCode: {
-      textError: 'Mã số sinh viên không được để trống',
+      textError: TEXT_ERROR_STUDENTCODE,
       isVisible: false,
       isError: true
     },
     facultyName: {
-      textError: 'Tên khoa không được để trống',
+      textError: TEXT_ERROR_FACULITYNOTEMPTY,
       isVisible: false,
       isError: true
     },
     major: {
-      textError: 'Tên ngành không được để trống',
+      textError: TEXT_ERROR_MAJORNAME,
       isVisible: false,
       isError: true
     },
     password: {
-      textError: 'Mật khẩu không được để trống',
+      textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: 'Nhập lại mật khẩu không được để trống',
+      textError: TEXT_ERROR_CONFIMPASSWORD,
       isVisible: false,
       isError: true
     }
@@ -159,7 +202,7 @@ export default function StudentRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên sinh viên không được để trống'
+            textError: TEXT_ERROR_STUDENTNAME
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -168,7 +211,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: 'Tên sinh viên không được chứa ký tự đặc biệt',
+            textError: TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
             isVisible: true
           }
         })
@@ -178,7 +221,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: 'Tên sinh viên không vượt quá 255 ký tự',
+            textError: TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
             isVisible: true
           }
         })
@@ -206,7 +249,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã số sinh viên không được để trống'
+            textError: TEXT_ERROR_STUDENTCODE
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -216,7 +259,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã số sinh viên không được chứa ký tự đặc biệt'
+            textError: TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER
           }
         })
       } else if (!stCode.test(value)) {
@@ -226,17 +269,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã sinh viên không đúng định dạng'
-          }
-        })
-      } else if (!isLengthInRange(value, 1, 12)) {
-        setValidate({
-          ...validate,
-          studentCode: {
-            ...validate.studentCode,
-            isError: true,
-            isVisible: true,
-            textError: 'Mã sinh viên không vượt quá 255 ký tự'
+            textError: TEXT_ERROR_STUDENTCODE_NOTFORMAT
           }
         })
       } else {
@@ -262,7 +295,7 @@ export default function StudentRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: 'Email đã được sử dụng',
+              textError: TEXT_ERROR_CHECKSAMEEMAIL,
               isVisible: true
             }
           })
@@ -282,7 +315,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email không được để trống'
+            textError: TEXT_ERROR_EMAIL_NOTIMPTY
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -292,7 +325,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email không vượt quá 255 ký tự'
+            textError: TEXT_ERROR_EMAIL_NOTLENGTH
           }
         })
       } else if (!isEmail(value)) {
@@ -302,7 +335,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email sai định dạng'
+            textError: TEXT_ERROR_EMAIL_NOTFORMAT
           }
         })
       } else {
@@ -328,7 +361,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không được để trống'
+            textError: TEXT_ERROR_PASSWORD_NOTIMPTY
           }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
@@ -338,7 +371,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không vượt quá 8 ký tự'
+            textError: TEXT_ERROR_PASSWORD_NOTLENGTH
           }
         })
       } else if (!isPassword(value)) {
@@ -348,7 +381,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu sai định dạng'
+            textError: TEXT_ERROR_PASSWORD_NOTFORMAT
           }
         })
       } else {
@@ -374,7 +407,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu không được để trống'
+            textError: TEXT_ERROR_CONFIMPASSWORD
           }
         })
       } else if (value != student.password) {
@@ -384,7 +417,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không đúng'
+            textError: TEXT_ERROR_CONFIMPASS_MATCHPASS
           }
         })
       } else {
@@ -410,7 +443,7 @@ export default function StudentRegistrationScreen() {
             ...validate.major,
             isError: true,
             isVisible: true,
-            textError: 'Tên khoa không được để trống'
+            textError: TEXT_ERROR_MAJORNAME_NOTEMPTY
           }
         })
       } else {
@@ -436,7 +469,7 @@ export default function StudentRegistrationScreen() {
             ...validate.facultyName,
             isVisible: true,
             isError: true,
-            textError: 'Tên khoa không được để trống'
+            textError: TEXT_ERROR_FACULITYNOTEMPTY
           }
         })
       } else {
@@ -479,12 +512,12 @@ export default function StudentRegistrationScreen() {
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert('Thông báo', 'Đăng ký thành công')
+          Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
           console.log(error)
-          Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
+          Alert.alert(TEXT_ALERT_REGISTER_FAILT, TEXT_ERROR_CHECKSAMEEMAIL)
           setIsLoading(false)
         })
     } else {
@@ -508,15 +541,15 @@ export default function StudentRegistrationScreen() {
             <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>Đăng ký sinh viên</Text>
+            <Text style={styles.txtHeader}>{TEXT_TITLE_REGISTER_STUDENT}</Text>
           </View>
         </View>
 
         <View style={styles.form}>
           <TextInputWithTitle
             value={student.name}
-            title='Họ tên'
-            placeholder='Nhập họ tên...'
+            title={TEXT_TITLE_STUDENTNAME}
+            placeholder={TEXT_PLACEHOLDER_STUDENTNAME}
             onChangeText={(value) => handleStudentNameChange(value)}
             textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
@@ -530,8 +563,8 @@ export default function StudentRegistrationScreen() {
 
           <TextInputWithTitle
             value={student.studentCode}
-            title='Mã số sinh viên'
-            placeholder='Nhập mã số sinh viên...'
+            title={TEXT_TITLE_STUDENTCODE}
+            placeholder={TEXT_PLACEHOLDER_STUDENTCODE}
             onChangeText={(value) => handleStudentCodeChange(value)}
             textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
           />
@@ -545,8 +578,8 @@ export default function StudentRegistrationScreen() {
 
           <TextInputWithTitle
             value={student.email}
-            title='Email sinh viên'
-            placeholder='Nhập email sinh viên...'
+            title={TEXT_TITLE_EMAIL_REGISTER}
+            placeholder={TEXT_PLACEHOLDER_EMAIL}
             onChangeText={(value) => handleEmailChange(value)}
             onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
@@ -560,7 +593,7 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Khoa</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_FACULITY}</Text>
             <Dropdown
               style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -571,8 +604,8 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              placeholder='Chọn khoa...'
-              searchPlaceholder='Tìm kiếm...'
+              placeholder={TEXT_PLACEHOLDER_FACULITY}
+              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
               value={value}
               onChange={(item) => {
                 setValue(item.id)
@@ -589,9 +622,9 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Ngành học</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_MAJOR}</Text>
             <Dropdown
-              placeholder='Chọn ngành học...'
+              placeholder={TEXT_PLACEHOLDER_MAJOR}
               style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -601,7 +634,7 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              searchPlaceholder='Tìm kiếm...'
+              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
               value={item}
               onChange={(item) => {
                 setItem(item.id)
@@ -618,10 +651,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Mật khẩu đăng ký</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_PASSWORD}</Text>
             <TextInput
               value={student.password}
-              placeholder='Nhập mật khẩu đăng ký...'
+              placeholder={TEXT_PLACEHOLDER_PASSWORD}
               style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -639,10 +672,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Nhập lại mật khẩu</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_CONFIMPASS}</Text>
             <TextInput
               value={student.confimPassword}
-              placeholder='Nhập lại mật khẩu...'
+              placeholder={TEXT_PLACEHOLDER_CONFIMPASS}
               style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -662,7 +695,7 @@ export default function StudentRegistrationScreen() {
 
           <View style={styles.group}>
             <View style={styles.logo}>
-              <Text style={styles.txt}>Ảnh đại diện</Text>
+              <Text style={styles.txt}>{TEXT_IMAGE_PICKER}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
@@ -679,17 +712,17 @@ export default function StudentRegistrationScreen() {
         </View>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>Đăng ký tài khoản</Text>
+          <Text style={styles.txtRegister}>{TEXT_REGISTER}</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
         <View style={styles.login}>
-          <Text>Đã có tài khoản? </Text>
+          <Text>{TEXT_REQUEST_LOGIN} </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>Đăng nhập</Text>
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{TEXT_LOGIN}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
