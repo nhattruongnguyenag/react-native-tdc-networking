@@ -9,6 +9,7 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
 import { BACKGROUND_BLUE } from '../constants/Color'
+import { JOB_APPLY_SCREEN_BUTTON_ADD_CV_TITLE, JOB_APPLY_SCREEN_BUTTON_COMPLETE, JOB_APPLY_SCREEN_BUTTON_GO_BACK, JOB_APPLY_SCREEN_BUTTON_UPDATE_CV_TITLE, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_CONTENT, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_TITLE, JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_CONTENT, JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_TITLE } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 import { useJobApplyMutation } from '../redux/Service'
 import { Data } from '../types/Data'
@@ -74,7 +75,7 @@ export default function JobApplyScreen() {
 
   const onBtnFinishJobApplyPress = () => {
     if (!Boolean(cvSource.size)) {
-      Alert.alert('Thông báo', 'Vui lòng thêm CV')
+      Alert.alert(JOB_APPLY_SCREEN_EMPTY_CV_TEXT_TITLE, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_CONTENT)
     }
 
     const onResult = (result: Data<string[]>) => {
@@ -97,8 +98,8 @@ export default function JobApplyScreen() {
   useEffect(() => {
     if (jobApplyResponse.isSuccess && jobApplyResponse.data) {
       Alert.alert(
-        'Thông báo',
-        'Hồ sơ của bạn đã được gửi đi thành công.\nChúng tôi sẽ liên hệ lại trong thời gian sớm nhất. Cảm ơn bạn đã nộp hồ sơ.'
+        JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_TITLE,
+        JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_CONTENT
       )
       navigation.goBack()
     }
@@ -112,7 +113,7 @@ export default function JobApplyScreen() {
           onBtnAddCVPress()
         }}
       >
-        <Text style={styles.btnTitle}>{cvSource.size === 0 ? 'Thêm CV' : 'Chọn lại CV'}</Text>
+        <Text style={styles.btnTitle}>{cvSource.size === 0 ? JOB_APPLY_SCREEN_BUTTON_ADD_CV_TITLE :JOB_APPLY_SCREEN_BUTTON_UPDATE_CV_TITLE}</Text>
         <FontAwesome6Icon style={styles.btnIcon} name='upload' size={20} color='#fff' />
       </Pressable>
 
@@ -127,7 +128,7 @@ export default function JobApplyScreen() {
             navigation.goBack()
           }}
           iconName='arrow-left-thin'
-          title='Quay lại'
+          title={JOB_APPLY_SCREEN_BUTTON_GO_BACK}
         />
 
         <ButtonFullWith
@@ -136,7 +137,7 @@ export default function JobApplyScreen() {
             onBtnFinishJobApplyPress()
           }}
           iconName='plus'
-          title='Hoàn tất'
+          title={JOB_APPLY_SCREEN_BUTTON_COMPLETE}
         />
       </View>
     </View>

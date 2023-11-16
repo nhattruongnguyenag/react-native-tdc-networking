@@ -3,7 +3,7 @@ import React from 'react'
 import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 interface CustomizeCommentType {
     tagName: any,
     userId: number | undefined,

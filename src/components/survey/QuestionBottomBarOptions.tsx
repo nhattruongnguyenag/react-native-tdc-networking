@@ -4,6 +4,7 @@ import { IconButton } from 'react-native-paper'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { deleteQuestion, setSurveyPostRequest, updateQuestion } from '../../redux/Slice'
 import ToggleSwitch from 'toggle-switch-react-native'
+import { QUESTION_BOTTOM_BAR_QUESTION_REQUIRE_TOGGLE } from '../../constants/StringVietnamese'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
@@ -38,9 +39,6 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
         }
     }, [switchToggle])
 
-    useEffect(() => {
-        console.log('on change required', surveyPostRequest)
-    }, [surveyPostRequest])
     return (
         <View style={[styles.body, { display: props.reviewMode || props.conductMode ? 'none' : 'flex' }]}>
             <IconButton
@@ -57,7 +55,7 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
                 isOn={switchToggle}
                 onColor="green"
                 offColor="gray"
-                label="Bắt buộc"
+                label={QUESTION_BOTTOM_BAR_QUESTION_REQUIRE_TOGGLE}
                 size="small"
                 onToggle={() => {
                     setSwitchToggle(!switchToggle)

@@ -7,10 +7,11 @@ import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { useAppSelector } from '../redux/Hook'
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
 import { InputTextValidate, isBlank } from '../utils/ValidateUtils'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RECRUITMENT_BENEFIT_EMPTY_VALIDATE, RECRUITMENT_BENEFIT_PLACEHOLDER, RECRUITMENT_BENEFIT_TITLE, RECRUITMENT_DESC_EMPTY_VALIDATE, RECRUITMENT_EMPLOYMENT_TYPE_EMPTY_VALIDATE, RECRUITMENT_EXPIRATION_VALIDATE, RECRUITMENT_LOCATION_EMPTY_VALIDATE, RECRUITMENT_REQUIREMENT_EMPTY_VALIDATE, RECRUITMENT_SALARY_EMPTY_VALIDATE, RECRUITMENT_SAVE_DESC_PLACEHOLDER, RECRUITMENT_SAVE_DESC_TITLE, RECRUITMENT_SAVE_EMPLOYMENT_TYPE_PLACEHOLDER, RECRUITMENT_SAVE_EXPIRATION_PICKER_LOCALE, RECRUITMENT_SAVE_EXPIRATION_TITLE, RECRUITMENT_SAVE_LOCATION_PLACEHOLDER, RECRUITMENT_SAVE_LOCATION_TITLE, RECRUITMENT_SAVE_REQUIREMENT_PLACEHOLDER, RECRUITMENT_SAVE_REQUIREMENT_TITLE, RECRUITMENT_SAVE_SALLARY_PLACEHOLDER, RECRUITMENT_SAVE_SALLARY_TITLE, RECRUITMENT_SAVE_SAVE_EMPLOYMENT_TYPE_TITLE, RECRUITMENT_SAVE_SUCCESS_CONTENT, RECRUITMENT_SAVE_SUCCESS_TITLE, RECRUITMENT_SAVE_TITLE_PLACEHOLDER, RECRUITMENT_SAVE_TITLE_TITLE, RECRUITMENT_TITLE_EMPTY_VALIDATE } from '../constants/StringVietnamese'
 
 interface CreateRecruitmentPostValidate {
   title: InputTextValidate
@@ -58,42 +59,42 @@ export default function CreateRecruitmentScreen() {
 
   const [validate, setValidate] = useState<CreateRecruitmentPostValidate>({
     title: {
-      textError: 'Tiêu đề không được để trống',
+      textError: RECRUITMENT_TITLE_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     desc: {
-      textError: 'Mô tả không được để trống',
+      textError: RECRUITMENT_DESC_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     benefit: {
-      textError: 'Quyền lợi không được để trống',
+      textError: RECRUITMENT_BENEFIT_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     salary: {
-      textError: 'Tiền lương không được để trống',
+      textError: RECRUITMENT_SALARY_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     expiration: {
-      textError: 'Thời hạn không được chọn ở thời điểm trong quá khứ',
+      textError: RECRUITMENT_EXPIRATION_VALIDATE,
       isError: false,
       isVisible: false
     },
     employmentType: {
-      textError: 'Hình thức làm việc không được để trống',
+      textError: RECRUITMENT_EMPLOYMENT_TYPE_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     location: {
-      textError: 'Địa điểm làm việc không được để trống',
+      textError: RECRUITMENT_LOCATION_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     },
     requirement: {
-      textError: 'Yêu cầu không được để trống',
+      textError: RECRUITMENT_REQUIREMENT_EMPTY_VALIDATE,
       isError: true,
       isVisible: false
     }
@@ -329,7 +330,7 @@ export default function CreateRecruitmentScreen() {
 
   useEffect(() => {
     if (createRecruitmentPostResponse.data) {
-      Alert.alert('Thành công !!!', 'Tin tuyển dụng đã được đăng')
+      Alert.alert(RECRUITMENT_SAVE_SUCCESS_TITLE, RECRUITMENT_SAVE_SUCCESS_CONTENT)
       navigation.goBack()
     }
   }, [createRecruitmentPostResponse])
@@ -339,8 +340,8 @@ export default function CreateRecruitmentScreen() {
       <ScrollView>
         <TextInputWithTitle
           multiline
-          title='Tiêu đề'
-          placeholder='Nhập tiêu đề...'
+          title={RECRUITMENT_SAVE_TITLE_TITLE}
+          placeholder={RECRUITMENT_SAVE_TITLE_PLACEHOLDER}
           onChangeText={(value) => onTitleChangeText(value)}
         />
 
@@ -352,8 +353,8 @@ export default function CreateRecruitmentScreen() {
         />
 
         <TextInputWithTitle
-          title='Hình thức làm việc'
-          placeholder='Hình thức làm việc...'
+          title={RECRUITMENT_SAVE_SAVE_EMPLOYMENT_TYPE_TITLE}
+          placeholder={RECRUITMENT_SAVE_EMPLOYMENT_TYPE_PLACEHOLDER}
           onChangeText={(value) => onEmploymentTypeChangeText(value)}
         />
 
@@ -370,7 +371,7 @@ export default function CreateRecruitmentScreen() {
           onFocus={() => {
             setShowDatePicker(true)
           }}
-          title='Thời hạn ứng tuyển'
+          title={RECRUITMENT_SAVE_EXPIRATION_TITLE}
           placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
         />
 
@@ -384,7 +385,7 @@ export default function CreateRecruitmentScreen() {
         <DatePicker
           modal
           mode='datetime'
-          locale='vi'
+          locale={RECRUITMENT_SAVE_EXPIRATION_PICKER_LOCALE}
           open={showDatePicker}
           date={new Date()}
           onConfirm={(date) => {
@@ -405,8 +406,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={3}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Địa điểm làm việc'
-          placeholder='Địa điểm làm việc...'
+          title={RECRUITMENT_SAVE_LOCATION_TITLE}
+          placeholder={RECRUITMENT_SAVE_LOCATION_PLACEHOLDER}
           onChangeText={(value) => onLocationChangeText(value)}
         />
 
@@ -421,8 +422,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Mô tả công việc'
-          placeholder='Mô tả công việc...'
+          title={RECRUITMENT_SAVE_DESC_TITLE}
+          placeholder={RECRUITMENT_SAVE_DESC_PLACEHOLDER}
           onChangeText={(value) => onDescriptionChangeText(value)}
         />
 
@@ -433,7 +434,7 @@ export default function CreateRecruitmentScreen() {
           isVisible={validate.desc?.isVisible}
         />
 
-        <TextInputWithTitle title='Lương' placeholder='Lương...' onChangeText={(value) => onSalaryChangeText(value)} />
+        <TextInputWithTitle title={RECRUITMENT_SAVE_SALLARY_TITLE} placeholder={RECRUITMENT_SAVE_SALLARY_PLACEHOLDER} onChangeText={(value) => onSalaryChangeText(value)} />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -446,8 +447,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Yêu cầu'
-          placeholder='Yêu cầu...'
+          title={RECRUITMENT_SAVE_REQUIREMENT_TITLE}
+          placeholder={RECRUITMENT_SAVE_REQUIREMENT_PLACEHOLDER}
           onChangeText={(value) => onRequirementChangeText(value)}
         />
 
@@ -462,8 +463,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Quyền lợi'
-          placeholder='Quyền lợi...'
+          title={RECRUITMENT_BENEFIT_TITLE}
+          placeholder={RECRUITMENT_BENEFIT_PLACEHOLDER}
           onChangeText={(value) => onBenefitChangeText(value)}
         />
 
@@ -481,7 +482,7 @@ export default function CreateRecruitmentScreen() {
           style={styles.buttonCreateRecruitment}
           onPress={() => onBtnFinishPress()}
         >
-          <Text style={styles.buttonCreateRecruitmentTitle}>Hoàn tất</Text>
+          <Text style={styles.buttonCreateRecruitmentTitle}>{RECRUITMENT_BENEFIT_PLACEHOLDER}</Text>
         </Button>
       </ScrollView>
     </SafeAreaView>

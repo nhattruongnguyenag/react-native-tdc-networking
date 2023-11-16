@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { QUESTION_COMPONENT_ADD_TEXT_TITLE } from '../../constants/StringVietnamese'
 import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
@@ -19,7 +20,7 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
   return (
     <View style={styles.itemBody}>
       <QuestionTitle
-        title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+        title={`${QUESTION_COMPONENT_ADD_TEXT_TITLE} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />

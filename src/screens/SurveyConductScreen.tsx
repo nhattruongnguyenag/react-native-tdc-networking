@@ -4,12 +4,13 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
-import Loading from '../components/Loading'
+import Loading from '../components/common/Loading'
 import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION, SHORT_ANSWER } from '../components/survey/AddQuestionView'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
+import { SURVEY_CONDUCT_SCREEN_BUTTON_COMPLETE, SURVEY_CONDUCT_SCREEN_BUTTON_GO_BACK, SURVEY_CONDUCT_SCREEN_LOADER_TITLE, SURVEY_CONDUCT_SCREEN_MULTI_QUESTION_MULITI_CHOICE, SURVEY_CONDUCT_SCREEN_MULTI_QUESTION_ONE_CHOICE, SURVEY_CONDUCT_SCREEN_SAVE_SUCCESS_CONTENT, SURVEY_CONDUCT_SCREEN_SAVE_SUCCESS_TITLE, SURVEY_CONDUCT_SCREEN_SHORT_ANSWER_ERROR } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyConductAnswerMutation, useGetQuestionsFromSurveyPostQuery } from '../redux/Service'
 import { AnswerRequest, SurveyConductRequest } from '../types/request/SurveyConductRequest'
@@ -58,7 +59,7 @@ export default function SurveyConductScreen() {
 
     useEffect(() => {
         if (surveyConductRequestResult.isSuccess) {
-            Alert.alert('Thành công !!!', 'Câu trả lời đã được lưu\nCảm ơn bạn đã tham gia trả lời khảo sát')
+            Alert.alert(SURVEY_CONDUCT_SCREEN_SAVE_SUCCESS_TITLE, SURVEY_CONDUCT_SCREEN_SAVE_SUCCESS_CONTENT)
             navigation.goBack()
         }
     }, [surveyConductRequestResult])
@@ -81,11 +82,11 @@ export default function SurveyConductScreen() {
                 let textError = ''
 
                 if (question.type === SHORT_ANSWER) {
-                    textError = 'Vui lòng nhập nội dung câu trả lời'
+                    textError = SURVEY_CONDUCT_SCREEN_SHORT_ANSWER_ERROR
                 } else if (question.type === MULTI_CHOICE_QUESTION) {
-                    textError = 'Vui lòng chọn ít nhất một câu trả lời'
+                    textError = SURVEY_CONDUCT_SCREEN_MULTI_QUESTION_MULITI_CHOICE
                 } else if (question.type === ONE_CHOICE_QUESTION) {
-                    textError = 'Vui lòng chọn một câu trả lời'
+                    textError = SURVEY_CONDUCT_SCREEN_MULTI_QUESTION_ONE_CHOICE
                 }
 
                 tempValidates.push({
@@ -108,7 +109,7 @@ export default function SurveyConductScreen() {
         <Fragment>
             {
                 isLoading ?
-                    <Loading title='Đang tải dữ liệu...' />
+                    <Loading title={SURVEY_CONDUCT_SCREEN_LOADER_TITLE} />
                     :
                     <ScrollView style={styles.body}>
                         <View style={styles.questionWrapper}>
@@ -224,14 +225,14 @@ export default function SurveyConductScreen() {
                                 btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
                                 onPress={onBtnBackPress}
                                 iconName='arrow-left-thin'
-                                title='Quay lại'
+                                title={SURVEY_CONDUCT_SCREEN_BUTTON_GO_BACK}
                             />
 
                             <ButtonFullWith
                                 btnStyle={{ marginLeft: 10, width: 140 }}
                                 onPress={onBtnPublishPostPress}
                                 iconName='plus'
-                                title='Hoàn tất'
+                                title={SURVEY_CONDUCT_SCREEN_BUTTON_COMPLETE}
                             />
                         </View>
                     </ScrollView>

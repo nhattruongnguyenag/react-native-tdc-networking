@@ -5,6 +5,7 @@ import { Pressable } from 'react-native'
 import { ChoiceItemResult } from '../../types/response/SurveyResult'
 import { LayoutChangeEvent } from 'react-native'
 import { ChartData } from './OptionSurveyQuesionResult'
+import { BAR_ITEM_COMPONENT_NUMBER_OF_VOTE } from '../../constants/StringVietnamese'
 
 interface BarItemProps {
   width?: number
@@ -24,7 +25,7 @@ function BarItem(props: BarItemProps) {
       backgroundColor={'#ffffff00'}
       showChildInTooltip={false}
       isVisible={tooltipVisible}
-      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + ' lượt bình chọn)'}</Text>}
+      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + BAR_ITEM_COMPONENT_NUMBER_OF_VOTE + ')'}</Text>}
       onClose={() => setTooltipVisible(false)}
       placement='top'
     >

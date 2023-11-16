@@ -8,6 +8,7 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { REVIEW_SURVEY_POST_SCREEN } from '../constants/Screen'
+import { TEXT_BUTTON_GO_BACK, TEXT_BUTTON_GO_NEXT, TEXT_EMPTY_QUESTION_ERROR_CONTENT, TEXT_EMPTY_QUESTION_ERROR_TITLE } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 
 // man hinh them cau hoi
@@ -21,7 +22,7 @@ export default function AddQuestionScreen() {
 
   const onBtnNextPress = useCallback(() => {
     if (surveyPostRequest?.questions.length === 0) {
-      Alert.alert('Lỗi', 'Thêm ít nhất 1 câu hỏi cho bài khảo sát')
+      Alert.alert(TEXT_EMPTY_QUESTION_ERROR_TITLE, TEXT_EMPTY_QUESTION_ERROR_CONTENT)
       return
     }
     navigation.navigate(REVIEW_SURVEY_POST_SCREEN)
@@ -58,7 +59,7 @@ export default function AddQuestionScreen() {
             btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
             onPress={onBtnBackPress}
             iconName='arrow-left-thin'
-            title='Quay lại'
+            title={TEXT_BUTTON_GO_BACK}
           />
 
           <ButtonFullWith
@@ -66,7 +67,7 @@ export default function AddQuestionScreen() {
             onPress={onBtnNextPress}
             iconName='arrow-right-thin'
             contentStyle={{ flexDirection: 'row-reverse' }}
-            title='Tiếp theo'
+            title={TEXT_BUTTON_GO_NEXT}
           />
         </View>
       </ScrollView>

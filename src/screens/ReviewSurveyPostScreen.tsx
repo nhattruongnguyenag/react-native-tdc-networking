@@ -9,6 +9,7 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { REVIEW_SURVEY_SCREEN_BUTTON_COMPLETE, REVIEW_SURVEY_SCREEN_BUTTON_GO_BACK, REVIEW_SURVEY_SCREEN_SAVE_FAIL_CONTENT, REVIEW_SURVEY_SCREEN_SAVE_FAIL_TITLE, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_CONTENT, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_TITLE } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyPostMutation } from '../redux/Service'
 
@@ -20,10 +21,10 @@ export default function ReviewSurveyPostScreen() {
   useEffect(() => {
     if (addSurveyResult.data) {
       if (addSurveyResult.data.status === 201 || 200) {
-        Alert.alert('Thành công !!!', 'Bài khảo sát đã được lưu')
+        Alert.alert(REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_TITLE, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_CONTENT)
         navigation.navigate(TOP_TAB_NAVIGATOR)
       } else {
-        Alert.alert('Thất bại !!!', 'Bài khảo sát thêm thất bại')
+        Alert.alert(REVIEW_SURVEY_SCREEN_SAVE_FAIL_TITLE, REVIEW_SURVEY_SCREEN_SAVE_FAIL_CONTENT)
       }
     }
   }, [addSurveyResult])
@@ -74,14 +75,14 @@ export default function ReviewSurveyPostScreen() {
           btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
           onPress={onBtnBackPress}
           iconName='arrow-left-thin'
-          title='Quay lại'
+          title={REVIEW_SURVEY_SCREEN_BUTTON_GO_BACK}
         />
 
         <ButtonFullWith
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={onBtnPublishPostPress}
           iconName='plus'
-          title='Hoàn tất'
+          title={REVIEW_SURVEY_SCREEN_BUTTON_COMPLETE}
         />
       </View>
     </ScrollView>

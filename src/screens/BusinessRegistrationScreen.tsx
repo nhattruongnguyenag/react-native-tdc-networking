@@ -37,7 +37,7 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment'
 

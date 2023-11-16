@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TextStyle } from 'react-native'
-import { COLOR_DANGER, COLOR_SUCCESS } from '../constants/Color'
+import { COLOR_DANGER, COLOR_SUCCESS } from '../../constants/Color'
 
 interface TextValidateProps {
   textError: string

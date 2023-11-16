@@ -5,11 +5,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { MESSENGER_SCREEN } from '../../constants/Screen'
+import { CONVERSATION_ITEM_COMPONENT_IMAGE_MESSAGE_ANNOTATION } from '../../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { Conversation } from '../../types/Conversation'
 import { getConversationLastUpdate } from '../../utils/DateTimeUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 interface ConversationItemProps {
   data: Conversation
@@ -39,7 +40,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
 
   const lastMessageContent = useMemo(() => {
     if (data?.lastMessageType === 'images') {
-      return '[Hình ảnh]'
+      return `[${CONVERSATION_ITEM_COMPONENT_IMAGE_MESSAGE_ANNOTATION}]`
     }
 
     return data?.lastMessageContent

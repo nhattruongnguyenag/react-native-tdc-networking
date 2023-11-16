@@ -4,6 +4,7 @@ import IconButton from '../buttons/IconButton'
 import { PURPLE_COLOR } from '../../constants/Color'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../CustomizedImagePicker'
+import { MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER } from '../../constants/StringVietnamese'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -42,7 +43,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
           setMessageContent(value)
           props.onInputMessageContent && props.onInputMessageContent(value)
         }}
-        placeholder='Tin nhắn'
+        placeholder={MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER}
         style={styles.inputMessage}
         cursorColor={PURPLE_COLOR}
         multiline

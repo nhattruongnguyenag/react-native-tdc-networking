@@ -18,7 +18,7 @@ import {
   CREATE_SURVEY_SCREEN,
   LOGIN_SCREEN
 } from '../../constants/Screen'
-import Divider from '../Divider'
+import Divider from '../common/Divider'
 import DrawerHeader from './DrawerHeader'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
