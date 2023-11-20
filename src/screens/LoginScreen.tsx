@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { UserLoginRequest } from '../types/request/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
@@ -30,6 +30,22 @@ import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setUserLogin } from '../redux/Slice'
 import { isEmail, isPassword } from '../utils/ValidateUtils'
 import { Faculty } from '../types/Faculty'
+import {
+  TEXT_ALERT_LOGIN_FAILT,
+  TEXT_ERROR_EMAIL_EMPTY_NOTMATCH,
+  TEXT_ERROR_PASS_EMPTY_NOTMATCH,
+  TEXT_FORGOT_PASSWORD,
+  TEXT_HIDE_PASSWORD,
+  TEXT_LOGIN,
+  TEXT_LOGIN_FAILT,
+  TEXT_PLACEHOLDER_EMAIL,
+  TEXT_PLACEHOLDER_EMAIL_LOGIN,
+  TEXT_PLACEHOLDER_PASSWORD,
+  TEXT_REGISTER,
+  TEXT_REQUEST_REGISTER,
+  TEXT_SHOW_PASSWORD,
+  TEXT_TITLE_PASSWORD_LOGIN
+} from '../constants/StringVietnamese'
 
 // man hinh dang nhap
 export default function LoginScreen() {
@@ -83,7 +99,7 @@ export default function LoginScreen() {
           })
       })
       .catch((error) => {
-        Alert.alert('Đăng nhập thất bại', 'Tên đăng nhập hoặc mật khẩu không đúng')
+        Alert.alert(TEXT_LOGIN_FAILT, TEXT_ALERT_LOGIN_FAILT)
         setIsLoading(false)
       })
   }
@@ -95,47 +111,47 @@ export default function LoginScreen() {
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#fff'}}>
       <SafeAreaView style={styles.container}>
         <View>
           <Image style={styles.imageLogin} source={require('../assets/login/login.png')}></Image>
         </View>
         <View>
           <View>
-            <Text style={styles.txtLogin}>Đăng nhập</Text>
+            <Text style={styles.txtLogin}>{TEXT_LOGIN}</Text>
           </View>
           <View style={styles.form}>
-            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>Email sai định dạng hoặc rỗng</Text> : ''}
+            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>{TEXT_ERROR_EMAIL_EMPTY_NOTMATCH}</Text> : ''}
             <View style={styles.group}>
               <Icon style={styles.icon} name='at' />
               <TextInput
                 value={userLoginRequest.email}
-                placeholder='Email ID'
+                placeholder={TEXT_PLACEHOLDER_EMAIL_LOGIN}
                 style={styles.txtIP}
                 onChangeText={(value) => handleCheckEmail(value)}
               ></TextInput>
             </View>
-            {!checkPassword ? <Text style={{ color: 'red' }}>Mật khẩu sai định dạng hoặc rỗng</Text> : ''}
+            {!checkPassword ? <Text style={{ color: 'red' }}>{TEXT_ERROR_PASS_EMPTY_NOTMATCH}</Text> : ''}
             <View style={styles.group}>
               <View>
                 <Icon style={styles.icon} name='lock' />
                 <TextInput
                   value={userLoginRequest.password}
                   secureTextEntry={!isChecked ? true : false}
-                  placeholder='Mật khẩu'
+                  placeholder={TEXT_TITLE_PASSWORD_LOGIN}
                   style={styles.txtIP}
                   onChangeText={(value) => handleCheckPassword(value)}
                 ></TextInput>
               </View>
               <View>
                 <TouchableOpacity>
-                  <Text style={styles.txtFogot}>Quên mật khẩu</Text>
+                  <Text style={styles.txtFogot}>{TEXT_FORGOT_PASSWORD}</Text>
                 </TouchableOpacity>
               </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <CheckBox checkBoxColor='green' isChecked={isChecked} onClick={() => handleCheckBoxToggle()} />
-              <Text style={{ marginLeft: 10 }}>{isChecked ? 'Hiện' : 'Ẩn'}</Text>
+              <Text style={{ marginLeft: 10 }}>{isChecked ? TEXT_SHOW_PASSWORD : TEXT_HIDE_PASSWORD}</Text>
             </View>
           </View>
           <TouchableOpacity
@@ -143,17 +159,17 @@ export default function LoginScreen() {
             style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
             onPress={() => onSubmit()}
           >
-            <Text style={styles.txtB}>Đăng nhập</Text>
+            <Text style={styles.txtB}>{TEXT_LOGIN}</Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
           <View style={styles.txt}>
-            <Text>Chưa có tài khoản? </Text>
+            <Text>{TEXT_REQUEST_REGISTER} </Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate(INTERMEDIATIOO_SCREEN)
               }}
             >
-              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>Đăng ký</Text>
+              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>{TEXT_REGISTER}</Text>
             </TouchableOpacity>
           </View>
         </View>

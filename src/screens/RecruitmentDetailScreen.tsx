@@ -15,6 +15,20 @@ import { RootStackParamList } from '../App'
 import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
 import { useAppSelector } from '../redux/Hook'
+import Loading from '../components/common/Loading'
+import {
+  TEXT_BENEFIT,
+  TEXT_BTN_APPLY_JOB,
+  TEXT_DESCRIPTION_JOB,
+  TEXT_EMPLOYMENTTYPE,
+  TEXT_EXPIRATION,
+  TEXT_LOCATION,
+  TEXT_REQUIREMENT_JOB,
+  TEXT_SALARY,
+  TEXT_SALARY_UNIT_MONTH,
+  TEXT_TITLE_LOADER,
+  TEXT_TITLE_RECRUITMENT
+} from '../constants/StringVietnamese'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -32,17 +46,21 @@ export default function RecruitmentDetailScreen() {
     requirement: '',
     title: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState([data.benefit])
   const [description, setDescription] = useState([data.description])
   const [requirement, setRequirement] = useState([data.requirement])
   useEffect(() => {
     if (postId) {
+      setIsLoading(true)
       axios
         .get(SERVER_ADDRESS + `api/posts/recruitment?postId=${postId}&&userLogin=${userLogin?.id}`)
         .then((recruitment) => {
+          setIsLoading(false)
           setData(recruitment.data.data)
         })
         .catch((error) => {
+          setIsLoading(false)
           console.log(error)
         })
     }
@@ -57,106 +75,124 @@ export default function RecruitmentDetailScreen() {
     setDescription(data.description.split(','))
     setRequirement(data.requirement.split(','))
   }, [data.benefit, data.description, data.requirement])
-  
+
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.group}>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Vị trí tuyển dụng</Text>
-            <View style={styles.iconRecuitment}>
-              <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.title}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Hình thức làm việc</Text>
-            <View style={styles.iconRecuitment}>
-              <Icon name='briefcase' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Lương</Text>
-            <View style={styles.iconRecuitment}>
-              <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>
-                {' '}
-                {formatVietNamCurrency(data.salary)} vnd/tháng{}
-              </Text>
-            </View>
-          </View>
+    <>
+      {isLoading ? (
+        <Loading title={TEXT_TITLE_LOADER} />
+      ) : (
+        <ScrollView style={{backgroundColor:'#fff'}}>
+          <>
+            {data.title == '' ? (
+              ''
+            ) : (
+              <>
+                <SafeAreaView style={styles.container}>
+                  <View style={styles.group}>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{TEXT_TITLE_RECRUITMENT}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK }}> {data.title}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{TEXT_EMPLOYMENTTYPE}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <Icon name='briefcase' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{TEXT_SALARY}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK }}>
+                          {' '}
+                          {formatVietNamCurrency(data.salary)} {TEXT_SALARY_UNIT_MONTH}
+                        </Text>
+                      </View>
+                    </View>
 
-          <View style={styles.item}>
-            <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
-            <View style={styles.iconRecuitment}>
-              <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Địa chỉ làm việc</Text>
-            <View style={styles.iconRecuitment}>
-              <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
-            </View>
-          </View>
-        </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{TEXT_EXPIRATION}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{TEXT_LOCATION}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
+                      </View>
+                    </View>
+                  </View>
 
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Phúc lợi</Text>
-          </View>
-          <View style={styles.welfare}>
-            {result
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <Text style={styles.welfareTxt} key={index}>{item}</Text>
-              ))}
-          </View>
-        </View>
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{TEXT_BENEFIT}</Text>
+                    </View>
+                    <View style={styles.welfare}>
+                      {result
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <Text style={styles.welfareTxt} key={index}>
+                            {item}
+                          </Text>
+                        ))}
+                    </View>
+                  </View>
 
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Mô tả công việc</Text>
-          </View>
-          <View>
-            {description
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <View style={styles.description} key={index}>
-                  <Icon name='circle' style={styles.icon} />
-                  <Text style={{ color: COLOR_BLACK }}>{item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}</Text>
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{TEXT_DESCRIPTION_JOB}</Text>
+                    </View>
+                    <View>
+                      {description
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <View style={styles.description} key={index}>
+                            <Icon name='circle' style={styles.icon} />
+                            <Text style={{ color: COLOR_BLACK }}>
+                              {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            </Text>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{TEXT_REQUIREMENT_JOB}</Text>
+                    </View>
+                    <View>
+                      {requirement
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <View style={styles.description} key={index}>
+                            <Icon name='circle' style={styles.icon} />
+                            <Text style={{ color: COLOR_BLACK }}>
+                              {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            </Text>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+                </SafeAreaView>
+
+                <View>
+                  <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
+                    <Text style={styles.txtRecruitment}>{TEXT_BTN_APPLY_JOB}</Text>
+                  </TouchableOpacity>
                 </View>
-              ))}
-          </View>
-        </View>
-
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Yêu cầu công việc</Text>
-          </View>
-          <View>
-            {requirement
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <View style={styles.description} key={index}>
-                  <Icon name='circle' style={styles.icon} />
-                  <Text style={{ color: COLOR_BLACK }} >
-                    {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
-                  </Text>
-                </View>
-              ))}
-          </View>
-        </View>
-      </SafeAreaView>
-
-      <View>
-        <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
-          <Text style={styles.txtRecruitment}>Nộp đơn ứng tuyển</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+              </>
+            )}
+          </>
+        </ScrollView>
+      )}
+    </>
   )
 }
 
@@ -219,7 +255,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   description: {
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'flex-start',
     marginHorizontal: 10
   },

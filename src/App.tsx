@@ -88,7 +88,7 @@ import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_ } from './constants/StringVietnamese';
+import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
 
 const vi = require('moment/locale/vi')
@@ -206,7 +206,7 @@ export function StackNavigator(): JSX.Element {
     >
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_RECRUITMENT_DETAIL} /> }}
         component={RecruitmentDetailScreen}
       />
 
@@ -319,7 +319,7 @@ export function StackNavigator(): JSX.Element {
       
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển'/> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
         component={ListJobApplyScreen}
       />
 
