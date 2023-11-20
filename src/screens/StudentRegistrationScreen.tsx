@@ -534,7 +534,7 @@ export default function StudentRegistrationScreen() {
   }, [validate])
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#fff'}}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>

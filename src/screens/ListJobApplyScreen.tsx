@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -61,71 +61,73 @@ export default function ListJobApplyScreen() {
     navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
   return (
-    <>
+    <Fragment>
       {isLoading ? (
         <Loading title={TEXT_TITLE_LOADER} />
       ) : (
-        <SafeAreaView style={{ marginVertical: 10 }}>
-          <ScrollView>
-            {listJob.map((item, index) => (
-              <>
-                {item.user.name == '' ? (
-                  ''
-                ) : (
-                  <View style={styles.form} key={index}>
-                    <View>
-                      <View style={styles.group}>
-                        <View style={{ flex: 3 }}>
-                          {item.user.image == '' ? (
-                            <DefaultAvatar
-                              size={80}
-                              identifer={item.user.name[0].replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
-                            />
-                          ) : (
-                            <Image
-                              source={{ uri: SERVER_ADDRESS + `api/images/${item.user.image}` }}
-                              style={styles.img}
-                            />
-                          )}
-                        </View>
-                        <View style={styles.item}>
-                          <Text style={styles.txt}>{item.user.name.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}</Text>
-                          <View>
-                            <View style={styles.itemChild}>
-                              <Icon name='phone-alt' style={styles.iconItem}></Icon>
-                              {item.user.phone != null ? (
-                                <Text style={styles.lbl}>{item.user.phone}</Text>
-                              ) : (
-                                <Text style={styles.lbl}>{TEXT_NOTIFICATION_UPDATE_NULL}</Text>
-                              )}
-                            </View>
-
-                            <View style={styles.itemChild}>
-                              <Icon name='envelope' style={styles.iconItem}></Icon>
-                              <Text style={styles.lbl}>{item.user.email}</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => handleGetDetailJobApply(item.id)}>
-                              <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
-                                <Icon name='file-pdf' style={[styles.iconItem, { color: COLOR_SUCCESS }]}></Icon>
-                                <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>{TEXT_SEE_CV}</Text>
-                                <Icon
-                                  name='angle-double-right'
-                                  style={[styles.iconItem, { color: COLOR_SUCCESS, marginLeft: 5 }]}
-                                ></Icon>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
+            <SafeAreaView style={{ marginVertical: 10}}>
+              {listJob.map((item, index) => (
+                <>
+                  {item.user.name == '' ? (
+                    ''
+                  ) : (
+                    <View style={styles.form} key={index}>
+                      <View>
+                        <View style={styles.group}>
+                          <View style={{ flex: 3 }}>
+                            {item.user.image == '' ? (
+                              <DefaultAvatar
+                                size={80}
+                                identifer={item.user.name[0].replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                              />
+                            ) : (
+                              <Image
+                                source={{ uri: SERVER_ADDRESS + `api/images/${item.user.image}` }}
+                                style={styles.img}
+                              />
+                            )}
+                          </View>
+                          <View style={styles.item}>
+                            <Text style={styles.txt}>
+                              {item.user.name.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            </Text>
+                            <View>
+                              <View style={styles.itemChild}>
+                                <Icon name='phone-alt' style={styles.iconItem}></Icon>
+                                {item.user.phone != null ? (
+                                  <Text style={styles.lbl}>{item.user.phone}</Text>
+                                ) : (
+                                  <Text style={styles.lbl}>{TEXT_NOTIFICATION_UPDATE_NULL}</Text>
+                                )}
                               </View>
-                            </TouchableOpacity>
+
+                              <View style={styles.itemChild}>
+                                <Icon name='envelope' style={styles.iconItem}></Icon>
+                                <Text style={styles.lbl}>{item.user.email}</Text>
+                              </View>
+                              <TouchableOpacity onPress={() => handleGetDetailJobApply(item.id)}>
+                                <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
+                                  <Icon name='file-pdf' style={[styles.iconItem, { color: COLOR_SUCCESS }]}></Icon>
+                                  <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>{TEXT_SEE_CV}</Text>
+                                  <Icon
+                                    name='angle-double-right'
+                                    style={[styles.iconItem, { color: COLOR_SUCCESS, marginLeft: 5 }]}
+                                  ></Icon>
+                                </View>
+                              </TouchableOpacity>
+                            </View>
                           </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                )}
-              </>
-            ))}
-          </ScrollView>
-        </SafeAreaView>
+                  )}
+                </>
+              ))}
+            </SafeAreaView>
+        </ScrollView>
       )}
-    </>
+    </Fragment>
   )
 }
 
@@ -169,7 +171,15 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     padding: 10,
-    backgroundColor: COLOR_WHITE
+    backgroundColor: COLOR_WHITE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 6.27,
+    elevation: 10,
   },
   lbl: {
     fontSize: 16,

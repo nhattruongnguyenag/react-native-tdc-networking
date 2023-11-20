@@ -111,7 +111,7 @@ export default function LoginScreen() {
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#fff'}}>
       <SafeAreaView style={styles.container}>
         <View>
           <Image style={styles.imageLogin} source={require('../assets/login/login.png')}></Image>

@@ -625,7 +625,7 @@ export default function BusinessRegistrationScreen() {
   }, [validate])
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#fff'}}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>

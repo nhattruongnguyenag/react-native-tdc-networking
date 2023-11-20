@@ -81,7 +81,7 @@ export default function RecruitmentDetailScreen() {
       {isLoading ? (
         <Loading title={TEXT_TITLE_LOADER} />
       ) : (
-        <ScrollView>
+        <ScrollView style={{backgroundColor:'#fff'}}>
           <>
             {data.title == '' ? (
               ''
