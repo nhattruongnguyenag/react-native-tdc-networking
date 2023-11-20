@@ -1,0 +1,9 @@
+{
+    "DrawerContentComponent": {
+        "userGroup": "Yours' group",
+        "userJobApplyProfile": "Manage job apply profile",
+        "waitingPost": "Waiting post",
+        "option": "Setting",
+        "logout": "Logout"
+    }
+}

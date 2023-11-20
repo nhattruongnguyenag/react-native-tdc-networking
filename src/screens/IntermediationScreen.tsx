@@ -5,10 +5,20 @@ import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { BUSINESS_REGISTER_SCREEN, STUDENT_REGISTER_SCREEN } from '../constants/Screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import {
+  TEXT_CONTINUTE,
+  TEXT_GO_BACK,
+  TEXT_SELECTED_TYPE,
+  TEXT_TITLE_NITIFICATION,
+  TEXT_TITLE_SELECTED_TYPE,
+  TEXT_TYPE_BUSINESS,
+  TEXT_TYPE_STUDENT,
+  TEXT_WARNING_SELECTED_TYPE
+} from '../constants/StringVietnamese'
 
 const data = [
-  { name: 'Sinh viên', value: '1' },
-  { name: 'Doanh nghiệp', value: '2' }
+  { name: TEXT_TYPE_STUDENT, value: '1' },
+  { name: TEXT_TYPE_BUSINESS, value: '2' }
 ]
 export default function IntermediationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -19,7 +29,7 @@ export default function IntermediationScreen() {
     } else if (value === '2') {
       navigation.navigate(BUSINESS_REGISTER_SCREEN)
     } else {
-      Alert.alert('Thông báo', 'Hãy chọn hình thức đăng ký!')
+      Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_WARNING_SELECTED_TYPE)
     }
   }
 
@@ -33,7 +43,7 @@ export default function IntermediationScreen() {
       >
         <View style={styles.group}>
           <View style={{ alignItems: 'center', marginBottom: 20 }}>
-            <Text style={styles.txt}>Chọn vai trò</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_SELECTED_TYPE}</Text>
           </View>
           <Dropdown
             style={styles.dropdown}
@@ -43,7 +53,7 @@ export default function IntermediationScreen() {
             data={data}
             labelField='name'
             valueField='value'
-            placeholder='Chọn hình thức đăng ký...'
+            placeholder={TEXT_SELECTED_TYPE}
             value={value}
             onChange={(item) => {
               setValue(item.value)
@@ -52,12 +62,12 @@ export default function IntermediationScreen() {
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <TouchableOpacity style={[styles.btnContinute, { marginRight: 5 }]} onPress={() => navigation.goBack()}>
               <Text style={styles.txtRegister}>
-                <Icon name='angle-double-left' size={16} /> Quay lại
+                <Icon name='angle-double-left' size={16} /> {TEXT_GO_BACK}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.btnContinute, { marginLeft: 5 }]} onPress={() => onChange()}>
               <Text style={styles.txtRegister}>
-                Tiếp tục <Icon name='angle-double-right' size={16} />
+                {TEXT_CONTINUTE} <Icon name='angle-double-right' size={16} />
               </Text>
             </TouchableOpacity>
           </View>

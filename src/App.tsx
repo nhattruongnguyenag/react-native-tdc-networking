@@ -53,6 +53,7 @@ import {
   DETAIL_JOB_APPLY,
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
+  APPLICATION_OPTION_SCREEN,
   FORGOTTEN_PASSWORD_SCREEN,
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN
 } from './constants/Screen'
@@ -87,9 +88,10 @@ import ListJobApplyScreen from './screens/ListJobApplyScreen'
 import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
-import OptionScreen from './screens/OptionScreen'
-import SurveyResultScreen from './screens/SurveyResultScreen'
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_ } from './constants/StringVietnamese'
+import OptionScreen from './screens/OptionScreen';
+import SurveyResultScreen from './screens/SurveyResultScreen';
+import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
+import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
 import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
 
@@ -128,10 +130,11 @@ export type RootStackParamList = {
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
-  PROFILE_SCREEN: { userId: number; group: string } | undefined
+  PROFILE_SCREEN: { userId: number, group: string } | undefined
   LIST_POST_SAVED_SCREEN: undefined
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
+  APPLICATION_OPTION_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -178,7 +181,7 @@ export function DrawerNavigator(): JSX.Element {
         header: () => null
       }}
     >
-      <Drawer.Screen
+       <Drawer.Screen
         name='TodoApp'
         options={{
           title: 'Todo App',
@@ -209,7 +212,7 @@ export function StackNavigator(): JSX.Element {
     >
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Chi tiết tuyển dụng' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_RECRUITMENT_DETAIL} /> }}
         component={RecruitmentDetailScreen}
       />
 
@@ -257,7 +260,10 @@ export function StackNavigator(): JSX.Element {
         component={MessengerScreen}
       />
 
-      <RootStack.Screen name={LOGIN_SCREEN} options={{ header: () => null }} component={LoginScreen} />
+      <RootStack.Screen
+        name={LOGIN_SCREEN}
+        options={{ header: () => null }}
+        component={LoginScreen} />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -289,7 +295,10 @@ export function StackNavigator(): JSX.Element {
         component={CreateSurveyPostScreen}
       />
 
-      <RootStack.Screen name={IMAGE_VIEW_SCREEN} options={{ header: () => null }} component={ImageViewScreen} />
+      <RootStack.Screen
+        name={IMAGE_VIEW_SCREEN}
+        options={{ header: () => null }}
+        component={ImageViewScreen} />
 
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
@@ -328,7 +337,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
         component={ListJobApplyScreen}
       />
 
@@ -356,12 +365,21 @@ export function StackNavigator(): JSX.Element {
         component={OptionScreen}
       />
 
-      <RootStack.Screen name={SPLASH_SCREEN} options={{ header: () => null }} component={SplashScreen} />
+      <RootStack.Screen
+        name={SPLASH_SCREEN}
+        options={{ header: () => null }}
+        component={SplashScreen} />
 
       <RootStack.Screen
         name={SURVEY_RESULT_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
         component={SurveyResultScreen}
+      />
+
+      <RootStack.Screen
+        name={APPLICATION_OPTION_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Tùy chọn' /> }}
+        component={ApplicationOptionScreen}
       />
     </RootStack.Navigator>
   )
