@@ -1,0 +1,9 @@
+{
+    "DrawerContentComponent": {
+        "userGroup": "あなたのグループ",
+        "userJobApplyProfile": "ジョブ適用プロファイルの管理",
+        "waitingPost": "待機ポスト",
+        "option": "設定",
+        "logout": "ログアウト"
+    }
+}
