@@ -53,6 +53,7 @@ import {
   DETAIL_JOB_APPLY,
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
+  APPLICATION_OPTION_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -88,6 +89,7 @@ import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
+import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -126,6 +128,7 @@ export type RootStackParamList = {
   LIST_POST_SAVED_SCREEN: undefined
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
+  APPLICATION_OPTION_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -172,7 +175,7 @@ export function DrawerNavigator(): JSX.Element {
         header: () => null
       }}
     >
-      <Drawer.Screen
+       <Drawer.Screen
         name='TodoApp'
         options={{
           title: 'Todo App',
@@ -352,6 +355,12 @@ export function StackNavigator(): JSX.Element {
         name={SURVEY_RESULT_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
         component={SurveyResultScreen}
+      />
+
+      <RootStack.Screen
+        name={APPLICATION_OPTION_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Tùy chọn' /> }}
+        component={ApplicationOptionScreen}
       />
     </RootStack.Navigator>
   )
