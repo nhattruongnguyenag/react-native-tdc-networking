@@ -36,12 +36,12 @@ export default function ForgottenPasswordScreen() {
     }
   }
 
-  const isBtnDisabled =  email == '' || checkEmail == false
+  const isBtnDisabled = email == '' || checkEmail == false
 
   const onSubmit = () => {
     setIsLoading(true)
     axios
-      .post(SERVER_ADDRESS + 'api/users/get/email/reset',{email: email})
+      .post(SERVER_ADDRESS + 'api/users/get/email/reset', { email: email })
       .then((response) => {
         setIsLoading(false)
         navigation.navigate(ACCEPT_FORGOTTEN_PASSWORD_SCREEN, { email: email })
@@ -53,36 +53,38 @@ export default function ForgottenPasswordScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Image style={styles.imageLogin} source={require('../assets/login/login.png')}></Image>
-      </View>
-      <View>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
+      <SafeAreaView style={styles.container}>
         <View>
-          <Text style={styles.txtLogin}>Quên mật khẩu</Text>
+          <Image style={styles.imageLogin} source={require('../assets/login/login.png')}></Image>
         </View>
-        <View style={styles.form}>
-          {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>Email sai định dạng hoặc rỗng</Text> : ''}
-          <View style={styles.group}>
-            <Icon style={styles.icon} name='at' />
-            <TextInput
-              value={email}
-              placeholder='Email ID'
-              style={styles.txtIP}
-              onChangeText={(value) => handleCheckEmail(value)}
-            ></TextInput>
+        <View>
+          <View>
+            <Text style={styles.txtLogin}>Quên mật khẩu</Text>
           </View>
+          <View style={styles.form}>
+            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>Email sai định dạng hoặc rỗng</Text> : ''}
+            <View style={styles.group}>
+              <Icon style={styles.icon} name='at' />
+              <TextInput
+                value={email}
+                placeholder='Email ID'
+                style={styles.txtIP}
+                onChangeText={(value) => handleCheckEmail(value)}
+              ></TextInput>
+            </View>
+          </View>
+          <TouchableOpacity
+            disabled={isBtnDisabled}
+            style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
+            onPress={() => onSubmit()}
+          >
+            <Text style={styles.txtB}>Xác nhận</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          disabled={isBtnDisabled}
-          style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
-          onPress={() => onSubmit()}
-        >
-          <Text style={styles.txtB}>Xác nhận</Text>
-          <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   )
 }
 
