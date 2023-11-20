@@ -13,7 +13,7 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  APPLICATION_OPTION_SCREEN, CREATE_SURVEY_SCREEN,
+  APPLICATION_OPTION_SCREEN, APPROVAL_POST_SCREEN, CREATE_SURVEY_SCREEN,
   LOGIN_SCREEN
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
@@ -79,6 +79,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         <DrawerItem
           label={t('DrawerContentComponent.waitingPost')}
           onPress={() => {
+            navigation.navigate(APPROVAL_POST_SCREEN)
           }}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}

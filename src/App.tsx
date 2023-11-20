@@ -54,6 +54,7 @@ import {
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
   APPLICATION_OPTION_SCREEN,
+  APPROVAL_POST_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -90,6 +91,7 @@ import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
+import ApprovalPostScreen from './ApprovalPostScreen';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -129,6 +131,8 @@ export type RootStackParamList = {
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
   APPLICATION_OPTION_SCREEN: undefined
+  WAITTING_POST_SCREEN: undefined
+  APPROVAL_POST_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -361,6 +365,12 @@ export function StackNavigator(): JSX.Element {
         name={APPLICATION_OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Tùy chọn' /> }}
         component={ApplicationOptionScreen}
+      />
+
+      <RootStack.Screen
+        name={APPROVAL_POST_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Duyệt bài viết' /> }}
+        component={ApprovalPostScreen}
       />
     </RootStack.Navigator>
   )
