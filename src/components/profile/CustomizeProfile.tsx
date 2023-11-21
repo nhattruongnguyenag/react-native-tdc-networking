@@ -8,6 +8,7 @@ import CustomizeBodyBusinessProfile from './CustomizeBodyBusinessProfile'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
+import { useAppSelector } from '../../redux/Hook'
 
 export interface CustomizeProfileType {
     data: Object[]
@@ -19,7 +20,7 @@ export interface CustomizeProfileType {
 
 const CustomizeProfile = (props: CustomizeProfileType) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+    const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const getBody = () => {
         let body;
         switch (props.role) {
@@ -30,7 +31,8 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
                     numberPost={props.data.length ?? 0}
-                    name={props.userData.name ?? TEXT_UN_UPDATE} />
+                    name={props.userData.name ?? TEXT_UN_UPDATE}
+                    isSameUser={props.userData?.id === userLogin?.id} />
                 break;
             case TYPE_POST_BUSINESS:
                 body = <CustomizeBodyBusinessProfile
@@ -42,7 +44,9 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
                     name={props.userData.name}
-                    numberPost={props.data.length ?? 0} />
+                    numberPost={props.data.length ?? 0}
+                    isSameUser={props.userData?.id === userLogin?.id}
+                />
                 break;
             case TYPE_POST_FACULTY:
                 body = <CustomizeBodyFacultyProfile
@@ -52,7 +56,9 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
                     name={props.userData.name ?? TEXT_UN_UPDATE}
-                    numberPost={props.data.length ?? 0} />
+                    numberPost={props.data.length ?? 0}
+                    isSameUser={props.userData?.id === userLogin?.id}
+                />
                 break;
             default:
                 break;

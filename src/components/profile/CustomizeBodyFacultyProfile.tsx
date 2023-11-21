@@ -16,7 +16,8 @@ interface FacultyProfileType {
     phone: string,
     email: string,
     name: string,
-    numberPost: number
+    numberPost: number,
+    isSameUser: boolean
 }
 
 
@@ -47,13 +48,15 @@ export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfi
                         Theo dõi
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-                    style={[
-                        styles.marginRightBtnAction, styles.btnOption]}
-                >
-                    <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-                </TouchableOpacity>
+                {
+                    props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+                        style={[
+                            styles.marginRightBtnAction, styles.btnOption]}
+                    >
+                        <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+                    </TouchableOpacity>
+                }
             </View>
             {/* Info */}
             <View>

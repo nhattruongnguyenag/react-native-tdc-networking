@@ -13,7 +13,8 @@ interface StudentProfileType {
     phone: string,
     email: string,
     numberPost: number,
-    name: string
+    name: string,
+    isSameUser: boolean
 }
 export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfileType>) {
     return (
@@ -52,13 +53,15 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                         Theo dõi
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-                    style={[
-                        styles.marginRightBtnAction, styles.btnOption]}
-                >
-                    <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-                </TouchableOpacity>
+                {
+                    props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+                        style={[
+                            styles.marginRightBtnAction, styles.btnOption]}
+                    >
+                        <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+                    </TouchableOpacity>
+                }
             </View>
             {/* Info */}
             <View>

@@ -18,7 +18,8 @@ interface BusinessProfileType {
   phone: string,
   email: string,
   name: string,
-  numberPost: number
+  numberPost: number,
+  isSameUser: boolean
 }
 
 export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessProfileType>) {
@@ -48,13 +49,15 @@ export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessPro
             Theo dõi
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-          style={[
-            styles.marginRightBtnAction, styles.btnOption]}
-        >
-          <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-        </TouchableOpacity>
+        {
+          props.isSameUser && <TouchableOpacity
+            onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+            style={[
+              styles.marginRightBtnAction, styles.btnOption]}
+          >
+            <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+          </TouchableOpacity>
+        }
       </View>
       {/* Info */}
       <View>
