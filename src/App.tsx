@@ -22,11 +22,11 @@ import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 
 import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
-import vie from './translates/vi.json'
+import vi from './translates/vi.json'
 import en from './translates/en.json'
 import jp from './translates/jp.json'
 
-setTranslations({vie, en, jp})
+setTranslations({vi, en, jp})
 setDefaultLanguage('vi')
 
 import {
@@ -102,8 +102,8 @@ import { useAppSelector } from './redux/Hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
-const vi = require('moment/locale/vi')
-moment.locale('vi', vi)
+const vie = require('moment/locale/vi')
+moment.locale('vi', vie)
 
 export type RootStackParamList = {
   CONVERSATION_SCREEN: undefined
