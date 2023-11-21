@@ -9,6 +9,7 @@ import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
+import { PostResponseModal } from '../types/response/PostResponseModal'
 import { QuestionResponse, SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
@@ -85,6 +86,11 @@ export const TDCSocialNetworkAPI = createApi({
       query: (surveyPostId) => ({
         url: `api/posts/survey/${surveyPostId}/result`
       })
+    }),
+    getAllWaitingPost: builder.query<Data<PostResponseModal[]>, void>({
+      query: () => ({
+        url: 'api/posts'
+      })
     })
   })
 })
@@ -92,6 +98,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetAllWaitingPostQuery,
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,
