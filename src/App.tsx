@@ -4,12 +4,12 @@
  *
  * @format
  */
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -20,6 +20,14 @@ import MessengerToolbar from './components/toolbars/MessengerToolbar'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
+
+import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
+import vi from './translates/vi.json'
+import en from './translates/en.json'
+import jp from './translates/jp.json'
+
+setTranslations({vi, en, jp})
+setDefaultLanguage('vi')
 
 import {
   ADD_QUESTION_SCREEN,
@@ -55,6 +63,8 @@ import {
   SURVEY_RESULT_SCREEN,
   APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN,
+  FORGOTTEN_PASSWORD_SCREEN,
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -92,11 +102,18 @@ import SurveyResultScreen from './screens/SurveyResultScreen';
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
 import ApprovalPostScreen from './ApprovalPostScreen';
+import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
+import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import { useAppSelector } from './redux/Hook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
-const vi = require('moment/locale/vi')
-moment.locale('vi', vi)
+const vie = require('moment/locale/vi')
+moment.locale('vi', vie)
 
 export type RootStackParamList = {
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN:{ email: string } | undefined
+  FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
   FACULTY_DASHBOARD_SCREEN: undefined
@@ -163,6 +180,25 @@ const customDrawerIcon = (props: DrawerIcon) => (
 )
 
 export function DrawerNavigator(): JSX.Element {
+  const { defaultLanguage } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
+  useEffect(() => {
+    AsyncStorage.getItem(DEFAULT_LANGUAGE)
+    .then((json) => {
+      console.log(json);
+      if (json) {
+        const defaultLanguage = JSON.parse(json)
+        if(defaultLanguage) {
+          setDefaultLanguage(defaultLanguage)
+        }
+      }
+    })
+  },[])
+
+  useEffect(() => {
+    setDefaultLanguage(defaultLanguage)
+    AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(defaultLanguage))
+  }, [defaultLanguage])
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}
@@ -226,6 +262,18 @@ export function StackNavigator(): JSX.Element {
         name={DRAWER_TAB_NAVIGATOR}
         options={{ title: 'TDC Social Network', header: () => null }}
         component={DrawerNavigator}
+      />
+
+      <RootStack.Screen
+        name={FORGOTTEN_PASSWORD_SCREEN}
+        options={{ title: 'Quên mật khẩu', header: () => null }}
+        component={ForgottenPasswordScreen}
+      />
+
+      <RootStack.Screen
+        name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
+        options={{ title: 'Xác nhận email', header: () => null }}
+        component={AcceptForgottenPasswordScreen}
       />
 
       <RootStack.Screen
@@ -320,7 +368,7 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
       />
-      
+
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
@@ -342,7 +390,8 @@ export function StackNavigator(): JSX.Element {
       <RootStack.Screen
         name={DETAIL_JOB_APPLY}
         options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
-        component={DetailJobApplyScreen} />
+        component={DetailJobApplyScreen}
+      />
 
       <RootStack.Screen
         name={OPTION_SCREEN}

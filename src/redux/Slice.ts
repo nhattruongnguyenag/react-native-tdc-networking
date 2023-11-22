@@ -30,9 +30,11 @@ export interface TDCSocialNetworkState {
   updatePost: boolean
   userIdOfProfileNow: number
   currentScreenNowIsProfileScreen: boolean
+  defaultLanguage: string
 }
 
 const initialState: TDCSocialNetworkState = {
+  defaultLanguage: 'vi',
   conversationMessages: [],
   surveyPostRequest: null,
   choices: ['', '', ''],
@@ -137,12 +139,16 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     listenConversationsSoket: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
+    },
+    setDefaultLanguage: (state, action: PayloadAction<string>) => {
+      state.defaultLanguage = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 export const {
+  setDefaultLanguage,
   setImagesUpload,
   setUserLogin,
   setConversations,

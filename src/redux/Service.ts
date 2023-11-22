@@ -82,6 +82,16 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
+    sendEmail: builder.mutation<MessageResponseData, string>({
+      query: (data) => ({
+        url: 'api/users/get/email/reset',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+    }),
     getSurveyResult: builder.query<Data<SurveyItemResult[]>, number>({
       query: (surveyPostId) => ({
         url: `api/posts/survey/${surveyPostId}/result`
@@ -107,5 +117,6 @@ export const {
   useSendFCMNotificationMutation,
   useAddRecruitmentPostMutation,
   useAddSurveyConductAnswerMutation,
-  useJobApplyMutation
+  useJobApplyMutation,
+  useSendEmailMutation
 } = TDCSocialNetworkAPI
