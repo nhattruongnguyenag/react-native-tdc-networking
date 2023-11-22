@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { COLOR_BTN_BLUE } from '../constants/Color'
+import { COLOR_BTN_BLUE, COLOR_DANGER } from '../constants/Color'
 import { ActivityIndicator } from 'react-native-paper'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -25,6 +25,7 @@ export default function ForgottenPasswordScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [checkEmail, setCheckEmail] = useState(true)
   const [email, setEmail] = useState('')
+  const [tap, setTap] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleCheckEmail = (value: any) => {
@@ -83,6 +84,17 @@ export default function ForgottenPasswordScreen() {
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
         </View>
+        <Text
+          style={styles.txtBottom}
+          onPressIn={() => setTap(true)}
+          onPressOut={() => setTap(false)}
+          onPress={() => {
+            navigation.navigate(LOGIN_SCREEN)
+          }}
+        >
+          <Icon style={tap ? styles.iconBack_Tap : styles.iconBack} name='arrow-left' />
+          <Text style={tap ? styles.txtClick_Tap : styles.txtClick}>&nbsp;Quay lại</Text>
+        </Text>
       </SafeAreaView>
     </ScrollView>
   )
@@ -96,6 +108,22 @@ const styles = StyleSheet.create({
     width: 370,
     height: 280,
     marginBottom: 15
+  },
+  txtBottom: {
+    fontSize: 12,
+    color: '#000',
+    fontWeight: 'bold',
+    marginRight: 10,
+    marginTop: 30
+  },
+  txtClick: {
+    color: COLOR_BTN_BLUE,
+    fontSize: 20
+  },
+  txtClick_Tap: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 20
   },
   txtLogin: {
     fontSize: 25,
@@ -122,6 +150,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 14
   },
+  iconBack: {
+    fontSize: 20,
+    color: COLOR_BTN_BLUE
+  },
+  iconBack_Tap: {
+    fontSize: 20,
+    color: '#000'
+  },
   txtFogot: {
     color: COLOR_BTN_BLUE,
     fontSize: 15
@@ -135,6 +171,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'center'
+  },
+  btnBack: {
+    width: 30,
+    height: 40,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginTop: 100
   },
   txtB: {
     fontSize: 20,

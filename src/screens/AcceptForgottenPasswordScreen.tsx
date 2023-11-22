@@ -64,10 +64,10 @@ export default function AcceptForgottenPasswordScreen() {
           </TouchableOpacity>
           <View>
             <Text style={styles.txtBottom}>
+                Chưa nhận được email ??,&nbsp;   
                 <Text onPressIn={() => setTap(true)} onPressOut={() => setTap(false)} onPress={onSubmit} style={tap?styles.txtClick_Tap:styles.txtClick}>
-                  Nhấp tại đây
+                 Gửi lại
                 </Text>
-              ,nếu chưa nhận được email
             </Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </View>

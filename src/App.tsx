@@ -232,7 +232,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={FORGOTTEN_PASSWORD_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Quên mật khẩu' /> }}
+        options={{ title: 'Quên mật khẩu', header: () => null }}
         component={ForgottenPasswordScreen}
       />
 
