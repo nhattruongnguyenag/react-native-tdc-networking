@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { UserLoginRequest } from '../types/request/UserLoginRequest'
 import axios, { AxiosResponse } from 'axios'
@@ -21,7 +21,7 @@ import { Business } from '../types/Business'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
 import { COLOR_BTN_BLUE } from '../constants/Color'
@@ -144,7 +144,11 @@ export default function LoginScreen() {
                 ></TextInput>
               </View>
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(FORGOTTEN_PASSWORD_SCREEN)
+                  }}
+                >
                   <Text style={styles.txtFogot}>{TEXT_FORGOT_PASSWORD}</Text>
                 </TouchableOpacity>
               </View>

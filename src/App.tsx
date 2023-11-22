@@ -4,7 +4,7 @@
  *
  * @format
  */
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
@@ -62,6 +62,8 @@ import {
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
   APPLICATION_OPTION_SCREEN,
+  FORGOTTEN_PASSWORD_SCREEN,
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -98,6 +100,8 @@ import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
+import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
+import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
 import { useAppSelector } from './redux/Hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEFAULT_LANGUAGE } from './constants/KeyValue';
@@ -106,6 +110,8 @@ const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 
 export type RootStackParamList = {
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN:{ email: string } | undefined
+  FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
   FACULTY_DASHBOARD_SCREEN: undefined
@@ -255,6 +261,18 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={FORGOTTEN_PASSWORD_SCREEN}
+        options={{ title: 'Quên mật khẩu', header: () => null }}
+        component={ForgottenPasswordScreen}
+      />
+
+      <RootStack.Screen
+        name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
+        options={{ title: 'Xác nhận email', header: () => null }}
+        component={AcceptForgottenPasswordScreen}
+      />
+
+      <RootStack.Screen
         name={SEACRH_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={TEXT_SEARCH_} /> }}
         component={SearchScreen}
@@ -346,7 +364,7 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
       />
-      
+
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
@@ -368,7 +386,8 @@ export function StackNavigator(): JSX.Element {
       <RootStack.Screen
         name={DETAIL_JOB_APPLY}
         options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
-        component={DetailJobApplyScreen} />
+        component={DetailJobApplyScreen}
+      />
 
       <RootStack.Screen
         name={OPTION_SCREEN}
