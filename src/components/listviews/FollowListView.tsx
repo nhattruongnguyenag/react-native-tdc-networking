@@ -4,6 +4,7 @@ import { Conversation } from '../../types/Conversation'
 import ConversationItem from '../items/ConversationItem'
 import { User } from '../../types/User'
 import UserItem from '../items/UserItem'
+import { FollowUserModel } from '../../types/response/FollowUserModel'
 
 
 export interface FollowListViewProps {
@@ -15,7 +16,7 @@ export default function ConversationListView({ data, handleFollow }: FollowListV
     return (
         <ScrollView>
             {
-                data.map((item:any) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
+                data?.map((item:any) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
             }
         </ScrollView>
     )

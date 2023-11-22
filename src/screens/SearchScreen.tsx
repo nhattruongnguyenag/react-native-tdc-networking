@@ -72,7 +72,7 @@ export default function SearchScreen() {
       console.log(payload.body)
       setMasterData(JSON.parse(payload.body))
       setQty(masterData.length)
-      setSearch('')
+      // setSearch('')
     }
     const onError = (err: string | Frame) => {
       console.log(err)
@@ -99,19 +99,10 @@ export default function SearchScreen() {
         })
         .then((response) => {
           setMasterData(response.data.data)
-          console.log(masterData);
-
           setQty(masterData.length)
-          setSearch('')
+          // setSearch('')
         })
     }
-  }
-
-  //Render Posts Item
-  const postItems = (item: any, index: any) => {
-    return (
-      <view></view>
-    )
   }
 
   //Follow
@@ -241,7 +232,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
     paddingLeft: 10,
-    width: 130,
+    // width: 130,
     marginLeft: -15,
     paddingTop: 10,
     paddingBottom: 10

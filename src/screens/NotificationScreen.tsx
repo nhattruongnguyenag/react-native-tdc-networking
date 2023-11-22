@@ -23,6 +23,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { TEXT_NOTIFICATION, TEXT_NOTIFICATION_ALL_READ, TEXT_NOTIFICATION_DELETE, TEXT_NOTIFICATION_NOT_READ } from '../constants/StringVietnamese'
 import moment from 'moment'
+import { useTranslation } from 'react-multi-lang'
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
@@ -36,6 +37,7 @@ export default function NotificationScreen() {
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
   const [filterData, setFilterData] = useState([])
+  const t = useTranslation()
 
   const callData = () => {
     axios
@@ -137,10 +139,10 @@ export default function NotificationScreen() {
             </MenuTrigger>
             <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
               <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
-                <Text style={styles.option}>{TEXT_NOTIFICATION_DELETE}</Text>
+                <Text style={styles.option}>{t('NotificationsComponent.deleteNotification')}</Text>
               </MenuOption>
               <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
-                <Text style={styles.option}>{TEXT_NOTIFICATION_NOT_READ}</Text>
+                <Text style={styles.option}>{t('NotificationsComponent.unReadNotification')}</Text>
               </MenuOption>
             </MenuOptions>
           </Menu>
@@ -156,11 +158,11 @@ export default function NotificationScreen() {
         <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
             <View style={styles.txtN}>
-              <Text style={styles.txt}>{TEXT_NOTIFICATION}</Text>
+              <Text style={styles.txt}>{t('NotificationsComponent.notification')}</Text>
             </View>
             <View style={styles.tick}>
               <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
-                <Text style={styles.txtTick}>{TEXT_NOTIFICATION_ALL_READ}</Text>
+                <Text style={styles.txtTick}>{t('NotificationsComponent.readAll')}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.searchBtn}>
@@ -176,7 +178,7 @@ export default function NotificationScreen() {
               <TextInput
                 value={search}
                 style={styles.search}
-                placeholder='Tìm kiếm thông báo...'
+                placeholder={t('NotificationsComponent.search')}
                 multiline={true}
                 numberOfLines={4}
                 onChangeText={(i) => setSearch(i)}

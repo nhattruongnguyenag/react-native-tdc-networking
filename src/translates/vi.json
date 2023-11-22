@@ -5,5 +5,16 @@
         "waitingPost": "Duyệt bài viết",
         "option": "Tùy chọn",
         "logout": "Đăng xuất"
+    },
+    "NotificationsComponent": {
+        "notification": "Thông báo",
+        "readAll": "Đánh dấu tất cả đã đọc",
+        "deleteNotification": "Xóa thông báo",
+        "unReadNotification": "Đánh dấu chưa đọc",
+        "search": "Tìm kiếm thông báo ..."
+    },
+    "FollowComponent":{
+        "following": "Đang theo dõi",
+        "follower": "Đang theo dõi bạn"
     }
 }

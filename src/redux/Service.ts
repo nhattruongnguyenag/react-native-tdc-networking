@@ -12,12 +12,27 @@ import { MessageResponseData } from '../types/response/MessageResponseData'
 import { QuestionResponse, SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
+import { FollowUserModel } from '../types/response/FollowUserModel'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
   baseQuery: fetchBaseQuery({ baseUrl: SERVER_ADDRESS }),
   tagTypes: ['UserLogin'],
   endpoints: (builder) => ({
+    getFollowerUser: builder.query<Data<FollowUserModel[]>, { id: number | undefined }>({
+      query: (data) => ({
+        url: 'api/users/follow/other',
+        method: 'POST',
+        body: data
+      })
+    }),
+    getFollowingUser: builder.query<Data<FollowUserModel[]>, { id: number | undefined }>({
+      query: (data) => ({
+        url: 'api/users/follow/me',
+        method: 'POST',
+        body: data
+      })
+    }),
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
     }),
@@ -92,6 +107,8 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetFollowingUserQuery,
+  useGetFollowerUserQuery,
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,

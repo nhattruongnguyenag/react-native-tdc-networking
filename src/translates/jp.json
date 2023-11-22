@@ -5,5 +5,16 @@
         "waitingPost": "待機ポスト",
         "option": "設定",
         "logout": "ログアウト"
+    },
+    "NotificationsComponent": {
+        "notification": "通知",
+        "readAll": "すべて既読としてマークする",
+        "deleteNotification": "通知の削除",
+        "unReadNotification": "未読としてマーク",
+        "search": "検索通知 ..."
+    },
+    "FollowComponent":{
+        "following": "Đang theo dõi",
+        "follower": "Đang theo dõi bạn"
     }
 }
