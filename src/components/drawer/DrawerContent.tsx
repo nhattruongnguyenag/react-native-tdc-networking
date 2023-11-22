@@ -21,12 +21,12 @@ import AccordionItem from './AccordionItem'
 import DrawerHeader from './DrawerHeader'
 
 import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
-import vi from '../../translates/vi.json'
-import en from '../../translates/en.json'
-import jp from '../../translates/jp.json'
+// import vi from '../../translates/vi.json'
+// import en from '../../translates/en.json'
+// import jp from '../../translates/jp.json'
 
-setTranslations({vi, en, jp})
-setDefaultLanguage('vi')
+// setTranslations({vi, en, jp})
+// setDefaultLanguage('vi')
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()

@@ -9,7 +9,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -20,6 +20,14 @@ import MessengerToolbar from './components/toolbars/MessengerToolbar'
 import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
+
+import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
+import vi from './translates/vi.json'
+import en from './translates/en.json'
+import jp from './translates/jp.json'
+
+setTranslations({vi, en, jp})
+setDefaultLanguage('vi')
 
 import {
   ADD_QUESTION_SCREEN,
@@ -94,9 +102,12 @@ import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_T
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
 import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import { useAppSelector } from './redux/Hook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
-const vi = require('moment/locale/vi')
-moment.locale('vi', vi)
+const vie = require('moment/locale/vi')
+moment.locale('vi', vie)
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN:{ email: string } | undefined
@@ -165,6 +176,25 @@ const customDrawerIcon = (props: DrawerIcon) => (
 )
 
 export function DrawerNavigator(): JSX.Element {
+  const { defaultLanguage } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
+  useEffect(() => {
+    AsyncStorage.getItem(DEFAULT_LANGUAGE)
+    .then((json) => {
+      console.log(json);
+      if (json) {
+        const defaultLanguage = JSON.parse(json)
+        if(defaultLanguage) {
+          setDefaultLanguage(defaultLanguage)
+        }
+      }
+    })
+  },[])
+
+  useEffect(() => {
+    setDefaultLanguage(defaultLanguage)
+    AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(defaultLanguage))
+  }, [defaultLanguage])
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}

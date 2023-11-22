@@ -4,7 +4,7 @@ import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState, useCallback } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { useAppSelector } from '../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import Icon1 from 'react-native-vector-icons/Entypo'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
@@ -16,12 +16,19 @@ import PostNormalItem from '../components/items/PostNormalItem'
 import { LABEL_POST_BUSINESS, LABEL_POST_FACULTY, LABEL_POST_NORMAL, LABEL_POST_RECRUITMENT, LABEL_POST_STUDENT, LABEL_POST_SURVEY, TEXT_SEARCH, TEXT_SUBJECT_POST, TEXT_SUBJECT_USER, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_NORMAL, TYPE_POST_RECRUITMENT, TYPE_POST_STUDENT, TYPE_POST_SURVEY } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
+import { setDefaultLanguage } from '../redux/Slice'
+
 
 let stompClient: Client
+
 
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
+
+  
+  
+
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //Danh sach tim kiem
   const [masterData, setMasterData] = useState([])
