@@ -1,36 +1,71 @@
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { Fragment, memo, useEffect, useState } from 'react'
+import { StyleSheet, TextInput, View } from 'react-native'
 import { Modal } from 'react-native-paper'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { setPostRejectLog } from '../../redux/Slice'
 import ButtonFullWith from '../buttons/ButtonFullWith'
-import { TEXT_BUTTON_GO_BACK, TEXT_BUTTON_GO_NEXT } from '../../constants/StringVietnamese'
+import { PostRejectedLog } from './PostApprovalItem'
 
-export default function ModalPostRejectReason() {
-    const [visible, setVisible] = React.useState(false)
-    const showModal = () => setVisible(true)
-    const hideModal = () => setVisible(false)
+function ModalPostRejectReason() {
+    const { postRejectLog } = useAppSelector(state => state.TDCSocialNetworkReducer)
+    const dispatch = useAppDispatch()
+    const [visible, setVisible] = useState(false)
+
+    const onDismiss = () => {
+        setVisible(false)
+        dispatch(setPostRejectLog(null))
+    }
+
+    const onCompleteRejectPost = () => {
+        console.log(postRejectLog)
+    }
+
+    useEffect(() => {
+        if (postRejectLog) {
+            setVisible(true)
+        }
+    }, [postRejectLog])
 
     return (
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
-            <TextInput
-                multiline
-                numberOfLines={10}
-                textAlign={'left'}
-                style={styles.textInput}
-                placeholder={'Ghi chú...'} />
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <ButtonFullWith
-                    textColor='#000'
-                    btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
-                    title={"Hủy"}
-                />
+        <Fragment>
+            {
+                <Modal
+                    visible={visible}
+                    onDismiss={onDismiss}
+                    contentContainerStyle={styles.containerStyle}>
+                    <TextInput
+                        multiline
+                        numberOfLines={10}
+                        textAlign={'left'}
+                        style={styles.textInput}
+                        placeholder={'Ghi chú...'}
+                        onChangeText={(value) => {
+                            if (postRejectLog) {
+                                dispatch(setPostRejectLog({
+                                    ...postRejectLog,
+                                    content: value
+                                }))
+                            }
+                        }}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <ButtonFullWith
+                            onPress={onDismiss}
+                            textColor='#000'
+                            btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
+                            title={"Hủy"}
+                        />
 
-                <ButtonFullWith
-                    btnStyle={{ marginLeft: 10, width: 140 }}
-                    contentStyle={{ flexDirection: 'row-reverse' }}
-                    title={"Hoàn tất"}
-                />
-            </View>
-        </Modal>
+                        <ButtonFullWith
+                            onPress={onCompleteRejectPost}
+                            btnStyle={{ marginLeft: 10, width: 140 }}
+                            contentStyle={{ flexDirection: 'row-reverse' }}
+                            title={"Hoàn tất"}
+                        />
+                    </View>
+                </Modal>
+            }
+        </Fragment>
     )
 }
 
@@ -51,3 +86,5 @@ const styles = StyleSheet.create({
         borderRadius: 5
     }
 })
+
+export default ModalPostRejectReason

@@ -7,15 +7,23 @@ import RecruitmentPostApprovalItem from './RecruitmentPostApprovalItem'
 import SurveyPostApprovalItem from './SurveyPostApprovalItem'
 import TextImagePostApprovalItem from './TextImagePostApprovalItem'
 
+export interface PostRejectedLog {
+    postId: number
+    content: string
+}
 export interface PostApprovalItemProps {
     post?: PostResponseModal
+    onAcceptedPost?: (postId: number) => void
 }
 
 export default function PostApprovalItem(props: PostApprovalItemProps) {
 
     return (
         <Pressable style={styles.container}>
-            <HeaderPostApprovalItem post={props.post} />
+            <HeaderPostApprovalItem
+             post={props.post} 
+             onAcceptedPost={props.onAcceptedPost}
+             />
 
             <View style={styles.postBody}>
                 {props.post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={props.post} />}
@@ -32,7 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         elevation: 10,
         marginHorizontal: 5,
-        marginTop: 10,
+        marginTop: 15,
         borderRadius: 5
     },
     postBody: {
