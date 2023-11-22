@@ -1,6 +1,7 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
@@ -9,36 +10,36 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
-import { REVIEW_SURVEY_SCREEN_BUTTON_COMPLETE, REVIEW_SURVEY_SCREEN_BUTTON_GO_BACK, REVIEW_SURVEY_SCREEN_SAVE_FAIL_CONTENT, REVIEW_SURVEY_SCREEN_SAVE_FAIL_TITLE, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_CONTENT, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_TITLE } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyPostMutation } from '../redux/Service'
 
 export default function ReviewSurveyPostScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
+  const t = useTranslation()
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation();
 
   useEffect(() => {
     if (addSurveyResult.data) {
       if (addSurveyResult.data.status === 201 || 200) {
-        Alert.alert(REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_TITLE, REVIEW_SURVEY_SCREEN_SAVE_SUCCESS_CONTENT)
-        navigation.navigate(TOP_TAB_NAVIGATOR)
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessContent'));
+        navigation.navigate(TOP_TAB_NAVIGATOR);
       } else {
-        Alert.alert(REVIEW_SURVEY_SCREEN_SAVE_FAIL_TITLE, REVIEW_SURVEY_SCREEN_SAVE_FAIL_CONTENT)
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
       }
     }
-  }, [addSurveyResult])
+  }, [addSurveyResult]);
 
   const onBtnPublishPostPress = () => {
-    console.log(JSON.stringify(surveyPostRequest))
+    console.log(JSON.stringify(surveyPostRequest));
     if (surveyPostRequest) {
-      addSurvey(surveyPostRequest)
+      addSurvey(surveyPostRequest);
     }
-  }
+  };
 
   const onBtnBackPress = useCallback(() => {
-    navigation.pop()
-  }, [])
+    navigation.pop();
+  }, []);
 
   return (
     <ScrollView style={styles.body}>
@@ -46,25 +47,16 @@ export default function ReviewSurveyPostScreen() {
 
       <Text style={styles.surveyDesc}>{surveyPostRequest?.description}</Text>
 
-      <Text style={styles.textTitle}>Câu hỏi</Text>
+      <Text style={styles.textTitle}>{t('ReviewSurveyPostScreen.reviewSurveyScreenButtonComplete')}</Text>
 
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion
-              key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+            return <MultiChoiceQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion
-              key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+            return <OneChoiceQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
           } else {
-            return <ShortAnswerQuestion
-              key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+            return <ShortAnswerQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
           }
         })}
       </View>
@@ -75,19 +67,20 @@ export default function ReviewSurveyPostScreen() {
           btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
           onPress={onBtnBackPress}
           iconName='arrow-left-thin'
-          title={REVIEW_SURVEY_SCREEN_BUTTON_GO_BACK}
+          title={t('ReviewSurveyPostScreen.reviewSurveyScreenButtonGoBack')}
         />
 
         <ButtonFullWith
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={onBtnPublishPostPress}
           iconName='plus'
-          title={REVIEW_SURVEY_SCREEN_BUTTON_COMPLETE}
+          title={t('ReviewSurveyPostScreen.reviewSurveyScreenButtonComplete')}
         />
       </View>
     </ScrollView>
-  )
+  );
 }
+
 
 const styles = StyleSheet.create({
   body: {

@@ -1,11 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React, { memo, useState } from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Tooltip from 'react-native-walkthrough-tooltip'
-import { Pressable } from 'react-native'
-import { ChoiceItemResult } from '../../types/response/SurveyResult'
-import { LayoutChangeEvent } from 'react-native'
-import { ChartData } from './OptionSurveyQuesionResult'
 import { BAR_ITEM_COMPONENT_NUMBER_OF_VOTE } from '../../constants/StringVietnamese'
+import { ChartData } from './OptionSurveyQuesionResult'
 
 interface BarItemProps {
   width?: number

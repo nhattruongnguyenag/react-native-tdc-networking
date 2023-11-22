@@ -1,15 +1,14 @@
 import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { Alert, Image, ToastAndroid } from 'react-native'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useTranslation } from 'react-multi-lang'
+import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import Pdf from 'react-native-pdf'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
 import { BACKGROUND_BLUE } from '../constants/Color'
-import { JOB_APPLY_SCREEN_BUTTON_ADD_CV_TITLE, JOB_APPLY_SCREEN_BUTTON_COMPLETE, JOB_APPLY_SCREEN_BUTTON_GO_BACK, JOB_APPLY_SCREEN_BUTTON_UPDATE_CV_TITLE, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_CONTENT, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_TITLE, JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_CONTENT, JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_TITLE } from '../constants/StringVietnamese'
 import { useAppSelector } from '../redux/Hook'
 import { useJobApplyMutation } from '../redux/Service'
 import { Data } from '../types/Data'
@@ -24,12 +23,13 @@ const cvSourceDefalutValue: FileUploadRequest = {
 }
 
 export default function JobApplyScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const route = useRoute<RouteProp<RootStackParamList, 'JOB_APPLY_SCREEN'>>()
-  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [jobApplyRequest, jobApplyResponse] = useJobApplyMutation()
-  const [isBtnFinishDisable, setBtnFinishDisable] = useState(true)
-  const [cvSource, setCVSource] = useState<FileUploadRequest>(cvSourceDefalutValue)
+  const t = useTranslation()
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'JOB_APPLY_SCREEN'>>();
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+  const [jobApplyRequest, jobApplyResponse] = useJobApplyMutation();
+  const [isBtnFinishDisable, setBtnFinishDisable] = useState(true);
+  const [cvSource, setCVSource] = useState<FileUploadRequest>(cvSourceDefalutValue);
 
   const onBtnAddCVPress = async () => {
     DocumentPicker.pick({
@@ -42,14 +42,14 @@ export default function JobApplyScreen() {
           size: result[0].size ?? 0,
           type: result[0].type ?? '',
           name: result[0].name ?? ''
-        })
+        });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   }
 
   const renderCVDocumentView = () => {
     if (cvSource.type.includes('image')) {
-      return <Image style={{ flex: 1, objectFit: 'scale-down' }} source={{ uri: cvSource.uri }} />
+      return <Image style={{ flex: 1, objectFit: 'scale-down' }} source={{ uri: cvSource.uri }} />;
     }
 
     return (
@@ -57,16 +57,16 @@ export default function JobApplyScreen() {
         trustAllCerts={false}
         source={cvSource}
         onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`)
+          console.log(`Number of pages: ${numberOfPages}`);
         }}
         onPageChanged={(page, numberOfPages) => {
-          console.log(`Current page: ${page}`)
+          console.log(`Current page: ${page}`);
         }}
         onError={(error) => {
-          console.log(error)
+          console.log(error);
         }}
         onPressLink={(uri) => {
-          console.log(`Link pressed: ${uri}`)
+          console.log(`Link pressed: ${uri}`);
         }}
         style={{ flex: 1 }}
       />
@@ -75,7 +75,7 @@ export default function JobApplyScreen() {
 
   const onBtnFinishJobApplyPress = () => {
     if (!Boolean(cvSource.size)) {
-      Alert.alert(JOB_APPLY_SCREEN_EMPTY_CV_TEXT_TITLE, JOB_APPLY_SCREEN_EMPTY_CV_TEXT_CONTENT)
+      Alert.alert(t('JobApplyScreen.jobApplyScreenEmptyCvTextTitle'), t('JobApplyScreen.jobApplyScreenEmptyCvTextContent'));
     }
 
     const onResult = (result: Data<string[]>) => {
@@ -84,36 +84,36 @@ export default function JobApplyScreen() {
           user_id: userLogin?.id ?? -1,
           post_id: route.params?.recruitmentPostId ?? -1,
           cv_url: result.data[0]
-        })
+        });
       }
-    }
+    };
 
     if (cvSource.type.includes('image')) {
-      handleUploadImages([cvSource], onResult)
+      handleUploadImages([cvSource], onResult);
     } else {
-      handleUploadDocumentFiles([cvSource], onResult)
+      handleUploadDocumentFiles([cvSource], onResult);
     }
-  }
+  };
 
   useEffect(() => {
     if (jobApplyResponse.isSuccess && jobApplyResponse.data) {
       Alert.alert(
-        JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_TITLE,
-        JOB_APPLY_SCREEN_SAVE_SUCCESS_TEXT_CONTENT
-      )
-      navigation.goBack()
+        t('JobApplyScreen.jobApplyScreenSaveSuccessTextTitle'),
+        t('JobApplyScreen.jobApplyScreenSaveSuccessTextContent')
+      );
+      navigation.goBack();
     }
-  }, [jobApplyResponse])
+  }, [jobApplyResponse]);
 
   return (
     <View style={styles.body}>
       <Pressable
         style={({ pressed }) => [styles.btnContainer, { opacity: pressed ? 0.7 : 1 }]}
         onPress={() => {
-          onBtnAddCVPress()
+          onBtnAddCVPress();
         }}
       >
-        <Text style={styles.btnTitle}>{cvSource.size === 0 ? JOB_APPLY_SCREEN_BUTTON_ADD_CV_TITLE :JOB_APPLY_SCREEN_BUTTON_UPDATE_CV_TITLE}</Text>
+        <Text style={styles.btnTitle}>{cvSource.size === 0 ? t('JobApplyScreen.jobApplyScreenButtonAddCvTitle') : t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle')}</Text>
         <FontAwesome6Icon style={styles.btnIcon} name='upload' size={20} color='#fff' />
       </Pressable>
 
@@ -124,20 +124,20 @@ export default function JobApplyScreen() {
           textColor='#000'
           btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
           onPress={() => {
-            setCVSource(cvSourceDefalutValue)
-            navigation.goBack()
+            setCVSource(cvSourceDefalutValue);
+            navigation.goBack();
           }}
           iconName='arrow-left-thin'
-          title={JOB_APPLY_SCREEN_BUTTON_GO_BACK}
+          title={t('JobApplyScreen.jobApplyScreenButtonGoBack')}
         />
 
         <ButtonFullWith
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={() => {
-            onBtnFinishJobApplyPress()
+            onBtnFinishJobApplyPress();
           }}
           iconName='plus'
-          title={JOB_APPLY_SCREEN_BUTTON_COMPLETE}
+          title={t('JobApplyScreen.jobApplyScreenButtonComplete')}
         />
       </View>
     </View>

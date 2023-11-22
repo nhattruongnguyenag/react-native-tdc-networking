@@ -9,7 +9,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { useEffect } from 'react'
+import React, { useEffect, useTransition } from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
@@ -26,7 +26,7 @@ import vi from './translates/vi.json'
 import en from './translates/en.json'
 import jp from './translates/jp.json'
 
-setTranslations({vi, en, jp})
+setTranslations({ vi, en, jp })
 setDefaultLanguage('vi')
 
 import {
@@ -112,7 +112,7 @@ const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 
 export type RootStackParamList = {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN:{ email: string } | undefined
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -181,19 +181,20 @@ const customDrawerIcon = (props: DrawerIcon) => (
 
 export function DrawerNavigator(): JSX.Element {
   const { defaultLanguage } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const t = useTransition()
 
   useEffect(() => {
     AsyncStorage.getItem(DEFAULT_LANGUAGE)
-    .then((json) => {
-      console.log(json);
-      if (json) {
-        const defaultLanguage = JSON.parse(json)
-        if(defaultLanguage) {
-          setDefaultLanguage(defaultLanguage)
+      .then((json) => {
+        console.log(json);
+        if (json) {
+          const defaultLanguage = JSON.parse(json)
+          if (defaultLanguage) {
+            setDefaultLanguage(defaultLanguage)
+          }
         }
-      }
-    })
-  },[])
+      })
+  }, [])
 
   useEffect(() => {
     setDefaultLanguage(defaultLanguage)
@@ -215,7 +216,7 @@ export function DrawerNavigator(): JSX.Element {
         header: () => null
       }}
     >
-       <Drawer.Screen
+      <Drawer.Screen
         name='TodoApp'
         options={{
           title: 'Todo App',
@@ -229,6 +230,8 @@ export function DrawerNavigator(): JSX.Element {
 }
 
 export function StackNavigator(): JSX.Element {
+  const t = useTranslation()
+
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}
@@ -246,45 +249,45 @@ export function StackNavigator(): JSX.Element {
     >
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_RECRUITMENT_DETAIL} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.recruitmentDetailScreen')} /> }}
         component={RecruitmentDetailScreen}
       />
 
       <RootStack.Screen
         name={TOP_TAB_NAVIGATOR}
         options={{
-          title: 'TDC Social Network',
+          title: t('ToolbarTitle.topTabNavigator'),
           header: () => <ToolBar />
         }}
         component={TopTabNavigator}
       />
       <RootStack.Screen
         name={DRAWER_TAB_NAVIGATOR}
-        options={{ title: 'TDC Social Network', header: () => null }}
+        options={{ title: t('ToolbarTitle.drawerTabNavigator'), header: () => null }}
         component={DrawerNavigator}
       />
 
       <RootStack.Screen
         name={FORGOTTEN_PASSWORD_SCREEN}
-        options={{ title: 'Quên mật khẩu', header: () => null }}
+        options={{ title: t('ToolbarTitle.forgottenPasswordScreen'), header: () => null }}
         component={ForgottenPasswordScreen}
       />
 
       <RootStack.Screen
         name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
-        options={{ title: 'Xác nhận email', header: () => null }}
+        options={{ title: t('ToolbarTitle.acceptForgottenPasswordScreen'), header: () => null }}
         component={AcceptForgottenPasswordScreen}
       />
 
       <RootStack.Screen
         name={SEACRH_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_SEARCH_} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.searchScreen')} /> }}
         component={SearchScreen}
       />
 
       <RootStack.Screen
         name={CONVERSATION_SCREEN}
-        options={{ header: () => <ToolbarWithSearchIcon title='Hội thoại' /> }}
+        options={{ header: () => <ToolbarWithSearchIcon title={t('ToolbarTitle.conversationScreen')} /> }}
         component={ConversationScreen}
       />
 
@@ -297,7 +300,8 @@ export function StackNavigator(): JSX.Element {
       <RootStack.Screen
         name={LOGIN_SCREEN}
         options={{ header: () => null }}
-        component={LoginScreen} />
+        component={LoginScreen}
+      />
 
       <RootStack.Screen
         name={STUDENT_REGISTER_SCREEN}
@@ -319,47 +323,48 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={CREATE_RECRUITMENT_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Thêm tin tuyển dụng' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.createRecruitmentScreen')} /> }}
         component={CreateRecruitmentScreen}
       />
 
       <RootStack.Screen
         name={CREATE_SURVEY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Thêm khảo sát' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.createSurveyScreen')} /> }}
         component={CreateSurveyPostScreen}
       />
 
       <RootStack.Screen
         name={IMAGE_VIEW_SCREEN}
         options={{ header: () => null }}
-        component={ImageViewScreen} />
+        component={ImageViewScreen}
+      />
 
       <RootStack.Screen
         name={ADD_QUESTION_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Thêm câu hỏi' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.addQuestionScreen')} /> }}
         component={AddQuestionScreen}
       />
 
       <RootStack.Screen
         name={REVIEW_SURVEY_POST_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Xem lại bài viết' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.reviewSurveyPostScreen')} /> }}
         component={ReviewSurveyPostScreen}
       />
 
       <RootStack.Screen
         name={SURVEY_CONDUCT_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Thực hiện khảo sát' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.surveyConductScreen')} /> }}
         component={SurveyConductScreen}
       />
 
       <RootStack.Screen
         name={JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Ứng tuyển' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.jobApplyScreen')} /> }}
         component={JobApplyScreen}
       />
       <RootStack.Screen
         name={LIST_POST_SAVED_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_SAVE} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.listPostSavedScreen')} /> }}
         component={ListPostSavedScreen}
       />
 
@@ -371,54 +376,55 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.listJobApplyScreen')} /> }}
         component={ListJobApplyScreen}
       />
 
       <RootStack.Screen
         name={LIST_FOLLOW_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_FOLLOW} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.listFollowScreen')} /> }}
         component={ListFollowScreen}
       />
 
       <RootStack.Screen
         name={PROFILE_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Trang cá nhân người dùng' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.profileScreen')} /> }}
         component={ProfileScreen}
       />
 
       <RootStack.Screen
         name={DETAIL_JOB_APPLY}
-        options={{ header: () => <ToolbarWithBackPress title='Chi tiết hồ sơ ứng tuyển' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.detailJobApply')} /> }}
         component={DetailJobApplyScreen}
       />
 
       <RootStack.Screen
         name={OPTION_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.optionScreen')} /> }}
         component={OptionScreen}
       />
 
       <RootStack.Screen
         name={SPLASH_SCREEN}
         options={{ header: () => null }}
-        component={SplashScreen} />
+        component={SplashScreen}
+      />
 
       <RootStack.Screen
         name={SURVEY_RESULT_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.surveyResultScreen')} /> }}
         component={SurveyResultScreen}
       />
 
       <RootStack.Screen
         name={APPLICATION_OPTION_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Tùy chọn' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.applicationOptionScreen')} /> }}
         component={ApplicationOptionScreen}
       />
 
       <RootStack.Screen
         name={APPROVAL_POST_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Duyệt bài viết' /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
         component={ApprovalPostScreen}
       />
     </RootStack.Navigator>

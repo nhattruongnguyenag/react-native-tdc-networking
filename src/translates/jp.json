@@ -5,5 +5,116 @@
         "waitingPost": "待機ポスト",
         "option": "設定",
         "logout": "ログアウト"
+    },
+    "ToolbarTitle": {
+        "recruitmentDetailScreen": "採用詳細",
+        "topTabNavigator": "TDC ソーシャル ネットワーク",
+        "drawerTabNavigator": "TDC ソーシャル ネットワーク",
+        "forgottenPasswordScreen": "パスワードをお忘れの方",
+        "acceptForgottenPasswordScreen": "メールアドレス確認",
+        "searchScreen": "検索",
+        "conversationScreen": "会話",
+        "messengerScreen": "メッセンジャー",
+        "addQuestionScreen": "質問を追加",
+        "reviewSurveyPostScreen": "投稿を確認",
+        "surveyConductScreen": "調査を実施",
+        "jobApplyScreen": "仕事に応募",
+        "listPostSavedScreen": "保存された投稿",
+        "createNormalPostScreen": "",
+        "listJobApplyScreen": "応募一覧",
+        "listFollowScreen": "フォロー一覧",
+        "profileScreen": "ユーザープロファイル",
+        "detailJobApply": "仕事応募の詳細",
+        "optionScreen": "オプション",
+        "splashScreen": "",
+        "surveyResultScreen": "調査結果",
+        "applicationOptionScreen": "アプリケーションオプション",
+        "approvalPostScreen": "投稿を承認"
+    },
+    "AddQuestionScreen": {
+        "textButtonGoBack": "戻る",
+        "textButtonGoNext": "次へ",
+        "textEmptyQuestionErrorTitle": "エラー",
+        "textEmptyQuestionErrorContent": "少なくとも1つの質問を追加してください"
+    },
+    "ConversationScreen": {
+        "allConversationTabTitle": "すべての会話",
+        "allActiveConversationTabTitle": "アクティブな会話"
+    },
+    "RecruitmentScreen": {
+        "recruitmentBenefitEmptyValidate": "手当は空白にできません",
+        "recruitmentBenefitPlaceholder": "手当...",
+        "recruitmentBenefitTitle": "手当",
+        "recruitmentDescEmptyValidate": "説明は空白にできません",
+        "recruitmentEmploymentTypeEmptyValidate": "雇用形態は空白にできません",
+        "recruitmentExpirationValidate": "期限は過去の日付にはできません",
+        "recruitmentLocationEmptyValidate": "勤務地は空白にできません",
+        "recruitmentRequirementEmptyValidate": "要件は空白にできません",
+        "recruitmentSalaryEmptyValidate": "給与は空白にできません",
+        "recruitmentSaveDescPlaceholder": "仕事の説明...",
+        "recruitmentSaveDescTitle": "仕事の説明",
+        "recruitmentSaveEmploymentTypePlaceholder": "雇用形態...",
+        "recruitmentSaveExpirationPickerLocale": "ja",
+        "recruitmentSaveExpirationTitle": "応募締切",
+        "recruitmentSaveLocationPlaceholder": "勤務地...",
+        "recruitmentSaveLocationTitle": "勤務地",
+        "recruitmentSaveRequirementPlaceholder": "要件...",
+        "recruitmentSaveRequirementTitle": "仕事の要件",
+        "recruitmentSaveSallaryPlaceholder": "給与...",
+        "recruitmentSaveSallaryTitle": "給与",
+        "recruitmentSaveSaveEmploymentTypeTitle": "雇用形態",
+        "recruitmentSaveSuccessContent": "求人が掲載されました",
+        "recruitmentSaveSuccessTitle": "成功!!!",
+        "recruitmentSaveTitlePlaceholder": "タイトルを入力...",
+        "recruitmentSaveTitleTitle": "求人タイトル",
+        "recruitmentTitleEmptyValidate": "タイトルは空白にできません"
+    },
+    "CreateSurveyPostScreen": {
+        "surveySaveButtonGoNext": "次へ",
+        "surveySaveDescEmptyValidate": "説明は空にできません",
+        "surveySaveDescOver255CharactersValidate": "説明は255文字を超えることはできません",
+        "surveySaveDescPlaceholder": "説明を入力",
+        "surveySaveDescTitle": "説明",
+        "surveySaveTitleEmptyValidate": "タイトルは空にできません",
+        "surveySaveTitleOver255CharactersValidate": "タイトルは255文字を超えることはできません",
+        "surveySaveTitlePlaceholder": "タイトルを入力",
+        "surveySaveTitleTitle": "投稿タイトル"
+    },
+    "JobApplyScreen": {
+        "jobApplyScreenButtonAddCvTitle": "CVを追加",
+        "jobApplyScreenButtonComplete": "完了",
+        "jobApplyScreenButtonGoBack": "戻る",
+        "jobApplyScreenButtonUpdateCvTitle": "CVを更新",
+        "jobApplyScreenEmptyCvTextContent": "登録を完了するにはCVを追加してください",
+        "jobApplyScreenEmptyCvTextTitle": "お知らせ",
+        "jobApplyScreenSaveSuccessTextContent": "申請が成功裡に提出されました",
+        "jobApplyScreenSaveSuccessTextTitle": "お知らせ"
+    },
+    "MessageScreen": {
+        "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
+    },
+    "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenButtonComplete": "完了",
+        "reviewSurveyScreenButtonGoBack": "戻る",
+        "reviewSurveyScreenSaveFailContent": "保存に失敗しました",
+        "reviewSurveyScreenSaveFailTitle": "エラー",
+        "reviewSurveyScreenSaveSuccessContent": "保存に成功しました",
+        "reviewSurveyScreenSaveSuccessTitle": "成功"
+    },
+    "SurveyConductScreen": {
+        "surveyConductScreenSaveSuccessTitle": "成功!!!",
+        "surveyConductScreenSaveSuccessContent": "回答が保存されました。\nアンケートにご参加いただきありがとうございます。",
+        "surveyConductScreenShortAnswerError": "回答の内容を入力してください",
+        "surveyConductScreenMultiQuestionMulitiChoice": "少なくとも1つの回答を選択してください",
+        "surveyConductScreenMultiQuestionOneChoice": "1つの回答を選択してください",
+        "surveyConductScreenLoaderTitle": "データを読み込んでいます...",
+        "surveyConductScreenButtonGoBack": "戻る",
+        "surveyConductScreenButtonComplete": "完了"
+    },
+    "SurveyResultScreen": {
+        "surveyResultScreenEmptyVote": "まだ投票はありません",
+        "surveyResultScreenEmptyShortAnswer": "回答はありません",
+        "surveyResultScreenNumberOfShortAnswer": "回答",
+        "surveyResultScreenLoaderTitle": "データを読み込んでいます..."
     }
 }

@@ -1,16 +1,16 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import TextValidate from '../components/common/TextValidate'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { ADD_QUESTION_SCREEN } from '../constants/Screen'
-import { SURVEY_SAVE_BUTTON_GO_NEXT, SURVEY_SAVE_DESC_EMPTY_VALIDATE, SURVEY_SAVE_DESC_OVER_255_CHARACTERS_VALIDATE, SURVEY_SAVE_DESC_PLACEHOLDER, SURVEY_SAVE_DESC_TITLE, SURVEY_SAVE_TITLE_EMPTY_VALIDATE, SURVEY_SAVE_TITLE_OVER_255_CHARACTERS_VALIDATE, SURVEY_SAVE_TITLE_PLACEHOLDER, SURVEY_SAVE_TITLE_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setSurveyPostRequest } from '../redux/Slice'
 import { SurveyPostRequest } from '../types/SurveyPost'
-import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isNotBlank, isNotContainSpecialCharacter } from '../utils/ValidateUtils'
+import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange } from '../utils/ValidateUtils'
 
 interface CreateSurveyPostScreenValidate {
   title: InputTextValidate
@@ -29,19 +29,20 @@ const isAllFieldsValid = (validate: CreateSurveyPostScreenValidate): boolean => 
   return true
 }
 
-// man hinh dang bai viet khao sat
 export default function CreateSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
+  const t = useTranslation()
+
   const [validate, setValidate] = useState<CreateSurveyPostScreenValidate>({
     title: {
-      textError: SURVEY_SAVE_TITLE_EMPTY_VALIDATE,
+      textError: t('CreateSurveyPostScreen.surveySaveTitleEmptyValidate'),
       isVisible: false,
       isError: true
     },
     description: {
-      textError: SURVEY_SAVE_DESC_EMPTY_VALIDATE,
+      textError: t('CreateSurveyPostScreen.surveySaveDescEmptyValidate'),
       isVisible: false,
       isError: true
     }
@@ -67,7 +68,7 @@ export default function CreateSurveyPostScreen() {
     setValidate({
       ...validate,
       title: {
-        textError: error,
+        textError: t('CreateSurveyPostScreen.surveySaveTitleEmptyValidate'),
         isError: true,
         isVisible: true
       }
@@ -79,7 +80,7 @@ export default function CreateSurveyPostScreen() {
     setValidate({
       ...validate,
       description: {
-        textError: error,
+        textError: t('CreateSurveyPostScreen.surveySaveDescEmptyValidate'),
         isError: true,
         isVisible: true
       }
@@ -91,17 +92,17 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setTitleError(SURVEY_SAVE_TITLE_EMPTY_VALIDATE)
+        setTitleError(t('CreateSurveyPostScreen.surveySaveTitleEmptyValidate'))
         return
       }
 
       if (isContainSpecialCharacter(value)) {
-        setTitleError(SURVEY_SAVE_TITLE_EMPTY_VALIDATE)
+        setTitleError(t('CreateSurveyPostScreen.surveySaveTitleEmptyValidate'))
         return
       }
 
       if (!isLengthInRange(value, 1, 255)) {
-        setTitleError(SURVEY_SAVE_TITLE_OVER_255_CHARACTERS_VALIDATE)
+        setTitleError(t('CreateSurveyPostScreen.surveySaveTitleOver255CharactersValidate'))
         return
       }
 
@@ -125,13 +126,12 @@ export default function CreateSurveyPostScreen() {
     (value: string) => {
       console.log(surveyPostRequest)
       if (isBlank(value)) {
-        setDescriptionError(SURVEY_SAVE_DESC_EMPTY_VALIDATE)
+        setDescriptionError(t('CreateSurveyPostScreen.surveySaveDescEmptyValidate'))
         return
       }
 
-
       if (!isLengthInRange(value, 1, 255)) {
-        setDescriptionError(SURVEY_SAVE_DESC_OVER_255_CHARACTERS_VALIDATE)
+        setDescriptionError(t('CreateSurveyPostScreen.surveySaveDescOver255CharactersValidate'))
         return
       }
 
@@ -163,9 +163,8 @@ export default function CreateSurveyPostScreen() {
         }
       }
 
-      setValidate({...validate})
+      setValidate({ ...validate })
     }
-
   }
 
   return (
@@ -173,13 +172,13 @@ export default function CreateSurveyPostScreen() {
       <TextInputWithTitle
         value={surveyPostRequest?.title ?? ''}
         onChangeText={(value) => onTitleChangeText(value)}
-        title={SURVEY_SAVE_TITLE_TITLE}
-        placeholder={SURVEY_SAVE_TITLE_PLACEHOLDER}
+        title={t('CreateSurveyPostScreen.surveySaveTitleTitle')}
+        placeholder={t('CreateSurveyPostScreen.surveySaveTitlePlaceholder')}
       />
 
       <TextValidate
         customStyle={{ marginLeft: 10 }}
-        textError={validate.title.textError}
+        textError={t(`CreateSurveyPostScreen.${validate.title.textError}`)}
         isError={validate.title.isError}
         isVisible={validate.title.isVisible}
       />
@@ -187,8 +186,8 @@ export default function CreateSurveyPostScreen() {
       <TextInputWithTitle
         value={surveyPostRequest?.description ?? ''}
         onChangeText={(value) => onDescriptionChangeText(value)}
-        title={SURVEY_SAVE_DESC_TITLE}
-        placeholder={SURVEY_SAVE_DESC_PLACEHOLDER}
+        title={t('CreateSurveyPostScreen.surveySaveDescTitle')}
+        placeholder={t('CreateSurveyPostScreen.surveySaveDescPlaceholder')}
         multiline={true}
         numberOfLine={7}
         textInputStyle={styles.textInputStyle}
@@ -196,7 +195,7 @@ export default function CreateSurveyPostScreen() {
 
       <TextValidate
         customStyle={{ marginLeft: 10 }}
-        textError={validate.description.textError}
+        textError={t(`CreateSurveyPostScreen.${validate.description.textError}`)}
         isError={validate.description.isError}
         isVisible={validate.description.isVisible}
       />
@@ -205,10 +204,11 @@ export default function CreateSurveyPostScreen() {
         iconName='arrow-right-thin'
         btnStyle={styles.customBtnStyle}
         contentStyle={{ flexDirection: 'row-reverse' }}
-        title={SURVEY_SAVE_BUTTON_GO_NEXT}
+        title={t('CreateSurveyPostScreen.surveySaveButtonGoNext')}
         onPress={() => onBtnNextPress()}
       />
     </View>
+
   )
 }
 

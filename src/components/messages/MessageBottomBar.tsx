@@ -5,6 +5,7 @@ import { PURPLE_COLOR } from '../../constants/Color'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../CustomizedImagePicker'
 import { MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER } from '../../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -16,6 +17,7 @@ interface MessageBottomBarProps {
 }
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
+  const t = useTranslation()
   const [messageContent, setMessageContent] = useState('')
 
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
@@ -43,7 +45,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
           setMessageContent(value)
           props.onInputMessageContent && props.onInputMessageContent(value)
         }}
-        placeholder={MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER}
+        placeholder={t('MessageBottomBar.messageBottomBarComponentInputTextPlaceholder')}
         style={styles.inputMessage}
         cursorColor={PURPLE_COLOR}
         multiline

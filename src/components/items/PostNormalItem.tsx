@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import Icon1 from 'react-native-vector-icons/Entypo'
 
 export interface PostNormalItemType {
