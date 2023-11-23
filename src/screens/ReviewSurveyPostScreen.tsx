@@ -47,7 +47,7 @@ export default function ReviewSurveyPostScreen() {
 
       <Text style={styles.surveyDesc}>{surveyPostRequest?.description}</Text>
 
-      <Text style={styles.textTitle}>{t('ReviewSurveyPostScreen.reviewSurveyScreenButtonComplete')}</Text>
+      <Text style={styles.textTitle}>{t('ReviewSurveyPostScreen.reviewSurveyScreenAnswerTitle')}</Text>
 
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {

@@ -107,6 +107,8 @@ export default function BusinessDashboardScreen() {
       stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
     }
     const onMessageReceived = (payload: any) => {
+      console.log(payload.body)
+
       setBusinessPost(JSON.parse(payload.body))
       setIsCalled(true);
     }

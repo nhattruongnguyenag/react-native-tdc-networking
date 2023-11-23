@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Tooltip from 'react-native-walkthrough-tooltip'
 import { BAR_ITEM_COMPONENT_NUMBER_OF_VOTE } from '../../constants/StringVietnamese'
@@ -12,6 +13,7 @@ interface BarItemProps {
 }
 
 function BarItem(props: BarItemProps) {
+  const t = useTranslation()
   const [tooltipVisible, setTooltipVisible] = useState(false)
   return (
     <Tooltip
@@ -22,7 +24,7 @@ function BarItem(props: BarItemProps) {
       backgroundColor={'#ffffff00'}
       showChildInTooltip={false}
       isVisible={tooltipVisible}
-      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + BAR_ITEM_COMPONENT_NUMBER_OF_VOTE + ')'}</Text>}
+      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + t('BarItemComponentNumberVote.barItemComponentNumberOfVote') + ')'}</Text>}
       onClose={() => setTooltipVisible(false)}
       placement='top'
     >

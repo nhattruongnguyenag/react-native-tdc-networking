@@ -1,9 +1,9 @@
 {
     "DrawerContentComponent": {
-        "userGroup": "Yours' group",
-        "userJobApplyProfile": "Manage job apply profile",
-        "waitingPost": "Waiting post",
-        "option": "Setting",
+        "userGroup": "Your group",
+        "userJobApplyProfile": "Job Application Profile",
+        "waitingPost": "Pending Posts",
+        "option": "Options",
         "logout": "Logout"
     },
     "ToolbarTitle": {
@@ -11,17 +11,17 @@
         "topTabNavigator": "TDC Social Network",
         "drawerTabNavigator": "TDC Social Network",
         "forgottenPasswordScreen": "Forgot Password",
-        "acceptForgottenPasswordScreen": "Email Confirmation",
+        "acceptForgottenPasswordScreen": "Confirm Email",
         "searchScreen": "Search",
         "conversationScreen": "Conversation",
         "messengerScreen": "Messenger",
         "addQuestionScreen": "Add Question",
         "reviewSurveyPostScreen": "Review Post",
         "surveyConductScreen": "Conduct Survey",
-        "jobApplyScreen": "Apply for Job",
+        "jobApplyScreen": "Job Application",
         "listPostSavedScreen": "Saved Posts",
         "createNormalPostScreen": "",
-        "listJobApplyScreen": "Job Applications List",
+        "listJobApplyScreen": "Job Application List",
         "listFollowScreen": "Follow List",
         "profileScreen": "User Profile",
         "detailJobApply": "Job Application Details",
@@ -29,7 +29,9 @@
         "splashScreen": "",
         "surveyResultScreen": "Survey Results",
         "applicationOptionScreen": "Application Options",
-        "approvalPostScreen": "Approve Post"
+        "approvalPostScreen": "Approve Posts",
+        "createSurveyScreen": "Create Survey",
+        "createRecruitmentScreen": "Create Job Posting"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Go back",
@@ -38,8 +40,8 @@
         "textEmptyQuestionErrorContent": "Add at least 1 question for the survey"
     },
     "ConversationScreen": {
-        "allConversationTabTitle": "All conversations",
-        "allActiveConversationTabTitle": "Active conversations"
+        "allConversationTabTitle": "All Conversations",
+        "allActiveConversationTabTitle": "Active"
     },
     "RecruitmentScreen": {
         "recruitmentBenefitEmptyValidate": "Benefits cannot be empty",
@@ -47,27 +49,28 @@
         "recruitmentBenefitTitle": "Benefits",
         "recruitmentDescEmptyValidate": "Description cannot be empty",
         "recruitmentEmploymentTypeEmptyValidate": "Employment type cannot be empty",
-        "recruitmentExpirationValidate": "Expiration date cannot be set in the past",
+        "recruitmentExpirationValidate": "Expiration date cannot be in the past",
         "recruitmentLocationEmptyValidate": "Work location cannot be empty",
         "recruitmentRequirementEmptyValidate": "Requirements cannot be empty",
         "recruitmentSalaryEmptyValidate": "Salary cannot be empty",
         "recruitmentSaveDescPlaceholder": "Job description...",
-        "recruitmentSaveDescTitle": "Job description",
+        "recruitmentSaveDescTitle": "Job Description",
         "recruitmentSaveEmploymentTypePlaceholder": "Employment type...",
         "recruitmentSaveExpirationPickerLocale": "en",
-        "recruitmentSaveExpirationTitle": "Application deadline",
+        "recruitmentSaveExpirationTitle": "Application Deadline",
         "recruitmentSaveLocationPlaceholder": "Work location...",
-        "recruitmentSaveLocationTitle": "Work location",
+        "recruitmentSaveLocationTitle": "Work Location",
         "recruitmentSaveRequirementPlaceholder": "Requirements...",
-        "recruitmentSaveRequirementTitle": "Job requirements",
+        "recruitmentSaveRequirementTitle": "Job Requirements",
         "recruitmentSaveSallaryPlaceholder": "Salary...",
         "recruitmentSaveSallaryTitle": "Salary",
-        "recruitmentSaveSaveEmploymentTypeTitle": "Employment type",
-        "recruitmentSaveSuccessContent": "Job posting has been published",
-        "recruitmentSaveSuccessTitle": "Success!!!",
+        "recruitmentSaveSaveEmploymentTypeTitle": "Employment Type",
+        "recruitmentSaveSuccessContent": "Job posting has been created",
+        "recruitmentSaveSuccessTitle": "Success!",
         "recruitmentSaveTitlePlaceholder": "Enter title...",
-        "recruitmentSaveTitleTitle": "Job posting title",
-        "recruitmentTitleEmptyValidate": "Title cannot be empty"
+        "recruitmentSaveTitleTitle": "Title",
+        "recruitmentTitleEmptyValidate": "Title cannot be empty",
+        "recruitmentSaveCompleteButton": "Complete"
     },
     "CreateSurveyPostScreen": {
         "surveySaveButtonGoNext": "Next",
@@ -78,14 +81,14 @@
         "surveySaveTitleEmptyValidate": "Title cannot be empty",
         "surveySaveTitleOver255CharactersValidate": "Title cannot exceed 255 characters",
         "surveySaveTitlePlaceholder": "Enter title",
-        "surveySaveTitleTitle": "Post Title"
+        "surveySaveTitleTitle": "Title"
     },
     "JobApplyScreen": {
         "jobApplyScreenButtonAddCvTitle": "Add CV",
         "jobApplyScreenButtonComplete": "Complete",
         "jobApplyScreenButtonGoBack": "Go back",
         "jobApplyScreenButtonUpdateCvTitle": "Update CV",
-        "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the registration",
+        "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the application",
         "jobApplyScreenEmptyCvTextTitle": "Notification",
         "jobApplyScreenSaveSuccessTextContent": "Application submitted successfully",
         "jobApplyScreenSaveSuccessTextTitle": "Notification"
@@ -93,28 +96,71 @@
     "MessageScreen": {
         "messageScreenLoaderTitle": "Loading messages..."
     },
+    "MessengerToolbar": {
+        "userStatusActive": "Active",
+        "userStatusInactive": "Last seen"
+    },
     "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenAnswerTitle": "Questions",
         "reviewSurveyScreenButtonComplete": "Complete",
-        "reviewSurveyScreenButtonGoBack": "Go back",
+        "reviewSurveyScreenButtonGoBack": "Go Back",
         "reviewSurveyScreenSaveFailContent": "Save failed",
         "reviewSurveyScreenSaveFailTitle": "Error",
         "reviewSurveyScreenSaveSuccessContent": "Save successful",
         "reviewSurveyScreenSaveSuccessTitle": "Success"
     },
     "SurveyConductScreen": {
-        "surveyConductScreenSaveSuccessTitle": "Success!!!",
-        "surveyConductScreenSaveSuccessContent": "Your answers have been saved.\nThank you for participating in the survey.",
-        "surveyConductScreenShortAnswerError": "Please enter the answer content",
-        "surveyConductScreenMultiQuestionMulitiChoice": "Please choose at least one answer",
-        "surveyConductScreenMultiQuestionOneChoice": "Please choose one answer",
+        "surveyConductScreenSaveSuccessTitle": "Success!",
+        "surveyConductScreenSaveSuccessContent": "Answers have been saved.\nThank you for participating in the survey",
+        "surveyConductScreenShortAnswerError": "Please enter a short answer",
+        "surveyConductScreenMultiQuestionMulitiChoice": "Please select at least one answer",
+        "surveyConductScreenMultiQuestionOneChoice": "Please select one answer",
         "surveyConductScreenLoaderTitle": "Loading data...",
         "surveyConductScreenButtonGoBack": "Go back",
         "surveyConductScreenButtonComplete": "Complete"
     },
     "SurveyResultScreen": {
         "surveyResultScreenEmptyVote": "No votes yet",
-        "surveyResultScreenEmptyShortAnswer": "No answers provided",
+        "surveyResultScreenEmptyShortAnswer": "No answers yet",
         "surveyResultScreenNumberOfShortAnswer": "answers",
         "surveyResultScreenLoaderTitle": "Loading data..."
+    },
+    "ConversationItem": {
+        "conversationItemComponentImageMessageAnnotation": "Image"
+    },
+    "MessageBottomBar": {
+        "messageBottomBarComponentInputTextPlaceholder": "@ Message"
+    },
+    "MessageSentItem": {
+        "messageItemStatusReceived": "Received",
+        "messageItemStatusSeen": "Seen"
+    },
+    "AddQuestionView": {
+        "addQuestionViewStartAddQuestion": "Add",
+        "addQuestionViewComponentButtonComplete": "Complete",
+        "addQuestionViewComponentShortAnswer": "Short Answer",
+        "addQuestionViewComponentChoiceInputPlaceholder": "Choice",
+        "addQuestionViewComponentMultiChoiceQuestion": "Multiple Choice",
+        "addQuestionViewComponentOneChoiceQuestion": "Quiz",
+        "addQuestionViewComponentQuestionEmptyErrorContent": "Please select a question type",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!",
+        "addQuestionViewComponentQuestionTypeDropdownSearch": "Search...",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Select question type ---",
+        "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Title cannot contain special characters",
+        "addQuestionViewComponentTitleEmptyValidate": "Title cannot be empty",
+        "addQuestionViewComponentTitleInputPlaceholder": "Enter question title...",
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters"
+    },
+    "MultiChoiceQuestion": {
+        "questionComponentAddTextTitle": "Question"
+    },
+    "QuestonBottomBarOptions": {
+        "questionBottomBarQuestionRequireToggle": "Required"
+    },
+    "ShortAnswerQuestion": {
+        "shortAnswerQuestionComponentTitlePlaceholder": "Enter your answer..."
+    },
+    "BarItemComponentNumberVote": {
+        "barItemComponentNumberOfVote": " votes"
     }
 }

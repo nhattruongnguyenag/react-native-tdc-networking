@@ -1,11 +1,10 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { LegacyRef, useEffect, useRef, useState } from 'react'
-import IconButton from '../buttons/IconButton'
-import { PURPLE_COLOR } from '../../constants/Color'
-import ActionSheet from 'react-native-actionsheet'
-import CustomizedImagePicker from '../CustomizedImagePicker'
-import { MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER } from '../../constants/StringVietnamese'
+import React, { LegacyRef, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
+import { StyleSheet, TextInput, View } from 'react-native'
+import ActionSheet from 'react-native-actionsheet'
+import { PURPLE_COLOR } from '../../constants/Color'
+import IconButton from '../buttons/IconButton'
+import CustomizedImagePicker from '../CustomizedImagePicker'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void

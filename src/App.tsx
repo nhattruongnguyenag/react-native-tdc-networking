@@ -4,7 +4,6 @@
  *
  * @format
  */
-import Toast from 'react-native-toast-message'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
@@ -13,6 +12,7 @@ import React, { useEffect, useTransition } from 'react'
 import { Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
+import Toast from 'react-native-toast-message'
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import { Provider } from 'react-redux'
 import DrawerContent from './components/drawer/DrawerContent'
@@ -21,95 +21,82 @@ import ToolBar from './components/toolbars/ToolBar'
 import ToolbarWithBackPress from './components/toolbars/ToolbarWithBackPress'
 import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 
-import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
-import vi from './translates/vi.json'
+import { setDefaultLanguage, setTranslations, useTranslation } from 'react-multi-lang'
 import en from './translates/en.json'
 import jp from './translates/jp.json'
+import vi from './translates/vi.json'
 
 setTranslations({ vi, en, jp })
 setDefaultLanguage('vi')
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import moment from 'moment'
+import ApprovalPostScreen from './ApprovalPostScreen'
+import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
-  ADD_QUESTION_SCREEN,
-  BUSINESS_DASHBOARD_SCREEN,
+  ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
+  APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
-  CREATE_SURVEY_SCREEN,
-  DRAWER_TAB_NAVIGATOR,
+  CREATE_SURVEY_SCREEN, DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
-  FOLLOWING_SCREEN,
-  IMAGE_VIEW_SCREEN,
-  INTERMEDIATIOO_SCREEN,
-  LIST_FOLLOW_SCREEN,
-  JOB_APPLY_SCREEN,
-  LIST_JOB_APPLY_SCREEN,
+  FOLLOWING_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
+  INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
-  NOTIFICATION_SCREEN,
-  RECRUITMENT_DETAIL_SCREEN,
+  NOTIFICATION_SCREEN, OPTION_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
-  SURVEY_CONDUCT_SCREEN,
-  TOP_TAB_NAVIGATOR,
-  PROFILE_SCREEN,
-  DETAIL_JOB_APPLY,
-  OPTION_SCREEN,
-  SURVEY_RESULT_SCREEN,
-  APPLICATION_OPTION_SCREEN,
-  APPROVAL_POST_SCREEN,
-  FORGOTTEN_PASSWORD_SCREEN,
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN
+  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
+import { useAppSelector } from './redux/Hook'
 import { store } from './redux/Store'
+import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import AddQuestionScreen from './screens/AddQuestionScreen'
+import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
 import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
 import ConversationScreen from './screens/ConversationScreen'
+import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
+import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import FollowingScreen from './screens/FollowingScreen'
+import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
+import ImageViewScreen from './screens/ImageViewScreen'
+import IntermediationScreen from './screens/IntermediationScreen'
+import JobApplyScreen from './screens/JobApplyScreen'
+import ListFollowScreen from './screens/ListFollowScreen'
+import ListJobApplyScreen from './screens/ListJobApplyScreen'
+import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import LoginScreen from './screens/LoginScreen'
 import MessengerScreen from './screens/MessageScreen'
 import NotificationScreen from './screens/NotificationScreen'
+import OptionScreen from './screens/OptionScreen'
+import ProfileScreen from './screens/ProfileScreen'
+import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
+import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import SearchScreen from './screens/SearchScreen'
 import SplashScreen from './screens/SplashScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
-import { Conversation } from './types/Conversation'
-import moment from 'moment'
-import ImageViewScreen from './screens/ImageViewScreen'
-import IntermediationScreen from './screens/IntermediationScreen'
-import AddQuestionScreen from './screens/AddQuestionScreen'
-import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
-import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
-import ListFollowScreen from './screens/ListFollowScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
-import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
-import JobApplyScreen from './screens/JobApplyScreen'
-import ListJobApplyScreen from './screens/ListJobApplyScreen'
-import ListPostSavedScreen from './screens/ListPostSavedScreen'
-import ProfileScreen from './screens/ProfileScreen'
-import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
-import OptionScreen from './screens/OptionScreen';
-import SurveyResultScreen from './screens/SurveyResultScreen';
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
-import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
-import ApprovalPostScreen from './ApprovalPostScreen';
-import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
-import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
-import { useAppSelector } from './redux/Hook';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_LANGUAGE } from './constants/KeyValue';
+import SurveyResultScreen from './screens/SurveyResultScreen'
+import { Conversation } from './types/Conversation'
 
-const vie = require('moment/locale/vi')
-moment.locale('vi', vie)
+const locale = new Map<string, any>()
+locale.set('vi', require('moment/locale/vi'))
+locale.set('en', require('moment/locale/es'))
+locale.set('jp', require('moment/locale/ja'))
+
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -198,8 +185,10 @@ export function DrawerNavigator(): JSX.Element {
 
   useEffect(() => {
     setDefaultLanguage(defaultLanguage)
+    moment.locale(defaultLanguage, locale.get(defaultLanguage))
     AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(defaultLanguage))
   }, [defaultLanguage])
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}

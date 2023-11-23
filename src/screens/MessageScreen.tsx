@@ -21,6 +21,7 @@ export default function MessengerScreen() {
   const { userLogin, imagesUpload, selectConversation, conversationMessages } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+
   const textInputMessageRef = useRef<TextInput | null>(null)
   const [isLoading, setLoading] = useState(false)
   const [messageContent, setMessageContent] = useState<string>('')

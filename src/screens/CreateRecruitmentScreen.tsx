@@ -488,7 +488,7 @@ export default function CreateRecruitmentScreen() {
           style={styles.buttonCreateRecruitment}
           onPress={() => onBtnFinishPress()}
         >
-          <Text style={styles.buttonCreateRecruitmentTitle}>{t('RecruitmentScreen.recruitmentSaveTitleTitle')}</Text>
+          <Text style={styles.buttonCreateRecruitmentTitle}>{t('RecruitmentScreen.recruitmentSaveCompleteButton')}</Text>
         </Button>
       </ScrollView>
     </SafeAreaView>

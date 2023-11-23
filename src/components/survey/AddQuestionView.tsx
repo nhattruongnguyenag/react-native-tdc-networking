@@ -1,9 +1,9 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Button, IconButton, Modal, Portal } from 'react-native-paper'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
-import { ADD_QUESTION_VIEW_COMPONENT_BUTTON_COMPLETE, ADD_QUESTION_VIEW_COMPONENT_CHOICE_INPUT_PLACEHOLDER, ADD_QUESTION_VIEW_COMPONENT_MULTI_CHOICE_QUESTION, ADD_QUESTION_VIEW_COMPONENT_ONE_CHOICE_QUESTION, ADD_QUESTION_VIEW_COMPONENT_QUESTION_EMPTY_ERROR_CONTENT, ADD_QUESTION_VIEW_COMPONENT_QUESTION_EMPTY_ERROR_TITLE, ADD_QUESTION_VIEW_COMPONENT_QUESTION_TYPE_DROPDOWN_SEARCH, ADD_QUESTION_VIEW_COMPONENT_QUESTION_TYPE_DROPDOWN_TITLE, ADD_QUESTION_VIEW_COMPONENT_SHORT_ANSWER, ADD_QUESTION_VIEW_COMPONENT_TITLE_CONTAINS_SPECIAL_CHARACTER_VALIDATE, ADD_QUESTION_VIEW_COMPONENT_TITLE_EMPTY_VALIDATE, ADD_QUESTION_VIEW_COMPONENT_TITLE_INPUT_PLACEHOLDER, ADD_QUESTION_VIEW_COMPONENT_TITLE_OVER_255_CHARACTER_VALIDATE } from '../../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { addQuestion, resetChoices } from '../../redux/Slice'
 import { Question } from '../../types/Question'
@@ -15,9 +15,9 @@ import {
   isNotBlank
 } from '../../utils/ValidateUtils'
 import ButtonFullWith from '../buttons/ButtonFullWith'
+import TextValidate from '../common/TextValidate'
 import TextInputWithBottomBorder from '../inputs/TextInputWithBottomBorder'
 import TextInputWithTitle from '../inputs/TextInputWithTitle'
-import TextValidate from '../common/TextValidate'
 
 interface QuestionType {
   icon: string
@@ -29,30 +29,15 @@ export const SHORT_ANSWER = 'tra-loi-ngan'
 export const ONE_CHOICE_QUESTION = 'chon-mot-dap-an'
 export const MULTI_CHOICE_QUESTION = 'chon-nhieu-dap-an'
 
-const questionTypes: QuestionType[] = [
-  {
-    icon: 'file-alt',
-    name: ADD_QUESTION_VIEW_COMPONENT_SHORT_ANSWER,
-    value: SHORT_ANSWER
-  },
-  {
-    icon: 'check-circle',
-    name: ADD_QUESTION_VIEW_COMPONENT_ONE_CHOICE_QUESTION,
-    value: ONE_CHOICE_QUESTION
-  },
-  {
-    icon: 'check-square',
-    name: ADD_QUESTION_VIEW_COMPONENT_MULTI_CHOICE_QUESTION,
-    value: MULTI_CHOICE_QUESTION
-  }
-]
-
 const AddChoices = () => {
+  const t = useTranslation()
   const { choices } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   return (
     <Fragment>
-      <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>Lựa chọn</Text>
+      <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>
+        {t('AddQuestionView.addQuestionViewComponentChoiceInputPlaceholder')}
+      </Text>
       <View style={{ paddingHorizontal: 15 }}>
         {choices.map((item, index) => {
           return (
@@ -62,9 +47,9 @@ const AddChoices = () => {
                 data: item
               }}
               totalChoices={choices.length}
-              placeholder={`${ADD_QUESTION_VIEW_COMPONENT_CHOICE_INPUT_PLACEHOLDER} ${index + 1}...`}
+              placeholder={`${t('AddQuestionView.addQuestionViewComponentChoiceInputPlaceholder')} ${index + 1}...`}
             />
-          )
+          );
         })}
       </View>
     </Fragment>
@@ -72,16 +57,36 @@ const AddChoices = () => {
 }
 
 export default function AddQuestionView() {
+  const t = useTranslation()
   const [visible, setVisible] = React.useState(false)
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
   const { choices, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType | null>(null)
+
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>({
-    textError: ADD_QUESTION_VIEW_COMPONENT_TITLE_EMPTY_VALIDATE,
+    textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate'),
     isVisible: false,
     isError: true
   })
+
+  const questionTypes: QuestionType[] = [
+    {
+      icon: 'file-alt',
+      name: t('AddQuestionView.addQuestionViewComponentShortAnswer'),
+      value: SHORT_ANSWER
+    },
+    {
+      icon: 'check-circle',
+      name: t('AddQuestionView.addQuestionViewComponentOneChoiceQuestion'),
+      value: ONE_CHOICE_QUESTION
+    },
+    {
+      icon: 'check-square',
+      name: t('AddQuestionView.addQuestionViewComponentMultiChoiceQuestion'),
+      value: MULTI_CHOICE_QUESTION
+    }
+  ]
 
   const defaultQuestion: Question = {
     title: '',
@@ -109,7 +114,10 @@ export default function AddQuestionView() {
 
   const onBtnStartAddQuestionPress = () => {
     if (selectedQuestionType === null) {
-      Alert.alert(ADD_QUESTION_VIEW_COMPONENT_QUESTION_EMPTY_ERROR_TITLE, ADD_QUESTION_VIEW_COMPONENT_QUESTION_EMPTY_ERROR_CONTENT)
+      Alert.alert(
+        t('AddQuestionView.addQuestionViewComponentQuestionEmptyErrorTitle'),
+        t('AddQuestionView.addQuestionViewComponentQuestionEmptyErrorContent')
+      )
       return
     }
 
@@ -137,19 +145,19 @@ export default function AddQuestionView() {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: ADD_QUESTION_VIEW_COMPONENT_TITLE_EMPTY_VALIDATE
+          textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate')
         })
       } else if (isContainSpecialCharacter(value)) {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: ADD_QUESTION_VIEW_COMPONENT_TITLE_CONTAINS_SPECIAL_CHARACTER_VALIDATE
+          textError: t('AddQuestionView.addQuestionViewComponentTitleContainsSpecialCharacterValidate')
         })
       } else if (!isLengthInRange(value, 1, 255)) {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: ADD_QUESTION_VIEW_COMPONENT_TITLE_OVER_255_CHARACTER_VALIDATE
+          textError: t('AddQuestionView.addQuestionViewComponentTitleOver255CharacterValidate')
         })
       } else {
         setTitleValidate({
@@ -192,8 +200,8 @@ export default function AddQuestionView() {
         search
         labelField='name'
         valueField='value'
-        placeholder={ADD_QUESTION_VIEW_COMPONENT_QUESTION_TYPE_DROPDOWN_TITLE}
-        searchPlaceholder={ADD_QUESTION_VIEW_COMPONENT_QUESTION_TYPE_DROPDOWN_SEARCH}
+        placeholder={t('AddQuestionView.addQuestionViewComponentQuestionTypeDropdownTitle')}
+        searchPlaceholder={t('AddQuestionView.addQuestionViewComponentQuestionTypeDropdownSearch')}
         value={selectedQuestionType}
         onChange={(item) => onQuestionTypeDropdownChange(item)}
         renderItem={renderItem}
@@ -204,11 +212,11 @@ export default function AddQuestionView() {
         mode='elevated'
         style={{ backgroundColor: '#0065FF' }}
         onPress={() => {
-          onBtnStartAddQuestionPress()
+          onBtnStartAddQuestionPress();
         }}
         textColor='#fff'
       >
-        <Text style={{ fontSize: 16 }}>Thêm</Text>
+        <Text style={{ fontSize: 16 }}>{t('AddQuestionView.addQuestionViewStartAddQuestion')}</Text>
       </Button>
 
       <Portal>
@@ -222,7 +230,7 @@ export default function AddQuestionView() {
               size={22}
               style={styles.btnClose}
               onPress={() => {
-                hideModal()
+                hideModal();
               }}
             />
           </View>
@@ -230,7 +238,7 @@ export default function AddQuestionView() {
             <TextInputWithTitle
               onFocus={() => setTitleValidate({ ...titleValidate, isVisible: true })}
               value={question.title}
-              placeholder={ADD_QUESTION_VIEW_COMPONENT_TITLE_INPUT_PLACEHOLDER}
+              placeholder={t('AddQuestionView.addQuestionViewComponentTitleInputPlaceholder')}
               onChangeText={(value) => onTitleChangeText(value)}
             />
 
@@ -243,7 +251,11 @@ export default function AddQuestionView() {
 
             {question.type !== SHORT_ANSWER && <AddChoices />}
             <View style={styles.modalFooter}>
-              <ButtonFullWith iconName='plus' title={ADD_QUESTION_VIEW_COMPONENT_BUTTON_COMPLETE} onPress={() => onBtnCompleteAddQuestionPress()} />
+              <ButtonFullWith
+                iconName='plus'
+                title={t('AddQuestionView.addQuestionViewComponentButtonComplete')}
+                onPress={() => onBtnCompleteAddQuestionPress()}
+              />
             </View>
           </ScrollView>
         </Modal>
