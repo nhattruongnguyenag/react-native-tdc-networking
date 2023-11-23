@@ -30,25 +30,16 @@ import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setUserLogin } from '../redux/Slice'
 import { isEmail, isPassword } from '../utils/ValidateUtils'
 import { Faculty } from '../types/Faculty'
-import {
-  TEXT_ALERT_LOGIN_FAILT,
-  TEXT_ERROR_EMAIL_EMPTY_NOTMATCH,
-  TEXT_ERROR_PASS_EMPTY_NOTMATCH,
-  TEXT_FORGOT_PASSWORD,
-  TEXT_HIDE_PASSWORD,
-  TEXT_LOGIN,
-  TEXT_LOGIN_FAILT,
-  TEXT_PLACEHOLDER_EMAIL,
-  TEXT_PLACEHOLDER_EMAIL_LOGIN,
-  TEXT_PLACEHOLDER_PASSWORD,
-  TEXT_REGISTER,
-  TEXT_REQUEST_REGISTER,
-  TEXT_SHOW_PASSWORD,
-  TEXT_TITLE_PASSWORD_LOGIN
-} from '../constants/StringVietnamese'
-
+import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
+import vi from '../translates/vi.json'
+import en from '../translates/en.json'
+import jp from '../translates/jp.json'
 // man hinh dang nhap
 export default function LoginScreen() {
+  const t = useTranslation()
+  // setTranslations({ vi, en, jp })
+  // setDefaultLanguage('vi')
+
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [userLoginRequest, setUserLoginRequest] = useState<UserLoginRequest>({
@@ -99,7 +90,7 @@ export default function LoginScreen() {
           })
       })
       .catch((error) => {
-        Alert.alert(TEXT_LOGIN_FAILT, TEXT_ALERT_LOGIN_FAILT)
+        Alert.alert(t('LoginComponent.loginFail'), t('LoginComponent.alertLoginFail'))
         setIsLoading(false)
       })
   }
@@ -111,47 +102,50 @@ export default function LoginScreen() {
   }, [checkEmail, checkPassword, userLoginRequest])
 
   return (
-    <ScrollView style={{backgroundColor:'#fff'}}>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView style={styles.container}>
         <View>
           <Image style={styles.imageLogin} source={require('../assets/login/login.png')}></Image>
         </View>
         <View>
           <View>
-            <Text style={styles.txtLogin}>{TEXT_LOGIN}</Text>
+            <Text style={styles.txtLogin}>{t('LoginComponent.titleLogin')}</Text>
           </View>
           <View style={styles.form}>
-            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>{TEXT_ERROR_EMAIL_EMPTY_NOTMATCH}</Text> : ''}
+            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>{t('LoginComponent.errorEmail')}</Text> : ''}
             <View style={styles.group}>
               <Icon style={styles.icon} name='at' />
               <TextInput
                 value={userLoginRequest.email}
-                placeholder={TEXT_PLACEHOLDER_EMAIL_LOGIN}
+                placeholder={t('LoginComponent.emailId')}
                 style={styles.txtIP}
                 onChangeText={(value) => handleCheckEmail(value)}
               ></TextInput>
             </View>
-            {!checkPassword ? <Text style={{ color: 'red' }}>{TEXT_ERROR_PASS_EMPTY_NOTMATCH}</Text> : ''}
+            {!checkPassword ? <Text style={{ color: 'red' }}>{t('LoginComponent.errorPass')}</Text> : ''}
             <View style={styles.group}>
               <View>
                 <Icon style={styles.icon} name='lock' />
                 <TextInput
                   value={userLoginRequest.password}
                   secureTextEntry={!isChecked ? true : false}
-                  placeholder={TEXT_TITLE_PASSWORD_LOGIN}
+                  placeholder={t('LoginComponent.password')}
                   style={styles.txtIP}
                   onChangeText={(value) => handleCheckPassword(value)}
                 ></TextInput>
               </View>
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles.txtFogot}>{TEXT_FORGOT_PASSWORD}</Text>
-                </TouchableOpacity>
-              </View>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <CheckBox checkBoxColor='green' isChecked={isChecked} onClick={() => handleCheckBoxToggle()} />
-              <Text style={{ marginLeft: 10 }}>{isChecked ? TEXT_SHOW_PASSWORD : TEXT_HIDE_PASSWORD}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CheckBox checkBoxColor='green' isChecked={isChecked} onClick={() => handleCheckBoxToggle()} />
+                <Text style={{ marginLeft: 10 }}>
+                  {isChecked ? t('LoginComponent.hidePass') : t('LoginComponent.showPass')}
+                </Text>
+              </View>
+
+              <TouchableOpacity>
+                <Text style={styles.txtFogot}>{t('LoginComponent.forgotPass')}</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <TouchableOpacity
@@ -159,17 +153,17 @@ export default function LoginScreen() {
             style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
             onPress={() => onSubmit()}
           >
-            <Text style={styles.txtB}>{TEXT_LOGIN}</Text>
+            <Text style={styles.txtB}>{t('LoginComponent.titleLogin')}</Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
           <View style={styles.txt}>
-            <Text>{TEXT_REQUEST_REGISTER} </Text>
+            <Text>{t('LoginComponent.requestRegister')} </Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate(INTERMEDIATIOO_SCREEN)
               }}
             >
-              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>{TEXT_REGISTER}</Text>
+              <Text style={{ color: '#0065FF', fontWeight: 'bold' }}>{t('LoginComponent.titleRegister')}</Text>
             </TouchableOpacity>
           </View>
         </View>
