@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { LegacyRef, useEffect, useRef, useState } from 'react'
-import IconButton from '../buttons/IconButton'
-import { PURPLE_COLOR } from '../../constants/Color'
+import React, { LegacyRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import { StyleSheet, TextInput, View } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
+import { PURPLE_COLOR } from '../../constants/Color'
+import IconButton from '../buttons/IconButton'
 import CustomizedImagePicker from '../CustomizedImagePicker'
-import { MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER } from '../../constants/StringVietnamese'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -16,6 +16,7 @@ interface MessageBottomBarProps {
 }
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
+  const t = useTranslation()
   const [messageContent, setMessageContent] = useState('')
 
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
@@ -43,7 +44,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
           setMessageContent(value)
           props.onInputMessageContent && props.onInputMessageContent(value)
         }}
-        placeholder={MESSAGE_BOTTOM_BAR_COMPONENT_INPUT_TEXT_PLACEHOLDER}
+        placeholder={t('MessageBottomBar.messageBottomBarComponentInputTextPlaceholder')}
         style={styles.inputMessage}
         cursorColor={PURPLE_COLOR}
         multiline

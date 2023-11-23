@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, ScrollView } from 'react-native'
+import { FlatList } from 'react-native'
 import { Conversation } from '../../types/Conversation'
 import ConversationItem from '../items/ConversationItem'
 

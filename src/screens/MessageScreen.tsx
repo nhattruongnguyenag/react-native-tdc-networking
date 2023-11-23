@@ -1,5 +1,6 @@
 import moment from 'moment'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { Client, Frame, Message } from 'stompjs'
@@ -16,11 +17,13 @@ import { Message as MessageModel } from '../types/Message'
 let stompClient: Client
 
 export default function MessengerScreen() {
+  const t = useTranslation()
   const { userLogin, imagesUpload, selectConversation, conversationMessages } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+
   const textInputMessageRef = useRef<TextInput | null>(null)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [messageContent, setMessageContent] = useState<string>('')
   const dispatch = useAppDispatch()
 
@@ -36,7 +39,6 @@ export default function MessengerScreen() {
     stompClient = getStompClient()
 
     const onConnected = () => {
-      setLoading(true)
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
       stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
     }
@@ -107,7 +109,7 @@ export default function MessengerScreen() {
   return (
     <View style={styles.body}>
       {isLoading ? (
-        <Loading title={MESSAGE_SCREEN_LOADER_TITLE} />
+        <Loading title={t('MessageScreen.messageScreenLoaderTitle')} />
       ) : (
         <Fragment>
           <FlatList

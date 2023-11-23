@@ -5,5 +5,162 @@
         "waitingPost": "Duyệt bài viết",
         "option": "Tùy chọn",
         "logout": "Đăng xuất"
+    },
+    "ToolbarTitle": {
+        "recruitmentDetailScreen": "Chi tiết tuyển dụng",
+        "topTabNavigator": "TDC Social Network",
+        "drawerTabNavigator": "TDC Social Network",
+        "forgottenPasswordScreen": "Quên mật khẩu",
+        "acceptForgottenPasswordScreen": "Xác nhận email",
+        "searchScreen": "Tìm kiếm",
+        "conversationScreen": "Hội thoại",
+        "messengerScreen": "Messenger",
+        "addQuestionScreen": "Thêm câu hỏi",
+        "reviewSurveyPostScreen": "Xem lại bài viết",
+        "surveyConductScreen": "Thực hiện khảo sát",
+        "jobApplyScreen": "Ứng tuyển",
+        "listPostSavedScreen": "Lưu bài viết",
+        "createNormalPostScreen": "",
+        "listJobApplyScreen": "Danh sách ứng tuyển",
+        "listFollowScreen": "Danh sách theo dõi",
+        "profileScreen": "Trang cá nhân người dùng",
+        "detailJobApply": "Chi tiết hồ sơ ứng tuyển",
+        "optionScreen": "Tùy chọn",
+        "splashScreen": "",
+        "surveyResultScreen": "Kết quả khảo sát",
+        "applicationOptionScreen": "Tùy chọn ứng dụng",
+        "approvalPostScreen": "Duyệt bài viết",
+        "createSurveyScreen": "Thêm khảo sát",
+        "createRecruitmentScreen": "Thêm tin tuyển dụng"
+    },
+    "AddQuestionScreen": {
+        "textButtonGoBack": "Quay lại",
+        "textButtonGoNext": "Tiếp theo",
+        "textEmptyQuestionErrorTitle": "Lỗi",
+        "textEmptyQuestionErrorContent": "Thêm ít nhất 1 câu hỏi cho bài khảo sát"
+    },
+    "ConversationScreen": {
+        "allConversationTabTitle": "Tất cả hội thoại",
+        "allActiveConversationTabTitle": "Đang hoạt động"
+    },
+    "RecruitmentScreen": {
+        "recruitmentBenefitEmptyValidate": "Quyền lợi không được để trống",
+        "recruitmentBenefitPlaceholder": "Quyền lợi...",
+        "recruitmentBenefitTitle": "Quyền lợi",
+        "recruitmentDescEmptyValidate": "Mô tả không được để trống",
+        "recruitmentEmploymentTypeEmptyValidate": "Hình thức làm việc không được để trống",
+        "recruitmentExpirationValidate": "Thời hạn không được chọn ở thời điểm trong quá khứ",
+        "recruitmentLocationEmptyValidate": "Địa điểm làm việc không được để trống",
+        "recruitmentRequirementEmptyValidate": "Yêu cầu không được để trống",
+        "recruitmentSalaryEmptyValidate": "Tiền lương không được để trống",
+        "recruitmentSaveDescPlaceholder": "Mô tả công việc...",
+        "recruitmentSaveDescTitle": "Mô tả công việc",
+        "recruitmentSaveEmploymentTypePlaceholder": "Hình thức làm việc...",
+        "recruitmentSaveExpirationPickerLocale": "vi",
+        "recruitmentSaveExpirationTitle": "Thời hạn ứng tuyển",
+        "recruitmentSaveLocationPlaceholder": "Địa điểm làm việc...",
+        "recruitmentSaveLocationTitle": "Địa điểm làm việc",
+        "recruitmentSaveRequirementPlaceholder": "Yêu cầu...",
+        "recruitmentSaveRequirementTitle": "Yêu cầu công việc",
+        "recruitmentSaveSallaryPlaceholder": "Lương...",
+        "recruitmentSaveSallaryTitle": "Lương",
+        "recruitmentSaveSaveEmploymentTypeTitle": "Hình thức làm việc",
+        "recruitmentSaveSuccessContent": "Tin tuyển dụng đã được đăng",
+        "recruitmentSaveSuccessTitle": "Thành công !!!",
+        "recruitmentSaveTitlePlaceholder": "Nhập tiêu đề...",
+        "recruitmentSaveTitleTitle": "Tiêu đề",
+        "recruitmentTitleEmptyValidate": "Tiêu đề không được để trống",
+        "recruitmentSaveCompleteButton": "Hoàn tất"
+    },
+    "CreateSurveyPostScreen": {
+        "surveySaveButtonGoNext": "Tiếp theo",
+        "surveySaveDescEmptyValidate": "Mô tả không được để trống",
+        "surveySaveDescOver255CharactersValidate": "Mô tả không được quá 255 ký tự",
+        "surveySaveDescPlaceholder": "Nhập mô tả",
+        "surveySaveDescTitle": "Mô tả",
+        "surveySaveTitleEmptyValidate": "Tiêu đề không được để trống",
+        "surveySaveTitleOver255CharactersValidate": "Tiêu đề không được quá 255 ký tự",
+        "surveySaveTitlePlaceholder": "Nhập tiêu đề",
+        "surveySaveTitleTitle": "Tiêu đề"
+    },
+    "JobApplyScreen": {
+        "jobApplyScreenButtonAddCvTitle": "Thêm CV",
+        "jobApplyScreenButtonComplete": "Hoàn tất",
+        "jobApplyScreenButtonGoBack": "Quay lại",
+        "jobApplyScreenButtonUpdateCvTitle": "Cập nhật CV",
+        "jobApplyScreenEmptyCvTextContent": "Vui lòng thêm CV để hoàn tất đăng ký",
+        "jobApplyScreenEmptyCvTextTitle": "Thông báo",
+        "jobApplyScreenSaveSuccessTextContent": "Nộp đơn thành công",
+        "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
+    },
+    "MessageScreen": {
+        "messageScreenLoaderTitle": "Đang tải tin nhắn..."
+    },
+    "MessengerToolbar": {
+        "userStatusActive": "Đang hoạt động",
+        "userStatusInactive": "Truy cập"
+    },
+    "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenAnswerTitle": "Câu hỏi",
+        "reviewSurveyScreenButtonComplete": "Hoàn tất",
+        "reviewSurveyScreenButtonGoBack": "Quay lại",
+        "reviewSurveyScreenSaveFailContent": "Lưu thất bại",
+        "reviewSurveyScreenSaveFailTitle": "Lỗi",
+        "reviewSurveyScreenSaveSuccessContent": "Lưu thành công",
+        "reviewSurveyScreenSaveSuccessTitle": "Thành công"
+    },
+    "SurveyConductScreen": {
+        "surveyConductScreenSaveSuccessTitle": "Thành công !!!",
+        "surveyConductScreenSaveSuccessContent": "Câu trả lời đã được lưu\nCảm ơn bạn đã tham gia trả lời khảo sát",
+        "surveyConductScreenShortAnswerError": "Vui lòng nhập nội dung câu trả lời",
+        "surveyConductScreenMultiQuestionMulitiChoice": "Vui lòng chọn ít nhất một câu trả lời",
+        "surveyConductScreenMultiQuestionOneChoice": "Vui lòng chọn một câu trả lời",
+        "surveyConductScreenLoaderTitle": "Đang tải dữ liệu...",
+        "surveyConductScreenButtonGoBack": "Quay lại",
+        "surveyConductScreenButtonComplete": "Hoàn tất"
+    },
+    "SurveyResultScreen": {
+        "surveyResultScreenEmptyVote": "Chưa có lượt bình chọn nào",
+        "surveyResultScreenEmptyShortAnswer": "Chưa có câu trả lời",
+        "surveyResultScreenNumberOfShortAnswer": "câu trả lời",
+        "surveyResultScreenLoaderTitle": "Đang tải dữ liệu..."
+    },
+    "ConversationItem": {
+        "conversationItemComponentImageMessageAnnotation": "Hình ảnh"
+    },
+    "MessageBottomBar": {
+        "messageBottomBarComponentInputTextPlaceholder": "@ Tin nhắn"
+    },
+    "MessageSentItem": {
+        "messageItemStatusReceived": "Đã nhận",
+        "messageItemStatusSeen": "Đã xem"
+    },
+    "AddQuestionView": {
+        "addQuestionViewStartAddQuestion": "Thêm",
+        "addQuestionViewComponentButtonComplete": "Hoàn tất",
+        "addQuestionViewComponentShortAnswer": "Trả lời ngắn",
+        "addQuestionViewComponentChoiceInputPlaceholder": "Lựa chọn",
+        "addQuestionViewComponentMultiChoiceQuestion": "Nhiều lựa chọn",
+        "addQuestionViewComponentOneChoiceQuestion": "Trắc nghiệm",
+        "addQuestionViewComponentQuestionEmptyErrorContent": "Vui lòng chọn loại câu hỏi",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Lỗi !!!",
+        "addQuestionViewComponentQuestionTypeDropdownSearch": "Tìm kiếm...",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Chọn loại câu hỏi ---",
+        "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Tiêu đề không được chứa ký tự đặc biệt",
+        "addQuestionViewComponentTitleEmptyValidate": "Tiêu đề không được để trống",
+        "addQuestionViewComponentTitleInputPlaceholder": "Nhập tiêu đề câu hỏi...",
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự"
+    },
+    "MultiChoiceQuestion": {
+        "questionComponentAddTextTitle": "Câu hỏi"
+    },
+    "QuestonBottomBarOptions": {
+        "questionBottomBarQuestionRequireToggle": "Bắt buộc"
+    },
+    "ShortAnswerQuestion": {
+        "shortAnswerQuestionComponentTitlePlaceholder": "Nhập câu trả lời..."
+    },
+    "BarItemComponentNumberVote": {
+        "barItemComponentNumberOfVote": " lượt bình chọn"
     }
 }
