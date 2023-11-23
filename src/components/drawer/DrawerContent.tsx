@@ -14,7 +14,8 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
   APPLICATION_OPTION_SCREEN, CREATE_SURVEY_SCREEN,
-  LOGIN_SCREEN
+  LOGIN_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
@@ -67,6 +68,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         <DrawerItem
           label={t('DrawerContentComponent.userJobApplyProfile')}
           onPress={() => {
+            navigation.navigate(MANAGEMENT_JOB_APPLY_SCREEN)
           }}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}

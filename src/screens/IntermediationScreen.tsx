@@ -5,22 +5,14 @@ import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { BUSINESS_REGISTER_SCREEN, STUDENT_REGISTER_SCREEN } from '../constants/Screen'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import {
-  TEXT_CONTINUTE,
-  TEXT_GO_BACK,
-  TEXT_SELECTED_TYPE,
-  TEXT_TITLE_NITIFICATION,
-  TEXT_TITLE_SELECTED_TYPE,
-  TEXT_TYPE_BUSINESS,
-  TEXT_TYPE_STUDENT,
-  TEXT_WARNING_SELECTED_TYPE
-} from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
-const data = [
-  { name: TEXT_TYPE_STUDENT, value: '1' },
-  { name: TEXT_TYPE_BUSINESS, value: '2' }
-]
 export default function IntermediationScreen() {
+  const t = useTranslation()
+  const data = [
+    { name: t('RegisterComponent.typeStudent'), value: '1' },
+    { name: t('RegisterComponent.typeBusiness'), value: '2' }
+  ]
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [value, setValue] = useState('')
   const onChange = () => {
@@ -29,7 +21,7 @@ export default function IntermediationScreen() {
     } else if (value === '2') {
       navigation.navigate(BUSINESS_REGISTER_SCREEN)
     } else {
-      Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_WARNING_SELECTED_TYPE)
+      Alert.alert(t('RegisterComponent.titleNotification'), t('RegisterComponent.warningSelectedType'))
     }
   }
 
@@ -43,7 +35,7 @@ export default function IntermediationScreen() {
       >
         <View style={styles.group}>
           <View style={{ alignItems: 'center', marginBottom: 20 }}>
-            <Text style={styles.txt}>{TEXT_TITLE_SELECTED_TYPE}</Text>
+            <Text style={styles.txt}>{t('RegisterComponent.titleSelectedType')}</Text>
           </View>
           <Dropdown
             style={styles.dropdown}
@@ -53,7 +45,7 @@ export default function IntermediationScreen() {
             data={data}
             labelField='name'
             valueField='value'
-            placeholder={TEXT_SELECTED_TYPE}
+            placeholder={t('RegisterComponent.selectedType')}
             value={value}
             onChange={(item) => {
               setValue(item.value)
@@ -62,12 +54,12 @@ export default function IntermediationScreen() {
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <TouchableOpacity style={[styles.btnContinute, { marginRight: 5 }]} onPress={() => navigation.goBack()}>
               <Text style={styles.txtRegister}>
-                <Icon name='angle-double-left' size={16} /> {TEXT_GO_BACK}
+                <Icon name='angle-double-left' size={16} /> {t('RegisterComponent.goBack')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.btnContinute, { marginLeft: 5 }]} onPress={() => onChange()}>
               <Text style={styles.txtRegister}>
-                {TEXT_CONTINUTE} <Icon name='angle-double-right' size={16} />
+                {t('RegisterComponent.continute')} <Icon name='angle-double-right' size={16} />
               </Text>
             </TouchableOpacity>
           </View>

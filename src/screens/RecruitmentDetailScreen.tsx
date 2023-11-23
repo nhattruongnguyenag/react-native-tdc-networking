@@ -16,19 +16,7 @@ import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
 import { useAppSelector } from '../redux/Hook'
 import Loading from '../components/common/Loading'
-import {
-  TEXT_BENEFIT,
-  TEXT_BTN_APPLY_JOB,
-  TEXT_DESCRIPTION_JOB,
-  TEXT_EMPLOYMENTTYPE,
-  TEXT_EXPIRATION,
-  TEXT_LOCATION,
-  TEXT_REQUIREMENT_JOB,
-  TEXT_SALARY,
-  TEXT_SALARY_UNIT_MONTH,
-  TEXT_TITLE_LOADER,
-  TEXT_TITLE_RECRUITMENT
-} from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -76,10 +64,11 @@ export default function RecruitmentDetailScreen() {
     setRequirement(data.requirement.split(','))
   }, [data.benefit, data.description, data.requirement])
 
+  const t = useTranslation()
   return (
     <>
       {isLoading ? (
-        <Loading title={TEXT_TITLE_LOADER} />
+        <Loading title={t('RecuitmentPostDetailComponent.titleLoader')} />
       ) : (
         <ScrollView style={{backgroundColor:'#fff'}}>
           <>
@@ -90,39 +79,39 @@ export default function RecruitmentDetailScreen() {
                 <SafeAreaView style={styles.container}>
                   <View style={styles.group}>
                     <View style={styles.item}>
-                      <Text style={styles.txt}>{TEXT_TITLE_RECRUITMENT}</Text>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.titleJob')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}> {data.title}</Text>
+                        <Text style={{ color: COLOR_BLACK }}>{data.title}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
-                      <Text style={styles.txt}>{TEXT_EMPLOYMENTTYPE}</Text>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.employeType')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='briefcase' size={16} color={COLOR_GREY} />
                         <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
-                      <Text style={styles.txt}>{TEXT_SALARY}</Text>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.salary')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
                         <Text style={{ color: COLOR_BLACK }}>
                           {' '}
-                          {formatVietNamCurrency(data.salary)} {TEXT_SALARY_UNIT_MONTH}
+                          {formatVietNamCurrency(data.salary)} {t('RecuitmentPostDetailComponent.salaryUnitMonth')}
                         </Text>
                       </View>
                     </View>
 
                     <View style={styles.item}>
-                      <Text style={styles.txt}>{TEXT_EXPIRATION}</Text>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.expiration')}</Text>
                       <View style={styles.iconRecuitment}>
                         <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
                         <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
-                      <Text style={styles.txt}>{TEXT_LOCATION}</Text>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.location')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
                         <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
@@ -132,7 +121,7 @@ export default function RecruitmentDetailScreen() {
 
                   <View style={styles.group1}>
                     <View>
-                      <Text style={styles.headerWelfare}>{TEXT_BENEFIT}</Text>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.benefit')}</Text>
                     </View>
                     <View style={styles.welfare}>
                       {result
@@ -147,7 +136,7 @@ export default function RecruitmentDetailScreen() {
 
                   <View style={styles.group1}>
                     <View>
-                      <Text style={styles.headerWelfare}>{TEXT_DESCRIPTION_JOB}</Text>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.descriptionJob')}</Text>
                     </View>
                     <View>
                       {description
@@ -165,7 +154,7 @@ export default function RecruitmentDetailScreen() {
 
                   <View style={styles.group1}>
                     <View>
-                      <Text style={styles.headerWelfare}>{TEXT_REQUIREMENT_JOB}</Text>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.requipmentJob')}</Text>
                     </View>
                     <View>
                       {requirement
@@ -184,7 +173,7 @@ export default function RecruitmentDetailScreen() {
 
                 <View>
                   <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
-                    <Text style={styles.txtRecruitment}>{TEXT_BTN_APPLY_JOB}</Text>
+                    <Text style={styles.txtRecruitment}>{t('RecuitmentPostDetailComponent.btnApplyJob')}</Text>
                   </TouchableOpacity>
                 </View>
               </>
@@ -240,7 +229,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     marginVertical: 5,
-    marginRight: 5
+    marginRight: 5,
   },
   headerWelfare: {
     fontSize: 16,

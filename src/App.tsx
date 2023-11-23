@@ -54,6 +54,7 @@ import {
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
   APPLICATION_OPTION_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -88,12 +89,13 @@ import ProfileScreen from './screens/ProfileScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, TEXT_TITLE_LIST_JOB_APPLY, TEXT_TITLE_RECRUITMENT_DETAIL } from './constants/StringVietnamese';
+import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_, } from './constants/StringVietnamese';
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen';
+import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen';
+import { useTranslation } from 'react-multi-lang';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
-
 export type RootStackParamList = {
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -129,6 +131,7 @@ export type RootStackParamList = {
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
   APPLICATION_OPTION_SCREEN: undefined
+  MANAGEMENT_JOB_APPLY_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -159,6 +162,7 @@ const customDrawerIcon = (props: DrawerIcon) => (
 )
 
 export function DrawerNavigator(): JSX.Element {
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}
@@ -189,6 +193,8 @@ export function DrawerNavigator(): JSX.Element {
 }
 
 export function StackNavigator(): JSX.Element {
+  const t = useTranslation()
+  
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}
@@ -206,7 +212,7 @@ export function StackNavigator(): JSX.Element {
     >
       <RootStack.Screen
         name={RECRUITMENT_DETAIL_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_RECRUITMENT_DETAIL} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('RecuitmentPostDetailComponent.titleRecruitmentDetail')} /> }}
         component={RecruitmentDetailScreen}
       />
 
@@ -319,7 +325,7 @@ export function StackNavigator(): JSX.Element {
       
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={TEXT_TITLE_LIST_JOB_APPLY}/> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ListJobApplyComponent.titleListJobApply')}/> }}
         component={ListJobApplyScreen}
       />
 
@@ -361,6 +367,12 @@ export function StackNavigator(): JSX.Element {
         name={APPLICATION_OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title='Tùy chọn' /> }}
         component={ApplicationOptionScreen}
+      />
+
+      <RootStack.Screen
+        name={MANAGEMENT_JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title='Quản lý hồ sơ ứng tuyển' /> }}
+        component={ManagementJobApplyScreen}
       />
     </RootStack.Navigator>
   )

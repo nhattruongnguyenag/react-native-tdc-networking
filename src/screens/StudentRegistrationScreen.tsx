@@ -35,49 +35,7 @@ import {
   isPassword
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
-import {
-  TEXT_ALERT_REGISTER_FAILT,
-  TEXT_ALERT_REGISTER_SUCCESS,
-  TEXT_ERROR_CHECKSAMEEMAIL,
-  TEXT_ERROR_CONFIMPASSWORD,
-  TEXT_ERROR_CONFIMPASS_MATCHPASS,
-  TEXT_ERROR_EMAIL_NOTFORMAT,
-  TEXT_ERROR_EMAIL_NOTIMPTY,
-  TEXT_ERROR_EMAIL_NOTLENGTH,
-  TEXT_ERROR_FACULITYNOTEMPTY,
-  TEXT_ERROR_MAJORNAME,
-  TEXT_ERROR_MAJORNAME_NOTEMPTY,
-  TEXT_ERROR_PASSWORD_NOTFORMAT,
-  TEXT_ERROR_PASSWORD_NOTIMPTY,
-  TEXT_ERROR_PASSWORD_NOTLENGTH,
-  TEXT_ERROR_STUDENTCODE,
-  TEXT_ERROR_STUDENTCODE_NOTFORMAT,
-  TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER,
-  TEXT_ERROR_STUDENTNAME,
-  TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
-  TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
-  TEXT_IMAGE_PICKER,
-  TEXT_LOGIN,
-  TEXT_PLACEHOLDER_CONFIMPASS,
-  TEXT_PLACEHOLDER_EMAIL,
-  TEXT_PLACEHOLDER_FACULITY,
-  TEXT_PLACEHOLDER_FACULiTY_SEARCH,
-  TEXT_PLACEHOLDER_MAJOR,
-  TEXT_PLACEHOLDER_PASSWORD,
-  TEXT_PLACEHOLDER_STUDENTCODE,
-  TEXT_PLACEHOLDER_STUDENTNAME,
-  TEXT_REGISTER,
-  TEXT_REQUEST_LOGIN,
-  TEXT_TITLE_CONFIMPASS,
-  TEXT_TITLE_EMAIL_REGISTER,
-  TEXT_TITLE_FACULITY,
-  TEXT_TITLE_MAJOR,
-  TEXT_TITLE_NITIFICATION,
-  TEXT_TITLE_PASSWORD,
-  TEXT_TITLE_REGISTER_STUDENT,
-  TEXT_TITLE_STUDENTCODE,
-  TEXT_TITLE_STUDENTNAME
-} from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -102,6 +60,7 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 }
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -139,37 +98,37 @@ export default function StudentRegistrationScreen() {
   const [isLoading, setIsLoading] = useState(false)
   const [validate, setValidate] = useState<RegisterStudent>({
     name: {
-      textError: TEXT_ERROR_STUDENTNAME,
+      textError: t('RegisterStudentComponent.errorStudentNameEmpty'),
       isVisible: false,
       isError: true
     },
     email: {
-      textError: TEXT_ERROR_EMAIL_NOTIMPTY,
+      textError: t('RegisterStudentComponent.errorEmailEmpty'),
       isVisible: false,
       isError: true
     },
     studentCode: {
-      textError: TEXT_ERROR_STUDENTCODE,
+      textError: t('RegisterStudentComponent.errorStudentCodeEmpty'),
       isVisible: false,
       isError: true
     },
     facultyName: {
-      textError: TEXT_ERROR_FACULITYNOTEMPTY,
+      textError: t('RegisterStudentComponent.errorFaculityEmpty'),
       isVisible: false,
       isError: true
     },
     major: {
-      textError: TEXT_ERROR_MAJORNAME,
+      textError: t('RegisterStudentComponent.errorMajor'),
       isVisible: false,
       isError: true
     },
     password: {
-      textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
+      textError: t('RegisterStudentComponent.errorPasswordEmpty'),
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: TEXT_ERROR_CONFIMPASSWORD,
+      textError: t('RegisterStudentComponent.errorConfimPasswordEmpty'),
       isVisible: false,
       isError: true
     }
@@ -202,7 +161,7 @@ export default function StudentRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTNAME
+            textError: t('RegisterStudentComponent.errorStudentNameEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -211,7 +170,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
+            textError: t('RegisterStudentComponent.errorStudentNameNotSpecial'),
             isVisible: true
           }
         })
@@ -221,7 +180,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
+            textError: t('RegisterStudentComponent.errorStudentNameNotLengthMax'),
             isVisible: true
           }
         })
@@ -249,7 +208,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE
+            textError: t('RegisterStudentComponent.errorStudentCodeEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -259,7 +218,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER
+            textError: t('RegisterStudentComponent.errorStudentCodeNotSpecial')
           }
         })
       } else if (!stCode.test(value)) {
@@ -269,7 +228,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorStudentCodeNotFormat')
           }
         })
       } else {
@@ -295,7 +254,7 @@ export default function StudentRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: TEXT_ERROR_CHECKSAMEEMAIL,
+              textError: t('RegisterStudentComponent.errorSameEmail'),
               isVisible: true
             }
           })
@@ -315,7 +274,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTIMPTY
+            textError: t('RegisterStudentComponent.errorEmailEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -325,7 +284,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTLENGTH
+            textError: t('RegisterStudentComponent.errorEmailNotLengthMax')
           }
         })
       } else if (!isEmail(value)) {
@@ -335,7 +294,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorEmailNotFormat')
           }
         })
       } else {
@@ -361,7 +320,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTIMPTY
+            textError: t('RegisterStudentComponent.errorPasswordEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
@@ -371,7 +330,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTLENGTH
+            textError: t('RegisterStudentComponent.errorPassNotLengthMax')
           }
         })
       } else if (!isPassword(value)) {
@@ -381,7 +340,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorPassNotFormat')
           }
         })
       } else {
@@ -407,7 +366,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASSWORD
+            textError: t('RegisterStudentComponent.errorConfimPasswordEmpty')
           }
         })
       } else if (value != student.password) {
@@ -417,7 +376,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASS_MATCHPASS
+            textError: t('RegisterStudentComponent.errorConfimPassNotMatch')
           }
         })
       } else {
@@ -443,7 +402,7 @@ export default function StudentRegistrationScreen() {
             ...validate.major,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_MAJORNAME_NOTEMPTY
+            textError: t('RegisterStudentComponent.errorMajorEmpty')
           }
         })
       } else {
@@ -469,7 +428,7 @@ export default function StudentRegistrationScreen() {
             ...validate.facultyName,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_FACULITYNOTEMPTY
+            textError: t('RegisterStudentComponent.errorFaculityEmpty')
           }
         })
       } else {
@@ -512,12 +471,12 @@ export default function StudentRegistrationScreen() {
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
+          Alert.alert(t('RegisterStudentComponent.titleNotification'), t('RegisterStudentComponent.registerSusccess'))
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
           console.log(error)
-          Alert.alert(TEXT_ALERT_REGISTER_FAILT, TEXT_ERROR_CHECKSAMEEMAIL)
+          Alert.alert(t('RegisterStudentComponent.registerFail'), t('RegisterStudentComponent.errorSameEmail'))
           setIsLoading(false)
         })
     } else {
@@ -541,15 +500,15 @@ export default function StudentRegistrationScreen() {
             <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>{TEXT_TITLE_REGISTER_STUDENT}</Text>
+            <Text style={styles.txtHeader}>{t('RegisterStudentComponent.titleRegisterStudent')}</Text>
           </View>
         </View>
 
         <View style={styles.form}>
           <TextInputWithTitle
             value={student.name}
-            title={TEXT_TITLE_STUDENTNAME}
-            placeholder={TEXT_PLACEHOLDER_STUDENTNAME}
+            title={t('RegisterStudentComponent.titleStudentName')}
+            placeholder={t('RegisterStudentComponent.placeholderStudentName')}
             onChangeText={(value) => handleStudentNameChange(value)}
             textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
@@ -563,8 +522,8 @@ export default function StudentRegistrationScreen() {
 
           <TextInputWithTitle
             value={student.studentCode}
-            title={TEXT_TITLE_STUDENTCODE}
-            placeholder={TEXT_PLACEHOLDER_STUDENTCODE}
+            title={t('RegisterStudentComponent.titleStudentCode')}
+            placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
             onChangeText={(value) => handleStudentCodeChange(value)}
             textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
           />
@@ -578,8 +537,8 @@ export default function StudentRegistrationScreen() {
 
           <TextInputWithTitle
             value={student.email}
-            title={TEXT_TITLE_EMAIL_REGISTER}
-            placeholder={TEXT_PLACEHOLDER_EMAIL}
+            title={t('RegisterStudentComponent.titleEmail')}
+            placeholder={t('RegisterStudentComponent.placeholderEmail')}
             onChangeText={(value) => handleEmailChange(value)}
             onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
@@ -593,7 +552,7 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_FACULITY}</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleFaculity')}</Text>
             <Dropdown
               style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -604,8 +563,8 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              placeholder={TEXT_PLACEHOLDER_FACULITY}
-              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
+              placeholder={t('RegisterStudentComponent.placeholderFaculity')}
+              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={value}
               onChange={(item) => {
                 setValue(item.id)
@@ -622,9 +581,9 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_MAJOR}</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
             <Dropdown
-              placeholder={TEXT_PLACEHOLDER_MAJOR}
+              placeholder={t('RegisterStudentComponent.placeholderMajor')}
               style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -634,7 +593,7 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
+              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={item}
               onChange={(item) => {
                 setItem(item.id)
@@ -651,10 +610,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_PASSWORD}</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titlePass')}</Text>
             <TextInput
               value={student.password}
-              placeholder={TEXT_PLACEHOLDER_PASSWORD}
+              placeholder={t('RegisterStudentComponent.placeholderPass')}
               style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -672,10 +631,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_CONFIMPASS}</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleConfimPass')}</Text>
             <TextInput
               value={student.confimPassword}
-              placeholder={TEXT_PLACEHOLDER_CONFIMPASS}
+              placeholder={t('RegisterStudentComponent.placeholderConfimPass')}
               style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -695,7 +654,7 @@ export default function StudentRegistrationScreen() {
 
           <View style={styles.group}>
             <View style={styles.logo}>
-              <Text style={styles.txt}>{TEXT_IMAGE_PICKER}</Text>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
@@ -712,17 +671,17 @@ export default function StudentRegistrationScreen() {
         </View>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>{TEXT_REGISTER}</Text>
+          <Text style={styles.txtRegister}>{t('RegisterStudentComponent.titleRegister')}</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
         <View style={styles.login}>
-          <Text>{TEXT_REQUEST_LOGIN} </Text>
+          <Text>{t('RegisterStudentComponent.requestLogin')} </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{TEXT_LOGIN}</Text>
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{t('RegisterStudentComponent.titleLogin')}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
