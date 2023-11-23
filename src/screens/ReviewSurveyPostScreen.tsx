@@ -31,7 +31,6 @@ export default function ReviewSurveyPostScreen() {
   }, [addSurveyResult]);
 
   const onBtnPublishPostPress = () => {
-    console.log(JSON.stringify(surveyPostRequest));
     if (surveyPostRequest) {
       addSurvey(surveyPostRequest);
     }

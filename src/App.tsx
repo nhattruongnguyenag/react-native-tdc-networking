@@ -23,11 +23,16 @@ import ToolbarWithSearchIcon from './components/toolbars/ToolbarWithSearchIcon'
 
 import { setDefaultLanguage, setTranslations, useTranslation } from 'react-multi-lang'
 import en from './translates/en.json'
-import jp from './translates/jp.json'
+import ja from './translates/jp.json'
 import vi from './translates/vi.json'
 
-setTranslations({ vi, en, jp })
+setTranslations({ vi, en, ja })
 setDefaultLanguage('vi')
+
+const locale = new Map<string, any>()
+locale.set('vi', require('moment/locale/vi'))
+locale.set('en', require('moment/locale/es'))
+locale.set('ja', require('moment/locale/ja'))
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import moment from 'moment'
@@ -91,12 +96,6 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
-
-const locale = new Map<string, any>()
-locale.set('vi', require('moment/locale/vi'))
-locale.set('en', require('moment/locale/es'))
-locale.set('jp', require('moment/locale/ja'))
-
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -168,7 +167,6 @@ const customDrawerIcon = (props: DrawerIcon) => (
 
 export function DrawerNavigator(): JSX.Element {
   const { defaultLanguage } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const t = useTransition()
 
   useEffect(() => {
     AsyncStorage.getItem(DEFAULT_LANGUAGE)

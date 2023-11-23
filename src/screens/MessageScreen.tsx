@@ -23,7 +23,7 @@ export default function MessengerScreen() {
   )
 
   const textInputMessageRef = useRef<TextInput | null>(null)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [messageContent, setMessageContent] = useState<string>('')
   const dispatch = useAppDispatch()
 
@@ -39,7 +39,6 @@ export default function MessengerScreen() {
     stompClient = getStompClient()
 
     const onConnected = () => {
-      setLoading(true)
       stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
       stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
     }

@@ -9,7 +9,7 @@ import { setDefaultLanguage } from '../redux/Slice';
 const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
-  { label: 'Japanese', value: 'jp' },
+  { label: 'Japanese', value: 'ja' },
  
 ];
 export default function ApplicationOptionScreen() {
