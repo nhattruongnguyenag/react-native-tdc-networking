@@ -22,6 +22,9 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { getGroupForPost } from '../utils/GetGroup';
 import { User } from '../types/User';
+import { followAPI } from '../api/CallApi';
+import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import { ToastMessenger } from '../utils/ToastMessenger';
 
 const ProfileScreen = ({ route }: any) => {
     const [imageToShow, setImageToShow] = useState<string>('');
@@ -33,6 +36,7 @@ const ProfileScreen = ({ route }: any) => {
     const { userId, group } = route.params;
     const [post, setPost] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState<Student | Faculty | Business | null>();
+    const [isFollow, setIsFollow] = useState<boolean>(false);
     const [typeAuthorPost, setTypeAuthorPost] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer);
@@ -63,6 +67,7 @@ const ProfileScreen = ({ route }: any) => {
             .then((response) => {
                 setTypeAuthorPost(response.data.data.user['roleCodes']);
                 setUserInfo(response.data.data.user);
+                setIsFollow(response.data.data.isFollow)
                 setPost(response.data.data.posts);
                 setIsLoading(false);
             }).catch((error) => {
@@ -152,7 +157,7 @@ const ProfileScreen = ({ route }: any) => {
             console.log(userInfo)
             navigation.navigate(MESSENGER_SCREEN)
         } else if (flag === FOLLOW_ACTION) {
-            console.log('follow');
+            handleClickFollowEvent();
         } else if (flag === CALL_ACTION) {
             console.log('call');
         } else {
@@ -160,8 +165,18 @@ const ProfileScreen = ({ route }: any) => {
         }
     }
 
+    const handleClickFollowEvent = async () => {
+        const followData = {
+            "userFollowId": userId,
+            "userId": userLogin?.id
+        }
+        setIsFollow(!isFollow);
+        const status = await followAPI(SERVER_ADDRESS + 'api/users/follow', followData);
+        ToastMessenger(status, 200, 'Thông báo', isFollow ? 'Hủy theo dõi thành công' : 'Theo dõi thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau');
+    }
+
     const handleClickIntoButtonMenu3dotEvent = () => {
-        navigation.navigate(OPTION_SCREEN);
+        navigation.navigate(OPTION_SCREEN, { userData: userInfo ?? null });
     }
 
     const handleClickIntoHeaderComponentEvent = (flag: number) => {
@@ -209,6 +224,7 @@ const ProfileScreen = ({ route }: any) => {
                         }
                     >
                         <CustomizeProfile
+                            isFollow={isFollow}
                             data={post}
                             role={typeAuthorPost}
                             userData={userInfo}

@@ -53,6 +53,7 @@ import {
   DETAIL_JOB_APPLY,
   OPTION_SCREEN,
   SURVEY_RESULT_SCREEN,
+  UPDATE_PROFILE,
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -88,6 +89,10 @@ import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import OptionScreen from './screens/OptionScreen';
 import SurveyResultScreen from './screens/SurveyResultScreen';
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_SEARCH_ } from './constants/StringVietnamese';
+import UpdateProfile from './screens/UpdateProfile';
+import { Student } from './types/Student';
+import { Faculty } from './types/Faculty';
+import { Business } from './types/Business';
 
 const vi = require('moment/locale/vi')
 moment.locale('vi', vi)
@@ -124,8 +129,9 @@ export type RootStackParamList = {
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
   LIST_POST_SAVED_SCREEN: undefined
-  OPTION_SCREEN: undefined
+  OPTION_SCREEN: { userData: Student | Faculty | Business | null }
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
+  UPDATE_PROFILE: { userData: Student | Faculty | Business | null }
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -313,10 +319,10 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => null }}
         component={CreateNormalPostScreen}
       />
-      
+
       <RootStack.Screen
         name={LIST_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển'/> }}
+        options={{ header: () => <ToolbarWithBackPress title='Danh sách hồ sơ ứng tuyển' /> }}
         component={ListJobApplyScreen}
       />
 
@@ -353,6 +359,13 @@ export function StackNavigator(): JSX.Element {
         options={{ header: () => <ToolbarWithBackPress title='Kết quả khảo sát' /> }}
         component={SurveyResultScreen}
       />
+
+      <RootStack.Screen
+        name={UPDATE_PROFILE}
+        options={{ header: () => <ToolbarWithBackPress title='Cập nhật thông tin cá nhân' /> }}
+        component={UpdateProfile}
+      />
+
     </RootStack.Navigator>
   )
 }

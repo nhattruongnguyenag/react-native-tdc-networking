@@ -27,3 +27,19 @@ export const handlePutDataAPI = async (apiUrl: string, postData: any): Promise<n
   } catch (error) {
   }
 }
+
+export const deletePostAPI = async (urlDeletePost: string, postId: number) => {
+  try {
+    const response = await axios.delete(urlDeletePost + postId);
+    return response.data.status;
+  } catch (error) {
+  }
+}
+
+export const followAPI = async (urlFollow: string, followData: any) => {
+  try {
+    const response = await axios.post(urlFollow, followData);
+    return response.data.status;
+  } catch (error) {
+  }
+}

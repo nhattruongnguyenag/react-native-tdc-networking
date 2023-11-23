@@ -57,6 +57,7 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -77,7 +78,7 @@ export default function StudentRegistrationScreen() {
     facultyName: '',
     major: '',
     studentCode: '',
-    confimPassword: ''
+    confimPassword: '',
   })
   const [dataRequest, setDataRequest] = useState([
     {

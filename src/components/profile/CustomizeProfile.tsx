@@ -1,5 +1,5 @@
 import CustomizeHeaderProfile from './CustomizeHeaderProfile'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeBodyFacultyProfile from './CustomizeBodyFacultyProfile'
 import { TEXT_UN_UPDATE, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../App'
 import { useAppSelector } from '../../redux/Hook'
 
 export interface CustomizeProfileType {
+    isFollow: boolean
     data: Object[]
     role: string
     userData: any
@@ -26,20 +27,23 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
         switch (props.role) {
             case TYPE_POST_STUDENT:
                 body = <CustomizeBodyStudentProfile
+                    isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
                     position={props.userData.position ?? TEXT_UN_UPDATE}
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
                     numberPost={props.data.length ?? 0}
                     name={props.userData.name ?? TEXT_UN_UPDATE}
-                    isSameUser={props.userData?.id === userLogin?.id} />
+                    isSameUser={props.userData?.id === userLogin?.id}
+                />
                 break;
             case TYPE_POST_BUSINESS:
                 body = <CustomizeBodyBusinessProfile
+                    isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    timeWork={props.userData.timeWork ?? TEXT_UN_UPDATE}
-                    TaxIdentificationNumber={props.userData.TaxIdentificationNumber ?? TEXT_UN_UPDATE}
-                    representative={props.userData.representative ?? TEXT_UN_UPDATE}
+                    timeWork={props.userData.activeTime ?? TEXT_UN_UPDATE}
+                    TaxIdentificationNumber={props.userData.taxCode ?? TEXT_UN_UPDATE}
+                    representor={props.userData.representor ?? TEXT_UN_UPDATE}
                     address={props.userData.address ?? TEXT_UN_UPDATE}
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}
@@ -50,8 +54,9 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                 break;
             case TYPE_POST_FACULTY:
                 body = <CustomizeBodyFacultyProfile
+                    isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    timeWork={props.userData.timeWork ?? TEXT_UN_UPDATE}
+                    timeWork={props.userData.activeTime ?? TEXT_UN_UPDATE}
                     address={props.userData.address ?? TEXT_UN_UPDATE}
                     phone={props.userData.phone ?? TEXT_UN_UPDATE}
                     email={props.userData.email ?? TEXT_UN_UPDATE}

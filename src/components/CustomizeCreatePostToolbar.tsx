@@ -5,8 +5,8 @@ import { COLOR_BTN_BLUE, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../c
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { TYPE_NORMAL_POST, TYPE_NORMAL_POST_TEXT, TYPE_RECRUITMENT_POST, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST, TYPE_SURVEY_POST_TXT } from '../constants/Variables'
-import { TEXT_PLACEHOLDER_CREATE_ANY_POST, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../constants/Variables'
+import { TEXT_PLACEHOLDER_CREATE_ANY_POST, TYPE_NORMAL_POST_TEXT, TYPE_POST_FACULTY, TYPE_POST_STUDENT, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST_TXT } from '../constants/StringVietnamese'
 import DefaultAvatar from './DefaultAvatar'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 

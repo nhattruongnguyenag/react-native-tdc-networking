@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   bottomButton: {
     flexDirection: 'row',
     backgroundColor: COLOR_BLUE_BANNER,
-    padding: 5,
+    padding: 6,
     alignItems: 'center',
     width: '40%',
     borderRadius: 5,

@@ -5,7 +5,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
-import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
+import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, CLICK_UN_SAVE_POST, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import DefaultAvatar from '../DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
@@ -49,7 +49,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         visible: props.isSave === 0
       },
       {
-        type: CLICK_DELETE_POST_EVENT,
+        type: CLICK_UN_SAVE_POST,
         name: 'Hủy lưu bài viết',
         visible: props.isSave === 1
       }

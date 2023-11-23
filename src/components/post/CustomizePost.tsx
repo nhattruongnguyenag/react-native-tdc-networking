@@ -15,27 +15,27 @@ import {
   CLICK_SAVE_POST_EVENT,
   CLICK_SEE_LIST_CV_POST_EVENT,
   CLICK_SEE_RESULT_POST_EVENT,
+  CLICK_UN_SAVE_POST,
   COMMENT_ACTION,
   GO_TO_PROFILE_ACTIONS,
   LIKE_ACTION,
   SHOW_LIST_USER_REACTED,
   TYPE_NORMAL_POST,
   TYPE_RECRUITMENT_POST,
-  TYPE_RECRUITMENT_POST_TEXT,
   TYPE_SURVEY_POST,
-  TYPE_SURVEY_POST_TXT
 } from '../../constants/Variables'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import {LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import { LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
-import { savePostAPI } from '../../api/CallApi'
+import { deletePostAPI, savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import Toast from 'react-native-toast-message'
-import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
+import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST_TXT } from '../../constants/StringVietnamese'
+import Toast from 'react-native-toast-message';
+import { ToastMessenger } from '../../utils/ToastMessenger'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
@@ -160,9 +160,12 @@ const CustomizePost = (props: Post) => {
         handleSavePost();
         break
       case CLICK_DELETE_POST_EVENT:
+        handleDeletePost();
+        break
+      case CLICK_UN_SAVE_POST:
         handleSavePost();
         post.handleUnSave(post.id);
-        break
+        break;
       case CLICK_SEE_LIST_CV_POST_EVENT:
         handleSeeListCvPost();
         break
@@ -172,6 +175,11 @@ const CustomizePost = (props: Post) => {
       default:
         return '';
     }
+  }
+
+  const handleDeletePost = async () => {
+    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', props.id);
+    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
   }
 
   const handleSavePost = async () => {
@@ -184,10 +192,7 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleSeeListCvPost = () => {
-    console.log('====================================');
-    console.log('handleSeeListCvPost' + post.id);
-    console.log('====================================');
-    navigation.navigate(LIST_JOB_APPLY_SCREEN, {postId: post.id})
+    navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
 
   const handleSeeResultSurveyPost = () => {

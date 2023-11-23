@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useIsFocused } from '@react-navigation/native';
+import CustomizeSelectFacultyToolbar from '../components/CustomizeSelectFacultyToolbar'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -165,9 +166,7 @@ export default function FacultyDashboardScreen() {
           renderItem={({ item }) => renderItem(item)}
         />
       </ScrollView>
-    </View> : <View style={styles.containerNotification}>
-      <Text>{TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT}</Text>
-    </View>
+    </View> : <CustomizeSelectFacultyToolbar />
   )
 }
 

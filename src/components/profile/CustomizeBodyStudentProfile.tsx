@@ -6,15 +6,20 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import { CALL_ACTION, FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
+import { Student } from '../../types/Student'
+import { Faculty } from '../../types/Faculty'
+import { Business } from '../../types/Business'
+import { TEXT_CALL, TEXT_CHAT, TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_PHONE, TEXT_PROFESSIONAL_POSITION, TEXT_STUDENT, TEXT_SUBJECT_POST, TEXT_UN_FOLLOW } from '../../constants/StringVietnamese'
 
 interface StudentProfileType {
+    isFollow: boolean,
     handleClickButtonEvent: (flag: number) => void,
     position: string,
     phone: string,
     email: string,
     numberPost: number,
     name: string,
-    isSameUser: boolean
+    isSameUser: boolean,
 }
 export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfileType>) {
     return (
@@ -23,36 +28,46 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
             <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
             {/* Btn action */}
             <View style={[styles.buttonContainer, styles.paddingBottom]}>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
-                    style={[styles.buttonAction,
-                    styles.marginRightBtnAction]}
-                >
-                    <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
-                    <Text style={styles.txtContentBtn}>
-                        Gửi tin nhắn
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(CALL_ACTION)}
-                    style={[styles.buttonAction,
-                    styles.marginRightBtnAction]}
-                >
-                    <IconEntypo name='phone' size={20} color={COLOR_WHITE} />
-                    <Text style={styles.txtContentBtn}>
-                        Gọi điện
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
-                    style={[styles.buttonAction,
-                    styles.marginRightBtnAction]}
-                >
-                    <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
-                    <Text style={styles.txtContentBtn}>
-                        Theo dõi
-                    </Text>
-                </TouchableOpacity>
+                {
+                    !props.isSameUser && <>
+                        <TouchableOpacity
+                            onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
+                            style={[styles.buttonAction,
+                            styles.marginRightBtnAction]}
+                        >
+                            <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
+                            <Text style={styles.txtContentBtn}>
+                                {TEXT_CHAT}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => props.handleClickButtonEvent(CALL_ACTION)}
+                            style={[styles.buttonAction,
+                            styles.marginRightBtnAction]}
+                        >
+                            <IconEntypo name='phone' size={20} color={COLOR_WHITE} />
+                            <Text style={styles.txtContentBtn}>
+                                {TEXT_CALL}
+                            </Text>
+                        </TouchableOpacity>
+                    </>
+                }
+                {
+                    !props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
+                        style={[styles.buttonAction,
+                        styles.marginRightBtnAction]}
+                    >
+                        {
+                            props.isFollow ? <IconIonicons name='person-remove-sharp' size={20} color={COLOR_WHITE} /> : <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
+                        }
+                        <Text style={styles.txtContentBtn}>
+                            {
+                                props.isFollow ? TEXT_UN_FOLLOW : TEXT_FOLLOW
+                            }
+                        </Text>
+                    </TouchableOpacity>
+                }
                 {
                     props.isSameUser && <TouchableOpacity
                         onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
@@ -69,23 +84,23 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                     <IconIonicons
                         style={styles.iconInfo}
                         name='bag-remove-outline' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Chức vụ: Sinh viên</Text>
+                    <Text style={styles.textInfo}>{TEXT_PROFESSIONAL_POSITION}: {TEXT_STUDENT}</Text>
                 </View>
                 <View style={styles.infoContainer}>
                     <IconFeather
                         style={styles.iconInfo}
                         name='phone-call' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
+                    <Text style={styles.textInfo}>{TEXT_PLACEHOLDER_PHONE}: {props.phone}</Text>
                 </View>
                 <View style={styles.infoContainer}>
                     <IconFontisto
                         style={styles.iconInfo}
                         name='email' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Email: {props.email}</Text>
+                    <Text style={styles.textInfo}>{TEXT_EMAIL}: {props.email}</Text>
                 </View>
             </View>
             {/* Number post */}
-            <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
+            <Text style={[styles.paddingVertical]}>{TEXT_SUBJECT_POST} ({props.numberPost})</Text>
             {/* Post */}
         </View>
     )
