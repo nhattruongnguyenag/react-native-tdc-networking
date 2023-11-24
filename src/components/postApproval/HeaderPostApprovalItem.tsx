@@ -1,11 +1,13 @@
 import moment from 'moment'
-import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { Alert, Image, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
+import { useAcceptPostMutation } from '../../redux/Service'
 import { setPostRejectLog } from '../../redux/Slice'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { PostApprovalItemProps } from './PostApprovalItem'
@@ -17,6 +19,8 @@ const TEXT_IMAGE_BADGE_COLOR = '#00A255'
 
 export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
     const dispatch = useAppDispatch()
+    const [acceptPost, acceptPostResponse] = useAcceptPostMutation()
+
     let badgeColor = TEXT_IMAGE_BADGE_COLOR
     let badgeContent = "Mặc định"
 
@@ -35,6 +39,19 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
         }))
     }
 
+    const onAcceptPost = (postId: number | undefined) => {
+        console.log(postId)
+        acceptPost({
+            postId: postId ?? -1
+        })
+    }
+
+    useEffect(() => {
+        if (acceptPostResponse.data) {
+            Alert.alert("Thành công !!!", "Duyệt bài viết thành công")
+        }
+    }, [acceptPostResponse.data])
+
     return (
         <View style={styles.body}>
             {Boolean(props.post?.user.image) ? (
@@ -46,7 +63,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
             <View style={styles.postInfoPrimaryWrapper}>
                 <Text style={styles.postPrimaryTitle}>{props.post?.user.name ?? 'Đang tải...'}</Text>
                 <View style={styles.postInfoSecondaryWrapper}>
-                    <Text style={styles.postCreatedDateText}>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : 'Đang tải...'}</Text>
+                    <Text>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : 'Đang tải...'}</Text>
                     <View style={[styles.postTypeBadge, { backgroundColor: badgeColor }]}>
                         <Text style={styles.postTypeText}>
                             {badgeContent}
@@ -63,14 +80,20 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                     <MenuOptions optionsContainerStyle={styles.menuOption} >
                         <MenuOption
                             key={0}
-                            onSelect={() => props.onAcceptedPost && props.onAcceptedPost(props.post?.id ?? -1)} >
-                            <Text style={styles.menuText}>Duyệt bài viết</Text>
+                            onSelect={() => onAcceptPost(props.post?.id)} >
+                            <View style={styles.menuTitle}>
+                                <Text style={styles.menuText}>Duyệt bài viết</Text>
+                                {
+                                    acceptPostResponse.isLoading &&
+                                    <ActivityIndicator style={{ marginStart: 'auto' }} size={'small'} />
+                                }
+                            </View>
                         </MenuOption>
 
                         <MenuOption
                             key={0}
                             onSelect={() => onStartRejectedPost(props.post?.id ?? -1)} >
-                            <Text style={styles.menuText}>Bỏ duyệt bài viết</Text>
+                            <Text style={styles.menuText}>Từ chối bài viết</Text>
                         </MenuOption>
                     </MenuOptions>
                 </Menu>
@@ -128,7 +151,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000'
     },
-    postCreatedDateText: {
-
+    menuTitle: {
+        flexDirection: 'row'
     }
 })

@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         elevation: 10,
         marginHorizontal: 5,
-        marginTop: 15,
+        marginTop: 10,
+        marginBottom: 5,
         borderRadius: 5
     },
     postBody: {

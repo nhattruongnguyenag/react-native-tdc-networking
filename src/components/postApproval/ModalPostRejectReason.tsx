@@ -1,15 +1,21 @@
+import { useIsFocused } from '@react-navigation/native'
 import React, { Fragment, memo, useEffect, useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { Modal } from 'react-native-paper'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { useAcceptPostMutation, useRejectPostMutation } from '../../redux/Service'
 import { setPostRejectLog } from '../../redux/Slice'
 import ButtonFullWith from '../buttons/ButtonFullWith'
+import ButtonWithLoader from '../buttons/ButtonWithLoader'
 import { PostRejectedLog } from './PostApprovalItem'
 
 function ModalPostRejectReason() {
     const { postRejectLog } = useAppSelector(state => state.TDCSocialNetworkReducer)
     const dispatch = useAppDispatch()
     const [visible, setVisible] = useState(false)
+    const isFocused = useIsFocused()
+
+    const [rejectPost, rejectPostResponse] = useRejectPostMutation()
 
     const onDismiss = () => {
         setVisible(false)
@@ -17,14 +23,23 @@ function ModalPostRejectReason() {
     }
 
     const onCompleteRejectPost = () => {
-        console.log(postRejectLog)
+        if (postRejectLog) {
+            rejectPost(postRejectLog)
+        }
     }
 
     useEffect(() => {
-        if (postRejectLog) {
+        if (rejectPostResponse.data) {
+            setVisible(false)
+            Alert.alert("Thành công !!!", "Đã từ chối bài viết thành công")
+        }
+    }, [rejectPostResponse.data])
+
+    useEffect(() => {
+        if (postRejectLog && isFocused) {
             setVisible(true)
         }
-    }, [postRejectLog])
+    }, [isFocused, postRejectLog])
 
     return (
         <Fragment>
@@ -56,7 +71,8 @@ function ModalPostRejectReason() {
                             title={"Hủy"}
                         />
 
-                        <ButtonFullWith
+                        <ButtonWithLoader
+                            loading={rejectPostResponse.isLoading}
                             onPress={onCompleteRejectPost}
                             btnStyle={{ marginLeft: 10, width: 140 }}
                             contentStyle={{ flexDirection: 'row-reverse' }}
