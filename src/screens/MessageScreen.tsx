@@ -39,8 +39,10 @@ export default function MessengerScreen() {
     stompClient = getStompClient()
 
     const onConnected = () => {
-      stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
-      stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
+      if (stompClient.connected) {
+        stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
+        stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
+      }
     }
 
     const onMessageReceived = (payload: Message) => {

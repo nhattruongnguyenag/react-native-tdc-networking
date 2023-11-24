@@ -90,7 +90,6 @@ export default function CreateSurveyPostScreen() {
 
   const onTitleChangeText = useCallback(
     (value: string) => {
-      console.log(surveyPostRequest)
       if (isBlank(value)) {
         setTitleError(t('CreateSurveyPostScreen.surveySaveTitleEmptyValidate'))
         return
