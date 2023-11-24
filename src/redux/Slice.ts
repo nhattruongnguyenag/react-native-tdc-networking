@@ -11,6 +11,7 @@ import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { Message } from '../types/Message'
 import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
+import { User } from '../types/User'
 
 export interface TDCSocialNetworkState {
   postRejectLog: PostRejectedLog | null
@@ -21,7 +22,7 @@ export interface TDCSocialNetworkState {
   conversations: Conversation[]
   conversationMessages: Message[]
   selectConversation: SelectedConversation | null
-  userLogin: Student | Faculty | Business | null
+  userLogin: User | null
   deviceToken: string | null
   isOpenModalImage: boolean
   isOpenModalComments: boolean

@@ -11,7 +11,7 @@ export default function DrawerHeader() {
 
   return (
     <View style={styles.body}>
-      {userLogin && (userLogin as User).image ? (
+      {userLogin && userLogin.image ? (
         <Avatar.Image size={60} source={{ uri: SERVER_ADDRESS + 'api/images/' + (userLogin as User).image  }} />
       ) : (
         <DefaultAvatar size={60} identifer={userLogin?.name[0]} />
