@@ -21,10 +21,13 @@ import AccordionItem from './AccordionItem'
 import DrawerHeader from './DrawerHeader'
 
 import { useTranslation } from 'react-multi-lang'
+import { useAppSelector } from '../../redux/Hook'
+import { isAdmin, isFaculty, isStudent } from '../../utils/UserHelper'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
+  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  
+
   const logout = useCallback(() => {
     AsyncStorage.removeItem(TOKEN_KEY)
     AsyncStorage.removeItem(USER_LOGIN_KEY)
@@ -46,15 +49,18 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           }
           titleStyle={{ fontSize: 17 }}
           id={0}>
-          <DrawerItem
-            style={{ marginStart: 60 }}
-            label={'Công nghệ thông tin'}
-            onPress={() => {
-              navigation.navigate(CREATE_SURVEY_SCREEN)
-            }}
-            inactiveBackgroundColor={'#fff'}
-            pressColor={'#0088ff03'}
-          />
+          {
+            isStudent(userLogin) &&
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={userLogin.facultyName}
+              onPress={() => {
+                navigation.navigate(CREATE_SURVEY_SCREEN)
+              }}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          }
         </List.Accordion>
 
 
@@ -66,22 +72,25 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff' }}
           icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{width: 15}} name='paste' size={16} color={'#0088ff'} />
+            <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
           )}
         />
 
-        <DrawerItem
-          label={t('DrawerContentComponent.waitingPost')}
-          onPress={() => {
-            navigation.navigate(APPROVAL_POST_SCREEN)
-          }}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{width: 15}} name='bars-progress' size={16} color={'#0088ff'} />
-          )}
-        />
+        {
+          (isAdmin(userLogin) || isFaculty(userLogin)) &&
+          <DrawerItem
+            label={t('DrawerContentComponent.waitingPost')}
+            onPress={() => {
+              navigation.navigate(APPROVAL_POST_SCREEN)
+            }}
+            inactiveBackgroundColor={'#fff'}
+            pressColor={'#0088ff03'}
+            labelStyle={{ color: '#0088ff' }}
+            icon={({ color, focused, size }) => (
+              <FontAwesome6Icon style={{ width: 15 }} name='bars-progress' size={16} color={'#0088ff'} />
+            )}
+          />
+        }
 
         <DrawerItem
           label={t('DrawerContentComponent.option')}
@@ -92,7 +101,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff', margin: 0 }}
           icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{width: 15}} name='gear' size={16} color={'#0088ff'} />
+            <FontAwesome6Icon style={{ width: 15 }} name='gear' size={16} color={'#0088ff'} />
           )}
         />
 

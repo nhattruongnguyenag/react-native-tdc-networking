@@ -1,3 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios, { AxiosResponse } from 'axios'
+import React, { useMemo, useState } from 'react'
 import {
   Alert,
   Image,
@@ -9,27 +14,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import { UserLoginRequest } from '../types/request/UserLoginRequest'
-import axios, { AxiosResponse } from 'axios'
-import { Data } from '../types/Data'
-import { Token } from '../types/Token'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { Student } from '../types/Student'
-import { Business } from '../types/Business'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BTN_BLUE } from '../constants/Color'
-import { useAppDispatch } from '../redux/Hook'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
-import { setUserLogin } from '../redux/Slice'
-import { isEmail, isPassword } from '../utils/ValidateUtils'
-import { Faculty } from '../types/Faculty'
+import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import {
   TEXT_ALERT_LOGIN_FAILT,
   TEXT_ERROR_EMAIL_EMPTY_NOTMATCH,
@@ -37,15 +27,21 @@ import {
   TEXT_FORGOT_PASSWORD,
   TEXT_HIDE_PASSWORD,
   TEXT_LOGIN,
-  TEXT_LOGIN_FAILT,
-  TEXT_PLACEHOLDER_EMAIL,
-  TEXT_PLACEHOLDER_EMAIL_LOGIN,
-  TEXT_PLACEHOLDER_PASSWORD,
-  TEXT_REGISTER,
+  TEXT_LOGIN_FAILT, TEXT_PLACEHOLDER_EMAIL_LOGIN, TEXT_REGISTER,
   TEXT_REQUEST_REGISTER,
   TEXT_SHOW_PASSWORD,
   TEXT_TITLE_PASSWORD_LOGIN
 } from '../constants/StringVietnamese'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppDispatch } from '../redux/Hook'
+import { setUserLogin } from '../redux/Slice'
+import { Business } from '../types/Business'
+import { Data } from '../types/Data'
+import { Faculty } from '../types/Faculty'
+import { UserLoginRequest } from '../types/request/UserLoginRequest'
+import { Student } from '../types/Student'
+import { Token } from '../types/Token'
+import { isEmail, isPassword } from '../utils/ValidateUtils'
 
 // man hinh dang nhap
 export default function LoginScreen() {
