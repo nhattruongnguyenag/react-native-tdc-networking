@@ -76,7 +76,7 @@ export default function ApplicationOptionScreen() {
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? "Chon ngon ngu" : '...'}
+                placeholder={!isFocus ? "Vietnamese" : '...'}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}

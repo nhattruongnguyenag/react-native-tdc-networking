@@ -27,8 +27,8 @@ const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
 
-  
-  
+
+
 
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //Danh sach tim kiem
@@ -74,7 +74,6 @@ export default function SearchScreen() {
       console.log(payload.body)
       setMasterData(JSON.parse(payload.body))
       setQty(masterData.length)
-      // setSearch('')
     }
     const onError = (err: string | Frame) => {
       console.log(err)
@@ -102,7 +101,6 @@ export default function SearchScreen() {
         .then((response) => {
           setMasterData(response.data.data)
           setQty(masterData.length)
-          // setSearch('')
         })
     }
   }
@@ -124,7 +122,7 @@ export default function SearchScreen() {
   const likeAction = (obj: LikeAction) => {
   }
 
-  const handleUnSave = () => {}
+  const handleUnSave = () => { }
 
   const checkType = () => {
     switch (subjects) {
@@ -185,11 +183,12 @@ export default function SearchScreen() {
             <Dropdown
               style={styles.dropDown}
               data={items}
-              value={value}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
               placeholder={label}
-              labelField='label'
-              valueField='value'
-              onChange={(item) => {
+              value={value}
+              onChange={item => {
                 setMasterData([])
                 setQty(0)
                 setLabel(item.label)
@@ -197,6 +196,7 @@ export default function SearchScreen() {
                 setType(item.label === t('SearchComponent.post') ? items[1].children[0].value : items[0].children[0].value)
                 setLabel2(item.label === t('SearchComponent.post') ? items[1].children[0].label : items[0].children[0].label)
               }}
+             
             />
             <Dropdown
               style={[styles.dropDown2]}
@@ -227,6 +227,7 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
+  // 
   menuText: {
     fontSize: 15
   },
@@ -268,21 +269,26 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   dropDown: {
-    backgroundColor: '#0065ff',
+    backgroundColor: '#ffffff',
     borderRadius: 5,
     color: 'white',
     height: 35,
     justifyContent: 'center',
-    paddingLeft: 10
+    paddingLeft: 35,
+    borderWidth: 1,
+    borderColor: '#070375'
   },
   dropDown2: {
-    backgroundColor: '#0065ff',
+    backgroundColor: '#ffffff',
     borderRadius: 5,
     color: 'white',
     height: 35,
     justifyContent: 'center',
-    paddingLeft: 10,
-    marginTop: 3
+    textAlign: 'center',
+    paddingLeft: 20,
+    marginTop: 3,
+    borderWidth: 1,
+    borderColor: '#070375'
   },
   drop: {
     flex: 5,

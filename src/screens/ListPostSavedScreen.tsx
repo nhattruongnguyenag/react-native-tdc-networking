@@ -13,6 +13,7 @@ import { RefreshControl, ScrollView, TextInput } from 'react-native-gesture-hand
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CustomizePost from '../components/post/CustomizePost';
 import { TEXT_SEARCH } from '../constants/StringVietnamese';
+import { useTranslation } from 'react-multi-lang';
 
 let stompClient: Client
 const ListPostSavedScreen = () => {
@@ -21,7 +22,7 @@ const ListPostSavedScreen = () => {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [search, setSearch] = useState('')
   const [value, setValue] = useState(null)
-
+  const t = useTranslation()
   const likeAction = (obj: LikeAction) => {
   }
 
@@ -103,7 +104,7 @@ const ListPostSavedScreen = () => {
       <View style={styles.search}>
         <TextInput
           value={search}
-          style={styles.txt_input} placeholder={TEXT_SEARCH}
+          style={styles.txt_input} placeholder={t('SavedPostListComponent.search')}
           onChangeText={(i) => setSearch(i)}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />

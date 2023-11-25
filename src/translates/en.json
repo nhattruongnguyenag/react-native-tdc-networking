@@ -29,6 +29,9 @@
         "recruitment": "Recruitment",
         "search": "Enter search content..."
     },
+    "SavedPostListComponent": {
+        "search": "Enter search content..."
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Recruitment Details",
         "topTabNavigator": "TDC Social Network",

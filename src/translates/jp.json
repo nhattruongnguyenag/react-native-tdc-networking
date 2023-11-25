@@ -18,6 +18,9 @@
         "follower": "あなたをフォロー",
         "search": "ユーザーを検索..."
     },
+    "SavedPostListComponent": {
+        "search": "検索内容を入力してください..."
+    },
     "SearchComponent": {
         "user": "ユーザー",
         "student": "学生",
