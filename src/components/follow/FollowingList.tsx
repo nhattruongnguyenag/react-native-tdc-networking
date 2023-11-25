@@ -12,10 +12,12 @@ import Icon2 from 'react-native-vector-icons/AntDesign'
 import { useGetFollowingUserQuery } from '../../redux/Service'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 
 
 let stompClient: Client
 const FollowingList = () => {
+  const t = useTranslation()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [search, setSearch] = useState('')
   const { data, isFetching } = useGetFollowingUserQuery(
@@ -44,7 +46,7 @@ const FollowingList = () => {
       <View style={styles.search}>
         <TextInput
           value={search}
-          style={styles.txt_input} placeholder='Tìm kiếm ...'
+          style={styles.txt_input} placeholder={t('FollowComponent.search')}
           onChangeText={(i) => setSearch(i)}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />

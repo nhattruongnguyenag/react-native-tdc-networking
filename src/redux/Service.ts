@@ -14,11 +14,8 @@ import { PostResponseModal } from '../types/response/PostResponseModal'
 import { SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
-<<<<<<< HEAD
 import { FollowUserModel } from '../types/response/FollowUserModel'
-=======
 import { buildPostSearchRequest } from '../utils/PostHelper'
->>>>>>> develop
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -161,12 +158,9 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
-<<<<<<< HEAD
   useGetFollowingUserQuery,
   useGetFollowerUserQuery,
-=======
   useGetPostsQuery,
->>>>>>> develop
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,

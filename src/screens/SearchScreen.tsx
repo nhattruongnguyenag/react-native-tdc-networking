@@ -17,6 +17,7 @@ import { LABEL_POST_BUSINESS, LABEL_POST_FACULTY, LABEL_POST_NORMAL, LABEL_POST_
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { setDefaultLanguage } from '../redux/Slice'
+import { useTranslation } from 'react-multi-lang'
 
 
 let stompClient: Client
@@ -38,27 +39,28 @@ export default function SearchScreen() {
   const [type, setType] = useState(TYPE_POST_STUDENT)
   const [qty, setQty] = useState(0)
   let URL = `${SERVER_ADDRESS}api/find/post`
+  const t = useTranslation()
   //Xu ly dropdown
   const [value, setValue] = useState(null)
-  const [label, setLabel] = useState(TEXT_SUBJECT_USER)
-  const [label2, setLabel2] = useState(`- - ${LABEL_POST_STUDENT} - -`)
+  const [label, setLabel] = useState(t('SearchComponent.user'))
+  const [label2, setLabel2] = useState(`- - ${t('SearchComponent.student')} - -`)
   const [items, setItems] = useState([
     {
-      label: TEXT_SUBJECT_USER,
+      label: t('SearchComponent.user'),
       value: 'user',
       children: [
-        { label: `- - ${LABEL_POST_STUDENT} - -`, value: TYPE_POST_STUDENT },
-        { label: `- - ${LABEL_POST_BUSINESS} - -`, value: TYPE_POST_BUSINESS },
-        { label: `- - ${LABEL_POST_FACULTY} - -`, value: TYPE_POST_FACULTY }
+        { label: `- - ${t('SearchComponent.student')} - -`, value: TYPE_POST_STUDENT },
+        { label: `- - ${t('SearchComponent.business')} - -`, value: TYPE_POST_BUSINESS },
+        { label: `- - ${t('SearchComponent.faculty')} - -`, value: TYPE_POST_FACULTY }
       ]
     },
     {
-      label: TEXT_SUBJECT_POST,
+      label: t('SearchComponent.post'),
       value: 'post',
       children: [
-        { label: `- - ${LABEL_POST_NORMAL} - -`, value: TYPE_POST_NORMAL },
-        { label: `- - ${LABEL_POST_SURVEY} - -`, value: TYPE_POST_SURVEY },
-        { label: `- - ${LABEL_POST_RECRUITMENT} - -`, value: TYPE_POST_RECRUITMENT }
+        { label: `- - ${t('SearchComponent.normal')} - -`, value: TYPE_POST_NORMAL },
+        { label: `- - ${t('SearchComponent.survey')} - -`, value: TYPE_POST_SURVEY },
+        { label: `- - ${t('SearchComponent.recruitment')} - -`, value: TYPE_POST_RECRUITMENT }
       ]
     }
   ])
@@ -173,7 +175,7 @@ export default function SearchScreen() {
       <View style={styles.operation}>
         <TextInput
           style={styles.search}
-          placeholder={TEXT_SEARCH}
+          placeholder={t('SearchComponent.search')}
           placeholderTextColor='#000000'
           value={search}
           onChangeText={(txt) => setSearch(txt)}
@@ -192,13 +194,13 @@ export default function SearchScreen() {
                 setQty(0)
                 setLabel(item.label)
                 setSubjects(item.value)
-                setType(item.label === TEXT_SUBJECT_POST ? items[1].children[0].value : items[0].children[0].value)
-                setLabel2(item.label === TEXT_SUBJECT_POST ? items[1].children[0].label : items[0].children[0].label)
+                setType(item.label === t('SearchComponent.post') ? items[1].children[0].value : items[0].children[0].value)
+                setLabel2(item.label === t('SearchComponent.post') ? items[1].children[0].label : items[0].children[0].label)
               }}
             />
             <Dropdown
               style={[styles.dropDown2]}
-              data={label === TEXT_SUBJECT_POST ? items[1].children : items[0].children}
+              data={label === t('SearchComponent.post') ? items[1].children : items[0].children}
               value={value}
               placeholder={label2}
               labelField='label'
