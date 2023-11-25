@@ -1,14 +1,16 @@
 import React, { Fragment, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import Loading from './components/common/Loading'
 import ModalPostRejectReason from './components/postApproval/ModalPostRejectReason'
-import PostApprovalItem, { PostRejectedLog } from './components/postApproval/PostApprovalItem'
+import PostApprovalItem, { PostRejectedLog, POST_APPROVAL } from './components/postApproval/PostApprovalItem'
 import { useAppDispatch, useAppSelector } from './redux/Hook'
 import { useGetPostsQuery } from './redux/Service'
 import { isAdmin, isFaculty } from './utils/UserHelper'
 
 export default function ApprovalPostScreen() {
   const {userLogin} = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const t = useTranslation()
   const group = useMemo(() => {
     if (isAdmin(userLogin)) {
       return "group_connect_business"
@@ -35,7 +37,7 @@ export default function ApprovalPostScreen() {
   return (
     <SafeAreaView style={styles.body}>
       {
-        isLoading ? <Loading title="Đang tải dữ liệu..." />
+        isLoading ? <Loading title={t('ApprovingScreen.isLoading')} />
           :
           <Fragment>
             {
@@ -45,13 +47,14 @@ export default function ApprovalPostScreen() {
                     data={data?.data}
                     renderItem={({ item, index }) =>
                       <PostApprovalItem
+                        type={POST_APPROVAL}
                         post={item}
                       />}
                   />
                   <ModalPostRejectReason />
                 </Fragment>
                 :
-                <Text style={{ marginTop: -60 }}>Chưa có bài viết mới</Text>
+                <Text style={{ marginTop: -60 }}>{t('ApprovingScreen.emptyMessage')}</Text>
             }
           </Fragment>
       }

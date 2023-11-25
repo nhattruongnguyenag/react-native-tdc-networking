@@ -52,7 +52,7 @@ import {
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
-  NOTIFICATION_SCREEN, OPTION_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
+  NOTIFICATION_SCREEN, OPTION_SCREEN, PEDDING_POST_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
@@ -96,6 +96,7 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+import PenddingPostScreen from './screens/PenddingPostScreen'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -136,6 +137,7 @@ export type RootStackParamList = {
   APPLICATION_OPTION_SCREEN: undefined
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
+  PEDDING_POST_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -411,8 +413,19 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={APPROVAL_POST_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
-        component={ApprovalPostScreen}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.approvalPostScreen')} />
+        }}
+        component={ApprovalPostScreen} />
+
+      <RootStack.Screen
+        name={PEDDING_POST_SCREEN}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.pendingPostScreen')} />
+        }}
+        component={PenddingPostScreen}
       />
     </RootStack.Navigator>
   )

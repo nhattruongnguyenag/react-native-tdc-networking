@@ -1,5 +1,7 @@
+import axios, { AxiosResponse } from 'axios'
 import moment from 'moment'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
@@ -7,10 +9,12 @@ import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
-import { useAcceptPostMutation } from '../../redux/Service'
+import { useAcceptPostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
 import { setPostRejectLog } from '../../redux/Slice'
+import { Data } from '../../types/Data'
+import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
 import DefaultAvatar from '../common/DefaultAvatar'
-import { PostApprovalItemProps } from './PostApprovalItem'
+import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from './PostApprovalItem'
 
 // SERVER_ADDRESS + `api/images/`
 const RECRUITMENT_BADGE_COLOR = '#999fac'
@@ -20,16 +24,17 @@ const TEXT_IMAGE_BADGE_COLOR = '#00A255'
 export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
     const dispatch = useAppDispatch()
     const [acceptPost, acceptPostResponse] = useAcceptPostMutation()
+    const t = useTranslation()
 
-    let badgeColor = TEXT_IMAGE_BADGE_COLOR
-    let badgeContent = "Mặc định"
+    let badgeColor = TEXT_IMAGE_BADGE_COLOR;
+    let badgeContent = t('ModalPostRejectReason.default')
 
     if (props.post?.type === TYPE_POST_SURVEY) {
-        badgeColor = SURVEY_BADGE_COLOR
-        badgeContent = "Khảo sát"
+        badgeColor = SURVEY_BADGE_COLOR;
+        badgeContent = t('ModalPostRejectReason.survey')
     } else if (props.post?.type === TYPE_POST_RECRUITMENT) {
-        badgeColor = RECRUITMENT_BADGE_COLOR
-        badgeContent = "Tuyển dụng"
+        badgeColor = RECRUITMENT_BADGE_COLOR;
+        badgeContent = t('ModalPostRejectReason.recruitment')
     }
 
     const onStartRejectedPost = (postId: number) => {
@@ -40,15 +45,24 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
     }
 
     const onAcceptPost = (postId: number | undefined) => {
-        console.log(postId)
         acceptPost({
             postId: postId ?? -1
         })
     }
 
+    const onRejectDetailsPress = (postId?: number) => {
+        axios
+          .get<void, AxiosResponse<Data<PostRejectLogResponse>>>(SERVER_ADDRESS + `api/approval/log/post/${postId}`)
+          .then((response) => {
+            if (response.status == 200) {
+                Alert.alert("Chi tiết", `${response.data.data.content}\n\nNgày tạo: ${moment(response.data.data.createdAt).format('DD MMM YYYY HH:mm')}`)
+            }
+          }).catch(err => console.log(err))
+    }
+
     useEffect(() => {
         if (acceptPostResponse.data) {
-            Alert.alert("Thành công !!!", "Duyệt bài viết thành công")
+            Alert.alert(t('ModalPostRejectReason.successMessage'), t('ModalPostRejectReason.rejectSuccessMessage'))
         }
     }, [acceptPostResponse.data])
 
@@ -61,9 +75,9 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
             )}
 
             <View style={styles.postInfoPrimaryWrapper}>
-                <Text style={styles.postPrimaryTitle}>{props.post?.user.name ?? 'Đang tải...'}</Text>
+                <Text style={styles.postPrimaryTitle}>{props.post?.user.name ?? t('ModalPostRejectReason.isLoading')}</Text>
                 <View style={styles.postInfoSecondaryWrapper}>
-                    <Text>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : 'Đang tải...'}</Text>
+                    <Text>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : t('ModalPostRejectReason.isLoading')}</Text>
                     <View style={[styles.postTypeBadge, { backgroundColor: badgeColor }]}>
                         <Text style={styles.postTypeText}>
                             {badgeContent}
@@ -78,27 +92,64 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                         <FontAwesome6Icon name='ellipsis-vertical' size={18} color={'#000'} />
                     </MenuTrigger>
                     <MenuOptions optionsContainerStyle={styles.menuOption} >
-                        <MenuOption
-                            key={0}
-                            onSelect={() => onAcceptPost(props.post?.id)} >
-                            <View style={styles.menuTitle}>
-                                <Text style={styles.menuText}>Duyệt bài viết</Text>
-                                {
-                                    acceptPostResponse.isLoading &&
-                                    <ActivityIndicator style={{ marginStart: 'auto' }} size={'small'} />
-                                }
-                            </View>
-                        </MenuOption>
+                        {
+                            props.type === POST_APPROVAL
+                            &&
+                            <MenuOption
+                                key={0}
+                                onSelect={() => onAcceptPost(props.post?.id)} >
+                                <View style={styles.menuTitle}>
+                                    <Text style={styles.menuText}>{t('ModalPostRejectReason.acceptPostMenuItem')}</Text>
+                                    {
+                                        acceptPostResponse.isLoading &&
+                                        <ActivityIndicator style={{ marginStart: 'auto' }} size={'small'} />
+                                    }
+                                </View>
+                            </MenuOption>
+                        }
 
-                        <MenuOption
-                            key={0}
-                            onSelect={() => onStartRejectedPost(props.post?.id ?? -1)} >
-                            <Text style={styles.menuText}>Từ chối bài viết</Text>
-                        </MenuOption>
+                        {
+                            props.type === POST_APPROVAL
+                            &&
+                            <MenuOption
+                                key={0}
+                                onSelect={() => onStartRejectedPost(props.post?.id ?? -1)} >
+                                <Text style={styles.menuText}>{t('ModalPostRejectReason.rejectPostMenuItem')}</Text>
+                            </MenuOption>
+                        }
+
+                        {
+                            props.type === POST_REJECT
+                            &&
+                            <MenuOption
+                                key={0}
+                                onSelect={() => onRejectDetailsPress(props.post?.id)}>
+                                <Text style={styles.menuText}>{t('ModalPostRejectReason.rejectDetails')}</Text>
+                            </MenuOption>
+                        }
+
+                        {
+                            props.type === POST_PENDING
+                            &&
+                            <MenuOption
+                                key={0}
+                                onSelect={() => { }}>
+                                <Text style={styles.menuText}>{t('ModalPostRejectReason.pendingPostUpdate')}</Text>
+                            </MenuOption>
+                        }
+
+                        {
+                            props.type === POST_PENDING
+                            &&
+                            <MenuOption
+                                key={0}
+                                onSelect={() => { }}>
+                                <Text style={styles.menuText}>{t('ModalPostRejectReason.pendingPostDelete')}</Text>
+                            </MenuOption>
+                        }
                     </MenuOptions>
                 </Menu>
             </View>
-
         </View>
     )
 }

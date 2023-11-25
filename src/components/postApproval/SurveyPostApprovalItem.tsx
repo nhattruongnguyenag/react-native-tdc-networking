@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
 import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
@@ -26,12 +27,14 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
         navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
     }
 
+    const t = useTranslation()
+
     return (
         <CustomizeSurveyPost
             id={surveyPost.id}
-            title={surveyPost.title ?? 'Đang tải...'}
+            title={surveyPost.title ?? t('PostApproveItem.isLoading')}
             handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
-            description={surveyPost.description ?? 'Đang tải...'}
+            description={surveyPost.description ?? t('PostApproveItem.isLoading')}
         />
     )
 }

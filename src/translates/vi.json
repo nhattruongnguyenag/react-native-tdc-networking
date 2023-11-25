@@ -2,7 +2,8 @@
     "DrawerContentComponent": {
         "userGroup": "Nhóm của bạn",
         "userJobApplyProfile": "Hồ sơ ứng tuyển",
-        "waitingPost": "Duyệt bài viết",
+        "approvingPost": "Duyệt bài viết",
+        "peddingPost": "Bài viết đang chờ",
         "option": "Tùy chọn",
         "logout": "Đăng xuất"
     },
@@ -31,7 +32,8 @@
         "applicationOptionScreen": "Tùy chọn ứng dụng",
         "approvalPostScreen": "Duyệt bài viết",
         "createSurveyScreen": "Thêm khảo sát",
-        "createRecruitmentScreen": "Thêm tin tuyển dụng"
+        "createRecruitmentScreen": "Thêm tin tuyển dụng",
+        "pendingPostScreen": "Bài viết đang chờ"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
@@ -162,5 +164,32 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " lượt bình chọn"
+    },
+    "ApprovingScreen": {
+        "isLoading": "Đang tải dữ liệu...",
+        "emptyMessage": "Chưa có bài viết mới"
+    },
+    "PostApproveItem": {
+        "isLoading": "Đang tải"
+    },
+    "ModalPostRejectReason": {
+        "default": "Mặc định",
+        "survey": "Khảo sát",
+        "recruitment": "Tuyển dụng",
+        "successMessage": "Thành công !!!",
+        "rejectSuccessMessage": "Đã từ chối bài viết thành công",
+        "notePlaceholder": "Ghi chú...",
+        "acceptPostMenuItem": "Duyệt bài viết",
+        "rejectPostMenuItem": "Từ chối bài viết",
+        "isLoading": "Từ chối bài viết",
+        "rejectDetails": "Chi tiết",
+        "pendingPostUpdate": "Chỉnh sửa",
+        "pendingPostDelete": "Xóa bài viết"
+    }, 
+    "PenddingPostScreen": {
+        "peddingPostTab": "Đang chờ",
+        "rejectedPostTab": "Bị từ chối",
+        "loading": "Đang tải...",
+        "emptyMessage": "Không có bài viết"
     }
 }

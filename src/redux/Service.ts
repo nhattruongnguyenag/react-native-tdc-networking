@@ -102,8 +102,8 @@ export const TDCSocialNetworkAPI = createApi({
     getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
       query: (data) => (
         {
-        url: `api/posts/search?${buildPostSearchRequest(data)}`
-      }),
+          url: `api/posts/search?${buildPostSearchRequest(data)}`
+        }),
       providesTags: (result) => {
         if (result) {
           return [
@@ -136,13 +136,20 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
-    })
+    }),
+    getPostRejectLog: builder.query<Data<PostRejectedLog>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/approval/log/post/${data.postId}`
+        })
+    }),
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetPostRejectLogQuery,
   useGetPostsQuery,
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,

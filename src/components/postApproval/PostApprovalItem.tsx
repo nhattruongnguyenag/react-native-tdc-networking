@@ -11,7 +11,13 @@ export interface PostRejectedLog {
     postId: number
     content: string
 }
+
+export const POST_APPROVAL = 0
+export const POST_PENDING = 1
+export const POST_REJECT = 2
+
 export interface PostApprovalItemProps {
+    type?: number
     post?: PostResponseModal
     onAcceptedPost?: (postId: number) => void
 }
@@ -21,9 +27,10 @@ export default function PostApprovalItem(props: PostApprovalItemProps) {
     return (
         <Pressable style={styles.container}>
             <HeaderPostApprovalItem
-             post={props.post} 
-             onAcceptedPost={props.onAcceptedPost}
-             />
+                type={props.type}
+                post={props.post}
+                onAcceptedPost={props.onAcceptedPost}
+            />
 
             <View style={styles.postBody}>
                 {props.post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={props.post} />}

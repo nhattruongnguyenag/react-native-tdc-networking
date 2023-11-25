@@ -1,4 +1,5 @@
 import React, { Fragment, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ImageView from 'react-native-image-viewing'
@@ -37,12 +38,14 @@ export default function TextImagePostApprovalItem(props: PostApprovalItemProps) 
         })
     }
 
+    const t = useTranslation()
+
     return (
         <Fragment>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.container}>
-                <Text style={styles.postContent}>{isTextImagePost(props.post) ? props.post.content : 'Đang tải...'}</Text>
+                <Text style={styles.postContent}>{isTextImagePost(props.post) ? props.post.content : t('PostApproveItem.isLoading')}</Text>
 
                 {
                     isTextImagePost(props.post) && props.post.images && props.post.images.length > 0 &&
