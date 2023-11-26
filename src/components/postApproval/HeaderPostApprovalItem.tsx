@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import axios, { AxiosResponse } from 'axios'
 import moment from 'moment'
 import React, { useEffect } from 'react'
@@ -6,13 +7,16 @@ import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
+import { RootStackParamList } from '../../App'
+import { CREATE_RECRUITMENT_SCREEN } from '../../constants/Screen'
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
-import { useAcceptPostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
+import { useAcceptPostMutation, useDeletePostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
 import { setPostRejectLog } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
+import { PostResponseModal } from '../../types/response/PostResponseModal'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from './PostApprovalItem'
 
@@ -22,8 +26,10 @@ const SURVEY_BADGE_COLOR = '#00C9F4'
 const TEXT_IMAGE_BADGE_COLOR = '#00A255'
 
 export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>()
     const dispatch = useAppDispatch()
     const [acceptPost, acceptPostResponse] = useAcceptPostMutation()
+    const [deletePost, deletePostResponse] = useDeletePostMutation()
     const t = useTranslation()
 
     let badgeColor = TEXT_IMAGE_BADGE_COLOR;
@@ -55,14 +61,32 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
           .get<void, AxiosResponse<Data<PostRejectLogResponse>>>(SERVER_ADDRESS + `api/approval/log/post/${postId}`)
           .then((response) => {
             if (response.status == 200) {
-                Alert.alert("Chi tiết", `${response.data.data.content}\n\nNgày tạo: ${moment(response.data.data.createdAt).format('DD MMM YYYY HH:mm')}`)
+                Alert.alert("Chi tiết", `${moment(response.data.data.createdAt).fromNow()}\n\n${response.data.data.content}`)
             }
           }).catch(err => console.log(err))
     }
 
+    const onDeletePost = (postId?: number) => {
+        if (postId) {
+            deletePost({postId: postId})
+        }
+    }
+
+    const onUpdatePost = (post?: PostResponseModal) => {
+        if (post && post.type === TYPE_POST_RECRUITMENT) {
+            navigation.navigate(CREATE_RECRUITMENT_SCREEN, {recruitmentPostId: post.id})
+        }
+    }
+
+    useEffect(() => {
+        if (deletePostResponse.data) {
+            Alert.alert(t('ModalPostRejectReason.successDeleteMessage'), t('ModalPostRejectReason.successDeleteMessageContent'))
+        }
+    }, [deletePostResponse.data])
+
     useEffect(() => {
         if (acceptPostResponse.data) {
-            Alert.alert(t('ModalPostRejectReason.successMessage'), t('ModalPostRejectReason.rejectSuccessMessage'))
+            Alert.alert(t('ModalPostRejectReason.successAcceptMessage'), t('ModalPostRejectReason.rejectSuccessMessage'))
         }
     }, [acceptPostResponse.data])
 
@@ -129,22 +153,22 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                         }
 
                         {
-                            props.type === POST_PENDING
+                           ( props.type === POST_PENDING || props.type === POST_REJECT)
                             &&
                             <MenuOption
                                 key={0}
-                                onSelect={() => { }}>
+                                onSelect={() => onUpdatePost(props.post)}>
                                 <Text style={styles.menuText}>{t('ModalPostRejectReason.pendingPostUpdate')}</Text>
                             </MenuOption>
                         }
 
                         {
-                            props.type === POST_PENDING
+                           ( props.type === POST_PENDING || props.type === POST_REJECT)
                             &&
                             <MenuOption
                                 key={0}
-                                onSelect={() => { }}>
-                                <Text style={styles.menuText}>{t('ModalPostRejectReason.pendingPostDelete')}</Text>
+                                onSelect={() => onDeletePost(props.post?.id)}>
+                                <Text style={[styles.menuText, {color: 'red'}]}>{t('ModalPostRejectReason.pendingPostDelete')}</Text>
                             </MenuOption>
                         }
                     </MenuOptions>

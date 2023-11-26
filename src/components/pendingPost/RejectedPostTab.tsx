@@ -14,7 +14,7 @@ export default function RejectedPostTab() {
     const { data, isLoading } = useGetPostsQuery({
         active: 2,
         userId: userLogin?.id
-    }, { pollingInterval: 5000 })
+    }, { refetchOnMountOrArgChange: true })
 
     return (
         <SafeAreaView style={styles.body}>

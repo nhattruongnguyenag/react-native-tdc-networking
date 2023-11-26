@@ -7,7 +7,7 @@ import { DeviceToken } from '../types/DeviceToken'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
+import { RecruitmentPost } from '../types/RecruitmentPost'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
 import { PostResponseModal } from '../types/response/PostResponseModal'
@@ -54,7 +54,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
-    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPostRequest>({
+    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
       query: (data) => ({
         url: 'api/posts/recruitment',
         method: 'POST',
@@ -143,6 +143,34 @@ export const TDCSocialNetworkAPI = createApi({
           url: `api/approval/log/post/${data.postId}`
         })
     }),
+    deletePost: builder.mutation<MessageResponseData, { postId: number }>({
+      query: (data) => ({
+        url: `api/posts/${data.postId}`,
+        method: 'DELETE',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+    }),
+    getRecruitmentPostUpdate: builder.query<RecruitmentPost, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/recruitment/${data.postId}/update`
+        })
+    }),
+    updateRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
+      query: (data) => ({
+        url: 'api/posts/recruitment',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
+    }),
   })
 })
 
@@ -162,5 +190,8 @@ export const {
   useJobApplyMutation,
   useSendEmailMutation,
   useRejectPostMutation,
-  useAcceptPostMutation
+  useAcceptPostMutation,
+  useDeletePostMutation,
+  useGetRecruitmentPostUpdateQuery,
+  useUpdateRecruitmentPostMutation
 } = TDCSocialNetworkAPI

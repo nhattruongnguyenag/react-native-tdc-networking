@@ -116,7 +116,7 @@ export type RootStackParamList = {
   BUSINESS_REGISTER_SCREEN: undefined
   TOP_TAB_NAVIGATOR: undefined
   DRAWER_TAB_NAVIGATOR: undefined
-  CREATE_RECRUITMENT_SCREEN: undefined
+  CREATE_RECRUITMENT_SCREEN: {recruitmentPostId: number} | undefined
   CREATE_SURVEY_SCREEN: undefined
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined

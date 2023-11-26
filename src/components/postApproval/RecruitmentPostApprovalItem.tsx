@@ -6,12 +6,9 @@ import { StyleSheet, View } from 'react-native'
 import { RootStackParamList } from '../../App'
 import { RECRUITMENT_DETAIL_SCREEN } from '../../constants/Screen'
 import { RecruitmentResponsePostModal } from '../../types/response/RecruitmentResponsePostModal'
+import { isRecruitmentPost } from '../../utils/PostHelper'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import { PostApprovalItemProps } from './PostApprovalItem'
-
-function isRecruitmentPost(post?: any): post is RecruitmentResponsePostModal {
-    return post !== undefined && post instanceof Object && post !== null && 'salary' in post
-}
 
 export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -35,7 +32,7 @@ export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps
             id={recruitmentPost.id}
             location={recruitmentPost.location ?? t('PostApproveItem.isLoading')}
             title={recruitmentPost.title ?? t('PostApproveItem.isLoading')}
-            salary={String(recruitmentPost.salary) ?? '0'}
+            salary={recruitmentPost.salary ? String(recruitmentPost.salary.toLocaleString()) : ''}
             employmentType={recruitmentPost.employmentType ?? t('PostApproveItem.isLoading')}
             handleClickBtnSeeDetailEvent={() => handleClickBtnRecruitmentDetailEvent(recruitmentPost.id)}
             createdAt={recruitmentPost.createdAt ?? new Date()}

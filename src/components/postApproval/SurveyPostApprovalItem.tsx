@@ -6,12 +6,9 @@ import { StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
 import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { SurveyResponsePostModal } from '../../types/response/SurveyResponsePostModal'
+import { isSurveyPost } from '../../utils/PostHelper'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { PostApprovalItemProps } from './PostApprovalItem'
-
-function isSurveyPost(post?: any): post is SurveyResponsePostModal {
-    return post !== undefined && post instanceof Object && post !== null && 'questions' in post
-}
 
 export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
     const [surveyPost, setSurveyPost] = useState<SurveyResponsePostModal>({} as SurveyResponsePostModal)
@@ -38,5 +35,3 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
         />
     )
 }
-
-const styles = StyleSheet.create({})

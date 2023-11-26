@@ -1,12 +1,11 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { Fragment, useMemo } from 'react'
-import { useAppSelector } from '../../redux/Hook'
+import React, { Fragment } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { isAdmin, isBusiness, isFaculty } from '../../utils/UserHelper'
+import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native'
+import { useAppSelector } from '../../redux/Hook'
 import { useGetPostsQuery } from '../../redux/Service'
-import PostApprovalItem, { POST_PENDING } from '../postApproval/PostApprovalItem'
-import ModalPostRejectReason from '../postApproval/ModalPostRejectReason'
 import Loading from '../common/Loading'
+import ModalPostRejectReason from '../postApproval/ModalPostRejectReason'
+import PostApprovalItem, { POST_PENDING } from '../postApproval/PostApprovalItem'
 
 export default function PenddingPostTab() {
     const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
@@ -15,7 +14,7 @@ export default function PenddingPostTab() {
     const { data, isLoading } = useGetPostsQuery({
         active: 0,
         userId: userLogin?.id        
-    }, { pollingInterval: 5000 })
+    }, {refetchOnMountOrArgChange: true})
 
     return (
         <SafeAreaView style={styles.body}>
