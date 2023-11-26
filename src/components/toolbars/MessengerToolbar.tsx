@@ -1,20 +1,35 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import moment from 'moment'
 import React, { Fragment } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { Appbar, Avatar } from 'react-native-paper'
 import { PURPLE_COLOR } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
-import { getUserStatus } from '../../utils/DateTimeUtils'
+import { User } from '../../types/User'
 import DefaultAvatar from '../common/DefaultAvatar'
 
 const AVATAR_HEIGHT = 40
 
-export default function MessengerToolbar({}) {
+export default function MessengerToolbar({ }) {
+  const t = useTranslation()
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { selectConversation } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
+  const getUserStatus = (user?: User): string => {
+    let status = ''
+
+    if (user?.status === 1) {
+      status = t('MessengerToolbar.userStatusActive')
+    } else {
+      status = `${t('MessengerToolbar.userStatusInactive')} ` + moment(user?.updatedAt).fromNow()
+    }
+
+    return status
+  }
 
   return (
     <Appbar.Header style={styles.header}>

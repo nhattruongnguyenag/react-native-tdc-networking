@@ -1,5 +1,6 @@
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
@@ -36,6 +37,7 @@ export interface TextMessageRenderItemProps {
 }
 
 const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
+  const t = useTranslation()
   const { conversationMessages } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   let preIndex = props.index
@@ -154,8 +156,8 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
         </View>
       </View>
       <View style={styles.messageStatus}>
-        <Text style={{textAlign: 'right', fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
-          {Boolean(props.message.status) ? MESSAGE_ITEM_STATUS_SEEN : MESSAGE_ITEM_STATUS_RECEIVED}
+        <Text style={{ textAlign: 'right', fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
+          {Boolean(props.message.status) ? t('MessageSentItem.messageItemStatusReceived') : t('MessageSentItem.messageItemStatusSeen')}
         </Text>
       </View>
     </View>

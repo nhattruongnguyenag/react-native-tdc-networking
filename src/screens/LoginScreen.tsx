@@ -1,3 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios, { AxiosResponse } from 'axios'
+import React, { useMemo, useState } from 'react'
 import {
   Alert,
   Image,
@@ -9,37 +14,27 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import { UserLoginRequest } from '../types/request/UserLoginRequest'
-import axios, { AxiosResponse } from 'axios'
-import { Data } from '../types/Data'
-import { Token } from '../types/Token'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { Student } from '../types/Student'
-import { Business } from '../types/Business'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import CheckBox from 'react-native-check-box'
 import { ActivityIndicator } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BTN_BLUE } from '../constants/Color'
-import { useAppDispatch } from '../redux/Hook'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setUserLogin } from '../redux/Slice'
-import { isEmail, isPassword } from '../utils/ValidateUtils'
 import { Faculty } from '../types/Faculty'
-import { setTranslations, setDefaultLanguage, useTranslation } from 'react-multi-lang'
-import vi from '../translates/vi.json'
-import en from '../translates/en.json'
-import jp from '../translates/jp.json'
+import { useTranslation } from 'react-multi-lang'
+import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppDispatch } from '../redux/Hook'
+import { Business } from '../types/Business'
+import { Data } from '../types/Data'
+import { UserLoginRequest } from '../types/request/UserLoginRequest'
+import { Student } from '../types/Student'
+import { Token } from '../types/Token'
+import { isEmail, isPassword } from '../utils/ValidateUtils'
+
 // man hinh dang nhap
 export default function LoginScreen() {
   const t = useTranslation()
-  // setTranslations({ vi, en, jp })
-  // setDefaultLanguage('vi')
-
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [userLoginRequest, setUserLoginRequest] = useState<UserLoginRequest>({

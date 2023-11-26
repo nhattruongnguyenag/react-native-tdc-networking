@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
-import { QUESTION_COMPONENT_ADD_TEXT_TITLE } from '../../constants/StringVietnamese'
 import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
@@ -12,6 +12,7 @@ interface MultiChoiceQuestionProps extends QuestionProps {
 
 export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
   const [selectedChoiceIds, setSelectedChoiceIds] = useState<number[]>([])
+  const t = useTranslation()
 
   useEffect(() => {
     props.onChangeValue && props.onChangeValue(selectedChoiceIds)
@@ -19,8 +20,9 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
 
   return (
     <View style={styles.itemBody}>
-      <QuestionTitle
-        title={`${QUESTION_COMPONENT_ADD_TEXT_TITLE} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+     <QuestionTitle
+        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
+        title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />

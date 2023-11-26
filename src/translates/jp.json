@@ -1,9 +1,9 @@
 {
     "DrawerContentComponent": {
         "userGroup": "あなたのグループ",
-        "userJobApplyProfile": "ジョブ適用プロファイルの管理",
-        "waitingPost": "待機ポスト",
-        "option": "設定",
+        "userJobApplyProfile": "求人応募プロフィール",
+        "waitingPost": "保留中の投稿",
+        "option": "オプション",
         "logout": "ログアウト"
     },
 
@@ -151,5 +151,161 @@
         "titleLogin":"ログイン",
         "requestLogin":"すでにアカウントをお持ちですか?",
         "titleNotification": "通知"
+    },
+    "ToolbarTitle": {
+        "recruitmentDetailScreen": "採用の詳細",
+        "topTabNavigator": "TDCソーシャルネットワーク",
+        "drawerTabNavigator": "TDCソーシャルネットワーク",
+        "forgottenPasswordScreen": "パスワードを忘れた",
+        "acceptForgottenPasswordScreen": "メールの確認",
+        "searchScreen": "検索",
+        "conversationScreen": "会話",
+        "messengerScreen": "メッセンジャー",
+        "addQuestionScreen": "質問を追加",
+        "reviewSurveyPostScreen": "投稿を確認",
+        "surveyConductScreen": "調査を実施",
+        "jobApplyScreen": "求人応募",
+        "listPostSavedScreen": "保存された投稿",
+        "createNormalPostScreen": "",
+        "listJobApplyScreen": "求人応募リスト",
+        "listFollowScreen": "フォローリスト",
+        "profileScreen": "ユーザープロフィール",
+        "detailJobApply": "求人応募の詳細",
+        "optionScreen": "オプション",
+        "splashScreen": "",
+        "surveyResultScreen": "調査結果",
+        "applicationOptionScreen": "アプリケーションオプション",
+        "approvalPostScreen": "投稿の承認",
+        "createSurveyScreen": "調査を作成",
+        "createRecruitmentScreen": "求人の作成"
+    },
+    "AddQuestionScreen": {
+        "textButtonGoBack": "戻る",
+        "textButtonGoNext": "次へ",
+        "textEmptyQuestionErrorTitle": "エラー",
+        "textEmptyQuestionErrorContent": "調査には少なくとも1つの質問を追加してください"
+    },
+    "ConversationScreen": {
+        "allConversationTabTitle": "すべての会話",
+        "allActiveConversationTabTitle": "アクティブ"
+    },
+    "RecruitmentScreen": {
+        "recruitmentBenefitEmptyValidate": "給与を入力してください",
+        "recruitmentBenefitPlaceholder": "給与...",
+        "recruitmentBenefitTitle": "給与",
+        "recruitmentDescEmptyValidate": "説明を入力してください",
+        "recruitmentEmploymentTypeEmptyValidate": "雇用形態を入力してください",
+        "recruitmentExpirationValidate": "締め切り日は過去の日付を選択できません",
+        "recruitmentLocationEmptyValidate": "勤務地を入力してください",
+        "recruitmentRequirementEmptyValidate": "要件を入力してください",
+        "recruitmentSalaryEmptyValidate": "給与を入力してください",
+        "recruitmentSaveDescPlaceholder": "仕事の説明...",
+        "recruitmentSaveDescTitle": "仕事の説明",
+        "recruitmentSaveEmploymentTypePlaceholder": "雇用形態...",
+        "recruitmentSaveExpirationPickerLocale": "ja",
+        "recruitmentSaveExpirationTitle": "応募期限",
+        "recruitmentSaveLocationPlaceholder": "勤務地...",
+        "recruitmentSaveLocationTitle": "勤務地",
+        "recruitmentSaveRequirementPlaceholder": "要件...",
+        "recruitmentSaveRequirementTitle": "仕事の要件",
+        "recruitmentSaveSallaryPlaceholder": "給与...",
+        "recruitmentSaveSallaryTitle": "給与",
+        "recruitmentSaveSaveEmploymentTypeTitle": "雇用形態",
+        "recruitmentSaveSuccessContent": "求人が作成されました",
+        "recruitmentSaveSuccessTitle": "成功！",
+        "recruitmentSaveTitlePlaceholder": "タイトルを入力...",
+        "recruitmentSaveTitleTitle": "タイトル",
+        "recruitmentTitleEmptyValidate": "タイトルを入力してください",
+        "recruitmentSaveCompleteButton": "完了"
+    },
+    "CreateSurveyPostScreen": {
+        "surveySaveButtonGoNext": "次へ",
+        "surveySaveDescEmptyValidate": "説明を入力してください",
+        "surveySaveDescOver255CharactersValidate": "説明は255文字を超えてはいけません",
+        "surveySaveDescPlaceholder": "説明を入力",
+        "surveySaveDescTitle": "説明",
+        "surveySaveTitleEmptyValidate": "タイトルを入力してください",
+        "surveySaveTitleOver255CharactersValidate": "タイトルは255文字を超えてはいけません",
+        "surveySaveTitlePlaceholder": "タイトルを入力",
+        "surveySaveTitleTitle": "タイトル"
+    },
+    "JobApplyScreen": {
+        "jobApplyScreenButtonAddCvTitle": "CVを追加",
+        "jobApplyScreenButtonComplete": "完了",
+        "jobApplyScreenButtonGoBack": "戻る",
+        "jobApplyScreenButtonUpdateCvTitle": "CVを更新",
+        "jobApplyScreenEmptyCvTextContent": "応募を完了するにはCVを追加してください",
+        "jobApplyScreenEmptyCvTextTitle": "通知",
+        "jobApplyScreenSaveSuccessTextContent": "応募が成功裏に送信されました",
+        "jobApplyScreenSaveSuccessTextTitle": "通知"
+    },
+    "MessageScreen": {
+        "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
+    },
+    "MessengerToolbar": {
+        "userStatusActive": "アクティブ",
+        "userStatusInactive": "最後に見た日時"
+    },
+    "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenAnswerTitle": "質問",
+        "reviewSurveyScreenButtonComplete": "完了",
+        "reviewSurveyScreenButtonGoBack": "戻る",
+        "reviewSurveyScreenSaveFailContent": "保存に失敗しました",
+        "reviewSurveyScreenSaveFailTitle": "エラー",
+        "reviewSurveyScreenSaveSuccessContent": "保存に成功しました",
+        "reviewSurveyScreenSaveSuccessTitle": "成功"
+    },
+    "SurveyConductScreen": {
+        "surveyConductScreenSaveSuccessTitle": "成功！",
+        "surveyConductScreenSaveSuccessContent": "回答が保存されました。\n調査に参加していただきありがとうございます。",
+        "surveyConductScreenShortAnswerError": "回答を入力してください",
+        "surveyConductScreenMultiQuestionMulitiChoice": "少なくとも1つの回答を選択してください",
+        "surveyConductScreenMultiQuestionOneChoice": "1つの回答を選択してください",
+        "surveyConductScreenLoaderTitle": "データを読み込んでいます...",
+        "surveyConductScreenButtonGoBack": "戻る",
+        "surveyConductScreenButtonComplete": "完了"
+    },
+    "SurveyResultScreen": {
+        "surveyResultScreenEmptyVote": "まだ投票はありません",
+        "surveyResultScreenEmptyShortAnswer": "回答はありません",
+        "surveyResultScreenNumberOfShortAnswer": "回答"
+    },
+    "ConversationItem": {
+        "conversationItemComponentImageMessageAnnotation": "画像"
+    },
+    "MessageBottomBar": {
+        "messageBottomBarComponentInputTextPlaceholder": "@ メッセージ"
+    },
+    "MessageSentItem": {
+        "messageItemStatusReceived": "受信済み",
+        "messageItemStatusSeen": "既読"
+    },
+    "AddQuestionView": {
+        "addQuestionViewStartAddQuestion": "追加",
+        "addQuestionViewComponentButtonComplete": "完了",
+        "addQuestionViewComponentShortAnswer": "短い回答",
+        "addQuestionViewComponentChoiceInputPlaceholder": "選択肢",
+        "addQuestionViewComponentMultiChoiceQuestion": "複数選択",
+        "addQuestionViewComponentOneChoiceQuestion": "単一選択",
+        "addQuestionViewComponentQuestionEmptyErrorContent": "質問のタイプを選択してください",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "エラー",
+        "addQuestionViewComponentQuestionTypeDropdownSearch": "検索...",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- 質問のタイプを選択 ---",
+        "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "タイトルに特殊文字を含めることはできません",
+        "addQuestionViewComponentTitleEmptyValidate": "タイトルは空にできません",
+        "addQuestionViewComponentTitleInputPlaceholder": "質問のタイトルを入力してください...",
+        "addQuestionViewComponentTitleOver255CharacterValidate": "タイトルは255文字を超えてはいけません"
+    },
+    "MultiChoiceQuestion": {
+        "questionComponentAddTextTitle": "質問"
+    },
+    "QuestonBottomBarOptions": {
+        "questionBottomBarQuestionRequireToggle": "必須"
+    },
+    "ShortAnswerQuestion": {
+        "shortAnswerQuestionComponentTitlePlaceholder": "回答を入力してください..."
+    },
+    "BarItemComponentNumberVote": {
+        "barItemComponentNumberOfVote": " 投票"
     }
 }
