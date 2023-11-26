@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { COLOR_BLACK, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
 import { formatDateTime } from '../utils/FormatTime'
@@ -7,7 +7,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
-import { DETAIL_JOB_APPLY } from '../constants/Screen'
+import { DETAIL_JOB_APPLY, JOB_APPLY_SCREEN } from '../constants/Screen'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
@@ -23,21 +23,17 @@ const dataType = [
 export default function ManagementJobApplyScreen() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  console.log(userLogin?.id)
-
   const [dataJob, setDataJob] = useState([
     {
       id: 0,
+      companyName: '',
+      jobTitle: '',
       createdAt: '',
-      post: {
-        id: 0,
-        user: {
-          name: ''
-        }
-      }
+      companyAvatar: '',
+      cvUrl: ''
     }
   ])
-
+  const [check, setCheck] = useState(false)
   const handleClickType = (flag: string) => {
     switch (flag) {
       case 'Đang chờ':
@@ -87,7 +83,30 @@ export default function ManagementJobApplyScreen() {
   const handleGetDetailJobApply = (cvId: number) => {
     navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
-  const [value, setValue] = useState('')
+  const handleUpdateCv = (profileId: number) => {
+    navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: profileId })
+  }
+  const handleDeleteCv = (profileId: number) => {
+    axios
+      .delete(SERVER_ADDRESS + `api/job/profile/${profileId}`)
+      .then((response) => {
+        console.log(response.status)
+        setCheck(true)
+        Alert.alert('Thông báo', 'Hủy hồ sơ thành công')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  useEffect(() => {
+    if (check) {
+      handleShowJobWaiting()
+    }
+  }, [check])
+  useEffect(() => {
+    handleShowJobWaiting()
+  }, [])
+
   return (
     <View>
       <View>
@@ -107,26 +126,32 @@ export default function ManagementJobApplyScreen() {
                   <Image source={require('../assets/login/login.png')} style={styles.img}></Image>
                 </View>
                 <View style={styles.item}>
-                  <Text style={styles.txt}>Tuyển cộng tác viên bán hàng</Text>
-                  <Text style={styles.txt}>{data.post.user.name}</Text>
+                  <Text style={styles.txt}>{data.jobTitle}</Text>
+                  <Text style={styles.txt}>{data.companyName}</Text>
 
                   <View style={styles.itemChild}>
                     <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-                    <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>12/11/2023</Text>
+                    <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>
+                      {formatDateTime(data.createdAt)}
+                    </Text>
                   </View>
                 </View>
               </View>
               <View style={styles.btnBottom}>
                 <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.post.id)}>
+                  <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
                     Xem cv
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom}>Chỉnh sửa cv</Text>
+                  <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id)}>
+                    Chỉnh sửa cv
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom}>Hủy cv</Text>
+                  <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                    Hủy hồ sơ
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
