@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollViewBase, SafeAreaView } from 'react-native'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { COLOR_BLACK, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
 import { formatDateTime } from '../utils/FormatTime'
@@ -7,179 +7,221 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
-import { DETAIL_JOB_APPLY, JOB_APPLY_SCREEN } from '../constants/Screen'
+import { CHANGE_STATUS_JOB_APPLY_SCREEN, DETAIL_JOB_APPLY, JOB_APPLY_SCREEN } from '../constants/Screen'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
+import { useGetJobProfileQuery } from '../redux/Service'
+import Loading from '../components/common/Loading'
+import DefaultAvatar from '../components/common/DefaultAvatar'
+import { Dropdown } from 'react-native-element-dropdown'
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
+import { JobApplyRespose } from '../types/response/JobApplyResponse'
 
 const dataType = [
-  { name: 'Đang chờ', value: '1' },
-  { name: 'Không đủ điều kiện', value: '2' },
-  { name: 'Đủ điều kiện', value: '3' },
-  { name: 'Gọi phỏng vấn', value: '4' },
-  { name: 'Nhận việc', value: '5' }
+  { label: 'received', value: '1' },
+  { label: 'in_progress', value: '2' },
+  { label: 'not_meet_standard_quality', value: '3' },
+  { label: 'interview', value: '4' },
+  { label: 'not_meet_standard_quality', value: '5' },
+  { label: 'accept', value: '6' }
 ]
 
+interface MenuOptionItem {
+  type: number
+  name: string
+  visible: boolean
+}
 export default function ManagementJobApplyScreen() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  const [dataJob, setDataJob] = useState([
-    {
-      id: 0,
-      companyName: '',
-      jobTitle: '',
-      createdAt: '',
-      companyAvatar: '',
-      cvUrl: ''
-    }
-  ])
-  const [check, setCheck] = useState(false)
-  const handleClickType = (flag: string) => {
+  const { data, isLoading, isFetching } = useGetJobProfileQuery(userLogin?.id, {
+    pollingInterval: 1000
+  })
+  const [value, setValue] = useState('received')
+
+  const menuOptions = useMemo<MenuOptionItem[]>(() => {
+    let options: MenuOptionItem[] = []
+    options = [
+      ...options,
+      {
+        type: 1,
+        name: 'Chỉnh sửa đơn xin việc',
+        visible: true
+      }
+    ]
+    options = [
+      ...options,
+      {
+        type: 2,
+        name: 'Chỉnh sửa trạng thái hồ sơ',
+        visible: true
+      }
+    ]
+    return options
+  }, [data?.data])
+
+  const handleClickMenuOption = (flag: number, profileId: number, status: string, cvUrl: string) => {
+    console.log(flag)
     switch (flag) {
-      case 'Đang chờ':
-        handleShowJobWaiting()
+      case 1:
+        handleUpdateCv(profileId, cvUrl)
         break
-      case 'Không đủ điều kiện':
-        handleShowJobUnconditional()
-        break
-      case 'Đủ điều kiện':
-        handleShowJobEligible()
-        break
-      case 'Gọi phỏng vấn':
-        handleShowJobInterview()
-        break
-      case 'Nhận việc':
-        handleShowJobAccept()
+      case 2:
+        handleChangeStatusJob(profileId, status)
         break
       default:
         return ''
     }
   }
-
-  const handleShowJobWaiting = () => {
-    axios
-      .get(SERVER_ADDRESS + `api/job/user/${userLogin?.id}`)
-      .then((response) => {
-        console.log(JSON.stringify(response.data.data))
-        setDataJob(response.data.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    console.log('Đang chờ')
-  }
-  const handleShowJobUnconditional = () => {
-    console.log('Không đủ điều kiện')
-  }
-  const handleShowJobEligible = () => {
-    console.log('Đủ điều kiện')
-  }
-  const handleShowJobInterview = () => {
-    console.log('Gọi phỏng vấn')
-  }
-  const handleShowJobAccept = () => {
-    console.log('Nhận việc')
-  }
   const handleGetDetailJobApply = (cvId: number) => {
     navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
-  const handleUpdateCv = (profileId: number) => {
-    navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: profileId })
+  const handleUpdateCv = (profileId: number, cvUrl: string) => {
+    navigation.navigate(JOB_APPLY_SCREEN, { profileId: profileId, cvUrl: cvUrl })
   }
   const handleDeleteCv = (profileId: number) => {
     axios
       .delete(SERVER_ADDRESS + `api/job/profile/${profileId}`)
       .then((response) => {
-        console.log(response.status)
-        setCheck(true)
         Alert.alert('Thông báo', 'Hủy hồ sơ thành công')
       })
       .catch((error) => {
         console.log(error)
       })
   }
-  useEffect(() => {
-    if (check) {
-      handleShowJobWaiting()
-    }
-  }, [check])
-  useEffect(() => {
-    handleShowJobWaiting()
-  }, [])
+
+  const handleChangeStatusJob = (profileId: number, status: string) => {
+    navigation.navigate(CHANGE_STATUS_JOB_APPLY_SCREEN, { profileId: profileId, status: status })
+  }
 
   return (
-    <View>
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {dataType.map((data) => (
-            <TouchableOpacity style={styles.btnType} onPress={() => handleClickType(data.name)}>
-              <Text style={styles.txtType}>{data.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+    <>
+      <SafeAreaView style={{ backgroundColor: COLOR_WHITE }}>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          iconStyle={styles.iconStyle}
+          data={dataType}
+          labelField='label'
+          valueField='value'
+          placeholder={value}
+          value={value}
+          onChange={(item) => {
+            setValue(item.label)
+          }}
+        />
+      </SafeAreaView>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {dataJob.map((data, index) => (
-            <View style={styles.form} key={index}>
-              <View style={styles.group}>
-                <View style={{ flex: 3 }}>
-                  <Image source={require('../assets/login/login.png')} style={styles.img}></Image>
-                </View>
-                <View style={styles.item}>
-                  <Text style={styles.txt}>{data.jobTitle}</Text>
-                  <Text style={styles.txt}>{data.companyName}</Text>
+      {isLoading ? (
+        <Loading title={'Đang tải dữ liệu...'} />
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
+          <>
+            {data?.data.length == 0 ? (
+              <Text
+                style={{
+                  marginVertical: '50%',
+                  marginHorizontal: '25%',
+                  width: 'auto',
+                  fontSize: 20,
+                  fontWeight: 'bold'
+                }}
+              >
+                Không có đơn xin việc
+              </Text>
+            ) : (
+              data?.data.map((data, index) =>
+                data.status === value ? (
+                  <View style={styles.form} key={index}>
+                    <View style={styles.group}>
+                      <View style={{ flex: 3 }}>
+                        {data.companyAvatar == '' ? (
+                          <DefaultAvatar
+                            size={80}
+                            identifer={data.companyName[0].replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                          />
+                        ) : (
+                          <Image
+                            source={{ uri: SERVER_ADDRESS + `api/images/${data.companyAvatar}` }}
+                            style={styles.img}
+                          />
+                        )}
+                      </View>
+                      <View style={styles.item}>
+                        <Text style={styles.txt}>{data.jobTitle}</Text>
+                        <Text style={styles.txt}>{data.companyName}</Text>
 
-                  <View style={styles.itemChild}>
-                    <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-                    <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>
-                      {formatDateTime(data.createdAt)}
-                    </Text>
+                        <View style={styles.itemChild}>
+                          <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
+                          <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>
+                            {formatDateTime(data.createdAt)}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.btnBottom}>
+                      <TouchableOpacity>
+                        <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
+                          Xem hồ sơ
+                        </Text>
+                      </TouchableOpacity>
+
+                      {data.status == 'interview' ? (
+                        ''
+                      ) : (
+                        <TouchableOpacity>
+                          <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                            Hủy hồ sơ
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      <Menu>
+                        <MenuTrigger>
+                          <View>
+                            <Text style={styles.txtBtnBottom}>Chỉnh sửa hồ sơ</Text>
+                          </View>
+                        </MenuTrigger>
+                        <MenuOptions optionsContainerStyle={styles.menuOption}>
+                          {menuOptions.map(
+                            (item, index) =>
+                              item.visible && (
+                                <MenuOption
+                                  key={item.type}
+                                  onSelect={() => handleClickMenuOption(item.type, data.id, data.status, data.cvUrl)}
+                                >
+                                  <Text>{item.name}</Text>
+                                </MenuOption>
+                              )
+                          )}
+                        </MenuOptions>
+                      </Menu>
+                    </View>
                   </View>
-                </View>
-              </View>
-              <View style={styles.btnBottom}>
-                <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
-                    Xem cv
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id)}>
-                    Chỉnh sửa cv
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
-                    Hủy hồ sơ
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
+                ) : (
+                  ''
+                )
+              )
+            )}
+          </>
         </ScrollView>
-      </View>
-    </View>
+      )}
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  wrapMenu: {
-    width: '5%',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
+  header: {
+    borderBottomWidth: 0.7
   },
-  menuOption: {
-    marginTop: 20,
-    borderRadius: 10,
-    paddingLeft: 10,
-    width: 160,
-    marginLeft: -15,
-    paddingTop: 10,
-    paddingBottom: 10
+  txtHeader: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
   },
-  body: {
-    backgroundColor: '#fff'
-  },
+
   btnType: {
     marginHorizontal: 10,
     marginVertical: 20
@@ -249,11 +291,50 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10
   },
-  borderCheck: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
-    borderBottomWidth: 2,
-    borderBottomColor: '#000'
+  dropdown: {
+    height: 50,
+    backgroundColor: COLOR_WHITE,
+    paddingLeft: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    shadowOffset: {
+      width: 0,
+      height: 5
+    },
+    shadowOpacity: 1,
+    shadowRadius: 6.27,
+    elevation: 5
+  },
+
+  placeholderStyle: {
+    fontSize: 16,
+    color: COLOR_BLACK
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: COLOR_BLACK
+  },
+  iconStyle: {
+    width: 30,
+    height: 30,
+    marginRight: 28
+  },
+  wrapMenu: {
+    // width: '5%',
+    // flexDirection: 'column',
+    // alignItems: 'flex-end'
+  },
+  menuText: {
+    fontSize: 15
+  },
+  menuOption: {
+    marginTop: -100,
+    borderRadius: 10,
+    width: 190,
+    marginRight: -5,
+    paddingTop: 10,
+    paddingBottom: 10,
+    height: 90
   }
 })

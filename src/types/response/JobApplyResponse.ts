@@ -5,4 +5,5 @@ export interface JobApplyRespose {
   createdAt: string
   companyAvatar: string
   cvUrl: string
+  status:string
 }
