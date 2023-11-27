@@ -8,6 +8,8 @@ export const postAPI = async (apiUrlPost: string) => {
   }
 }
 
+
+
 export const savePostAPI = async (urlSavePost: string, data: any) => {
   try {
     const response = await axios.post(urlSavePost, data);

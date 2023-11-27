@@ -70,7 +70,7 @@ const CustomizePost = (props: Post) => {
         imageIdClicked: imageId,
         avatar: props.avatar,
         images: props.images,
-        listImageError: listImageError
+        listImageError: listImageError,
       })
     )
   }
@@ -131,39 +131,16 @@ const CustomizePost = (props: Post) => {
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
-  const showToast = (status: number) => {
-    if (status === 201) {
-      Toast.show({
-        type: 'success',
-        text1: TEXT_NOTIFYCATIONS,
-        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
-      });
-    } else if (status === 400) {
-      Toast.show({
-        type: 'error',
-        text1: TEXT_NOTIFYCATIONS,
-        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
-      });
-    } else {
-      Toast.show({
-        type: 'warning',
-        text1: TEXT_NOTIFYCATIONS,
-        text2: TEXT_NOTIFICATION_SAVE_SUCCESS
-      });
-    }
-  }
-
   const handleClickMenuOption = (flag: number) => {
     console.log(flag)
     switch (flag) {
       case CLICK_SAVE_POST_EVENT:
-        handleSavePost();
+        post.handleUnSave(post.id);
         break
       case CLICK_DELETE_POST_EVENT:
-        handleDeletePost();
+        post.handleDelete(post.id);
         break
       case CLICK_UN_SAVE_POST:
-        handleSavePost();
         post.handleUnSave(post.id);
         break;
       case CLICK_SEE_LIST_CV_POST_EVENT:
@@ -177,20 +154,6 @@ const CustomizePost = (props: Post) => {
     }
   }
 
-  const handleDeletePost = async () => {
-    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', props.id);
-    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
-  }
-
-  const handleSavePost = async () => {
-    const data = {
-      "userId": userLogin?.id,
-      "postId": post.id
-    }
-    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
-    updatePostData();
-  }
-
   const handleSeeListCvPost = () => {
     navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
@@ -199,6 +162,7 @@ const CustomizePost = (props: Post) => {
     navigation.navigate(SURVEY_RESULT_SCREEN, { surveyPostId: post.id })
   }
 
+  // Tam  thoi
   const updatePostData = () => {
     dispatch(updatePostWhenHaveChangeComment(true))
   }

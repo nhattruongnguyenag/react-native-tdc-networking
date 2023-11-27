@@ -39,9 +39,6 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
   const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   let post = props
   const menuOptions = useMemo<MenuOptionItem[]>(() => {
-    console.log('====================================');
-    console.log('call back header menu option');
-    console.log('====================================');
     let options: MenuOptionItem[] = [
       {
         type: CLICK_SAVE_POST_EVENT,

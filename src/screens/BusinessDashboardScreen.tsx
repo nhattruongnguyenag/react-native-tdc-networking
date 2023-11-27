@@ -10,7 +10,7 @@ import { setConversations, setDeviceToken, updatePostWhenHaveChangeComment } fro
 import { useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
-import { postAPI } from '../api/CallApi'
+import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
@@ -23,6 +23,8 @@ import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { useIsFocused } from '@react-navigation/native';
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { ToastMessenger } from '../utils/ToastMessenger'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -103,8 +105,12 @@ export default function BusinessDashboardScreen() {
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
+      // Like
       stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
       stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
+      // Save post
+      // stompClient.send(`app/posts/group/${code}/unsave/`)
+      // Delete  post
     }
     const onMessageReceived = (payload: any) => {
       setBusinessPost(JSON.parse(payload.body))
@@ -145,10 +151,6 @@ export default function BusinessDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnsave = () => {
-
-  }
-
   const renderItem = (item: any) => {
     return (
       <CustomizePost
@@ -175,9 +177,30 @@ export default function BusinessDashboardScreen() {
         description={item.description ?? null}
         isSave={item.isSave}
         group={code}
-        handleUnSave={handleUnsave}
+        handleUnSave={handleSavePost}
+        handleDelete={handleDeletePost}
       />
     )
+  }
+
+
+  const handleDeletePost = async (id: number) => {
+    console.log('====================================');
+    console.log('delte');
+    console.log('====================================');
+    // const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
+    // ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+  }
+
+  const handleSavePost = async (id: number) => {
+    console.log('====================================');
+    console.log('save');
+    console.log('====================================');
+    // const data = {
+    //   "userId": userLogin?.id,
+    //   "postId": id
+    // }
+    // stompClient.send(`/app/posts/group/${code}/unsave`, {}, JSON.stringify(data))
   }
 
   return (

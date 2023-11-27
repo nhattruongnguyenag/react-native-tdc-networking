@@ -1,27 +1,15 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import axios from 'axios'
 import { COLOR_WHITE } from '../constants/Color'
 
-const CustomizeSelectFacultyToolbar = () => {
-    const [value, setValue] = useState('')
-    const [dataRequest, setDataRequest] = useState([
-        {
-            id: '',
-            name: '',
-            majors: [
-                {
-                    id: '',
-                    name: ''
-                }
-            ]
-        }
-    ])
-
-    const handleOnChange = () => {
-    }
+interface SelectFacultyToolbarType {
+    handleSelectFacultyEvent: (code: string) => void
+}
+const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
+    const [dataRequest, setDataRequest] = useState([])
 
     useEffect(() => {
         axios
@@ -30,7 +18,6 @@ const CustomizeSelectFacultyToolbar = () => {
                 setDataRequest(response.data.data)
             })
             .catch((error) => {
-                console.log(error)
             })
     }, [])
 
@@ -49,9 +36,8 @@ const CustomizeSelectFacultyToolbar = () => {
                     valueField='id'
                     placeholder='Chọn khoa...'
                     searchPlaceholder='Tìm kiếm...'
-                    value={value}
-                    onChange={(item) => {
-                        setValue(item.id)
+                    onChange={(item: any) => {
+                        props.handleSelectFacultyEvent(item.facultyGroupCode)
                     }}
                 />
             </View>

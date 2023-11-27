@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
 import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import { postAPI } from '../api/CallApi'
+import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
@@ -18,6 +18,8 @@ import { RootStackParamList } from '../App'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { useIsFocused } from '@react-navigation/native';
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { ToastMessenger } from '../utils/ToastMessenger'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
@@ -126,11 +128,23 @@ export default function StudentDiscussionDashboardScreen() {
         description={item.description ?? null}
         isSave={item.isSave}
         group={code}
-        handleUnSave={handleUnSave}
-      />
+        handleUnSave={handleSavePost}
+        handleDelete={handleDeletePost} />
     )
   }
 
+  const handleDeletePost = async (id: number) => {
+    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
+    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+  }
+
+  const handleSavePost = async (id: number) => {
+    const data = {
+      "userId": userLogin?.id,
+      "postId": id
+    }
+    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
+  }
   return (
     <View style={styles.container}>
       {

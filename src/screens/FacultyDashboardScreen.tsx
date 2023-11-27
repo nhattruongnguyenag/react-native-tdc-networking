@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
 import { TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import { postAPI } from '../api/CallApi'
+import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
@@ -19,6 +19,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useIsFocused } from '@react-navigation/native';
 import CustomizeSelectFacultyToolbar from '../components/CustomizeSelectFacultyToolbar'
+import { WINDOW_HEIGHT } from '../utils/SystemDimensions'
+import { ToastMessenger } from '../utils/ToastMessenger'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -29,7 +32,7 @@ export default function FacultyDashboardScreen() {
   const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
-  const code = (userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '';
+  const [code, setCode] = useState((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '');
   const dispatch = useAppDispatch()
   const [facultyPost, setFacultyPost] = useState([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -44,16 +47,23 @@ export default function FacultyDashboardScreen() {
 
   useEffect(() => {
     getDataFacultyApi();
-  }, [isFocused])
+  }, [isFocused, code])
 
   const getDataFacultyApi = async () => {
-    try {
-      const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
-      setFacultyPost(data.data)
-    } catch (error) {
-      console.log(error)
+    console.log('====================================');
+    console.log(code);
+    console.log('====================================');
+    if (code.length !== 0) {
+      try {
+        const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
+        setFacultyPost(data.data)
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      setFacultyPost([]);
     }
-    setIsCalled(true)
+    setIsCalled(true);
   }
 
   useEffect(() => {
@@ -101,7 +111,18 @@ export default function FacultyDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnSave = () => { }
+  const handleDeletePost = async (id: number) => {
+    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
+    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+  }
+
+  const handleSavePost = async (id: number) => {
+    const data = {
+      "userId": userLogin?.id,
+      "postId": id
+    }
+    stompClient.send(`/app/posts/group/${code}/unsave`, {}, JSON.stringify(data))
+  }
 
   const renderItem = (item: any) => {
     return (
@@ -129,16 +150,19 @@ export default function FacultyDashboardScreen() {
         description={item.description ?? null}
         isSave={item.isSave}
         group={code}
-        handleUnSave={handleUnSave}
-      />
+        handleUnSave={handleSavePost}
+        handleDelete={handleDeletePost} />
     )
   }
 
+  const handleSelectFacultyEvent = (_code: string) => {
+    setCode(_code);
+  };
+
+
+
   return (
     userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
-      {
-        isLoading && <SkeletonPost />
-      }
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
@@ -159,14 +183,44 @@ export default function FacultyDashboardScreen() {
           </View> : null
         }
 
-        <FlatList
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          data={facultyPost}
-          renderItem={({ item }) => renderItem(item)}
-        />
+        {
+          isLoading ? <SkeletonPost /> : <FlatList
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            data={facultyPost}
+            renderItem={({ item }) => renderItem(item)}
+          />
+        }
       </ScrollView>
-    </View> : <CustomizeSelectFacultyToolbar />
+    </View> : <ScrollView
+      showsVerticalScrollIndicator={false}>
+      <CustomizeSelectFacultyToolbar
+        handleSelectFacultyEvent={handleSelectFacultyEvent}
+      />
+      <View>
+        {isLoading ? (
+          <View style={styles.businessRolePostShow}>
+            <SkeletonPost />
+          </View>
+        ) : (
+          <>
+            {facultyPost.length ? (
+              <FlatList
+                style={styles.businessRolePostShow}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={facultyPost}
+                renderItem={({ item }) => renderItem(item)}
+              />
+            ) : (
+              <View style={styles.wrapperWhenDontHaveAnyPost}>
+                <Text>Chưa có bất kỳ bài viết nào</Text>
+              </View>
+            )}
+          </>
+        )}
+      </View>
+    </ScrollView>
   )
 }
 
@@ -179,6 +233,15 @@ const styles = StyleSheet.create({
   },
   containerNotification: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  businessRolePostShow: {
+    marginTop: 20,
+  },
+  wrapperWhenDontHaveAnyPost: {
+    height: WINDOW_HEIGHT * 0.6,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   }
