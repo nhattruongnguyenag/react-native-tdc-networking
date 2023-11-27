@@ -187,5 +187,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " 投票"
+    },
+    "UserItem": {
+        "follow": "フォロー",
+        "unFollow": "フォロー解除",
+        "profile": "プロフィール"
     }
 }

@@ -1,7 +1,8 @@
 import { View, Text, Pressable, StyleSheet, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useTransition } from 'react'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
 import Icon1 from 'react-native-vector-icons/Entypo'
+import { useTranslation } from 'react-multi-lang';
 
 export interface UserItemType {
   id: number;
@@ -14,6 +15,7 @@ export interface UserItemType {
 
 export default function UserItem(props: UserItemType) {
   let item = props
+  const t = useTranslation()
 
   const isFollowed = () => {
     return (
@@ -25,10 +27,10 @@ export default function UserItem(props: UserItemType) {
         </MenuTrigger>
         <MenuOptions optionsContainerStyle={styles.menuOption}>
           <MenuOption>
-            <Text style={styles.menuText}>Trang cá nhân</Text>
+            <Text style={styles.menuText}>{t('UserItem.profile')}</Text>
           </MenuOption>
           <MenuOption onSelect={() => item.handleFollow(item.id)}>
-            <Text style={styles.menuText}>Hủy theo dõi</Text>
+            <Text style={styles.menuText}>{t('UserItem.unFollow')}</Text>
           </MenuOption>
         </MenuOptions>
       </Menu>
@@ -40,7 +42,7 @@ export default function UserItem(props: UserItemType) {
       <TouchableOpacity style={styles.follow}
       onPress={() => item.handleFollow(item.id)}
       >
-        <Text style={{ color: 'white', fontWeight: 'bold' }}>Theo dõi</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>{t('UserItem.follow')}</Text>
       </TouchableOpacity>
     )
   }

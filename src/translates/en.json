@@ -188,5 +188,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " votes"
+    },
+    "UserItem": {
+        "follow": "Follow",
+        "unFollow": "Unfollow",
+        "profile": "Profile"
     }
 }

@@ -14,4 +14,5 @@ export interface PostSavedModel {
   commentQty: number
   isSave: number
   content: string
+  title: string | null
 }
