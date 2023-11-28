@@ -152,6 +152,36 @@
         "requestLogin":"Do have account?",
         "titleNotification": "Notification"
     },
+    "ManageJobApply":{
+        "textReceived" : "Received",
+        "textIn_progress" : "In progress",
+        "textNot_meet_standard_quality" : "Not meet standard quality",
+        "textInterview" : "Interview",
+        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
+        "textAccept" : "Accept",
+        "textChangeCv" : "Update job application",
+        "textChangeStatusJob" : "Update profile status",
+        "textNotification" : "Notification",
+        "textDeleteSucces" : "Cancel profile successfully",
+        "textLoader" : "Loading...",
+        "textListJobNull" : "No job application",
+        "textSeeCv" : "See profile",
+        "textDelete" : "Cancle profile",
+        "textChangeProfile" : "Update profile"
+     },
+     "ChangeStatusJobApply":{
+        "textReceived" : "Received",
+        "textIn_progress" : "In progress",
+        "textNot_meet_standard_quality" : "Not meet standard quality",
+        "textInterview" : "Interview",
+        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
+        "textAccept" : "Accept",
+        "textNotification" : "Notification",
+        "textChangeSucces" : "Change profile status successfully",
+        "textChangeStatus" : "Change profile status",
+        "textDelete" : "Cancle",
+        "textChange" : "Change"
+     },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Recruitment Details",
         "topTabNavigator": "TDC Social Network",
@@ -177,7 +207,8 @@
         "applicationOptionScreen": "Application Options",
         "approvalPostScreen": "Approve Posts",
         "createSurveyScreen": "Create Survey",
-        "createRecruitmentScreen": "Create Job Posting"
+        "createRecruitmentScreen": "Create Job Posting",
+        "manageJobApply": "Manage application job"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Go back",
@@ -237,6 +268,7 @@
         "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the application",
         "jobApplyScreenEmptyCvTextTitle": "Notification",
         "jobApplyScreenSaveSuccessTextContent": "Application submitted successfully",
+        "jobApplyScreenChangeSuccessTextContent": "Change submitted successfully",
         "jobApplyScreenSaveSuccessTextTitle": "Notification"
     },
     "MessageScreen": {

@@ -420,7 +420,7 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={MANAGEMENT_JOB_APPLY_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={t('Quản lý hồ sơ ứng tuyển')} /> }}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.manageJobApply')} /> }}
         component={ManagementJobApplyScreen}
       />
 

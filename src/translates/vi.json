@@ -150,6 +150,36 @@
         "requestLogin":"Đã có tài khoản?",
         "titleNotification": "Thông báo"
     },
+    "ManageJobApply":{
+       "textReceived" : "Đã nhận",
+       "textIn_progress" : "Trong tiến trình",
+       "textNot_meet_standard_quality" : "Không đạt tiêu chuẩn",
+       "textInterview" : "Phỏng vấn",
+       "textInterview_not_meet_standard_quality" : "Không đạt phỏng vấn",
+       "textAccept" : "Nhận việc",
+       "textChangeCv" : "Chỉnh sửa đơn xin việc",
+       "textChangeStatusJob" : "Chỉnh sửa trạng thái hồ sơ",
+       "textNotification" : "Thông báo",
+       "textDeleteSucces" : "Hủy hồ sơ thành công",
+       "textLoader" : "Đang tải dữ liệu...",
+       "textListJobNull" : "Không có đơn xin việc",
+       "textSeeCv" : "Xem hồ sơ",
+       "textDelete" : "Hủy hồ sơ",
+       "textChangeProfile" : "Chỉnh sửa hồ sơ"
+    },
+    "ChangeStatusJobApply":{
+       "textReceived" : "Đã nhận",
+       "textIn_progress" : "Trong tiến trình",
+       "textNot_meet_standard_quality" : "Không đạt tiêu chuẩn",
+       "textInterview" : "Phỏng vấn",
+       "textInterview_not_meet_standard_quality" : "Không đạt phỏng vấn",
+       "textAccept" : "Nhận việc",
+       "textNotification" : "Thông báo",
+       "textChangeSucces" : "Đổi trạng thái thành công",
+       "textChangeStatus" : "Đổi trạng thái hồ sơ",
+       "textDelete" : "Hủy",
+       "textChange" : "Thay đổi"
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Chi tiết tuyển dụng",
         "topTabNavigator": "TDC Social Network",
@@ -175,7 +205,8 @@
         "applicationOptionScreen": "Tùy chọn ứng dụng",
         "approvalPostScreen": "Duyệt bài viết",
         "createSurveyScreen": "Thêm khảo sát",
-        "createRecruitmentScreen": "Thêm tin tuyển dụng"
+        "createRecruitmentScreen": "Thêm tin tuyển dụng",
+        "manageJobApply": "Quản lý hồ sơ ứng tuyển"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
@@ -235,6 +266,7 @@
         "jobApplyScreenEmptyCvTextContent": "Vui lòng thêm CV để hoàn tất đăng ký",
         "jobApplyScreenEmptyCvTextTitle": "Thông báo",
         "jobApplyScreenSaveSuccessTextContent": "Nộp đơn thành công",
+        "jobApplyScreenChangeSuccessTextContent": "Sửa đơn thành công",
         "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
     },
     "MessageScreen": {

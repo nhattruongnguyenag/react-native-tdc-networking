@@ -33,13 +33,13 @@ export default function JobApplyScreen() {
   const [isBtnFinishDisable, setBtnFinishDisable] = useState(true)
   const [cvSource, setCVSource] = useState<FileUploadRequest>(cvSourceDefalutValue)
   useEffect(() => {
-    if(route.params?.profileId){
+    if (route.params?.profileId) {
       setCVSource({
         ...cvSource,
         uri: SERVER_ADDRESS + 'api/files/' + route.params.cvUrl ?? ''
       })
     }
-  },[route.params?.profileId])
+  }, [route.params?.profileId])
 
   const onBtnAddCVPress = async () => {
     DocumentPicker.pick({
@@ -61,7 +61,7 @@ export default function JobApplyScreen() {
     if (cvSource.type.includes('image')) {
       return <Image style={{ flex: 1, objectFit: 'scale-down' }} source={{ uri: cvSource.uri }} />
     }
-    
+
     return (
       <Pdf
         trustAllCerts={false}
@@ -123,7 +123,10 @@ export default function JobApplyScreen() {
       )
       navigation.goBack()
     } else if (jobApplyUpdateResponse.isSuccess && jobApplyUpdateResponse.data) {
-      Alert.alert('Thông báo', 'Sửa đơn xin việc thành công')
+      Alert.alert(
+        t('JobApplyScreen.jobApplyScreenSaveSuccessTextTitle'),
+        t('JobApplyScreen.jobApplyScreenChangeSuccessTextContent')
+      )
       navigation.goBack()
     }
   }, [jobApplyResponse, jobApplyUpdateResponse])

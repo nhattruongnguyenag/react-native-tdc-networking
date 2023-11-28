@@ -7,14 +7,15 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
+import { t } from 'react-multi-lang'
 
 const dataType = [
-  { label: 'received', value: '1' },
-  { label: 'in_progress', value: '2' },
-  { label: 'not_meet_standard_quality', value: '3' },
-  { label: 'interview', value: '4' },
-  { label: 'not_meet_standard_quality', value: '5' },
-  { label: 'accept', value: '6' }
+  { label: t('ChangeStatusJobApply.textReceived'), value: 'received' },
+  { label: t('ChangeStatusJobApply.textIn_progress'), value: 'in_progress' },
+  { label: t('ChangeStatusJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
+  { label: t('ChangeStatusJobApply.textInterview'), value: 'interview' },
+  { label: t('ChangeStatusJobApply.textInterview_not_meet_standard_quality'), value: 'interview_not_meet_standard_quality' },
+  { label: t('ChangeStatusJobApply.textAccept'), value: 'accept' }
 ]
 
 export default function ComponentJobApply() {
@@ -23,6 +24,7 @@ export default function ComponentJobApply() {
   const [jobApplyUpdateRequest, jobApplyUpdateResponse] = useJobApplyUpdateMutation()
   const status = route.params?.status
   const [value, setValue] = useState(status)
+  const [item, setItem] = useState(status)
   const handleChangeStatusJob = () => {
     jobApplyUpdateRequest({
       profileId: route.params?.profileId,
@@ -33,8 +35,7 @@ export default function ComponentJobApply() {
   useEffect(() => {
     console.log(jobApplyUpdateResponse.isSuccess)
     if (jobApplyUpdateResponse.isSuccess || jobApplyUpdateResponse.data) {
-      console.log(jobApplyUpdateResponse.data)
-      Alert.alert('Thông báo', 'Đổi trạng thái thành công')
+      Alert.alert(t('ChangeStatusJobApply.textNotification'), t('ChangeStatusJobApply.textChangeSucces'))
       navigation.goBack()
     }
   }, [jobApplyUpdateResponse])
@@ -43,10 +44,10 @@ export default function ComponentJobApply() {
     <ScrollView style={{ backgroundColor: COLOR_WHITE }}>
       <View style={styles.group}>
         <View style={{ alignItems: 'center', marginBottom: 20 }}>
-          <Text style={styles.txt}>Đổi trạng thái hồ sơ</Text>
+          <Text style={styles.txt}>{t('ChangeStatusJobApply.textChangeStatus')}</Text>
         </View>
         <Dropdown
-          placeholder={value}
+          placeholder={item}
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -54,17 +55,18 @@ export default function ComponentJobApply() {
           data={dataType}
           labelField='label'
           valueField='value'
-          value={value}
+          value={item}
           onChange={(item) => {
-            setValue(item.label)
+            setValue(item.value)
+            setItem(item.label)
           }}
         />
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity style={[styles.btnContinute, { marginRight: 5 }]} onPress={() => navigation.goBack()}>
-            <Text style={styles.txtRegister}>Hủy</Text>
+            <Text style={styles.txtRegister}>{t('ChangeStatusJobApply.textDelete')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.btnContinute, { marginLeft: 5 }]} onPress={() => handleChangeStatusJob()}>
-            <Text style={styles.txtRegister}>Thay đổi</Text>
+            <Text style={styles.txtRegister}>{t('ChangeStatusJobApply.textChange')}</Text>
           </TouchableOpacity>
         </View>
       </View>

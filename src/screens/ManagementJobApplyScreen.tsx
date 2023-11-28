@@ -16,15 +16,15 @@ import Loading from '../components/common/Loading'
 import DefaultAvatar from '../components/common/DefaultAvatar'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
-import { JobApplyRespose } from '../types/response/JobApplyResponse'
+import { t } from 'react-multi-lang'
 
 const dataType = [
-  { label: 'received', value: '1' },
-  { label: 'in_progress', value: '2' },
-  { label: 'not_meet_standard_quality', value: '3' },
-  { label: 'interview', value: '4' },
-  { label: 'not_meet_standard_quality', value: '5' },
-  { label: 'accept', value: '6' }
+  { label: t('ManageJobApply.textReceived'), value: 'received' },
+  { label: t('ManageJobApply.textIn_progress'), value: 'in_progress' },
+  { label: t('ManageJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
+  { label: t('ManageJobApply.textInterview'), value: 'interview' },
+  { label: t('ManageJobApply.textInterview_not_meet_standard_quality'), value: 'interview_not_meet_standard_quality' },
+  { label: t('ManageJobApply.textAccept'), value: 'accept' }
 ]
 
 interface MenuOptionItem {
@@ -35,10 +35,11 @@ interface MenuOptionItem {
 export default function ManagementJobApplyScreen() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  const { data, isLoading, isFetching } = useGetJobProfileQuery(userLogin?.id, {
+  const { data, isLoading } = useGetJobProfileQuery(userLogin?.id, {
     pollingInterval: 1000
   })
   const [value, setValue] = useState('received')
+  const [item, setItem] = useState(t('ManageJobApply.textReceived'))
 
   const menuOptions = useMemo<MenuOptionItem[]>(() => {
     let options: MenuOptionItem[] = []
@@ -46,7 +47,7 @@ export default function ManagementJobApplyScreen() {
       ...options,
       {
         type: 1,
-        name: 'Chỉnh sửa đơn xin việc',
+        name: t('ManageJobApply.textChangeCv'),
         visible: true
       }
     ]
@@ -54,7 +55,7 @@ export default function ManagementJobApplyScreen() {
       ...options,
       {
         type: 2,
-        name: 'Chỉnh sửa trạng thái hồ sơ',
+        name: t('ManageJobApply.textChangeStatusJob'),
         visible: true
       }
     ]
@@ -84,7 +85,7 @@ export default function ManagementJobApplyScreen() {
     axios
       .delete(SERVER_ADDRESS + `api/job/profile/${profileId}`)
       .then((response) => {
-        Alert.alert('Thông báo', 'Hủy hồ sơ thành công')
+        Alert.alert(t('ManageJobApply.textNotification'), t('ManageJobApply.textDeleteSucces'))
       })
       .catch((error) => {
         console.log(error)
@@ -106,16 +107,17 @@ export default function ManagementJobApplyScreen() {
           data={dataType}
           labelField='label'
           valueField='value'
-          placeholder={value}
-          value={value}
+          placeholder={item}
+          value={item}
           onChange={(item) => {
-            setValue(item.label)
+            setValue(item.value)
+            setItem(item.label)
           }}
         />
       </SafeAreaView>
 
       {isLoading ? (
-        <Loading title={'Đang tải dữ liệu...'} />
+        <Loading title={t('ManageJobApply.textLoader')} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
           <>
@@ -129,7 +131,7 @@ export default function ManagementJobApplyScreen() {
                   fontWeight: 'bold'
                 }}
               >
-                Không có đơn xin việc
+                {t('ManageJobApply.textListJobNull')}
               </Text>
             ) : (
               data?.data.map((data, index) =>
@@ -164,23 +166,20 @@ export default function ManagementJobApplyScreen() {
                     <View style={styles.btnBottom}>
                       <TouchableOpacity>
                         <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
-                          Xem hồ sơ
+                          {t('ManageJobApply.textSeeCv')}
+                        </Text>
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity>
+                        <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                        {t('ManageJobApply.textDelete')}
                         </Text>
                       </TouchableOpacity>
 
-                      {data.status == 'interview' ? (
-                        ''
-                      ) : (
-                        <TouchableOpacity>
-                          <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
-                            Hủy hồ sơ
-                          </Text>
-                        </TouchableOpacity>
-                      )}
                       <Menu>
                         <MenuTrigger>
                           <View>
-                            <Text style={styles.txtBtnBottom}>Chỉnh sửa hồ sơ</Text>
+                            <Text style={styles.txtBtnBottom}>{t('ManageJobApply.textChangeProfile')}</Text>
                           </View>
                         </MenuTrigger>
                         <MenuOptions optionsContainerStyle={styles.menuOption}>
@@ -334,7 +333,6 @@ const styles = StyleSheet.create({
     width: 190,
     marginRight: -5,
     paddingTop: 10,
-    paddingBottom: 10,
-    height: 90
+    paddingBottom: 10
   }
 })

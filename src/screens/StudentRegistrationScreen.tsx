@@ -76,25 +76,27 @@ export default function StudentRegistrationScreen() {
     email: '',
     name: '',
     image: '',
-    facultyName: '',
-    major: '',
+    facultyId: 0,
+    majorId: 0,
+    background:'',
+    phone:'',
     studentCode: '',
     confimPassword: ''
   })
   const [dataRequest, setDataRequest] = useState([
     {
-      id: '',
+      id: 0,
       name: '',
       majors: [
         {
-          id: '',
+          id: 0,
           name: ''
         }
       ]
     }
   ])
 
-  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: '', name: '' }])
+  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: 0, name: '' }])
   const [isLoading, setIsLoading] = useState(false)
   const [validate, setValidate] = useState<RegisterStudent>({
     name: {
@@ -133,8 +135,8 @@ export default function StudentRegistrationScreen() {
       isError: true
     }
   })
-  const [value, setValue] = useState('')
-  const [item, setItem] = useState('')
+  const [value, setValue] = useState('Chọn khoa')
+  const [item, setItem] = useState('Chọn ngành')
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
   })
@@ -393,9 +395,9 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleMajorNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, major: value })
-      if (isBlank(value)) {
+    (value: number) => {
+      setStudent({ ...student, majorId: value })
+      if (value == null) {
         setValidate({
           ...validate,
           major: {
@@ -419,9 +421,9 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleFacultyNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, facultyName: value })
-      if (isBlank(value)) {
+    (value: number) => {
+      setStudent({ ...student, facultyId: value })
+      if (value == null) {
         setValidate({
           ...validate,
           facultyName: {
@@ -450,7 +452,7 @@ export default function StudentRegistrationScreen() {
       .then((response) => {
         setDataRequest(response.data.data)
         dataRequest.map((data) => {
-          if (data.name === student.facultyName) {
+          if (data.id == student.facultyId) {
             setDataNganhRequest(data.majors)
           }
         })
@@ -563,12 +565,12 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              placeholder={t('RegisterStudentComponent.placeholderFaculity')}
+              placeholder={value}
               searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={value}
               onChange={(item) => {
-                setValue(item.id)
-                handleFacultyNameChange(item.name)
+                setValue(item.name)
+                handleFacultyNameChange(item.id)
               }}
             />
           </View>
@@ -583,7 +585,7 @@ export default function StudentRegistrationScreen() {
           <View style={styles.group}>
             <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
             <Dropdown
-              placeholder={t('RegisterStudentComponent.placeholderMajor')}
+              placeholder={item}
               style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -596,8 +598,8 @@ export default function StudentRegistrationScreen() {
               searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={item}
               onChange={(item) => {
-                setItem(item.id)
-                handleMajorNameChange(item.name)
+                setItem(item.name)
+                handleMajorNameChange(item.id)
               }}
             />
           </View>
