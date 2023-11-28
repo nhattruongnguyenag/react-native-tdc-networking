@@ -74,7 +74,7 @@ export default function CreateRecruitmentScreen() {
     if (data && isSuccess) {
       setRecruitmentModel(data)
     }
-  }, [data])
+  }, [data, isSuccess])
 
   const defaultValidate = useMemo(() => (
     {

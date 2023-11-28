@@ -2,6 +2,7 @@ import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import { PostResponseModal } from '../../types/response/PostResponseModal'
+import { SCREEN_WIDTH, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import HeaderPostApprovalItem from './HeaderPostApprovalItem'
 import RecruitmentPostApprovalItem from './RecruitmentPostApprovalItem'
 import SurveyPostApprovalItem from './SurveyPostApprovalItem'
@@ -43,6 +44,7 @@ export default function PostApprovalItem(props: PostApprovalItemProps) {
 
 const styles = StyleSheet.create({
     container: {
+        width: SCREEN_WIDTH - 20,
         padding: 10,
         backgroundColor: '#fff',
         elevation: 10,

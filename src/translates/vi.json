@@ -149,7 +149,7 @@
         "addQuestionViewComponentQuestionEmptyErrorContent": "Vui lòng chọn loại câu hỏi",
         "addQuestionViewComponentQuestionEmptyErrorTitle": "Lỗi !!!",
         "addQuestionViewComponentQuestionTypeDropdownSearch": "Tìm kiếm...",
-        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Chọn loại câu hỏi ---",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "Chọn loại câu hỏi",
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Tiêu đề không được chứa ký tự đặc biệt",
         "addQuestionViewComponentTitleEmptyValidate": "Tiêu đề không được để trống",
         "addQuestionViewComponentTitleInputPlaceholder": "Nhập tiêu đề câu hỏi...",

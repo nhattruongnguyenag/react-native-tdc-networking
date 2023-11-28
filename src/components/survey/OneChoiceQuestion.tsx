@@ -37,9 +37,10 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
         }}
         value={value}
       >
-        {(props.data?.choices &&
+        {(props.data?.choices
+          &&
           props.data.choices.map((item, index) => {
-            return <RadioInputWithTitle label={item} value={item} />
+            return <RadioInputWithTitle label={item.content} value={item.id ? item.id.toString() : index.toString()} />
           })) ||
           (props.dataResponse?.choices &&
             props.dataResponse.choices.map((item, index) => {
@@ -61,7 +62,8 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
         props.editMode && <QuestionBottomBarOptions
           reviewMode={props.reviewMode}
           conductMode={props.conductMode}
-          index={props.index} />
+          index={props.index}
+          onBtnUpdateQuestionPress={props.onUpdateQuestion} />
       }
     </View>
   )

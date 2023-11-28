@@ -5,7 +5,7 @@ import { useTranslation } from 'react-multi-lang'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
-import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionView'
+import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionModal'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
@@ -31,6 +31,8 @@ export default function ReviewSurveyPostScreen() {
   }, [addSurveyResult]);
 
   const onBtnPublishPostPress = () => {
+    console.log(JSON.stringify(surveyPostRequest))
+    return;
     if (surveyPostRequest) {
       addSurvey(surveyPostRequest);
     }

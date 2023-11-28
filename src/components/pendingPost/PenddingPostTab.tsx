@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
-import { useTranslation } from 'react-multi-lang'
-import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React, { Fragment, useMemo } from 'react'
 import { useAppSelector } from '../../redux/Hook'
+import { useTranslation } from 'react-multi-lang'
+import { isAdmin, isBusiness, isFaculty } from '../../utils/UserHelper'
 import { useGetPostsQuery } from '../../redux/Service'
-import Loading from '../common/Loading'
-import ModalPostRejectReason from '../postApproval/ModalPostRejectReason'
 import PostApprovalItem, { POST_PENDING } from '../postApproval/PostApprovalItem'
+import ModalPostRejectReason from '../postApproval/ModalPostRejectReason'
+import Loading from '../common/Loading'
 
 export default function PenddingPostTab() {
     const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
@@ -21,10 +22,10 @@ export default function PenddingPostTab() {
             {
                 isLoading ? <Loading title={t('PenddingPostScreen.loading')} />
                     :
-                    <Fragment>
+                    <>
                         {
                             data?.data.length ?
-                                <Fragment>
+                                <>
                                     <FlatList
                                         data={data?.data}
                                         renderItem={({ item, index }) =>
@@ -34,11 +35,11 @@ export default function PenddingPostTab() {
                                             />}
                                     />
                                     <ModalPostRejectReason />
-                                </Fragment>
+                                </>
                                 :
                                 <Text style={{ marginTop: -60 }}>{t('PenddingPostScreen.emptyMessage')}</Text>
                         }
-                    </Fragment>
+                    </>
             }
         </SafeAreaView>
     )

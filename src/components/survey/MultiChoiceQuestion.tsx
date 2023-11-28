@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
@@ -19,7 +19,7 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
   }, [selectedChoiceIds])
 
   return (
-    <View style={styles.itemBody}>
+    <Pressable style={styles.itemBody}>
      <QuestionTitle
         required={props.conductMode ? props.dataResponse?.required : props.data?.required}
         title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
@@ -28,7 +28,7 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
       />
       {(props.data?.choices &&
         props.data.choices.map((item, index) => {
-          return <CheckboxInputWithTitle label={item} key={index} />
+          return <CheckboxInputWithTitle label={item.content} key={index} />
         })) ||
         (props.dataResponse?.choices &&
           props.dataResponse.choices.map((item, index) => {
@@ -50,9 +50,10 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
         props.editMode && <QuestionBottomBarOptions
           reviewMode={props.reviewMode}
           conductMode={props.conductMode}
-          index={props.index} />
+          index={props.index} 
+          onBtnUpdateQuestionPress={props.onUpdateQuestion}/>
       }
-    </View>
+    </Pressable>
   )
 }
 

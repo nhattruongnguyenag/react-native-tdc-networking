@@ -171,6 +171,23 @@ export const TDCSocialNetworkAPI = createApi({
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
     }),
+    getSurveyPostUpdate: builder.query<Data<SurveyPostRequest>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/survey/${data.postId}/update`
+        })
+    }),
+    updateSurveyPost: builder.mutation<MessageResponseData, SurveyPostRequest>({
+      query: (data) => ({
+        url: 'api/posts/survey',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
+    }),
   })
 })
 
@@ -193,5 +210,7 @@ export const {
   useAcceptPostMutation,
   useDeletePostMutation,
   useGetRecruitmentPostUpdateQuery,
-  useUpdateRecruitmentPostMutation
+  useUpdateRecruitmentPostMutation,
+  useGetSurveyPostUpdateQuery,
+  useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI

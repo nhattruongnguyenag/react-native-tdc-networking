@@ -5,12 +5,14 @@ import { IconButton } from 'react-native-paper'
 import ToggleSwitch from 'toggle-switch-react-native'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { deleteQuestion, updateQuestion } from '../../redux/Slice'
+import { Question } from '../../types/Question'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
     editMode?: boolean
     reviewMode?: boolean
     conductMode?: boolean
+    onBtnUpdateQuestionPress?: (questionIndex: number) => void
 }
 
 export default function QuestionBottomBarOptions(props: QuestionBottomBarOptionsProps) {
@@ -19,9 +21,7 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
     const dispatch = useAppDispatch()
 
     const onBtnDeletePress = () => {
-        if (props.index) {
-            dispatch(deleteQuestion(props.index))
-        }
+        dispatch(deleteQuestion(props.index))
     }
 
     const [switchToggle, setSwitchToggle] = useState(true)
@@ -52,9 +52,18 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
                 }}
             />
 
+            <IconButton
+                icon='square-edit-outline'
+                iconColor='#14a44d'
+                size={25}
+                onPress={() => {
+                    props.onBtnUpdateQuestionPress && props.onBtnUpdateQuestionPress(props.index ?? -1)
+                }}
+            />
+
             <ToggleSwitch
                 isOn={switchToggle}
-                onColor="green"
+                onColor="#6f42c1"
                 offColor="gray"
                 label={t('QuestonBottomBarOptions.questionBottomBarQuestionRequireToggle')}
                 size="small"
@@ -73,6 +82,6 @@ const styles = StyleSheet.create({
     },
     btnDelete: {
         marginStart: 'auto',
-        marginEnd: 0
+        marginEnd: 5
     }
 })

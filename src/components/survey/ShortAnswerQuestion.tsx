@@ -30,7 +30,8 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
         props.editMode && <QuestionBottomBarOptions
           reviewMode={props.reviewMode}
           conductMode={props.conductMode}
-          index={props.index} />
+          index={props.index}
+          onBtnUpdateQuestionPress={props.onUpdateQuestion} />
       }
     </View>
   )

@@ -8,7 +8,7 @@ import { ActivityIndicator } from 'react-native-paper'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../../App'
-import { CREATE_RECRUITMENT_SCREEN } from '../../constants/Screen'
+import { CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN } from '../../constants/Screen'
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
@@ -58,23 +58,27 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
 
     const onRejectDetailsPress = (postId?: number) => {
         axios
-          .get<void, AxiosResponse<Data<PostRejectLogResponse>>>(SERVER_ADDRESS + `api/approval/log/post/${postId}`)
-          .then((response) => {
-            if (response.status == 200) {
-                Alert.alert("Chi tiết", `${moment(response.data.data.createdAt).fromNow()}\n\n${response.data.data.content}`)
-            }
-          }).catch(err => console.log(err))
+            .get<void, AxiosResponse<Data<PostRejectLogResponse>>>(SERVER_ADDRESS + `api/approval/log/post/${postId}`)
+            .then((response) => {
+                if (response.status == 200) {
+                    Alert.alert("Chi tiết", `${moment(response.data.data.createdAt).fromNow()}\n\n${response.data.data.content}`)
+                }
+            }).catch(err => console.log(err))
     }
 
     const onDeletePost = (postId?: number) => {
         if (postId) {
-            deletePost({postId: postId})
+            deletePost({ postId: postId })
         }
     }
 
     const onUpdatePost = (post?: PostResponseModal) => {
-        if (post && post.type === TYPE_POST_RECRUITMENT) {
-            navigation.navigate(CREATE_RECRUITMENT_SCREEN, {recruitmentPostId: post.id})
+        if (post) {
+            if (post.type === TYPE_POST_RECRUITMENT) {
+                navigation.navigate(CREATE_RECRUITMENT_SCREEN, { recruitmentPostId: post.id })
+            } else if (post.type === TYPE_POST_SURVEY) {
+                navigation.navigate(CREATE_SURVEY_SCREEN, { surveyPostId: post.id })
+            }
         }
     }
 
@@ -153,7 +157,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                         }
 
                         {
-                           ( props.type === POST_PENDING || props.type === POST_REJECT)
+                            (props.type === POST_PENDING || props.type === POST_REJECT)
                             &&
                             <MenuOption
                                 key={0}
@@ -163,12 +167,12 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                         }
 
                         {
-                           ( props.type === POST_PENDING || props.type === POST_REJECT)
+                            (props.type === POST_PENDING || props.type === POST_REJECT)
                             &&
                             <MenuOption
                                 key={0}
                                 onSelect={() => onDeletePost(props.post?.id)}>
-                                <Text style={[styles.menuText, {color: 'red'}]}>{t('ModalPostRejectReason.pendingPostDelete')}</Text>
+                                <Text style={[styles.menuText, { color: 'red' }]}>{t('ModalPostRejectReason.pendingPostDelete')}</Text>
                             </MenuOption>
                         }
                     </MenuOptions>
@@ -180,9 +184,10 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
 
 const styles = StyleSheet.create({
     body: {
+        flex: 1,
         backgroundColor: '#fff',
         flexDirection: 'row',
-        alignItems: 'center'
+        justifyContent: 'space-between'
     },
     menuTrigger: {
         width: 15,
@@ -211,7 +216,8 @@ const styles = StyleSheet.create({
         marginStart: 10
     },
     postInfoPrimaryWrapper: {
-        marginStart: 15
+        marginStart: 15,
+        flex: 1
     },
     postInfoSecondaryWrapper: {
         flexDirection: 'row',
@@ -224,7 +230,9 @@ const styles = StyleSheet.create({
     postPrimaryTitle: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
+        flex: 1,
+        flexWrap: 'wrap'
     },
     menuTitle: {
         flexDirection: 'row'
