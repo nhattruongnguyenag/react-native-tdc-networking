@@ -1,13 +1,16 @@
 import {
   Alert,
+  Button,
   Image,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  useWindowDimensions
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
@@ -16,13 +19,13 @@ import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { LOGIN_SCREEN } from '../constants/Screen'
-import { COLOR_BTN_BLUE } from '../constants/Color'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { Student } from '../types/Student'
 import axios, { AxiosResponse } from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import { ActivityIndicator } from 'react-native-paper'
+import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
@@ -60,6 +63,10 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 }
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
+  type OpenURLButtonProps = {
+    url: string
+    children: string
+  }
   const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
@@ -78,8 +85,8 @@ export default function StudentRegistrationScreen() {
     image: '',
     facultyId: 0,
     majorId: 0,
-    background:'',
-    phone:'',
+    background: '',
+    phone: '',
     studentCode: '',
     confimPassword: ''
   })
@@ -466,6 +473,16 @@ export default function StudentRegistrationScreen() {
     setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
 
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const openModal = () => {
+    setModalVisible(true)
+  }
+
+  const closeModal = () => {
+    setModalVisible(false)
+  }
+
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
@@ -473,12 +490,10 @@ export default function StudentRegistrationScreen() {
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert(t('RegisterStudentComponent.titleNotification'), t('RegisterStudentComponent.registerSusccess'))
-          navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
           console.log(error)
-          Alert.alert(t('RegisterStudentComponent.registerFail'), t('RegisterStudentComponent.errorSameEmail'))
+          openModal()
           setIsLoading(false)
         })
     } else {
@@ -494,204 +509,247 @@ export default function StudentRegistrationScreen() {
     }
   }, [validate])
 
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 100,
+    height: 230
+  }
+
   return (
-    <ScrollView style={{backgroundColor:'#fff'}}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
-            <Icon name='chevron-left' size={20} color={'#ffff'} />
-          </TouchableOpacity>
-          <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>{t('RegisterStudentComponent.titleRegisterStudent')}</Text>
-          </View>
-        </View>
-
-        <View style={styles.form}>
-          <TextInputWithTitle
-            value={student.name}
-            title={t('RegisterStudentComponent.titleStudentName')}
-            placeholder={t('RegisterStudentComponent.placeholderStudentName')}
-            onChangeText={(value) => handleStudentNameChange(value)}
-            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.name?.textError}
-            isError={validate.name?.isError}
-            isVisible={validate.name?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={student.studentCode}
-            title={t('RegisterStudentComponent.titleStudentCode')}
-            placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
-            onChangeText={(value) => handleStudentCodeChange(value)}
-            textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.studentCode?.textError}
-            isError={validate.studentCode?.isError}
-            isVisible={validate.studentCode?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={student.email}
-            title={t('RegisterStudentComponent.titleEmail')}
-            placeholder={t('RegisterStudentComponent.placeholderEmail')}
-            onChangeText={(value) => handleEmailChange(value)}
-            onBlur={() => handleCheckEmail()}
-            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.email?.textError}
-            isError={validate.email?.isError}
-            isVisible={validate.email?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{t('RegisterStudentComponent.titleFaculity')}</Text>
-            <Dropdown
-              style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={dataRequest}
-              search
-              labelField='name'
-              valueField='id'
-              placeholder={value}
-              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
-              value={value}
-              onChange={(item) => {
-                setValue(item.name)
-                handleFacultyNameChange(item.id)
-              }}
-            />
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.facultyName?.textError}
-            isError={validate.facultyName?.isError}
-            isVisible={validate.facultyName?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
-            <Dropdown
-              placeholder={item}
-              style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={dataNganhRequest}
-              search
-              labelField='name'
-              valueField='id'
-              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
-              value={item}
-              onChange={(item) => {
-                setItem(item.name)
-                handleMajorNameChange(item.id)
-              }}
-            />
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.major?.textError}
-            isError={validate.major?.isError}
-            isVisible={validate.major?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{t('RegisterStudentComponent.titlePass')}</Text>
-            <TextInput
-              value={student.password}
-              placeholder={t('RegisterStudentComponent.placeholderPass')}
-              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck.secureTextEntry ? true : false}
-              onChangeText={(value) => handlePasswordChange(value)}
-            ></TextInput>
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
-              <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+    <PaperProvider>
+      <ScrollView style={{ backgroundColor: '#fff' }}>
+        <SafeAreaView>
+          <View style={styles.header}>
+            <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
+              <Icon name='chevron-left' size={20} color={'#ffff'} />
             </TouchableOpacity>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.txtHeader}>{t('RegisterStudentComponent.titleRegisterStudent')}</Text>
+            </View>
           </View>
 
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.password?.textError}
-            isError={validate.password?.isError}
-            isVisible={validate.password?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{t('RegisterStudentComponent.titleConfimPass')}</Text>
-            <TextInput
-              value={student.confimPassword}
-              placeholder={t('RegisterStudentComponent.placeholderConfimPass')}
-              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck1.secureTextEntry ? true : false}
-              onChangeText={(value) => handleConfirmPasswordChange(value)}
+          <View style={styles.form}>
+            <TextInputWithTitle
+              value={student.name}
+              title={t('RegisterStudentComponent.titleStudentName')}
+              placeholder={t('RegisterStudentComponent.placeholderStudentName')}
+              onChangeText={(value) => handleStudentNameChange(value)}
+              textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
             />
 
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
-              <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-            </TouchableOpacity>
-          </View>
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.name?.textError}
+              isError={validate.name?.isError}
+              isVisible={validate.name?.isVisible}
+            />
 
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.confimPassword?.textError}
-            isError={validate.confimPassword?.isError}
-            isVisible={validate.confimPassword?.isVisible}
-          />
+            <TextInputWithTitle
+              value={student.studentCode}
+              title={t('RegisterStudentComponent.titleStudentCode')}
+              placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
+              onChangeText={(value) => handleStudentCodeChange(value)}
+              textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
+            />
 
-          <View style={styles.group}>
-            <View style={styles.logo}>
-              <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
-              <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
-                <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.studentCode?.textError}
+              isError={validate.studentCode?.isError}
+              isVisible={validate.studentCode?.isVisible}
+            />
+
+            <TextInputWithTitle
+              value={student.email}
+              title={t('RegisterStudentComponent.titleEmail')}
+              placeholder={t('RegisterStudentComponent.placeholderEmail')}
+              onChangeText={(value) => handleEmailChange(value)}
+              onBlur={() => handleCheckEmail()}
+              textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
+            />
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.email?.textError}
+              isError={validate.email?.isError}
+              isVisible={validate.email?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleFaculity')}</Text>
+              <Dropdown
+                style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={dataRequest}
+                search
+                labelField='name'
+                valueField='id'
+                placeholder={value}
+                searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
+                value={value}
+                onChange={(item) => {
+                  setValue(item.name)
+                  handleFacultyNameChange(item.id)
+                }}
+              />
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.facultyName?.textError}
+              isError={validate.facultyName?.isError}
+              isVisible={validate.facultyName?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
+              <Dropdown
+                placeholder={item}
+                style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={dataNganhRequest}
+                search
+                labelField='name'
+                valueField='id'
+                searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
+                value={item}
+                onChange={(item) => {
+                  setItem(item.name)
+                  handleMajorNameChange(item.id)
+                }}
+              />
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.major?.textError}
+              isError={validate.major?.isError}
+              isVisible={validate.major?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titlePass')}</Text>
+              <TextInput
+                value={student.password}
+                placeholder={t('RegisterStudentComponent.placeholderPass')}
+                style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck.secureTextEntry ? true : false}
+                onChangeText={(value) => handlePasswordChange(value)}
+              ></TextInput>
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
+                <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
               </TouchableOpacity>
             </View>
-            <View style={{ alignItems: 'center' }}>
-              {imagesUpload ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
-              )}
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.password?.textError}
+              isError={validate.password?.isError}
+              isVisible={validate.password?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleConfimPass')}</Text>
+              <TextInput
+                value={student.confimPassword}
+                placeholder={t('RegisterStudentComponent.placeholderConfimPass')}
+                style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck1.secureTextEntry ? true : false}
+                onChangeText={(value) => handleConfirmPasswordChange(value)}
+              />
+
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
+                <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+              </TouchableOpacity>
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.confimPassword?.textError}
+              isError={validate.confimPassword?.isError}
+              isVisible={validate.confimPassword?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <View style={styles.logo}>
+                <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
+                <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
+                  <Icon name='camera-retro' size={20}></Icon>
+                  <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                {imagesUpload ? (
+                  <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                ) : (
+                  ''
+                )}
+              </View>
             </View>
           </View>
-        </View>
 
-        <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>{t('RegisterStudentComponent.titleRegister')}</Text>
-          <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
-        </TouchableOpacity>
-        <View style={styles.login}>
-          <Text>{t('RegisterStudentComponent.requestLogin')} </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(LOGIN_SCREEN)
-            }}
-          >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{t('RegisterStudentComponent.titleLogin')}</Text>
+          <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
+            <Text style={styles.txtRegister}>{t('RegisterStudentComponent.titleRegister')}</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+          <Portal>
+            <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
+              <View style={styles.headerModal}>
+                <Text style={styles.txtModal}>Thông báo</Text>
+              </View>
+              <View style={styles.container}>
+                <Text style={styles.txt}>Đăng ký tài khoản thành công! Kiểm tra email để xác thực tài khoản</Text>
+              </View>
+              <View style={styles.btnBottom}>
+                <TouchableOpacity style={[styles.btnItem, { marginRight: 5 }]}>
+                  <Text style={styles.txtBottom} onPress={closeModal}>
+                    Tôi hiểu rồi!
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </Portal>
+          <View style={styles.login}>
+            <Text>{t('RegisterStudentComponent.requestLogin')} </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(LOGIN_SCREEN)
+              }}
+            >
+              <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+                {t('RegisterStudentComponent.titleLogin')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </PaperProvider>
   )
 }
 
 const styles = StyleSheet.create({
+  headerModal: {
+    borderBottomWidth: 0.7
+  },
+  txtModal: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 14
+  },
   header: {
     backgroundColor: '#1e90ff',
     alignItems: 'center',
@@ -797,5 +855,21 @@ const styles = StyleSheet.create({
   textInput: {
     borderColor: '#228b22',
     borderWidth: 2
+  },
+  btnBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  btnItem: {
+    padding: 5,
+    backgroundColor: '#1e90ff',
+    borderRadius: 10
+  },
+  txtBottom: {
+    color: COLOR_WHITE,
+    fontWeight: 'bold',
+    fontSize: 18
   }
 })

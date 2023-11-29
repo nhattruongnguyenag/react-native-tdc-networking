@@ -99,28 +99,6 @@ export default function ManagementJobApplyScreen() {
     navigation.navigate(CHANGE_STATUS_JOB_APPLY_SCREEN, { profileId: profileId, status: status })
   }
 
-  // useEffect(() =>{
-  //     data?.data.map((data) => {
-  //       if(data.status !== value){
-  //         Alert.alert('Khong co')
-  //       }
-  //     })
-  // },[])
-  const check = useCallback((value: string) => {
-    if (data?.data.length !== 0) {
-      data?.data.map((data) => {
-        if (data.status === value) {
-          return true
-        } else {
-          return false
-        }
-      })
-    }
-    
-    return false
-  }, [value,data?.data])
-  console.log(check)
-  
   return (
     <>
       <SafeAreaView style={{ backgroundColor: COLOR_WHITE }}>
@@ -146,7 +124,7 @@ export default function ManagementJobApplyScreen() {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
           <>
-            {check(value) == false ? (
+            {data?.data.length == 0 ? (
               <Text
                 style={{
                   marginVertical: '50%',
