@@ -71,9 +71,6 @@ export default function UserItem(props: UserItemType) {
 }
 
 
-
-
-
 const styles = StyleSheet.create({
   menuText: {
     fontSize: 15

@@ -24,72 +24,56 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { TEXT_NOTIFICATION, TEXT_NOTIFICATION_ALL_READ, TEXT_NOTIFICATION_DELETE, TEXT_NOTIFICATION_NOT_READ } from '../constants/StringVietnamese'
 import moment from 'moment'
 import { useTranslation } from 'react-multi-lang'
+import { useGetNotificationsUserQuery } from '../redux/Service'
+import NotificationItem from '../components/items/NotificationItem'
+import NotificationListView from '../components/listviews/NotificationListView'
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  // const [menuRef, setMenuRef] = useState<Menu | null>()
-  const [data, setData] = useState([])
-  const [dataIsRead, setDataIsRead] = useState([])
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
-  const [filterData, setFilterData] = useState([])
   const t = useTranslation()
 
-  const callData = () => {
-    axios
-      .post(`${SERVER_ADDRESS}api/notifications/user/`, {
-        id: userLogin?.id
-      })
-      .then((res) => {
-        const respo = res.data.data
-        setData(respo)
-      })
-      .catch((error) => console.log(error))
-  }
-  useEffect(() => {
-    callData()
-  }, [])
+  const { data, isFetching } = useGetNotificationsUserQuery(
+    {
+      id: userLogin?.id ?? -1
+    },
+    {
+      pollingInterval: 500
+    }
+  )
+  const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
 
-  useEffect(() => {
-    axios.get(`${SERVER_ADDRESS}api/notifications/find?content=${search}`).then((res) => {
-      const respo = res.data.data
-      setFilterData(respo)
-    })
-  }, [search])
-
-  const handleIsRead = (id: any, userId: any) => {
+  const handleIsRead = (id: any) => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/makeNotSeen`, {
         id: id,
-        userId: userId
+        userId: userLogin?.id
       })
-      callData()
     } catch (error) {
       console.error('Error updating name:', error)
     }
   }
 
-  const handleDelNotification = (id: number, userId: number) => {
+  const handleDelNotification = (id: number) => {
     try {
-      axios.delete(`${SERVER_ADDRESS}api/notifications/`, { data: { id: id, userId: userId } })
-      callData()
+      axios.delete(`${SERVER_ADDRESS}api/notifications/`, { data: { id: id, userId: userLogin?.id } })
     } catch (error) {
       console.error('Error updating name:', error)
     }
   }
 
-  const handleItem = (id: number, userId: number) => {
+  const handleItem = (id: number) => {
     try {
       // navigation.navigate('Man hinh muon den', { id: id })
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
-        userId: userId
+        userId: userLogin?.id
       })
-      callData()
     } catch (error) {
       console.error('Error updating name:', error)
     }
@@ -98,7 +82,6 @@ export default function NotificationScreen() {
   const handleListIsRead = () => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/all`, { userId: userLogin?.id })
-      callData()
     } catch (error) {
       console.log(error)
     }
@@ -113,43 +96,7 @@ export default function NotificationScreen() {
   }
 
   //Render Items
-  const renderItem = (item: any, index: any) => {
-    return (
-      <View>
-        <Pressable
-          onPress={() => handleItem(item.id, item.user.id)}
-          key={index}
-          style={[styles.item, { backgroundColor: item.status === '1' ? '#ffffff' : '#f3f9ff' }]}
-        >
-          <View style={styles.cont}>
-            <Image
-              style={styles.image}
-              source={{
-                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
-              }}
-            />
-            <View style={styles.content}>
-              <Text style={styles.name}>{item.content}</Text>
-              <Text style={styles.tg}>{moment(item.createddate).fromNow()}</Text>
-            </View>
-          </View>
-          <Menu style={styles.menu} key={item.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
-            <MenuTrigger>
-              <Icon1 name='dots-three-vertical' size={17} color='#000000' />
-            </MenuTrigger>
-            <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
-              <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
-                <Text style={styles.option}>{t('NotificationsComponent.deleteNotification')}</Text>
-              </MenuOption>
-              <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
-                <Text style={styles.option}>{t('NotificationsComponent.unReadNotification')}</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        </Pressable>
-      </View>
-    )
-  }
+  
 
   return (
     <>
@@ -196,11 +143,12 @@ export default function NotificationScreen() {
         </View>
         {/*  */}
         <ScrollView style={styles.platList}>
-          {search === ''
-            ? data !== null
-              ? data.map((item, index) => renderItem(item, index))
-              : null
-            : filterData.map((item, index) => renderItem(item, index))}
+          {
+            search == '' ?
+              <NotificationListView data={data?.data} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead}/>
+              :
+              <NotificationListView data={filter} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead}/>
+          }
         </ScrollView>
       </View>
     </>
@@ -275,19 +223,17 @@ const styles = StyleSheet.create({
   },
   //Flatlist
   platList: {
-    width: '100%'
+    width: '100%',
+    backgroundColor: '#d3d3d3'
   },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 80,
-    // backgroundColor: '#f3f9ff',
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 10,
     paddingRight: 15,
-    borderBottomWidth: 0.8,
-    borderBottomColor: 'grey'
+    marginBottom: 1
   },
   image: {
     width: 70,
@@ -306,8 +252,8 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   name: {
-    color: '#000000',
-    fontSize: 17
+
+    fontSize: 15
   },
   tg: {
     fontSize: 15,
