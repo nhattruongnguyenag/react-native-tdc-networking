@@ -3,12 +3,17 @@ import React, { useTransition } from 'react'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
 import Icon1 from 'react-native-vector-icons/Entypo'
 import { useTranslation } from 'react-multi-lang';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
+import { PROFILE_SCREEN } from '../../constants/Screen';
 
 export interface UserItemType {
   id: number;
   image: string;
   name: string;
   isFollow: boolean;
+  group: string;
   handleFollow: (userId: number) => void;
 }
 
@@ -16,6 +21,7 @@ export interface UserItemType {
 export default function UserItem(props: UserItemType) {
   let item = props
   const t = useTranslation()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const isFollowed = () => {
     return (
@@ -50,7 +56,8 @@ export default function UserItem(props: UserItemType) {
   return (
     // <Text>{item.name}</Text>
     <Pressable style={styles.item}
-      key={item.id}>
+      key={item.id}
+      onPress={() => navigation.navigate(PROFILE_SCREEN, { userId: item.id, group: item.group })}>
       <View style={styles.item2}>
         <Image
           style={styles.image}
