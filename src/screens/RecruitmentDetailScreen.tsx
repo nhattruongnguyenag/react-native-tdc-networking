@@ -82,21 +82,21 @@ export default function RecruitmentDetailScreen() {
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.titleJob')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}>{data.title}</Text>
+                        <Text style={{ color: COLOR_BLACK,marginLeft:10}}>{data.title}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.employeType')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='briefcase' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
+                        <Text style={{ color: COLOR_BLACK ,marginLeft:10}}> {data.employmentType}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.salary')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}>
+                        <Text style={{ color: COLOR_BLACK,marginLeft:10 }}>
                           {' '}
                           {formatVietNamCurrency(data.salary)} {t('RecuitmentPostDetailComponent.salaryUnitMonth')}
                         </Text>
@@ -107,14 +107,14 @@ export default function RecruitmentDetailScreen() {
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.expiration')}</Text>
                       <View style={styles.iconRecuitment}>
                         <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
+                        <Text style={{ color: COLOR_BLACK,marginLeft:10 }}> {formatDateTime(data.expiration)}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.location')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
+                        <Text style={{ color: COLOR_BLACK ,marginLeft:10}}> {data.location}</Text>
                       </View>
                     </View>
                   </View>
