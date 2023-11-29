@@ -40,7 +40,6 @@ export default function NotificationListView(props: NotificatonsListViewType) {
     )
 }
 
-
 const styles = StyleSheet.create({
     platList: {
         width: '100%',

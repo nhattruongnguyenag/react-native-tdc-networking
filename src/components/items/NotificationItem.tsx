@@ -25,7 +25,6 @@ export interface NotificatonsType {
 }
 
 export default function NotificationItem(props: NotificatonsType) {
-    // let item = props
     const t = useTranslation()
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const [isMenuOpen, setMenuOpen] = useState(false)

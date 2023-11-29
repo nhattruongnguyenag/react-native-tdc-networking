@@ -95,9 +95,6 @@ export default function NotificationScreen() {
     setOpenSearch(!openSearch)
   }
 
-  //Render Items
-  
-
   return (
     <>
       <View style={styles.screen}>
@@ -141,15 +138,12 @@ export default function NotificationScreen() {
             </View>
           )}
         </View>
-        {/*  */}
-        <ScrollView style={styles.platList}>
-          {
-            search == '' ?
-              <NotificationListView data={data?.data} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead}/>
-              :
-              <NotificationListView data={filter} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead}/>
-          }
-        </ScrollView>
+        {
+          search == '' ?
+            <NotificationListView data={data?.data} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead} />
+            :
+            <NotificationListView data={filter} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead} />
+        }
       </View>
     </>
   )
@@ -221,52 +215,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 6
   },
-  //Flatlist
-  platList: {
-    width: '100%',
-    backgroundColor: '#d3d3d3'
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 10,
-    paddingRight: 15,
-    marginBottom: 1
-  },
-  image: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    paddingVertical: 20,
-    borderColor: '#0065ff',
-    borderWidth: 1
-  },
-  cont: {
-    flexDirection: 'row'
-  },
-  content: {
-    paddingTop: 8,
-    paddingLeft: 10,
-    width: '80%'
-  },
-  name: {
-
-    fontSize: 15
-  },
-  tg: {
-    fontSize: 15,
-    color: '#B9B6B6',
-    paddingBottom: 0
-  },
-  menu: {
-    justifyContent: 'center'
-  },
-  option: {
-    fontSize: 15,
-    paddingTop: 7,
-    paddingBottom: 7,
-    paddingLeft: 5
-  }
 })
