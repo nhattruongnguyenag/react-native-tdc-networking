@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
@@ -9,13 +10,14 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { Conversation } from '../../types/Conversation'
 import { getConversationLastUpdate } from '../../utils/DateTimeUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 interface ConversationItemProps {
   data: Conversation
 }
 
 export default function ConversationItem({ data }: ConversationItemProps) {
+  const t = useTranslation()
   const [active, setActive] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
@@ -39,7 +41,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
 
   const lastMessageContent = useMemo(() => {
     if (data?.lastMessageType === 'images') {
-      return '[Hình ảnh]'
+      return `[${t('ConversationItem.conversationItemComponentImageMessageAnnotation')}]`
     }
 
     return data?.lastMessageContent

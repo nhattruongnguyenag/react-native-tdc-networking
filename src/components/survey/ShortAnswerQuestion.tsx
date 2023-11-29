@@ -1,8 +1,9 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
-import QuestionTitle from './QuestionTitle'
-import { Question, QuestionProps } from '../../types/Question'
+import { useTranslation } from 'react-multi-lang'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { QuestionProps } from '../../types/Question'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
+import QuestionTitle from './QuestionTitle'
 
 interface ShortAnswerQuestionProps extends QuestionProps {
   isEnableTextInput?: boolean
@@ -10,18 +11,19 @@ interface ShortAnswerQuestionProps extends QuestionProps {
 }
 
 export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
+  const t = useTranslation()
   return (
     <View style={styles.group}>
       <QuestionTitle
         required={props.conductMode ? props.dataResponse?.required : props.data?.required}
-        title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+        title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />
       <TextInput
         onChangeText={(value) => props.onTextChange && props.onTextChange(value)}
         editable={Boolean(props.isEnableTextInput)}
-        placeholder='Nhập câu trả lời...'
+        placeholder={t('ShortAnswerQuestion.shortAnswerQuestionComponentTitlePlaceholder')}
         style={styles.ip}
       />
       {

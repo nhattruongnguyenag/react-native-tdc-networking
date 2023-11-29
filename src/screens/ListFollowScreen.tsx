@@ -16,13 +16,14 @@ import { LIST_FOLLOWER, LIST_FOLLOWING } from '../constants/Screen'
 import FollowingList from '../components/follow/FollowingList'
 import FollowerList from '../components/follow/FollowerList'
 import { TEXT_STATUS_FOLLOWER, TEXT_STATUS_FOLLOWING } from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 let stompClient: Client
-
 
 const TopTab = createMaterialTopTabNavigator()
 
 function TopTabNavigator(): JSX.Element {
+  const t = useTranslation()
   return (
     <TopTab.Navigator
       screenOptions={({ route }) => ({
@@ -31,17 +32,17 @@ function TopTabNavigator(): JSX.Element {
         tabBarLabelStyle: styles.tabBarLabelStyle,
         header: null
       })}
-    >
+      >
       <TopTab.Screen
         name={LIST_FOLLOWING}
-        options={{ title: TEXT_STATUS_FOLLOWING }}
+        options={{ title: t('FollowComponent.following') }}
         component={FollowingList}
-      />
+        />
       <TopTab.Screen
         name={LIST_FOLLOWER}
-        options={{ title: TEXT_STATUS_FOLLOWER }}
+        options={{ title: t('FollowComponent.follower') }}
         component={FollowerList}
-      />
+        />
     </TopTab.Navigator>
   )
 }
@@ -49,7 +50,7 @@ function TopTabNavigator(): JSX.Element {
 const ListFollowScreen = () => {
   return (
     <View style={styles.screen}>
-      <TopTabNavigator />
+      <TopTabNavigator  />
     </View>
   )
 }

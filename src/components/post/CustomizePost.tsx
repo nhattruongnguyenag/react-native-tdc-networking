@@ -31,15 +31,17 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
-import { deletePostAPI, savePostAPI } from '../../api/CallApi'
-import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST_TXT } from '../../constants/StringVietnamese'
+import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST_TXT } from '../../constants/StringVietnamese'
 import Toast from 'react-native-toast-message';
 import { ToastMessenger } from '../../utils/ToastMessenger'
+import { formatVietNamCurrency } from '../../utils/FormatCurrency'
+import { useTranslation } from 'react-multi-lang'
+import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
+  const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   let post = props
   const { userLogin, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector(
@@ -114,9 +116,11 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickIntoBtnIconComments = () => {
+    console.log(JSON.stringify(props));
     dispatch(
       openModalComments({
         id: props.id,
+        userCreatedPostId:props.userId,
         group: post.group,
         commentFather: []
       })
@@ -167,22 +171,33 @@ const CustomizePost = (props: Post) => {
     dispatch(updatePostWhenHaveChangeComment(true))
   }
 
+  const handleIdentifyTypeAuthor = (type: string) => {
+    if (type == TYPE_POST_FACULTY) {
+      return t("Post.normalPostIdentifyAuthorFaculty")
+    } else if (type == TYPE_POST_BUSINESS) {
+      return t("Post.normalPostIdentifyAuthorCompany")
+    } else {
+      return null;
+    }
+  }
+
   switch (post.type) {
     case TYPE_NORMAL_POST:
       return (
         <View style={styles.container}>
           <CustomizeHeaderPost
-            userId={post.userId}
-            name={post.name}
-            avatar={post.avatar}
-            available={post.available}
-            timeCreatePost={numberDayPassed(post.timeCreatePost)}
-            typeAuthor={post.typeAuthor}
-            type={post.type}
-            role={post.role}
+            t={t}
+            userId={props.userId}
+            name={getFacultyTranslated(props.name, t)}
+            avatar={props.avatar}
+            available={props.available}
+            timeCreatePost={numberDayPassed(props.timeCreatePost)}
+            typeAuthor={handleIdentifyTypeAuthor(props.typeAuthor ?? '')}
+            type={props.type}
+            role={props.role}
             handleClickMenuOption={handleClickMenuOption}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-            isSave={post.isSave}
+            isSave={props.isSave}
           />
           <View style={styles.bodyWrap}>
             <CustomizeBodyPost content={post.content} />
@@ -198,6 +213,7 @@ const CustomizePost = (props: Post) => {
             likes={post.likes}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
+            textLikeBy={t("Post.normalPostLikeBy")}
           />
         </View>
       )
@@ -205,17 +221,18 @@ const CustomizePost = (props: Post) => {
       return (
         <View style={styles.container}>
           <CustomizeHeaderPost
-            userId={post.userId}
-            name={post.name}
-            avatar={post.avatar}
-            typeAuthor={TYPE_RECRUITMENT_POST_TEXT}
-            available={null}
-            timeCreatePost={''}
-            type={post.type}
-            role={post.role}
+            t={t}
+            userId={props.userId}
+            name={getFacultyTranslated(props.name, t)}
+            avatar={props.avatar}
+            available={props.available}
+            timeCreatePost={numberDayPassed(props.timeCreatePost)}
+            typeAuthor={t("RecruitmentPost.recruitmentPostType")}
+            type={props.type}
+            role={props.role}
             handleClickMenuOption={handleClickMenuOption}
             handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-            isSave={post.isSave}
+            isSave={props.isSave}
           />
           <CustomizeRecruitmentPost
             id={post.id}
@@ -225,40 +242,47 @@ const CustomizePost = (props: Post) => {
             employmentType={post.employmentType ?? ''}
             handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
             createdAt={props.timeCreatePost}
+            current={t("RecruitmentPost.recruitmentPostCurrency")}
+            textButton={t("RecruitmentPost.recruitmentPostButtonSeeDetail")}
           />
           <CustomizeBottomPost
             isLike={checkLiked(post.likes, userLogin?.id)}
             likes={post.likes}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
+            textLikeBy={t("Post.normalPostLikeBy")}
           />
         </View>
       )
     case TYPE_SURVEY_POST:
       return <View style={styles.container}>
         <CustomizeHeaderPost
-          userId={post.userId}
-          name={post.name}
-          avatar={post.avatar}
-          typeAuthor={TYPE_SURVEY_POST_TXT}
-          available={null}
-          timeCreatePost={numberDayPassed(post.timeCreatePost)}
-          type={post.type}
-          role={post.role}
+          t={t}
+          userId={props.userId}
+          name={getFacultyTranslated(props.name, t)}
+          avatar={props.avatar}
+          available={props.available}
+          timeCreatePost={numberDayPassed(props.timeCreatePost)}
+          typeAuthor={t("SurveyPost.surveyPostType")}
+          type={props.type}
+          role={props.role}
           handleClickMenuOption={handleClickMenuOption}
           handleClickIntoAvatarAndNameAndMenuEvent={handleClickIntoAvatarAndNameAndMenuEvent}
-          isSave={post.isSave} />
+          isSave={props.isSave}
+        />
         <CustomizeSurveyPost
           id={post.id}
           title={post.title ?? ''}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
+          textButton={t("SurveyPost.surveyPostButton")}
         />
         <CustomizeBottomPost
           isLike={checkLiked(post.likes, userLogin?.id)}
           likes={post.likes}
           handleClickBottomBtnEvent={handleClickBottomBtnEvent}
           commentQty={post.commentQty}
+          textLikeBy={t("Post.normalPostLikeBy")}
         />
       </View>
     default:

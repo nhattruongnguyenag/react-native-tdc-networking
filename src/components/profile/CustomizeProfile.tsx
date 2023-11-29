@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { useAppSelector } from '../../redux/Hook'
+import { useTranslation } from 'react-multi-lang'
+import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
 
 export interface CustomizeProfileType {
     isFollow: boolean
@@ -20,6 +22,7 @@ export interface CustomizeProfileType {
 }
 
 const CustomizeProfile = (props: CustomizeProfileType) => {
+    const t = useTranslation();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const getBody = () => {
@@ -27,40 +30,43 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
         switch (props.role) {
             case TYPE_POST_STUDENT:
                 body = <CustomizeBodyStudentProfile
+                    t={t}
                     isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    position={props.userData.position ?? TEXT_UN_UPDATE}
-                    phone={props.userData.phone ?? TEXT_UN_UPDATE}
-                    email={props.userData.email ?? TEXT_UN_UPDATE}
+                    position={t("Profile.profileRole") ?? t("Profile.unUpdate")}
+                    phone={props.userData.phone ?? t("Profile.unUpdate")}
+                    email={props.userData.email ?? t("Profile.unUpdate")}
                     numberPost={props.data.length ?? 0}
-                    name={props.userData.name ?? TEXT_UN_UPDATE}
+                    name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
                 break;
             case TYPE_POST_BUSINESS:
                 body = <CustomizeBodyBusinessProfile
+                    t={t}
                     isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    timeWork={props.userData.activeTime ?? TEXT_UN_UPDATE}
-                    TaxIdentificationNumber={props.userData.taxCode ?? TEXT_UN_UPDATE}
-                    representor={props.userData.representor ?? TEXT_UN_UPDATE}
-                    address={props.userData.address ?? TEXT_UN_UPDATE}
-                    phone={props.userData.phone ?? TEXT_UN_UPDATE}
-                    email={props.userData.email ?? TEXT_UN_UPDATE}
-                    name={props.userData.name}
+                    timeWork={props.userData.activeTime ?? t("Profile.unUpdate")}
+                    TaxIdentificationNumber={props.userData.taxCode ?? t("Profile.unUpdate")}
+                    representor={props.userData.representor ?? t("Profile.unUpdate")}
+                    address={props.userData.address ?? t("Profile.unUpdate")}
+                    phone={props.userData.phone ?? t("Profile.unUpdate")}
+                    email={props.userData.email ?? t("Profile.unUpdate")}
+                    name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
                     numberPost={props.data.length ?? 0}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
                 break;
             case TYPE_POST_FACULTY:
                 body = <CustomizeBodyFacultyProfile
+                    t={t}
                     isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    timeWork={props.userData.activeTime ?? TEXT_UN_UPDATE}
-                    address={props.userData.address ?? TEXT_UN_UPDATE}
-                    phone={props.userData.phone ?? TEXT_UN_UPDATE}
-                    email={props.userData.email ?? TEXT_UN_UPDATE}
-                    name={props.userData.name ?? TEXT_UN_UPDATE}
+                    timeWork={props.userData.activeTime ?? t("Profile.unUpdate")}
+                    address={props.userData.address ?? t("Profile.unUpdate")}
+                    phone={props.userData.phone ?? t("Profile.unUpdate")}
+                    email={props.userData.email ?? t("Profile.unUpdate")}
+                    name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
                     numberPost={props.data.length ?? 0}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
@@ -78,7 +84,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     <CustomizeHeaderProfile
                         background={props.userData.image}
                         avatar={props.userData.image}
-                        name={props.userData.name}
+                        name={getFacultyTranslated(props.userData.name, t)}
                         handleClickIntoHeaderComponentEvent={
                             props.handleClickIntoHeaderComponentEvent
                         } />

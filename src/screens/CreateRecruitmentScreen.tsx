@@ -1,16 +1,17 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { Button } from 'react-native-paper'
-import { useAddRecruitmentPostMutation } from '../redux/Service'
-import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
-import { useAppSelector } from '../redux/Hook'
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment'
-import TextValidate from '../components/TextValidate'
-import { InputTextValidate, isBlank } from '../utils/ValidateUtils'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import moment from 'moment'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native'
+import DatePicker from 'react-native-date-picker'
+import { Button } from 'react-native-paper'
+import TextValidate from '../components/common/TextValidate'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
+import { useAppSelector } from '../redux/Hook'
+import { useAddRecruitmentPostMutation } from '../redux/Service'
+import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
+import { InputTextValidate, isBlank } from '../utils/ValidateUtils'
 
 interface CreateRecruitmentPostValidate {
   title: InputTextValidate
@@ -36,11 +37,13 @@ const isAllFieldsValid = (validate: CreateRecruitmentPostValidate): boolean => {
 }
 
 export default function CreateRecruitmentScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-  const [createRecruitmentPostRequest, createRecruitmentPostResponse] = useAddRecruitmentPostMutation()
-  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false)
-  const expirationRef = useRef<TextInput | null>(null)
+  const t = useTranslation()
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const [createRecruitmentPostRequest, createRecruitmentPostResponse] = useAddRecruitmentPostMutation();
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const expirationRef = useRef<TextInput | null>(null);
   const [createRecruitmentModel, setCreateRecruitmentModel] = useState<RecruitmentPostRequest>({
     userId: userLogin?.id ?? -1,
     images: [],
@@ -54,50 +57,50 @@ export default function CreateRecruitmentScreen() {
     requirement: '',
     groupId: 2,
     expiration: moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss')
-  })
+  });
 
   const [validate, setValidate] = useState<CreateRecruitmentPostValidate>({
     title: {
-      textError: 'Tiêu đề không được để trống',
+      textError: t('RecruitmentScreen.recruitmentTitleEmptyValidate'),
       isError: true,
       isVisible: false
     },
     desc: {
-      textError: 'Mô tả không được để trống',
+      textError: t('RecruitmentScreen.recruitmentDescEmptyValidate'),
       isError: true,
       isVisible: false
     },
     benefit: {
-      textError: 'Quyền lợi không được để trống',
+      textError: t('RecruitmentScreen.recruitmentBenefitEmptyValidate'),
       isError: true,
       isVisible: false
     },
     salary: {
-      textError: 'Tiền lương không được để trống',
+      textError: t('RecruitmentScreen.recruitmentSalaryEmptyValidate'),
       isError: true,
       isVisible: false
     },
     expiration: {
-      textError: 'Thời hạn không được chọn ở thời điểm trong quá khứ',
+      textError: t('RecruitmentScreen.recruitmentExpirationValidate'),
       isError: false,
       isVisible: false
     },
     employmentType: {
-      textError: 'Hình thức làm việc không được để trống',
+      textError: t('RecruitmentScreen.recruitmentEmploymentTypeEmptyValidate'),
       isError: true,
       isVisible: false
     },
     location: {
-      textError: 'Địa điểm làm việc không được để trống',
+      textError: t('RecruitmentScreen.recruitmentLocationEmptyValidate'),
       isError: true,
       isVisible: false
     },
     requirement: {
-      textError: 'Yêu cầu không được để trống',
+      textError: t('RecruitmentScreen.recruitmentRequirementEmptyValidate'),
       isError: true,
       isVisible: false
     }
-  })
+  });
 
   const onTitleChangeText = useCallback(
     (value: string) => {
@@ -109,7 +112,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -118,13 +121,13 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, title: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, title: value });
       }
     },
     [validate]
-  )
+  );
 
   const onSalaryChangeText = useCallback(
     (value: string) => {
@@ -136,7 +139,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -145,16 +148,16 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, salary: parseInt(value) })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, salary: parseInt(value) });
       }
     },
     [validate]
-  )
+  );
 
   useEffect(() => {
-    console.log(moment().isAfter(moment(createRecruitmentModel.expiration)))
+    console.log(moment().isAfter(moment(createRecruitmentModel.expiration)));
     if (moment().isAfter(moment(createRecruitmentModel.expiration))) {
       setValidate({
         ...validate,
@@ -163,7 +166,7 @@ export default function CreateRecruitmentScreen() {
           isError: true,
           isVisible: true
         }
-      })
+      });
     } else {
       setValidate({
         ...validate,
@@ -172,9 +175,9 @@ export default function CreateRecruitmentScreen() {
           isError: false,
           isVisible: false
         }
-      })
+      });
     }
-  }, [createRecruitmentModel.expiration])
+  }, [createRecruitmentModel.expiration]);
 
   const onBenefitChangeText = useCallback(
     (value: string) => {
@@ -186,7 +189,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -195,13 +198,13 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, benefit: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, benefit: value });
       }
     },
     [validate]
-  )
+  );
 
   const onDescriptionChangeText = useCallback(
     (value: string) => {
@@ -213,7 +216,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -222,13 +225,13 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, description: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, description: value });
       }
     },
     [validate]
-  )
+  );
 
   const onEmploymentTypeChangeText = useCallback(
     (value: string) => {
@@ -240,7 +243,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -249,13 +252,13 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, employmentType: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, employmentType: value });
       }
     },
     [validate]
-  )
+  );
 
   const onLocationChangeText = useCallback(
     (value: string) => {
@@ -267,7 +270,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -276,13 +279,13 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, location: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, location: value });
       }
     },
     [validate]
-  )
+  );
 
   const onRequirementChangeText = useCallback(
     (value: string) => {
@@ -294,7 +297,7 @@ export default function CreateRecruitmentScreen() {
             isError: true,
             isVisible: true
           }
-        })
+        });
       } else {
         setValidate({
           ...validate,
@@ -303,44 +306,44 @@ export default function CreateRecruitmentScreen() {
             isError: false,
             isVisible: false
           }
-        })
+        });
 
-        setCreateRecruitmentModel({ ...createRecruitmentModel, requirement: value })
+        setCreateRecruitmentModel({ ...createRecruitmentModel, requirement: value });
       }
     },
     [validate]
-  )
+  );
 
   const onBtnFinishPress = useCallback(() => {
     if (isAllFieldsValid(validate)) {
-      createRecruitmentPostRequest(createRecruitmentModel)
+      createRecruitmentPostRequest(createRecruitmentModel);
     } else {
-      let key: keyof CreateRecruitmentPostValidate
+      let key: keyof CreateRecruitmentPostValidate;
 
       for (key in validate) {
         if (validate[key].isError) {
-          validate[key].isVisible = true
+          validate[key].isVisible = true;
         }
       }
 
-      setValidate({ ...validate })
+      setValidate({ ...validate });
     }
-  }, [validate])
+  }, [validate]);
 
   useEffect(() => {
     if (createRecruitmentPostResponse.data) {
-      Alert.alert('Thành công !!!', 'Tin tuyển dụng đã được đăng')
-      navigation.goBack()
+      Alert.alert(t('RecruitmentScreen.recruitmentSaveSuccessTitle'), t('RecruitmentScreen.recruitmentSaveSuccessContent'));
+      navigation.goBack();
     }
-  }, [createRecruitmentPostResponse])
+  }, [createRecruitmentPostResponse]);
 
   return (
     <SafeAreaView style={styles.body}>
       <ScrollView>
         <TextInputWithTitle
           multiline
-          title='Tiêu đề'
-          placeholder='Nhập tiêu đề...'
+          title={t('RecruitmentScreen.recruitmentSaveTitleTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveTitlePlaceholder')}
           onChangeText={(value) => onTitleChangeText(value)}
         />
 
@@ -352,8 +355,8 @@ export default function CreateRecruitmentScreen() {
         />
 
         <TextInputWithTitle
-          title='Hình thức làm việc'
-          placeholder='Hình thức làm việc...'
+          title={t('RecruitmentScreen.recruitmentSaveSaveEmploymentTypeTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveEmploymentTypePlaceholder')}
           onChangeText={(value) => onEmploymentTypeChangeText(value)}
         />
 
@@ -368,9 +371,9 @@ export default function CreateRecruitmentScreen() {
           value={createRecruitmentModel.expiration}
           textInputRef={expirationRef}
           onFocus={() => {
-            setShowDatePicker(true)
+            setShowDatePicker(true);
           }}
-          title='Thời hạn ứng tuyển'
+          title={t('RecruitmentScreen.recruitmentSaveExpirationTitle')}
           placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
         />
 
@@ -383,21 +386,21 @@ export default function CreateRecruitmentScreen() {
 
         <DatePicker
           modal
-          mode='datetime'
-          locale='vi'
+          mode="datetime"
+          locale={t('RecruitmentScreen.recruitmentSaveExpirationPickerLocale')}
           open={showDatePicker}
           date={new Date()}
           onConfirm={(date) => {
             setCreateRecruitmentModel({
               ...createRecruitmentModel,
               expiration: moment(date).format('YYYY-MM-DD HH:mm:ss')
-            })
-            expirationRef.current?.blur()
-            setShowDatePicker(false)
+            });
+            expirationRef.current?.blur();
+            setShowDatePicker(false);
           }}
           onCancel={() => {
-            expirationRef.current?.blur()
-            setShowDatePicker(false)
+            expirationRef.current?.blur();
+            setShowDatePicker(false);
           }}
         />
 
@@ -405,8 +408,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={3}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Địa điểm làm việc'
-          placeholder='Địa điểm làm việc...'
+          title={t('RecruitmentScreen.recruitmentSaveLocationTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveLocationPlaceholder')}
           onChangeText={(value) => onLocationChangeText(value)}
         />
 
@@ -421,8 +424,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Mô tả công việc'
-          placeholder='Mô tả công việc...'
+          title={t('RecruitmentScreen.recruitmentSaveDescTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveDescPlaceholder')}
           onChangeText={(value) => onDescriptionChangeText(value)}
         />
 
@@ -433,7 +436,11 @@ export default function CreateRecruitmentScreen() {
           isVisible={validate.desc?.isVisible}
         />
 
-        <TextInputWithTitle title='Lương' placeholder='Lương...' onChangeText={(value) => onSalaryChangeText(value)} />
+        <TextInputWithTitle
+          title={t('RecruitmentScreen.recruitmentSaveSallaryTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveSallaryPlaceholder')}
+          onChangeText={(value) => onSalaryChangeText(value)}
+        />
 
         <TextValidate
           customStyle={{ marginLeft: 10 }}
@@ -446,8 +453,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Yêu cầu'
-          placeholder='Yêu cầu...'
+          title={t('RecruitmentScreen.recruitmentSaveRequirementTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentSaveRequirementPlaceholder')}
           onChangeText={(value) => onRequirementChangeText(value)}
         />
 
@@ -462,8 +469,8 @@ export default function CreateRecruitmentScreen() {
           multiline
           numberOfLine={5}
           textInputStyle={{ textAlignVertical: 'top' }}
-          title='Quyền lợi'
-          placeholder='Quyền lợi...'
+          title={t('RecruitmentScreen.recruitmentBenefitTitle')}
+          placeholder={t('RecruitmentScreen.recruitmentBenefitPlaceholder')}
           onChangeText={(value) => onBenefitChangeText(value)}
         />
 
@@ -475,18 +482,19 @@ export default function CreateRecruitmentScreen() {
         />
 
         <Button
-          icon='plus'
-          mode='contained'
+          icon="plus"
+          mode="contained"
           buttonColor={'#0065FF'}
           style={styles.buttonCreateRecruitment}
           onPress={() => onBtnFinishPress()}
         >
-          <Text style={styles.buttonCreateRecruitmentTitle}>Hoàn tất</Text>
+          <Text style={styles.buttonCreateRecruitmentTitle}>{t('RecruitmentScreen.recruitmentSaveCompleteButton')}</Text>
         </Button>
       </ScrollView>
     </SafeAreaView>
   )
 }
+
 
 const styles = StyleSheet.create({
   body: {

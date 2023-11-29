@@ -21,3 +21,19 @@ export const CLICK_DELETE_POST_EVENT = 1;
 export const CLICK_SEE_RESULT_POST_EVENT = 2;
 export const CLICK_SEE_LIST_CV_POST_EVENT = 3;
 export const CLICK_UN_SAVE_POST = 4;
+// Faculty
+export const FacultyOfElectricalEngineering = "Khoa điện - Điện tử";
+export const FacultyOfInformationTechnology = "Khoa Công Nghệ Thông Tin";
+export const FacultyOfAutomationTechnology = "Khoa Công Nghệ Tự Động";
+export const FacultyOfMechanicalEngineeringAndManufacturing = "Khoa Cơ Khí Chế Tạo Máy";
+export const AutomobileEngineeringDepartment = "Khoa Cơ Khí Ô Tô";
+export const FacultyOfFinanceAndAccounting = "Khoa Tài Chính - Kế Toán";
+export const FacultyOfBusinessAdministration = "Khoa Quản Trị Kinh Doanh";
+export const FacultyOfTourism = "Khoa Du Lịch";
+export const DepartmentOfEnglish = "Khoa Tiếng Anh";
+export const DepartmentOfKoreanLanguage = "Khoa Tiếng Hàn";
+export const JapaneseLanguageDepartment = "Khoa Bộ Môn Tiếng Nhật"
+export const groupStudent = 'group_tdc';
+export const groupBusiness = 'group_connect_business';
+export const postHasActive = 1;
+

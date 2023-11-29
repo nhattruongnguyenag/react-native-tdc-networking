@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     },
     image: {
         width: SCREEN_WIDTH * 1,
-        height: SCREEN_HEIGHT * 0.7
+        height: SCREEN_HEIGHT * 0.7,
+        objectFit:'cover',
     },
     buttonClose: {
         position: 'absolute',

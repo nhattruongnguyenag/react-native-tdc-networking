@@ -1,26 +1,49 @@
-import { View, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, StyleSheet, Text } from 'react-native'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import axios from 'axios'
 import { COLOR_WHITE } from '../constants/Color'
+import { useTranslation } from 'react-multi-lang'
+import { getFacultyTranslated } from '../utils/getFacultyTranslated '
+
+
+interface DataItem {
+    id: number
+    facultyGroupCode: number
+    oldName: string
+    name: string
+}
 
 interface SelectFacultyToolbarType {
+    flag: string
     handleSelectFacultyEvent: (code: string) => void
 }
-const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
-    const [dataRequest, setDataRequest] = useState([])
 
+const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
+    const t = useTranslation();
+    const [dataRequest, setDataRequest] = useState<DataItem[]>([])
     useEffect(() => {
-        axios
-            .get(SERVER_ADDRESS + 'api/faculty')
-            .then((response) => {
-                setDataRequest(response.data.data)
-            })
-            .catch((error) => {
-            })
+        const fetchData = async () => {
+            const response = axios
+                .get(SERVER_ADDRESS + 'api/faculty')
+                .then((response) => {
+                    const simpleData: DataItem[] = response.data.data.map(({ id, name, facultyGroupCode, oldName }: DataItem) => ({ id, name, facultyGroupCode, oldName: name }))
+                    setDataRequest(simpleData)
+                })
+                .catch((error) => {
+                })
+        }
+        fetchData();
     }, [])
 
+    const translateAllFaculty = (dataNeedTranslate: DataItem[]) => {
+        const facultiesHadTranslated: DataItem[] = dataNeedTranslate.map((item: DataItem) => {
+            item.name = getFacultyTranslated(item.oldName, t);
+            return item;
+        })
+        return facultiesHadTranslated;
+    }
     return (
         <View>
             <View style={styles.group}>
@@ -30,12 +53,12 @@ const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
-                    data={dataRequest}
+                    data={translateAllFaculty(dataRequest)}
                     search
-                    labelField='name'
+                    labelField={'name'}
                     valueField='id'
-                    placeholder='Chọn khoa...'
-                    searchPlaceholder='Tìm kiếm...'
+                    placeholder={t("SelectFaculty.selectFacultyPlaceholder")}
+                    searchPlaceholder={t("SelectFaculty.selectFacultyTextSearch")}
                     onChange={(item: any) => {
                         props.handleSelectFacultyEvent(item.facultyGroupCode)
                     }}
@@ -164,4 +187,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default CustomizeSelectFacultyToolbar
+export default memo(CustomizeSelectFacultyToolbar)

@@ -2,7 +2,7 @@ import { Image, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 interface UserReactionType {
   id: number

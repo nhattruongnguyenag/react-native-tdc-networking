@@ -4,11 +4,13 @@ import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE 
 import { TEXT_JOIN_SURVEY } from '../../constants/StringVietnamese'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import CustomizeBodyPost from '../post/CustomizeBodyPost'
+import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
 
 interface RecruitmentPostType {
-  id: number,
-  title: string,
-  description: string,
+  id: number
+  textButton: string
+  title: string
+  description: string
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
 
@@ -22,13 +24,16 @@ export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>
           <Text style={styles.title}>{props.title}</Text>
           <CustomizeBodyPost content={props.description} />
         </View>
-        <TouchableOpacity
-          onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
-          <View style={styles.bottomButton}>
-            <Text style={styles.txtBtn}>{TEXT_JOIN_SURVEY}</Text>
-            <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
-          </View>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={{ flexDirection: 'row' }}
+            onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
+            <View style={styles.bottomButton}>
+              <Text style={styles.txtBtn}>{props.textButton}</Text>
+              <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -90,7 +95,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_BLUE_BANNER,
     padding: 6,
     alignItems: 'center',
-    width: '40%',
     borderRadius: 5,
   },
   item: {

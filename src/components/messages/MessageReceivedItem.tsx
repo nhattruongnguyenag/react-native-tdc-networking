@@ -11,7 +11,7 @@ import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
 import { getMessageSectionTitle } from '../../utils/DateTimeUtils'
 import { isApproximatelyTime } from '../../utils/MessageUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import MessageSectionTitle from './MessageSectionTitle'
 import { MessageItemProps, TextMessageRenderItemProps } from './MessageSentItem'
 

@@ -10,8 +10,10 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { TEXT_FOLLOW, TEXT_SAVE, TEXT_UPDATE_PROFILE } from '../constants/StringVietnamese'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color'
+import { useTranslation } from 'react-multi-lang'
 
 export default function OptionScreen({ route }: any) {
+    const t = useTranslation();
     const { userData } = route.params;
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const handleFollowItem = () => {
@@ -30,15 +32,15 @@ export default function OptionScreen({ route }: any) {
             <ScrollView>
                 <Pressable style={styles.item} onPress={handleFollowItem}>
                     <Icon1 name='account-eye' size={21} color='red' />
-                    <Text style={styles.txt}>{TEXT_FOLLOW}</Text>
+                    <Text style={styles.txt}>{t("OptionScreen.optionScreenFollowText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleSaveItem}>
                     <Icon2 name='bookmark-alt' size={21} color='#8a2be2' />
-                    <Text style={styles.txt}>{TEXT_SAVE}</Text>
+                    <Text style={styles.txt}>{t("OptionScreen.optionScreenSaveText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleUpdateProfile}>
                     <FontAwesomeIcon name='pencil-square-o' size={21} color={COLOR_BLACK} />
-                    <Text style={styles.txt}>{TEXT_UPDATE_PROFILE}</Text>
+                    <Text style={styles.txt}>{t("OptionScreen.optionScreenUpdateProfileText")}</Text>
                 </Pressable>
             </ScrollView>
         </View>

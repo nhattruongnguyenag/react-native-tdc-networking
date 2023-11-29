@@ -12,8 +12,10 @@ import { Student } from '../../types/Student'
 import { Faculty } from '../../types/Faculty'
 import { Business } from '../../types/Business'
 import { TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_ADDRESS, TEXT_PLACEHOLDER_PHONE, TEXT_PLACEHOLDER_TAXCODE, TEXT_REPRESENTOR, TEXT_SUBJECT_POST, TEXT_UN_FOLLOW, TEXT_WORKING_TIME } from '../../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 interface BusinessProfileType {
+  t:ReturnType<typeof useTranslation>
   isFollow: boolean,
   handleClickButtonEvent: (flag: number) => void,
   timeWork: string,
@@ -42,7 +44,9 @@ export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessPro
           >
             <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
             <Text style={styles.txtContentBtn}>
-              Gửi tin nhắn
+              {
+                props.t("Profile.chat")
+              }
             </Text>
           </TouchableOpacity>
         }
@@ -57,7 +61,7 @@ export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessPro
             }
             <Text style={styles.txtContentBtn}>
               {
-                props.isFollow ? TEXT_UN_FOLLOW : TEXT_FOLLOW
+                props.isFollow ?   props.t("Profile.unFollow") : props.t("Profile.follow")
               }
             </Text>
           </TouchableOpacity>
@@ -72,47 +76,47 @@ export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessPro
           </TouchableOpacity>
         }
       </View>
-      {/* Info */}
+      {/* Info*/}
       <View>
         <View style={styles.infoContainer}>
           <IconIonicons
             style={styles.iconInfo}
             name='time-outline' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_WORKING_TIME}: {props.timeWork}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profileOperatingHours")}: {props.timeWork}</Text>
         </View>
         <View style={styles.infoContainer}>
           <IconFontAwesome
             style={styles.iconInfo}
             name='barcode' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_PLACEHOLDER_TAXCODE}: {props.TaxIdentificationNumber}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profileTaxID")}: {props.TaxIdentificationNumber}</Text>
         </View>
         <View style={styles.infoContainer}>
           <IconFeather
             style={styles.iconInfo}
             name='user' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_REPRESENTOR}: {props.representor}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profileRepresentative")}: {props.representor}</Text>
         </View>
         <View style={styles.infoContainer}>
           <IconEvilIcons
             style={styles.iconInfo}
             name='location' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_PLACEHOLDER_ADDRESS}: {props.address}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profileAddress")}: {props.address}</Text>
         </View>
         <View style={styles.infoContainer}>
           <IconFeather
             style={styles.iconInfo}
             name='phone-call' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_PLACEHOLDER_PHONE}: {props.phone}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profilePhone")}: {props.phone}</Text>
         </View>
         <View style={styles.infoContainer}>
           <IconFontisto
             style={styles.iconInfo}
             name='email' size={20} color={COLOR_BLACK} />
-          <Text style={styles.textInfo}>{TEXT_EMAIL}: {props.email}</Text>
+          <Text style={styles.textInfo}>{props.t("Profile.profileEmail")}: {props.email}</Text>
         </View>
       </View>
       {/* Number post */}
-      <Text style={[styles.paddingVertical]}>{TEXT_SUBJECT_POST} ({props.numberPost})</Text>
+      <Text style={[styles.paddingVertical]}>{props.t("Profile.profileArticles")} ({props.numberPost})</Text>
       {/* Post */}
     </View>
   )

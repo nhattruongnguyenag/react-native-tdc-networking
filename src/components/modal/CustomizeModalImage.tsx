@@ -1,5 +1,5 @@
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { closeModalImage } from '../../redux/Slice'
@@ -9,90 +9,10 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
-
-// const CustomizeModalImage = () => {
-//   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-//   const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-//   const dispatch = useAppDispatch()
-
-//   const [imageActive, setImageActive] = useState(0)
-
-//   // Function to check if an image has an error
-//   const handleCheckImageHaveError = (id: number) => {
-//     let result: boolean = false
-//     modalImageData?.listImageError.some((item: number) => {
-//       if (item === id) {
-//         result = true
-//       }
-//     })
-//     return result
-//   }
-
-//   // Function to handle scroll event and update active image
-//   const onChange = (nativeEvent: any) => {
-//     if (nativeEvent) {
-//       // Calculate the active image index based on the scroll position
-//       const slide = Math.floor((nativeEvent.contentOffset.x + nativeEvent.layoutMeasurement.width / 2) / nativeEvent.layoutMeasurement.width);
-//       if (slide !== imageActive) {
-//         setImageActive(slide);
-//       }
-//     }
-//   }
-
-//   // Function to close the modal
-//   const closeModal = () => {
-//     dispatch(closeModalImage())
-//   }
-
-//   // Function to handle click on user name or avatar
-//   const handleClickIntoUserNameOrAvatarEvent = () => {
-//     if (userIdOfProfileNow !== modalImageData?.userId) {
-//       closeModal();
-//       if (currentScreenNowIsProfileScreen) {
-//         navigation.replace(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
-//       } else {
-//         navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
-//       }
-//     }
-//   }
-
-//   return (
-//     <Modal statusBarTranslucent={true} transparent>
-//       <ScrollView
-//         onScroll={({ nativeEvent }) => onChange(nativeEvent)}
-//         horizontal={true}
-//         showsHorizontalScrollIndicator={false}
-//         pagingEnabled
-//         contentOffset={{ x: imageActive * WINDOW_WIDTH, y: 0 }} // Set initial position
-//       >
-//         {modalImageData?.images.map((item, index) => (
-//           <CustomizeImageModalShow
-//             key={item.id}
-//             closeModal={closeModal}
-//             data={item}
-//             authorInfo={modalImageData}
-//             handleCheckImageHaveError={handleCheckImageHaveError}
-//             handleClickIntoUserNameOrAvatarEvent={handleClickIntoUserNameOrAvatarEvent}
-//           />
-//         ))}
-//       </ScrollView>
-//       <View style={styles.container}>
-//         {modalImageData?.images.map((item, index) => (
-//           <Text
-//             key={item.id}
-//             style={
-//               imageActive === index
-//                 ? styles.nodeActive
-//                 : styles.nodeUnActive
-//             }
-//           ></Text>
-//         ))}
-//       </View>
-//     </Modal>
-//   )
-// }
+import { useTranslation } from 'react-multi-lang'
 
 const CustomizeModalImage = () => {
+  const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
@@ -148,6 +68,7 @@ const CustomizeModalImage = () => {
       >
         {modalImageData?.images.map((item) => (
           <CustomizeImageModalShow
+            t={t}
             key={item.id}
             closeModal={closeModal}
             data={item}

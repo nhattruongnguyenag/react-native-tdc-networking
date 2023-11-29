@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import { QuestionProps } from '../../types/Question'
@@ -13,6 +14,7 @@ interface OneChoiceQuestionProps extends QuestionProps {
 export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
   const [value, setValue] = useState('')
   const [selectedChoiceIds, setSelectedChoiceIds] = useState<number[]>([])
+  const t = useTranslation()
 
   useEffect(() => {
     props.onChangeValue && props.onChangeValue(selectedChoiceIds)
@@ -21,7 +23,8 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
   return (
     <View style={styles.itemBody}>
       <QuestionTitle
-        title={`Câu hỏi ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
+        title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />

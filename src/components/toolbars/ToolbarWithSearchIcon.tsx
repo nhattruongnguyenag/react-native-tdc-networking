@@ -2,7 +2,6 @@ import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { SEARCH_ICON } from '../../constants/Icon'
 import IconButton from '../buttons/IconButton'
 
 interface ToolbarWithSearchIconProps {

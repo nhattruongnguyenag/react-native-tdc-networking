@@ -4,10 +4,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ACTIVE_CONVERSATION_TAB, ALL_CONVERSATION_TAB } from '../constants/Screen'
 import AllConversationGroupTab from '../components/conversation/AllConversationGroupTab'
 import ActiveConversationGroupTab from '../components/conversation/ActiveConversationGroupTab'
+import { ALL_ACTIVE_CONVERSATION_TAB_TITLE, ALL_CONVERSATION_TAB_TITLE } from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 const TopTab = createMaterialTopTabNavigator()
 
 function TopTabNavigator(): JSX.Element {
+  const t = useTranslation()
+
   return (
     <TopTab.Navigator
       screenOptions={({ route }) => ({
@@ -19,12 +23,12 @@ function TopTabNavigator(): JSX.Element {
     >
       <TopTab.Screen
         name={ALL_CONVERSATION_TAB}
-        options={{ title: 'Tất cả hội thoại' }}
+        options={{ title: t('ConversationScreen.allConversationTabTitle') }}
         component={AllConversationGroupTab}
       />
       <TopTab.Screen
         name={ACTIVE_CONVERSATION_TAB}
-        options={{ title: 'Đang hoạt động' }}
+        options={{ title: t('ConversationScreen.allActiveConversationTabTitle') }}
         component={ActiveConversationGroupTab}
       />
     </TopTab.Navigator>

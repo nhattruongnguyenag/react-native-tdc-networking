@@ -9,9 +9,11 @@ import { CALL_ACTION, FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from 
 import { Student } from '../../types/Student'
 import { Faculty } from '../../types/Faculty'
 import { Business } from '../../types/Business'
-import { TEXT_CALL, TEXT_CHAT, TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_PHONE, TEXT_PROFESSIONAL_POSITION, TEXT_STUDENT, TEXT_SUBJECT_POST, TEXT_UN_FOLLOW } from '../../constants/StringVietnamese'
+import { TEXT_CALL, TEXT_CHAT, TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_PHONE, TEXT_PROFESSIONAL_POSITION, TEXT_STUDENT, TEXT_SUBJECT_POST, TEXT_TITLE_PHONE, TEXT_UN_FOLLOW } from '../../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 interface StudentProfileType {
+    t: ReturnType<typeof useTranslation>
     isFollow: boolean,
     handleClickButtonEvent: (flag: number) => void,
     position: string,
@@ -37,7 +39,7 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                         >
                             <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
                             <Text style={styles.txtContentBtn}>
-                                {TEXT_CHAT}
+                                {props.t("Profile.chat")}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -47,7 +49,7 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                         >
                             <IconEntypo name='phone' size={20} color={COLOR_WHITE} />
                             <Text style={styles.txtContentBtn}>
-                                {TEXT_CALL}
+                                {props.t("Profile.call")}
                             </Text>
                         </TouchableOpacity>
                     </>
@@ -63,7 +65,7 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                         }
                         <Text style={styles.txtContentBtn}>
                             {
-                                props.isFollow ? TEXT_UN_FOLLOW : TEXT_FOLLOW
+                                props.isFollow ? props.t("Profile.follow") : props.t("Profile.unFollow")
                             }
                         </Text>
                     </TouchableOpacity>
@@ -78,29 +80,28 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                     </TouchableOpacity>
                 }
             </View>
-            {/* Info */}
             <View>
                 <View style={styles.infoContainer}>
                     <IconIonicons
                         style={styles.iconInfo}
                         name='bag-remove-outline' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>{TEXT_PROFESSIONAL_POSITION}: {TEXT_STUDENT}</Text>
+                    <Text style={styles.textInfo}>{props.t("Profile.profilePosition")}: {props.position}</Text>
                 </View>
                 <View style={styles.infoContainer}>
                     <IconFeather
                         style={styles.iconInfo}
                         name='phone-call' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>{TEXT_PLACEHOLDER_PHONE}: {props.phone}</Text>
+                    <Text style={styles.textInfo}>{props.t("Profile.profilePhone")}: {props.phone}</Text>
                 </View>
                 <View style={styles.infoContainer}>
                     <IconFontisto
                         style={styles.iconInfo}
                         name='email' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>{TEXT_EMAIL}: {props.email}</Text>
+                    <Text style={styles.textInfo}>{props.t("Profile.profileEmail")}: {props.email}</Text>
                 </View>
             </View>
             {/* Number post */}
-            <Text style={[styles.paddingVertical]}>{TEXT_SUBJECT_POST} ({props.numberPost})</Text>
+            <Text style={[styles.paddingVertical]}>{props.t("Profile.profileArticles")} ({props.numberPost})</Text>
             {/* Post */}
         </View>
     )

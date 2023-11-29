@@ -1,10 +1,13 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
-import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
-import { TEXT_DELETE, TEXT_REPLY } from '../../constants/StringVietnamese'
+import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY, COLOR_GREY_FEEBLE } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+
 interface CustomizeCommentType {
+    textDelete: string,
+    textReply: string,
     tagName: any,
     userId: number | undefined,
     authorCommentId: number,
@@ -14,6 +17,8 @@ interface CustomizeCommentType {
     content: string,
     avatar: string,
     timeCreated: string,
+    textCommentOfAuthor: string,
+    userCreatedPostId: number,
     handleClickToCommentReplyEvent: (id: number) => void,
     handleClickToDeleteCommentsEvent: (idComments: number) => void
     handleClickToAvatarAndName: (userId: number) => void
@@ -41,7 +46,12 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                     onPress={() => props.handleClickToAvatarAndName(props.authorCommentId)}
                 >
                     <Text style={styles.name}>
-                        {props.name}
+                        {props.name} {' '}
+                        <Text style={styles.textIdentifyAuthor}>
+                            {
+                                props.userCreatedPostId === props.authorCommentId && <Text>  <MaterialCommunityIconsIcon name='microphone-variant' color={COLOR_BLUE_BANNER} size={15} />{' '}{props.textCommentOfAuthor}</Text>
+                            }
+                        </Text>
                     </Text>
                 </TouchableOpacity>
                 <Text style={styles.content}>
@@ -54,13 +64,13 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                     <TouchableOpacity
                         onPress={() => props.handleClickToCommentReplyEvent(props.id)}
                     >
-                        <Text style={styles.reply}>{TEXT_REPLY}</Text>
+                        <Text style={styles.reply}>{props.textReply}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => props.handleClickToDeleteCommentsEvent(props.id)}
                     >
                         {
-                            props.userId === props.authorCommentId && <Text style={styles.reply}>{TEXT_DELETE}</Text>
+                            props.userId === props.authorCommentId && <Text style={styles.reply}>{props.textDelete}</Text>
                         }
                     </TouchableOpacity>
                 </View>
@@ -87,10 +97,15 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                 >
                     <Text style={styles.name}>
                         {props.name}
+                        <Text style={styles.textIdentifyAuthor}>
+                            {
+                                props.userCreatedPostId === props.authorCommentId && <Text>  <MaterialCommunityIconsIcon name='microphone-variant' color={COLOR_BLUE_BANNER} size={15} />{' '}{props.textCommentOfAuthor}</Text>
+                            }
+                        </Text>
                     </Text>
                 </TouchableOpacity>
                 <Text style={styles.content}>
-                    <Text style={styles.tagName}>@{props.tagName['name']} </Text>
+                    <Text style={styles.tagName}>@{props.tagName} </Text>
                     {
                         props.content
                     }
@@ -100,12 +115,12 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                     <TouchableOpacity
                         onPress={() => props.handleClickToCommentReplyEvent(props.id)}
                     >
-                        <Text style={styles.reply}>{TEXT_REPLY}</Text>
+                        <Text style={styles.reply}>{props.textReply}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => props.handleClickToDeleteCommentsEvent(props.id)}
                     >
-                        <Text style={styles.reply}>{TEXT_DELETE}</Text>
+                        <Text style={styles.reply}>{props.textDelete}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -147,6 +162,10 @@ const styles = StyleSheet.create({
     },
     tagName: {
         color: COLOR_BUTTON
+    },
+    textIdentifyAuthor: {
+        color: COLOR_BLUE_BANNER,
+        fontWeight: '100'
     }
 })
 export default CustomizeComment

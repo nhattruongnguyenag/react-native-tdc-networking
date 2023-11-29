@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
-import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { deleteQuestion, setSurveyPostRequest, updateQuestion } from '../../redux/Slice'
 import ToggleSwitch from 'toggle-switch-react-native'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { deleteQuestion, updateQuestion } from '../../redux/Slice'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
@@ -13,6 +14,7 @@ interface QuestionBottomBarOptionsProps {
 }
 
 export default function QuestionBottomBarOptions(props: QuestionBottomBarOptionsProps) {
+    const t = useTranslation()
     const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const dispatch = useAppDispatch()
 
@@ -38,9 +40,6 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
         }
     }, [switchToggle])
 
-    useEffect(() => {
-        console.log('on change required', surveyPostRequest)
-    }, [surveyPostRequest])
     return (
         <View style={[styles.body, { display: props.reviewMode || props.conductMode ? 'none' : 'flex' }]}>
             <IconButton
@@ -57,7 +56,7 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
                 isOn={switchToggle}
                 onColor="green"
                 offColor="gray"
-                label="Bắt buộc"
+                label={t('QuestonBottomBarOptions.questionBottomBarQuestionRequireToggle')}
                 size="small"
                 onToggle={() => {
                     setSwitchToggle(!switchToggle)

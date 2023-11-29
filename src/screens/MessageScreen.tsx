@@ -1,12 +1,14 @@
 import moment from 'moment'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { Client, Frame, Message } from 'stompjs'
-import Loading from '../components/Loading'
+import Loading from '../components/common/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSentItem from '../components/messages/MessageSentItem'
+import { MESSAGE_SCREEN_LOADER_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setConversationMessages, setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
@@ -15,11 +17,13 @@ import { Message as MessageModel } from '../types/Message'
 let stompClient: Client
 
 export default function MessengerScreen() {
+  const t = useTranslation()
   const { userLogin, imagesUpload, selectConversation, conversationMessages } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+
   const textInputMessageRef = useRef<TextInput | null>(null)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [messageContent, setMessageContent] = useState<string>('')
   const dispatch = useAppDispatch()
 
@@ -35,9 +39,10 @@ export default function MessengerScreen() {
     stompClient = getStompClient()
 
     const onConnected = () => {
-      setLoading(true)
-      stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
-      stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
+      if (stompClient.connected) {
+        stompClient.subscribe(`/topic/messages/${senderId}/${receiverId}`, onMessageReceived)
+        stompClient.send(`/app/messages/${senderId}/${receiverId}/listen`)
+      }
     }
 
     const onMessageReceived = (payload: Message) => {
@@ -106,7 +111,7 @@ export default function MessengerScreen() {
   return (
     <View style={styles.body}>
       {isLoading ? (
-        <Loading title={'Đang tải tin nhắn'} />
+        <Loading title={t('MessageScreen.messageScreenLoaderTitle')} />
       ) : (
         <Fragment>
           <FlatList
@@ -116,10 +121,6 @@ export default function MessengerScreen() {
             data={conversationMessages}
             renderItem={({ item, index }) => messageRenderItems(item, index)}
           />
-
-          <Text style={{ marginBottom: 5, display: Boolean(selectConversation?.receiver.isTyping) ? 'flex' : 'none' }}>
-            Đang soạn tin...
-          </Text>
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}

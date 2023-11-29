@@ -1,0 +1,376 @@
+{
+    "DrawerContentComponent": {
+        "userGroup": "Nhóm của bạn",
+        "userJobApplyProfile": "Hồ sơ ứng tuyển",
+        "waitingPost": "Duyệt bài viết",
+        "option": "Tùy chọn",
+        "logout": "Đăng xuất"
+    },
+    "NotificationsComponent": {
+        "notification": "Thông báo",
+        "readAll": "Đánh dấu tất cả đã đọc",
+        "deleteNotification": "Xóa thông báo",
+        "unReadNotification": "Đánh dấu chưa đọc",
+        "search": "Tìm kiếm thông báo ..."
+    },
+    "FollowComponent":{
+        "following": "Đang theo dõi",
+        "follower": "Đang theo dõi bạn",
+        "search": "Tìm kiếm người dùng ..."
+    },
+    "SavedPostListComponent": {
+        "search": "Nhập nội dung tìm kiếm..."
+    },
+    "SearchComponent": {
+        "user": "Người dùng",
+        "student": "Sinh viên",
+        "business": "Doanh nghiệp",
+        "faculty": "Khoa",
+        "post": "Bài viết",
+        "normal": "Bài viết",
+        "survey": "Khảo sát",
+        "recruitment": "Tin tuyển dụng",
+        "search": "Nhập nội dung tìm kiếm..."
+    },
+    "ToolbarTitle": {
+        "recruitmentDetailScreen": "Chi tiết tuyển dụng",
+        "topTabNavigator": "TDC Social Network",
+        "drawerTabNavigator": "TDC Social Network",
+        "forgottenPasswordScreen": "Quên mật khẩu",
+        "acceptForgottenPasswordScreen": "Xác nhận email",
+        "searchScreen": "Tìm kiếm",
+        "conversationScreen": "Hội thoại",
+        "messengerScreen": "Messenger",
+        "addQuestionScreen": "Thêm câu hỏi",
+        "reviewSurveyPostScreen": "Xem lại bài viết",
+        "surveyConductScreen": "Thực hiện khảo sát",
+        "jobApplyScreen": "Ứng tuyển",
+        "listPostSavedScreen": "Lưu bài viết",
+        "createNormalPostScreen": "",
+        "listJobApplyScreen": "Danh sách ứng tuyển",
+        "listFollowScreen": "Danh sách theo dõi",
+        "profileScreen": "Trang cá nhân người dùng",
+        "detailJobApply": "Chi tiết hồ sơ ứng tuyển",
+        "optionScreen": "Tùy chọn",
+        "splashScreen": "",
+        "surveyResultScreen": "Kết quả khảo sát",
+        "applicationOptionScreen": "Tùy chọn ứng dụng",
+        "approvalPostScreen": "Duyệt bài viết",
+        "createSurveyScreen": "Thêm khảo sát",
+        "createRecruitmentScreen": "Thêm tin tuyển dụng",
+        "createUpdateProfile": "Cập nhật thông tin cá nhân"
+    },
+    "AddQuestionScreen": {
+        "textButtonGoBack": "Quay lại",
+        "textButtonGoNext": "Tiếp theo",
+        "textEmptyQuestionErrorTitle": "Lỗi",
+        "textEmptyQuestionErrorContent": "Thêm ít nhất 1 câu hỏi cho bài khảo sát"
+    },
+    "ConversationScreen": {
+        "allConversationTabTitle": "Tất cả hội thoại",
+        "allActiveConversationTabTitle": "Đang hoạt động"
+    },
+    "RecruitmentScreen": {
+        "recruitmentBenefitEmptyValidate": "Quyền lợi không được để trống",
+        "recruitmentBenefitPlaceholder": "Quyền lợi...",
+        "recruitmentBenefitTitle": "Quyền lợi",
+        "recruitmentDescEmptyValidate": "Mô tả không được để trống",
+        "recruitmentEmploymentTypeEmptyValidate": "Hình thức làm việc không được để trống",
+        "recruitmentExpirationValidate": "Thời hạn không được chọn ở thời điểm trong quá khứ",
+        "recruitmentLocationEmptyValidate": "Địa điểm làm việc không được để trống",
+        "recruitmentRequirementEmptyValidate": "Yêu cầu không được để trống",
+        "recruitmentSalaryEmptyValidate": "Tiền lương không được để trống",
+        "recruitmentSaveDescPlaceholder": "Mô tả công việc...",
+        "recruitmentSaveDescTitle": "Mô tả công việc",
+        "recruitmentSaveEmploymentTypePlaceholder": "Hình thức làm việc...",
+        "recruitmentSaveExpirationPickerLocale": "vi",
+        "recruitmentSaveExpirationTitle": "Thời hạn ứng tuyển",
+        "recruitmentSaveLocationPlaceholder": "Địa điểm làm việc...",
+        "recruitmentSaveLocationTitle": "Địa điểm làm việc",
+        "recruitmentSaveRequirementPlaceholder": "Yêu cầu...",
+        "recruitmentSaveRequirementTitle": "Yêu cầu công việc",
+        "recruitmentSaveSallaryPlaceholder": "Lương...",
+        "recruitmentSaveSallaryTitle": "Lương",
+        "recruitmentSaveSaveEmploymentTypeTitle": "Hình thức làm việc",
+        "recruitmentSaveSuccessContent": "Tin tuyển dụng đã được đăng",
+        "recruitmentSaveSuccessTitle": "Thành công !!!",
+        "recruitmentSaveTitlePlaceholder": "Nhập tiêu đề...",
+        "recruitmentSaveTitleTitle": "Tiêu đề",
+        "recruitmentTitleEmptyValidate": "Tiêu đề không được để trống",
+        "recruitmentSaveCompleteButton": "Hoàn tất"
+    },
+    "CreateSurveyPostScreen": {
+        "surveySaveButtonGoNext": "Tiếp theo",
+        "surveySaveDescEmptyValidate": "Mô tả không được để trống",
+        "surveySaveDescOver255CharactersValidate": "Mô tả không được quá 255 ký tự",
+        "surveySaveDescPlaceholder": "Nhập mô tả",
+        "surveySaveDescTitle": "Mô tả",
+        "surveySaveTitleEmptyValidate": "Tiêu đề không được để trống",
+        "surveySaveTitleOver255CharactersValidate": "Tiêu đề không được quá 255 ký tự",
+        "surveySaveTitlePlaceholder": "Nhập tiêu đề",
+        "surveySaveTitleTitle": "Tiêu đề"
+    },
+    "JobApplyScreen": {
+        "jobApplyScreenButtonAddCvTitle": "Thêm CV",
+        "jobApplyScreenButtonComplete": "Hoàn tất",
+        "jobApplyScreenButtonGoBack": "Quay lại",
+        "jobApplyScreenButtonUpdateCvTitle": "Cập nhật CV",
+        "jobApplyScreenEmptyCvTextContent": "Vui lòng thêm CV để hoàn tất đăng ký",
+        "jobApplyScreenEmptyCvTextTitle": "Thông báo",
+        "jobApplyScreenSaveSuccessTextContent": "Nộp đơn thành công",
+        "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
+    },
+    "MessageScreen": {
+        "messageScreenLoaderTitle": "Đang tải tin nhắn..."
+    },
+    "MessengerToolbar": {
+        "userStatusActive": "Đang hoạt động",
+        "userStatusInactive": "Truy cập"
+    },
+    "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenAnswerTitle": "Câu hỏi",
+        "reviewSurveyScreenButtonComplete": "Hoàn tất",
+        "reviewSurveyScreenButtonGoBack": "Quay lại",
+        "reviewSurveyScreenSaveFailContent": "Lưu thất bại",
+        "reviewSurveyScreenSaveFailTitle": "Lỗi",
+        "reviewSurveyScreenSaveSuccessContent": "Lưu thành công",
+        "reviewSurveyScreenSaveSuccessTitle": "Thành công"
+    },
+    "SurveyConductScreen": {
+        "surveyConductScreenSaveSuccessTitle": "Thành công !!!",
+        "surveyConductScreenSaveSuccessContent": "Câu trả lời đã được lưu\nCảm ơn bạn đã tham gia trả lời khảo sát",
+        "surveyConductScreenShortAnswerError": "Vui lòng nhập nội dung câu trả lời",
+        "surveyConductScreenMultiQuestionMulitiChoice": "Vui lòng chọn ít nhất một câu trả lời",
+        "surveyConductScreenMultiQuestionOneChoice": "Vui lòng chọn một câu trả lời",
+        "surveyConductScreenLoaderTitle": "Đang tải dữ liệu...",
+        "surveyConductScreenButtonGoBack": "Quay lại",
+        "surveyConductScreenButtonComplete": "Hoàn tất"
+    },
+    "SurveyResultScreen": {
+        "surveyResultScreenEmptyVote": "Chưa có lượt bình chọn nào",
+        "surveyResultScreenEmptyShortAnswer": "Chưa có câu trả lời",
+        "surveyResultScreenNumberOfShortAnswer": "câu trả lời",
+        "surveyResultScreenLoaderTitle": "Đang tải dữ liệu..."
+    },
+    "ConversationItem": {
+        "conversationItemComponentImageMessageAnnotation": "Hình ảnh"
+    },
+    "MessageBottomBar": {
+        "messageBottomBarComponentInputTextPlaceholder": "@ Tin nhắn"
+    },
+    "MessageSentItem": {
+        "messageItemStatusReceived": "Đã nhận",
+        "messageItemStatusSeen": "Đã xem"
+    },
+    "AddQuestionView": {
+        "addQuestionViewStartAddQuestion": "Thêm",
+        "addQuestionViewComponentButtonComplete": "Hoàn tất",
+        "addQuestionViewComponentShortAnswer": "Trả lời ngắn",
+        "addQuestionViewComponentChoiceInputPlaceholder": "Lựa chọn",
+        "addQuestionViewComponentMultiChoiceQuestion": "Nhiều lựa chọn",
+        "addQuestionViewComponentOneChoiceQuestion": "Trắc nghiệm",
+        "addQuestionViewComponentQuestionEmptyErrorContent": "Vui lòng chọn loại câu hỏi",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Lỗi !!!",
+        "addQuestionViewComponentQuestionTypeDropdownSearch": "Tìm kiếm...",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Chọn loại câu hỏi ---",
+        "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Tiêu đề không được chứa ký tự đặc biệt",
+        "addQuestionViewComponentTitleEmptyValidate": "Tiêu đề không được để trống",
+        "addQuestionViewComponentTitleInputPlaceholder": "Nhập tiêu đề câu hỏi...",
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự"
+    },
+    "MultiChoiceQuestion": {
+        "questionComponentAddTextTitle": "Câu hỏi"
+    },
+    "QuestonBottomBarOptions": {
+        "questionBottomBarQuestionRequireToggle": "Bắt buộc"
+    },
+    "ShortAnswerQuestion": {
+        "shortAnswerQuestionComponentTitlePlaceholder": "Nhập câu trả lời..."
+    },
+    "BarItemComponentNumberVote": {
+        "barItemComponentNumberOfVote": " lượt bình chọn"
+    },
+    
+    "Post":{
+        "normalPostIdentifyAuthorCompany": "Doanh nghiệp",
+        "normalPostIdentifyAuthorFaculty": "Khoa",
+        "normalPostIdentifyAuthorStudent": "",
+        "typePostRecruitment":"Tuyển dụng",
+        "typePostSurvey":"Khảo sát",
+        "normalPostLikeBy" : "Thích bởi"
+     },
+     "Comment": {
+         "commentReplyComment":"Trả lời",
+         "commentDeleteComment":"Xóa",
+         "commentAuthor": "Tác giả",
+         "modalListCommentTitle": "Bình luận"
+     },
+     "CommentContainer": {
+        "commentContainerComponentSeeMore": "Xem thêm",
+        "commentContainerComponentHidden": "Ẩn bớt"
+     },
+     "CreateCommentToolbar":{
+        "commentCreateComment": "Đăng bình luận",
+        "commentPlaceholderInput":"Hãy nhập nội dung bình luận"
+     },
+     "RecruitmentPost": {
+        "recruitmentPostType": "Tuyển dụng",
+        "recruitmentPostButtonSeeDetail": "Xem chi tiết",
+        "recruitmentPostCurrency":"vnd/Tháng"
+    },    
+     "SurveyPost": {
+        "surveyPostType": "Khảo sát",
+        "surveyPostButton": "Tiến hành khảo sát",
+        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời"
+    },
+    "Faculty":{
+        "facultyOfElectricalEngineering": "Khoa điện - Điện tử",
+        "facultyOfInformationTechnology": "Khoa Công Nghệ Thông Tin",
+        "facultyOfAutomationTechnology": "Khoa Công Nghệ Tự Động",
+        "facultyOfMechanicalEngineeringAndManufacturing": "Khoa Cơ Khí Chế Tạo Máy",
+        "automobileEngineeringDepartment": "Khoa Cơ Khí Ô Tô",
+        "facultyOfFinanceAndAccounting": "Khoa Tài Chính - Kế Toán",
+        "facultyOfBusinessAdministration": "Khoa Quản Trị Kinh Doanh",
+        "facultyOfTourism": "Khoa Du Lịch",
+        "departmentOfEnglish": "Khoa Tiếng Anh",
+        "departmentOfKoreanLanguage": "Khoa Tiếng Hàn",
+        "japaneseLanguageDepartment": "Khoa Bộ Môn Tiếng Nhật"
+    },
+    "ModalUserLiked":{
+        "modalUserLikedTitle":"Danh sách người dùng đã like"
+    },
+    "MenuOption":{
+        "menuOptionSaveArticle": "Lưu bài viết",
+        "menuOptionUnSaveArticle": "Hủy lưu bài viết",
+        "menuOptionDeleteArticle": "Xóa bài viết",
+        "menuOptionViewResumeList": "Xem danh sách CV",
+        "menuOptionViewSurveyResults": "Xem kết quả khảo sát"
+    },
+    "CreatePostToolbar": {
+        "createPostToolbarTitle": "Tạo Bài Viết Mới",
+        "createPostToolbarNormalPost": "Văn bản/Hình ảnh",
+        "createPostToolbarSurveyPost": "Tạo Bài Viết Khảo Sát",
+        "createPostToolbarRecruitmentPost": "Tin Tuyển Dụng"
+    },
+    "ModalCreateNormalPost": {
+      "modalCreateNormalPostTitle": "Tạo bài viết",
+      "modalCreateNormalPostPlaceholder": "Vui lòng nhập nội dung bài viết",
+      "modalCreateNormalPostEntryImages": "Ảnh",
+      "modalCreateNormalPostButton": "Đăng bài viết"
+    },
+    "BusinessSelectFacultyToolbar":{
+        "businessSelectFacultyToolbarTitle":"Hãy lựa chọn khoa mà bạn muốn hiển thị bài viết"
+    },
+    "NotifyFacultyDontHaveAnyPost": {
+        "textNotifyFacultyDontHaveAnyPost": "Chưa có bài viết nào ở khoa này"
+      },
+      "Profile": {
+        "profileOperatingHours": "Giờ làm việc",
+        "profileTaxID": "Mã số thuế",
+        "profileRepresentative": "Đại diện",
+        "profileAddress": "Địa chỉ",
+        "profilePhone": "Điện thoại",
+        "profileEmail": "Email",
+        "profileArticles": "Bài viết",
+        "profilePosition": "Vị trí",
+        "profileRole": "Sinh viên",
+        "chat": "Nhắn tin",
+        "call": "Gọi điện",
+        "unFollow": "Hủy theo dõi",
+        "follow": "Theo dõi",
+        "updateProfile": "Cập nhật thông tin cá nhân",
+        "unUpdate":"chưa được cập nhật "
+    },
+    "Group": {
+        "groupTdc": "Nhóm TDC - Trường Cao Đẳng Công Nghệ Thủ Đức",
+        "groupConnectBusiness": "Nhóm Kết nối Doanh nghiệp",
+        "electricalElectronicsGroup": "Nhóm Điện - Điện tử",
+        "informationTechnologyGroup": "Nhóm Công nghệ Thông tin",
+        "automationTechnologyGroup": "Nhóm Công nghệ Tự động hóa",
+        "mechanicalEngineeringAndManufacturingGroup": "Nhóm Kỹ thuật Cơ khí và Chế tạo",
+        "automotiveMechanicalGroup": "Nhóm Cơ khí Ô tô",
+        "financeAccountingGroup": "Nhóm Tài chính - Kế toán",
+        "businessAdministrationGroup": "Nhóm Quản trị kinh doanh",
+        "tourismGroup": "Nhóm Du lịch",
+        "englishGroup": "Nhóm Tiếng Anh",
+        "koreanGroup": "Nhóm Tiếng Hàn",
+        "japaneseLanguageDepartmentGroup": "Nhóm Bộ môn Tiếng Nhật"
+    },    
+    "ModalUpdate": {
+        "modalUpdateTitle": "Cập Nhật Thông Tin Tài Khoản",
+        "modalUpdatePlaceholderPhoneNumber": "Số Điện Thoại",
+        "modalUpdatePlaceholderEmail": "Email",
+        "modalUpdateBackground": "Hình Nền",
+        "modalUpdateAvatar": "Ảnh Đại Diện",
+        "modalUpdateButtonText": "Cập Nhật"
+    },
+    "Validate":{
+        "validatePhoneNull":"Số điện thoại không được để trống",
+        "validatePhoneUnCorrectFormat":"Số điện thoại sai định dạng",
+        "validateEmailNull":"Email không được để trống",
+        "validateEmailUnCorrectFormat":"Email sai định dạng",
+        "validateEmailHadUsed":"Email đã đươck đăng ký, vui lòng nhập email khác",
+        "validateEmailHasMaxLength": "Email không vượt quá 255 ký tự",
+        "validateNameHasMaxLength":"Tên không được vượt quá 255 ký tự ",
+        "validateNameHasSpecialCharacter":"Tên không được chứa các ký tự đặc biệt ",
+        "validateAddressNull":"Địa chỉ không được để trống",
+        "validatePresentorNull":"Tên người đại diện không được để trống",
+        "validateRepresentorSpecialCharacter":"Tên không được chứa các ký tự đặc biệt",
+        "validateRepresentorMaxLength":"Tên không được vượt quá 255 ký tự ",
+        "validateTaxCodeNull":"Mã số thuế không được để trống",
+        "validateNameNull":"Tên không được để trống",
+        "validateNameSpecialCharacter":"Tên không được chứa các ký tự đặc biệt",
+        "validateNameMaxLength":"Tên không được vượt quá 255 ký tự ",
+        "validateNameTimeActiveUnCorrect": "Thời gian hoạt động sai quy định",
+        "validateTaxCodeFormat": "Mã thuế sai quy định",
+        "validateTaxCodeMaxLength":  "Mã số thuế không vượt quá 255 ký tự",
+        "validateAddressMaxLength":  "Địa chỉ không vượt quá 255 ký tự"
+    },
+    "ModalListUserLiked": {
+        "modalListUserLikedTitle": "Danh sách người thích"
+     },
+     "ModalLoadingComment": {
+        "modalLoadingCommentTitle": "Đang tải dữ liệu"
+    },
+    "CreatePostSelector": {
+        "createPostSelectorPlaceHolder": "Nhập nội dung bài viết",
+        "createPostSelectorSurveyText": "Khảo sát",
+        "createPostSelectorRecruitmentText": "Tuyển dụng",
+        "createPostSelectorNormalText": "Thông thường"
+    },
+    "SelectFaculty":{
+        "selectFacultyPlaceholder":"Chọn khoa...",
+        "selectFacultyTextSearch":"Tìm kiếm.."
+    },
+    "FacultyDashboard": {
+        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào"
+    },
+    "StudentDashboard": {
+        "studentDashboardGroupTitle": "Group TDC - Trường Cao Đẳng Công Nghệ Thủ Đức"
+    },
+    "OptionScreen": {
+        "optionScreenFollowText": "Theo dõi",
+        "optionScreenSaveText": "Lưu",
+        "optionScreenUpdateProfileText": "Cập nhật trang cá nhân"
+    },
+        "BusinessUpdate": {
+            "businessUpdateCompanyName": "Tên doanh nghiệp",
+            "businessUpdateEmail": "Email",
+            "businessUpdateRepresentorFullName": "Họ tên người đại diện",
+            "businessUpdateCompanyTaxId": "Mã số thuế",
+            "businessUpdateCompanyAddress": "Địa chỉ",
+            "businessUpdateCompanyPhoneNumber": "Số điện thoại",
+            "businessUpdateCompanyTimeActiveStart": "Thời gian bắt đầu hoạt động",
+            "businessUpdateCompanyTimeActiveEnd": "Thời gian kết thúc hoạt động",
+            "businessUpdateCompanyAvatar": "Ảnh đại diện",
+            "businessUpdateCompanyButton": "Cập nhật thông tin cá nhân",
+            "businessUpdateCompanyNamePlaceholder": "Nhập tên doanh nghiệp",
+            "businessUpdateEmailPlaceholder": "Nhập email",
+            "businessUpdateRepresentorFullNamePlaceholder": "Nhập họ tên người đại diện",
+            "businessUpdateCompanyTaxIdPlaceholder": "Nhập mã số thuế",
+            "businessUpdateCompanyAddressPlaceholder": "Nhập địa chỉ",
+            "businessUpdateCompanyPhoneNumberPlaceholder": "Nhập số điện thoại",
+            "businessUpdateTimeActive": "Đến"
+        }
+    
+}

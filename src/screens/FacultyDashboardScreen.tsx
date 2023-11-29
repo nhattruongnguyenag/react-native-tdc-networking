@@ -1,8 +1,8 @@
 import { FlatList, ScrollView, StyleSheet, View, RefreshControl, Text } from 'react-native'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useTransition } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TEXT_NOTIFICATION_SCOPE_OF_ACCOUNT, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
 import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
@@ -22,10 +22,11 @@ import CustomizeSelectFacultyToolbar from '../components/CustomizeSelectFacultyT
 import { WINDOW_HEIGHT } from '../utils/SystemDimensions'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
-
+  const t = useTranslation();
   const isFocused = useIsFocused();
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,9 +51,6 @@ export default function FacultyDashboardScreen() {
   }, [isFocused, code])
 
   const getDataFacultyApi = async () => {
-    console.log('====================================');
-    console.log(code);
-    console.log('====================================');
     if (code.length !== 0) {
       try {
         const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
@@ -121,17 +119,46 @@ export default function FacultyDashboardScreen() {
       "userId": userLogin?.id,
       "postId": id
     }
-    stompClient.send(`/app/posts/group/${code}/unsave`, {}, JSON.stringify(data))
+    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
   }
 
   const renderItem = (item: any) => {
+    // return item.active === 1 ? (
+    //   <CustomizePost
+    //     id={item.id}
+    //     userId={item.user['id']}
+    //     name={item.user['name']}
+    //     avatar={item.user['image']}
+    //     typeAuthor={item.user['roleCodes']}
+    //     available={null}
+    //     timeCreatePost={item.createdAt}
+    //     content={item.content}
+    //     type={item.type}
+    //     likes={item.likes}
+    //     comments={item.comment}
+    //     commentQty={item.commentQuantity}
+    //     images={item.images}
+    //     role={item.user['roleCodes']}
+    //     likeAction={likeAction}
+    //     location={item.location ?? null}
+    //     title={item.title ?? null}
+    //     expiration={item.expiration ?? null}
+    //     salary={item.salary ?? null}
+    //     employmentType={item.employmentType ?? null}
+    //     description={item.description ?? null}
+    //     isSave={item.isSave}
+    //     group={code}
+    //     handleUnSave={handleSavePost}
+    //     handleDelete={handleDeletePost} />
+    // ) : (null)
+
     return (
       <CustomizePost
         id={item.id}
         userId={item.user['id']}
         name={item.user['name']}
         avatar={item.user['image']}
-        typeAuthor={null}
+        typeAuthor={item.user['roleCodes']}
         available={null}
         timeCreatePost={item.createdAt}
         content={item.content}
@@ -155,11 +182,9 @@ export default function FacultyDashboardScreen() {
     )
   }
 
-  const handleSelectFacultyEvent = (_code: string) => {
+  const handleSelectFacultyEvent = useCallback((_code: string) => {
     setCode(_code);
-  };
-
-
+  }, [])
 
   return (
     userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
@@ -172,7 +197,7 @@ export default function FacultyDashboardScreen() {
       >
         {/* Create post area */}
         {
-          (userLogin?.roleCodes.includes(TYPE_POST_FACULTY) || userLogin?.roleCodes.includes(TYPE_POST_STUDENT)) ? <View style={styles.toolbarCreatePost}>
+          userLogin?.roleCodes.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar
               role={userLogin?.roleCodes ?? ''}
               handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
@@ -195,6 +220,7 @@ export default function FacultyDashboardScreen() {
     </View> : <ScrollView
       showsVerticalScrollIndicator={false}>
       <CustomizeSelectFacultyToolbar
+        flag={t("SelectFaculty.selectFacultyPlaceholder")}
         handleSelectFacultyEvent={handleSelectFacultyEvent}
       />
       <View>
@@ -214,7 +240,7 @@ export default function FacultyDashboardScreen() {
               />
             ) : (
               <View style={styles.wrapperWhenDontHaveAnyPost}>
-                <Text>Chưa có bất kỳ bài viết nào</Text>
+                <Text>{t("FacultyDashboard.facultyDashboardNotifyNotHavePost")}</Text>
               </View>
             )}
           </>

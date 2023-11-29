@@ -22,18 +22,21 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { getGroupForPost } from '../utils/GetGroup';
 import { User } from '../types/User';
-import { followAPI } from '../api/CallApi';
+import { deletePostAPI, followAPI } from '../api/CallApi';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
+import { useTranslation } from 'react-multi-lang';
+import { getFacultyTranslated } from '../utils/getFacultyTranslated ';
 
 const ProfileScreen = ({ route }: any) => {
+    const t = useTranslation();
+    const { userId, group } = route.params;
     const [imageToShow, setImageToShow] = useState<string>('');
     const [isCalled, setIsCalled] = useState(false);
     const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-    const { userId, group } = route.params;
     const [post, setPost] = useState<any[]>([]);
     const [userInfo, setUserInfo] = useState<Student | Faculty | Business | null>();
     const [isFollow, setIsFollow] = useState<boolean>(false);
@@ -111,8 +114,16 @@ const ProfileScreen = ({ route }: any) => {
         navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: group })
     }
 
-    const handleUnSave = () => {
+    const handleDeletePost = async (id: number) => {
+        const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
+        ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+    }
 
+    const handleSavePost = async (id: number) => {
+        const data = {
+            "userId": userLogin?.id,
+            "postId": id
+        }
     }
 
     const renderItem = (item: any) => {
@@ -122,7 +133,7 @@ const ProfileScreen = ({ route }: any) => {
                 userId={item.user['id']}
                 name={item.user['name']}
                 avatar={item.user['image']}
-                typeAuthor={'Doanh Nghiệp'}
+                typeAuthor={item.user['roleCodes']}
                 available={null}
                 timeCreatePost={item.createdAt}
                 content={item.content}
@@ -141,7 +152,8 @@ const ProfileScreen = ({ route }: any) => {
                 description={item.description ?? null}
                 isSave={item.isSave}
                 group={group}
-                handleUnSave={handleUnSave}
+                handleUnSave={handleSavePost}
+                handleDelete={handleDeletePost}
             />
         )
     }
@@ -230,17 +242,16 @@ const ProfileScreen = ({ route }: any) => {
                             userData={userInfo}
                             handleClickButtonEvent={handleClickButtonEvent}
                             handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
-
                         <View style={styles.titlePostArea}>
                             <Text style={styles.txtTitlePostArea}>
                                 {
-                                    userInfo?.name
+                                    getFacultyTranslated(userInfo?.name + "", t)
                                 }
                                 {' '}
                                 <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
                                 {' '}
                                 {
-                                    getGroupForPost(group)
+                                    getGroupForPost(group, t) 
                                 }
                             </Text>
                         </View>

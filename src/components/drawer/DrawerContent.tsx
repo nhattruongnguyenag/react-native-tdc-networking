@@ -8,26 +8,51 @@ import {
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types'
 import React, { useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
+import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  CREATE_NORMAL_POST_SCREEN,
-  CREATE_RECRUITMENT_SCREEN,
-  CREATE_SURVEY_SCREEN,
-  LOGIN_SCREEN
+  APPLICATION_OPTION_SCREEN, APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN, CREATE_SURVEY_SCREEN,
+  FACULTY_DASHBOARD_SCREEN,
+  LOGIN_SCREEN,
+  STUDENT_DISCUSSION_DASHBOARD_SCREEN
 } from '../../constants/Screen'
-import Divider from '../Divider'
+import Divider from '../common/Divider'
+import AccordionItem from './AccordionItem'
 import DrawerHeader from './DrawerHeader'
 
+import { useTranslation } from 'react-multi-lang'
+import { useAppSelector } from '../../redux/Hook'
+import { isAdmin, isFaculty, isStudent, isBusiness } from '../../utils/UserHelper'
+import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
+import { getGroupForPost } from '../../utils/GetGroup'
+import { groupBusiness, groupStudent } from '../../constants/Variables'
+
 export default function DrawerContent(props: DrawerContentComponentProps) {
+  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+
   const logout = useCallback(() => {
     AsyncStorage.removeItem(TOKEN_KEY)
     AsyncStorage.removeItem(USER_LOGIN_KEY)
     navigation.navigate(LOGIN_SCREEN)
   }, [])
+
+  const t = useTranslation()
+
+
+  const getScreenOfUser = (role: string) => {
+    let screen = '';
+    if (role === TYPE_POST_STUDENT) {
+      screen = STUDENT_DISCUSSION_DASHBOARD_SCREEN;
+    } else if (role === TYPE_POST_FACULTY) {
+      screen = FACULTY_DASHBOARD_SCREEN;
+    } else {
+      screen = BUSINESS_DASHBOARD_SCREEN;
+    }
+    navigation.navigate(screen);
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,49 +60,96 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
       <Divider />
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
+        <List.Accordion
+          titleNumberOfLines={5}
+          title={
+            <AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />
+          }
+          titleStyle={{ fontSize: 17 }}
+          id={0}>
+          {
+            isStudent(userLogin) &&
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(groupStudent, t)}
+              onPress={() => {  
+                getScreenOfUser(userLogin.roleCodes);
+              }}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          }
+          {
+            isFaculty(userLogin) &&
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(userLogin?.facultyGroupCode + "", t)}
+              onPress={() => {
+                getScreenOfUser(userLogin.roleCodes);
+              }}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          }
+          {
+
+            isBusiness(userLogin) &&
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(groupBusiness, t)}
+              onPress={() => {
+                getScreenOfUser(userLogin.roleCodes);
+              }}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          }
+        </List.Accordion>
+
+
         <DrawerItem
-          style={{ marginStart: 14 }}
-          label={'Thêm khảo sát'}
+          label={t('DrawerContentComponent.userJobApplyProfile')}
           onPress={() => {
-            navigation.navigate(CREATE_SURVEY_SCREEN)
           }}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff' }}
           icon={({ color, focused, size }) => (
-            <FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />
+            <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
           )}
         />
 
+        {
+          (isAdmin(userLogin) || isFaculty(userLogin)) &&
+          <DrawerItem
+            label={t('DrawerContentComponent.waitingPost')}
+            onPress={() => {
+              navigation.navigate(APPROVAL_POST_SCREEN)
+            }}
+            inactiveBackgroundColor={'#fff'}
+            pressColor={'#0088ff03'}
+            labelStyle={{ color: '#0088ff' }}
+            icon={({ color, focused, size }) => (
+              <FontAwesome6Icon style={{ width: 15 }} name='bars-progress' size={16} color={'#0088ff'} />
+            )}
+          />
+        }
+
         <DrawerItem
-          style={{ marginStart: 14 }}
-          label={'Thêm tin tuyển dụng'}
+          label={t('DrawerContentComponent.option')}
           onPress={() => {
-            navigation.navigate(CREATE_RECRUITMENT_SCREEN)
+            navigation.navigate(APPLICATION_OPTION_SCREEN)
           }}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
+          labelStyle={{ color: '#0088ff', margin: 0 }}
           icon={({ color, focused, size }) => (
-            <FontAwesome6Icon name='square-poll-vertical' size={16} color={'#0088ff'} />
+            <FontAwesome6Icon style={{ width: 15 }} name='gear' size={16} color={'#0088ff'} />
           )}
         />
 
         <DrawerItem
-          style={{ marginStart: 14 }}
-          label={'Thêm bài viết'}
-          onPress={() => {
-            navigation.navigate(CREATE_NORMAL_POST_SCREEN)
-          }}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => <IoniconsIcon name='create-sharp' size={16} color={'#0088ff'} />}
-        />
-
-        <DrawerItem
-          style={{ marginStart: 14 }}
-          label={'Đăng xuất'}
+          label={t('DrawerContentComponent.logout')}
           onPress={() => {
             logout()
           }}

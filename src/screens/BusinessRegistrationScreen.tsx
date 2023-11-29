@@ -37,9 +37,61 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment'
+import {
+  TEXT_ACTIVETIME_END,
+  TEXT_ACTIVETIME_START,
+  TEXT_ALERT_REGISTER_FAILT,
+  TEXT_ALERT_REGISTER_SUCCESS,
+  TEXT_ERROR_ACTIVE_NOTFORMAT,
+  TEXT_ERROR_ADDRESS_NOTEMPTY,
+  TEXT_ERROR_ADDRESS_NOTMAXLENGTH,
+  TEXT_ERROR_BUSINESSNAME_NOTEMPTY,
+  TEXT_ERROR_BUSINESSNAME_NOTMAXLENGTH,
+  TEXT_ERROR_BUSINESSNAME_NOTSPECIALCHARACTER,
+  TEXT_ERROR_CHECKSAMEEMAIL,
+  TEXT_ERROR_CONFIMPASSWORD,
+  TEXT_ERROR_CONFIMPASS_MATCHPASS,
+  TEXT_ERROR_EMAIL_NOTFORMAT,
+  TEXT_ERROR_EMAIL_NOTIMPTY,
+  TEXT_ERROR_EMAIL_NOTLENGTH,
+  TEXT_ERROR_PASSWORD_NOTFORMAT,
+  TEXT_ERROR_PASSWORD_NOTIMPTY,
+  TEXT_ERROR_PASSWORD_NOTLENGTH,
+  TEXT_ERROR_PHONE_NOTEMPTY,
+  TEXT_ERROR_PHONE_NOTFORMAT,
+  TEXT_ERROR_REPRESENTER_NOTEMPTY,
+  TEXT_ERROR_REPRESENTNAME_NOTMAXLENGTH,
+  TEXT_ERROR_REPRESENTNAME_NOTSPECIALCHARACTER,
+  TEXT_ERROR_TAXCODE_NOTEMPTY,
+  TEXT_ERROR_TAXCODE_NOTFORMAT,
+  TEXT_ERROR_TAXCODE_NOTMAXLENGTH,
+  TEXT_IMAGE_PICKER,
+  TEXT_LOGIN,
+  TEXT_PLACEHODER_BUSINESSNAME,
+  TEXT_PLACEHOLDER_ADDRESS,
+  TEXT_PLACEHOLDER_CONFIMPASS,
+  TEXT_PLACEHOLDER_EMAIL,
+  TEXT_PLACEHOLDER_PASSWORD,
+  TEXT_PLACEHOLDER_PHONE,
+  TEXT_PLACEHOLDER_REPRESENTER,
+  TEXT_PLACEHOLDER_TAXCODE,
+  TEXT_REGISTER,
+  TEXT_REQUEST_LOGIN,
+  TEXT_TITLE_ADDRESS,
+  TEXT_TITLE_BUSINESSNAME,
+  TEXT_TITLE_CONFIMPASS,
+  TEXT_TITLE_EMAIL_REGISTER,
+  TEXT_TITLE_NITIFICATION,
+  TEXT_TITLE_PASSWORD,
+  TEXT_TITLE_PHONE,
+  TEXT_TITLE_REGISTER_BUSINESS,
+  TEXT_TITLE_REPRESENTER,
+  TEXT_TITLE_TAXCODE,
+  TEXT_TO_ACTIVETIME
+} from '../constants/StringVietnamese'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -88,47 +140,47 @@ export default function BusinessRegistrationScreen() {
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
     name: {
-      textError: 'Tên không được để trống',
+      textError: TEXT_ERROR_BUSINESSNAME_NOTEMPTY,
       isVisible: false,
       isError: true
     },
     representor: {
-      textError: 'Tên người đại diện không được để trống',
+      textError: TEXT_ERROR_REPRESENTER_NOTEMPTY,
       isVisible: false,
       isError: true
     },
     email: {
-      textError: 'Email không được để trống',
+      textError: TEXT_ERROR_EMAIL_NOTIMPTY,
       isVisible: false,
       isError: true
     },
     taxCode: {
-      textError: 'Mã số thuế không được để trống',
+      textError: TEXT_ERROR_TAXCODE_NOTEMPTY,
       isVisible: false,
       isError: true
     },
     address: {
-      textError: 'Địa chỉ không được để trống',
+      textError: TEXT_ERROR_ADDRESS_NOTEMPTY,
       isVisible: false,
       isError: true
     },
     phone: {
-      textError: 'Số điện thoại không được để trống',
+      textError: TEXT_ERROR_PHONE_NOTEMPTY,
       isVisible: false,
       isError: true
     },
     activeTime: {
-      textError: 'Thời gian hoạt động sai định dạng',
+      textError: TEXT_ERROR_ACTIVE_NOTFORMAT,
       isVisible: false,
       isError: true
     },
     password: {
-      textError: 'Mật khẩu không được để trống',
+      textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: 'Nhập lại mật khẩu không được để trống',
+      textError: TEXT_ERROR_CONFIMPASSWORD,
       isVisible: false,
       isError: true
     }
@@ -146,7 +198,8 @@ export default function BusinessRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            isVisible: true
+            isVisible: true,
+            textError: TEXT_ERROR_BUSINESSNAME_NOTEMPTY
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -156,7 +209,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên công ty không chứa ký tự đặt biệt'
+            textError: TEXT_ERROR_BUSINESSNAME_NOTSPECIALCHARACTER
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -166,7 +219,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên công ty không vượt quá 255 ký tự'
+            textError: TEXT_ERROR_BUSINESSNAME_NOTMAXLENGTH
           }
         })
       } else {
@@ -192,7 +245,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.representor,
             isError: true,
             isVisible: true,
-            textError: 'Tên người đại diện không được để trống'
+            textError: TEXT_ERROR_REPRESENTER_NOTEMPTY
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -201,7 +254,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: 'Tên người đại diện không được chứa ký tự đặc biệt',
+            textError: TEXT_ERROR_REPRESENTNAME_NOTSPECIALCHARACTER,
             isVisible: true
           }
         })
@@ -211,7 +264,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: 'Tên người đại diện không vượt quá 255 ký tự',
+            textError: TEXT_ERROR_REPRESENTNAME_NOTMAXLENGTH,
             isVisible: true
           }
         })
@@ -238,7 +291,7 @@ export default function BusinessRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: 'Email đã được sử dụng',
+              textError: TEXT_ERROR_CHECKSAMEEMAIL,
               isVisible: true
             }
           })
@@ -259,7 +312,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email không được để trống',
+            textError: TEXT_ERROR_EMAIL_NOTIMPTY,
             isVisible: true
           }
         })
@@ -269,7 +322,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email không vượt quá 255 ký tự',
+            textError: TEXT_ERROR_EMAIL_NOTLENGTH,
             isVisible: true
           }
         })
@@ -279,7 +332,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email sai định dạng',
+            textError: TEXT_ERROR_EMAIL_NOTFORMAT,
             isVisible: true
           }
         })
@@ -305,7 +358,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu không được để trống',
+            textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
             isVisible: true
           }
         })
@@ -315,7 +368,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu không vượt quá 8 ký tự',
+            textError: TEXT_ERROR_PASSWORD_NOTLENGTH,
             isVisible: true
           }
         })
@@ -325,7 +378,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu sai định dạng',
+            textError: TEXT_ERROR_PASSWORD_NOTFORMAT,
             isVisible: true
           }
         })
@@ -351,7 +404,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu không được để trống',
+            textError: TEXT_ERROR_CONFIMPASSWORD,
             isVisible: true
           }
         })
@@ -361,7 +414,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu phải trùng với mật khẩu',
+            textError: TEXT_ERROR_CONFIMPASS_MATCHPASS,
             isVisible: true
           }
         })
@@ -387,7 +440,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế không được để trống',
+            textError: TEXT_ERROR_TAXCODE_NOTEMPTY,
             isVisible: true
           }
         })
@@ -397,7 +450,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế không vượt quá 255 ký tự',
+            textError: TEXT_ERROR_TAXCODE_NOTMAXLENGTH,
             isVisible: true
           }
         })
@@ -407,7 +460,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế sai định dạng',
+            textError: TEXT_ERROR_TAXCODE_NOTFORMAT,
             isVisible: true
           }
         })
@@ -433,7 +486,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: 'Địa chỉ không được để trống',
+            textError: TEXT_ERROR_ADDRESS_NOTEMPTY,
             isVisible: true
           }
         })
@@ -443,7 +496,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: 'Địa chỉ không vượt quá 255 ký tự',
+            textError: TEXT_ERROR_ADDRESS_NOTMAXLENGTH,
             isVisible: true
           }
         })
@@ -469,7 +522,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: 'Số điện thoại không được để trống',
+            textError: TEXT_ERROR_PHONE_NOTEMPTY,
             isVisible: true
           }
         })
@@ -479,7 +532,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: 'Số điện thoại sai định dạng',
+            textError: TEXT_ERROR_PHONE_NOTFORMAT,
             isVisible: true
           }
         })
@@ -496,7 +549,7 @@ export default function BusinessRegistrationScreen() {
     },
     [validate]
   )
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
@@ -523,12 +576,12 @@ export default function BusinessRegistrationScreen() {
         activeTime: {
           ...validate.activeTime,
           isError: true,
-          textError: 'Thời gian hoạt động sai định dạng',
+          textError: TEXT_ERROR_ACTIVE_NOTFORMAT,
           isVisible: true
         }
       })
     } else {
-      setBusiness({ ...business, activeTime: timeStart + '-' + timeEnd})
+      setBusiness({ ...business, activeTime: timeStart + '-' + timeEnd })
       setValidate({
         ...validate,
         activeTime: {
@@ -539,7 +592,7 @@ export default function BusinessRegistrationScreen() {
       })
     }
   }, [timeStart, timeEnd])
- 
+
   useEffect(() => {
     setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
@@ -552,11 +605,11 @@ export default function BusinessRegistrationScreen() {
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert('Thông báo', 'Đăng ký thành công')
+          Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
-          Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
+          Alert.alert(TEXT_ALERT_REGISTER_FAILT, TEXT_ERROR_CHECKSAMEEMAIL)
           setIsLoading(false)
         })
     } else {
@@ -572,21 +625,21 @@ export default function BusinessRegistrationScreen() {
   }, [validate])
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#fff'}}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
             <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>Đăng ký doanh nghiệp</Text>
+            <Text style={styles.txtHeader}>{TEXT_TITLE_REGISTER_BUSINESS}</Text>
           </View>
         </View>
         <View>
           <TextInputWithTitle
             value={business.name}
-            title='Tên doanh nghiệp'
-            placeholder='Nhập tên doanh nghiệp...'
+            title={TEXT_TITLE_BUSINESSNAME}
+            placeholder={TEXT_PLACEHODER_BUSINESSNAME}
             onChangeText={(value) => handleNameChange(value)}
             textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
@@ -599,8 +652,8 @@ export default function BusinessRegistrationScreen() {
 
           <TextInputWithTitle
             value={business.email}
-            title='Email'
-            placeholder='Nhập email...'
+            title={TEXT_TITLE_EMAIL_REGISTER}
+            placeholder={TEXT_PLACEHOLDER_EMAIL}
             onChangeText={(value) => handleEmailChange(value)}
             onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
@@ -615,8 +668,8 @@ export default function BusinessRegistrationScreen() {
 
           <TextInputWithTitle
             value={business.representor}
-            title='Họ tên người đại diện'
-            placeholder='Nhập họ tên người đại diện...'
+            title={TEXT_TITLE_REPRESENTER}
+            placeholder={TEXT_PLACEHOLDER_REPRESENTER}
             onChangeText={(value) => handleRepresentoreChange(value)}
             textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
           />
@@ -630,8 +683,8 @@ export default function BusinessRegistrationScreen() {
 
           <TextInputWithTitle
             value={business.taxCode}
-            title='Mã số thuế'
-            placeholder='Nhập mã số thuế...'
+            title={TEXT_TITLE_TAXCODE}
+            placeholder={TEXT_PLACEHOLDER_TAXCODE}
             onChangeText={(value) => handleTaxCodeChange(value)}
             textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
           />
@@ -645,8 +698,8 @@ export default function BusinessRegistrationScreen() {
 
           <TextInputWithTitle
             value={business.address}
-            title='Địa chỉ'
-            placeholder='Nhập địa chỉ...'
+            title={TEXT_TITLE_ADDRESS}
+            placeholder={TEXT_PLACEHOLDER_ADDRESS}
             onChangeText={(value) => handleAddressChange(value)}
             textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
           />
@@ -659,8 +712,8 @@ export default function BusinessRegistrationScreen() {
 
           <TextInputWithTitle
             value={business.phone}
-            title='Điện thoại'
-            placeholder='Nhập số điện thoại...'
+            title={TEXT_TITLE_PHONE}
+            placeholder={TEXT_PLACEHOLDER_PHONE}
             onChangeText={(value) => handlePhoneChange(value)}
             textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
           />
@@ -679,10 +732,10 @@ export default function BusinessRegistrationScreen() {
                 setShowDatePickerStart(true)
               }}
               textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title='Thời gian bắt đầu'
+              title={TEXT_ACTIVETIME_START}
               placeholder={moment().format('HH:mm')}
             />
-            <Text style={styles.txt}>đến</Text>
+            <Text style={styles.txt}>{TEXT_TO_ACTIVETIME}</Text>
             <DatePicker
               modal
               mode='time'
@@ -707,7 +760,7 @@ export default function BusinessRegistrationScreen() {
                 setShowDatePickerEnd(true)
               }}
               textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title='Thời gian kết thúc'
+              title={TEXT_ACTIVETIME_END}
               placeholder={moment().format('HH:mm')}
             />
 
@@ -737,10 +790,10 @@ export default function BusinessRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Mật khẩu đăng ký</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_PASSWORD}</Text>
             <TextInput
               value={business.password}
-              placeholder='Nhập mật khẩu đăng ký...'
+              placeholder={TEXT_PLACEHOLDER_PASSWORD}
               style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -758,10 +811,10 @@ export default function BusinessRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Nhập lại mật khẩu</Text>
+            <Text style={styles.txt}>{TEXT_TITLE_CONFIMPASS}</Text>
             <TextInput
               value={business.confimPassword}
-              placeholder='Nhập lại mật khẩu...'
+              placeholder={TEXT_PLACEHOLDER_CONFIMPASS}
               style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -781,7 +834,7 @@ export default function BusinessRegistrationScreen() {
 
           <View style={styles.group}>
             <View style={styles.logo}>
-              <Text style={styles.txt}>Ảnh đại diện</Text>
+              <Text style={styles.txt}>{TEXT_IMAGE_PICKER}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
@@ -798,18 +851,18 @@ export default function BusinessRegistrationScreen() {
         </View>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>Đăng ký tài khoản</Text>
+          <Text style={styles.txtRegister}>{TEXT_REGISTER}</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
 
         <View style={styles.login}>
-          <Text>Đã có tài khoản? </Text>
+          <Text>{TEXT_REQUEST_LOGIN}{' '}</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>Đăng nhập</Text>
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{TEXT_LOGIN}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

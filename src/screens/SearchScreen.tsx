@@ -4,7 +4,7 @@ import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useEffect, useState, useCallback } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { useAppSelector } from '../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import Icon1 from 'react-native-vector-icons/Entypo'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
@@ -16,12 +16,20 @@ import PostNormalItem from '../components/items/PostNormalItem'
 import { LABEL_POST_BUSINESS, LABEL_POST_FACULTY, LABEL_POST_NORMAL, LABEL_POST_RECRUITMENT, LABEL_POST_STUDENT, LABEL_POST_SURVEY, TEXT_SEARCH, TEXT_SUBJECT_POST, TEXT_SUBJECT_USER, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_NORMAL, TYPE_POST_RECRUITMENT, TYPE_POST_STUDENT, TYPE_POST_SURVEY } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
+import { setDefaultLanguage } from '../redux/Slice'
+import { useTranslation } from 'react-multi-lang'
+
 
 let stompClient: Client
+
 
 const { height, width } = Dimensions.get('screen')
 // man hinh tim kiem
 export default function SearchScreen() {
+
+
+
+
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   //Danh sach tim kiem
   const [masterData, setMasterData] = useState([])
@@ -31,27 +39,28 @@ export default function SearchScreen() {
   const [type, setType] = useState(TYPE_POST_STUDENT)
   const [qty, setQty] = useState(0)
   let URL = `${SERVER_ADDRESS}api/find/post`
+  const t = useTranslation()
   //Xu ly dropdown
   const [value, setValue] = useState(null)
-  const [label, setLabel] = useState(TEXT_SUBJECT_USER)
-  const [label2, setLabel2] = useState(`- - ${LABEL_POST_STUDENT} - -`)
+  const [label, setLabel] = useState(t('SearchComponent.user'))
+  const [label2, setLabel2] = useState(`- - ${t('SearchComponent.student')} - -`)
   const [items, setItems] = useState([
     {
-      label: TEXT_SUBJECT_USER,
+      label: t('SearchComponent.user'),
       value: 'user',
       children: [
-        { label: `- - ${LABEL_POST_STUDENT} - -`, value: TYPE_POST_STUDENT },
-        { label: `- - ${LABEL_POST_BUSINESS} - -`, value: TYPE_POST_BUSINESS },
-        { label: `- - ${LABEL_POST_FACULTY} - -`, value: TYPE_POST_FACULTY }
+        { label: `- - ${t('SearchComponent.student')} - -`, value: TYPE_POST_STUDENT },
+        { label: `- - ${t('SearchComponent.business')} - -`, value: TYPE_POST_BUSINESS },
+        { label: `- - ${t('SearchComponent.faculty')} - -`, value: TYPE_POST_FACULTY }
       ]
     },
     {
-      label: TEXT_SUBJECT_POST,
+      label: t('SearchComponent.post'),
       value: 'post',
       children: [
-        { label: `- - ${LABEL_POST_NORMAL} - -`, value: TYPE_POST_NORMAL },
-        { label: `- - ${LABEL_POST_SURVEY} - -`, value: TYPE_POST_SURVEY },
-        { label: `- - ${LABEL_POST_RECRUITMENT} - -`, value: TYPE_POST_RECRUITMENT }
+        { label: `- - ${t('SearchComponent.normal')} - -`, value: TYPE_POST_NORMAL },
+        { label: `- - ${t('SearchComponent.survey')} - -`, value: TYPE_POST_SURVEY },
+        { label: `- - ${t('SearchComponent.recruitment')} - -`, value: TYPE_POST_RECRUITMENT }
       ]
     }
   ])
@@ -65,7 +74,6 @@ export default function SearchScreen() {
       console.log(payload.body)
       setMasterData(JSON.parse(payload.body))
       setQty(masterData.length)
-      setSearch('')
     }
     const onError = (err: string | Frame) => {
       console.log(err)
@@ -92,19 +100,9 @@ export default function SearchScreen() {
         })
         .then((response) => {
           setMasterData(response.data.data)
-          console.log(masterData);
-
           setQty(masterData.length)
-          setSearch('')
         })
     }
-  }
-
-  //Render Posts Item
-  const postItems = (item: any, index: any) => {
-    return (
-      <view></view>
-    )
   }
 
   //Follow
@@ -124,7 +122,7 @@ export default function SearchScreen() {
   const likeAction = (obj: LikeAction) => {
   }
 
-  const handleUnSave = () => {}
+  const handleUnSave = () => { }
 
   const checkType = () => {
     switch (subjects) {
@@ -175,7 +173,7 @@ export default function SearchScreen() {
       <View style={styles.operation}>
         <TextInput
           style={styles.search}
-          placeholder={TEXT_SEARCH}
+          placeholder={t('SearchComponent.search')}
           placeholderTextColor='#000000'
           value={search}
           onChangeText={(txt) => setSearch(txt)}
@@ -185,22 +183,24 @@ export default function SearchScreen() {
             <Dropdown
               style={styles.dropDown}
               data={items}
-              value={value}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
               placeholder={label}
-              labelField='label'
-              valueField='value'
-              onChange={(item) => {
+              value={value}
+              onChange={item => {
                 setMasterData([])
                 setQty(0)
                 setLabel(item.label)
                 setSubjects(item.value)
-                setType(item.label === TEXT_SUBJECT_POST ? items[1].children[0].value : items[0].children[0].value)
-                setLabel2(item.label === TEXT_SUBJECT_POST ? items[1].children[0].label : items[0].children[0].label)
+                setType(item.label === t('SearchComponent.post') ? items[1].children[0].value : items[0].children[0].value)
+                setLabel2(item.label === t('SearchComponent.post') ? items[1].children[0].label : items[0].children[0].label)
               }}
+             
             />
             <Dropdown
               style={[styles.dropDown2]}
-              data={label === TEXT_SUBJECT_POST ? items[1].children : items[0].children}
+              data={label === t('SearchComponent.post') ? items[1].children : items[0].children}
               value={value}
               placeholder={label2}
               labelField='label'
@@ -227,6 +227,7 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
+  // 
   menuText: {
     fontSize: 15
   },
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
     paddingLeft: 10,
-    width: 130,
+    // width: 130,
     marginLeft: -15,
     paddingTop: 10,
     paddingBottom: 10
@@ -268,21 +269,26 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   dropDown: {
-    backgroundColor: '#0065ff',
+    backgroundColor: '#ffffff',
     borderRadius: 5,
     color: 'white',
     height: 35,
     justifyContent: 'center',
-    paddingLeft: 10
+    paddingLeft: 35,
+    borderWidth: 1,
+    borderColor: '#070375'
   },
   dropDown2: {
-    backgroundColor: '#0065ff',
+    backgroundColor: '#ffffff',
     borderRadius: 5,
     color: 'white',
     height: 35,
     justifyContent: 'center',
-    paddingLeft: 10,
-    marginTop: 3
+    textAlign: 'center',
+    paddingLeft: 20,
+    marginTop: 3,
+    borderWidth: 1,
+    borderColor: '#070375'
   },
   drop: {
     flex: 5,

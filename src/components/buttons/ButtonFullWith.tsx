@@ -7,7 +7,7 @@ interface ButtonFullWithProps {
   title?: string
   onPress?: () => void
   contentStyle?: StyleProp<ViewStyle>
-  iconName: string
+  iconName?: string
   btnStyle?: StyleProp<ViewStyle>
   textColor?: string
   disable?: boolean

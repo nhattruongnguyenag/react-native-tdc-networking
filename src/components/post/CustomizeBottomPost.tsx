@@ -3,16 +3,16 @@ import React from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../../constants/Color'
-import { TEXT_LIKE_BY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Like } from '../../types/Like'
 import { COMMENT_ACTION, LIKE_ACTION, SHOW_LIST_USER_REACTED } from '../../constants/Variables'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 interface BottomPostType {
   handleClickBottomBtnEvent: (a: number | null) => void
   isLike: boolean
   likes: Like[]
-  commentQty: number
+  commentQty: number,
+  textLikeBy: string,
 }
 
 const BOTTOM_ICON_SIZE = 30
@@ -54,7 +54,7 @@ const CustomizeBottomPost = (props: BottomPostType) => {
         </View>
       </View>
       <View style={[styles.wrapBottomRight, styles.row]}>
-        {numberUserReacted > 0 && <Text style={styles.bottomWrapRightText}>{TEXT_LIKE_BY}</Text>}
+        {numberUserReacted > 0 && <Text style={styles.bottomWrapRightText}>{props.textLikeBy}</Text>}
         {numberUserReacted > 3 ? (
           <TouchableOpacity
             onPress={() => props.handleClickBottomBtnEvent(SHOW_LIST_USER_REACTED)}

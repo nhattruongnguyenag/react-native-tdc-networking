@@ -1,0 +1,373 @@
+{
+    "DrawerContentComponent": {
+        "userGroup": "あなたのグループ",
+        "userJobApplyProfile": "求人応募プロフィール",
+        "waitingPost": "保留中の投稿",
+        "option": "オプション",
+        "logout": "ログアウト"
+    },
+    "NotificationsComponent": {
+        "notification": "通知",
+        "readAll": "すべて既読としてマークする",
+        "deleteNotification": "通知の削除",
+        "unReadNotification": "未読としてマーク",
+        "search": "検索通知 ..."
+    },
+    "FollowComponent": {
+        "following": "フォロー中",
+        "follower": "あなたをフォロー",
+        "search": "ユーザーを検索..."
+    },
+    "SavedPostListComponent": {
+        "search": "検索内容を入力してください..."
+    },
+    "SearchComponent": {
+        "user": "ユーザー",
+        "student": "学生",
+        "business": "ビジネス",
+        "faculty": "学部",
+        "post": "投稿",
+        "normal": "投稿",
+        "survey": "調査",
+        "recruitment": "採用情報",
+        "search": "検索コンテンツを入力してください..."
+    },
+    "ToolbarTitle": {
+        "recruitmentDetailScreen": "採用の詳細",
+        "topTabNavigator": "TDCソーシャルネットワーク",
+        "drawerTabNavigator": "TDCソーシャルネットワーク",
+        "forgottenPasswordScreen": "パスワードを忘れた",
+        "acceptForgottenPasswordScreen": "メールの確認",
+        "searchScreen": "検索",
+        "conversationScreen": "会話",
+        "messengerScreen": "メッセンジャー",
+        "addQuestionScreen": "質問を追加",
+        "reviewSurveyPostScreen": "投稿を確認",
+        "surveyConductScreen": "調査を実施",
+        "jobApplyScreen": "求人応募",
+        "listPostSavedScreen": "保存された投稿",
+        "createNormalPostScreen": "",
+        "listJobApplyScreen": "求人応募リスト",
+        "listFollowScreen": "フォローリスト",
+        "profileScreen": "ユーザープロフィール",
+        "detailJobApply": "求人応募の詳細",
+        "optionScreen": "オプション",
+        "splashScreen": "",
+        "surveyResultScreen": "調査結果",
+        "applicationOptionScreen": "アプリケーションオプション",
+        "approvalPostScreen": "投稿の承認",
+        "createSurveyScreen": "調査を作成",
+        "createRecruitmentScreen": "求人の作成",
+        "createUpdateProfile": "個人情報を更新"
+    },
+    "AddQuestionScreen": {
+        "textButtonGoBack": "戻る",
+        "textButtonGoNext": "次へ",
+        "textEmptyQuestionErrorTitle": "エラー",
+        "textEmptyQuestionErrorContent": "調査には少なくとも1つの質問を追加してください"
+    },
+    "ConversationScreen": {
+        "allConversationTabTitle": "すべての会話",
+        "allActiveConversationTabTitle": "アクティブ"
+    },
+    "RecruitmentScreen": {
+        "recruitmentBenefitEmptyValidate": "給与を入力してください",
+        "recruitmentBenefitPlaceholder": "給与...",
+        "recruitmentBenefitTitle": "給与",
+        "recruitmentDescEmptyValidate": "説明を入力してください",
+        "recruitmentEmploymentTypeEmptyValidate": "雇用形態を入力してください",
+        "recruitmentExpirationValidate": "締め切り日は過去の日付を選択できません",
+        "recruitmentLocationEmptyValidate": "勤務地を入力してください",
+        "recruitmentRequirementEmptyValidate": "要件を入力してください",
+        "recruitmentSalaryEmptyValidate": "給与を入力してください",
+        "recruitmentSaveDescPlaceholder": "仕事の説明...",
+        "recruitmentSaveDescTitle": "仕事の説明",
+        "recruitmentSaveEmploymentTypePlaceholder": "雇用形態...",
+        "recruitmentSaveExpirationPickerLocale": "ja",
+        "recruitmentSaveExpirationTitle": "応募期限",
+        "recruitmentSaveLocationPlaceholder": "勤務地...",
+        "recruitmentSaveLocationTitle": "勤務地",
+        "recruitmentSaveRequirementPlaceholder": "要件...",
+        "recruitmentSaveRequirementTitle": "仕事の要件",
+        "recruitmentSaveSallaryPlaceholder": "給与...",
+        "recruitmentSaveSallaryTitle": "給与",
+        "recruitmentSaveSaveEmploymentTypeTitle": "雇用形態",
+        "recruitmentSaveSuccessContent": "求人が作成されました",
+        "recruitmentSaveSuccessTitle": "成功！",
+        "recruitmentSaveTitlePlaceholder": "タイトルを入力...",
+        "recruitmentSaveTitleTitle": "タイトル",
+        "recruitmentTitleEmptyValidate": "タイトルを入力してください",
+        "recruitmentSaveCompleteButton": "完了"
+    },
+    "CreateSurveyPostScreen": {
+        "surveySaveButtonGoNext": "次へ",
+        "surveySaveDescEmptyValidate": "説明を入力してください",
+        "surveySaveDescOver255CharactersValidate": "説明は255文字を超えてはいけません",
+        "surveySaveDescPlaceholder": "説明を入力",
+        "surveySaveDescTitle": "説明",
+        "surveySaveTitleEmptyValidate": "タイトルを入力してください",
+        "surveySaveTitleOver255CharactersValidate": "タイトルは255文字を超えてはいけません",
+        "surveySaveTitlePlaceholder": "タイトルを入力",
+        "surveySaveTitleTitle": "タイトル"
+    },
+    "JobApplyScreen": {
+        "jobApplyScreenButtonAddCvTitle": "CVを追加",
+        "jobApplyScreenButtonComplete": "完了",
+        "jobApplyScreenButtonGoBack": "戻る",
+        "jobApplyScreenButtonUpdateCvTitle": "CVを更新",
+        "jobApplyScreenEmptyCvTextContent": "応募を完了するにはCVを追加してください",
+        "jobApplyScreenEmptyCvTextTitle": "通知",
+        "jobApplyScreenSaveSuccessTextContent": "応募が成功裏に送信されました",
+        "jobApplyScreenSaveSuccessTextTitle": "通知"
+    },
+    "MessageScreen": {
+        "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
+    },
+    "MessengerToolbar": {
+        "userStatusActive": "アクティブ",
+        "userStatusInactive": "最後に見た日時"
+    },
+    "ReviewSurveyPostScreen": {
+        "reviewSurveyScreenAnswerTitle": "質問",
+        "reviewSurveyScreenButtonComplete": "完了",
+        "reviewSurveyScreenButtonGoBack": "戻る",
+        "reviewSurveyScreenSaveFailContent": "保存に失敗しました",
+        "reviewSurveyScreenSaveFailTitle": "エラー",
+        "reviewSurveyScreenSaveSuccessContent": "保存に成功しました",
+        "reviewSurveyScreenSaveSuccessTitle": "成功"
+    },
+    "SurveyConductScreen": {
+        "surveyConductScreenSaveSuccessTitle": "成功！",
+        "surveyConductScreenSaveSuccessContent": "回答が保存されました。\n調査に参加していただきありがとうございます。",
+        "surveyConductScreenShortAnswerError": "回答を入力してください",
+        "surveyConductScreenMultiQuestionMulitiChoice": "少なくとも1つの回答を選択してください",
+        "surveyConductScreenMultiQuestionOneChoice": "1つの回答を選択してください",
+        "surveyConductScreenLoaderTitle": "データを読み込んでいます...",
+        "surveyConductScreenButtonGoBack": "戻る",
+        "surveyConductScreenButtonComplete": "完了"
+    },
+    "SurveyResultScreen": {
+        "surveyResultScreenEmptyVote": "まだ投票はありません",
+        "surveyResultScreenEmptyShortAnswer": "回答はありません",
+        "surveyResultScreenNumberOfShortAnswer": "回答"
+    },
+    "ConversationItem": {
+        "conversationItemComponentImageMessageAnnotation": "画像"
+    },
+    "MessageBottomBar": {
+        "messageBottomBarComponentInputTextPlaceholder": "@ メッセージ"
+    },
+    "MessageSentItem": {
+        "messageItemStatusReceived": "受信済み",
+        "messageItemStatusSeen": "既読"
+    },
+    "AddQuestionView": {
+        "addQuestionViewStartAddQuestion": "追加",
+        "addQuestionViewComponentButtonComplete": "完了",
+        "addQuestionViewComponentShortAnswer": "短い回答",
+        "addQuestionViewComponentChoiceInputPlaceholder": "選択肢",
+        "addQuestionViewComponentMultiChoiceQuestion": "複数選択",
+        "addQuestionViewComponentOneChoiceQuestion": "単一選択",
+        "addQuestionViewComponentQuestionEmptyErrorContent": "質問のタイプを選択してください",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "エラー",
+        "addQuestionViewComponentQuestionTypeDropdownSearch": "検索...",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- 質問のタイプを選択 ---",
+        "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "タイトルに特殊文字を含めることはできません",
+        "addQuestionViewComponentTitleEmptyValidate": "タイトルは空にできません",
+        "addQuestionViewComponentTitleInputPlaceholder": "質問のタイトルを入力してください...",
+        "addQuestionViewComponentTitleOver255CharacterValidate": "タイトルは255文字を超えてはいけません"
+    },
+    "MultiChoiceQuestion": {
+        "questionComponentAddTextTitle": "質問"
+    },
+    "QuestonBottomBarOptions": {
+        "questionBottomBarQuestionRequireToggle": "必須"
+    },
+    "ShortAnswerQuestion": {
+        "shortAnswerQuestionComponentTitlePlaceholder": "回答を入力してください..."
+    },
+    "BarItemComponentNumberVote": {
+        "barItemComponentNumberOfVote": " 投票"
+    },
+    "Post": {
+        "normalPostIdentifyAuthorCompany": "ビジネス",
+        "normalPostIdentifyAuthorFaculty": "学科",
+        "normalPostIdentifyAuthorStudent": "",
+        "typePostRecruitment": "採用",
+        "typePostSurvey": "調査",
+        "normalPostLikeBy" : "好き"
+     },
+     "Comment": {
+         "commentReplyComment": "返信",
+         "commentDeleteComment": "削除",
+         "commentAuthor": "著者",
+         "modalListCommentTitle": "コメント"
+     },
+     "CommentContainer": {
+        "commentContainerComponentSeeMore": "もっと見る",
+        "commentContainerComponentHidden": "隠す"
+     },     
+     "CreateCommentToolbar":{
+        "commentCreateComment": "コメント投稿",
+        "commentPlaceholderInput": "コメントを入力してください"
+     },
+     "RecruitmentPost": {
+        "recruitmentPostType": "採用",
+        "recruitmentPostButtonSeeDetail": "詳細を見る",
+        "recruitmentPostCurrency":"vnd/月"
+    },    
+     "SurveyPost": {
+        "surveyPostType": "アンケート",
+        "surveyPostButton": "アンケートを実施する",
+        "surveyPostButtonSetting": "アンケートを編集する"
+    },
+    "Faculty":{
+        "facultyOfElectricalEngineering": "電気工学学部",
+        "facultyOfInformationTechnology": "情報技術学部",
+        "facultyOfAutomationTechnology": "自動化技術学部",
+        "facultyOfMechanicalEngineeringAndManufacturing": "機械工学及び製造学部",
+        "automobileEngineeringDepartment": "自動車工学部",
+        "facultyOfFinanceAndAccounting": "財務会計学部",
+        "facultyOfBusinessAdministration": "経営管理学部",
+        "facultyOfTourism": "観光学部",
+        "departmentOfEnglish": "英語学科",
+        "departmentOfKoreanLanguage": "韓国語学科",
+        "japaneseLanguageDepartment": "日本語学科"
+    },
+    "ModalUserLiked": {
+        "modalUserLikedTitle": "いいねしたユーザーのリスト"
+    },
+    "MenuOption": {
+      "menuOptionSaveArticle": "記事を保存",
+      "menuOptionUnSaveArticle": "記事の保存を解除",
+      "menuOptionDeleteArticle": "記事を削除",
+      "menuOptionViewResumeList": "履歴書リストを表示",
+      "menuOptionViewSurveyResults": "調査結果を表示"
+    },
+    "CreatePostToolbar": {
+        "createPostToolbarTitle": "新しい投稿を作成する",
+        "createPostToolbarNormalPost": "テキスト/画像",
+        "createPostToolbarSurveyPost": "アンケート付きの新しい投稿",
+        "createPostToolbarRecruitmentPost": "求人投稿"
+    },
+    "ModalCreateNormalPost": {
+      "modalCreateNormalPostTitle": "投稿を作成する",
+      "modalCreateNormalPostPlaceholder": "投稿内容を入力してください",
+      "modalCreateNormalPostEntryImages": "写真",
+      "modalCreateNormalPostButton": "投稿する"
+    },
+    "BusinessSelectFacultyToolbar": {
+      "businessSelectFacultyToolbarTitle": "表示したい学部を選択してください"
+    },
+    "NotifyFacultyDontHaveAnyPost": {
+        "textNotifyFacultyDontHaveAnyPost": "この学部にはまだ投稿がありません"
+      },
+      "Profile": {
+        "profileOperatingHours": "営業時間",
+        "profileTaxID": "税ID",
+        "profileRepresentative": "代表者",
+        "profileAddress": "住所",
+        "profilePhone": "電話",
+        "profileEmail": "メール",
+        "profileArticles": "記事",
+        "profilePosition": "役職",
+        "profileRole": "学生",
+        "chat": "メッセージを送る",
+        "call": "電話する",
+        "unFollow": "フォロー解除",
+        "follow": "フォローする",
+        "updateProfile": "プロフィールを更新",
+        "unUpdate":"まだ更新されていません"
+    },
+        "Group": {
+        "groupTdc": "TDC - Thu Duc College of Technologyによるグループ",
+        "groupConnectBusiness": "ビジネスコミュニティに接続するグループ",
+        "electricalElectronicsGroup": "電気 - 電子グループ",
+        "informationTechnologyGroup": "情報技術グループ",
+        "automationTechnologyGroup": "自動化技術グループ",
+        "mechanicalEngineeringAndManufacturingGroup": "機械工学および製造グループ",
+        "automotiveMechanicalGroup": "自動車機械グループ",
+        "financeAccountingGroup": "ファイナンス - 会計グループ",
+        "businessAdministrationGroup": "経営管理グループ",
+        "tourismGroup": "観光グループ",
+        "englishGroup": "英語グループ",
+        "koreanGroup": "韓国語グループ",
+        "japaneseLanguageDepartmentGroup": "日本語学科グループ"
+        },
+        "ModalUpdate":{
+            "modalUpdateTitle": "アカウント情報を更新する",
+            "modalUpdatePlaceholderPhoneNumber": "電話番号",
+            "modalUpdatePlaceholderEmail": "メール",
+            "modalUpdateBackground": "背景画像",
+            "modalUpdateAvatar": "プロフィール画像",
+            "modalUpdateButtonText": "更新する"
+        },
+        "Validate": {
+            "validatePhoneNull": "電話番号は空白にできません",
+            "validatePhoneUnCorrectFormat": "正しくない電話番号の形式です",
+            "validateEmailNull": "メールアドレスは空白にできません",
+            "validateEmailUnCorrectFormat": "正しくないメールアドレスの形式です",
+            "validateEmailHadUsed": "このメールアドレスはすでに登録されています。別のメールアドレスを入力してください",
+            "validateEmailHasMaxLength": "メールアドレスは255文字を超えることはできません",
+            "validateNameHasMaxLength": "名前は255文字を超えることはできません",
+            "validateNameHasSpecialCharacter": "名前には特殊文字を含めることはできません",
+            "validateAddressNull": "住所は空白にできません",
+            "validatePresentorNull": "代表者の名前は空白にできません",
+            "validateRepresentorSpecialCharacter": "名前に特殊文字を含めることはできません",
+            "validateRepresentorMaxLength": "名前は255文字を超えることはできません",
+            "validateTaxCodeNull": "税金コードは空白にできません",
+            "validateNameNull": "名前は空白にできません",
+            "validateNameSpecialCharacter": "名前に特殊文字を含めることはできません",
+            "validateNameMaxLength": "名前は255文字を超えることはできません",
+            "validateNameTimeActiveUnCorrect": "営業時間が正しくありません",
+            "validateTaxCodeFormat": "誤った税金コードの形式です",
+            "validateTaxCodeMaxLength": "税金コードは255文字を超えることはできません",
+            "validateAddressMaxLength": "住所は255文字を超えることはできません"            
+        },
+        "ModalListUserLiked": {
+            "modalListUserLikedTitle": "いいねリスト"
+         },
+         "ModalLoadingComment": {
+            "modalLoadingCommentTitle": "データを読み込んでいます"
+        },
+        "CreatePostSelector": {
+            "createPostSelectorPlaceHolder": "投稿内容を入力してください",
+            "createPostSelectorSurveyText": "調査",
+            "createPostSelectorRecruitmentText": "募集",
+            "createPostSelectorNormalText": "通常"
+        },
+        "SelectFaculty": {
+            "selectFacultyPlaceholder": "学科を選択...",
+            "selectFacultyTextSearch": "検索..."
+        },
+        "FacultyDashboard": {
+            "facultyDashboardNotifyNotHavePost": "まだ投稿がありません"
+        },
+        "StudentDashboard": {
+            "studentDashboardGroupTitle": "TDCによるグループ - Thu Duc College of Technology"
+        },
+        "OptionScreen": {
+            "optionScreenFollowText": "フォロー",
+            "optionScreenSaveText": "保存",
+            "optionScreenUpdateProfileText": "プロフィールを更新"
+        },
+            "BusinessUpdate": {
+                "businessUpdateCompanyName": "企業名",
+                "businessUpdateEmail": "Eメール",
+                "businessUpdateRepresentorFullName": "代表者氏名",
+                "businessUpdateCompanyTaxId": "税ID",
+                "businessUpdateCompanyAddress": "住所",
+                "businessUpdateCompanyPhoneNumber": "電話番号",
+                "businessUpdateCompanyTimeActiveStart": "活動開始時刻",
+                "businessUpdateCompanyTimeActiveEnd": "活動終了時刻",
+                "businessUpdateCompanyAvatar": "アバター画像",
+                "businessUpdateCompanyButton": "個人情報を更新",
+                "businessUpdateCompanyNamePlaceholder": "企業名を入力",
+                "businessUpdateEmailPlaceholder": "メールを入力",
+                "businessUpdateRepresentorFullNamePlaceholder": "代表者のフルネームを入力",
+                "businessUpdateCompanyTaxIdPlaceholder": "税IDを入力",
+                "businessUpdateCompanyAddressPlaceholder": "住所を入力",
+                "businessUpdateCompanyPhoneNumberPlaceholder": "電話番号を入力",
+                "businessUpdateTimeActive": "まで"
+            }
+}

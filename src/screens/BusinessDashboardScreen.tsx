@@ -21,16 +21,15 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness, groupStudent } from '../constants/Variables'
 import { useIsFocused } from '@react-navigation/native';
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { ToastMessenger } from '../utils/ToastMessenger'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
-
   const isFocused = useIsFocused();
-  const code = 'group_connect_business';
+  const code = groupBusiness;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [businessPost, setBusinessPost] = useState([]);
@@ -113,6 +112,8 @@ export default function BusinessDashboardScreen() {
       // Delete  post
     }
     const onMessageReceived = (payload: any) => {
+      console.log(payload.body)
+
       setBusinessPost(JSON.parse(payload.body))
       setIsCalled(true);
     }
@@ -152,13 +153,42 @@ export default function BusinessDashboardScreen() {
   }
 
   const renderItem = (item: any) => {
+    // return item.active === 1 ? (
+    //   <CustomizePost
+    //     id={item.id}
+    //     userId={item.user['id']}
+    //     name={item.user['name']}
+    //     avatar={item.user['image']}
+    //     typeAuthor={item.user['roleCodes']}
+    //     available={null}
+    //     timeCreatePost={item.createdAt}
+    //     content={item.content}
+    //     type={item.type}
+    //     likes={item.likes}
+    //     comments={item.comment}
+    //     commentQty={item.commentQuantity}
+    //     images={item.images}
+    //     role={item.user['roleCodes']}
+    //     likeAction={likeAction}
+    //     location={item.location ?? null}
+    //     title={item.title ?? null}
+    //     expiration={item.expiration ?? null}
+    //     salary={item.salary ?? null}
+    //     employmentType={item.employmentType ?? null}
+    //     description={item.description ?? null}
+    //     isSave={item.isSave}
+    //     group={code}
+    //     handleUnSave={handleSavePost}
+    //     handleDelete={handleDeletePost} />
+    // ) : (null)
+
     return (
       <CustomizePost
         id={item.id}
         userId={item.user['id']}
         name={item.user['name']}
         avatar={item.user['image']}
-        typeAuthor={'Doanh Nghiệp'}
+        typeAuthor={item.user['roleCodes']}
         available={null}
         timeCreatePost={item.createdAt}
         content={item.content}
@@ -178,29 +208,23 @@ export default function BusinessDashboardScreen() {
         isSave={item.isSave}
         group={code}
         handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost}
-      />
+        handleDelete={handleDeletePost} />
     )
+
   }
 
 
   const handleDeletePost = async (id: number) => {
-    console.log('====================================');
-    console.log('delte');
-    console.log('====================================');
-    // const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
-    // ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
+    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
   }
 
   const handleSavePost = async (id: number) => {
-    console.log('====================================');
-    console.log('save');
-    console.log('====================================');
-    // const data = {
-    //   "userId": userLogin?.id,
-    //   "postId": id
-    // }
-    // stompClient.send(`/app/posts/group/${code}/unsave`, {}, JSON.stringify(data))
+    const data = {
+      "userId": userLogin?.id,
+      "postId": id
+    }
+    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
   }
 
   return (

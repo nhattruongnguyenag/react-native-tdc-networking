@@ -15,16 +15,18 @@ import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupStudent } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { useIsFocused } from '@react-navigation/native';
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { ToastMessenger } from '../utils/ToastMessenger'
+import { useTranslation } from 'react-multi-lang'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
-  const isFocused = useIsFocused();
-  const code = 'group_tdc';
+  const t = useTranslation();
+  const isFocused = useIsFocused()
+  const code = groupStudent;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost, userLogin } = useAppSelector(
@@ -103,13 +105,42 @@ export default function StudentDiscussionDashboardScreen() {
   const handleUnSave = () => { }
 
   const renderItem = (item: any) => {
+    // return item.active === 1 ? (
+    //   <CustomizePost
+    //     id={item.id}
+    //     userId={item.user['id']}
+    //     name={item.user['name']}
+    //     avatar={item.user['image']}
+    //     typeAuthor={item.user['roleCodes']}
+    //     available={null}
+    //     timeCreatePost={item.createdAt}
+    //     content={item.content}
+    //     type={item.type}
+    //     likes={item.likes}
+    //     comments={item.comment}
+    //     commentQty={item.commentQuantity}
+    //     images={item.images}
+    //     role={item.user['roleCodes']}
+    //     likeAction={likeAction}
+    //     location={item.location ?? null}
+    //     title={item.title ?? null}
+    //     expiration={item.expiration ?? null}
+    //     salary={item.salary ?? null}
+    //     employmentType={item.employmentType ?? null}
+    //     description={item.description ?? null}
+    //     isSave={item.isSave}
+    //     group={code}
+    //     handleUnSave={handleSavePost}
+    //     handleDelete={handleDeletePost} />
+    // ) : (null)
+
     return (
       <CustomizePost
         id={item.id}
         userId={item.user['id']}
         name={item.user['name']}
         avatar={item.user['image']}
-        typeAuthor={null}
+        typeAuthor={item.user['roleCodes']}
         available={null}
         timeCreatePost={item.createdAt}
         content={item.content}
@@ -165,7 +196,7 @@ export default function StudentDiscussionDashboardScreen() {
 
         {/* Name group */}
         <View style={styles.lineBellowBanner}>
-          <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
+          <Text style={styles.nameOfStudentGroup}>{t("StudentDashboard.studentDashboardGroupTitle")}</Text>
         </View>
         {/* Create post */}
         {

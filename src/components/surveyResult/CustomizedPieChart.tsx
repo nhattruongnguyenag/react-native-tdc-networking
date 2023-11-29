@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { PieChart } from 'react-native-chart-kit'
-import { ChartData } from './OptionSurveyQuesionResult'
 import { FlatList } from 'react-native-gesture-handler'
-import BarNoteItem from './BarNoteItem'
 import CustomizedPieNoteItem from './CustomizedPieNoteItem'
+import { ChartData } from './OptionSurveyQuesionResult'
 
 const chartConfig = {
   backgroundGradientFrom: '#1E2923',

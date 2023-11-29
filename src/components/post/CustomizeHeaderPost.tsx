@@ -4,13 +4,15 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import { TYPE_POST_BUSINESS, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
 import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, CLICK_UN_SAVE_POST, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
+import { useTranslation } from 'react-multi-lang'
 
 interface HeaderPostPropsType {
+  t:ReturnType<typeof useTranslation>
   userId: number
   name: string
   avatar: string
@@ -39,39 +41,45 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
   const { userLogin, conversations } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   let post = props
   const menuOptions = useMemo<MenuOptionItem[]>(() => {
-    let options: MenuOptionItem[] = [
+    const options: MenuOptionItem[] = [
       {
         type: CLICK_SAVE_POST_EVENT,
-        name: 'Lưu bài viết',
+        name: props.t("MenuOption.menuOptionSaveArticle"),
         visible: props.isSave === 0
       },
       {
         type: CLICK_UN_SAVE_POST,
-        name: 'Hủy lưu bài viết',
+        name: props.t("MenuOption.menuOptionUnSaveArticle"),
         visible: props.isSave === 1
       }
-    ]
+    ];
 
-    options = [...options, {
-      type: CLICK_DELETE_POST_EVENT,
-      name: 'Xóa bài viết',
-      visible: userLogin?.id === props.userId
-    }]
+    if (userLogin?.id === props.userId) {
+      options.push({
+        type: CLICK_DELETE_POST_EVENT,
+        name: props.t("MenuOption.menuOptionDeleteArticle"),
+        visible: true
+      });
+    }
 
-    options = [...options, {
-      type: CLICK_SEE_LIST_CV_POST_EVENT,
-      name: 'Xem danh sách cv',
-      visible: userLogin?.id === props.userId && props.type === TYPE_RECRUITMENT_POST
-    }]
+    if (userLogin?.id === props.userId && props.type === TYPE_RECRUITMENT_POST) {
+      options.push({
+        type: CLICK_SEE_LIST_CV_POST_EVENT,
+        name: props.t("MenuOption.menuOptionViewResumeList"),
+        visible: true
+      });
+    }
 
-    options = [...options, {
-      type: CLICK_SEE_RESULT_POST_EVENT,
-      name: 'Xem kết quả khảo sát',
-      visible: userLogin?.id === props.userId && props.type === TYPE_SURVEY_POST
-    }]
+    if (userLogin?.id === props.userId && props.type === TYPE_SURVEY_POST) {
+      options.push({
+        type: CLICK_SEE_RESULT_POST_EVENT,
+        name: props.t("MenuOption.menuOptionViewSurveyResults"),
+        visible: true
+      });
+    }
 
-    return options
-  }, [props.isSave])
+    return options;
+  }, [props.isSave, props.userId, props.type]);
 
   return (
     <View style={[styles.wrapHeader]}>
@@ -110,7 +118,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
           {/* Time created post */}
           <Text style={[styles.headerCenterTimePost, styles.headerItem]}>{post.timeCreatePost}</Text>
           {/* Type author */}
-          {post.role === TYPE_POST_BUSINESS && (
+          {(post.role === TYPE_POST_BUSINESS || post.role === TYPE_POST_FACULTY) && (
             <View style={styles.headerCenterType}>
               <Text style={styles.headerTxt}>{post.typeAuthor}</Text>
             </View>

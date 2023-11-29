@@ -1,13 +1,13 @@
 import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList, Alert } from 'react-native'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { WINDOW_HEIGHT } from '../../utils/SystemDimensions'
-import { COLOR_BLACK, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
+import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomizeComment from '../post/CustomizeCommentPost';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
-import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
+import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_TITLE_LOADER, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
 import { numberDayPassed } from '../../utils/FormatTime';
 import { isBlank, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
@@ -18,6 +18,11 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { PROFILE_SCREEN } from '../../constants/Screen';
+import { useTranslation } from 'react-multi-lang';
+import { getFacultyTranslated } from '../../utils/getFacultyTranslated ';
+import Loading from '../common/Loading';
+import ActionSheet from 'react-native-actionsheet';
+import { ActivityIndicator } from 'react-native-paper';
 
 //  Constant
 const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9;
@@ -26,11 +31,23 @@ const MAX_UPWARD_TRANSLATE_Y = BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT
 const MAX_DOWNWARD_TRANSLATE_Y = 0;
 const DRAG_THRESHOLD = 50;
 let stompClient: Client
+
+interface LoadingCommentProps {
+    t: ReturnType<typeof useTranslation>
+}
+export function LoadingComment(props: Readonly<LoadingCommentProps>) {
+    return <View
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '60%' }}
+    ><View><ActivityIndicator color={COLOR_BLUE_BANNER} /><Text style={{ color: COLOR_GREY }}>{props.t("ModalLoadingComment.modalLoadingCommentTitle")}</Text></View></View>
+}
+
 const CustomizeModalComments = () => {
+    const t = useTranslation();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { modalCommentData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const [haveChange, setHaveChange] = useState(false);
     // Variable
+    const [isLoading, setIsLoading] = useState(true);
     const [comments, setComments] = useState();
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
     const inputRef = useRef<any>();
@@ -171,6 +188,7 @@ const CustomizeModalComments = () => {
         }
         const onMessageReceived = (payload: any) => {
             setComments(JSON.parse(payload.body));
+            setIsLoading(false);
         }
 
         const onError = (err: string | Frame) => {
@@ -201,7 +219,7 @@ const CustomizeModalComments = () => {
                     <View style={styles.dragHandleArea}
                         {...panResponder.panHandlers}>
                         <View style={styles.dragHandle}>
-                            <Text style={styles.headerTitle}>{TEXT_TITLE_COMMENT}</Text>
+                            <Text style={styles.headerTitle}>{t("Comment.modalListCommentTitle")}</Text>
                         </View>
                         <TouchableOpacity
                             onPress={() => handleClickIntoBtnIconClose()}
@@ -212,24 +230,28 @@ const CustomizeModalComments = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.containerComments}>
-                        <FlatList
-                            automaticallyAdjustKeyboardInsets={true}
-                            contentContainerStyle={{ paddingBottom: '50%' }}
-                            showsVerticalScrollIndicator={false}
-                            data={comments}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => {
-                                return item.parent === null ?
-                                    <CommentExport
-                                        commentItem={item}
-                                        userLoginId={userLogin?.id}
-                                        handleClickToCommentReplyEvent={handleClickToCommentReplyEvent}
-                                        handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent}
-                                        handleClickToAvatarAndName={handleClickToAvatarAndName}
-                                    />
-                                    : <></>
-                            }}
-                        />
+                        {
+                            isLoading ? <LoadingComment t={t} /> : <FlatList
+                                automaticallyAdjustKeyboardInsets={true}
+                                contentContainerStyle={{ paddingBottom: '50%' }}
+                                showsVerticalScrollIndicator={false}
+                                data={comments}
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({ item }) => {
+                                    return item.parent === null ?
+                                        <CommentExport
+                                            t={t}
+                                            userCreatedPostId={modalCommentData?.userCreatedPostId ?? 0}
+                                            commentItem={item}
+                                            userLoginId={userLogin?.id}
+                                            handleClickToCommentReplyEvent={handleClickToCommentReplyEvent}
+                                            handleClickToDeleteCommentsEvent={handleClickToDeleteCommentsEvent}
+                                            handleClickToAvatarAndName={handleClickToAvatarAndName}
+                                        />
+                                        : <></>
+                                }}
+                            />
+                        }
                     </View>
                 </Animated.View>
                 <SafeAreaView style={keyboardStatus ? [styles.textInput, { bottom: '41%' }] : [styles.textInput, { bottom: '0%' }]}>
@@ -241,7 +263,7 @@ const CustomizeModalComments = () => {
                         }}
                         placeholderTextColor={COLOR_BLACK}
                         style={styles.txtPlaceholder}
-                        placeholder={TEXT_PLACEHOLDER_INPUT_COMMENT}
+                        placeholder={t("CreateCommentToolbar.commentPlaceholderInput")}
                     />
                     <TouchableOpacity
                         onPress={() => handleSubmitEvent()}>
@@ -255,6 +277,8 @@ const CustomizeModalComments = () => {
 }
 
 export interface CommentChildrenType {
+    t: ReturnType<typeof useTranslation>
+    userCreatedPostId:number,
     commentItem: Comment,
     userLoginId: number | undefined,
     handleClickToCommentReplyEvent: (id: number) => void,
@@ -270,19 +294,23 @@ const CommentExport = (item: CommentChildrenType) => {
     }
     return <>
         <CustomizeComment
-            tagName={item.commentItem.parent}
+            tagName={getFacultyTranslated(item.commentItem?.parent?.['name'] ?? "",item.t)}
             userId={item.userLoginId}
             authorCommentId={item.commentItem.user['id']}
             type={item.commentItem.parent === null ? 0 : 1}
             key={item.commentItem.id}
             id={item.commentItem.id}
-            name={item.commentItem.user.name}
+            name={getFacultyTranslated(item.commentItem.user.name, item.t)}
             content={item.commentItem.content}
             avatar={item.commentItem.user.image}
             timeCreated={numberDayPassed(item.commentItem.createdAt)}
             handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
             handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}
             handleClickToAvatarAndName={item.handleClickToAvatarAndName}
+            textDelete={item.t("Comment.commentDeleteComment")}
+            textReply={item.t("Comment.commentReplyComment")}
+            textCommentOfAuthor={item.t("Comment.commentAuthor")}
+            userCreatedPostId={item.userCreatedPostId}
         />
         {
             hasChildren && (<>
@@ -290,7 +318,7 @@ const CommentExport = (item: CommentChildrenType) => {
                     onPress={() => { setSeeMore(!seeMore) }}
                     style={styles.txtActivity}
                 >
-                    <Text style={{ color: COLOR_GREY }}>{seeMore ? TEXT_HIDDEN_COMMENTS : TEXT_SEE_MORE_COMMENTS}</Text>
+                    <Text style={{ color: COLOR_GREY }}>{seeMore ? item.t("CommentContainer.commentContainerComponentSeeMore") : item.t("CommentContainer.commentContainerComponentHidden")}</Text>
                 </TouchableOpacity>
                 {
                     seeMore && (
@@ -298,6 +326,8 @@ const CommentExport = (item: CommentChildrenType) => {
                             data={item.commentItem.childrens}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item: child }) => <CommentExport
+                                t={item.t}
+                                userCreatedPostId={item.userCreatedPostId}
                                 commentItem={child}
                                 handleClickToCommentReplyEvent={item.handleClickToCommentReplyEvent}
                                 handleClickToDeleteCommentsEvent={item.handleClickToDeleteCommentsEvent}

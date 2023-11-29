@@ -1,4 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Button, IconButton, Modal, Portal } from 'react-native-paper'
@@ -14,9 +15,9 @@ import {
   isNotBlank
 } from '../../utils/ValidateUtils'
 import ButtonFullWith from '../buttons/ButtonFullWith'
+import TextValidate from '../common/TextValidate'
 import TextInputWithBottomBorder from '../inputs/TextInputWithBottomBorder'
 import TextInputWithTitle from '../inputs/TextInputWithTitle'
-import TextValidate from '../TextValidate'
 
 interface QuestionType {
   icon: string
@@ -28,30 +29,15 @@ export const SHORT_ANSWER = 'tra-loi-ngan'
 export const ONE_CHOICE_QUESTION = 'chon-mot-dap-an'
 export const MULTI_CHOICE_QUESTION = 'chon-nhieu-dap-an'
 
-const questionTypes: QuestionType[] = [
-  {
-    icon: 'file-alt',
-    name: 'Trả lời ngắn',
-    value: SHORT_ANSWER
-  },
-  {
-    icon: 'check-circle',
-    name: 'Trắc nghiệm',
-    value: ONE_CHOICE_QUESTION
-  },
-  {
-    icon: 'check-square',
-    name: 'Nhiều lựa chọn',
-    value: MULTI_CHOICE_QUESTION
-  }
-]
-
 const AddChoices = () => {
+  const t = useTranslation()
   const { choices } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   return (
     <Fragment>
-      <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>Lựa chọn</Text>
+      <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>
+        {t('AddQuestionView.addQuestionViewComponentChoiceInputPlaceholder')}
+      </Text>
       <View style={{ paddingHorizontal: 15 }}>
         {choices.map((item, index) => {
           return (
@@ -61,9 +47,9 @@ const AddChoices = () => {
                 data: item
               }}
               totalChoices={choices.length}
-              placeholder={`Lựa chọn ${index + 1}...`}
+              placeholder={`${t('AddQuestionView.addQuestionViewComponentChoiceInputPlaceholder')} ${index + 1}...`}
             />
-          )
+          );
         })}
       </View>
     </Fragment>
@@ -71,16 +57,36 @@ const AddChoices = () => {
 }
 
 export default function AddQuestionView() {
+  const t = useTranslation()
   const [visible, setVisible] = React.useState(false)
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
   const { choices, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [selectedQuestionType, setSelectedQuestionType] = useState<QuestionType | null>(null)
+
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>({
-    textError: 'Tiêu đề không được để trống',
+    textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate'),
     isVisible: false,
     isError: true
   })
+
+  const questionTypes: QuestionType[] = [
+    {
+      icon: 'file-alt',
+      name: t('AddQuestionView.addQuestionViewComponentShortAnswer'),
+      value: SHORT_ANSWER
+    },
+    {
+      icon: 'check-circle',
+      name: t('AddQuestionView.addQuestionViewComponentOneChoiceQuestion'),
+      value: ONE_CHOICE_QUESTION
+    },
+    {
+      icon: 'check-square',
+      name: t('AddQuestionView.addQuestionViewComponentMultiChoiceQuestion'),
+      value: MULTI_CHOICE_QUESTION
+    }
+  ]
 
   const defaultQuestion: Question = {
     title: '',
@@ -108,7 +114,10 @@ export default function AddQuestionView() {
 
   const onBtnStartAddQuestionPress = () => {
     if (selectedQuestionType === null) {
-      Alert.alert('Lỗi !!!', 'Vui lòng chọn loại câu hỏi')
+      Alert.alert(
+        t('AddQuestionView.addQuestionViewComponentQuestionEmptyErrorTitle'),
+        t('AddQuestionView.addQuestionViewComponentQuestionEmptyErrorContent')
+      )
       return
     }
 
@@ -136,19 +145,19 @@ export default function AddQuestionView() {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: 'Tiêu đề không được để trống'
+          textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate')
         })
       } else if (isContainSpecialCharacter(value)) {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: 'Tiêu đề không được chứa ký tự đặc biệt'
+          textError: t('AddQuestionView.addQuestionViewComponentTitleContainsSpecialCharacterValidate')
         })
       } else if (!isLengthInRange(value, 1, 255)) {
         setTitleValidate({
           ...titleValidate,
           isError: true,
-          textError: 'Tiêu đề không vượt quá 255 ký tự'
+          textError: t('AddQuestionView.addQuestionViewComponentTitleOver255CharacterValidate')
         })
       } else {
         setTitleValidate({
@@ -191,8 +200,8 @@ export default function AddQuestionView() {
         search
         labelField='name'
         valueField='value'
-        placeholder='--- Chọn loại câu hỏi ---'
-        searchPlaceholder='Tìm kiếm...'
+        placeholder={t('AddQuestionView.addQuestionViewComponentQuestionTypeDropdownTitle')}
+        searchPlaceholder={t('AddQuestionView.addQuestionViewComponentQuestionTypeDropdownSearch')}
         value={selectedQuestionType}
         onChange={(item) => onQuestionTypeDropdownChange(item)}
         renderItem={renderItem}
@@ -203,11 +212,11 @@ export default function AddQuestionView() {
         mode='elevated'
         style={{ backgroundColor: '#0065FF' }}
         onPress={() => {
-          onBtnStartAddQuestionPress()
+          onBtnStartAddQuestionPress();
         }}
         textColor='#fff'
       >
-        <Text style={{ fontSize: 16 }}>Thêm</Text>
+        <Text style={{ fontSize: 16 }}>{t('AddQuestionView.addQuestionViewStartAddQuestion')}</Text>
       </Button>
 
       <Portal>
@@ -221,7 +230,7 @@ export default function AddQuestionView() {
               size={22}
               style={styles.btnClose}
               onPress={() => {
-                hideModal()
+                hideModal();
               }}
             />
           </View>
@@ -229,7 +238,7 @@ export default function AddQuestionView() {
             <TextInputWithTitle
               onFocus={() => setTitleValidate({ ...titleValidate, isVisible: true })}
               value={question.title}
-              placeholder='Nhập tiêu đề câu hỏi...'
+              placeholder={t('AddQuestionView.addQuestionViewComponentTitleInputPlaceholder')}
               onChangeText={(value) => onTitleChangeText(value)}
             />
 
@@ -242,7 +251,11 @@ export default function AddQuestionView() {
 
             {question.type !== SHORT_ANSWER && <AddChoices />}
             <View style={styles.modalFooter}>
-              <ButtonFullWith iconName='plus' title='Hoàn tất' onPress={() => onBtnCompleteAddQuestionPress()} />
+              <ButtonFullWith
+                iconName='plus'
+                title={t('AddQuestionView.addQuestionViewComponentButtonComplete')}
+                onPress={() => onBtnCompleteAddQuestionPress()}
+              />
             </View>
           </ScrollView>
         </Modal>

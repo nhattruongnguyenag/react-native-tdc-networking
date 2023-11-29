@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-multi-lang'
 import { Comment } from './Comment'
 import { Images } from './Images'
 import { Like } from './Like'

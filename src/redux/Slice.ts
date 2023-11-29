@@ -10,8 +10,11 @@ import { ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { Message } from '../types/Message'
+import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
+import { User } from '../types/User'
 
 export interface TDCSocialNetworkState {
+  postRejectLog: PostRejectedLog | null
   surveyPostRequest: SurveyPostRequest | null
   choices: string[]
   questions: Question[]
@@ -19,7 +22,7 @@ export interface TDCSocialNetworkState {
   conversations: Conversation[]
   conversationMessages: Message[]
   selectConversation: SelectedConversation | null
-  userLogin: Student | Faculty | Business | null
+  userLogin: User | null
   deviceToken: string | null
   isOpenModalImage: boolean
   isOpenModalComments: boolean
@@ -30,9 +33,12 @@ export interface TDCSocialNetworkState {
   updatePost: boolean
   userIdOfProfileNow: number
   currentScreenNowIsProfileScreen: boolean
+  defaultLanguage: string
 }
 
 const initialState: TDCSocialNetworkState = {
+  postRejectLog: null,
+  defaultLanguage: 'vi',
   conversationMessages: [],
   surveyPostRequest: null,
   choices: ['', '', ''],
@@ -83,7 +89,7 @@ export const TDCSocialNetworkSlice = createSlice({
         state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
       }
     },
-    updateQuestion: (state, action: PayloadAction<{index: number, question: Question}>) => {
+    updateQuestion: (state, action: PayloadAction<{ index: number, question: Question }>) => {
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions[action.payload.index] = action.payload.question
       }
@@ -137,12 +143,20 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     listenConversationsSoket: (state, action: PayloadAction<void>) => {
       state.isOpenModalUserReaction = false
+    },
+    setDefaultLanguage: (state, action: PayloadAction<string>) => {
+      state.defaultLanguage = action.payload
+    },
+    setPostRejectLog: (state, action: PayloadAction<PostRejectedLog | null>) => {
+      state.postRejectLog = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 export const {
+  setPostRejectLog,
+  setDefaultLanguage,
   setImagesUpload,
   setUserLogin,
   setConversations,
