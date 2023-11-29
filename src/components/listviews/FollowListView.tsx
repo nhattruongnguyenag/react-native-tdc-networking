@@ -16,7 +16,7 @@ export default function ConversationListView({ data, handleFollow }: FollowListV
     return (
         <ScrollView>
             {
-                data?.map((item:any) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} handleFollow={handleFollow} />)
+                data?.map((item:any) => <UserItem id={item.id} name={item.name} image={item.image} isFollow={item.isFollow} group={item.group} handleFollow={handleFollow} />)
             }
         </ScrollView>
     )

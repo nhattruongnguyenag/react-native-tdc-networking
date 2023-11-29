@@ -127,7 +127,7 @@ export default function SearchScreen() {
   const checkType = () => {
     switch (subjects) {
       case 'user':
-        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} handleFollow={handleFollow} />)
+        return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} group={item.group} handleFollow={handleFollow} />)
         break
       case 'post':
         return (

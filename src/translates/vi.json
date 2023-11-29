@@ -188,5 +188,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " lượt bình chọn"
+    },
+    "UserItem": {
+        "follow": "Theo dõi",
+        "unFollow": "Hủy theo dõi",
+        "profile": "Trang cá nhân"
     }
 }
