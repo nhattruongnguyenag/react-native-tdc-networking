@@ -17,7 +17,7 @@ export interface NotificatonsType {
     id: any
     status: string
     image: string
-    createddate: any
+    createdAt: any
     content: string
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
@@ -44,8 +44,8 @@ export default function NotificationItem(props: NotificatonsType) {
                             }}
                         />
                         <View style={styles.content}>
-                            <Text style={styles.name}>{props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content}</Text>
-                            <Text style={styles.tg}>{moment(props.createddate).fromNow()}</Text>
+                            <Text style={[styles.name, {color: props.status === '1' ? '#a9a9a9' : '#000000'}]}>{props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content}</Text>
+                            <Text style={styles.tg}>{moment(props.createdAt).fromNow()}</Text>
                         </View>
                     </View>
                     <Menu style={styles.menu} key={props.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
@@ -68,6 +68,15 @@ export default function NotificationItem(props: NotificatonsType) {
 
 const styles = StyleSheet.create({
     item: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 10,
+        paddingRight: 15,
+        marginBottom: 1,
+    },
+    item2: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingTop: 4,

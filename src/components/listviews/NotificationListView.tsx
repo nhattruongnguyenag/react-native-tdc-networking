@@ -29,7 +29,7 @@ export default function NotificationListView(props: NotificatonsListViewType) {
                     id={item.id}
                     status={item.status}
                     image={item.image}
-                    createddate={item.createddate}
+                    createdAt={item.createdAt}
                     content={item.content}
                     handleItem={props.handleItem}
                     handleIsRead={props.handleIsRead}
