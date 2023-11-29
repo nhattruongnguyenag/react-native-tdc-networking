@@ -18,21 +18,24 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { t } from 'react-multi-lang'
 
-const dataType = [
-  { label: t('ManageJobApply.textReceived'), value: 'received' },
-  { label: t('ManageJobApply.textIn_progress'), value: 'in_progress' },
-  { label: t('ManageJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
-  { label: t('ManageJobApply.textInterview'), value: 'interview' },
-  { label: t('ManageJobApply.textInterview_not_meet_standard_quality'), value: 'interview_not_meet_standard_quality' },
-  { label: t('ManageJobApply.textAccept'), value: 'accept' }
-]
-
 interface MenuOptionItem {
   type: number
   name: string
   visible: boolean
 }
 export default function ManagementJobApplyScreen() {
+  const dataType = [
+    { label: t('ManageJobApply.textReceived'), value: 'received' },
+    { label: t('ManageJobApply.textIn_progress'), value: 'in_progress' },
+    { label: t('ManageJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
+    { label: t('ManageJobApply.textInterview'), value: 'interview' },
+    {
+      label: t('ManageJobApply.textInterview_not_meet_standard_quality'),
+      value: 'interview_not_meet_standard_quality'
+    },
+    { label: t('ManageJobApply.textAccept'), value: 'accept' }
+  ]
+
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const { data, isLoading } = useGetJobProfileQuery(userLogin?.id, {
@@ -96,6 +99,28 @@ export default function ManagementJobApplyScreen() {
     navigation.navigate(CHANGE_STATUS_JOB_APPLY_SCREEN, { profileId: profileId, status: status })
   }
 
+  // useEffect(() =>{
+  //     data?.data.map((data) => {
+  //       if(data.status !== value){
+  //         Alert.alert('Khong co')
+  //       }
+  //     })
+  // },[])
+  const check = useCallback((value: string) => {
+    if (data?.data.length !== 0) {
+      data?.data.map((data) => {
+        if (data.status === value) {
+          return true
+        } else {
+          return false
+        }
+      })
+    }
+    
+    return false
+  }, [value,data?.data])
+  console.log(check)
+  
   return (
     <>
       <SafeAreaView style={{ backgroundColor: COLOR_WHITE }}>
@@ -121,7 +146,7 @@ export default function ManagementJobApplyScreen() {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
           <>
-            {data?.data.length == 0 ? (
+            {check(value) == false ? (
               <Text
                 style={{
                   marginVertical: '50%',
@@ -164,38 +189,46 @@ export default function ManagementJobApplyScreen() {
                       </View>
                     </View>
                     <View style={styles.btnBottom}>
-                      <TouchableOpacity>
+                      <TouchableOpacity style={{ maxWidth: 'auto' }}>
                         <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
                           {t('ManageJobApply.textSeeCv')}
                         </Text>
                       </TouchableOpacity>
-                      
-                      <TouchableOpacity>
-                        <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
-                        {t('ManageJobApply.textDelete')}
-                        </Text>
-                      </TouchableOpacity>
 
-                      <Menu>
-                        <MenuTrigger>
-                          <View>
-                            <Text style={styles.txtBtnBottom}>{t('ManageJobApply.textChangeProfile')}</Text>
-                          </View>
-                        </MenuTrigger>
-                        <MenuOptions optionsContainerStyle={styles.menuOption}>
-                          {menuOptions.map(
-                            (item, index) =>
-                              item.visible && (
-                                <MenuOption
-                                  key={item.type}
-                                  onSelect={() => handleClickMenuOption(item.type, data.id, data.status, data.cvUrl)}
-                                >
-                                  <Text>{item.name}</Text>
-                                </MenuOption>
-                              )
-                          )}
-                        </MenuOptions>
-                      </Menu>
+                      {data.status == 'accept' ? (
+                        ''
+                      ) : (
+                        <>
+                          <TouchableOpacity>
+                            <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                              {t('ManageJobApply.textDelete')}
+                            </Text>
+                          </TouchableOpacity>
+
+                          <Menu>
+                            <MenuTrigger>
+                              <View>
+                                <Text style={styles.txtBtnBottom}>{t('ManageJobApply.textChangeProfile')}</Text>
+                              </View>
+                            </MenuTrigger>
+                            <MenuOptions optionsContainerStyle={styles.menuOption}>
+                              {menuOptions.map(
+                                (item, index) =>
+                                  item.visible && (
+                                    <MenuOption
+                                      key={item.type}
+                                      onSelect={() =>
+                                        handleClickMenuOption(item.type, data.id, data.status, data.cvUrl)
+                                      }
+                                    >
+                                      <Text>{item.name}</Text>
+                                    </MenuOption>
+                                  )
+                              )}
+                            </MenuOptions>
+                          </Menu>
+                        </>
+                      )}
                     </View>
                   </View>
                 ) : (
@@ -280,7 +313,8 @@ const styles = StyleSheet.create({
   btnBottom: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%'
   },
   txtBtnBottom: {
     fontSize: 16,

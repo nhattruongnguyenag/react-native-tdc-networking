@@ -154,7 +154,7 @@
     },
     "ManageJobApply":{
         "textReceived" : "受け取った",
-        "textIn_progress" : "進行中",
+        "textIn_progress" : "処理",
         "textNot_meet_standard_quality" : "標準品質を満たしていない",
         "textInterview" : "インタビュー",
         "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
@@ -165,13 +165,13 @@
         "textDeleteSucces" : "プロファイルを正常にキャンセルしました",
         "textLoader" : "読み込み中...",
         "textListJobNull" : "求人応募はありません",
-        "textSeeCv" : "プロフィールを見る",
-        "textDelete" : "プロファイルをキャンセルします",
-        "textChangeProfile" : "プロフィールを更新する"
+        "textSeeCv" : "見る",
+        "textDelete" : "キャンセルします",
+        "textChangeProfile" : "更新する"
      },
      "ChangeStatusJobApply":{
         "textReceived" : "受け取った",
-        "textIn_progress" : "進行中",
+        "textIn_progress" : "処理",
         "textNot_meet_standard_quality" : "標準品質を満たしていない",
         "textInterview" : "インタビュー",
         "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",

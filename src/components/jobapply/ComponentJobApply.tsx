@@ -9,16 +9,18 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { t } from 'react-multi-lang'
 
-const dataType = [
-  { label: t('ChangeStatusJobApply.textReceived'), value: 'received' },
-  { label: t('ChangeStatusJobApply.textIn_progress'), value: 'in_progress' },
-  { label: t('ChangeStatusJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
-  { label: t('ChangeStatusJobApply.textInterview'), value: 'interview' },
-  { label: t('ChangeStatusJobApply.textInterview_not_meet_standard_quality'), value: 'interview_not_meet_standard_quality' },
-  { label: t('ChangeStatusJobApply.textAccept'), value: 'accept' }
-]
-
 export default function ComponentJobApply() {
+  const dataType = [
+    { label: t('ChangeStatusJobApply.textReceived'), value: 'received' },
+    { label: t('ChangeStatusJobApply.textIn_progress'), value: 'in_progress' },
+    { label: t('ChangeStatusJobApply.textNot_meet_standard_quality'), value: 'not_meet_standard_quality' },
+    { label: t('ChangeStatusJobApply.textInterview'), value: 'interview' },
+    {
+      label: t('ChangeStatusJobApply.textInterview_not_meet_standard_quality'),
+      value: 'interview_not_meet_standard_quality'
+    },
+    { label: t('ChangeStatusJobApply.textAccept'), value: 'accept' }
+  ]
   const route = useRoute<RouteProp<RootStackParamList, 'CHANGE_STATUS_JOB_APPLY_SCREEN'>>()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const [jobApplyUpdateRequest, jobApplyUpdateResponse] = useJobApplyUpdateMutation()

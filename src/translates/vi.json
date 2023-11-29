@@ -152,8 +152,8 @@
     },
     "ManageJobApply":{
        "textReceived" : "Đã nhận",
-       "textIn_progress" : "Trong tiến trình",
-       "textNot_meet_standard_quality" : "Không đạt tiêu chuẩn",
+       "textIn_progress" : "Đang xử lý",
+       "textNot_meet_standard_quality" : "Xem xét",
        "textInterview" : "Phỏng vấn",
        "textInterview_not_meet_standard_quality" : "Không đạt phỏng vấn",
        "textAccept" : "Nhận việc",
@@ -169,8 +169,8 @@
     },
     "ChangeStatusJobApply":{
        "textReceived" : "Đã nhận",
-       "textIn_progress" : "Trong tiến trình",
-       "textNot_meet_standard_quality" : "Không đạt tiêu chuẩn",
+       "textIn_progress" : "Đang xử lý",
+       "textNot_meet_standard_quality" : "Xem xét",
        "textInterview" : "Phỏng vấn",
        "textInterview_not_meet_standard_quality" : "Không đạt phỏng vấn",
        "textAccept" : "Nhận việc",
