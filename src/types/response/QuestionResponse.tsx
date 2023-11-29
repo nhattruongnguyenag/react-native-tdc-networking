@@ -13,6 +13,6 @@ export interface QuestionResponse extends Base {
 }
 
 interface Choice {
-  voteQuestionId: number
+  id: number
   content: string
 }

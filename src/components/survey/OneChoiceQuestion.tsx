@@ -40,20 +40,20 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
         {(props.data?.choices
           &&
           props.data.choices.map((item, index) => {
-            return <RadioInputWithTitle label={item.content} value={item.id ? item.id.toString() : index.toString()} />
+            return <RadioInputWithTitle label={item.content} value={item.id ? String(item.id): String(index)} />
           })) ||
           (props.dataResponse?.choices &&
             props.dataResponse.choices.map((item, index) => {
               return (
                 <RadioInputWithTitle
                   onPress={() => {
-                    setValue(item.voteQuestionId.toString())
+                    setValue(item.id.toString())
                     if (props.dataResponse) {
-                      setSelectedChoiceIds([parseInt(item.voteQuestionId.toString())])
+                      setSelectedChoiceIds([parseInt(item.id.toString())])
                     }
                   }}
                   label={item.content}
-                  value={item.voteQuestionId.toString()}
+                  value={item.id.toString()}
                 />
               )
             }))}

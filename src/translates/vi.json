@@ -110,8 +110,10 @@
         "reviewSurveyScreenButtonGoBack": "Quay lại",
         "reviewSurveyScreenSaveFailContent": "Lưu thất bại",
         "reviewSurveyScreenSaveFailTitle": "Lỗi",
-        "reviewSurveyScreenSaveSuccessContent": "Lưu thành công",
-        "reviewSurveyScreenSaveSuccessTitle": "Thành công"
+        "reviewSurveyScreenSaveSuccessTitle": "Thành công",
+        "reviewSurveyScreenSaveSuccessContent": "Thêm khảo sát thành công",
+        "reviewSurveyScreenUpdateSuccessTitle": "Thành công",
+        "reviewSurveyScreenUpdateSuccessContent": "Cập nhật khảo sát thành công"
     },
     "SurveyConductScreen": {
         "surveyConductScreenSaveSuccessTitle": "Thành công !!!",

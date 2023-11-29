@@ -11,13 +11,14 @@ import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { useAppSelector } from '../redux/Hook'
-import { useAddSurveyPostMutation } from '../redux/Service'
+import { useAddSurveyPostMutation, useUpdateSurveyPostMutation } from '../redux/Service'
 
 export default function ReviewSurveyPostScreen() {
   const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer);
-  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation();
+  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
+  const [updateSurvey, updateSurveyResult] = useUpdateSurveyPostMutation()
 
   useEffect(() => {
     if (addSurveyResult.data) {
@@ -28,18 +29,32 @@ export default function ReviewSurveyPostScreen() {
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
       }
     }
-  }, [addSurveyResult]);
+  }, [addSurveyResult])
+
+  useEffect(() => {
+    if (updateSurveyResult.data) {
+      if (updateSurveyResult.data.status === 201 || 200) {
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessContent'));
+        navigation.navigate(TOP_TAB_NAVIGATOR);
+      } else {
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
+      }
+    }
+  }, [updateSurveyResult])
 
   const onBtnPublishPostPress = () => {
     console.log(JSON.stringify(surveyPostRequest))
-    return;
     if (surveyPostRequest) {
-      addSurvey(surveyPostRequest);
+      if (surveyPostRequest.postId) {
+        updateSurvey(surveyPostRequest)
+      } else {
+        addSurvey(surveyPostRequest)
+      }
     }
   };
 
   const onBtnBackPress = useCallback(() => {
-    navigation.pop();
+    navigation.pop()
   }, []);
 
   return (

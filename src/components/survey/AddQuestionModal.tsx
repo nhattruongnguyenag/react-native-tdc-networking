@@ -28,7 +28,7 @@ interface AddQuestionModalProps {
   onCompleteSaveQuestion: (question: Question) => void
 }
 
-const defaultQuestion = {
+const defaultQuestion: Question = {
   choices: [],
   required: 1,
   type: "",
@@ -47,6 +47,11 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
 
   useEffect(() => {
     if (props.questionUpdate) {
+      setTitleValidate({
+        textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate'),
+        isVisible: false,
+        isError: isBlank(props.questionUpdate?.data.title)
+      })
       setQuestion(props.questionUpdate.data)
     }
   }, [props.questionUpdate])
@@ -55,9 +60,9 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
     return {
       textError: t('AddQuestionView.addQuestionViewComponentTitleEmptyValidate'),
       isVisible: false,
-      isError: isBlank(question.title)
+      isError: isBlank(props.questionUpdate?.data.title)
     }
-  }, [question])
+  }, [])
 
   const [titleValidate, setTitleValidate] = useState<InputTextValidate>(defaultValidate)
 
@@ -97,12 +102,15 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
   )
 
   const onBtnCompleteAddQuestionPress = () => {
-    console.log(JSON.stringify(question))
     if (!titleValidate.isError) {
-      const choices = question.choices.filter(question => question.content.trim().length > 1)
-      if ((question.type !== SHORT_ANSWER && props.questionUpdate?.data.type !== SHORT_ANSWER) && choices.length === 0) {
-        Alert.alert("Thông báo", "Vui lòng thêm ít nhất một lựa chọn cho câu hỏi")
-        return
+      let choices: Choice[] = []
+
+      if (question.choices) {
+        choices = question.choices.filter(question => question.content.trim().length > 1)
+        if ((question.type !== SHORT_ANSWER && props.questionUpdate?.data.type !== SHORT_ANSWER) && choices.length === 0) {
+          Alert.alert("Thông báo", "Vui lòng thêm ít nhất một lựa chọn cho câu hỏi")
+          return
+        }
       }
 
       if (props.questionUpdate) {
@@ -121,6 +129,7 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
       }
 
       props.onDismiss()
+      setQuestion(defaultQuestion)
     } else if (titleValidate.isError) {
       setTitleValidate({ ...titleValidate, isVisible: true })
     }
@@ -134,7 +143,7 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
     }
 
     setQuestion({
-      ...question,
+      ...defaultQuestion,
       type: props.type?.value ?? "",
       choices: [...choices]
     })

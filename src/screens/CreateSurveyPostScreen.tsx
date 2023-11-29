@@ -33,7 +33,6 @@ const isAllFieldsValid = (validate: CreateSurveyPostScreenValidate): boolean => 
 
 
 export default function CreateSurveyPostScreen() {
-  const [loading, setLoading] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
@@ -167,7 +166,6 @@ export default function CreateSurveyPostScreen() {
 
   const onBtnNextPress = useCallback(() => {
     if (isAllFieldsValid(validate)) {
-      setLoading(true)
       navigation.navigate(ADD_QUESTION_SCREEN)
     } else {
       let key: keyof CreateSurveyPostScreenValidate
@@ -215,7 +213,6 @@ export default function CreateSurveyPostScreen() {
       />
 
       <ButtonFullWith
-        loading={loading}
         iconName='arrow-right-thin'
         btnStyle={styles.customBtnStyle}
         contentStyle={{ flexDirection: 'row-reverse' }}

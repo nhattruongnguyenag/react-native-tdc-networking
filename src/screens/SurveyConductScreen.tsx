@@ -37,12 +37,12 @@ export default function SurveyConductScreen() {
     const [surveyConductRequest, setSurveyConductRequest] = useState<SurveyConductRequest>({
         user_id: userLogin?.id ?? -1,
         answers: []
-    });
+    })
 
     const postId = route.params?.surveyPostId ?? -1;
     const userId = userLogin?.id ?? -1;
 
-    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId });
+    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, {refetchOnFocus: true, refetchOnMountOrArgChange: true})
 
     const onBtnPublishPostPress = () => {
         if (isAllFieldValid(validates)) {
@@ -60,7 +60,7 @@ export default function SurveyConductScreen() {
 
     useEffect(() => {
         if (surveyConductRequestResult.isSuccess) {
-            Alert.alert(t('SurveyConductScreen.surveyConductScreenSaveSuccessTitle'), t('SurveyConductScreen.surveyConductScreenSaveSuccessContent'));
+            Alert.alert(t('SurveyConductScreen.surveyConductScreenSaveSuccessTitle'), t('SurveyConductScreen.surveyConductScreenSaveSuccessContent'))
             navigation.goBack();
         }
     }, [surveyConductRequestResult]);
@@ -83,11 +83,11 @@ export default function SurveyConductScreen() {
                 let textError = '';
 
                 if (question.type === SHORT_ANSWER) {
-                    textError = t('SurveyConductScreen.surveyConductScreenShortAnswerError');
+                    textError = t('SurveyConductScreen.surveyConductScreenShortAnswerError')
                 } else if (question.type === MULTI_CHOICE_QUESTION) {
-                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionMultiChoice');
+                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionMulitiChoice')
                 } else if (question.type === ONE_CHOICE_QUESTION) {
-                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionOneChoice');
+                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionOneChoice')
                 }
 
                 tempValidates.push({

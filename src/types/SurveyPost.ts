@@ -1,7 +1,7 @@
 import { Question } from './Question'
 
 export interface SurveyPostRequest {
-  id?: number
+  postId?: number
   groupId?: number
   type: string
   title: string
