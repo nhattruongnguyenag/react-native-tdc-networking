@@ -10,12 +10,11 @@ const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
   { label: 'Japanese', value: 'ja' },
- 
+
 ];
 export default function ApplicationOptionScreen() {
   const dispatch = useAppDispatch()
   const [language, setLanguage] = useState('vi')
-  
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -77,7 +76,7 @@ export default function ApplicationOptionScreen() {
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Chọn ngôn ngữ' : '...'}
+                placeholder={!isFocus ? "Vietnamese" : '...'}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}
@@ -89,8 +88,31 @@ export default function ApplicationOptionScreen() {
               />
             </View>
             <View style={styles.button}>
-              <Pressable style={styles.btn}><Text style={{fontWeight: 'bold'}} onPress={closeModal}>Hủy</Text></Pressable>
-              <Pressable style={styles.btn}><Text style={{fontWeight: 'bold'}} onPress={handleChangeLangue}>Thay đổi</Text></Pressable>
+              <Pressable style={({ pressed }) => [
+                {
+                  backgroundColor: pressed
+                    ? 'rgb(210, 230, 255)'
+                    : 'white'
+                },
+                styles.btn
+              ]} onPress={closeModal}>
+                {({ pressed }) => (
+                  <Text style={{ fontWeight: 'bold' }} >Hủy</Text>
+                )}
+              </Pressable>
+
+              <Pressable style={({ pressed }) => [
+                {
+                  backgroundColor: pressed
+                    ? 'rgb(210, 230, 255)'
+                    : 'white'
+                },
+                styles.btn
+              ]}  onPress={handleChangeLangue}>
+                {({ pressed }) => (
+                  <Text style={{ fontWeight: 'bold' }}>Thay đổi</Text>
+                )}
+              </Pressable>
             </View>
           </Modal>
         </Portal>
@@ -123,7 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 5,
-    
+
   },
   btn: {
     borderWidth: 0.8,

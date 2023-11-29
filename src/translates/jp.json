@@ -182,6 +182,32 @@
         "textDelete" : "キャンクル",
         "textChange" : "変化"
      },
+    "NotificationsComponent": {
+        "notification": "通知",
+        "readAll": "すべて既読としてマークする",
+        "deleteNotification": "通知の削除",
+        "unReadNotification": "未読としてマーク",
+        "search": "検索通知 ..."
+    },
+    "FollowComponent": {
+        "following": "フォロー中",
+        "follower": "あなたをフォロー",
+        "search": "ユーザーを検索..."
+    },
+    "SavedPostListComponent": {
+        "search": "検索内容を入力してください..."
+    },
+    "SearchComponent": {
+        "user": "ユーザー",
+        "student": "学生",
+        "business": "ビジネス",
+        "faculty": "学部",
+        "post": "投稿",
+        "normal": "投稿",
+        "survey": "調査",
+        "recruitment": "採用情報",
+        "search": "検索コンテンツを入力してください..."
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "採用の詳細",
         "topTabNavigator": "TDCソーシャルネットワーク",
@@ -339,5 +365,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " 投票"
+    },
+    "UserItem": {
+        "follow": "フォロー",
+        "unFollow": "フォロー解除",
+        "profile": "プロフィール"
     }
 }

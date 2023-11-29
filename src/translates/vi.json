@@ -180,6 +180,32 @@
        "textDelete" : "Hủy",
        "textChange" : "Thay đổi"
     },
+    "NotificationsComponent": {
+        "notification": "Thông báo",
+        "readAll": "Đánh dấu tất cả đã đọc",
+        "deleteNotification": "Xóa thông báo",
+        "unReadNotification": "Đánh dấu chưa đọc",
+        "search": "Tìm kiếm thông báo ..."
+    },
+    "FollowComponent":{
+        "following": "Đang theo dõi",
+        "follower": "Đang theo dõi bạn",
+        "search": "Tìm kiếm người dùng ..."
+    },
+    "SavedPostListComponent": {
+        "search": "Nhập nội dung tìm kiếm..."
+    },
+    "SearchComponent": {
+        "user": "Người dùng",
+        "student": "Sinh viên",
+        "business": "Doanh nghiệp",
+        "faculty": "Khoa",
+        "post": "Bài viết",
+        "normal": "Bài viết",
+        "survey": "Khảo sát",
+        "recruitment": "Tin tuyển dụng",
+        "search": "Nhập nội dung tìm kiếm..."
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Chi tiết tuyển dụng",
         "topTabNavigator": "TDC Social Network",
@@ -338,5 +364,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " lượt bình chọn"
+    },
+    "UserItem": {
+        "follow": "Theo dõi",
+        "unFollow": "Hủy theo dõi",
+        "profile": "Trang cá nhân"
     }
 }
