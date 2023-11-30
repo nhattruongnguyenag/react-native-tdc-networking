@@ -17,12 +17,16 @@ import { RootStackParamList } from '../App'
 import Video from 'react-native-video'
 import { ActivityIndicator } from 'react-native-paper'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ACCEPT_FORGOTTEN_PASSWORD_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { LOGIN_SCREEN } from '../constants/Screen'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
-export default function AcceptForgottenPasswordScreen() {
-  const route = useRoute<RouteProp<RootStackParamList, 'ACCEPT_FORGOTTEN_PASSWORD_SCREEN'>>()
+import { TEXT_SUBJECT_RESET_PASSWORD } from '../constants/StringVietnamese'
+export default function AcceptScreen() {
+  const route = useRoute<RouteProp<RootStackParamList, 'ACCEPT_SCREEN'>>()
   const email = route.params?.email ?? ''
+  const subject = route.params?.subject ?? ''
+  const title = route.params?.title ?? ''
+  const url = route.params?.url ?? ''
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const videoRef = useRef<Video>(null)
   const [mute, setMute] = useState(false)
@@ -32,7 +36,7 @@ export default function AcceptForgottenPasswordScreen() {
 
   const onSubmit = () => {
     setIsLoading(true)
-    axios.post(SERVER_ADDRESS + 'api/users/get/email/reset', { email: email }).then((response) => {
+    axios.post(SERVER_ADDRESS + url, { to: email , subject: subject , content: '' }).then((response) => {
       setIsLoading(false)
       Alert.alert('Thông báo', 'Đã gửi lại liên kết tới ' + email)
     })
@@ -51,7 +55,7 @@ export default function AcceptForgottenPasswordScreen() {
           <View>
             <Text style={styles.txtLogin}>Kiểm tra email</Text>
             <Text style={styles.txtDetail}>
-              Chúng tôi đã gửi đến email bạn liên kết thay đổi mật khẩu, vui lòng kiểm tra email
+              Chúng tôi đã gửi đến email bạn liên kết {title}, vui lòng kiểm tra email
             </Text>
           </View>
           <TouchableOpacity

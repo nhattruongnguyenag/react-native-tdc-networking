@@ -39,7 +39,7 @@ import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
 import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
+  ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
@@ -63,7 +63,7 @@ import {
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { useAppSelector } from './redux/Hook'
 import { store } from './redux/Store'
-import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import AcceptForgottenPasswordScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
@@ -96,9 +96,10 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+import AcceptScreen from './screens/AcceptScreen'
 
 export type RootStackParamList = {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
+  ACCEPT_SCREEN: { email: string , subject: string , title: string, url: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -261,9 +262,9 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
-        name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
+        name={ACCEPT_SCREEN}
         options={{ title: t('ToolbarTitle.acceptForgottenPasswordScreen'), header: () => null }}
-        component={AcceptForgottenPasswordScreen}
+        component={AcceptScreen}
       />
 
       <RootStack.Screen

@@ -260,6 +260,9 @@ export const TEXT_SEE_CV = 'Xem chi tiết cv'
 export const TEXT_NOTIFICATION_LIST_EMPTY = 'Không có hồ sơ ứng tuyển'
 export const TEXT_TITLE_LOADER = 'Đang tải dữ liệu...'
 
+export const TEXT_SUBJECT_RESET_PASSWORD = 'Cập nhật mật khẩu'
+export const TITLE_SUBJECT_RESET_PASSWORD = 'thay đổi mật khẩu'
+
 
 
 
