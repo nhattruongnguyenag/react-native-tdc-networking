@@ -47,10 +47,6 @@ export default function AddQuestionScreen() {
     }
   }
 
-  useEffect(() => {
-    console.log(surveyPostRequest)
-  }, [])
-
   return (
     <Fragment>
       <ChooseQuestionBar onQuestionTypeDropdownChange={(questionType) => {

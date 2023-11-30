@@ -127,16 +127,22 @@ export default function SurveyConductScreen() {
                                             onChangeValue={(choices) => {
                                                 if (surveyConductRequest.answers[index]) {
                                                     if (choices.length > 0) {
-                                                        surveyConductRequest.answers[index].choices_ids = choices;
+                                                        surveyConductRequest.answers[index].choices_ids = choices
                                                         let tempValidates = [...validates];
-                                                        tempValidates[index].isError = false;
-                                                        tempValidates[index].isVisible = false;
-                                                        setValidates(tempValidates);
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: false,
+                                                            isVisible: false
+                                                        }
+                                                        setValidates(tempValidates)
                                                     } else {
-                                                        let tempValidates = [...validates];
-                                                        tempValidates[index].isError = true;
-                                                        tempValidates[index].isVisible = true;
-                                                        setValidates(tempValidates);
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: true,
+                                                            isVisible: true
+                                                        }
+                                                        setValidates(tempValidates)
                                                     }
                                                 }
                                             }}
@@ -163,15 +169,21 @@ export default function SurveyConductScreen() {
                                                 if (surveyConductRequest.answers[index]) {
                                                     if (choices.length > 0) {
                                                         surveyConductRequest.answers[index].choices_ids = choices;
-                                                        let tempValidates = [...validates];
-                                                        tempValidates[index].isError = false;
-                                                        tempValidates[index].isVisible = false;
-                                                        setValidates(tempValidates);
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: false,
+                                                            isVisible: false
+                                                        }
+                                                        setValidates(tempValidates)
                                                     } else {
                                                         let tempValidates = [...validates];
-                                                        tempValidates[index].isError = true;
-                                                        tempValidates[index].isVisible = true;
-                                                        setValidates(tempValidates);
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: true,
+                                                            isVisible: true
+                                                        }
+                                                        setValidates(tempValidates)
                                                     }
                                                 }
                                             }}
@@ -194,15 +206,21 @@ export default function SurveyConductScreen() {
                                             onTextChange={(value) => {
                                                 if (isNotBlank(value.trim())) {
                                                     surveyConductRequest.answers[index].content = value;
-                                                    let tempValidates = [...validates];
-                                                    tempValidates[index].isError = false;
-                                                    tempValidates[index].isVisible = false;
-                                                    setValidates(tempValidates);
+                                                    let tempValidates = [...validates]
+                                                    tempValidates[index] = {
+                                                        ...tempValidates[index],
+                                                        isError: false,
+                                                        isVisible: false
+                                                    }
+                                                    setValidates(tempValidates)
                                                 } else {
-                                                    let tempValidates = [...validates];
-                                                    tempValidates[index].isError = true;
-                                                    tempValidates[index].isVisible = true;
-                                                    setValidates(tempValidates);
+                                                    let tempValidates = [...validates]
+                                                    tempValidates[index] = {
+                                                        ...tempValidates[index],
+                                                        isError: true,
+                                                        isVisible: true
+                                                    }
+                                                    setValidates(tempValidates)
                                                 }
                                             }}
                                             dataResponse={item}

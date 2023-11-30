@@ -42,6 +42,7 @@ export default function ReviewSurveyPostScreen() {
       } else {
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
       }
+      dispatch(setSurveyPostRequest(null))
     }
   }, [updateSurveyResult])
 
@@ -57,12 +58,6 @@ export default function ReviewSurveyPostScreen() {
 
   const onBtnBackPress = useCallback(() => {
     navigation.pop()
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      dispatch(setSurveyPostRequest(null))
-    }
   }, [])
 
   return (

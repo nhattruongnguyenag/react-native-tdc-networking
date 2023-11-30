@@ -350,7 +350,7 @@ export default function CreateRecruitmentScreen() {
         }
       }
 
-      setValidate({ ...validate });
+      setValidate({ ...validate })
     }
   }, [validate]);
 

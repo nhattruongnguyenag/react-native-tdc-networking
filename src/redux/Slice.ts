@@ -104,7 +104,6 @@ export const TDCSocialNetworkSlice = createSlice({
       }
     },
     deleteQuestion: (state, action: PayloadAction<number | undefined>) => {
-      console.log('action-payload', action.payload)
       if (state.surveyPostRequest && action.payload !== undefined) {
         state.surveyPostRequest.questions.splice(action.payload, 1)
       }
@@ -112,14 +111,15 @@ export const TDCSocialNetworkSlice = createSlice({
     addChoice: (state, action: PayloadAction<{ questionIndex: number, choice: Choice }>) => {
       const data = action.payload
       if (state.surveyPostRequest) {
-        state.surveyPostRequest.questions[data.questionIndex].choices.push(data.choice)
+        state.surveyPostRequest.questions[data.questionIndex].choices?.push(data.choice)
       }
     },
     updateChoice: (state, action: PayloadAction<{ questionIndex: number, choiceIndex: number, content: string }>) => {
       const data = action.payload
       if (state.surveyPostRequest) {
-        state.surveyPostRequest.questions[data.questionIndex].choices[data.choiceIndex].content = data.content
-      }
+          state.surveyPostRequest.questions[data.questionIndex].choices[data.choiceIndex].content = data.content
+
+        }
     },
     deleteChoice: (state, action: PayloadAction<{ questionIndex: number, choiceIndex: number }>) => {
       const data = action.payload

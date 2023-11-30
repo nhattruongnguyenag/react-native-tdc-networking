@@ -4,7 +4,7 @@ export interface Question {
   id?: number
   type?: string
   title: string
-  choices?: Choice[]
+  choices: Choice[]
   required: number
 }
 
