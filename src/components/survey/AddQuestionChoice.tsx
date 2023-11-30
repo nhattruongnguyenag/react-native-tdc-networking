@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { useAppDispatch } from '../../redux/Hook'
 import TextInputWithBottomBorder from '../inputs/TextInputWithBottomBorder'
@@ -19,8 +19,19 @@ interface AddChoicesProps {
     onChoiceContentTextChange: (index: number, value: string) => void
 }
 
+const DELETE_CHOICE = 0
+const ADD_CHOICE = 1
+
 export default function AddQuestionChoice(props: AddChoicesProps) {
     const t = useTranslation()
+
+    const buttonChoiceMode = useCallback((index: number) => {
+        if (props.question?.choices && props.question.choices.length && index !== props.question.choices.length - 1) {
+            return DELETE_CHOICE
+        } else {
+            return ADD_CHOICE
+        }
+    }, [props.question])
     return (
         <Fragment>
             <Text style={{ marginLeft: 10, marginTop: 15, fontSize: 16, fontWeight: 'bold', color: '#000' }}>
@@ -28,7 +39,7 @@ export default function AddQuestionChoice(props: AddChoicesProps) {
             </Text>
             <View style={{ paddingHorizontal: 15 }}>
                 {
-                    props.question.choices.map((item, index) => {
+                    props.question?.choices?.map((item, index) => {
                         return (
                             <View style={{ flexDirection: 'row', flex: 1 }}>
                                 <TextInputWithBottomBorder
@@ -37,14 +48,15 @@ export default function AddQuestionChoice(props: AddChoicesProps) {
                                     placeholder={`${t('AddQuestionView.addQuestionViewComponentChoiceInputPlaceholder')} ${index + 1}...`}
                                 />
                                 <IconButton
-                                    icon={index !== props.question.choices.length - 1 ? 'delete' : 'plus'}
-                                    iconColor={index !== props.question.choices.length - 1 ? '#f70000' : '#037fe8'}
+                                    icon={buttonChoiceMode(index) === DELETE_CHOICE ? 'delete' : 'plus'}
+                                    iconColor={buttonChoiceMode(index) === DELETE_CHOICE ? '#f70000' : '#037fe8'}
                                     size={22}
                                     onPress={() => {
-                                        if (index === props.question.choices.length - 1) {
-                                            props.onAddChoice()
-                                        } else {
+                                        if (buttonChoiceMode(index) === DELETE_CHOICE) {
                                             props.onDeleteChoice(index)
+
+                                        } else {
+                                            props.onAddChoice()
                                         }
                                     }}
                                 />

@@ -35,10 +35,10 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
             return (
               <CheckboxInputWithTitle
                 onPress={() => {
-                  if (selectedChoiceIds.indexOf(item.voteQuestionId) != -1) {
-                    setSelectedChoiceIds(selectedChoiceIds.filter((value) => value != item.voteQuestionId))
+                  if (selectedChoiceIds.indexOf(item.id) != -1) {
+                    setSelectedChoiceIds(selectedChoiceIds.filter((value) => value != item.id))
                   } else {
-                    setSelectedChoiceIds([...selectedChoiceIds, item.voteQuestionId])
+                    setSelectedChoiceIds([...selectedChoiceIds, item.id])
                   }
                 }}
                 label={item.content}

@@ -10,7 +10,7 @@ import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { ADD_QUESTION_SCREEN } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { useGetSurveyPostUpdateQuery } from '../redux/Service'
-import { setSurveyPostRequest, updateSurveyDescription, updateSurveyTitle } from '../redux/Slice'
+import { setSurveyPostRequest, updateQuestion, updateSurveyDescription, updateSurveyTitle } from '../redux/Slice'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange } from '../utils/ValidateUtils'
 
@@ -38,6 +38,7 @@ export default function CreateSurveyPostScreen() {
   const dispatch = useAppDispatch()
   const t = useTranslation()
   const route = useRoute<RouteProp<RootStackParamList, 'CREATE_SURVEY_SCREEN'>>()
+
   const defaultSurveyPost: SurveyPostRequest = {
     type: 'khao-sat',
     title: '',
@@ -46,6 +47,20 @@ export default function CreateSurveyPostScreen() {
     questions: [],
     groupId: route.params?.groupId
   }
+
+  const { data, isSuccess, isFetching } = useGetSurveyPostUpdateQuery({
+    postId: route.params?.surveyPostId ?? -1
+  }, { refetchOnMountOrArgChange: true, refetchOnFocus: true })
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(setSurveyPostRequest(data.data))
+    }
+  }, [data, isSuccess])
+
+  useEffect(() => {
+    dispatch(setSurveyPostRequest(defaultSurveyPost))
+  }, [])
 
   const titleError = (value: string): string | null => {
     let isValid = null
@@ -118,16 +133,6 @@ export default function CreateSurveyPostScreen() {
     return
   }, [])
 
-  const { data, isSuccess, isFetching } = useGetSurveyPostUpdateQuery({
-    postId: route.params?.surveyPostId ?? -1
-  }, { refetchOnMountOrArgChange: true, refetchOnFocus: true })
-
-  useEffect(() => {
-    if (data && isSuccess) {
-      dispatch(setSurveyPostRequest(data.data))
-    }
-  }, [data, isSuccess])
-
   const onTitleChangeText = useCallback(
     (value: string) => {
       setTitleError(titleError(value) ?? '')
@@ -166,6 +171,7 @@ export default function CreateSurveyPostScreen() {
 
   const onBtnNextPress = useCallback(() => {
     if (isAllFieldsValid(validate)) {
+      console.log(surveyPostRequest)
       navigation.navigate(ADD_QUESTION_SCREEN)
     } else {
       let key: keyof CreateSurveyPostScreenValidate
@@ -185,7 +191,7 @@ export default function CreateSurveyPostScreen() {
         defaultValue={surveyPostRequest?.title}
         onChangeText={(value) => onTitleChangeText(value)}
         title={t('CreateSurveyPostScreen.surveySaveTitleTitle')}
-        placeholder={t('CreateSurveyPostScreen.surveySaveTitlePlaceholder')}
+        placeholder={isFetching && route.params?.surveyPostId ? 'Loading...' : t('CreateSurveyPostScreen.surveySaveTitlePlaceholder')}
       />
 
       <TextValidate
@@ -199,7 +205,7 @@ export default function CreateSurveyPostScreen() {
         defaultValue={surveyPostRequest?.description}
         onChangeText={(value) => onDescriptionChangeText(value)}
         title={t('CreateSurveyPostScreen.surveySaveDescTitle')}
-        placeholder={t('CreateSurveyPostScreen.surveySaveDescPlaceholder')}
+        placeholder={isFetching && route.params?.surveyPostId ? 'Loading...' : t('CreateSurveyPostScreen.surveySaveDescPlaceholder')}
         multiline={true}
         numberOfLine={7}
         textInputStyle={styles.textInputStyle}

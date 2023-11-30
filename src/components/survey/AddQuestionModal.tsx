@@ -108,7 +108,7 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
       if (question.choices) {
         choices = question.choices.filter(question => question.content.trim().length > 1)
         if ((question.type !== SHORT_ANSWER && props.questionUpdate?.data.type !== SHORT_ANSWER) && choices.length === 0) {
-          Alert.alert("Thông báo", "Vui lòng thêm ít nhất một lựa chọn cho câu hỏi")
+          Alert.alert(t('AddQuestionView.addChoiceValidateErrorTitle'), t('AddQuestionView.addChoiceValidateErrorContent') )
           return
         }
       }
@@ -163,7 +163,10 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
   return (
     <View style={styles.body}>
       <Portal>
-        <Modal visible={Boolean(props.type) || Boolean(props.questionUpdate)} onDismiss={props.onDismiss} contentContainerStyle={styles.containerStyle}>
+        <Modal
+          visible={Boolean(props.type) || Boolean(props.questionUpdate)}
+          onDismiss={props.onDismiss}
+          contentContainerStyle={styles.containerStyle}>
           <View style={styles.modalHeader}>
             <Text style={styles.headerTitle}>{header}</Text>
             <IconButton
@@ -194,7 +197,7 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
               ((props.type && props.type.value !== SHORT_ANSWER) || question.type !== SHORT_ANSWER)
               && <AddQuestionChoice
                 onDeleteChoice={(index) => {
-                  let tempChoices = [...question.choices]
+                  let tempChoices = [...question.choices ?? []]
                   tempChoices.splice(index, 1)
                   setQuestion({
                     ...question,
@@ -205,11 +208,11 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
                 onAddChoice={() => {
                   setQuestion({
                     ...question,
-                    choices: [...question.choices, { content: "" }]
+                    choices: [...question.choices ?? [], { content: "" }]
                   })
                 }}
                 onChoiceContentTextChange={(index, value) => {
-                  let choices = [...question.choices]
+                  let choices = [...question.choices ?? []]
                   choices[index] = {
                     ...choices[index],
                     content: value

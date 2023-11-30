@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import ToggleSwitch from 'toggle-switch-react-native'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { deleteQuestion, updateQuestion } from '../../redux/Slice'
-import { Question } from '../../types/Question'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
@@ -19,25 +18,28 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
     const t = useTranslation()
     const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const dispatch = useAppDispatch()
+    const questionUpdate = useMemo(() =>
+        [...surveyPostRequest?.questions ?? []][props.index ?? -1],
+        [props.index])
 
     const onBtnDeletePress = () => {
         dispatch(deleteQuestion(props.index))
     }
 
-    const [switchToggle, setSwitchToggle] = useState(true)
+    const [switchToggle, setSwitchToggle] = useState(questionUpdate.required !== 0)
 
     useEffect(() => {
-        let questionUpdate = [...surveyPostRequest?.questions ?? []][props.index ?? -1]
-        questionUpdate = {
-            ...questionUpdate,
-            required: switchToggle ? 1 : 0
-        }
         if (surveyPostRequest) {
             dispatch(updateQuestion({
                 index: props.index ?? -1,
-                question: questionUpdate
+                question: {
+                    ...questionUpdate,
+                    required: switchToggle ? 1 : 0
+                }
             }))
         }
+
+        console.log(props.index, switchToggle)
     }, [switchToggle])
 
     return (

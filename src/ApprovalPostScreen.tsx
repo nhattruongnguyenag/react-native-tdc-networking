@@ -1,10 +1,10 @@
-import React, { Fragment, useMemo, useState } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native'
 import Loading from './components/common/Loading'
 import ModalPostRejectReason from './components/postApproval/ModalPostRejectReason'
-import PostApprovalItem, { PostRejectedLog, POST_APPROVAL } from './components/postApproval/PostApprovalItem'
-import { useAppDispatch, useAppSelector } from './redux/Hook'
+import PostApprovalItem, { POST_APPROVAL } from './components/postApproval/PostApprovalItem'
+import { useAppSelector } from './redux/Hook'
 import { useGetPostsQuery } from './redux/Service'
 import { isAdmin, isFaculty } from './utils/UserHelper'
 
@@ -21,7 +21,6 @@ export default function ApprovalPostScreen() {
 
   const faculty = useMemo(() => {
     if (isFaculty(userLogin)) {
-      console.log(userLogin.code)
       return userLogin.code
     }
 
@@ -32,7 +31,7 @@ export default function ApprovalPostScreen() {
     active: 0,
     group: group,
     ownerFaculty: faculty
-  }, {pollingInterval: 5000})
+  }, {refetchOnFocus: true, refetchOnMountOrArgChange: true})
 
   return (
     <SafeAreaView style={styles.body}>

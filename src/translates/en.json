@@ -6,6 +6,32 @@
         "option": "Options",
         "logout": "Logout"
     },
+    "NotificationsComponent": {
+        "notification": "Notification",
+        "readAll": "Mark all as read",
+        "deleteNotification": "Delete notification",
+        "unReadNotification": "Mark as unread",
+        "search": "Search notifications ..."
+    },
+    "FollowComponent": {
+        "following": "Following",
+        "follower": "Follows you",
+        "search": "Search for users..."
+    },
+    "SearchComponent": {
+        "user": "User",
+        "student": "Student",
+        "business": "Business",
+        "faculty": "Faculty",
+        "post": "Post",
+        "normal": "Post",
+        "survey": "Survey",
+        "recruitment": "Recruitment",
+        "search": "Enter search content..."
+    },
+    "SavedPostListComponent": {
+        "search": "Enter search content..."
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Recruitment Details",
         "topTabNavigator": "TDC Social Network",
@@ -162,5 +188,10 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " votes"
+    },
+    "UserItem": {
+        "follow": "Follow",
+        "unFollow": "Unfollow",
+        "profile": "Profile"
     }
 }

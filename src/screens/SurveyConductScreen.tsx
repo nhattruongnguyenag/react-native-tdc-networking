@@ -11,6 +11,7 @@ import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION, SHORT_ANSWER } from '../com
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
+import { CONDUCT_MODE } from '../constants/Variables'
 import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyConductAnswerMutation, useGetQuestionsFromSurveyPostQuery } from '../redux/Service'
 import { AnswerRequest, SurveyConductRequest } from '../types/request/SurveyConductRequest'
@@ -42,7 +43,7 @@ export default function SurveyConductScreen() {
     const postId = route.params?.surveyPostId ?? -1;
     const userId = userLogin?.id ?? -1;
 
-    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, {refetchOnFocus: true, refetchOnMountOrArgChange: true})
+    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 
     const onBtnPublishPostPress = () => {
         if (isAllFieldValid(validates)) {
@@ -118,6 +119,7 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <MultiChoiceQuestion
+                                            mode={[CONDUCT_MODE]}
                                             conductMode
                                             dataResponse={item}
                                             index={index}
@@ -152,6 +154,7 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <OneChoiceQuestion
+                                            mode={[CONDUCT_MODE]}
                                             conductMode
                                             dataResponse={item}
                                             index={index}
@@ -186,6 +189,7 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <ShortAnswerQuestion
+                                            mode={[CONDUCT_MODE]}
                                             conductMode
                                             onTextChange={(value) => {
                                                 if (isNotBlank(value.trim())) {

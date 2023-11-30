@@ -7,6 +7,32 @@
         "option": "Tùy chọn",
         "logout": "Đăng xuất"
     },
+    "NotificationsComponent": {
+        "notification": "Thông báo",
+        "readAll": "Đánh dấu tất cả đã đọc",
+        "deleteNotification": "Xóa thông báo",
+        "unReadNotification": "Đánh dấu chưa đọc",
+        "search": "Tìm kiếm thông báo ..."
+    },
+    "FollowComponent": {
+        "following": "Đang theo dõi",
+        "follower": "Đang theo dõi bạn",
+        "search": "Tìm kiếm người dùng ..."
+    },
+    "SavedPostListComponent": {
+        "search": "Nhập nội dung tìm kiếm..."
+    },
+    "SearchComponent": {
+        "user": "Người dùng",
+        "student": "Sinh viên",
+        "business": "Doanh nghiệp",
+        "faculty": "Khoa",
+        "post": "Bài viết",
+        "normal": "Bài viết",
+        "survey": "Khảo sát",
+        "recruitment": "Tin tuyển dụng",
+        "search": "Nhập nội dung tìm kiếm..."
+    },
     "ToolbarTitle": {
         "recruitmentDetailScreen": "Chi tiết tuyển dụng",
         "topTabNavigator": "TDC Social Network",
@@ -155,7 +181,9 @@
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Tiêu đề không được chứa ký tự đặc biệt",
         "addQuestionViewComponentTitleEmptyValidate": "Tiêu đề không được để trống",
         "addQuestionViewComponentTitleInputPlaceholder": "Nhập tiêu đề câu hỏi...",
-        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự"
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự",
+        "addChoiceValidateErrorTitle": "Thông báo",
+        "addChoiceValidateErrorContent": "Vui lòng thêm ít nhất một lựa chọn cho câu hỏi"
     },
     "MultiChoiceQuestion": {
         "questionComponentAddTextTitle": "Câu hỏi"
@@ -191,11 +219,16 @@
         "rejectDetails": "Chi tiết",
         "pendingPostUpdate": "Chỉnh sửa",
         "pendingPostDelete": "Xóa bài viết"
-    }, 
+    },
     "PenddingPostScreen": {
         "peddingPostTab": "Đang chờ",
         "rejectedPostTab": "Bị từ chối",
         "loading": "Đang tải...",
         "emptyMessage": "Không có bài viết"
+    },
+    "UserItem": {
+        "follow": "Theo dõi",
+        "unFollow": "Hủy theo dõi",
+        "profile": "Trang cá nhân"
     }
 }

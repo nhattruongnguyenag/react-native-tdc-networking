@@ -27,4 +27,5 @@ export interface QuestionProps {
   reviewMode?: boolean
   conductMode?: boolean
   editMode?: boolean
+  mode: number[]
 }

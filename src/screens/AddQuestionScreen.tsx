@@ -11,11 +11,9 @@ import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { REVIEW_SURVEY_POST_SCREEN } from '../constants/Screen'
-import { TEXT_BUTTON_GO_BACK, TEXT_BUTTON_GO_NEXT, TEXT_EMPTY_QUESTION_ERROR_CONTENT, TEXT_EMPTY_QUESTION_ERROR_TITLE } from '../constants/StringVietnamese'
+import { EDIT_MODE } from '../constants/Variables'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { addQuestion } from '../redux/Slice'
-import { Question } from '../types/Question'
-import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 
 // man hinh them cau hoi
 export default function AddQuestionScreen() {
@@ -49,6 +47,10 @@ export default function AddQuestionScreen() {
     }
   }
 
+  useEffect(() => {
+    console.log(surveyPostRequest)
+  }, [])
+
   return (
     <Fragment>
       <ChooseQuestionBar onQuestionTypeDropdownChange={(questionType) => {
@@ -65,6 +67,7 @@ export default function AddQuestionScreen() {
           setSelectedType(null)
         }}
         onCompleteSaveQuestion={(question) => {
+          console.log(question)
           dispatch(addQuestion(question))
         }} />
 
@@ -72,18 +75,24 @@ export default function AddQuestionScreen() {
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
             return <MultiChoiceQuestion
-              editMode data={item}
+              mode={[EDIT_MODE]}
+              editMode
+              data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)}
             />
           } else if (item.type === ONE_CHOICE_QUESTION) {
             return <OneChoiceQuestion
-              editMode data={item}
+              mode={[EDIT_MODE]}
+              editMode
+              data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)} />
           } else {
             return <ShortAnswerQuestion
-              editMode data={item}
+              mode={[EDIT_MODE]}
+              editMode
+              data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)} />
           }
