@@ -21,6 +21,7 @@ import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
 import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
 import { PostSavedModel } from '../types/response/PostSavedModel'
 import { NotificationModel } from '../types/response/NotificationModel'
+import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -162,6 +163,12 @@ export const TDCSocialNetworkAPI = createApi({
         url: `api/job/user/${userId}`
       }),
     }),
+    getProfileApply: builder.query<Data<JobApplyResponseData[]>, number | undefined>({
+      query: (postId) => (
+        {
+        url: `api/job/post/${postId}`
+      }),
+    }),
     rejectPost: builder.mutation<MessageResponseData, PostRejectedLog>({
       query: (data) => ({
         url: 'api/approval/post/log',
@@ -190,6 +197,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetProfileApplyQuery,
   useGetJobProfileQuery,
   useGetNotificationsUserQuery,
   useGetListPostSavedQuery,
@@ -209,4 +217,5 @@ export const {
   useRejectPostMutation,
   useAcceptPostMutation,
   useJobApplyUpdateMutation
+
 } = TDCSocialNetworkAPI

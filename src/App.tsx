@@ -40,7 +40,6 @@ import {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
-  CHANGE_STATUS_JOB_APPLY_SCREEN,
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
@@ -102,7 +101,6 @@ moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
 import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
-import ComponentJobApply from './components/jobapply/ComponentJobApply'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -428,11 +426,6 @@ export function StackNavigator(): JSX.Element {
         name={APPROVAL_POST_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
         component={ApprovalPostScreen}
-      />
-      <RootStack.Screen
-        name={CHANGE_STATUS_JOB_APPLY_SCREEN}
-        options={{ header: () => null}}
-        component={ComponentJobApply}
       />
     </RootStack.Navigator>
   )

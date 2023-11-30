@@ -563,9 +563,9 @@ export default function BusinessRegistrationScreen() {
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
           setIsLoading(false)
+          openModal()
         })
         .catch((error) => {
-          openModal()
           setIsLoading(false)
         })
     } else {

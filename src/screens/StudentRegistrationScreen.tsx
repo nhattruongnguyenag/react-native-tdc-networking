@@ -490,10 +490,10 @@ export default function StudentRegistrationScreen() {
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
+          openModal()
         })
         .catch((error) => {
           console.log(error)
-          openModal()
           setIsLoading(false)
         })
     } else {
