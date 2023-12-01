@@ -1,16 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
-import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { DETAIL_SURVEY_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { SurveyResponsePostModal } from '../../types/response/SurveyResponsePostModal'
+import { isSurveyPost } from '../../utils/PostHelper'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { PostApprovalItemProps } from './PostApprovalItem'
-
-function isSurveyPost(post?: any): post is SurveyResponsePostModal {
-    return post !== undefined && post instanceof Object && post !== null && 'questions' in post
-}
 
 export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
     const [surveyPost, setSurveyPost] = useState<SurveyResponsePostModal>({} as SurveyResponsePostModal)
@@ -23,17 +21,18 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
     }, [])
 
     const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
+        navigation.navigate(DETAIL_SURVEY_SCREEN, { surveyPostId: idPost })
     }
+
+    const t = useTranslation()
 
     return (
         <CustomizeSurveyPost
             id={surveyPost.id}
-            title={surveyPost.title ?? 'Đang tải...'}
+            title={surveyPost.title ?? t('PostApproveItem.isLoading')}
+            active={surveyPost.active}
             handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
-            description={surveyPost.description ?? 'Đang tải...'}
+            description={surveyPost.description ?? t('PostApproveItem.isLoading')}
         />
     )
 }
-
-const styles = StyleSheet.create({})

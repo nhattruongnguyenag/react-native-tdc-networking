@@ -80,11 +80,16 @@ export default function JobApplyScreen() {
 
     const onResult = (result: Data<string[]>) => {
       if (result.status === 200 || result.status === 201) {
-        jobApplyRequest({
-          user_id: userLogin?.id ?? -1,
-          post_id: route.params?.recruitmentPostId ?? -1,
-          cv_url: result.data[0]
-        });
+
+        if (route.params?.profileId) {
+
+        } else {
+          jobApplyRequest({
+            user_id: userLogin?.id ?? -1,
+            post_id: route.params?.recruitmentPostId ?? -1,
+            cv_url: result.data[0]
+          });
+        }
       }
     };
 

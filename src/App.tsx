@@ -52,13 +52,14 @@ import {
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
   MESSENGER_SCREEN,
-  NOTIFICATION_SCREEN, OPTION_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
+  NOTIFICATION_SCREEN, OPTION_SCREEN, PEDDING_POST_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
-  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR
+  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
+  DETAIL_SURVEY_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { useAppSelector } from './redux/Hook'
@@ -96,6 +97,9 @@ import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+import PenddingPostScreen from './screens/PenddingPostScreen'
+import DetailSurveyPost from './screens/DetailSurveyPostScreen'
+import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -115,18 +119,18 @@ export type RootStackParamList = {
   BUSINESS_REGISTER_SCREEN: undefined
   TOP_TAB_NAVIGATOR: undefined
   DRAWER_TAB_NAVIGATOR: undefined
-  CREATE_RECRUITMENT_SCREEN: undefined
-  CREATE_SURVEY_SCREEN: undefined
+  CREATE_RECRUITMENT_SCREEN: { recruitmentPostId?: number, groupId?: number } | undefined
+  CREATE_SURVEY_SCREEN: { surveyPostId?: number, groupId?: number } | undefined
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
+  CREATE_NORMAL_POST_SCREEN: { groupId: number } | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
-  JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?: number } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
@@ -136,6 +140,8 @@ export type RootStackParamList = {
   APPLICATION_OPTION_SCREEN: undefined
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
+  PEDDING_POST_SCREEN: undefined
+  DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -411,8 +417,28 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={APPROVAL_POST_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
-        component={ApprovalPostScreen}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.approvalPostScreen')} />
+        }}
+        component={ApprovalPostScreen} />
+
+      <RootStack.Screen
+        name={PEDDING_POST_SCREEN}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.pendingPostScreen')} />
+        }}
+        component={PenddingPostScreen}
+      />
+
+      <RootStack.Screen
+        name={DETAIL_SURVEY_SCREEN}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.detailSurveyScreen')} />
+        }}
+        component={DetailSurveyPostScreen}
       />
     </RootStack.Navigator>
   )

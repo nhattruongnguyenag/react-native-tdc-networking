@@ -7,10 +7,11 @@ import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
 import Loading from '../components/common/Loading'
 import TextValidate from '../components/common/TextValidate'
-import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION, SHORT_ANSWER } from '../components/survey/AddQuestionView'
+import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION, SHORT_ANSWER } from '../components/survey/AddQuestionModal'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
+import { CONDUCT_MODE } from '../constants/Variables'
 import { useAppSelector } from '../redux/Hook'
 import { useAddSurveyConductAnswerMutation, useGetQuestionsFromSurveyPostQuery } from '../redux/Service'
 import { AnswerRequest, SurveyConductRequest } from '../types/request/SurveyConductRequest'
@@ -37,12 +38,12 @@ export default function SurveyConductScreen() {
     const [surveyConductRequest, setSurveyConductRequest] = useState<SurveyConductRequest>({
         user_id: userLogin?.id ?? -1,
         answers: []
-    });
+    })
 
     const postId = route.params?.surveyPostId ?? -1;
     const userId = userLogin?.id ?? -1;
 
-    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId });
+    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 
     const onBtnPublishPostPress = () => {
         if (isAllFieldValid(validates)) {
@@ -60,7 +61,7 @@ export default function SurveyConductScreen() {
 
     useEffect(() => {
         if (surveyConductRequestResult.isSuccess) {
-            Alert.alert(t('SurveyConductScreen.surveyConductScreenSaveSuccessTitle'), t('SurveyConductScreen.surveyConductScreenSaveSuccessContent'));
+            Alert.alert(t('SurveyConductScreen.surveyConductScreenSaveSuccessTitle'), t('SurveyConductScreen.surveyConductScreenSaveSuccessContent'))
             navigation.goBack();
         }
     }, [surveyConductRequestResult]);
@@ -83,11 +84,11 @@ export default function SurveyConductScreen() {
                 let textError = '';
 
                 if (question.type === SHORT_ANSWER) {
-                    textError = t('SurveyConductScreen.surveyConductScreenShortAnswerError');
+                    textError = t('SurveyConductScreen.surveyConductScreenShortAnswerError')
                 } else if (question.type === MULTI_CHOICE_QUESTION) {
-                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionMultiChoice');
+                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionMulitiChoice')
                 } else if (question.type === ONE_CHOICE_QUESTION) {
-                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionOneChoice');
+                    textError = t('SurveyConductScreen.surveyConductScreenMultiQuestionOneChoice')
                 }
 
                 tempValidates.push({
@@ -118,23 +119,29 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <MultiChoiceQuestion
-                                            conductMode
+                                            mode={[CONDUCT_MODE]}
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
                                             onChangeValue={(choices) => {
                                                 if (surveyConductRequest.answers[index]) {
                                                     if (choices.length > 0) {
-                                                        surveyConductRequest.answers[index].choices_ids = choices;
+                                                        surveyConductRequest.answers[index].choices_ids = choices
                                                         let tempValidates = [...validates];
-                                                        tempValidates[index].isError = false;
-                                                        tempValidates[index].isVisible = false;
-                                                        setValidates(tempValidates);
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: false,
+                                                            isVisible: false
+                                                        }
+                                                        setValidates(tempValidates)
                                                     } else {
-                                                        let tempValidates = [...validates];
-                                                        tempValidates[index].isError = true;
-                                                        tempValidates[index].isVisible = true;
-                                                        setValidates(tempValidates);
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: true,
+                                                            isVisible: true
+                                                        }
+                                                        setValidates(tempValidates)
                                                     }
                                                 }
                                             }}
@@ -152,7 +159,7 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <OneChoiceQuestion
-                                            conductMode
+                                            mode={[CONDUCT_MODE]}
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
@@ -160,15 +167,21 @@ export default function SurveyConductScreen() {
                                                 if (surveyConductRequest.answers[index]) {
                                                     if (choices.length > 0) {
                                                         surveyConductRequest.answers[index].choices_ids = choices;
-                                                        let tempValidates = [...validates];
-                                                        tempValidates[index].isError = false;
-                                                        tempValidates[index].isVisible = false;
-                                                        setValidates(tempValidates);
+                                                        let tempValidates = [...validates]
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: false,
+                                                            isVisible: false
+                                                        }
+                                                        setValidates(tempValidates)
                                                     } else {
                                                         let tempValidates = [...validates];
-                                                        tempValidates[index].isError = true;
-                                                        tempValidates[index].isVisible = true;
-                                                        setValidates(tempValidates);
+                                                        tempValidates[index] = {
+                                                            ...tempValidates[index],
+                                                            isError: true,
+                                                            isVisible: true
+                                                        }
+                                                        setValidates(tempValidates)
                                                     }
                                                 }
                                             }}
@@ -186,19 +199,25 @@ export default function SurveyConductScreen() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <ShortAnswerQuestion
-                                            conductMode
+                                            mode={[CONDUCT_MODE]}
                                             onTextChange={(value) => {
                                                 if (isNotBlank(value.trim())) {
                                                     surveyConductRequest.answers[index].content = value;
-                                                    let tempValidates = [...validates];
-                                                    tempValidates[index].isError = false;
-                                                    tempValidates[index].isVisible = false;
-                                                    setValidates(tempValidates);
+                                                    let tempValidates = [...validates]
+                                                    tempValidates[index] = {
+                                                        ...tempValidates[index],
+                                                        isError: false,
+                                                        isVisible: false
+                                                    }
+                                                    setValidates(tempValidates)
                                                 } else {
-                                                    let tempValidates = [...validates];
-                                                    tempValidates[index].isError = true;
-                                                    tempValidates[index].isVisible = true;
-                                                    setValidates(tempValidates);
+                                                    let tempValidates = [...validates]
+                                                    tempValidates[index] = {
+                                                        ...tempValidates[index],
+                                                        isError: true,
+                                                        isVisible: true
+                                                    }
+                                                    setValidates(tempValidates)
                                                 }
                                             }}
                                             dataResponse={item}

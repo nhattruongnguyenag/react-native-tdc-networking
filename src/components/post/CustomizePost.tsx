@@ -30,7 +30,7 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import {LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import { DETAIL_SURVEY_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { savePostAPI } from '../../api/CallApi'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -187,7 +187,7 @@ const CustomizePost = (props: Post) => {
     console.log('====================================');
     console.log('handleSeeListCvPost' + post.id);
     console.log('====================================');
-    navigation.navigate(LIST_JOB_APPLY_SCREEN, {postId: post.id})
+    navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
 
   const handleSeeResultSurveyPost = () => {
@@ -282,6 +282,7 @@ const CustomizePost = (props: Post) => {
         <CustomizeSurveyPost
           id={post.id}
           title={post.title ?? ''}
+          active={post.active}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
         />

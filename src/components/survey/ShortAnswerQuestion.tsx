@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, TextInput, View } from 'react-native'
+import { CONDUCT_MODE, EDIT_MODE } from '../../constants/Variables'
 import { QuestionProps } from '../../types/Question'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
 import QuestionTitle from './QuestionTitle'
@@ -15,7 +16,7 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
   return (
     <View style={styles.group}>
       <QuestionTitle
-        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
+        required={props.mode.includes(CONDUCT_MODE) ? props.dataResponse?.required : props.data?.required}
         title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
@@ -27,10 +28,10 @@ export default function ShortAnswerQuestion(props: ShortAnswerQuestionProps) {
         style={styles.ip}
       />
       {
-        props.editMode && <QuestionBottomBarOptions
-          reviewMode={props.reviewMode}
-          conductMode={props.conductMode}
-          index={props.index} />
+        props.mode.includes(EDIT_MODE) && <QuestionBottomBarOptions
+          mode={props.mode}
+          index={props.index}
+          onBtnUpdateQuestionPress={props.onUpdateQuestion} />
       }
     </View>
   )

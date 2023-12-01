@@ -4,4 +4,6 @@ export interface PostSearchRequest {
     ownerFaculty?: string
     status?: number
     userId?: number
+    postId?: number
+    type?: string
 }

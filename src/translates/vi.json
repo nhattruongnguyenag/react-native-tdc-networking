@@ -2,7 +2,8 @@
     "DrawerContentComponent": {
         "userGroup": "Nhóm của bạn",
         "userJobApplyProfile": "Hồ sơ ứng tuyển",
-        "waitingPost": "Duyệt bài viết",
+        "approvingPost": "Duyệt bài viết",
+        "peddingPost": "Bài viết đang chờ",
         "option": "Tùy chọn",
         "logout": "Đăng xuất"
     },
@@ -13,7 +14,7 @@
         "unReadNotification": "Đánh dấu chưa đọc",
         "search": "Tìm kiếm thông báo ..."
     },
-    "FollowComponent":{
+    "FollowComponent": {
         "following": "Đang theo dõi",
         "follower": "Đang theo dõi bạn",
         "search": "Tìm kiếm người dùng ..."
@@ -57,7 +58,9 @@
         "applicationOptionScreen": "Tùy chọn ứng dụng",
         "approvalPostScreen": "Duyệt bài viết",
         "createSurveyScreen": "Thêm khảo sát",
-        "createRecruitmentScreen": "Thêm tin tuyển dụng"
+        "createRecruitmentScreen": "Thêm tin tuyển dụng",
+        "pendingPostScreen": "Bài viết đang chờ",
+        "detailSurveyScreen": "Chi tiết câu hỏi"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
@@ -93,6 +96,8 @@
         "recruitmentSaveSaveEmploymentTypeTitle": "Hình thức làm việc",
         "recruitmentSaveSuccessContent": "Tin tuyển dụng đã được đăng",
         "recruitmentSaveSuccessTitle": "Thành công !!!",
+        "recruitmentUpdateSuccessTitle": "Thành công !!!",
+        "recruitmentUpdateSuccessContent": "Tin tuyển dụng đã được cập nhật",
         "recruitmentSaveTitlePlaceholder": "Nhập tiêu đề...",
         "recruitmentSaveTitleTitle": "Tiêu đề",
         "recruitmentTitleEmptyValidate": "Tiêu đề không được để trống",
@@ -132,8 +137,10 @@
         "reviewSurveyScreenButtonGoBack": "Quay lại",
         "reviewSurveyScreenSaveFailContent": "Lưu thất bại",
         "reviewSurveyScreenSaveFailTitle": "Lỗi",
-        "reviewSurveyScreenSaveSuccessContent": "Lưu thành công",
-        "reviewSurveyScreenSaveSuccessTitle": "Thành công"
+        "reviewSurveyScreenSaveSuccessTitle": "Thành công",
+        "reviewSurveyScreenSaveSuccessContent": "Thêm khảo sát thành công",
+        "reviewSurveyScreenUpdateSuccessTitle": "Thành công",
+        "reviewSurveyScreenUpdateSuccessContent": "Cập nhật khảo sát thành công"
     },
     "SurveyConductScreen": {
         "surveyConductScreenSaveSuccessTitle": "Thành công !!!",
@@ -171,11 +178,13 @@
         "addQuestionViewComponentQuestionEmptyErrorContent": "Vui lòng chọn loại câu hỏi",
         "addQuestionViewComponentQuestionEmptyErrorTitle": "Lỗi !!!",
         "addQuestionViewComponentQuestionTypeDropdownSearch": "Tìm kiếm...",
-        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Chọn loại câu hỏi ---",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "Chọn loại câu hỏi",
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Tiêu đề không được chứa ký tự đặc biệt",
         "addQuestionViewComponentTitleEmptyValidate": "Tiêu đề không được để trống",
         "addQuestionViewComponentTitleInputPlaceholder": "Nhập tiêu đề câu hỏi...",
-        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự"
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Tiêu đề không vượt quá 255 ký tự",
+        "addChoiceValidateErrorTitle": "Thông báo",
+        "addChoiceValidateErrorContent": "Vui lòng thêm ít nhất một lựa chọn cho câu hỏi"
     },
     "MultiChoiceQuestion": {
         "questionComponentAddTextTitle": "Câu hỏi"
@@ -188,6 +197,35 @@
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " lượt bình chọn"
+    },
+    "ApprovingScreen": {
+        "isLoading": "Đang tải dữ liệu...",
+        "emptyMessage": "Chưa có bài viết mới"
+    },
+    "PostApproveItem": {
+        "isLoading": "Đang tải"
+    },
+    "ModalPostRejectReason": {
+        "default": "Mặc định",
+        "survey": "Khảo sát",
+        "recruitment": "Tuyển dụng",
+        "successDeleteMessage": "Thành công !!!",
+        "successAcceptMessage": "Thành công !!!",
+        "successDeleteMessageContent": "Đã xóa bài viết thành công",
+        "rejectSuccessMessage": "Đã từ chối bài viết thành công",
+        "notePlaceholder": "Ghi chú...",
+        "acceptPostMenuItem": "Duyệt bài viết",
+        "rejectPostMenuItem": "Từ chối bài viết",
+        "isLoading": "Từ chối bài viết",
+        "rejectDetails": "Chi tiết",
+        "pendingPostUpdate": "Chỉnh sửa",
+        "pendingPostDelete": "Xóa bài viết"
+    },
+    "PenddingPostScreen": {
+        "peddingPostTab": "Đang chờ",
+        "rejectedPostTab": "Bị từ chối",
+        "loading": "Đang tải...",
+        "emptyMessage": "Không có bài viết"
     },
     "UserItem": {
         "follow": "Theo dõi",
