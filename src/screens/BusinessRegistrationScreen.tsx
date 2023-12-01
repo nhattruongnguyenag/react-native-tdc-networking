@@ -1,8 +1,6 @@
 import {
   Alert,
   Image,
-  PermissionsAndroid,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -92,6 +90,8 @@ import {
   TEXT_TITLE_TAXCODE,
   TEXT_TO_ACTIVETIME
 } from '../constants/StringVietnamese'
+import { useDispatch } from 'react-redux'
+import { setImagesUpload } from '../redux/Slice'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -118,6 +118,7 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 }
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
+  const dispatch  = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
@@ -606,6 +607,7 @@ export default function BusinessRegistrationScreen() {
         .then((response) => {
           setIsLoading(false)
           Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
+          dispatch(setImagesUpload([]));
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
@@ -614,7 +616,6 @@ export default function BusinessRegistrationScreen() {
         })
     } else {
       let key: keyof RegisterBusiness
-
       for (key in validate) {
         if (validate[key].isError) {
           validate[key].isVisible = true

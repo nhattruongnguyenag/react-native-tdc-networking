@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { UpdateNormalPost } from '../types/UpdateNormalPost'
 
 export const postAPI = async (apiUrlPost: string) => {
   try {
@@ -8,18 +9,12 @@ export const postAPI = async (apiUrlPost: string) => {
   }
 }
 
-
-
 export const savePostAPI = async (urlSavePost: string, data: any) => {
   try {
     const response = await axios.post(urlSavePost, data);
     return response.data.status;
   } catch (error) {
   }
-}
-
-export const exportDefaultAPI = () => {
-
 }
 
 export const handlePutDataAPI = async (apiUrl: string, postData: any): Promise<number> => {
@@ -33,6 +28,22 @@ export const handlePutDataAPI = async (apiUrl: string, postData: any): Promise<n
 export const deletePostAPI = async (urlDeletePost: string, postId: number) => {
   try {
     const response = await axios.delete(urlDeletePost + postId);
+    return response.data.status;
+  } catch (error) {
+  }
+}
+
+export const updateNormalPostAPI = async (urlUpdate: string, data: any) => {
+  try {
+    const response = await axios.put(urlUpdate, data);
+    return response.data.status;
+  } catch (error) {
+  }
+}
+
+export const updateImageUserProfile = async (urlUpdate: string, data: any) => {
+  try {
+    const response = await axios.post(urlUpdate, data);
     return response.data.status;
   } catch (error) {
   }

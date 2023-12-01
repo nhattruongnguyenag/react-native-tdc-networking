@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 55,
     backgroundColor: '#fff',
-    elevation: 5
+    elevation: 5,
   },
   toolbarTitle: {
     color: '#000',

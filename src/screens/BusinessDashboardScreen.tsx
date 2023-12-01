@@ -6,29 +6,29 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setConversations, setDeviceToken, updatePostWhenHaveChangeComment } from '../redux/Slice'
-import { useSaveDeviceTokenMutation } from '../redux/Service'
+import { setConversations, setDeviceToken} from '../redux/Slice'
+import { useGetBusinessPostsQuery, useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
 import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_BUSINESS_POST } from '../constants/Path'
+import { API_URL_BUSINESS_POST, API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness, groupStudent } from '../constants/Variables'
-import { useIsFocused } from '@react-navigation/native';
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness } from '../constants/Variables'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { ToastMessenger } from '../utils/ToastMessenger'
+import { useTranslation } from 'react-multi-lang'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
-  const isFocused = useIsFocused();
+  const t = useTranslation();
   const code = groupBusiness;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +40,22 @@ export default function BusinessDashboardScreen() {
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
+  const { data, isFetching } = useGetBusinessPostsQuery(
+    { id: userLogin?.id ?? 0 },
+    {
+      pollingInterval: 2000
+    }
+  );
+
+  useEffect(() => {
+    if (data) {
+      setIsLoading(false);
+      setBusinessPost([]);
+      setBusinessPost(data.data);
+      setIsCalled(true);
+    }
+  }, [data])
 
   useEffect(() => {
     const getFCMToken = async () => {
@@ -63,7 +79,6 @@ export default function BusinessDashboardScreen() {
 
   const updateUserStatusToOnline = useCallback(() => {
     const stompClient: Client = getStompClient()
-
     const onConnected = () => {
       stompClient.subscribe('/topic/conversations', onMessageReceived)
       stompClient.send(`/app/conversations/online/${userLogin?.id}`)
@@ -91,7 +106,7 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
-  const getDataBusinessApi = async () => {
+  const getDataBusinessApi = useCallback(async () => {
     try {
       const data = await postAPI(API_URL_BUSINESS_POST + userLogin?.id)
       setBusinessPost(data.data)
@@ -99,21 +114,15 @@ export default function BusinessDashboardScreen() {
       console.log(error)
     }
     setIsCalled(true);
-  }
+  }, [userLogin, data])
 
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      // Like
       stompClient.subscribe(`/topic/posts/group/${code}`, onMessageReceived)
       stompClient.send(`/app/posts/group/${code}/listen/${userLogin?.id}`)
-      // Save post
-      // stompClient.send(`app/posts/group/${code}/unsave/`)
-      // Delete  post
     }
     const onMessageReceived = (payload: any) => {
-      console.log(payload.body)
-
       setBusinessPost(JSON.parse(payload.body))
       setIsCalled(true);
     }
@@ -131,12 +140,7 @@ export default function BusinessDashboardScreen() {
 
   const like = useCallback((likeData: LikeAction) => {
     stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
-  }, [])
-
-  useEffect(() => {
-    getDataBusinessApi()
-    dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost, isFocused])
+  }, [code])
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
@@ -150,6 +154,20 @@ export default function BusinessDashboardScreen() {
 
   const handleClickIntoAvatar = () => {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
+  }
+
+  const handleDeletePost = async (id: number) => {
+    const status = await deletePostAPI(API_URL_DELETE_POST, id);
+    ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
+  }
+
+  const handleSavePost = async (id: number) => {
+    const data = {
+      "userId": userLogin?.id,
+      "postId": id
+    }
+    const status = await savePostAPI(API_URL_SAVE_POST, data);
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
 
   const renderItem = (item: any) => {
@@ -210,21 +228,6 @@ export default function BusinessDashboardScreen() {
         handleUnSave={handleSavePost}
         handleDelete={handleDeletePost} />
     )
-
-  }
-
-
-  const handleDeletePost = async (id: number) => {
-    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
-    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
-  }
-
-  const handleSavePost = async (id: number) => {
-    const data = {
-      "userId": userLogin?.id,
-      "postId": id
-    }
-    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
   }
 
   return (
@@ -235,6 +238,7 @@ export default function BusinessDashboardScreen() {
       {
         isOpenModalUserReaction && <CustomizeModalUserReacted />
       }
+      {isOpenModalComments && <CustomizeModalComments />}
       {
         isLoading && <SkeletonPost />
       }
@@ -245,7 +249,6 @@ export default function BusinessDashboardScreen() {
           onRefresh={() => getDataBusinessApi()}
         />}
       >
-        {/* Create post area */}
         {
           userLogin?.roleCodes.includes(TYPE_POST_BUSINESS) ?
             <View style={styles.toolbarCreatePost}>
@@ -265,9 +268,7 @@ export default function BusinessDashboardScreen() {
           renderItem={({ item }) => renderItem(item)}
         />
       </ScrollView>
-      {isOpenModalComments && <CustomizeModalComments />}
     </View>
-
   )
 }
 

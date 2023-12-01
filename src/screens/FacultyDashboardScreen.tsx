@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, View, RefreshControl, Text } from 'react-native'
-import React, { useEffect, useState, useCallback, useTransition } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
 import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
@@ -7,22 +7,20 @@ import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_FACULTY_POST } from '../constants/Path'
+import { API_URL_DELETE_POST, API_URL_FACULTY_POST, API_URL_SAVE_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
-import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { useIsFocused } from '@react-navigation/native';
 import CustomizeSelectFacultyToolbar from '../components/CustomizeSelectFacultyToolbar'
 import { WINDOW_HEIGHT } from '../utils/SystemDimensions'
 import { ToastMessenger } from '../utils/ToastMessenger'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useTranslation } from 'react-multi-lang'
+import { useGetFacultyPostsQuery } from '../redux/Service'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -33,10 +31,33 @@ export default function FacultyDashboardScreen() {
   const { updatePost, userLogin } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
-  const [code, setCode] = useState((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '');
-  const dispatch = useAppDispatch()
-  const [facultyPost, setFacultyPost] = useState([])
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const [code, setCode] = useState("");
+  const dispatch = useAppDispatch();
+  const [facultyPost, setFacultyPost] = useState([]);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { data, isFetching } = useGetFacultyPostsQuery(
+    {
+      faculty: code,
+      id: userLogin?.id ?? 0
+    },
+    {
+      pollingInterval: 2000
+    }
+  );
+
+
+  useEffect(() => {
+    if (data) {
+      setIsLoading(false);
+      setFacultyPost([]);
+      setFacultyPost(data.data);
+      setIsCalled(true);
+    }
+  }, [data])
+
+  useEffect(() => {
+    setCode((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '');
+  }, [userLogin]);
 
   useEffect(() => {
     if (facultyPost.length > 0 || isCalled) {
@@ -46,11 +67,7 @@ export default function FacultyDashboardScreen() {
     }
   }, [facultyPost, isCalled])
 
-  useEffect(() => {
-    getDataFacultyApi();
-  }, [isFocused, code])
-
-  const getDataFacultyApi = async () => {
+  const getDataFacultyApi = useCallback(async () => {
     if (code.length !== 0) {
       try {
         const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
@@ -62,7 +79,7 @@ export default function FacultyDashboardScreen() {
       setFacultyPost([]);
     }
     setIsCalled(true);
-  }
+  }, [userLogin, data])
 
   useEffect(() => {
     stompClient = getStompClient()
@@ -86,14 +103,9 @@ export default function FacultyDashboardScreen() {
     like(obj)
   }
 
-  useEffect(() => {
-    getDataFacultyApi()
-    dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost])
-
   const like = useCallback((likeData: LikeAction) => {
     stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
-  }, [])
+  }, [code])
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
@@ -104,14 +116,14 @@ export default function FacultyDashboardScreen() {
       navigation.navigate(CREATE_SURVEY_SCREEN);
     }
   }
-
+  // passed
   const handleClickIntoAvatar = () => {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
   const handleDeletePost = async (id: number) => {
-    const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
-    ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+    const status = await deletePostAPI(API_URL_DELETE_POST, id);
+    ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
 
   const handleSavePost = async (id: number) => {
@@ -119,8 +131,13 @@ export default function FacultyDashboardScreen() {
       "userId": userLogin?.id,
       "postId": id
     }
-    const status = await savePostAPI(SERVER_ADDRESS + 'api/posts/user/save', data);
+    const status = await savePostAPI(API_URL_SAVE_POST, data);
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
+
+  const handleSelectFacultyEvent = useCallback((_code: string) => {
+    setCode(_code);
+  }, [])
 
   const renderItem = (item: any) => {
     // return item.active === 1 ? (
@@ -182,10 +199,6 @@ export default function FacultyDashboardScreen() {
     )
   }
 
-  const handleSelectFacultyEvent = useCallback((_code: string) => {
-    setCode(_code);
-  }, [])
-
   return (
     userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
       <ScrollView
@@ -195,7 +208,6 @@ export default function FacultyDashboardScreen() {
           onRefresh={() => getDataFacultyApi()}
         />}
       >
-        {/* Create post area */}
         {
           userLogin?.roleCodes.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
             <CustomizeCreatePostToolbar

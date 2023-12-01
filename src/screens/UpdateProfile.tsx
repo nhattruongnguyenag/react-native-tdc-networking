@@ -14,23 +14,19 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
-import { COLOR_BTN_BLUE } from '../constants/Color'
+import { COLOR_BTN_BLUE, COLOR_GREY } from '../constants/Color'
 import axios, { AxiosResponse } from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import { ActivityIndicator } from 'react-native-paper'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
-import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { useAppSelector } from '../redux/Hook'
 import {
     InputTextValidate,
     isBlank,
     isContainSpecialCharacter,
-    isEmail,
     isLengthInRange,
-    isPassword,
     isPhone,
     isTime,
     isType
@@ -39,15 +35,15 @@ import { Business } from '../types/Business';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import { Student } from '../types/Student';
-import { Dropdown } from 'react-native-element-dropdown';
-import { TEXT_UPDATE_PROFILE_ACTIVITY, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese';
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese';
 import TextValidate from '../components/common/TextValidate';
 import { Faculty } from '../types/Faculty';
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setUserLogin } from '../redux/Slice';
+import { setImagesUpload, setUserLogin } from '../redux/Slice';
 import { useTranslation } from 'react-multi-lang';
 import { useDispatch } from 'react-redux';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 
@@ -75,7 +71,7 @@ const UpdateProfile = ({ route }: any) => {
     )
 }
 
-const stylesBusiness = StyleSheet.create({
+const styles = StyleSheet.create({
     header: { backgroundColor: COLOR_BTN_BLUE, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
     txtHeader: {
         color: '#ffffff',
@@ -106,7 +102,6 @@ const stylesBusiness = StyleSheet.create({
         marginTop: 10
     },
     btnRegister: {
-        backgroundColor: COLOR_BTN_BLUE,
         alignItems: 'center',
         marginTop: 20,
         marginBottom: 10,
@@ -114,6 +109,12 @@ const stylesBusiness = StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'center'
+    },
+    btnAble: {
+        backgroundColor: COLOR_BTN_BLUE,
+    },
+    btnDisable: {
+        backgroundColor: COLOR_GREY,
     },
     txtRegister: {
         color: '#ffffff',
@@ -154,6 +155,10 @@ const stylesBusiness = StyleSheet.create({
     textInput: {
         borderColor: '#228b22',
         borderWidth: 2
+    },
+    spinner: {
+        position: 'absolute',
+        left: '10%'
     }
 })
 
@@ -168,7 +173,6 @@ interface UpdateType {
 // Business
 interface BusinessUpdate {
     name: InputTextValidate
-    email: InputTextValidate
     phone: InputTextValidate
     representor: InputTextValidate
     taxCode: InputTextValidate
@@ -191,25 +195,22 @@ const isAllFieldsValidBusiness = (validate: BusinessUpdate): boolean => {
 export function UpdateBusiness(props: Readonly<UpdateType>) {
     const t = useTranslation();
     const dispatch = useDispatch();
-    let submit = 0;
     const [passValidate, setPassValidate] = useState(false);
     const [timeStart, setTimeStart] = useState(props.userData?.activeTime.split("-")[0])
     const [timeEnd, setTimeEnd] = useState(props.userData?.activeTime.split("-")[1])
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [representor, setRepresentor] = useState('');
     const [taxCode, setTaxCode] = useState('');
     const [address, setAddress] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
-    // const [imageBackgroundTemporary, setImageBackgroundTemporary] = useState('');
 
     const [business, setBusiness] = useState({
         id: props.userData?.id ?? 0,
         email: props.userData?.email ?? '',
         name: props.userData?.name ?? '',
         image: props.userData?.image ?? '',
-        background: props.userData?.background ?? '',
+        background: undefined,
         representor: props.userData?.representor ?? '',
         taxCode: props.userData?.taxCode ?? '',
         address: props.userData?.address ?? '',
@@ -218,17 +219,13 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     });
 
     useEffect(() => {
-        // Faculty
         setPhone(props.userData?.phone ?? "");
-        setEmail(props.userData?.email ?? "");
-        // Business
         setName(props.userData?.name ?? "");
         setRepresentor(props.userData?.representor ?? "");
         setTaxCode(props.userData?.taxCode ?? "");
         setAddress(props.userData?.address ?? "");
         setBusiness({ ...business, image: props.userData?.image })
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
-        // props.userData?.background ? setImageBackgroundTemporary(props.userData?.avatar) : setImageBackgroundTemporary("");
     }, [props.userData]);
 
     const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
@@ -242,11 +239,6 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
         },
         representor: {
             textError: t("Validate.validatePresentorNull"),
-            isVisible: false,
-            isError: true
-        },
-        email: {
-            textError: t("Validate.validateEmailNull"),
             isVisible: false,
             isError: true
         },
@@ -276,90 +268,12 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     const timeStartRef = useRef<TextInput | null>(null)
     const timeEndRef = useRef<TextInput | null>(null)
 
-    const handleCheckEmail = useCallback(() => {
-        axios
-            .post(SERVER_ADDRESS + `api/users/check?email=${business.email}`)
-            .then((response) => {
-                if (response.data.data == 0) {
-                    setValidate({
-                        ...validate,
-                        email: {
-                            ...validate.email,
-                            isError: true,
-                            textError: t("Validate.validateEmailHadUsed"),
-                            isVisible: true
-                        }
-                    })
-                }
-                console.log(response.data.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [business.email])
-
-    const handleEmailChange = useCallback(
-        (event: string) => {
-            setEmail(event)
-            return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailNull")
-                        }
-                    }));
-                    resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailHasMaxLength")
-                        }
-                    }));
-                    resolve();
-                } else if (!isEmail(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailUnCorrectFormat")
-                        }
-                    }));
-                    resolve();
-                } else {
-                    setBusiness((prevBusiness) => ({
-                        ...prevBusiness,
-                        email: event
-                    }));
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: false,
-                            isVisible: false
-                        }
-                    }));
-                    resolve();
-                }
-            });
-        },
-        [validate]
-    );
 
     const handlePhoneChange = useCallback(
-        (event: string) => {
-            setPhone(event)
+        (value: string) => {
+            setPhone(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -370,7 +284,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         }
                     }));
                     resolve();
-                } else if (!isPhone(event)) {
+                } else if (!isPhone(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -384,7 +298,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                 } else {
                     setBusiness((prevBusiness) => ({
                         ...prevBusiness,
-                        phone: event
+                        phone: value
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -402,10 +316,10 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     );
 
     const handleNameChange = useCallback(
-        (event: string) => {
-            setName(event)
+        (value: string) => {
+            setName(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -416,7 +330,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (isContainSpecialCharacter(event)) {
+                } else if (isContainSpecialCharacter(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -427,7 +341,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -441,7 +355,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                 } else {
                     setBusiness((prevBusiness) => ({
                         ...prevBusiness,
-                        name: event,
+                        name: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -459,10 +373,10 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     );
 
     const handleRepresentoreChange = useCallback(
-        (event: string) => {
-            setRepresentor(event)
+        (value: string) => {
+            setRepresentor(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         representor: {
@@ -473,7 +387,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (isContainSpecialCharacter(event)) {
+                } else if (isContainSpecialCharacter(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         representor: {
@@ -484,7 +398,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         representor: {
@@ -498,7 +412,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                 } else {
                     setBusiness((prevBusiness) => ({
                         ...prevBusiness,
-                        representor: event,
+                        representor: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -516,10 +430,10 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     );
 
     const handleTaxCodeChange = useCallback(
-        (event: string) => {
-            setTaxCode(event)
+        (value: string) => {
+            setTaxCode(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         taxCode: {
@@ -530,7 +444,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         taxCode: {
@@ -541,7 +455,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isType(event)) {
+                } else if (!isType(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         taxCode: {
@@ -555,7 +469,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                 } else {
                     setBusiness((prevBusiness) => ({
                         ...prevBusiness,
-                        taxCode: event,
+                        taxCode: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -573,10 +487,10 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     );
 
     const handleAddressChange = useCallback(
-        (event: string) => {
-            setAddress(event)
+        (value: string) => {
+            setAddress(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         address: {
@@ -587,7 +501,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         address: {
@@ -601,7 +515,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                 } else {
                     setBusiness((prevBusiness) => ({
                         ...prevBusiness,
-                        address: event,
+                        address: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -644,12 +558,9 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     // Dont focus
     useEffect(() => {
         setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : imageAvatarTemporary })
-        // background dont have backend side
-        // setBusiness({ ...business, background: imagesUpload ? imagesUpload[0] : '' })
     }, [imagesUpload])
-
     const showAlert = () => {
-        Alert.alert("Cập nhật thất bại vui lòng thử lại")
+        Alert.alert(t("UpdateProfile.updateProfileAlertFail"))
     }
 
     useEffect(() => {
@@ -658,7 +569,6 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
 
     const asyncForValidate = async () => {
         const validationPromises = [
-            handleEmailChange(email),
             handlePhoneChange(phone),
             handleAddressChange(address),
             handleTaxCodeChange(taxCode),
@@ -685,7 +595,8 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                             if (response.status === 200 || response.status === 201) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
-                                dispatch(setUserLogin(response.data.data))
+                                dispatch(setUserLogin(response.data.data));
+                                dispatch(setImagesUpload([]));
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
@@ -722,7 +633,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         title={t("BusinessUpdate.businessUpdateCompanyName")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
-                        textInputStyle={!validate.name?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
                     />
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
@@ -731,25 +642,11 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={email}
-                        title={t("BusinessUpdate.businessUpdateEmail")}
-                        placeholder={t("BusinessUpdate.businessUpdateEmailPlaceholder")}
-                        onChangeText={(value) => handleEmailChange(value)}
-                        onBlur={() => handleCheckEmail()}
-                        textInputStyle={!validate.email?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
-                    />
-                    <TextValidate
-                        customStyle={{ marginLeft: 10 }}
-                        textError={validate.email?.textError}
-                        isError={validate.email?.isError}
-                        isVisible={validate.email?.isVisible}
-                    />
-                    <TextInputWithTitle
                         value={representor}
                         title={t("BusinessUpdate.businessUpdateRepresentorFullName")}
                         placeholder={t("BusinessUpdate.businessUpdateRepresentorFullNamePlaceholder")}
                         onChangeText={(value) => handleRepresentoreChange(value)}
-                        textInputStyle={!validate.representor?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
                     />
 
                     <TextValidate
@@ -764,7 +661,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         title={t("BusinessUpdate.businessUpdateCompanyTaxId")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyTaxIdPlaceholder")}
                         onChangeText={(value) => handleTaxCodeChange(value)}
-                        textInputStyle={!validate.taxCode?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
                     />
 
                     <TextValidate
@@ -779,7 +676,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         title={t("BusinessUpdate.businessUpdateCompanyAddress")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyAddressPlaceholder")}
                         onChangeText={(value) => handleAddressChange(value)}
-                        textInputStyle={!validate.address?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
                     />
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
@@ -792,7 +689,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
-                        textInputStyle={!validate.phone?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
 
                     <TextValidate
@@ -809,7 +706,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                                 onFocus={() => {
                                     setShowDatePickerStart(true)
                                 }}
-                                textInputStyle={!validate.activeTime?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
                                 title={t("BusinessUpdate.businessUpdateCompanyTimeActiveStart")}
                                 placeholder={moment().format('HH:mm')}
                             />
@@ -837,7 +734,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                                 onFocus={() => {
                                     setShowDatePickerEnd(true)
                                 }}
-                                textInputStyle={!validate.activeTime?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
                                 title={t("BusinessUpdate.businessUpdateCompanyTimeActiveEnd")}
                                 placeholder={moment().format('HH:mm')}
                             />
@@ -866,43 +763,33 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         isError={validate.activeTime?.isError}
                         isVisible={validate.activeTime?.isVisible}
                     />
-                    <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
-                                <Icon name='camera-retro' size={20}></Icon>
-                                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ alignItems: 'center'}}>
-                            {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload[0]}` }} />
-                            ) : (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
-                            )}
-                        </View>
-                    </View>
-                    {/* Background */}
-                    {/* <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>Ảnh bìa</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
+                    <View style={styles.group}>
+                        <View style={styles.logo}>
+                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload[0]}` }} />
                             ) : (
-                                ''
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
                         </View>
-                    </View> */}
+                    </View>
                 </View>
 
-                <TouchableOpacity style={stylesBusiness.btnRegister} onPress={() => onSubmit(business)}>
-                    <Text style={stylesBusiness.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                <TouchableOpacity
+                    disabled={passValidate}
+                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    onPress={() => onSubmit(business)}
+                >
+                    {
+                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                    }
+                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>
@@ -912,7 +799,6 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
 // Faculty
 interface FacultyUpdate {
     name: InputTextValidate
-    email: InputTextValidate
     phone: InputTextValidate
     address: InputTextValidate
 }
@@ -929,15 +815,13 @@ const isAllFieldsValidFaculty = (validate: FacultyUpdate): boolean => {
     return true
 }
 
-export function UpdateFaculty(props: UpdateType) {
+export function UpdateFaculty(props: Readonly<UpdateType>) {
     const t = useTranslation();
     const dispatch = useDispatch();
     const [passValidate, setPassValidate] = useState(false);
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
-    // const [imageBackgroundTemporary, setImageBackgroundTemporary] = useState('');
 
     const [faculty, setFaculty] = useState({
         id: props.userData?.id ?? 0,
@@ -949,14 +833,10 @@ export function UpdateFaculty(props: UpdateType) {
     });
 
     useEffect(() => {
-        // Faculty
         setPhone(props.userData?.phone ?? "");
-        setEmail(props.userData?.email ?? "");
-        // Business
         setName(props.userData?.name ?? "");
         setFaculty({ ...faculty, image: props.userData?.image })
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
-        // props.userData?.background ? setImageBackgroundTemporary(props.userData?.avatar) : setImageBackgroundTemporary("");
     }, [props.userData]);
 
 
@@ -966,11 +846,6 @@ export function UpdateFaculty(props: UpdateType) {
     const [validate, setValidate] = useState<FacultyUpdate>({
         name: {
             textError: 'Tên không được để trống',
-            isVisible: false,
-            isError: true
-        },
-        email: {
-            textError: 'Email không được để trống',
             isVisible: false,
             isError: true
         },
@@ -987,90 +862,11 @@ export function UpdateFaculty(props: UpdateType) {
 
     })
 
-    const handleCheckEmail = useCallback(() => {
-        axios
-            .post(SERVER_ADDRESS + `api/users/check?email=${faculty.email}`)
-            .then((response) => {
-                if (response.data.data == 0) {
-                    setValidate({
-                        ...validate,
-                        email: {
-                            ...validate.email,
-                            isError: true,
-                            textError: t("Validate.validateEmailHadUsed"),
-                            isVisible: true
-                        }
-                    })
-                }
-                console.log(response.data.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [faculty.email])
-
-    const handleEmailChange = useCallback(
-        (event: string) => {
-            setEmail(event)
-            return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailNull")
-                        }
-                    }));
-                    resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailHasMaxLength")
-                        }
-                    }));
-                    resolve();
-                } else if (!isEmail(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailUnCorrectFormat")
-                        }
-                    }));
-                    resolve();
-                } else {
-                    setFaculty((prevBusiness) => ({
-                        ...prevBusiness,
-                        email: event
-                    }));
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: false,
-                            isVisible: false
-                        }
-                    }));
-                    resolve();
-                }
-            });
-        },
-        [validate]
-    );
-
     const handlePhoneChange = useCallback(
-        (event: string) => {
-            setPhone(event)
+        (value: string) => {
+            setPhone(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -1081,7 +877,7 @@ export function UpdateFaculty(props: UpdateType) {
                         }
                     }));
                     resolve();
-                } else if (!isPhone(event)) {
+                } else if (!isPhone(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -1095,7 +891,7 @@ export function UpdateFaculty(props: UpdateType) {
                 } else {
                     setFaculty((prevBusiness) => ({
                         ...prevBusiness,
-                        phone: event
+                        phone: value
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -1113,10 +909,10 @@ export function UpdateFaculty(props: UpdateType) {
     );
 
     const handleNameChange = useCallback(
-        (event: string) => {
-            setName(event)
+        (value: string) => {
+            setName(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1127,7 +923,7 @@ export function UpdateFaculty(props: UpdateType) {
                         },
                     }));
                     resolve();
-                } else if (isContainSpecialCharacter(event)) {
+                } else if (isContainSpecialCharacter(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1138,7 +934,7 @@ export function UpdateFaculty(props: UpdateType) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1152,7 +948,7 @@ export function UpdateFaculty(props: UpdateType) {
                 } else {
                     setFaculty((prevBusiness) => ({
                         ...prevBusiness,
-                        name: event,
+                        name: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -1168,19 +964,15 @@ export function UpdateFaculty(props: UpdateType) {
         },
         [validate]
     );
-
-
     const showAlert = () => {
-        Alert.alert("Cập nhật thất bại vui lòng thử lại")
+        Alert.alert(t("UpdateProfile.updateProfileAlertSuccess"));
     }
-
     useEffect(() => {
         setFaculty({ ...faculty, image: imagesUpload ? imagesUpload[0] : imageAvatarTemporary })
     }, [imagesUpload, imageAvatarTemporary])
 
     const asyncForValidate = async () => {
         const validationPromises = [
-            handleEmailChange(email),
             handlePhoneChange(phone),
             handleNameChange(name),
         ];
@@ -1205,6 +997,7 @@ export function UpdateFaculty(props: UpdateType) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
                                 dispatch(setUserLogin(response.data.data))
+                                dispatch(setImagesUpload([]));
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
@@ -1241,7 +1034,7 @@ export function UpdateFaculty(props: UpdateType) {
                         title={t("BusinessUpdate.businessUpdateCompanyName")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
-                        textInputStyle={!validate.name?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
                     />
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
@@ -1250,25 +1043,11 @@ export function UpdateFaculty(props: UpdateType) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={email}
-                        title={t("BusinessUpdate.businessUpdateEmail")}
-                        placeholder={t("BusinessUpdate.businessUpdateEmailPlaceholder")}
-                        onChangeText={(value) => handleEmailChange(value)}
-                        onBlur={() => handleCheckEmail()}
-                        textInputStyle={!validate.email?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
-                    />
-                    <TextValidate
-                        customStyle={{ marginLeft: 10 }}
-                        textError={validate.email?.textError}
-                        isError={validate.email?.isError}
-                        isVisible={validate.email?.isVisible}
-                    />
-                    <TextInputWithTitle
                         value={phone}
                         title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
-                        textInputStyle={!validate.phone?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
 
                     <TextValidate
@@ -1277,43 +1056,33 @@ export function UpdateFaculty(props: UpdateType) {
                         isError={validate.phone?.isError}
                         isVisible={validate.phone?.isVisible}
                     />
-                    <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
+                    <View style={styles.group}>
+                        <View style={styles.logo}>
+                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                            {imagesUpload?.length !== 0 ? (
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
                             ) : (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
                         </View>
                     </View>
-                    {/* Background */}
-                    {/* <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>Ảnh bìa</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
-                                <Icon name='camera-retro' size={20}></Icon>
-                                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ alignItems: 'center' }}>
-                            {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-                            ) : (
-                                ''
-                            )}
-                        </View>
-                    </View> */}
                 </View>
 
-                <TouchableOpacity style={stylesBusiness.btnRegister} onPress={() => onSubmit(faculty)}>
-                    <Text style={stylesBusiness.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                <TouchableOpacity
+                    disabled={passValidate}
+                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    onPress={() => onSubmit(faculty)}
+                >
+                    {
+                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                    }
+                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>
@@ -1323,7 +1092,6 @@ export function UpdateFaculty(props: UpdateType) {
 // Student
 interface StudentUpdate {
     name: InputTextValidate
-    email: InputTextValidate
     phone: InputTextValidate
     address: InputTextValidate
 }
@@ -1345,10 +1113,8 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     const dispatch = useDispatch();
     const [passValidate, setPassValidate] = useState(false);
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
-    // const [imageBackgroundTemporary, setImageBackgroundTemporary] = useState('');
 
     const [student, setStudent] = useState({
         id: props.userData?.id ?? 0,
@@ -1361,14 +1127,10 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     });
 
     useEffect(() => {
-        // Faculty
         setPhone(props.userData?.phone ?? "");
-        setEmail(props.userData?.email ?? "");
-        // Business
         setName(props.userData?.name ?? "");
         setStudent({ ...student, image: props.userData?.image })
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
-        // props.userData?.background ? setImageBackgroundTemporary(props.userData?.avatar) : setImageBackgroundTemporary("");
     }, [props.userData]);
 
 
@@ -1379,11 +1141,6 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     const [validate, setValidate] = useState<StudentUpdate>({
         name: {
             textError: t("Validate.validateNameNull"),
-            isVisible: false,
-            isError: true
-        },
-        email: {
-            textError: t("Validate.validateEmailNull"),
             isVisible: false,
             isError: true
         },
@@ -1400,90 +1157,11 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
 
     })
 
-    const handleCheckEmail = useCallback(() => {
-        axios
-            .post(SERVER_ADDRESS + `api/users/check?email=${student.email}`)
-            .then((response) => {
-                if (response.data.data == 0) {
-                    setValidate({
-                        ...validate,
-                        email: {
-                            ...validate.email,
-                            isError: true,
-                            textError: t("Validate.validateEmailHadUsed"),
-                            isVisible: true
-                        }
-                    })
-                }
-                console.log(response.data.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [student.email])
-
-    const handleEmailChange = useCallback(
-        (event: string) => {
-            setEmail(event)
-            return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailNull")
-                        }
-                    }));
-                    resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailHasMaxLength")
-                        }
-                    }));
-                    resolve();
-                } else if (!isEmail(event)) {
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: true,
-                            isVisible: true,
-                            textError: t("Validate.validateEmailUnCorrectFormat")
-                        }
-                    }));
-                    resolve();
-                } else {
-                    setStudent((prevBusiness) => ({
-                        ...prevBusiness,
-                        email: event
-                    }));
-                    setValidate((prevValidate) => ({
-                        ...prevValidate,
-                        email: {
-                            ...prevValidate.email,
-                            isError: false,
-                            isVisible: false
-                        }
-                    }));
-                    resolve();
-                }
-            });
-        },
-        [validate]
-    );
-
     const handlePhoneChange = useCallback(
-        (event: string) => {
-            setPhone(event)
+        (value: string) => {
+            setPhone(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -1494,7 +1172,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         }
                     }));
                     resolve();
-                } else if (!isPhone(event)) {
+                } else if (!isPhone(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         phone: {
@@ -1508,7 +1186,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                 } else {
                     setStudent((prevBusiness) => ({
                         ...prevBusiness,
-                        phone: event
+                        phone: value
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -1526,10 +1204,10 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     );
 
     const handleNameChange = useCallback(
-        (event: string) => {
-            setName(event)
+        (value: string) => {
+            setName(value)
             return new Promise<void>((resolve) => {
-                if (isBlank(event)) {
+                if (isBlank(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1540,7 +1218,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (isContainSpecialCharacter(event)) {
+                } else if (isContainSpecialCharacter(value)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1551,7 +1229,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         },
                     }));
                     resolve();
-                } else if (!isLengthInRange(event, 1, 255)) {
+                } else if (!isLengthInRange(value, 1, 255)) {
                     setValidate((prevValidate) => ({
                         ...prevValidate,
                         name: {
@@ -1565,7 +1243,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                 } else {
                     setStudent((prevBusiness) => ({
                         ...prevBusiness,
-                        name: event,
+                        name: value,
                     }));
                     setValidate((prevValidate) => ({
                         ...prevValidate,
@@ -1582,9 +1260,8 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
         [validate]
     );
 
-
     const showAlert = () => {
-        Alert.alert("Cập nhật thất bại vui lòng thử lại")
+        Alert.alert(t("UpdateProfile.updateProfileAlertFail"))
     }
 
     useEffect(() => {
@@ -1593,7 +1270,6 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
 
     const asyncForValidate = async () => {
         const validationPromises = [
-            handleEmailChange(email),
             handlePhoneChange(phone),
             handleNameChange(name),
         ];
@@ -1618,6 +1294,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
                                 dispatch(setUserLogin(response.data.data))
+                                dispatch(setImagesUpload([]));
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
@@ -1654,7 +1331,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         title={t("BusinessUpdate.businessUpdateCompanyName")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
-                        textInputStyle={!validate.name?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
                     />
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
@@ -1663,25 +1340,11 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={email}
-                        title={t("BusinessUpdate.businessUpdateEmail")}
-                        placeholder={t("BusinessUpdate.businessUpdateEmailPlaceholder")}
-                        onChangeText={(value) => handleEmailChange(value)}
-                        onBlur={() => handleCheckEmail()}
-                        textInputStyle={!validate.email?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
-                    />
-                    <TextValidate
-                        customStyle={{ marginLeft: 10 }}
-                        textError={validate.email?.textError}
-                        isError={validate.email?.isError}
-                        isVisible={validate.email?.isVisible}
-                    />
-                    <TextInputWithTitle
                         value={phone}
                         title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
-                        textInputStyle={!validate.phone?.isError ? stylesBusiness.textInput : stylesBusiness.ip}
+                        textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
 
                     <TextValidate
@@ -1690,43 +1353,33 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         isError={validate.phone?.isError}
                         isVisible={validate.phone?.isVisible}
                     />
-                    <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
+                    <View style={styles.group}>
+                        <View style={styles.logo}>
+                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
                             ) : (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
                         </View>
                     </View>
-                    {/* Background */}
-                    {/* <View style={stylesBusiness.group}>
-                        <View style={stylesBusiness.logo}>
-                            <Text style={stylesBusiness.txt}>Ảnh bìa</Text>
-                            <TouchableOpacity style={stylesBusiness.btnImg} onPress={() => imagePickerOption?.show()}>
-                                <Icon name='camera-retro' size={20}></Icon>
-                                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ alignItems: 'center' }}>
-                            {imagesUpload ? (
-                                <Image style={stylesBusiness.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-                            ) : (
-                                ''
-                            )}
-                        </View>
-                    </View> */}
                 </View>
 
-                <TouchableOpacity style={stylesBusiness.btnRegister} onPress={() => onSubmit(student)}>
-                    <Text style={stylesBusiness.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                <TouchableOpacity
+                    disabled={passValidate}
+                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    onPress={() => onSubmit(student)}
+                >
+                    {
+                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                    }
+                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>

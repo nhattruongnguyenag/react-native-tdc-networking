@@ -78,6 +78,8 @@ import {
   TEXT_TITLE_STUDENTCODE,
   TEXT_TITLE_STUDENTNAME
 } from '../constants/StringVietnamese'
+import { useDispatch } from 'react-redux'
+import { setImagesUpload } from '../redux/Slice'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -103,6 +105,7 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -514,6 +517,7 @@ export default function StudentRegistrationScreen() {
         .then((response) => {
           setIsLoading(false)
           Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
+          dispatch(setImagesUpload([]));
           navigation.navigate(LOGIN_SCREEN)
         })
         .catch((error) => {
@@ -535,7 +539,7 @@ export default function StudentRegistrationScreen() {
   }, [validate])
 
   return (
-    <ScrollView style={{backgroundColor:'#fff'}}>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>

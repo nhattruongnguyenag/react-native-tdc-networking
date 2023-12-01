@@ -254,23 +254,25 @@ const CustomizeModalComments = () => {
                         }
                     </View>
                 </Animated.View>
-                <SafeAreaView style={keyboardStatus ? [styles.textInput, { bottom: '41%' }] : [styles.textInput, { bottom: '0%' }]}>
-                    <TextInput
-                        ref={inputRef}
-                        value={myComment}
-                        onChangeText={(value) => {
-                            setMyComment(value)
-                        }}
-                        placeholderTextColor={COLOR_BLACK}
-                        style={styles.txtPlaceholder}
-                        placeholder={t("CreateCommentToolbar.commentPlaceholderInput")}
-                    />
-                    <TouchableOpacity
-                        onPress={() => handleSubmitEvent()}>
-                        <IconFontAwesome
-                            name='send' size={25} color={COLOR_BUTTON} />
-                    </TouchableOpacity>
-                </SafeAreaView>
+                {
+                    !isLoading && <SafeAreaView style={keyboardStatus ? [styles.textInput, { bottom: '41%' }] : [styles.textInput, { bottom: '0%' }]}>
+                        <TextInput
+                            ref={inputRef}
+                            value={myComment}
+                            onChangeText={(value) => {
+                                setMyComment(value)
+                            }}
+                            placeholderTextColor={COLOR_BLACK}
+                            style={styles.txtPlaceholder}
+                            placeholder={t("CreateCommentToolbar.commentPlaceholderInput")}
+                        />
+                        <TouchableOpacity
+                            onPress={() => handleSubmitEvent()}>
+                            <IconFontAwesome
+                                name='send' size={25} color={COLOR_BUTTON} />
+                        </TouchableOpacity>
+                    </SafeAreaView>
+                }
             </View >
         </Modal >
     )
@@ -278,7 +280,7 @@ const CustomizeModalComments = () => {
 
 export interface CommentChildrenType {
     t: ReturnType<typeof useTranslation>
-    userCreatedPostId:number,
+    userCreatedPostId: number,
     commentItem: Comment,
     userLoginId: number | undefined,
     handleClickToCommentReplyEvent: (id: number) => void,
@@ -294,7 +296,7 @@ const CommentExport = (item: CommentChildrenType) => {
     }
     return <>
         <CustomizeComment
-            tagName={getFacultyTranslated(item.commentItem?.parent?.['name'] ?? "",item.t)}
+            tagName={getFacultyTranslated(item.commentItem?.parent?.['name'] ?? "", item.t)}
             userId={item.userLoginId}
             authorCommentId={item.commentItem.user['id']}
             type={item.commentItem.parent === null ? 0 : 1}

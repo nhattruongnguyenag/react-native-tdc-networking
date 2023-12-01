@@ -18,8 +18,6 @@ interface FacultyProfileType {
     t:ReturnType<typeof useTranslation>
     isFollow: boolean,
     handleClickButtonEvent: (flag: number) => void,
-    timeWork: string,
-    address: string,
     phone: string,
     email: string,
     name: string,
@@ -74,18 +72,6 @@ export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfi
             </View>
             {/* Info */}
             <View>
-                <View style={styles.infoContainer}>
-                    <IconIonicons
-                        style={styles.iconInfo}
-                        name='time-outline' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>{props.t("Profile.profileOperatingHours")}: {props.timeWork}</Text>
-                </View>
-                <View style={styles.infoContainer}>
-                    <IconEvilIcons
-                        style={styles.iconInfo}
-                        name='location' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>{props.t("Profile.profileAddress")}: {props.address}</Text>
-                </View>
                 <View style={styles.infoContainer}>
                     <IconFeather
                         style={styles.iconInfo}

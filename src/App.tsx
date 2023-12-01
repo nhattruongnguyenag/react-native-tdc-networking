@@ -74,7 +74,7 @@ import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
-import FollowingScreen from './screens/FollowingScreen'
+import MyProfileScreen from './screens/MyProfileScreen'
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
 import ImageViewScreen from './screens/ImageViewScreen'
 import IntermediationScreen from './screens/IntermediationScreen'
@@ -100,6 +100,11 @@ import UpdateProfile from './screens/UpdateProfile'
 import { Student } from './types/Student'
 import { Faculty } from './types/Faculty'
 import { Business } from './types/Business'
+import { NormalPost } from './types/NormalPost'
+import { UpdateNormalPost } from './types/UpdateNormalPost'
+import CustomizeModalImage from './components/modal/CustomizeModalImage'
+import CustomizeModalUserReacted from './components/modal/CustomizeModalUserReacted'
+import CustomizeModalComments from './components/modal/CustomizeModalComments'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -127,7 +132,7 @@ export type RootStackParamList = {
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
+  CREATE_NORMAL_POST_SCREEN: { group: number } | UpdateNormalPost | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
@@ -460,7 +465,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
-      <TopTab.Screen name={FOLLOWING_SCREEN} component={FollowingScreen} />
+      <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
 }

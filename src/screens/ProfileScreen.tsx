@@ -1,15 +1,14 @@
 import { FlatList, View, ScrollView, RefreshControl, StyleSheet, Text } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
-import { API_URL_GET_POST_BY_USER_ID, API_URL_LIKE } from '../constants/Path';
+import { API_URL_DELETE_POST, API_URL_FOLLOW, API_URL_GET_POST_BY_USER_ID, API_URL_LIKE, API_URL_SAVE_POST } from '../constants/Path';
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setSelectConversation, updatePostWhenHaveChangeComment } from '../redux/Slice';
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation} from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
-import CustomizeModalLoading from '../components/modal/CustomizeModalLoading';
-import { CALL_ACTION, CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables';
-import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, MESSENGER_SCREEN, OPTION_SCREEN, PROFILE_SCREEN } from '../constants/Screen';
+import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND} from '../constants/Variables';
+import {MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
@@ -22,16 +21,22 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { getGroupForPost } from '../utils/GetGroup';
 import { User } from '../types/User';
-import { deletePostAPI, followAPI } from '../api/CallApi';
+import { deletePostAPI, followAPI, savePostAPI, updateImageUserProfile } from '../api/CallApi';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
 import { getFacultyTranslated } from '../utils/getFacultyTranslated ';
+import CustomizedImagePicker from '../components/CustomizedImagePicker';
+import ActionSheet from 'react-native-actionsheet';
+import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
+import SkeletonPost from '../components/SkeletonPost';
+import { useGetPostsByIdQuery } from '../redux/Service';
 
 const ProfileScreen = ({ route }: any) => {
     const t = useTranslation();
+    const [imageFocus, setImageFocus] = useState<string>("");
     const { userId, group } = route.params;
-    const [imageToShow, setImageToShow] = useState<string>('');
+    const [loadingBackground, setLoadingBackground] = useState(false);
     const [isCalled, setIsCalled] = useState(false);
     const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
@@ -42,13 +47,30 @@ const ProfileScreen = ({ route }: any) => {
     const [isFollow, setIsFollow] = useState<boolean>(false);
     const [typeAuthorPost, setTypeAuthorPost] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { updatePost } = useAppSelector((state) => state.TDCSocialNetworkReducer);
-    const dispatch = useAppDispatch();
+    const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>();
+    const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+    const dispatch = useAppDispatch()
+
+    const { data, isFetching } = useGetPostsByIdQuery(
+        {
+            userId: userId,
+            groupCode: group,
+            userLogin: userLogin?.id ?? 0
+        },
+        {
+            pollingInterval: 2000
+        }
+    );
 
     useEffect(() => {
-        getPostByUserIdAPI();
-        dispatch(updatePostWhenHaveChangeComment(false))
-    }, [updatePost])
+        if (data) {
+            setIsLoading(false);
+            setPost([]);
+            setPost(data.data.posts);
+            setIsCalled(true);
+        }
+    }, [data])
+
 
     useEffect(() => {
         if (post.length != 0 || isCalled) {
@@ -61,7 +83,6 @@ const ProfileScreen = ({ route }: any) => {
     }, [])
 
     const getPostByUserIdAPI = useCallback(() => {
-        dispatch(goToProfileScreen(userId))
         axios.post(API_URL_GET_POST_BY_USER_ID, {
             "userId": userId,
             "groupCode": group,
@@ -78,10 +99,14 @@ const ProfileScreen = ({ route }: any) => {
             })
     }, [])
 
+    useEffect(()=>{
+        dispatch(goToProfileScreen(userId))
+    },[userId])
+
     useEffect(() => {
         setIsLoading(true);
         getPostByUserIdAPI();
-    }, [getPostByUserIdAPI, isFocused])
+    }, [getPostByUserIdAPI, isFocused, loadingBackground])
 
     const likeAction = (obj: LikeAction) => {
         like(obj)
@@ -100,23 +125,9 @@ const ProfileScreen = ({ route }: any) => {
         })
     }, [])
 
-    const handleClickToCreateButtonEvent = (type: string) => {
-        if (type === TYPE_NORMAL_POST) {
-            navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: -1 });
-        } else if (type === TYPE_RECRUITMENT_POST) {
-            navigation.navigate(CREATE_RECRUITMENT_SCREEN);
-        } else {
-            navigation.navigate(CREATE_SURVEY_SCREEN);
-        }
-    }
-
-    const handleClickIntoAvatar = () => {
-        navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: group })
-    }
-
     const handleDeletePost = async (id: number) => {
-        const status = await deletePostAPI(SERVER_ADDRESS + 'api/posts/', id);
-        ToastMessenger(status, 200, 'Thông báo', 'Xóa bài viết thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau')
+        const status = await deletePostAPI(API_URL_DELETE_POST, id);
+        ToastMessenger(status, 200,t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
     }
 
     const handleSavePost = async (id: number) => {
@@ -124,6 +135,7 @@ const ProfileScreen = ({ route }: any) => {
             "userId": userLogin?.id,
             "postId": id
         }
+        const status = await savePostAPI(API_URL_SAVE_POST, data);
     }
 
     const renderItem = (item: any) => {
@@ -166,7 +178,6 @@ const ProfileScreen = ({ route }: any) => {
                     sender: userLogin
                 }))
             }
-            console.log(userInfo)
             navigation.navigate(MESSENGER_SCREEN)
         } else if (flag === FOLLOW_ACTION) {
             handleClickFollowEvent();
@@ -183,7 +194,7 @@ const ProfileScreen = ({ route }: any) => {
             "userId": userLogin?.id
         }
         setIsFollow(!isFollow);
-        const status = await followAPI(SERVER_ADDRESS + 'api/users/follow', followData);
+        const status = await followAPI(API_URL_FOLLOW, followData);
         ToastMessenger(status, 200, 'Thông báo', isFollow ? 'Hủy theo dõi thành công' : 'Theo dõi thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau');
     }
 
@@ -193,18 +204,15 @@ const ProfileScreen = ({ route }: any) => {
 
     const handleClickIntoHeaderComponentEvent = (flag: number) => {
         switch (flag) {
-            case CLICK_CAMERA_AVATAR_EVENT:
-                console.log('CLICK_CAMERA_AVATAR_EVENT');
-                break;
             case CLICK_CAMERA_BACKGROUND_EVENT:
-                console.log('CLICK_CAMERA_BACKGROUND_EVENT');
+                imagePickerOption?.show();
                 break;
             case SEE_AVATAR:
-                // setImageToShow(userInfo?.image ?? '')
+                setImageFocus(userInfo?.image + "");
                 setIsShowAvatar(true)
                 break;
             case SEE_BACKGROUND:
-                // setImageToShow(userInfo?.background ?? '')
+                setImageFocus(userInfo?.background + "");
                 setIsShowAvatar(true)
                 break;
             default:
@@ -216,13 +224,36 @@ const ProfileScreen = ({ route }: any) => {
         setIsShowAvatar(false);
     }
 
+    const handleShowImageBackgroundUpdate = (flag: boolean) => {
+        if (flag) {
+            const data = {
+                userId: userLogin?.id,
+                avatar: undefined,
+                background: imagesUpload !== null ? imagesUpload[0] : undefined
+            }
+            const status = updateImageUserProfile(SERVER_ADDRESS + "api/users/change/image", data);
+            setLoadingBackground(!loadingBackground);
+        }
+        dispatch(setImagesUpload([]));
+    }
+
     return (
         <View>
             {
-                isLoading ? <CustomizeModalLoading /> : <>
+                imagesUpload !== null && <>
+                    {
+                        (imagesUpload?.length !== 0 && isFocused) && <CustomizeModalShowBackgroundUpdate
+                            t={t}
+                            image={imagesUpload?.length !== 0 ? imagesUpload[0] : ""}
+                            handleShowImageBackgroundUpdate={handleShowImageBackgroundUpdate} />
+                    }
+                </>
+            }
+            {
+                isLoading ? <SkeletonPost /> : <>
                     <CustomizeModalBigImageShow
                         visible={isShowAvatar}
-                        image={userInfo?.image ?? ''}
+                        image={imageFocus + ""}
                         handleCloseModal={handleCloseModal} />
                     <ScrollView
                         showsVerticalScrollIndicator={false}
@@ -251,7 +282,7 @@ const ProfileScreen = ({ route }: any) => {
                                 <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
                                 {' '}
                                 {
-                                    getGroupForPost(group, t) 
+                                    getGroupForPost(group, t)
                                 }
                             </Text>
                         </View>
@@ -264,6 +295,7 @@ const ProfileScreen = ({ route }: any) => {
                             />
                         }
                     </ScrollView>
+                    <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                 </>
             }
         </View>
@@ -272,7 +304,7 @@ const ProfileScreen = ({ route }: any) => {
 
 const styles = StyleSheet.create({
     wrapperCreateNormalPostToolbar: {
-        marginBottom: 20
+        marginBottom: 20,
     },
     titlePostArea: {
         backgroundColor: COLOR_WHITE,

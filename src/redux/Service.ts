@@ -16,6 +16,7 @@ import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { FollowUserModel } from '../types/response/FollowUserModel'
 import { buildPostSearchRequest } from '../utils/PostHelper'
+import { Post } from '../types/Post'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -39,7 +40,7 @@ export const TDCSocialNetworkAPI = createApi({
     getConversationsByUserId: builder.query<Conversation[], number>({
       query: (userId) => `api/conversations/${userId}`
     }),
-    getQuestionsFromSurveyPost: builder.query<Data<SurveyResponse>, { postId: number, userLogin: number }>({
+    getQuestionsFromSurveyPost: builder.query<Data<SurveyResponse>, { postId: number; userLogin: number }>({
       query: ({ postId, userLogin }) => `api/posts/survey?postId=${postId}&userLogin=${userLogin}`
     }),
     saveDeviceToken: builder.mutation<MessageResponseData, DeviceToken>({
@@ -115,8 +116,7 @@ export const TDCSocialNetworkAPI = createApi({
       })
     }),
     getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
-      query: (data) => (
-        {
+      query: (data) => ({
         url: `api/posts/search?${buildPostSearchRequest(data)}`
       }),
       providesTags: (result) => {
@@ -151,6 +151,34 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+    }),
+    getFacultyPosts: builder.query<Data<Post[]>, { faculty: string; id: number }>({
+      query: (data) => ({
+        url: `api/posts/group?code=${data.faculty}&userLogin=${data.id}`,
+        method: 'GET'
+      })
+    }),
+    getBusinessPosts: builder.query<Data<Post[]>, { id: number }>({
+      query: (data) => ({
+        url: `api/posts/group?code=group_connect_business&userLogin=${data.id}`,
+        method: 'GET'
+      })
+    }),
+    getStudentPosts: builder.query<Data<Post[]>, { id: number }>({
+      query: (data) => ({
+        url: `api/posts/group?code=group_tdc&userLogin=${data.id}`,
+        method: 'GET'
+      })
+    }),
+    getPostsById: builder.query<Data<any>, { userId: number; groupCode: string; userLogin: number }>({
+      query: (data) => ({
+        url: `api/posts/group/user/detail`,
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
     })
   })
 })
@@ -172,5 +200,9 @@ export const {
   useJobApplyMutation,
   useSendEmailMutation,
   useRejectPostMutation,
-  useAcceptPostMutation
+  useAcceptPostMutation,
+  useGetFacultyPostsQuery,
+  useGetBusinessPostsQuery,
+  useGetStudentPostsQuery,
+  useGetPostsByIdQuery
 } = TDCSocialNetworkAPI

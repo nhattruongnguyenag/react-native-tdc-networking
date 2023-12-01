@@ -16,6 +16,7 @@ import {
   CLICK_SEE_LIST_CV_POST_EVENT,
   CLICK_SEE_RESULT_POST_EVENT,
   CLICK_UN_SAVE_POST,
+  CLICK_UPDATE_POST,
   COMMENT_ACTION,
   GO_TO_PROFILE_ACTIONS,
   LIKE_ACTION,
@@ -29,14 +30,12 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
-import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST_TXT } from '../../constants/StringVietnamese'
-import Toast from 'react-native-toast-message';
-import { ToastMessenger } from '../../utils/ToastMessenger'
-import { formatVietNamCurrency } from '../../utils/FormatCurrency'
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY } from '../../constants/StringVietnamese'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
@@ -51,15 +50,14 @@ const CustomizePost = (props: Post) => {
 
   const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
     if (flag === GO_TO_PROFILE_ACTIONS) {
+      console.log(userIdOfProfileNow, post.userId,currentScreenNowIsProfileScreen);
       if (userIdOfProfileNow !== post.userId) {
         if (currentScreenNowIsProfileScreen) {
-          navigation.replace(PROFILE_SCREEN, { userId: post.userId, group: post.group })
-        } else {
-          navigation.navigate(PROFILE_SCREEN, { userId: post.userId, group: post.group })
-        }
+            navigation.replace(PROFILE_SCREEN, { userId: post.userId, group: post.group })
+          } else {
+            navigation.navigate(PROFILE_SCREEN, { userId: post.userId, group: post.group })
+          }
       }
-    } else {
-      console.log('show menu')
     }
   }
 
@@ -116,11 +114,10 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickIntoBtnIconComments = () => {
-    console.log(JSON.stringify(props));
     dispatch(
       openModalComments({
         id: props.id,
-        userCreatedPostId:props.userId,
+        userCreatedPostId: props.userId,
         group: post.group,
         commentFather: []
       })
@@ -136,7 +133,6 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickMenuOption = (flag: number) => {
-    console.log(flag)
     switch (flag) {
       case CLICK_SAVE_POST_EVENT:
         post.handleUnSave(post.id);
@@ -153,9 +149,20 @@ const CustomizePost = (props: Post) => {
       case CLICK_SEE_RESULT_POST_EVENT:
         handleSeeResultSurveyPost();
         break
+      case CLICK_UPDATE_POST:
+        handleUpdateNormalPostEvent();
+        break
       default:
         return '';
     }
+  }
+  const handleUpdateNormalPostEvent = () => {
+    const updateNormalPost: UpdateNormalPost = {
+      postId: props.id,
+      content: props.content,
+      images: props.images
+    }
+    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost });
   }
 
   const handleSeeListCvPost = () => {

@@ -242,7 +242,8 @@
       "menuOptionUnSaveArticle": "記事の保存を解除",
       "menuOptionDeleteArticle": "記事を削除",
       "menuOptionViewResumeList": "履歴書リストを表示",
-      "menuOptionViewSurveyResults": "調査結果を表示"
+      "menuOptionViewSurveyResults": "調査結果を表示",
+      "menuOptionViewSurveyUpdateNormalPost": "投稿を編集する"
     },
     "CreatePostToolbar": {
         "createPostToolbarTitle": "新しい投稿を作成する",
@@ -351,23 +352,54 @@
             "optionScreenSaveText": "保存",
             "optionScreenUpdateProfileText": "プロフィールを更新"
         },
-            "BusinessUpdate": {
-                "businessUpdateCompanyName": "企業名",
-                "businessUpdateEmail": "Eメール",
-                "businessUpdateRepresentorFullName": "代表者氏名",
-                "businessUpdateCompanyTaxId": "税ID",
-                "businessUpdateCompanyAddress": "住所",
-                "businessUpdateCompanyPhoneNumber": "電話番号",
-                "businessUpdateCompanyTimeActiveStart": "活動開始時刻",
-                "businessUpdateCompanyTimeActiveEnd": "活動終了時刻",
-                "businessUpdateCompanyAvatar": "アバター画像",
-                "businessUpdateCompanyButton": "個人情報を更新",
-                "businessUpdateCompanyNamePlaceholder": "企業名を入力",
-                "businessUpdateEmailPlaceholder": "メールを入力",
-                "businessUpdateRepresentorFullNamePlaceholder": "代表者のフルネームを入力",
-                "businessUpdateCompanyTaxIdPlaceholder": "税IDを入力",
-                "businessUpdateCompanyAddressPlaceholder": "住所を入力",
-                "businessUpdateCompanyPhoneNumberPlaceholder": "電話番号を入力",
-                "businessUpdateTimeActive": "まで"
-            }
-}
+        "BusinessUpdate": {
+            "businessUpdateCompanyName": "企業名",
+            "businessUpdateEmail": "Eメール",
+            "businessUpdateRepresentorFullName": "代表者氏名",
+            "businessUpdateCompanyTaxId": "税ID",
+            "businessUpdateCompanyAddress": "住所",
+            "businessUpdateCompanyPhoneNumber": "電話番号",
+            "businessUpdateCompanyTimeActiveStart": "活動開始時刻",
+            "businessUpdateCompanyTimeActiveEnd": "活動終了時刻",
+            "businessUpdateCompanyAvatar": "アバター画像",
+            "businessUpdateCompanyButton": "個人情報を更新",
+            "businessUpdateCompanyNamePlaceholder": "企業名を入力",
+            "businessUpdateEmailPlaceholder": "メールを入力",
+            "businessUpdateRepresentorFullNamePlaceholder": "代表者のフルネームを入力",
+            "businessUpdateCompanyTaxIdPlaceholder": "税IDを入力",
+            "businessUpdateCompanyAddressPlaceholder": "住所を入力",
+            "businessUpdateCompanyPhoneNumberPlaceholder": "電話番号を入力",
+            "businessUpdateTimeActive": "まで"
+        },
+        "CreateNormalPost": {
+            "createNormalPostTitle": "投稿を追加",
+            "updateNormalPostTitle": "投稿を更新",
+            "createNormalPostPlaceholder": "投稿の内容を入力してください",
+            "createNormalPostButtonText": "画像を追加",
+            "createNormalPostButtonFinish": "完了"
+        },
+        "ModalReviewBackground": {
+            "modalReviewBackgroundTextSave": "保存",
+            "modalReviewBackgroundTextCancel": "保存をキャンセル"
+        },                
+        "AlertNotify": {
+            "alertNotifyTitle": "お知らせ",
+            "alertNotifyCreateNewPostFail": "新しい投稿の作成に失敗しました",
+            "alertNotifyCreateNewPostSuccess": "新しい投稿が成功製造されました",
+            "alertNotifyUpdatePostFail": "投稿の更新に失敗しました",
+            "alertNotifyUpdatePostSuccess": "投稿の更新に成功しました",
+            "alertNotifyPostContentCannotNull": "投稿の内容は空白にできません",
+            "alertNotifyCharacter": "文字",
+            "alertNotifyTextAccept": "承認",
+            "alertNotifyTextReject": "拒否",
+            "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "文字数は制限を超えていてはいけません"            
+        },
+        "UpdateProfile": {
+            "updateProfileAlertSuccess": "更新が成功しました",
+            "updateProfileAlertFail": "更新に失敗しました。もう一度お試しください"
+        },
+        "ToastMessenger": {
+            "toastMessengerTextTitle": "警告",
+            "toastMessengerTextWarning": "システムエラーが発生しました。後でもう一度お試しください"
+        }                               
+    }

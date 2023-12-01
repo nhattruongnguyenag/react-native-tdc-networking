@@ -62,8 +62,6 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     t={t}
                     isFollow={props.isFollow}
                     handleClickButtonEvent={props.handleClickButtonEvent}
-                    timeWork={props.userData.activeTime ?? t("Profile.unUpdate")}
-                    address={props.userData.address ?? t("Profile.unUpdate")}
                     phone={props.userData.phone ?? t("Profile.unUpdate")}
                     email={props.userData.email ?? t("Profile.unUpdate")}
                     name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
@@ -82,7 +80,8 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
             {
                 props.userData && <View style={styles.container}>
                     <CustomizeHeaderProfile
-                        background={props.userData.image}
+                        isSameUser={props.userData?.id === userLogin?.id}
+                        background={props.userData.background}
                         avatar={props.userData.image}
                         name={getFacultyTranslated(props.userData.name, t)}
                         handleClickIntoHeaderComponentEvent={

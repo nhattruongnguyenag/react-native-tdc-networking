@@ -5,14 +5,14 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE, COLOR_BLUE_BANNER, COLOR_BORDER } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
-import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, CLICK_UN_SAVE_POST, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
+import { CLICK_DELETE_POST_EVENT, CLICK_SAVE_POST_EVENT, CLICK_SEE_LIST_CV_POST_EVENT, CLICK_SEE_RESULT_POST_EVENT, CLICK_UN_SAVE_POST, CLICK_UPDATE_POST, GO_TO_PROFILE_ACTIONS, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import { useAppSelector } from '../../redux/Hook'
 import { useTranslation } from 'react-multi-lang'
 
 interface HeaderPostPropsType {
-  t:ReturnType<typeof useTranslation>
+  t: ReturnType<typeof useTranslation>
   userId: number
   name: string
   avatar: string
@@ -54,10 +54,18 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
       }
     ];
 
-    if (userLogin?.id === props.userId) {
+    if (userLogin?.id === props.userId && props.isSave !== 1) {
       options.push({
         type: CLICK_DELETE_POST_EVENT,
         name: props.t("MenuOption.menuOptionDeleteArticle"),
+        visible: true
+      });
+    }
+
+    if (userLogin?.id === props.userId) {
+      options.push({
+        type: CLICK_UPDATE_POST,
+        name: props.t("MenuOption.menuOptionViewSurveyUpdateNormalPost"),
         visible: true
       });
     }

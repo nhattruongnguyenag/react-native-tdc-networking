@@ -21,6 +21,7 @@ export const CLICK_DELETE_POST_EVENT = 1;
 export const CLICK_SEE_RESULT_POST_EVENT = 2;
 export const CLICK_SEE_LIST_CV_POST_EVENT = 3;
 export const CLICK_UN_SAVE_POST = 4;
+export const CLICK_UPDATE_POST = 5;
 // Faculty
 export const FacultyOfElectricalEngineering = "Khoa điện - Điện tử";
 export const FacultyOfInformationTechnology = "Khoa Công Nghệ Thông Tin";

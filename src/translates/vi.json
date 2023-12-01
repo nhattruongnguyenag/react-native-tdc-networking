@@ -244,7 +244,8 @@
         "menuOptionUnSaveArticle": "Hủy lưu bài viết",
         "menuOptionDeleteArticle": "Xóa bài viết",
         "menuOptionViewResumeList": "Xem danh sách CV",
-        "menuOptionViewSurveyResults": "Xem kết quả khảo sát"
+        "menuOptionViewSurveyResults": "Xem kết quả khảo sát",
+        "menuOptionViewSurveyUpdateNormalPost": "Chỉnh sửa bài viết"
     },
     "CreatePostToolbar": {
         "createPostToolbarTitle": "Tạo Bài Viết Mới",
@@ -353,24 +354,54 @@
         "optionScreenSaveText": "Lưu",
         "optionScreenUpdateProfileText": "Cập nhật trang cá nhân"
     },
-        "BusinessUpdate": {
-            "businessUpdateCompanyName": "Tên doanh nghiệp",
-            "businessUpdateEmail": "Email",
-            "businessUpdateRepresentorFullName": "Họ tên người đại diện",
-            "businessUpdateCompanyTaxId": "Mã số thuế",
-            "businessUpdateCompanyAddress": "Địa chỉ",
-            "businessUpdateCompanyPhoneNumber": "Số điện thoại",
-            "businessUpdateCompanyTimeActiveStart": "Thời gian bắt đầu hoạt động",
-            "businessUpdateCompanyTimeActiveEnd": "Thời gian kết thúc hoạt động",
-            "businessUpdateCompanyAvatar": "Ảnh đại diện",
-            "businessUpdateCompanyButton": "Cập nhật thông tin cá nhân",
-            "businessUpdateCompanyNamePlaceholder": "Nhập tên doanh nghiệp",
-            "businessUpdateEmailPlaceholder": "Nhập email",
-            "businessUpdateRepresentorFullNamePlaceholder": "Nhập họ tên người đại diện",
-            "businessUpdateCompanyTaxIdPlaceholder": "Nhập mã số thuế",
-            "businessUpdateCompanyAddressPlaceholder": "Nhập địa chỉ",
-            "businessUpdateCompanyPhoneNumberPlaceholder": "Nhập số điện thoại",
-            "businessUpdateTimeActive": "Đến"
-        }
-    
+    "BusinessUpdate": {
+        "businessUpdateCompanyName": "Tên doanh nghiệp",
+        "businessUpdateEmail": "Email",
+        "businessUpdateRepresentorFullName": "Họ tên người đại diện",
+        "businessUpdateCompanyTaxId": "Mã số thuế",
+        "businessUpdateCompanyAddress": "Địa chỉ",
+        "businessUpdateCompanyPhoneNumber": "Số điện thoại",
+        "businessUpdateCompanyTimeActiveStart": "Thời gian bắt đầu hoạt động",
+        "businessUpdateCompanyTimeActiveEnd": "Thời gian kết thúc hoạt động",
+        "businessUpdateCompanyAvatar": "Ảnh đại diện",
+        "businessUpdateCompanyButton": "Cập nhật thông tin cá nhân",
+        "businessUpdateCompanyNamePlaceholder": "Nhập tên doanh nghiệp",
+        "businessUpdateEmailPlaceholder": "Nhập email",
+        "businessUpdateRepresentorFullNamePlaceholder": "Nhập họ tên người đại diện",
+        "businessUpdateCompanyTaxIdPlaceholder": "Nhập mã số thuế",
+        "businessUpdateCompanyAddressPlaceholder": "Nhập địa chỉ",
+        "businessUpdateCompanyPhoneNumberPlaceholder": "Nhập số điện thoại",
+        "businessUpdateTimeActive": "Đến"
+    },
+    "CreateNormalPost":{
+        "createNormalPostTitle":"Thêm bài viết",
+        "updateNormalPostTitle":"Cập nhật bài viết",
+        "createNormalPostPlaceholder":"Hãy nhập nội dung bài viết",
+        "createNormalPostButtonText":"Thêm hình ảnh",
+        "createNormalPostButtonFinish":"Hoàn tất"
+    },
+    "ModalReviewBackground":{
+        "modalReviewBackgroundTextSave":"Lưu",
+        "modalReviewBackgroundTextCancel":"Hủy lưu"
+    },
+    "AlertNotify":{
+        "alertNotifyTitle":"Thông báo",
+        "alertNotifyCreateNewPostFail":"Tạo bài viết không thành công",
+        "alertNotifyCreateNewPostSuccess":"Đã tạo bài viết thành công",
+        "alertNotifyUpdatePostFail":"Cập nhật bài viết không thành công",
+        "alertNotifyUpdatePostSuccess":"Cập nhật bài viết thành công",
+        "alertNotifyPostContentCannotNull":"nội dung bài viết không thể để trống",
+        "alertNotifyCharacter":"Ký tự",
+        "alertNotifyTextAccept":"Đồng ý",
+        "alertNotifyTextReject":"Hủy bỏ",
+        "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber":"số  lượng ký tự không được vượt quá"
+    },
+   "UpdateProfile":{
+        "updateProfileAlertSuccess":"Cập nhật thành công",
+        "updateProfileAlertFail":"Cập nhật thất bại vui lòng thử lại"
+    },
+    "ToastMessenger":{
+        "toastMessengerTextTitle":"Cảnh báo",
+        "toastMessengerTextWarning":"Lỗi hệ thống vui lòng thử lại sau"
+    }
 }
