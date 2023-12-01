@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
-import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { DETAIL_SURVEY_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
 import { SurveyResponsePostModal } from '../../types/response/SurveyResponsePostModal'
 import { isSurveyPost } from '../../utils/PostHelper'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
@@ -21,7 +21,7 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
     }, [])
 
     const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
+        navigation.navigate(DETAIL_SURVEY_SCREEN, { surveyPostId: idPost })
     }
 
     const t = useTranslation()
@@ -30,6 +30,7 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
         <CustomizeSurveyPost
             id={surveyPost.id}
             title={surveyPost.title ?? t('PostApproveItem.isLoading')}
+            active={surveyPost.active}
             handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
             description={surveyPost.description ?? t('PostApproveItem.isLoading')}
         />

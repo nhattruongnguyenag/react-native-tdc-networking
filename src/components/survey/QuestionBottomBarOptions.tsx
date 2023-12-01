@@ -3,14 +3,13 @@ import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import ToggleSwitch from 'toggle-switch-react-native'
+import { EDIT_MODE } from '../../constants/Variables'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { deleteQuestion, updateQuestion } from '../../redux/Slice'
 
 interface QuestionBottomBarOptionsProps {
     index?: number
-    editMode?: boolean
-    reviewMode?: boolean
-    conductMode?: boolean
+    mode: number[]
     onBtnUpdateQuestionPress?: (questionIndex: number) => void
 }
 
@@ -38,12 +37,10 @@ export default function QuestionBottomBarOptions(props: QuestionBottomBarOptions
                 }
             }))
         }
-
-        console.log(props.index, switchToggle)
     }, [switchToggle])
 
     return (
-        <View style={[styles.body, { display: props.reviewMode || props.conductMode ? 'none' : 'flex' }]}>
+        <View style={[styles.body, { display: props.mode.includes(EDIT_MODE) ? 'flex' : 'none' }]}>
             <IconButton
                 icon='delete'
                 iconColor='#f70000'

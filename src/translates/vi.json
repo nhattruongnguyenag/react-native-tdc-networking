@@ -59,7 +59,8 @@
         "approvalPostScreen": "Duyệt bài viết",
         "createSurveyScreen": "Thêm khảo sát",
         "createRecruitmentScreen": "Thêm tin tuyển dụng",
-        "pendingPostScreen": "Bài viết đang chờ"
+        "pendingPostScreen": "Bài viết đang chờ",
+        "detailSurveyScreen": "Chi tiết câu hỏi"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",

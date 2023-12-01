@@ -24,8 +24,5 @@ export interface QuestionProps {
   index?: number
   isDisableDeleteBtn?: boolean
   onUpdateQuestion?: (questionIndex: number) => void
-  reviewMode?: boolean
-  conductMode?: boolean
-  editMode?: boolean
   mode: number[]
 }

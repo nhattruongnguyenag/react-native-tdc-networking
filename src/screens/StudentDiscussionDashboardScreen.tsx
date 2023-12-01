@@ -18,6 +18,7 @@ import { RootStackParamList } from '../App'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { useIsFocused } from '@react-navigation/native';
+import { GROUP_TDC_ID } from '../constants/Groups'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
@@ -86,11 +87,11 @@ export default function StudentDiscussionDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 1 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { groupId: GROUP_TDC_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_TDC_ID })
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN, { groupId: GROUP_TDC_ID })
     }
   }
 
@@ -127,6 +128,7 @@ export default function StudentDiscussionDashboardScreen() {
         isSave={item.isSave}
         group={code}
         handleUnSave={handleUnSave}
+        active={item.active}
       />
     )
   }

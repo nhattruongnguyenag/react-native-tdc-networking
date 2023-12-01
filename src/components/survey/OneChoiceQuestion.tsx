@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
+import { CONDUCT_MODE, EDIT_MODE } from '../../constants/Variables'
 import { QuestionProps } from '../../types/Question'
 import RadioInputWithTitle from '../inputs/RadioInputWithTitle'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
@@ -23,7 +24,7 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
   return (
     <View style={styles.itemBody}>
       <QuestionTitle
-        required={props.conductMode ? props.dataResponse?.required : props.data?.required}
+        required={props.mode.includes(CONDUCT_MODE) ? props.dataResponse?.required : props.data?.required}
         title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
@@ -40,7 +41,7 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
         {(props.data?.choices
           &&
           props.data.choices.map((item, index) => {
-            return <RadioInputWithTitle label={item.content} value={item.id ? String(item.id): String(index)} />
+            return <RadioInputWithTitle label={item.content} value={item.id ? String(item.id) : String(index)} />
           })) ||
           (props.dataResponse?.choices &&
             props.dataResponse.choices.map((item, index) => {
@@ -59,9 +60,8 @@ export default function OneChoiceQuestion(props: OneChoiceQuestionProps) {
             }))}
       </RadioButton.Group>
       {
-        props.editMode && <QuestionBottomBarOptions
-          reviewMode={props.reviewMode}
-          conductMode={props.conductMode}
+        props.mode.includes(EDIT_MODE) && <QuestionBottomBarOptions
+          mode={props.mode}
           index={props.index}
           onBtnUpdateQuestionPress={props.onUpdateQuestion} />
       }

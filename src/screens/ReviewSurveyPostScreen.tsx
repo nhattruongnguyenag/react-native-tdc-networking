@@ -73,7 +73,6 @@ export default function ReviewSurveyPostScreen() {
           if (item.type === MULTI_CHOICE_QUESTION) {
             return <MultiChoiceQuestion
               key={index}
-              reviewMode
               mode={[REVIEW_MODE]}
               data={item}
               index={index}
@@ -81,7 +80,6 @@ export default function ReviewSurveyPostScreen() {
           } else if (item.type === ONE_CHOICE_QUESTION) {
             return <OneChoiceQuestion
               key={index}
-              reviewMode
               mode={[REVIEW_MODE]}
               data={item}
               index={index}
@@ -89,7 +87,6 @@ export default function ReviewSurveyPostScreen() {
           } else {
             return <ShortAnswerQuestion
               key={index}
-              reviewMode
               mode={[REVIEW_MODE]}
               data={item}
               index={index}

@@ -120,7 +120,6 @@ export default function SurveyConductScreen() {
                                     <Fragment key={index.toString()}>
                                         <MultiChoiceQuestion
                                             mode={[CONDUCT_MODE]}
-                                            conductMode
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
@@ -161,7 +160,6 @@ export default function SurveyConductScreen() {
                                     <Fragment key={index.toString()}>
                                         <OneChoiceQuestion
                                             mode={[CONDUCT_MODE]}
-                                            conductMode
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
@@ -202,7 +200,6 @@ export default function SurveyConductScreen() {
                                     <Fragment key={index.toString()}>
                                         <ShortAnswerQuestion
                                             mode={[CONDUCT_MODE]}
-                                            conductMode
                                             onTextChange={(value) => {
                                                 if (isNotBlank(value.trim())) {
                                                     surveyConductRequest.answers[index].content = value;

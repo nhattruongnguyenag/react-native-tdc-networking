@@ -84,35 +84,32 @@ export default function CreateSurveyPostScreen() {
 
   const onTitleChangeText = useCallback(
     (value: string) => {
-      if (!validateField(error['title'], validate['title'], value)) {
-        setValidate({ ...validate })
-      }
-
+      validateField(error['title'], validate['title'], value)
+      setValidate({ ...validate })
       dispatch(updateSurveyTitle(value))
     },
-    [surveyPostRequest]
+    [surveyPostRequest, validate]
   )
 
   const onDescriptionChangeText = useCallback(
     (value: string) => {
-      if (!validateField(error['description'], validate['description'], value)) {
-        setValidate({ ...validate })
-      }
-
+      validateField(error['description'], validate['description'], value)
+      setValidate({ ...validate })
       dispatch(updateSurveyDescription(value))
     },
-    [surveyPostRequest]
+    [surveyPostRequest, validate]
   )
 
   const onBtnNextPress = useCallback(() => {
     if (surveyPostRequest) {
+      console.log(surveyPostRequest, isExistFieldInvalid<SurveyPostRequest, CreateSurveyPostScreenValidate, CreateSurveyPostErrorMessage>(surveyPostRequest, validate, error))
       if (isExistFieldInvalid<SurveyPostRequest, CreateSurveyPostScreenValidate, CreateSurveyPostErrorMessage>(surveyPostRequest, validate, error)) {
         setValidate({ ...validate })
       } else {
         navigation.navigate(ADD_QUESTION_SCREEN)
       }
     }
-  }, [surveyPostRequest, validate])
+  }, [surveyPostRequest, validate, data])
 
   return (
     <View style={styles.body}>

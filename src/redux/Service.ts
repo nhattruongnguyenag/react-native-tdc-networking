@@ -213,7 +213,7 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       }),
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
     }),
   })
 })

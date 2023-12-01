@@ -1,41 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { Fragment, useMemo, useState } from 'react'
-import Loading from '../components/common/Loading';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import React, { Fragment } from 'react';
+import { useTranslation } from 'react-multi-lang';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { RootStackParamList } from '../App';
+import Loading from '../components/common/Loading';
 import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionModal';
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion';
-import { CONDUCT_MODE } from '../constants/Variables';
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion';
-import TextValidate from '../components/common/TextValidate';
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion';
-import { InputTextValidate, isNotBlank } from '../utils/ValidateUtils';
+import { REVIEW_MODE } from '../constants/Variables';
 import { useAppSelector } from '../redux/Hook';
-import { useTranslation } from 'react-multi-lang';
-import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '../App';
-import { useAddSurveyConductAnswerMutation, useGetQuestionsFromSurveyPostQuery } from '../redux/Service';
-import { SurveyConductRequest } from '../types/request/SurveyConductRequest';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useGetQuestionsFromSurveyPostQuery } from '../redux/Service';
 
-export default function DetailSurveyPost() {
+export default function DetailSurveyPostScreen() {
     const t = useTranslation()
-    const route = useRoute<RouteProp<RootStackParamList, 'SURVEY_CONDUCT_SCREEN'>>();
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
-    const [validates, setValidates] = useState<InputTextValidate[]>([]);
-    const [surveyConductRequestAPI, surveyConductRequestResult] = useAddSurveyConductAnswerMutation();
-
-    const [surveyConductRequest, setSurveyConductRequest] = useState<SurveyConductRequest>({
-        user_id: userLogin?.id ?? -1,
-        answers: []
-    })
+    const route = useRoute<RouteProp<RootStackParamList, 'SURVEY_CONDUCT_SCREEN'>>()
+    const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
     const postId = route.params?.surveyPostId ?? -1;
     const userId = userLogin?.id ?? -1;
 
-    const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
+    const { data, isLoading, isSuccess, error } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 
-
+    console.log(error)
     return (
         <Fragment>
             {isLoading ? (
@@ -48,8 +36,7 @@ export default function DetailSurveyPost() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <MultiChoiceQuestion
-                                            mode={[CONDUCT_MODE]}
-                                            conductMode
+                                            mode={[REVIEW_MODE]}
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
@@ -60,8 +47,7 @@ export default function DetailSurveyPost() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <OneChoiceQuestion
-                                            mode={[CONDUCT_MODE]}
-                                            conductMode
+                                            mode={[REVIEW_MODE]}
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
@@ -72,8 +58,7 @@ export default function DetailSurveyPost() {
                                 return (
                                     <Fragment key={index.toString()}>
                                         <ShortAnswerQuestion
-                                            mode={[CONDUCT_MODE]}
-                                            conductMode
+                                            mode={[REVIEW_MODE]}
                                             dataResponse={item}
                                             index={index}
                                             isDisableDeleteBtn
