@@ -102,7 +102,6 @@ export default function CreateSurveyPostScreen() {
 
   const onBtnNextPress = useCallback(() => {
     if (surveyPostRequest) {
-      console.log(surveyPostRequest, isExistFieldInvalid<SurveyPostRequest, CreateSurveyPostScreenValidate, CreateSurveyPostErrorMessage>(surveyPostRequest, validate, error))
       if (isExistFieldInvalid<SurveyPostRequest, CreateSurveyPostScreenValidate, CreateSurveyPostErrorMessage>(surveyPostRequest, validate, error)) {
         setValidate({ ...validate })
       } else {
