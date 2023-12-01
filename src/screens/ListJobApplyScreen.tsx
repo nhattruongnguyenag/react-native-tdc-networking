@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { COLOR_BLACK, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
+import { COLOR_BLACK, COLOR_DANGER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../constants/Color'
 import { Image } from 'react-native'
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../App'
@@ -19,6 +19,14 @@ import { useGetProfileApplyQuery, useJobApplyUpdateMutation } from '../redux/Ser
 import { Dropdown } from 'react-native-element-dropdown'
 import { Modal, PaperProvider, Portal } from 'react-native-paper'
 
+interface JobApplyResponseData {
+  status: string
+  isOpen: boolean
+}
+const defaultModal: JobApplyResponseData = {
+  status: 'received',
+  isOpen: false
+}
 export default function ListJobApplyScreen() {
   const dataType = [
     { label: t('ListJobApplyComponent.textReceived'), value: 'received' },
@@ -36,35 +44,40 @@ export default function ListJobApplyScreen() {
   const postId = route.params?.postId ?? 0
   const [value, setValue] = useState('received')
   const [item, setItem] = useState(t('ListJobApplyComponent.textReceived'))
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState<JobApplyResponseData>(defaultModal)
   const [jobApplyUpdateRequest, jobApplyUpdateResponse] = useJobApplyUpdateMutation()
   const { data, isLoading } = useGetProfileApplyQuery(postId, {
     pollingInterval: 1000
   })
-  const openModal = () => {
-    setModalVisible(true)
+  const openModal = (status: string) => {
+    setModalVisible({
+      status: status,
+      isOpen: true
+    })
   }
 
   const closeModal = () => {
-    setModalVisible(false)
+    setModalVisible({
+      status: 'received',
+      isOpen: false
+    })
   }
 
   const handleGetDetailJobApply = (cvId: number) => {
     navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
 
-  const [status, setStatus] = useState('')
-  const [itemStatus, setItemStatus] = useState(t('ListJobApplyComponent.textSelectStatus'))
-
   const handleChangeStatusJob = (profileId: number) => {
     jobApplyUpdateRequest({
       profileId: profileId,
-      status: status ?? undefined
+      status: modalVisible.status
     })
-    setModalVisible(false)
+    setModalVisible({
+      status: 'received',
+      isOpen: false
+    })
   }
   useEffect(() => {
-    console.log(jobApplyUpdateResponse.isSuccess)
     if (jobApplyUpdateResponse.isSuccess || jobApplyUpdateResponse.data) {
       Alert.alert(t('ListJobApplyComponent.textNotification'), t('ListJobApplyComponent.textChangeSucces'))
     }
@@ -78,7 +91,6 @@ export default function ListJobApplyScreen() {
     marginBottom: 100,
     height: 230
   }
-
 
   return (
     <Fragment>
@@ -105,11 +117,11 @@ export default function ListJobApplyScreen() {
         ) : (
           <ScrollView style={{ backgroundColor: '#fff' }}>
             <SafeAreaView style={{ marginVertical: 10 }}>
-              {data?.data.length == 0 ? (
+              {data?.data.length == 0? (
                 <Text
                   style={{
                     marginVertical: '50%',
-                    marginHorizontal: '25%',
+                    marginHorizontal: '20%',
                     width: 'auto',
                     fontSize: 20,
                     fontWeight: 'bold'
@@ -182,7 +194,7 @@ export default function ListJobApplyScreen() {
                               </Text>
                             </View>
                           </TouchableOpacity>
-                          <TouchableOpacity onPress={openModal}>
+                          <TouchableOpacity onPress={()=> openModal(item.status)}>
                             <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
                               <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>
                                 {t('ListJobApplyComponent.textChangeStatus')}
@@ -191,7 +203,7 @@ export default function ListJobApplyScreen() {
                           </TouchableOpacity>
 
                           <Portal>
-                            <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
+                            <Modal visible={modalVisible.isOpen} onDismiss={closeModal} contentContainerStyle={containerStyle}>
                               <View style={styles.headerModal}>
                                 <Text style={styles.txtModal}>{t('ListJobApplyComponent.textChangeStatus')}</Text>
                               </View>
@@ -204,16 +216,18 @@ export default function ListJobApplyScreen() {
                                   data={dataType}
                                   labelField='label'
                                   valueField='value'
-                                  placeholder={itemStatus}
-                                  value={itemStatus}
+                                  placeholder={modalVisible.status}
+                                  value={modalVisible.status}
                                   onChange={(item) => {
-                                    setStatus(item.value)
-                                    setItemStatus(item.label)
+                                     setModalVisible({
+                                      status: item.value,
+                                      isOpen: true
+                                     })
                                   }}
                                 />
                               </View>
                               <View style={styles.btnBottomm}>
-                                <TouchableOpacity style={[styles.btnItem, { marginRight: 5 }]}>
+                                <TouchableOpacity style={[styles.btnItem, { marginRight: 5, backgroundColor: '#ff8c00'}]}>
                                   <Text style={styles.txtBottom} onPress={closeModal}>
                                     {t('ListJobApplyComponent.textCancel')}
                                   </Text>

@@ -80,7 +80,7 @@ export default function ManagementJobApplyScreen() {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
           <>
-            {data?.data.length == 0 ? (
+            {data?.data.length == 0? (
               <Text
                 style={{
                   marginVertical: '50%',
@@ -128,23 +128,23 @@ export default function ManagementJobApplyScreen() {
                           {t('ManageJobApply.textSeeCv')}
                         </Text>
                       </TouchableOpacity>
-
                       {data.status.match('accept') ? (
                         ''
                       ) : (
-                        <>
-                          <TouchableOpacity>
-                            <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
-                              {t('ManageJobApply.textDelete')}
-                            </Text>
-                          </TouchableOpacity>
-
-                          <TouchableOpacity>
-                            <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id, data.cvUrl)}>
-                              {t('ManageJobApply.textChangeProfile')}
-                            </Text>
-                          </TouchableOpacity>
-                        </>
+                        <TouchableOpacity>
+                          <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                            {t('ManageJobApply.textDelete')}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                       {data.status != 'received' ? (
+                        ''
+                      ) : (
+                      <TouchableOpacity>
+                        <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id, data.cvUrl)}>
+                          {t('ManageJobApply.textChangeProfile')}
+                        </Text>
+                      </TouchableOpacity>
                       )}
                     </View>
                   </View>
@@ -269,5 +269,5 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 28
-  },
+  }
 })
