@@ -7,7 +7,7 @@ import { DeviceToken } from '../types/DeviceToken'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
+import { RecruitmentPost } from '../types/RecruitmentPost'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { MessageResponseData } from '../types/response/MessageResponseData'
 import { PostResponseModal } from '../types/response/PostResponseModal'
@@ -85,7 +85,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
-    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPostRequest>({
+    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
       query: (data) => ({
         url: 'api/posts/recruitment',
         method: 'POST',
@@ -125,7 +125,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
-    
+
     sendEmail: builder.mutation<MessageResponseData, string>({
       query: (data) => ({
         url: 'api/users/get/email/reset',
@@ -144,8 +144,8 @@ export const TDCSocialNetworkAPI = createApi({
     getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
       query: (data) => (
         {
-        url: `api/posts/search?${buildPostSearchRequest(data)}`
-      }),
+          url: `api/posts/search?${buildPostSearchRequest(data)}`
+        }),
       providesTags: (result) => {
         if (result) {
           return [
@@ -160,14 +160,14 @@ export const TDCSocialNetworkAPI = createApi({
     getJobProfile: builder.query<Data<JobApplyRespose[]>, number | undefined>({
       query: (userId) => (
         {
-        url: `api/job/user/${userId}`
-      }),
+          url: `api/job/user/${userId}`
+        }),
     }),
     getProfileApply: builder.query<Data<JobApplyResponseData[]>, number | undefined>({
       query: (postId) => (
         {
-        url: `api/job/post/${postId}`
-      }),
+          url: `api/job/post/${postId}`
+        }),
     }),
     rejectPost: builder.mutation<MessageResponseData, PostRejectedLog>({
       query: (data) => ({
@@ -190,7 +190,58 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
-    })
+    }),
+    getPostRejectLog: builder.query<Data<PostRejectedLog>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/approval/log/post/${data.postId}`
+        })
+    }),
+    deletePost: builder.mutation<MessageResponseData, { postId: number }>({
+      query: (data) => ({
+        url: `api/posts/${data.postId}`,
+        method: 'DELETE',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+    }),
+    getRecruitmentPostUpdate: builder.query<RecruitmentPost, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/recruitment/${data.postId}/update`
+        })
+    }),
+    updateRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
+      query: (data) => ({
+        url: 'api/posts/recruitment',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
+    }),
+    getSurveyPostUpdate: builder.query<Data<SurveyPostRequest>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/survey/${data.postId}/update`
+        })
+    }),
+    updateSurveyPost: builder.mutation<MessageResponseData, SurveyPostRequest>({
+      query: (data) => ({
+        url: 'api/posts/survey',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
+    }),
   })
 })
 
@@ -199,6 +250,7 @@ export const TDCSocialNetworkAPI = createApi({
 export const {
   useGetProfileApplyQuery,
   useGetJobProfileQuery,
+  useGetPostRejectLogQuery,
   useGetNotificationsUserQuery,
   useGetListPostSavedQuery,
   useGetFollowingUserQuery,
@@ -216,6 +268,10 @@ export const {
   useSendEmailMutation,
   useRejectPostMutation,
   useAcceptPostMutation,
-  useJobApplyUpdateMutation
-
+  useJobApplyUpdateMutation,
+  useDeletePostMutation,
+  useGetRecruitmentPostUpdateQuery,
+  useUpdateRecruitmentPostMutation,
+  useGetSurveyPostUpdateQuery,
+  useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI
