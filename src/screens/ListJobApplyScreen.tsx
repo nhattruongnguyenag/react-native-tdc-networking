@@ -13,14 +13,10 @@ import DefaultAvatar from '../components/common/DefaultAvatar'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { DETAIL_JOB_APPLY } from '../constants/Screen'
 import Loading from '../components/common/Loading'
-import {
-  TEXT_NOTIFICATION_LIST_EMPTY,
-  TEXT_NOTIFICATION_UPDATE_NULL,
-  TEXT_SEE_CV,
-  TEXT_TITLE_LOADER
-} from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 export default function ListJobApplyScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const [listJob, setListJob] = useState([
     {
@@ -37,7 +33,6 @@ export default function ListJobApplyScreen() {
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute<RouteProp<RootStackParamList, 'LIST_JOB_APPLY_SCREEN'>>()
   const postId = route.params?.postId ?? 0
-
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -46,7 +41,7 @@ export default function ListJobApplyScreen() {
         .then((response) => {
           setIsLoading(false)
           if (response.data.data == '') {
-            Alert.alert(TEXT_NOTIFICATION_LIST_EMPTY)
+            Alert.alert(t('ListJobApplyComponent.listEmpty'))
           }
           setListJob(response.data.data)
         })
@@ -60,10 +55,11 @@ export default function ListJobApplyScreen() {
   const handleGetDetailJobApply = (cvId: number) => {
     navigation.navigate(DETAIL_JOB_APPLY, { cvId: cvId })
   }
+  
   return (
     <Fragment>
       {isLoading ? (
-        <Loading title={TEXT_TITLE_LOADER} />
+        <Loading title={t('ListJobApplyComponent.titleLoader')} />
       ) : (
         <ScrollView style={{ backgroundColor: '#fff' }}>
             <SafeAreaView style={{ marginVertical: 10}}>
@@ -98,7 +94,7 @@ export default function ListJobApplyScreen() {
                                 {item.user.phone != null ? (
                                   <Text style={styles.lbl}>{item.user.phone}</Text>
                                 ) : (
-                                  <Text style={styles.lbl}>{TEXT_NOTIFICATION_UPDATE_NULL}</Text>
+                                  <Text style={styles.lbl}>{t('ListJobApplyComponent.updateNull')}</Text>
                                 )}
                               </View>
 
@@ -109,7 +105,7 @@ export default function ListJobApplyScreen() {
                               <TouchableOpacity onPress={() => handleGetDetailJobApply(item.id)}>
                                 <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
                                   <Icon name='file-pdf' style={[styles.iconItem, { color: COLOR_SUCCESS }]}></Icon>
-                                  <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>{TEXT_SEE_CV}</Text>
+                                  <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>{t('ListJobApplyComponent.seeDetailCV')}</Text>
                                   <Icon
                                     name='angle-double-right'
                                     style={[styles.iconItem, { color: COLOR_SUCCESS, marginLeft: 5 }]}

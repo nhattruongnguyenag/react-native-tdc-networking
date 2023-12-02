@@ -42,6 +42,7 @@ import {
   ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
+  CHANGE_STATUS_JOB_APPLY_SCREEN,
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
@@ -51,6 +52,7 @@ import {
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN, OPTION_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
@@ -94,9 +96,20 @@ import SplashScreen from './screens/SplashScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
+import { useAppSelector } from './redux/Hook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_LANGUAGE } from './constants/KeyValue';
+
+const vie = require('moment/locale/vi')
+moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+
 import AcceptScreen from './screens/AcceptScreen'
+
+import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
+import ComponentJobApply from './components/jobapply/ComponentJobApply'
+
 
 export type RootStackParamList = {
   ACCEPT_SCREEN: { email: string , subject: string , title: string, url: string } | undefined
@@ -127,7 +140,7 @@ export type RootStackParamList = {
   CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
-  JOB_APPLY_SCREEN: { recruitmentPostId: number } | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
@@ -135,8 +148,10 @@ export type RootStackParamList = {
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
   APPLICATION_OPTION_SCREEN: undefined
+  MANAGEMENT_JOB_APPLY_SCREEN: undefined
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
+  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -219,7 +234,7 @@ export function DrawerNavigator(): JSX.Element {
 
 export function StackNavigator(): JSX.Element {
   const t = useTranslation()
-
+  
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}
@@ -411,9 +426,20 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={MANAGEMENT_JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.manageJobApply')} /> }}
+        component={ManagementJobApplyScreen}
+      />
+
+      <RootStack.Screen
         name={APPROVAL_POST_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
         component={ApprovalPostScreen}
+      />
+      <RootStack.Screen
+        name={CHANGE_STATUS_JOB_APPLY_SCREEN}
+        options={{ header: () => null}}
+        component={ComponentJobApply}
       />
     </RootStack.Navigator>
   )

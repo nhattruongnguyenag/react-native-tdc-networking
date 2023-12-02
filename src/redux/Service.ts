@@ -16,6 +16,9 @@ import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { FollowUserModel } from '../types/response/FollowUserModel'
 import { buildPostSearchRequest } from '../utils/PostHelper'
+import { JobApplyRespose } from '../types/response/JobApplyResponse'
+import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
+import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
 import { PostSavedModel } from '../types/response/PostSavedModel'
 import { NotificationModel } from '../types/response/NotificationModel'
 
@@ -111,6 +114,17 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
+    jobApplyUpdate: builder.mutation<MessageResponseData, JobApplyUpdateRequest | JobUpdateStatus>({
+      query: (data) => ({
+        url: 'api/job/update',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+    }),
+    
     sendEmail: builder.mutation<MessageResponseData, string>({
       query: (data) => ({
         url: 'api/users/get/email/reset',
@@ -142,6 +156,12 @@ export const TDCSocialNetworkAPI = createApi({
         return [{ type: 'Posts' as const, id: 'LIST' }]
       }
     }),
+    getJobProfile: builder.query<Data<JobApplyRespose[]>, number | undefined>({
+      query: (userId) => (
+        {
+        url: `api/job/user/${userId}`
+      }),
+    }),
     rejectPost: builder.mutation<MessageResponseData, PostRejectedLog>({
       query: (data) => ({
         url: 'api/approval/post/log',
@@ -170,6 +190,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetJobProfileQuery,
   useGetNotificationsUserQuery,
   useGetListPostSavedQuery,
   useGetFollowingUserQuery,
@@ -186,5 +207,6 @@ export const {
   useJobApplyMutation,
   useSendEmailMutation,
   useRejectPostMutation,
-  useAcceptPostMutation
+  useAcceptPostMutation,
+  useJobApplyUpdateMutation
 } = TDCSocialNetworkAPI

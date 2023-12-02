@@ -13,8 +13,12 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  APPLICATION_OPTION_SCREEN, APPROVAL_POST_SCREEN, CREATE_SURVEY_SCREEN,
-  LOGIN_SCREEN
+  APPLICATION_OPTION_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN,
+  APPROVAL_POST_SCREEN,
+  CREATE_SURVEY_SCREEN,
+  LOGIN_SCREEN,
+  BUSINESS_DASHBOARD_SCREEN
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
@@ -25,7 +29,7 @@ import { useAppSelector } from '../../redux/Hook'
 import { isAdmin, isFaculty, isStudent } from '../../utils/UserHelper'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
-  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
 
   const logout = useCallback(() => {
@@ -44,13 +48,11 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         <DrawerItemList {...props} />
         <List.Accordion
           titleNumberOfLines={5}
-          title={
-            <AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />
-          }
+          title={<AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />}
           titleStyle={{ fontSize: 17 }}
-          id={0}>
-          {
-            isStudent(userLogin) &&
+          id={0}
+        >
+          {isStudent(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
               label={userLogin.facultyName}
@@ -60,24 +62,25 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
-          }
+          )}
         </List.Accordion>
 
+        {isStudent(userLogin) && (
+          <DrawerItem
+            label={t('DrawerContentComponent.userJobApplyProfile')}
+            onPress={() => {
+              navigation.navigate(MANAGEMENT_JOB_APPLY_SCREEN)
+            }}
+            inactiveBackgroundColor={'#fff'}
+            pressColor={'#0088ff03'}
+            labelStyle={{ color: '#0088ff' }}
+            icon={({ color, focused, size }) => (
+              <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
+            )}
+          />
+        )}
 
-        <DrawerItem
-          label={t('DrawerContentComponent.userJobApplyProfile')}
-          onPress={() => {
-          }}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
-          )}
-        />
-
-        {
-          (isAdmin(userLogin) || isFaculty(userLogin)) &&
+        {(isAdmin(userLogin) || isFaculty(userLogin)) && (
           <DrawerItem
             label={t('DrawerContentComponent.waitingPost')}
             onPress={() => {
@@ -90,7 +93,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
               <FontAwesome6Icon style={{ width: 15 }} name='bars-progress' size={16} color={'#0088ff'} />
             )}
           />
-        }
+        )}
 
         <DrawerItem
           label={t('DrawerContentComponent.option')}
