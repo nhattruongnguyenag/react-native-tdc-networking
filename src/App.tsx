@@ -63,7 +63,6 @@ import {
   SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
-import { useAppSelector } from './redux/Hook'
 import { store } from './redux/Store'
 import AcceptForgottenPasswordScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
@@ -97,8 +96,6 @@ import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboa
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import { useAppSelector } from './redux/Hook';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
 const vie = require('moment/locale/vi')
 moment.locale('vi', vie)

@@ -25,7 +25,7 @@ import { useAppSelector } from '../redux/Hook'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import {
   InputTextValidate,
   isBlank,
@@ -41,6 +41,7 @@ import TextValidate from '../components/common/TextValidate'
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment'
 import { useTranslation } from 'react-multi-lang'
+import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -84,7 +85,9 @@ export default function BusinessRegistrationScreen() {
     email: '',
     name: '',
     image: '',
-    confimPassword: ''
+    confimPassword: '',
+    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
+    content: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -563,6 +566,8 @@ export default function BusinessRegistrationScreen() {
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
           setIsLoading(false)
+          openModal()
+          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           openModal()

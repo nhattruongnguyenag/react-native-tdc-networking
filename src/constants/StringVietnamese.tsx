@@ -262,7 +262,8 @@ export const TEXT_TITLE_LOADER = 'Đang tải dữ liệu...'
 
 export const TEXT_SUBJECT_RESET_PASSWORD = 'Cập nhật mật khẩu'
 export const TITLE_SUBJECT_RESET_PASSWORD = 'thay đổi mật khẩu'
-
+export const TEXT_SUBJECT_AUTHENTICATE_REGISTRATION = 'Xác thực tài khoản'
+export const TITLE_SUBJECT_AUTHENTICATE_REGISTRATION = 'xác thực tài khoản'
 
 
 
