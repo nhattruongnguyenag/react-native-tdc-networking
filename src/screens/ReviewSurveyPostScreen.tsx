@@ -5,40 +5,60 @@ import { useTranslation } from 'react-multi-lang'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
-import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionView'
+import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionModal'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
 import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
-import { useAppSelector } from '../redux/Hook'
-import { useAddSurveyPostMutation } from '../redux/Service'
+import { REVIEW_MODE } from '../constants/Variables'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { useAddSurveyPostMutation, useUpdateSurveyPostMutation } from '../redux/Service'
+import { setSurveyPostRequest } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const t = useTranslation()
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer);
-  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
+  const [updateSurvey, updateSurveyResult] = useUpdateSurveyPostMutation()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (addSurveyResult.data) {
       if (addSurveyResult.data.status === 201 || 200) {
-        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessContent'));
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessContent'))
+        navigation.navigate(TOP_TAB_NAVIGATOR)
+      } else {
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'))
+      }
+    }
+  }, [addSurveyResult])
+
+  useEffect(() => {
+    if (updateSurveyResult.data) {
+      if (updateSurveyResult.data.status === 201 || 200) {
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessContent'));
         navigation.navigate(TOP_TAB_NAVIGATOR);
       } else {
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
       }
+      dispatch(setSurveyPostRequest(null))
     }
-  }, [addSurveyResult]);
+  }, [updateSurveyResult])
 
   const onBtnPublishPostPress = () => {
     if (surveyPostRequest) {
-      addSurvey(surveyPostRequest);
+      if (surveyPostRequest.postId) {
+        updateSurvey(surveyPostRequest)
+      } else {
+        addSurvey(surveyPostRequest)
+      }
     }
-  };
+  }
 
   const onBtnBackPress = useCallback(() => {
-    navigation.pop();
-  }, []);
+    navigation.pop()
+  }, [])
 
   return (
     <ScrollView style={styles.body}>
@@ -51,11 +71,26 @@ export default function ReviewSurveyPostScreen() {
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
-            return <MultiChoiceQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
+            return <MultiChoiceQuestion
+              key={index}
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           } else if (item.type === ONE_CHOICE_QUESTION) {
-            return <OneChoiceQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
+            return <OneChoiceQuestion
+              key={index}
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           } else {
-            return <ShortAnswerQuestion key={index} reviewMode data={item} index={index} isDisableDeleteBtn />;
+            return <ShortAnswerQuestion
+              key={index}
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           }
         })}
       </View>
@@ -77,7 +112,7 @@ export default function ReviewSurveyPostScreen() {
         />
       </View>
     </ScrollView>
-  );
+  )
 }
 
 

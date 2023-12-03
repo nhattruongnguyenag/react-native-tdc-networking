@@ -48,7 +48,6 @@ export default function FacultyDashboardScreen() {
 
   useEffect(() => {
     if (data) {
-      console.log('=================call faculty===================');
       setIsLoading(false);
       setFacultyPost([]);
       setFacultyPost(data.data);
@@ -155,7 +154,9 @@ export default function FacultyDashboardScreen() {
         isSave={item.isSave}
         group={code}
         handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost} />
+        handleDelete={handleDeletePost} 
+        active={item.active} 
+        />
     )
   },[facultyPost])
 

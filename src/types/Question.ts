@@ -1,10 +1,21 @@
 import { QuestionResponse } from './response/QuestionResponse'
 
 export interface Question {
-  type: string
+  id?: number
+  type?: string
   title: string
-  choices: string[]
+  choices: Choice[]
   required: number
+}
+
+export interface Choice {
+  id?: number
+  content: string
+}
+
+export interface ChoiceProps {
+  index: number
+  choice: string
 }
 
 export interface QuestionProps {
@@ -12,16 +23,6 @@ export interface QuestionProps {
   dataResponse?: QuestionResponse
   index?: number
   isDisableDeleteBtn?: boolean
-  reviewMode?: boolean
-  conductMode?: boolean
-  editMode?: boolean
+  onUpdateQuestion?: (questionIndex: number) => void
+  mode: number[]
 }
-
-export interface ChoiceProps {
-  index: number
-  data: string
-}
-
-export type MultiChoiceQuestion = Question
-export type OneChoiceQuestion = Question
-export type ShortAnswerQuestion = Omit<Question, 'choices'>

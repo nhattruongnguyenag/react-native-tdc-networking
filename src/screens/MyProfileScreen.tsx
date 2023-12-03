@@ -156,9 +156,10 @@ const MyProfileScreen = () => {
         group={group ?? ""}
         handleUnSave={handleSavePost}
         handleDelete={handleDeletePost}
+        active={item.active} 
       />
     )
-  },[post])
+  }, [post])
 
   const handleClickButtonEvent = (flag: number) => {
     if (flag === MESSENGER_ACTION) {
@@ -212,7 +213,7 @@ const MyProfileScreen = () => {
 
   const handleCloseModal = useCallback(() => {
     setIsShowAvatar(false);
-  },[])
+  }, [])
 
   const handleShowImageBackgroundUpdate = (flag: boolean) => {
     if (flag) {

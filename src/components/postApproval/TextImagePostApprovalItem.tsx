@@ -1,16 +1,15 @@
 import React, { Fragment, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ImageView from 'react-native-image-viewing'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { Images } from '../../types/Images'
 import { TextImagePostResponseModal } from '../../types/response/TextImagePostResponseModal'
+import { isTextImagePost } from '../../utils/PostHelper'
+import CustomizeBodyPost from '../post/CustomizeBodyPost'
 import CustomizeImagePost from '../post/CustomizeImagePost'
 import { PostApprovalItemProps } from './PostApprovalItem'
-
-function isTextImagePost(post?: any): post is TextImagePostResponseModal {
-    return post !== undefined && post instanceof Object && post !== null && 'content' in post
-}
 
 export default function TextImagePostApprovalItem(props: PostApprovalItemProps) {
     const [imageViewState, setImageViewState] = useState<{ index: number, show: boolean }>({
@@ -37,13 +36,14 @@ export default function TextImagePostApprovalItem(props: PostApprovalItemProps) 
         })
     }
 
+    const t = useTranslation()
+
     return (
         <Fragment>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.container}>
-                <Text style={styles.postContent}>{isTextImagePost(props.post) ? props.post.content : 'Đang tải...'}</Text>
-
+                <CustomizeBodyPost content={isTextImagePost(props.post) ? props.post.content : t('PostApproveItem.isLoading')} />
                 {
                     isTextImagePost(props.post) && props.post.images && props.post.images.length > 0 &&
                     <CustomizeImagePost
