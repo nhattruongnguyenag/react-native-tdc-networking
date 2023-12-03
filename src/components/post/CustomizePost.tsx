@@ -1,5 +1,5 @@
-import { View, StyleSheet, Text } from 'react-native'
-import React from 'react'
+import { View, StyleSheet } from 'react-native'
+import React, { memo, useCallback, useMemo } from 'react'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeHeaderPost from './CustomizeHeaderPost'
 import CustomizeBottomPost from './CustomizeBottomPost'
@@ -7,10 +7,12 @@ import CustomizeBodyPost from './CustomizeBodyPost'
 import CustomizeImagePost from './CustomizeImagePost'
 import { Post } from '../../types/Post'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { openModalComments, openModalImage, openModalUserReaction, updatePostWhenHaveChangeComment } from '../../redux/Slice'
+import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice'
 import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
 import {
+  TYPE_POST_BUSINESS,
+  TYPE_POST_FACULTY,
   CLICK_DELETE_POST_EVENT,
   CLICK_SAVE_POST_EVENT,
   CLICK_SEE_LIST_CV_POST_EVENT,
@@ -32,7 +34,6 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
-import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY } from '../../constants/StringVietnamese'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
@@ -40,6 +41,9 @@ import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
+  console.log('====================================');
+  console.log("CustomizePost");
+  console.log('====================================');
   const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   let post = props
@@ -48,18 +52,17 @@ const CustomizePost = (props: Post) => {
   )
   const dispatch = useAppDispatch()
 
-  const handleClickIntoAvatarAndNameAndMenuEvent = (flag: number | null) => {
+  const handleClickIntoAvatarAndNameAndMenuEvent = useCallback((flag: number | null) => {
     if (flag === GO_TO_PROFILE_ACTIONS) {
-      console.log(userIdOfProfileNow, post.userId,currentScreenNowIsProfileScreen);
       if (userIdOfProfileNow !== post.userId) {
         if (currentScreenNowIsProfileScreen) {
-            navigation.replace(PROFILE_SCREEN, { userId: post.userId, group: post.group })
-          } else {
-            navigation.navigate(PROFILE_SCREEN, { userId: post.userId, group: post.group })
-          }
+          navigation.replace(PROFILE_SCREEN, { userId: post.userId, group: post.group })
+        } else {
+          navigation.navigate(PROFILE_SCREEN, { userId: post.userId, group: post.group })
+        }
       }
     }
-  }
+  }, [userIdOfProfileNow])
 
   const handleClickIntoAnyImageEvent = (imageId: number, listImageError: number[]) => {
     dispatch(
@@ -103,15 +106,27 @@ const CustomizePost = (props: Post) => {
     props.likeAction(dataLike)
   }
 
-  const checkLiked = (likes: Like[], userId: number | undefined) => {
-    let result = false
-    likes.some((item: any) => {
-      if (item.id === userId) {
-        result = true
+  // const handleCheckLiked = useCallback((likes: Like[], userId: number | undefined) => {
+  //   console.log('============handleCheckLiked========================');
+  //   let result = false
+  //   likes.some((item: any) => {
+  //     if (item.id === userId) {
+  //       result = true
+  //     }
+  //   })
+  //   return result
+  // },[])
+
+  const handleCheckLiked = useMemo(() => {
+    console.log('============handleCheckLiked========================');
+    let result = false;
+    post.likes.some((item: any) => {
+      if (item.id === userLogin?.id) {
+        result = true;
       }
-    })
-    return result
-  }
+    });
+    return result;
+  }, [post.likes, userLogin?.id]);
 
   const handleClickIntoBtnIconComments = () => {
     dispatch(
@@ -125,14 +140,16 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
+    console.log("handleClickBtnSurveyDetailEvent");
     navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
+    console.log("handleClickBtnRecruitmentDetailEvent");
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
-  const handleClickMenuOption = (flag: number) => {
+  const handleClickMenuOption = useCallback((flag: number) => {
     switch (flag) {
       case CLICK_SAVE_POST_EVENT:
         post.handleUnSave(post.id);
@@ -155,8 +172,10 @@ const CustomizePost = (props: Post) => {
       default:
         return '';
     }
-  }
+  }, [])
+
   const handleUpdateNormalPostEvent = () => {
+    console.log("handleUpdateNormalPostEvent");
     const updateNormalPost: UpdateNormalPost = {
       postId: props.id,
       content: props.content,
@@ -166,19 +185,17 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleSeeListCvPost = () => {
+    console.log("handleSeeListCvPost");
     navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
 
   const handleSeeResultSurveyPost = () => {
+    console.log("handleSeeResultSurveyPost");
     navigation.navigate(SURVEY_RESULT_SCREEN, { surveyPostId: post.id })
   }
 
-  // Tam  thoi
-  const updatePostData = () => {
-    dispatch(updatePostWhenHaveChangeComment(true))
-  }
-
-  const handleIdentifyTypeAuthor = (type: string) => {
+  const identifyTypeAuthor = useCallback((type: string) => {
+    console.log("identifyTypeAuthor");
     if (type == TYPE_POST_FACULTY) {
       return t("Post.normalPostIdentifyAuthorFaculty")
     } else if (type == TYPE_POST_BUSINESS) {
@@ -186,7 +203,7 @@ const CustomizePost = (props: Post) => {
     } else {
       return null;
     }
-  }
+  }, [])
 
   switch (post.type) {
     case TYPE_NORMAL_POST:
@@ -199,7 +216,7 @@ const CustomizePost = (props: Post) => {
             avatar={props.avatar}
             available={props.available}
             timeCreatePost={numberDayPassed(props.timeCreatePost)}
-            typeAuthor={handleIdentifyTypeAuthor(props.typeAuthor ?? '')}
+            typeAuthor={identifyTypeAuthor(props.typeAuthor ?? '')}
             type={props.type}
             role={props.role}
             handleClickMenuOption={handleClickMenuOption}
@@ -216,7 +233,7 @@ const CustomizePost = (props: Post) => {
             />
           )}
           <CustomizeBottomPost
-            isLike={checkLiked(post.likes, userLogin?.id)}
+            isLike={handleCheckLiked}
             likes={post.likes}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
@@ -253,7 +270,7 @@ const CustomizePost = (props: Post) => {
             textButton={t("RecruitmentPost.recruitmentPostButtonSeeDetail")}
           />
           <CustomizeBottomPost
-            isLike={checkLiked(post.likes, userLogin?.id)}
+            isLike={handleCheckLiked}
             likes={post.likes}
             handleClickBottomBtnEvent={handleClickBottomBtnEvent}
             commentQty={post.commentQty}
@@ -285,7 +302,7 @@ const CustomizePost = (props: Post) => {
           textButton={t("SurveyPost.surveyPostButton")}
         />
         <CustomizeBottomPost
-          isLike={checkLiked(post.likes, userLogin?.id)}
+          isLike={handleCheckLiked}
           likes={post.likes}
           handleClickBottomBtnEvent={handleClickBottomBtnEvent}
           commentQty={post.commentQty}
@@ -312,4 +329,4 @@ const styles = StyleSheet.create({
     marginVertical: 10
   }
 })
-export default CustomizePost
+export default memo(CustomizePost)

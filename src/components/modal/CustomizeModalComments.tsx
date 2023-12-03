@@ -1,5 +1,5 @@
 import { Keyboard, Platform, View, Text, StyleSheet, Animated, PanResponder, Modal, TouchableOpacity, TextInput, SafeAreaView, FlatList, Alert } from 'react-native'
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, { useRef, useState, useEffect, useCallback, memo } from 'react'
 import { WINDOW_HEIGHT } from '../../utils/SystemDimensions'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -7,7 +7,6 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomizeComment from '../post/CustomizeCommentPost';
 import { useAppDispatch, useAppSelector } from '../../redux/Hook';
 import { closeModalComments, updatePostWhenHaveChangeComment } from '../../redux/Slice';
-import { TEXT_CHAR, TEXT_HIDDEN_COMMENTS, TEXT_PLACEHOLDER_INPUT_COMMENT, TEXT_SEE_MORE_COMMENTS, TEXT_TITLE_COMMENT, TEXT_TITLE_LOADER, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL } from '../../constants/StringVietnamese';
 import { Comment } from '../../types/Comment';
 import { numberDayPassed } from '../../utils/FormatTime';
 import { isBlank, isLengthInRange, isNotBlank } from '../../utils/ValidateUtils';
@@ -20,7 +19,6 @@ import { RootStackParamList } from '../../App';
 import { PROFILE_SCREEN } from '../../constants/Screen';
 import { useTranslation } from 'react-multi-lang';
 import { getFacultyTranslated } from '../../utils/getFacultyTranslated ';
-import Loading from '../common/Loading';
 import ActionSheet from 'react-native-actionsheet';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -142,33 +140,33 @@ const CustomizeModalComments = () => {
             setIdReply(0);
         } else {
             if (isBlank(myComment.trim()) && isLengthInRange(myComment, NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER)) {
-                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NULL + " và " + TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED + NUMBER_MAX_CHARACTER + " " + TEXT_CHAR);
+                Alert.alert(t("ModalComment.modalCommentCreateFail"), t("ModalComment.modalCommentCommentNotNull") + ", " + t("ModalComment.modalCommentTextNumberLimited") + NUMBER_MAX_CHARACTER + " " + t("ModalComment.modalCommentTextChar"));
             } else if (isBlank(myComment.trim())) {
-                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NULL);
+                Alert.alert(t("ModalComment.modalCommentCreateFail"), t("ModalComment.modalCommentCommentNotNull"));
             } else {
-                Alert.alert(TEXT_WARNING_CREATE_COMMENT_FAIL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED + NUMBER_MAX_CHARACTER + " " + TEXT_CHAR);
+                Alert.alert(t("ModalComment.modalCommentCreateFail"), t("ModalComment.modalCommentCommentNotNull") + NUMBER_MAX_CHARACTER + " " + t("ModalComment.modalCommentTextNumberLimited"));
             }
         }
     }
 
     // Reply comment
-    const handleClickToCommentReplyEvent = (commentReplyId: number) => {
+    const handleClickToCommentReplyEvent = useCallback((commentReplyId: number) => {
         setIdReply(commentReplyId);
         inputRef.current.focus();
-    }
+    }, [])
 
     // Delete comments
-    const handleClickToDeleteCommentsEvent = async (commentDeleteId: number) => {
+    const handleClickToDeleteCommentsEvent = useCallback(async (commentDeleteId: number) => {
         const dataToDeleteComment = {
             "commentId": commentDeleteId,
             "postId": modalCommentData?.id,
             "userId": userLogin?.id
         }
         deleteComment(dataToDeleteComment);
-    }
+    }, [])
 
     // 
-    const handleClickToAvatarAndName = (userId: number) => {
+    const handleClickToAvatarAndName = useCallback((userId: number) => {
         if (userIdOfProfileNow !== userId) {
             dispatch(closeModalComments());
             if (currentScreenNowIsProfileScreen) {
@@ -177,7 +175,7 @@ const CustomizeModalComments = () => {
                 navigation.navigate(PROFILE_SCREEN, { userId: userId, group: modalCommentData?.group ?? '' })
             }
         }
-    }
+    }, [])
 
     // Socket
     useEffect(() => {
@@ -320,7 +318,7 @@ const CommentExport = (item: CommentChildrenType) => {
                     onPress={() => { setSeeMore(!seeMore) }}
                     style={styles.txtActivity}
                 >
-                    <Text style={{ color: COLOR_GREY }}>{seeMore ? item.t("CommentContainer.commentContainerComponentSeeMore") : item.t("CommentContainer.commentContainerComponentHidden")}</Text>
+                    <Text style={{ color: COLOR_GREY }}>{seeMore ? item.t("CommentContainer.commentContainerComponentHidden") : item.t("CommentContainer.commentContainerComponentSeeMore")}</Text>
                 </TouchableOpacity>
                 {
                     seeMore && (
@@ -415,4 +413,4 @@ const styles = StyleSheet.create({
         width: '90%', height: '100%', paddingLeft: 20
     }
 })
-export default CustomizeModalComments
+export default memo(CustomizeModalComments)

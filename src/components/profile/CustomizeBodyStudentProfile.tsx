@@ -6,10 +6,6 @@ import IconEntypo from 'react-native-vector-icons/Entypo'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import { CALL_ACTION, FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
-import { Student } from '../../types/Student'
-import { Faculty } from '../../types/Faculty'
-import { Business } from '../../types/Business'
-import { TEXT_CALL, TEXT_CHAT, TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_PHONE, TEXT_PROFESSIONAL_POSITION, TEXT_STUDENT, TEXT_SUBJECT_POST, TEXT_TITLE_PHONE, TEXT_UN_FOLLOW } from '../../constants/StringVietnamese'
 import { useTranslation } from 'react-multi-lang'
 
 interface StudentProfileType {
@@ -65,7 +61,7 @@ export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfi
                         }
                         <Text style={styles.txtContentBtn}>
                             {
-                                props.isFollow ? props.t("Profile.follow") : props.t("Profile.unFollow")
+                                props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
                             }
                         </Text>
                     </TouchableOpacity>

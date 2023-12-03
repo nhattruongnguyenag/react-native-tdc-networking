@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
-import { TEXT_JOIN_SURVEY } from '../../constants/StringVietnamese'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import CustomizeBodyPost from '../post/CustomizeBodyPost'
 import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'

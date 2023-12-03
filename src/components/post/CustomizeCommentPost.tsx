@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY, COLOR_GREY_FEEBLE } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
@@ -25,6 +25,7 @@ interface CustomizeCommentType {
 }
 
 const CustomizeComment = (props: CustomizeCommentType) => {
+
     return props.type === 0 ?
         (<View style={styles.containerType0}>
             <TouchableOpacity
@@ -120,7 +121,9 @@ const CustomizeComment = (props: CustomizeCommentType) => {
                     <TouchableOpacity
                         onPress={() => props.handleClickToDeleteCommentsEvent(props.id)}
                     >
-                        <Text style={styles.reply}>{props.textDelete}</Text>
+                        {
+                            props.userId === props.authorCommentId && <Text style={styles.reply}>{props.textDelete}</Text>
+                        }
                     </TouchableOpacity>
                 </View>
             </View>
@@ -168,4 +171,4 @@ const styles = StyleSheet.create({
         fontWeight: '100'
     }
 })
-export default CustomizeComment
+export default memo(CustomizeComment)

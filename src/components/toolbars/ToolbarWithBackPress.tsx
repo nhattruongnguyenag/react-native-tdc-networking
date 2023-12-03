@@ -4,7 +4,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import IconButton from '../buttons/IconButton'
 import { useAppDispatch } from '../../redux/Hook'
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen } from '../../redux/Slice'
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload } from '../../redux/Slice'
 
 interface ToolbarWithBackPressProps {
   title: string
@@ -17,6 +17,7 @@ export default function ToolbarWithBackPress({ title }: ToolbarWithBackPressProp
     navigation.goBack();
     dispatch(goToProfileScreen(0));
     dispatch(setCurrentScreenNowIsProfileScreen(false));
+    dispatch(setImagesUpload([]));
   }
   return (
     <View style={styles.toolbarBody}>

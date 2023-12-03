@@ -37,4 +37,7 @@ export const JapaneseLanguageDepartment = "Khoa Bộ Môn Tiếng Nhật"
 export const groupStudent = 'group_tdc';
 export const groupBusiness = 'group_connect_business';
 export const postHasActive = 1;
-
+export const TYPE_POST_BUSINESS = 'doanh-nghiep';
+export const TYPE_POST_FACULTY = 'khoa';
+export const TYPE_POST_STUDENT = 'sinh-vien';
+export const TYPE_POST_NORMAL = 'thong-thuong';

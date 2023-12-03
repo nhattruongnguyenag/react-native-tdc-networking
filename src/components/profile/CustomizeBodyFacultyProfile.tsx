@@ -2,15 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLOR_BLACK, COLOR_BTN_BLUE, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import IconFontisto from 'react-native-vector-icons/Fontisto'
-import IconEvilIcons from 'react-native-vector-icons/EvilIcons'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
-import { Student } from '../../types/Student'
-import { Faculty } from '../../types/Faculty'
-import { Business } from '../../types/Business'
-import { TEXT_CHAT, TEXT_FOLLOW, TEXT_PLACEHOLDER_ADDRESS, TEXT_PLACEHOLDER_PHONE, TEXT_SUBJECT_POST, TEXT_TITLE_ADDRESS, TEXT_TITLE_PHONE, TEXT_UN_FOLLOW, TEXT_WORKING_TIME } from '../../constants/StringVietnamese'
 import { useTranslation } from 'react-multi-lang'
 
 
@@ -54,7 +49,7 @@ export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfi
                         }
                         <Text style={styles.txtContentBtn}>
                             {
-                                props.isFollow ? props.t("Profile.follow") : props.t("Profile.unFollow")
+                               props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
                             }
                         </Text>
                     </TouchableOpacity>

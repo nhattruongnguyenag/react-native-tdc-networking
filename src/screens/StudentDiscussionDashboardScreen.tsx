@@ -2,19 +2,18 @@ import { StyleSheet, Text, View, Image, ScrollView, FlatList, RefreshControl } f
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
+import { deletePostAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_DELETE_POST, API_URL_SAVE_POST, API_URL_STUDENT_POST } from '../constants/Path'
+import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupStudent } from '../constants/Variables'
+import { TYPE_POST_STUDENT, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupStudent } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
@@ -38,14 +37,16 @@ export default function StudentDiscussionDashboardScreen() {
   const { data, isFetching } = useGetStudentPostsQuery({
     id: userLogin?.id ?? 0
   }, {
-    pollingInterval: 500
+    pollingInterval: 2000
   });
 
   useEffect(() => {
     if (data) {
       setIsLoading(false);
       setStudentPost([]);
-      setStudentPost(data.data);
+      if (data.data !== null) {
+        setStudentPost(data.data);
+      }
       setIsCalled(true);
     }
   }, [data]);
@@ -57,16 +58,6 @@ export default function StudentDiscussionDashboardScreen() {
       setIsLoading(true)
     }
   }, [studentsPost, isCalled])
-
-  const getDataStudentApi = useCallback(async () => {
-    try {
-      const data = await postAPI(API_URL_STUDENT_POST + userLogin?.id)
-      setStudentPost(data.data)
-    } catch (error) {
-      console.log(error)
-    }
-    setIsCalled(true)
-  }, [userLogin, data])
 
   useEffect(() => {
     stompClient = getStompClient()
@@ -122,36 +113,7 @@ export default function StudentDiscussionDashboardScreen() {
     const status = await savePostAPI(API_URL_SAVE_POST, data);
   }
 
-  const renderItem = (item: any) => {
-    // return item.active === 1 ? (
-    //   <CustomizePost
-    //     id={item.id}
-    //     userId={item.user['id']}
-    //     name={item.user['name']}
-    //     avatar={item.user['image']}
-    //     typeAuthor={item.user['roleCodes']}
-    //     available={null}
-    //     timeCreatePost={item.createdAt}
-    //     content={item.content}
-    //     type={item.type}
-    //     likes={item.likes}
-    //     comments={item.comment}
-    //     commentQty={item.commentQuantity}
-    //     images={item.images}
-    //     role={item.user['roleCodes']}
-    //     likeAction={likeAction}
-    //     location={item.location ?? null}
-    //     title={item.title ?? null}
-    //     expiration={item.expiration ?? null}
-    //     salary={item.salary ?? null}
-    //     employmentType={item.employmentType ?? null}
-    //     description={item.description ?? null}
-    //     isSave={item.isSave}
-    //     group={code}
-    //     handleUnSave={handleSavePost}
-    //     handleDelete={handleDeletePost} />
-    // ) : (null)
-
+  const renderItem = useCallback((item: any) => {
     return (
       <CustomizePost
         id={item.id}
@@ -180,7 +142,7 @@ export default function StudentDiscussionDashboardScreen() {
         handleUnSave={handleSavePost}
         handleDelete={handleDeletePost} />
     )
-  }
+  },[studentsPost])
 
   return (
     <View style={styles.container}>
@@ -192,7 +154,9 @@ export default function StudentDiscussionDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
           refreshing={refreshing}
-          onRefresh={() => getDataStudentApi()} />}
+          onRefresh={() => {
+            // TODO
+          }} />}
       >
         {/* Image banner */}
         <Image

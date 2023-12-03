@@ -35,7 +35,7 @@ import { Business } from '../types/Business';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import { Student } from '../types/Student';
-import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese';
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables';
 import TextValidate from '../components/common/TextValidate';
 import { Faculty } from '../types/Faculty';
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue';
@@ -204,13 +204,14 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     const [taxCode, setTaxCode] = useState('');
     const [address, setAddress] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     const [business, setBusiness] = useState({
         id: props.userData?.id ?? 0,
         email: props.userData?.email ?? '',
         name: props.userData?.name ?? '',
         image: props.userData?.image ?? '',
-        background: undefined,
+        background: props.userData?.background ?? '',
         representor: props.userData?.representor ?? '',
         taxCode: props.userData?.taxCode ?? '',
         address: props.userData?.address ?? '',
@@ -579,12 +580,13 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     }
 
     const onSubmit = useCallback(async (business: any) => {
+        setIsUploading(true);
         asyncForValidate();
         setPassValidate(!passValidate)
     }, [validate, imagesUpload])
 
     useEffect(() => {
-        if (isAllFieldsValidBusiness(validate)) {
+        if (isAllFieldsValidStudent(validate)) {
             axios
                 .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business', business)
                 .then((responseUpdate: any) => {
@@ -595,19 +597,22 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                             if (response.status === 200 || response.status === 201) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
-                                dispatch(setUserLogin(response.data.data));
+                                dispatch(setUserLogin(response.data.data))
                                 dispatch(setImagesUpload([]));
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
                             }
+                            setIsUploading(false);
                         })
                         .catch((error) => {
                             showAlert();
+                            setIsUploading(false);
                         });
                 })
                 .catch((error) => {
                     showAlert();
+                    setIsUploading(false);
                 });
         } else {
             let key: keyof BusinessUpdate;
@@ -622,8 +627,10 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     }));
                 }
             }
+            setIsUploading(false);
         }
     }, [passValidate])
+
     return (
         <ScrollView>
             <SafeAreaView>
@@ -686,12 +693,11 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     />
                     <TextInputWithTitle
                         value={phone}
-                        title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
-                        placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
+                        title={t("Update.updatePhoneNumber")}
+                        placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
                         textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
-
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
                         textError={validate.phone?.textError}
@@ -765,38 +771,36 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     />
                     <View style={styles.group}>
                         <View style={styles.logo}>
-                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <Text style={styles.txt}>{t("Update.updateAvatarTitle")}</Text>
                             <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {imagesUpload ? (
-                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload[0]}` }} />
+                            {(imagesUpload !== null && imagesUpload?.length !== 0) ? (
+                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
                             ) : (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
                         </View>
                     </View>
                 </View>
-
                 <TouchableOpacity
-                    disabled={passValidate}
-                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    disabled={isUploading}
+                    style={[styles.btnRegister, isUploading ? styles.btnDisable : styles.btnAble]}
                     onPress={() => onSubmit(business)}
                 >
                     {
-                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                        isUploading && <ActivityIndicator size={25} color='white' style={styles.spinner} />
                     }
-                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                    <Text style={styles.txtRegister}>{t("Update.updateProfileButtonTitle")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>
     )
 }
 
-// Faculty
 interface FacultyUpdate {
     name: InputTextValidate
     phone: InputTextValidate
@@ -822,6 +826,7 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     const [faculty, setFaculty] = useState({
         id: props.userData?.id ?? 0,
@@ -839,27 +844,25 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
     }, [props.userData]);
 
-
     const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
     const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
     const [validate, setValidate] = useState<FacultyUpdate>({
         name: {
-            textError: 'Tên không được để trống',
+            textError: t("Validate.validateNameNull"),
             isVisible: false,
             isError: true
         },
         phone: {
-            textError: 'Số điện thoại không được để trống',
+            textError: t("Validate.validatePhoneNull"),
             isVisible: false,
             isError: true
         },
         address: {
-            textError: 'Địa chỉ không được để trống',
+            textError: t("Validate.validateAddressNull"),
             isVisible: false,
             isError: false
         },
-
     })
 
     const handlePhoneChange = useCallback(
@@ -980,12 +983,13 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
     }
 
     const onSubmit = useCallback(async (faculty: any) => {
+        setIsUploading(true);
         asyncForValidate();
         setPassValidate(!passValidate)
     }, [validate, imagesUpload])
 
     useEffect(() => {
-        if (isAllFieldsValidFaculty(validate)) {
+        if (isAllFieldsValidStudent(validate)) {
             axios
                 .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/faculty', faculty)
                 .then((responseUpdate: any) => {
@@ -1002,16 +1006,19 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                             } else {
                                 showAlert();
                             }
+                            setIsUploading(false);
                         })
                         .catch((error) => {
                             showAlert();
+                            setIsUploading(false);
                         });
                 })
                 .catch((error) => {
                     showAlert();
+                    setIsUploading(false);
                 });
         } else {
-            let key: keyof FacultyUpdate;
+            let key: keyof StudentUpdate;
             for (key in validate) {
                 if (validate[key].isError) {
                     setValidate((prevValidate) => ({
@@ -1023,16 +1030,18 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                     }));
                 }
             }
+            setIsUploading(false);
         }
     }, [passValidate])
+
     return (
         <ScrollView>
             <SafeAreaView>
                 <View>
                     <TextInputWithTitle
                         value={name}
-                        title={t("BusinessUpdate.businessUpdateCompanyName")}
-                        placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
+                        title={t("FacultyUpdate.facultyUpdateName")}
+                        placeholder={t("FacultyUpdate.facultyUpdateNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
                         textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
                     />
@@ -1044,8 +1053,8 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                     />
                     <TextInputWithTitle
                         value={phone}
-                        title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
-                        placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
+                        title={t("Update.updatePhoneNumber")}
+                        placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
                         textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
@@ -1058,14 +1067,14 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                     />
                     <View style={styles.group}>
                         <View style={styles.logo}>
-                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <Text style={styles.txt}>{t("Update.updateAvatarTitle")}</Text>
                             <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {imagesUpload?.length !== 0 ? (
+                            {(imagesUpload !== null && imagesUpload?.length !== 0) ? (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
                             ) : (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
@@ -1075,14 +1084,14 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                 </View>
 
                 <TouchableOpacity
-                    disabled={passValidate}
-                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    disabled={isUploading}
+                    style={[styles.btnRegister, isUploading ? styles.btnDisable : styles.btnAble]}
                     onPress={() => onSubmit(faculty)}
                 >
                     {
-                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                        isUploading && <ActivityIndicator size={25} color='white' style={styles.spinner} />
                     }
-                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                    <Text style={styles.txtRegister}>{t("Update.updateProfileButtonTitle")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>
@@ -1115,6 +1124,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     const [student, setStudent] = useState({
         id: props.userData?.id ?? 0,
@@ -1277,6 +1287,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     }
 
     const onSubmit = useCallback(async (student: any) => {
+        setIsUploading(true);
         asyncForValidate();
         setPassValidate(!passValidate)
     }, [validate, imagesUpload])
@@ -1299,13 +1310,16 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                             } else {
                                 showAlert();
                             }
+                            setIsUploading(false);
                         })
                         .catch((error) => {
                             showAlert();
+                            setIsUploading(false);
                         });
                 })
                 .catch((error) => {
                     showAlert();
+                    setIsUploading(false);
                 });
         } else {
             let key: keyof StudentUpdate;
@@ -1320,6 +1334,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                     }));
                 }
             }
+            setIsUploading(false);
         }
     }, [passValidate])
     return (
@@ -1328,8 +1343,8 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                 <View>
                     <TextInputWithTitle
                         value={name}
-                        title={t("BusinessUpdate.businessUpdateCompanyName")}
-                        placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
+                        title={t("StudentUpdate.studentUpdateName")}
+                        placeholder={t("StudentUpdate.facultyUpdateNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
                         textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
                     />
@@ -1341,12 +1356,11 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                     />
                     <TextInputWithTitle
                         value={phone}
-                        title={t("BusinessUpdate.businessUpdateCompanyPhoneNumber")}
-                        placeholder={t("BusinessUpdate.businessUpdateCompanyPhoneNumberPlaceholder")}
+                        title={t("Update.updatePhoneNumber")}
+                        placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
                         textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
                     />
-
                     <TextValidate
                         customStyle={{ marginLeft: 10 }}
                         textError={validate.phone?.textError}
@@ -1355,14 +1369,14 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                     />
                     <View style={styles.group}>
                         <View style={styles.logo}>
-                            <Text style={styles.txt}>{t("BusinessUpdate.businessUpdateCompanyAvatar")}</Text>
+                            <Text style={styles.txt}>{t("Update.updateAvatarTitle")}</Text>
                             <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
                                 <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {imagesUpload ? (
+                            {(imagesUpload !== null && imagesUpload?.length !== 0) ? (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
                             ) : (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
@@ -1370,16 +1384,15 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         </View>
                     </View>
                 </View>
-
                 <TouchableOpacity
-                    disabled={passValidate}
-                    style={[styles.btnRegister, passValidate ? styles.btnDisable : styles.btnAble]}
+                    disabled={isUploading}
+                    style={[styles.btnRegister, isUploading ? styles.btnDisable : styles.btnAble]}
                     onPress={() => onSubmit(student)}
                 >
                     {
-                        passValidate && <ActivityIndicator size={25} color='white' style={styles.spinner} />
+                        isUploading && <ActivityIndicator size={25} color='white' style={styles.spinner} />
                     }
-                    <Text style={styles.txtRegister}>{t("BusinessUpdate.businessUpdateCompanyButton")}</Text>
+                    <Text style={styles.txtRegister}>{t("Update.updateProfileButtonTitle")}</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </ScrollView>

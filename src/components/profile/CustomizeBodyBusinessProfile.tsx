@@ -8,14 +8,10 @@ import IconFeather from 'react-native-vector-icons/Feather'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
-import { Student } from '../../types/Student'
-import { Faculty } from '../../types/Faculty'
-import { Business } from '../../types/Business'
-import { TEXT_EMAIL, TEXT_FOLLOW, TEXT_PLACEHOLDER_ADDRESS, TEXT_PLACEHOLDER_PHONE, TEXT_PLACEHOLDER_TAXCODE, TEXT_REPRESENTOR, TEXT_SUBJECT_POST, TEXT_UN_FOLLOW, TEXT_WORKING_TIME } from '../../constants/StringVietnamese'
 import { useTranslation } from 'react-multi-lang'
 
 interface BusinessProfileType {
-  t:ReturnType<typeof useTranslation>
+  t: ReturnType<typeof useTranslation>
   isFollow: boolean,
   handleClickButtonEvent: (flag: number) => void,
   timeWork: string,
@@ -61,7 +57,7 @@ export default function CustomizeBodyBusinessProfile(props: Readonly<BusinessPro
             }
             <Text style={styles.txtContentBtn}>
               {
-                props.isFollow ?   props.t("Profile.unFollow") : props.t("Profile.follow")
+                props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
               }
             </Text>
           </TouchableOpacity>

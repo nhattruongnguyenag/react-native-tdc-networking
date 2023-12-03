@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Image } from 'react-native'
-import React, { useTransition } from 'react'
+import React, { useTransition, memo } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
@@ -18,7 +18,7 @@ interface ImageModalShowType {
   handleClickIntoUserNameOrAvatarEvent: () => void
 }
 
-export default function CustomizeImageModalShow(props: Readonly<ImageModalShowType>) {
+const CustomizeImageModalShow = (props: Readonly<ImageModalShowType>) => {
   return (
     <TouchableOpacity onPress={() => props.closeModal()} style={styles.wrapperContent}>
       <Pressable style={styles.containerContent}>
@@ -107,3 +107,4 @@ const styles = StyleSheet.create({
     width: '75%'
   }
 })
+export default memo(CustomizeImageModalShow)

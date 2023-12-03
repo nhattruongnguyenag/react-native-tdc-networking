@@ -1,5 +1,5 @@
 import { Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_BLACK, COLOR_WHITE } from '../../constants/Color'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../utils/SystemDimensions'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
@@ -10,8 +10,7 @@ interface ModalBigImageShowType {
     image: string,
     handleCloseModal: () => void
 }
-export default function CustomizeModalBigImageShow(props: Readonly<ModalBigImageShowType>) {
-
+const CustomizeModalBigImageShow = (props: Readonly<ModalBigImageShowType>) => {
     return (
         <Modal statusBarTranslucent={true} visible={props.visible}>
             <View style={styles.container}>
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
     image: {
         width: SCREEN_WIDTH * 1,
         height: SCREEN_HEIGHT * 0.7,
-        objectFit:'cover',
+        objectFit: 'cover',
     },
     buttonClose: {
         position: 'absolute',
@@ -47,3 +46,5 @@ const styles = StyleSheet.create({
         top: 40
     }
 })
+
+export default memo(CustomizeModalBigImageShow)

@@ -1,14 +1,13 @@
 import { FlatList, View, ScrollView, RefreshControl, StyleSheet, Text } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import axios from 'axios';
-import { API_URL_DELETE_POST, API_URL_FOLLOW, API_URL_GET_POST_BY_USER_ID, API_URL_LIKE, API_URL_SAVE_POST } from '../constants/Path';
+import { API_URL_DELETE_POST, API_URL_FOLLOW, API_URL_LIKE, API_URL_SAVE_POST } from '../constants/Path';
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation} from '../redux/Slice';
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
-import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND} from '../constants/Variables';
-import {MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
+import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../constants/Variables';
+import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
@@ -21,7 +20,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { getGroupForPost } from '../utils/GetGroup';
 import { User } from '../types/User';
-import { deletePostAPI, followAPI, savePostAPI, updateImageUserProfile } from '../api/CallApi';
+import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProfile } from '../api/CallApi';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
@@ -64,10 +63,15 @@ const ProfileScreen = ({ route }: any) => {
 
     useEffect(() => {
         if (data) {
+            console.log('================call profile====================');
             setIsLoading(false);
             setPost([]);
-            setPost(data.data.posts);
             setIsCalled(true);
+            setTypeAuthorPost(data.data.user['roleCodes']);
+            setUserInfo(data.data.user);
+            setIsFollow(data.data.isFollow)
+            setPost(data.data.posts);
+            setIsLoading(false);
         }
     }, [data])
 
@@ -82,52 +86,26 @@ const ProfileScreen = ({ route }: any) => {
         dispatch(setCurrentScreenNowIsProfileScreen(true));
     }, [])
 
-    const getPostByUserIdAPI = useCallback(() => {
-        axios.post(API_URL_GET_POST_BY_USER_ID, {
-            "userId": userId,
-            "groupCode": group,
-            "userLogin": userLogin?.id
-        })
-            .then((response) => {
-                setTypeAuthorPost(response.data.data.user['roleCodes']);
-                setUserInfo(response.data.data.user);
-                setIsFollow(response.data.data.isFollow)
-                setPost(response.data.data.posts);
-                setIsLoading(false);
-            }).catch((error) => {
-                console.log(error);
-            })
-    }, [])
-
-    useEffect(()=>{
-        dispatch(goToProfileScreen(userId))
-    },[userId])
-
     useEffect(() => {
-        setIsLoading(true);
-        getPostByUserIdAPI();
-    }, [getPostByUserIdAPI, isFocused, loadingBackground])
+        dispatch(goToProfileScreen(userId))
+    }, [userId])
 
     const likeAction = (obj: LikeAction) => {
         like(obj)
     }
 
     const like = useCallback(async (likeData: LikeAction) => {
-        axios.post(API_URL_LIKE, {
+        const data = {
             "postId": likeData.postId,
             "userId": likeData.userId
-        }).then((response) => {
-            if (response.data.status === 201) {
-                getPostByUserIdAPI();
-            }
-        }).catch((error) => {
-            console.error(error);
-        })
+        }
+        const status = await likePostAPI(API_URL_LIKE, data);
+        ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
     }, [])
 
     const handleDeletePost = async (id: number) => {
         const status = await deletePostAPI(API_URL_DELETE_POST, id);
-        ToastMessenger(status, 200,t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
+        ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
     }
 
     const handleSavePost = async (id: number) => {
@@ -138,7 +116,7 @@ const ProfileScreen = ({ route }: any) => {
         const status = await savePostAPI(API_URL_SAVE_POST, data);
     }
 
-    const renderItem = (item: any) => {
+    const renderItem = useCallback((item: any) => {
         return (
             <CustomizePost
                 id={item.id}
@@ -168,7 +146,9 @@ const ProfileScreen = ({ route }: any) => {
                 handleDelete={handleDeletePost}
             />
         )
-    }
+    }, [post]
+    )
+
 
     const handleClickButtonEvent = (flag: number) => {
         if (flag === MESSENGER_ACTION) {
@@ -195,7 +175,7 @@ const ProfileScreen = ({ route }: any) => {
         }
         setIsFollow(!isFollow);
         const status = await followAPI(API_URL_FOLLOW, followData);
-        ToastMessenger(status, 200, 'Thông báo', isFollow ? 'Hủy theo dõi thành công' : 'Theo dõi thành công', 'Cảnh báo', 'Lỗi hệ thống vui lòng thử lại sau');
+        ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
     }
 
     const handleClickIntoButtonMenu3dotEvent = () => {
@@ -220,9 +200,9 @@ const ProfileScreen = ({ route }: any) => {
         }
     }
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setIsShowAvatar(false);
-    }
+    }, [])
 
     const handleShowImageBackgroundUpdate = (flag: boolean) => {
         if (flag) {
@@ -261,7 +241,7 @@ const ProfileScreen = ({ route }: any) => {
                             <RefreshControl
                                 refreshing={false}
                                 onRefresh={() => {
-                                    getPostByUserIdAPI();
+                                    // TODO
                                 }}
                             />
                         }
@@ -317,4 +297,3 @@ const styles = StyleSheet.create({
     }
 })
 export default ProfileScreen
-

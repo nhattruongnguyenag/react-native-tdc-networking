@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, RefreshControl, ScrollView, Text } from 'react-native'
+import { FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
@@ -6,25 +6,24 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setConversations, setDeviceToken} from '../redux/Slice'
+import { setConversations, setDeviceToken } from '../redux/Slice'
 import { useGetBusinessPostsQuery, useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
-import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
-import { TYPE_POST_BUSINESS } from '../constants/StringVietnamese'
+import { deletePostAPI, savePostAPI } from '../api/CallApi'
+import { TYPE_POST_BUSINESS } from '../constants/Variables'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_BUSINESS_POST, API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
+import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
-import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness } from '../constants/Variables'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -36,6 +35,7 @@ export default function BusinessDashboardScreen() {
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
+  const isFocused = useIsFocused();
   const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
@@ -50,6 +50,7 @@ export default function BusinessDashboardScreen() {
 
   useEffect(() => {
     if (data) {
+      console.log('=================call business===================');
       setIsLoading(false);
       setBusinessPost([]);
       setBusinessPost(data.data);
@@ -106,15 +107,6 @@ export default function BusinessDashboardScreen() {
     }
   }, [deviceToken])
 
-  const getDataBusinessApi = useCallback(async () => {
-    try {
-      const data = await postAPI(API_URL_BUSINESS_POST + userLogin?.id)
-      setBusinessPost(data.data)
-    } catch (error) {
-      console.log(error)
-    }
-    setIsCalled(true);
-  }, [userLogin, data])
 
   useEffect(() => {
     stompClient = getStompClient()
@@ -170,36 +162,8 @@ export default function BusinessDashboardScreen() {
     ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
 
-  const renderItem = (item: any) => {
-    // return item.active === 1 ? (
-    //   <CustomizePost
-    //     id={item.id}
-    //     userId={item.user['id']}
-    //     name={item.user['name']}
-    //     avatar={item.user['image']}
-    //     typeAuthor={item.user['roleCodes']}
-    //     available={null}
-    //     timeCreatePost={item.createdAt}
-    //     content={item.content}
-    //     type={item.type}
-    //     likes={item.likes}
-    //     comments={item.comment}
-    //     commentQty={item.commentQuantity}
-    //     images={item.images}
-    //     role={item.user['roleCodes']}
-    //     likeAction={likeAction}
-    //     location={item.location ?? null}
-    //     title={item.title ?? null}
-    //     expiration={item.expiration ?? null}
-    //     salary={item.salary ?? null}
-    //     employmentType={item.employmentType ?? null}
-    //     description={item.description ?? null}
-    //     isSave={item.isSave}
-    //     group={code}
-    //     handleUnSave={handleSavePost}
-    //     handleDelete={handleDeletePost} />
-    // ) : (null)
 
+  const renderItem = useCallback((item: any) => {
     return (
       <CustomizePost
         id={item.id}
@@ -228,7 +192,7 @@ export default function BusinessDashboardScreen() {
         handleUnSave={handleSavePost}
         handleDelete={handleDeletePost} />
     )
-  }
+  }, [businessPost])
 
   return (
     <View style={styles.container}>
@@ -246,7 +210,9 @@ export default function BusinessDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
           refreshing={false}
-          onRefresh={() => getDataBusinessApi()}
+          onRefresh={() => {
+            // TODO
+          }}
         />}
       >
         {
@@ -264,6 +230,7 @@ export default function BusinessDashboardScreen() {
         <FlatList
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
+          extraData={businessPost}
           data={businessPost}
           renderItem={({ item }) => renderItem(item)}
         />

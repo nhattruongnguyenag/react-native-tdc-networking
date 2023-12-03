@@ -14,12 +14,6 @@ import React, { useEffect, useState } from 'react'
 import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
-import {
-  TEXT_AGREE,
-  TEXT_CHAR,
-  TEXT_DEFINITE_QUESTION,
-  TEXT_WARNING,
-} from '../constants/StringVietnamese'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
@@ -107,15 +101,14 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
         isLengthInRange(content.trim(), NUMBER_MIN_CHARACTER, NUMBER_MAX_CHARACTER) === false
       ) {
         alertString =
-          t("AlertNotify.alertNotifyPostContentCannotNull") +
-          'Và' +
-          t("AlertNotify.alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber") +
-          `${NUMBER_MAX_CHARACTER}` +
-          t("AlertNotify.alertNotifyCharacter");
+          `${t("AlertNotify.alertNotifyPostContentCannotNull")}` +
+          ', ' +
+          `${t("AlertNotify.alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber")}` +
+          " " + `${NUMBER_MAX_CHARACTER}` + " " + `${t("AlertNotify.alertNotifyCharacter")}`;
       } else if (isNotBlank(content.trim()) === false) {
         alertString = t("AlertNotify.alertNotifyPostContentCannotNull")
       } else {
-        alertString = t("AlertNotify.alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber") + `${NUMBER_MAX_CHARACTER} ` + TEXT_CHAR
+        alertString = `${t("AlertNotify.alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber")}` + " " + NUMBER_MAX_CHARACTER + " " + `${t("AlertNotify.alertNotifyCharacter")}`;
       }
       Alert.alert(t("AlertNotify.alertNotifyCreateNewPostFail"), alertString)
     }
@@ -127,10 +120,10 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   }
   const handleLongClickIntoImage = async (imageName: string) => {
     let result: boolean = false
-    result = await showAlert(TEXT_WARNING, TEXT_DEFINITE_QUESTION, true)
+    result = await showAlert(t("CreateNormalPost.createNormalPostAllerTitle"), t("CreateNormalPost.createNormalPostAllertQuestion"), true)
     if (result) {
       handleDeleteImage(imageName)
-    } 
+    }
   }
 
   const showAlert = async (title: string, messenger: string, QA: boolean) => {
@@ -163,7 +156,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           messenger,
           [
             {
-              text: TEXT_AGREE,
+              text: `${t("CreateNormalPost.createNormalPostAllertButton")}`,
               onPress: () => {
                 resolve(true)
               }

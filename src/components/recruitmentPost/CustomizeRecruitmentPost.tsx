@@ -6,7 +6,6 @@ import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
 import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { numberDayPassed } from '../../utils/FormatTime'
-import { TEXT_SEE_DETAIL } from '../../constants/StringVietnamese'
 
 interface RecruitmentPostType {
   id: number

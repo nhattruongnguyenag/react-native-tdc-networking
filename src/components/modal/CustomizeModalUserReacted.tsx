@@ -1,5 +1,5 @@
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_BLACK, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   }
 })
-export default CustomizeModalUserReacted
+export default memo(CustomizeModalUserReacted)

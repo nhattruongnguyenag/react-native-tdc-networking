@@ -191,13 +191,15 @@
         "barItemComponentNumberOfVote": " votes"
     },
     "Post": {
-        "normalPostIdentifyAuthorCompany": "Business",
+        "normalPostIdentifyAuthorCompany": "Company",
         "normalPostIdentifyAuthorFaculty": "Faculty",
         "normalPostIdentifyAuthorStudent": "",
         "typePostRecruitment": "Recruitment",
         "typePostSurvey": "Survey",
-        "normalPostLikeBy" : "Like by"
-     },
+        "normalPostLikeBy": "Liked by",
+        "normalPostSeeMoreContent": "See more",
+        "normalPostHiddentContent": "Hide"
+    },    
      "Comment": {
          "commentReplyComment": "Reply",
          "commentDeleteComment": "Delete",
@@ -373,12 +375,20 @@
             "businessUpdateTimeActive": "To"
         },
         "CreateNormalPost": {
-            "createNormalPostTitle": "Add a post",
-            "updateNormalPostTitle": "Update a post",
+            "createNormalPostTitle": "Add Post",
+            "updateNormalPostTitle": "Update Post",
             "createNormalPostPlaceholder": "Please enter the content of the post",
-            "createNormalPostButtonText": "Add images",
-            "createNormalPostButtonFinish": "Finish"
-        },
+            "createNormalPostButtonText": "Add Image",
+            "createNormalPostButtonFinish": "Finish",
+            "createNormalPostAlertButton": "OK",
+            "createNormalPostAlertTextChar": "characters",
+            "createNormalPostAlertQuestion": "Are you sure you want to delete this image?",
+            "createNormalPostAlertTitle": "Warning",
+            "createNormalPostAllertButton": "はい",
+            "createNormalPostAllertTextChar": "文字",
+            "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
+            "createNormalPostAllerTitle": "警告"
+        },        
         "ModalReviewBackground": {
             "modalReviewBackgroundTextSave": "Save",
             "modalReviewBackgroundTextCancel": "Cancel"
@@ -402,5 +412,31 @@
         "ToastMessenger": {
             "toastMessengerTextTitle": "Warning",
             "toastMessengerTextWarning": "System error, please try again later"
-        }
+        },
+        "FacultyUpdate": {
+            "facultyUpdateName": "Faculty Name",
+            "facultyUpdateNamePlaceholder": "Please enter the faculty name"
+        },
+        "Update": {
+            "updatePhoneNumber": "Phone Number",
+            "updatePhoneNumberPlaceholder": "Enter phone number",
+            "updateAvatarTitle": "Profile Picture",
+            "updateProfileButtonTitle": "Update Profile Information"
+        },
+        "StudentUpdate": {
+            "studentUpdateName": "Full Name",
+            "facultyUpdateNamePlaceholder": "Please enter your name"
+        },
+        "Notify": {
+            "updatePhoneNumber": "Phone Number",
+            "updatePhoneNumberPlaceholder": "Enter phone number",
+            "updateAvatarTitle": "Profile Picture",
+            "updateProfileButtonTitle": "Update Profile Information"
+        },
+        "ModalComment": {
+            "modalCommentTextChar": "characters",
+            "modalCommentCommentNotNull": "Comment content cannot be empty",
+            "modalCommentTextNumberLimited": "Comment content cannot exceed",
+            "modalCommentCreateFail": "Failed to create comment"
+        }                
 }

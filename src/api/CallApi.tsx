@@ -17,6 +17,14 @@ export const savePostAPI = async (urlSavePost: string, data: any) => {
   }
 }
 
+export const likePostAPI = async (urlLike: string, data: any) => {
+  try {
+    const response = await axios.post(urlLike, data);
+    return response.data.status;
+  } catch (error) {
+  }
+}
+
 export const handlePutDataAPI = async (apiUrl: string, postData: any): Promise<number> => {
   try {
     const response = await axios.post(apiUrl, postData)

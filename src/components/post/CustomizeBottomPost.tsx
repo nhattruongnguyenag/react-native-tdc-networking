@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BACKGROUND_COLOR_BOTTOM_ICON, COLOR_BLACK, COLOR_BOTTOM_AVATAR, COLOR_WHITE } from '../../constants/Color'
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
     margin: 1,
   }
 })
-export default CustomizeBottomPost
+export default memo(CustomizeBottomPost)

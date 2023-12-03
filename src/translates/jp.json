@@ -190,13 +190,15 @@
         "barItemComponentNumberOfVote": " 投票"
     },
     "Post": {
-        "normalPostIdentifyAuthorCompany": "ビジネス",
+        "normalPostIdentifyAuthorCompany": "企業",
         "normalPostIdentifyAuthorFaculty": "学科",
         "normalPostIdentifyAuthorStudent": "",
         "typePostRecruitment": "採用",
         "typePostSurvey": "調査",
-        "normalPostLikeBy" : "好き"
-     },
+        "normalPostLikeBy": "いいね",
+        "normalPostSeeMoreContent": "もっと見る",
+        "normalPostHiddentContent": "非表示"
+    },    
      "Comment": {
          "commentReplyComment": "返信",
          "commentDeleteComment": "削除",
@@ -376,8 +378,16 @@
             "updateNormalPostTitle": "投稿を更新",
             "createNormalPostPlaceholder": "投稿の内容を入力してください",
             "createNormalPostButtonText": "画像を追加",
-            "createNormalPostButtonFinish": "完了"
-        },
+            "createNormalPostButtonFinish": "完了",
+            "createNormalPostAlertButton": "了解",
+            "createNormalPostAlertTextChar": "文字",
+            "createNormalPostAlertQuestion": "この画像を本当に削除しますか？",
+            "createNormalPostAlertTitle": "警告",
+            "createNormalPostAllertButton": "はい",
+            "createNormalPostAllertTextChar": "文字",
+            "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
+            "createNormalPostAllerTitle": "警告"
+        },        
         "ModalReviewBackground": {
             "modalReviewBackgroundTextSave": "保存",
             "modalReviewBackgroundTextCancel": "保存をキャンセル"
@@ -401,5 +411,32 @@
         "ToastMessenger": {
             "toastMessengerTextTitle": "警告",
             "toastMessengerTextWarning": "システムエラーが発生しました。後でもう一度お試しください"
-        }                               
-    }
+        },
+        "FacultyUpdate": {
+            "facultyUpdateName": "学科名",
+            "facultyUpdateNamePlaceholder": "学科名を入力してください"
+        },
+        "Update": {
+            "updatePhoneNumber": "電話番号",
+            "updatePhoneNumberPlaceholder": "電話番号を入力してください",
+            "updateAvatarTitle": "プロフィール写真",
+            "updateProfileButtonTitle": "プロフィール情報を更新"
+        },
+        "StudentUpdate": {
+            "studentUpdateName": "フルネーム",
+            "facultyUpdateNamePlaceholder": "お名前を入力してください"
+        },
+        "Notify": {
+            "updatePhoneNumber": "電話番号",
+            "updatePhoneNumberPlaceholder": "電話番号を入力してください",
+            "updateAvatarTitle": "プロフィール画像",
+            "updateProfileButtonTitle": "プロフィール情報を更新"
+        },
+        "ModalComment": {
+            "modalCommentTextChar": "文字",
+            "modalCommentCommentNotNull": "コメントの内容は空白にできません",
+            "modalCommentTextNumberLimited": "コメントの内容は",
+            "modalCommentCreateFail": "コメントの作成に失敗しました"
+        }
+                                                          
+} 

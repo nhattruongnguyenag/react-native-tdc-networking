@@ -26,7 +26,7 @@ export const LABEL_POST_NORMAL = 'Bài viết'
 export const LABEL_POST_RECRUITMENT = 'Tin tuyển dụng'
 export const LABEL_POST_SURVEY = 'Khảo sát'
 export const NAME_GROUP = 'Group by TDC - Trường Cao Đẳng Công Nghệ Thủ Đức'
-export const TEXT_AGREE = 'Đồng ý'
+export const TEXT_AGREE = 'Oke'
 export const TEXT_CANCEL = 'Hủy'
 export const TEXT_NOTIFYCATIONS = 'Thông báo'
 export const TEXT_WARNING = 'Cảnh báo'
@@ -277,7 +277,12 @@ export const TEXT_NOTIFICATION_LIST_EMPTY = 'Không có hồ sơ ứng tuyển'
 export const TEXT_TITLE_LOADER = 'Đang tải dữ liệu...'
 
 
-
-
-
-
+/**
+ * 
+ * 
+ * TEXT_CHAR, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL
+ * export const TEXT_CHAR = 'ký tự'
+ * export const TEXT_WARNING_CONTENT_COMMENT_NULL = 'nội dung bình luận không thể để trống'
+ * export const TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED = 'nội dung bình luận không thể quá'
+ * export const TEXT_WARNING_CREATE_COMMENT_FAIL = 'Tạo bình luận thất bại'
+ */

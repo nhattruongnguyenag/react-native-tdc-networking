@@ -197,7 +197,9 @@
         "normalPostIdentifyAuthorStudent": "",
         "typePostRecruitment":"Tuyển dụng",
         "typePostSurvey":"Khảo sát",
-        "normalPostLikeBy" : "Thích bởi"
+        "normalPostLikeBy" : "Thích bởi",
+        "normalPostSeeMoreContent" : "Thích bởi",
+        "normalPostHiddentContent" : "Ẩn bớt"
      },
      "Comment": {
          "commentReplyComment":"Trả lời",
@@ -378,7 +380,11 @@
         "updateNormalPostTitle":"Cập nhật bài viết",
         "createNormalPostPlaceholder":"Hãy nhập nội dung bài viết",
         "createNormalPostButtonText":"Thêm hình ảnh",
-        "createNormalPostButtonFinish":"Hoàn tất"
+        "createNormalPostButtonFinish":"Hoàn tất",
+        "createNormalPostAllertButton":"đồng ý",
+        "createNormalPostAllertTextChar":"ký tự",
+        "createNormalPostAllertQuestion":"Bạn có thực sự muốn xóa bức ảnh này chứ",
+        "createNormalPostAllerTitle":"Cảnh báo"
     },
     "ModalReviewBackground":{
         "modalReviewBackgroundTextSave":"Lưu",
@@ -403,5 +409,31 @@
     "ToastMessenger":{
         "toastMessengerTextTitle":"Cảnh báo",
         "toastMessengerTextWarning":"Lỗi hệ thống vui lòng thử lại sau"
+    },
+    "FacultyUpdate": {
+        "facultyUpdateName": "Tên khoa",
+        "facultyUpdateNamePlaceholder": "Hãy nhập tên khoa"
+    },
+    "StudentUpdate": {
+        "studentUpdateName": "Họ và tên",
+        "facultyUpdateNamePlaceholder": "Hãy nhập tên của bạn"
+    },
+    "Update":{
+        "updatePhoneNumber": "Số điện thoại",
+        "updatePhoneNumberPlaceholder": "Nhập số điện thoại",
+        "updateAvatarTitle": "Ảnh đại diện",
+        "updateProfileButtonTitle": "Cập nhật thông tin cá nhân"
+    },
+    "Notify":{
+        "updatePhoneNumber": "Số điện thoại",
+        "updatePhoneNumberPlaceholder": "Nhập số điện thoại",
+        "updateAvatarTitle": "Ảnh đại diện",
+        "updateProfileButtonTitle": "Cập nhật thông tin cá nhân"
+    },
+    "ModalComment":{
+        "modalCommentTextChar":"ký tự",
+        "modalCommentCommentNotNull":"nội dung bình luận không thể để trống",
+        "modalCommentTextNumberLimited":"nội dung bình luận không thể quá",
+        "modalCommentCreateFail":"Tạo bình luận thất bại"
     }
 }

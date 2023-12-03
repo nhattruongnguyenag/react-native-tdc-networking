@@ -1,5 +1,5 @@
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_GREY, COLOR_WHITE } from '../../constants/Color'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../utils/SystemDimensions'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
@@ -11,7 +11,7 @@ interface ModalBigImageShowType {
     handleShowImageBackgroundUpdate: (flag: boolean) => void
 }
 
-export default function CustomizeModalShowBackgroundUpdate(props: Readonly<ModalBigImageShowType>) {
+const CustomizeModalShowBackgroundUpdate = (props: Readonly<ModalBigImageShowType>) => {
     return (
         <Modal statusBarTranslucent={true} visible={true} transparent={true}>
             <View style={styles.container}>
@@ -28,7 +28,7 @@ export default function CustomizeModalShowBackgroundUpdate(props: Readonly<Modal
                         <TouchableOpacity
                             onPress={() => props.handleShowImageBackgroundUpdate(true)}
                             style={[styles.button, styles.buttonRight]}>
-                           <Text>{props.t("ModalReviewBackground.modalReviewBackgroundTextSave")}</Text>
+                            <Text>{props.t("ModalReviewBackground.modalReviewBackgroundTextSave")}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -83,3 +83,4 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 15
     }
 })
+export default memo(CustomizeModalShowBackgroundUpdate)

@@ -1,13 +1,12 @@
 import { FlatList, View, ScrollView, RefreshControl, StyleSheet } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import axios from 'axios';
-import { API_URL_DELETE_POST, API_URL_GET_POST_BY_USER_ID, API_URL_LIKE, API_URL_SAVE_POST } from '../constants/Path';
+import { API_URL_DELETE_POST, API_URL_LIKE, API_URL_SAVE_POST } from '../constants/Path';
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation} from '../redux/Slice';
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
-import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND} from '../constants/Variables';
+import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables';
 import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -19,11 +18,10 @@ import { Faculty } from '../types/Faculty';
 import { Business } from '../types/Business';
 import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color';
 import { User } from '../types/User';
-import { deletePostAPI, followAPI, savePostAPI, updateImageUserProfile } from '../api/CallApi';
+import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProfile } from '../api/CallApi';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese';
 import SkeletonPost from '../components/SkeletonPost';
 import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
@@ -33,7 +31,6 @@ import { useGetPostsByIdQuery } from '../redux/Service';
 const MyProfileScreen = () => {
   const t = useTranslation();
   const [imageFocus, setImageFocus] = useState<string>("");
-  const [loadingBackground, setLoadingBackground] = useState(false);
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [group, setGroup] = useState((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : 'group_connect_business');
   const [isCalled, setIsCalled] = useState(false);
@@ -62,10 +59,15 @@ const MyProfileScreen = () => {
 
   useEffect(() => {
     if (data) {
+      console.log('=================call my profile===================');
       setIsLoading(false);
       setPost([]);
-      setPost(data.data.posts);
       setIsCalled(true);
+      setTypeAuthorPost(data.data.user['roleCodes']);
+      setUserInfo(data.data.user);
+      setIsFollow(data.data.isFollow)
+      setPost(data.data.posts);
+      setIsLoading(false);
     }
   }, [data])
 
@@ -75,54 +77,41 @@ const MyProfileScreen = () => {
     }
   }, [post, isCalled])
 
-  const getPostByUserIdAPI = useCallback(() => {
-    axios.post(API_URL_GET_POST_BY_USER_ID, {
-      // same user
-      "userId": userLogin?.id,
-      "groupCode": group,
-      "userLogin": userLogin?.id
-    })
-      .then((response) => {
-        setTypeAuthorPost(response.data.data.user['roleCodes']);
-        setUserInfo(response.data.data.user);
-        setIsFollow(response.data.data.isFollow)
-        setPost(response.data.data.posts);
-        setIsLoading(false);
-      }).catch((error) => {
-      })
-  }, [userLogin?.id])
-
   useEffect(() => {
-    setGroup((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : 'group_connect_business');
-    setIsLoading(true);
-    getPostByUserIdAPI();
-  }, [userLogin, loadingBackground])
+    let groupOfUser = '';
+    if (userLogin?.roleCodes.includes(TYPE_POST_STUDENT)) {
+      groupOfUser = 'group_tdc';
+    } else if (userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) {
+      groupOfUser = userLogin.facultyGroupCode;
+    } else {
+      groupOfUser = 'group_connect_business'
+    }
+    setGroup(groupOfUser);
+  }, [userLogin])
 
   const likeAction = (obj: LikeAction) => {
     like(obj)
   }
 
   useEffect(() => {
+    setIsLoading(true);
     if (isFocused) {
       dispatch(goToProfileScreen(userLogin?.id ?? -1));
-      dispatch(setCurrentScreenNowIsProfileScreen(true));
     } else {
       dispatch(goToProfileScreen(-1));
       dispatch(setCurrentScreenNowIsProfileScreen(false));
     }
+    setIsLoading(false);
   }, [isFocused])
 
 
   const like = useCallback(async (likeData: LikeAction) => {
-    axios.post(API_URL_LIKE, {
+    const data = {
       "postId": likeData.postId,
       "userId": likeData.userId
-    }).then((response) => {
-      let status = response.data.status;
-      ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
-    }).catch((error) => {
-      console.error(error);
-    })
+    }
+    const status = await likePostAPI(API_URL_LIKE, data);
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }, [])
 
   const handleDeletePost = async (id: number) => {
@@ -138,7 +127,8 @@ const MyProfileScreen = () => {
     const status = await savePostAPI(API_URL_SAVE_POST, data);
   }
 
-  const renderItem = (item: any) => {
+
+  const renderItem = useCallback((item: any) => {
     return (
       <CustomizePost
         id={item.id}
@@ -168,7 +158,7 @@ const MyProfileScreen = () => {
         handleDelete={handleDeletePost}
       />
     )
-  }
+  },[post])
 
   const handleClickButtonEvent = (flag: number) => {
     if (flag === MESSENGER_ACTION) {
@@ -220,9 +210,9 @@ const MyProfileScreen = () => {
     }
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsShowAvatar(false);
-  }
+  },[])
 
   const handleShowImageBackgroundUpdate = (flag: boolean) => {
     if (flag) {
@@ -232,7 +222,6 @@ const MyProfileScreen = () => {
         background: imagesUpload !== null ? imagesUpload[0] : undefined
       }
       const status = updateImageUserProfile(SERVER_ADDRESS + "api/users/change/image", data);
-      setLoadingBackground(!loadingBackground);
     }
     dispatch(setImagesUpload([]));
   }
@@ -262,7 +251,7 @@ const MyProfileScreen = () => {
               <RefreshControl
                 refreshing={false}
                 onRefresh={() => {
-                  getPostByUserIdAPI();
+                  // TODO
                 }}
               />
             }
@@ -305,4 +294,3 @@ const styles = StyleSheet.create({
   }
 })
 export default MyProfileScreen
-

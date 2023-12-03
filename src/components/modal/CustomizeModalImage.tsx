@@ -1,5 +1,5 @@
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native'
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useCallback, useState, memo } from 'react'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { closeModalImage } from '../../redux/Slice'
@@ -46,7 +46,7 @@ const CustomizeModalImage = () => {
     dispatch(closeModalImage())
   }
 
-  const handleClickIntoUserNameOrAvatarEvent = () => {
+  const handleClickIntoUserNameOrAvatarEvent = useCallback(() => {
     if (userIdOfProfileNow !== modalImageData?.userId) {
       closeModal();
       if (currentScreenNowIsProfileScreen) {
@@ -55,7 +55,7 @@ const CustomizeModalImage = () => {
         navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
       }
     }
-  }
+  }, [userIdOfProfileNow, modalImageData?.userId])
 
   return (
     <Modal statusBarTranslucent={true} transparent>
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
     margin: 2,
   }
 })
-export default CustomizeModalImage
+export default memo(CustomizeModalImage)

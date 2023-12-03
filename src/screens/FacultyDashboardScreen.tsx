@@ -2,12 +2,12 @@ import { FlatList, ScrollView, StyleSheet, View, RefreshControl, Text } from 're
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import { deletePostAPI, postAPI, savePostAPI } from '../api/CallApi'
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables'
+import { deletePostAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_DELETE_POST, API_URL_FACULTY_POST, API_URL_SAVE_POST } from '../constants/Path'
+import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
@@ -48,6 +48,7 @@ export default function FacultyDashboardScreen() {
 
   useEffect(() => {
     if (data) {
+      console.log('=================call faculty===================');
       setIsLoading(false);
       setFacultyPost([]);
       setFacultyPost(data.data);
@@ -56,30 +57,18 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
+    setFacultyPost([]);
     setCode((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '');
   }, [userLogin]);
 
   useEffect(() => {
-    if (facultyPost.length > 0 || isCalled) {
+    if (facultyPost.length > 0 || isCalled || code.trim() === "") {
       setIsLoading(false)
     } else {
       setIsLoading(true)
     }
-  }, [facultyPost, isCalled])
+  }, [facultyPost, isCalled, code])
 
-  const getDataFacultyApi = useCallback(async () => {
-    if (code.length !== 0) {
-      try {
-        const data = await postAPI(API_URL_FACULTY_POST + code + '&userLogin=' + userLogin?.id)
-        setFacultyPost(data.data)
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      setFacultyPost([]);
-    }
-    setIsCalled(true);
-  }, [userLogin, data])
 
   useEffect(() => {
     stompClient = getStompClient()
@@ -139,36 +128,7 @@ export default function FacultyDashboardScreen() {
     setCode(_code);
   }, [])
 
-  const renderItem = (item: any) => {
-    // return item.active === 1 ? (
-    //   <CustomizePost
-    //     id={item.id}
-    //     userId={item.user['id']}
-    //     name={item.user['name']}
-    //     avatar={item.user['image']}
-    //     typeAuthor={item.user['roleCodes']}
-    //     available={null}
-    //     timeCreatePost={item.createdAt}
-    //     content={item.content}
-    //     type={item.type}
-    //     likes={item.likes}
-    //     comments={item.comment}
-    //     commentQty={item.commentQuantity}
-    //     images={item.images}
-    //     role={item.user['roleCodes']}
-    //     likeAction={likeAction}
-    //     location={item.location ?? null}
-    //     title={item.title ?? null}
-    //     expiration={item.expiration ?? null}
-    //     salary={item.salary ?? null}
-    //     employmentType={item.employmentType ?? null}
-    //     description={item.description ?? null}
-    //     isSave={item.isSave}
-    //     group={code}
-    //     handleUnSave={handleSavePost}
-    //     handleDelete={handleDeletePost} />
-    // ) : (null)
-
+  const renderItem = useCallback((item: any) => {
     return (
       <CustomizePost
         id={item.id}
@@ -197,7 +157,7 @@ export default function FacultyDashboardScreen() {
         handleUnSave={handleSavePost}
         handleDelete={handleDeletePost} />
     )
-  }
+  },[facultyPost])
 
   return (
     userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
@@ -205,7 +165,9 @@ export default function FacultyDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
           refreshing={false}
-          onRefresh={() => getDataFacultyApi()}
+          onRefresh={() => {
+            // TODO
+          }}
         />}
       >
         {
@@ -251,7 +213,7 @@ export default function FacultyDashboardScreen() {
                 renderItem={({ item }) => renderItem(item)}
               />
             ) : (
-              <View style={styles.wrapperWhenDontHaveAnyPost}>
+              code !== "" && <View style={styles.wrapperWhenDontHaveAnyPost}>
                 <Text>{t("FacultyDashboard.facultyDashboardNotifyNotHavePost")}</Text>
               </View>
             )}
