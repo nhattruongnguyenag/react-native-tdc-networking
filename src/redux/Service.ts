@@ -1,20 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
 import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { PostRejectedLog } from '../types/PostRejectLog'
+import { RecruitmentPost } from '../types/RecruitmentPost'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { RecruitmentPost } from '../types/RecruitmentPost'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
+import { FollowUserModel } from '../types/response/FollowUserModel'
 import { MessageResponseData } from '../types/response/MessageResponseData'
-import { PostResponseModal } from '../types/response/PostResponseModal'
+import { PostResponseModel } from '../types/response/PostResponseModel'
 import { SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
-import { SurveyPostRequest } from '../types/SurveyPost'
-import { FollowUserModel } from '../types/response/FollowUserModel'
+import { SurveyPostRequest } from '../types/SurveyPostRequest'
 import { buildPostSearchRequest } from '../utils/PostHelper'
 import { JobApplyRespose } from '../types/response/JobApplyResponse'
 import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
@@ -141,7 +141,7 @@ export const TDCSocialNetworkAPI = createApi({
         url: `api/posts/survey/${surveyPostId}/result`
       })
     }),
-    getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
+    getPosts: builder.query<Data<PostResponseModel[]>, PostSearchRequest>({
       query: (data) => (
         {
           url: `api/posts/search?${buildPostSearchRequest(data)}`
@@ -241,7 +241,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
-    }),
+    })
   })
 })
 

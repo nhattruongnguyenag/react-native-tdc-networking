@@ -43,7 +43,8 @@ import {
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
-  CREATE_SURVEY_SCREEN, DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
+  CREATE_SURVEY_SCREEN,
+  DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
@@ -105,6 +106,7 @@ import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
+import { SurveyPostResponseModel } from './types/response/SurveyPostResponseModel'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
@@ -148,7 +150,7 @@ export type RootStackParamList = {
   APPROVAL_POST_SCREEN: undefined
   CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
   PEDDING_POST_SCREEN: undefined
-  DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
+  DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
