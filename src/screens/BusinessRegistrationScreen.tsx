@@ -1,7 +1,11 @@
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios, { AxiosResponse } from 'axios'
+import moment from 'moment'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import {
-  Alert,
   Image,
-  PermissionsAndroid,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -10,22 +14,21 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import ActionSheet from 'react-native-actionsheet'
+import DatePicker from 'react-native-date-picker'
+import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Business } from '../types/Business'
-import axios, { AxiosResponse } from 'axios'
+import TextValidate from '../components/common/TextValidate'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
+import { Business } from '../types/Business'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
-import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
-import ActionSheet from 'react-native-actionsheet'
-import { useAppSelector } from '../redux/Hook'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
-import { useNavigation, ParamListBase } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import {
   InputTextValidate,
   isBlank,
@@ -37,11 +40,6 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/common/TextValidate'
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment'
-import { useTranslation } from 'react-multi-lang'
-import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -574,7 +572,6 @@ export default function BusinessRegistrationScreen() {
         })
     } else {
       let key: keyof RegisterBusiness
-
       for (key in validate) {
         if (validate[key].isError) {
           validate[key].isVisible = true

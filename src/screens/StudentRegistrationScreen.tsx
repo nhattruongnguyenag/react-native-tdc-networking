@@ -62,6 +62,7 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
   type OpenURLButtonProps = {

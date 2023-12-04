@@ -5,32 +5,25 @@ import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotifyPost'
 import { SCREEN_HEIGHT} from '../../utils/SystemDimensions'
 import { Images } from '../../types/Images'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-
-// Hide log warning to export image error
 LogBox.ignoreLogs(['Warning: ...'])
 LogBox.ignoreAllLogs()
-
-// Definition props
 
 interface ImagePostType {
   images: Images[]
   handleClickIntoAnyImageEvent: (flag: any, arr: Array<number>) => void
 }
 
-// Constant
-
 const TYPE_LAYOUT_WIDTH_GREATER_HEIGHT = 1
 const TYPE_LAYOUT_HEIGHT_GREATER_WIDTH = 2
 const TYPE_LAYOUT_WIDTH_BALANCE_HEIGHT = 3
 const CustomizeImagePost = (props: ImagePostType) => {
-  // Variable
-
+  console.log('====================================');
+  console.log("CustomizeImagePost");
+  console.log('====================================');
   const [typeImageLayout, setTypeImageLayout] = useState(-1)
   const [numberImageRemaining, setNumberImageRemaining] = useState(0)
   const imageQty = props.images?.length
   const [listImageError, setListImageError] = useState([] as any)
-
-  // Function
 
   const handleAddImageToListError = (id: any) => {
     setListImageError([...listImageError, id])
@@ -579,6 +572,7 @@ const styles = StyleSheet.create({
     aspectRatio: 2 / 1
   },
   imageOnePost: {
+    objectFit:'cover',
     width: '100%',
     height: '100%'
   },

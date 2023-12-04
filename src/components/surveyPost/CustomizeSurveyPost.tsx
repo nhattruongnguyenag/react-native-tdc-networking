@@ -4,12 +4,14 @@ import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE 
 import { TEXT_DETAIL_SURVEY, TEXT_JOIN_SURVEY } from '../../constants/StringVietnamese'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import CustomizeBodyPost from '../post/CustomizeBodyPost'
+import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
 
 interface RecruitmentPostType {
-  id: number,
-  title: string,
-  description: string,
-  active: number,
+  id: number
+  textButton: string
+  title: string
+  description: string
+  active: number
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
 
@@ -23,13 +25,16 @@ export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>
           <Text style={styles.title}>{props.title}</Text>
           <CustomizeBodyPost content={props.description} />
         </View>
-        <TouchableOpacity
-          onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
-          <View style={styles.bottomButton}>
-            <Text style={styles.txtBtn}>{props.active === 1 ? TEXT_JOIN_SURVEY : TEXT_DETAIL_SURVEY}</Text>
-            <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
-          </View>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={{ flexDirection: 'row' }}
+            onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
+            <View style={styles.bottomButton}>
+              <Text style={styles.txtBtn}>{props.active === 1 ? TEXT_JOIN_SURVEY : TEXT_DETAIL_SURVEY}</Text>
+              <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -89,9 +94,8 @@ const styles = StyleSheet.create({
   bottomButton: {
     flexDirection: 'row',
     backgroundColor: COLOR_BLUE_BANNER,
-    padding: 5,
+    padding: 6,
     alignItems: 'center',
-    width: '40%',
     borderRadius: 5,
   },
   item: {
