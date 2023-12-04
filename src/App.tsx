@@ -34,10 +34,12 @@ locale.set('vi', require('moment/locale/vi'))
 locale.set('en', require('moment/locale/es'))
 locale.set('ja', require('moment/locale/ja'))
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
+import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
+  ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
@@ -63,7 +65,7 @@ import {
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
-import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import AcceptForgottenPasswordScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
@@ -95,21 +97,23 @@ import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboa
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import { useAppSelector } from './redux/Hook';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
 const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+
+import AcceptScreen from './screens/AcceptScreen'
+
 import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import { SurveyPostResponseModel } from './types/response/SurveyPostResponseModel'
 
+
 export type RootStackParamList = {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
+  ACCEPT_SCREEN: { email: string , subject: string , title: string, url: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -276,9 +280,9 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
-        name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
+        name={ACCEPT_SCREEN}
         options={{ title: t('ToolbarTitle.acceptForgottenPasswordScreen'), header: () => null }}
-        component={AcceptForgottenPasswordScreen}
+        component={AcceptScreen}
       />
 
       <RootStack.Screen
