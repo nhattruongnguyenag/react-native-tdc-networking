@@ -30,4 +30,5 @@ export interface Post {
   group: string
   handleUnSave: (post_id: number) => void
   handleDelete: (post_id: number) => void
+  active: number
 }

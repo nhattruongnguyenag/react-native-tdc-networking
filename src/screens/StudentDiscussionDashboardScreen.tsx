@@ -18,6 +18,7 @@ import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCR
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
 import { useGetStudentPostsQuery } from '../redux/Service'
+import { GROUP_TDC_ID } from '../constants/Groups'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
@@ -88,11 +89,11 @@ export default function StudentDiscussionDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 1 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { groupId: GROUP_TDC_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_TDC_ID })
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN, { groupId: GROUP_TDC_ID })
     }
   }
 
@@ -140,9 +141,11 @@ export default function StudentDiscussionDashboardScreen() {
         isSave={item.isSave}
         group={code}
         handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost} />
+        handleDelete={handleDeletePost}
+        active={item.active} 
+        />
     )
-  },[studentsPost])
+  }, [studentsPost])
 
   return (
     <View style={styles.container}>

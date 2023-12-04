@@ -13,10 +13,14 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  APPLICATION_OPTION_SCREEN, APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN, CREATE_SURVEY_SCREEN,
   FACULTY_DASHBOARD_SCREEN,
+  STUDENT_DISCUSSION_DASHBOARD_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN,
+  BUSINESS_DASHBOARD_SCREEN,
+  APPLICATION_OPTION_SCREEN,
+  APPROVAL_POST_SCREEN,
   LOGIN_SCREEN,
-  STUDENT_DISCUSSION_DASHBOARD_SCREEN
+  PEDDING_POST_SCREEN
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
@@ -30,7 +34,7 @@ import { getGroupForPost } from '../../utils/GetGroup'
 import { groupBusiness, groupStudent } from '../../constants/Variables'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
-  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
 
   const logout = useCallback(() => {
@@ -40,7 +44,6 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
   }, [])
 
   const t = useTranslation()
-
 
   const getScreenOfUser = (role: string) => {
     let screen = '';
@@ -60,72 +63,61 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
       <Divider />
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
+
         <List.Accordion
           titleNumberOfLines={5}
-          title={
-            <AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />
-          }
+          title={<AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />}
           titleStyle={{ fontSize: 17 }}
-          id={0}>
-          {
-            isStudent(userLogin) &&
+          id={0}
+        >
+          {isStudent(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
               label={getGroupForPost(groupStudent, t)}
-              onPress={() => {  
-                getScreenOfUser(userLogin.roleCodes);
-              }}
+              onPress={() => getScreenOfUser(userLogin.roleCodes)}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
-          }
-          {
-            isFaculty(userLogin) &&
+          )}
+
+          {isFaculty(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
               label={getGroupForPost(userLogin?.facultyGroupCode + "", t)}
-              onPress={() => {
-                getScreenOfUser(userLogin.roleCodes);
-              }}
+              onPress={() => getScreenOfUser(userLogin.roleCodes)}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
-          }
-          {
+          )}
 
-            isBusiness(userLogin) &&
+          {isBusiness(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
               label={getGroupForPost(groupBusiness, t)}
-              onPress={() => {
-                getScreenOfUser(userLogin.roleCodes);
-              }}
+              onPress={() => getScreenOfUser(userLogin.roleCodes)}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
-          }
+          )}
         </List.Accordion>
 
-
-        <DrawerItem
-          label={t('DrawerContentComponent.userJobApplyProfile')}
-          onPress={() => {
-          }}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
-          )}
-        />
-
-        {
-          (isAdmin(userLogin) || isFaculty(userLogin)) &&
+        {isStudent(userLogin) && (
           <DrawerItem
-            label={t('DrawerContentComponent.waitingPost')}
-            onPress={() => {
-              navigation.navigate(APPROVAL_POST_SCREEN)
-            }}
+            label={t('DrawerContentComponent.userJobApplyProfile')}
+            onPress={() => navigation.navigate(MANAGEMENT_JOB_APPLY_SCREEN)}
+            inactiveBackgroundColor={'#fff'}
+            pressColor={'#0088ff03'}
+            labelStyle={{ color: '#0088ff' }}
+            icon={({ color, focused, size }) => (
+              <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
+            )}
+          />
+        )}
+
+        {(isAdmin(userLogin) || isFaculty(userLogin)) && (
+          <DrawerItem
+            label={t('DrawerContentComponent.approvingPost')}
+            onPress={() => navigation.navigate(APPROVAL_POST_SCREEN)}
             inactiveBackgroundColor={'#fff'}
             pressColor={'#0088ff03'}
             labelStyle={{ color: '#0088ff' }}
@@ -133,13 +125,22 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
               <FontAwesome6Icon style={{ width: 15 }} name='bars-progress' size={16} color={'#0088ff'} />
             )}
           />
-        }
+        )}
+
+        <DrawerItem
+          label={t('DrawerContentComponent.peddingPost')}
+          onPress={() => navigation.navigate(PEDDING_POST_SCREEN)}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon style={{ width: 15 }} name='list' size={16} color={'#0088ff'} />
+          )}
+        />
 
         <DrawerItem
           label={t('DrawerContentComponent.option')}
-          onPress={() => {
-            navigation.navigate(APPLICATION_OPTION_SCREEN)
-          }}
+          onPress={() => navigation.navigate(APPLICATION_OPTION_SCREEN)}
           inactiveBackgroundColor={'#fff'}
           pressColor={'#0088ff03'}
           labelStyle={{ color: '#0088ff', margin: 0 }}
@@ -150,9 +151,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
 
         <DrawerItem
           label={t('DrawerContentComponent.logout')}
-          onPress={() => {
-            logout()
-          }}
+          onPress={logout}
           labelStyle={{ color: '#f12749' }}
           icon={({ color, focused, size }) => <FontAwesome6Icon name='power-off' size={16} color={'#f12749'} />}
         />

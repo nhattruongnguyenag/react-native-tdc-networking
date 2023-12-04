@@ -1,19 +1,16 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { useTranslation } from 'react-multi-lang'
 import { RootStackParamList } from '../../App'
-import { SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
-import { SurveyResponsePostModal } from '../../types/response/SurveyResponsePostModal'
+import { DETAIL_SURVEY_SCREEN } from '../../constants/Screen'
+import { SurveyPostResponseModel } from '../../types/response/SurveyResponsePostModal'
+import { isSurveyPost } from '../../utils/PostHelper'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { PostApprovalItemProps } from './PostApprovalItem'
 
-function isSurveyPost(post?: any): post is SurveyResponsePostModal {
-    return post !== undefined && post instanceof Object && post !== null && 'questions' in post
-}
-
 export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
-    const [surveyPost, setSurveyPost] = useState<SurveyResponsePostModal>({} as SurveyResponsePostModal)
+    const [surveyPost, setSurveyPost] = useState<SurveyPostResponseModel>({} as SurveyPostResponseModel)
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
     useEffect(() => {
@@ -22,18 +19,22 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
         }
     }, [])
 
-    const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
+    const handleClickBtnSurveyDetailEvent = () => {
+        if (isSurveyPost(props.post)) {
+            navigation.navigate(DETAIL_SURVEY_SCREEN, { survey: props.post })
+        }
     }
+
+    const t = useTranslation()
 
     return (
         <CustomizeSurveyPost
+            textButton=''
             id={surveyPost.id}
-            title={surveyPost.title ?? 'Đang tải...'}
-            handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
-            description={surveyPost.description ?? 'Đang tải...'}
+            title={surveyPost.title ?? t('PostApproveItem.isLoading')}
+            active={surveyPost.active}
+            handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent()}
+            description={surveyPost.description ?? t('PostApproveItem.isLoading')}
         />
     )
 }
-
-const styles = StyleSheet.create({})

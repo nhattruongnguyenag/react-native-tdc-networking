@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native'
+import { FlatList, StyleSheet, View, RefreshControl, ScrollView, Text } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
@@ -11,7 +11,6 @@ import { useGetBusinessPostsQuery, useSaveDeviceTokenMutation } from '../redux/S
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
 import { deletePostAPI, savePostAPI } from '../api/CallApi'
-import { TYPE_POST_BUSINESS } from '../constants/Variables'
 import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
@@ -20,10 +19,11 @@ import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness } from '../constants/Variables'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness, TYPE_POST_BUSINESS } from '../constants/Variables'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { GROUP_CONNECT_BUSINESS_ID } from '../constants/Groups'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -50,7 +50,6 @@ export default function BusinessDashboardScreen() {
 
   useEffect(() => {
     if (data) {
-      console.log('=================call business===================');
       setIsLoading(false);
       setBusinessPost([]);
       setBusinessPost(data.data);
@@ -136,11 +135,11 @@ export default function BusinessDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 2 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { groupId: GROUP_CONNECT_BUSINESS_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_CONNECT_BUSINESS_ID });
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN, { groupId: GROUP_CONNECT_BUSINESS_ID });
     }
   }
 
@@ -190,7 +189,8 @@ export default function BusinessDashboardScreen() {
         isSave={item.isSave}
         group={code}
         handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost} />
+        handleDelete={handleDeletePost}
+        active={item.active} />
     )
   }, [businessPost])
 

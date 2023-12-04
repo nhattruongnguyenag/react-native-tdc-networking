@@ -144,6 +144,7 @@ const ProfileScreen = ({ route }: any) => {
                 group={group}
                 handleUnSave={handleSavePost}
                 handleDelete={handleDeletePost}
+                active={item.active} 
             />
         )
     }, [post]

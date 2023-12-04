@@ -32,7 +32,7 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, DETAIL_SURVEY_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
@@ -106,19 +106,7 @@ const CustomizePost = (props: Post) => {
     props.likeAction(dataLike)
   }
 
-  // const handleCheckLiked = useCallback((likes: Like[], userId: number | undefined) => {
-  //   console.log('============handleCheckLiked========================');
-  //   let result = false
-  //   likes.some((item: any) => {
-  //     if (item.id === userId) {
-  //       result = true
-  //     }
-  //   })
-  //   return result
-  // },[])
-
   const handleCheckLiked = useMemo(() => {
-    console.log('============handleCheckLiked========================');
     let result = false;
     post.likes.some((item: any) => {
       if (item.id === userLogin?.id) {
@@ -175,17 +163,16 @@ const CustomizePost = (props: Post) => {
   }, [])
 
   const handleUpdateNormalPostEvent = () => {
-    console.log("handleUpdateNormalPostEvent");
+    console.log("handleUpdateNormalPostEvent")
     const updateNormalPost: UpdateNormalPost = {
       postId: props.id,
       content: props.content,
       images: props.images
     }
-    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost });
+    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost })
   }
 
   const handleSeeListCvPost = () => {
-    console.log("handleSeeListCvPost");
     navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
 
@@ -201,7 +188,7 @@ const CustomizePost = (props: Post) => {
     } else if (type == TYPE_POST_BUSINESS) {
       return t("Post.normalPostIdentifyAuthorCompany")
     } else {
-      return null;
+      return null
     }
   }, [])
 
@@ -297,6 +284,7 @@ const CustomizePost = (props: Post) => {
         <CustomizeSurveyPost
           id={post.id}
           title={post.title ?? ''}
+          active={post.active}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
           textButton={t("SurveyPost.surveyPostButton")}

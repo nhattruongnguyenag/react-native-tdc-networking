@@ -1,22 +1,187 @@
 {
     "DrawerContentComponent": {
-        "userGroup": "Your group",
+        "userGroup": "Your Group",
         "userJobApplyProfile": "Job Application Profile",
-        "waitingPost": "Pending Posts",
+        "approvingPost": "Approving Posts",
+        "peddingPost": "Pending Posts",
         "option": "Options",
-        "logout": "Logout"
+        "logout": "Log Out"
+    },
+    "LoginComponent": {
+        "titleLogin": "Log In",
+        "emailId": "Email ID",
+        "password": "Password",
+        "errorEmail": "Incorrect or empty email format",
+        "errorPass": "Incorrect or empty password format",
+        "showPass": "Show",
+        "hidePass": "Hide",
+        "loginFail": "Login Failed",
+        "alertLoginFail": "Incorrect email or password",
+        "forgotPass": "Forgot Password?",
+        "titleRegister": "Register",
+        "requestRegister": "Don't have an account?"
+    },
+    "RegisterComponent": {
+        "typeStudent": "Student",
+        "typeBusiness": "Business",
+        "titleNotification": "Notification",
+        "warningSelectedType": "Please select a registration role",
+        "titleSelectedType": "Select Role",
+        "selectedType": "---Select registration role---",
+        "goBack": "Go Back",
+        "continute": "Continue"
+    },
+    "RecuitmentPostDetailComponent": {
+        "titleLoader": "Loading data...",
+        "titleJob": "Job Position",
+        "employeType": "Employment Type",
+        "salary": "Salary",
+        "salaryUnitMonth": "VND/month",
+        "expiration": "Application Deadline",
+        "location": "Work Address",
+        "benefit": "Benefits",
+        "descriptionJob": "Job Description",
+        "requipmentJob": "Job Requirements",
+        "btnApplyJob": "Apply Now"
+    },
+    "ListJobApplyComponent": {
+        "listEmpty": "No job applications",
+        "updateNull": "Not updated",
+        "seeDetailCV": "View CV",
+        "titleLoader": "Loading data...",
+        "textReceived": "Received",
+        "textIn_progress": "In Progress",
+        "textNot_meet_standard_quality": "Under Review",
+        "textInterview": "Interview",
+        "textInterview_not_meet_standard_quality": "Did not pass interview",
+        "textAccept": "Accepted",
+        "textSelectStatus": "Select status to change",
+        "textChangeSucces": "Status changed successfully",
+        "textChangeStatus": "Change status",
+        "textCancel": "Cancel",
+        "textChange": "Change",
+        "textNotification": "Notification"
+    },
+    "RegisterStudentComponent": {
+        "titleRegisterStudent": "Student Registration",
+        "avata": "Profile Picture",
+        "placeholderConfimPass": "Confirm registration password...",
+        "titleConfimPass": "Confirm Password",
+        "placeholderPass": "Enter registration password...",
+        "titlePass": "Registration Password",
+        "placeholderMajor": "Select major...",
+        "titleMajor": "Major",
+        "placeholderFaculity": "Select faculty...",
+        "titleFaculity": "Faculty",
+        "placeholderSearch": "Search...",
+        "placeholderStudentCode": "Enter student code...",
+        "titleStudentCode": "Student Code",
+        "titleStudentName": "Student Name",
+        "placeholderStudentName": "Enter student name...",
+        "registerSusccess": "Registration successful",
+        "registerFail": "Registration failed",
+        "errorStudentNameEmpty": "Student name cannot be empty",
+        "errorStudentCodeEmpty": "Student code cannot be empty",
+        "errorFaculityEmpty": "Faculty name cannot be empty",
+        "errorMajor": "Please select a faculty before selecting a major",
+        "errorMajorEmpty": "Major name cannot be empty",
+        "errorPasswordEmpty": "Password cannot be empty",
+        "errorConfimPasswordEmpty": "Confirm password cannot be empty",
+        "errorSameEmail": "Email already registered! Please enter a different email",
+        "errorStudentNameNotSpecial": "Student name cannot contain special characters",
+        "errorStudentCodeNotSpecial": "Student code cannot contain special characters",
+        "errorStudentNameNotLengthMax": "Student name cannot exceed 255 characters",
+        "errorStudentCodeNotFormat": "Incorrect student code format",
+        "errorConfimPassNotMatch": "Confirm password does not match",
+        "titleEmail": "Email ID",
+        "placeholderEmail": "Enter email ID...",
+        "errorEmailEmpty": "Email cannot be empty",
+        "errorEmailNotFormat": "Incorrect email format",
+        "errorEmailNotLengthMax": "Email cannot exceed 255 characters",
+        "errorPassNotLengthMax": "Password cannot exceed 8 characters",
+        "errorPassNotFormat": "Incorrect password format",
+        "titleRegister": "Register",
+        "titleLogin": "Log In",
+        "requestLogin": "Already have an account?",
+        "titleNotification": "Notification"
+    },
+    "RegisterBusinessComponent": {
+        "titleRegisterBusiness": "Business Registration",
+        "avata": "Profile Picture",
+        "placeholderConfimPass": "Confirm registration password...",
+        "titleConfimPass": "Confirm Password",
+        "placeholderPass": "Enter registration password...",
+        "titlePass": "Registration Password",
+        "placeholderTaxCode": "Enter tax code...",
+        "titleTaxCode": "Tax Code",
+        "placeholderPhone": "Enter phone number...",
+        "titlePhone": "Phone Number",
+        "placeholderAddress": "Enter address...",
+        "titleAddress": "Address",
+        "placeholderRepresent": "Enter representative name...",
+        "titleRepresent": "Representative Name",
+        "titleTimeStart": "Start Time",
+        "titleTimeEnd": "End Time",
+        "titleTo": "to",
+        "titleBusinessName": "Business Name",
+        "placeholderBusinessName": "Enter business name...",
+        "registerSusccess": "Registration successful",
+        "registerFail": "Registration failed",
+        "errorNameEmpty": "Business name cannot be empty",
+        "errorTaxCodeEmpty": "Tax code cannot be empty",
+        "errorTaxCodeNotLengthMax": "Tax code cannot exceed 255 characters",
+        "errorTaxCodeNotFormat": "Incorrect tax code format",
+        "errorPhoneEmpty": "Phone number cannot be empty",
+        "errorPhoneNotFormat": "Incorrect phone number format",
+        "errorRepresentEmpty": "Representative name cannot be empty",
+        "errorAddressEmpty": "Address cannot be empty",
+        "errorAddressNotLengthMax": "Address cannot exceed 255 characters",
+        "errorPasswordEmpty": "Password cannot be empty",
+        "errorConfimPasswordEmpty": "Confirm password cannot be empty",
+        "errorSameEmail": "Email already registered! Please enter a different email",
+        "activeTimeNotFormat": "Incorrect operating time format",
+        "errorNameNotSpecial": "Business name cannot contain special characters",
+        "errorNameNotLengthMax": "Business name cannot exceed 255 characters",
+        "errorRepresentNotSpecial": "Representative name cannot contain special characters",
+        "errorRepresentNotLengthMax": "Representative name cannot exceed 255 characters",
+        "errorEmailNotFormat": "Incorrect email format",
+        "errorEmailNotLengthMax": "Email cannot exceed 255 characters",
+        "errorPassNotLengthMax": "Password cannot exceed 8 characters",
+        "errorPassNotFormat": "Incorrect password format",
+        "titleRegister": "Register",
+        "titleLogin": "Log In",
+        "requestLogin": "Already have an account?",
+        "titleNotification": "Notification"
+    },
+    "ManageJobApply": {
+        "textReceived": "Received",
+        "textIn_progress": "In Progress",
+        "textNot_meet_standard_quality": "Under Review",
+        "textInterview": "Interview",
+        "textInterview_not_meet_standard_quality": "Did not pass interview",
+        "textAccept": "Accepted",
+        "textNotification": "Notification",
+        "textDeleteSucces": "Canceled application successfully",
+        "textLoader": "Loading data...",
+        "textListJobNull": "No job applications",
+        "textSeeCv": "View CV",
+        "textDelete": "Cancel Application",
+        "textChangeProfile": "Edit Profile"
     },
     "NotificationsComponent": {
         "notification": "Notification",
         "readAll": "Mark all as read",
         "deleteNotification": "Delete notification",
         "unReadNotification": "Mark as unread",
-        "search": "Search notifications ..."
+        "search": "Search notifications..."
     },
     "FollowComponent": {
         "following": "Following",
-        "follower": "Follows you",
-        "search": "Search for users..."
+        "follower": "Followers",
+        "search": "Search users..."
+    },
+    "SavedPostListComponent": {
+        "search": "Enter search content..."
     },
     "SearchComponent": {
         "user": "User",
@@ -26,10 +191,7 @@
         "post": "Post",
         "normal": "Post",
         "survey": "Survey",
-        "recruitment": "Recruitment",
-        "search": "Enter search content..."
-    },
-    "SavedPostListComponent": {
+        "recruitment": "Job Post",
         "search": "Enter search content..."
     },
     "ToolbarTitle": {
@@ -44,31 +206,34 @@
         "addQuestionScreen": "Add Question",
         "reviewSurveyPostScreen": "Review Post",
         "surveyConductScreen": "Conduct Survey",
-        "jobApplyScreen": "Job Application",
+        "jobApplyScreen": "Job Apply",
         "listPostSavedScreen": "Saved Posts",
         "createNormalPostScreen": "",
-        "listJobApplyScreen": "Job Application List",
-        "listFollowScreen": "Follow List",
+        "listJobApplyScreen": "List Job Applications",
+        "listFollowScreen": "List Follow",
         "profileScreen": "User Profile",
         "detailJobApply": "Job Application Details",
         "optionScreen": "Options",
         "splashScreen": "",
         "surveyResultScreen": "Survey Results",
         "applicationOptionScreen": "Application Options",
-        "approvalPostScreen": "Approve Posts",
+        "approvalPostScreen": "Approve Post",
         "createSurveyScreen": "Create Survey",
-        "createRecruitmentScreen": "Create Job Posting",
-        "createUpdateProfile": "Update Personal Information"
+        "createRecruitmentScreen": "Create Recruitment Post",
+        "createUpdateProfile": "Update Personal Information",
+        "manageJobApply": "Manage Job Applications",
+        "pendingPostScreen": "Pending Posts",
+        "detailSurveyScreen": "Survey Details"
     },
     "AddQuestionScreen": {
-        "textButtonGoBack": "Go back",
+        "textButtonGoBack": "Go Back",
         "textButtonGoNext": "Next",
         "textEmptyQuestionErrorTitle": "Error",
-        "textEmptyQuestionErrorContent": "Add at least 1 question for the survey"
+        "textEmptyQuestionErrorContent": "Add at least 1 question to the survey"
     },
     "ConversationScreen": {
         "allConversationTabTitle": "All Conversations",
-        "allActiveConversationTabTitle": "Active"
+        "allActiveConversationTabTitle": "Active Conversations"
     },
     "RecruitmentScreen": {
         "recruitmentBenefitEmptyValidate": "Benefits cannot be empty",
@@ -82,18 +247,20 @@
         "recruitmentSalaryEmptyValidate": "Salary cannot be empty",
         "recruitmentSaveDescPlaceholder": "Job description...",
         "recruitmentSaveDescTitle": "Job Description",
-        "recruitmentSaveEmploymentTypePlaceholder": "Employment type...",
+        "recruitmentSaveEmploymentTypePlaceholder": "Employment Type...",
         "recruitmentSaveExpirationPickerLocale": "en",
         "recruitmentSaveExpirationTitle": "Application Deadline",
-        "recruitmentSaveLocationPlaceholder": "Work location...",
+        "recruitmentSaveLocationPlaceholder": "Work Location...",
         "recruitmentSaveLocationTitle": "Work Location",
         "recruitmentSaveRequirementPlaceholder": "Requirements...",
         "recruitmentSaveRequirementTitle": "Job Requirements",
         "recruitmentSaveSallaryPlaceholder": "Salary...",
         "recruitmentSaveSallaryTitle": "Salary",
         "recruitmentSaveSaveEmploymentTypeTitle": "Employment Type",
-        "recruitmentSaveSuccessContent": "Job posting has been created",
-        "recruitmentSaveSuccessTitle": "Success!",
+        "recruitmentSaveSuccessContent": "Recruitment post has been published",
+        "recruitmentSaveSuccessTitle": "Success!!!",
+        "recruitmentUpdateSuccessTitle": "Success!!!",
+        "recruitmentUpdateSuccessContent": "Recruitment post has been updated",
         "recruitmentSaveTitlePlaceholder": "Enter title...",
         "recruitmentSaveTitleTitle": "Title",
         "recruitmentTitleEmptyValidate": "Title cannot be empty",
@@ -113,11 +280,12 @@
     "JobApplyScreen": {
         "jobApplyScreenButtonAddCvTitle": "Add CV",
         "jobApplyScreenButtonComplete": "Complete",
-        "jobApplyScreenButtonGoBack": "Go back",
+        "jobApplyScreenButtonGoBack": "Go Back",
         "jobApplyScreenButtonUpdateCvTitle": "Update CV",
         "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the application",
         "jobApplyScreenEmptyCvTextTitle": "Notification",
         "jobApplyScreenSaveSuccessTextContent": "Application submitted successfully",
+        "jobApplyScreenChangeSuccessTextContent": "Application edited successfully",
         "jobApplyScreenSaveSuccessTextTitle": "Notification"
     },
     "MessageScreen": {
@@ -125,25 +293,27 @@
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
-        "userStatusInactive": "Last seen"
+        "userStatusInactive": "Online"
     },
     "ReviewSurveyPostScreen": {
-        "reviewSurveyScreenAnswerTitle": "Questions",
+        "reviewSurveyScreenAnswerTitle": "Question",
         "reviewSurveyScreenButtonComplete": "Complete",
         "reviewSurveyScreenButtonGoBack": "Go Back",
         "reviewSurveyScreenSaveFailContent": "Save failed",
         "reviewSurveyScreenSaveFailTitle": "Error",
-        "reviewSurveyScreenSaveSuccessContent": "Save successful",
-        "reviewSurveyScreenSaveSuccessTitle": "Success"
+        "reviewSurveyScreenSaveSuccessTitle": "Success",
+        "reviewSurveyScreenSaveSuccessContent": "Survey added successfully",
+        "reviewSurveyScreenUpdateSuccessTitle": "Success",
+        "reviewSurveyScreenUpdateSuccessContent": "Survey updated successfully"
     },
     "SurveyConductScreen": {
-        "surveyConductScreenSaveSuccessTitle": "Success!",
-        "surveyConductScreenSaveSuccessContent": "Answers have been saved.\nThank you for participating in the survey",
+        "surveyConductScreenSaveSuccessTitle": "Success!!!",
+        "surveyConductScreenSaveSuccessContent": "Answers have been saved\nThank you for participating in the survey",
         "surveyConductScreenShortAnswerError": "Please enter a short answer",
         "surveyConductScreenMultiQuestionMulitiChoice": "Please select at least one answer",
         "surveyConductScreenMultiQuestionOneChoice": "Please select one answer",
         "surveyConductScreenLoaderTitle": "Loading data...",
-        "surveyConductScreenButtonGoBack": "Go back",
+        "surveyConductScreenButtonGoBack": "Go Back",
         "surveyConductScreenButtonComplete": "Complete"
     },
     "SurveyResultScreen": {
@@ -170,13 +340,15 @@
         "addQuestionViewComponentMultiChoiceQuestion": "Multiple Choice",
         "addQuestionViewComponentOneChoiceQuestion": "Quiz",
         "addQuestionViewComponentQuestionEmptyErrorContent": "Please select a question type",
-        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!!!",
         "addQuestionViewComponentQuestionTypeDropdownSearch": "Search...",
-        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Select question type ---",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "Select question type",
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Title cannot contain special characters",
         "addQuestionViewComponentTitleEmptyValidate": "Title cannot be empty",
         "addQuestionViewComponentTitleInputPlaceholder": "Enter question title...",
-        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters"
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters",
+        "addChoiceValidateErrorTitle": "Notification",
+        "addChoiceValidateErrorContent": "Please add at least one choice for the question"
     },
     "MultiChoiceQuestion": {
         "questionComponentAddTextTitle": "Question"
@@ -185,40 +357,87 @@
         "questionBottomBarQuestionRequireToggle": "Required"
     },
     "ShortAnswerQuestion": {
-        "shortAnswerQuestionComponentTitlePlaceholder": "Enter your answer..."
+        "shortAnswerQuestionComponentTitlePlaceholder": "Enter answer..."
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " votes"
     },
     "Post": {
-        "normalPostIdentifyAuthorCompany": "Company",
+        "normalPostIdentifyAuthorCompany": "Business",
         "normalPostIdentifyAuthorFaculty": "Faculty",
         "normalPostIdentifyAuthorStudent": "",
         "typePostRecruitment": "Recruitment",
         "typePostSurvey": "Survey",
         "normalPostLikeBy": "Liked by",
-        "normalPostSeeMoreContent": "See more",
-        "normalPostHiddentContent": "Hide"
-    },    
-     "Comment": {
-         "commentReplyComment": "Reply",
-         "commentDeleteComment": "Delete",
-         "commentAuthor": "Author",
-         "modalListCommentTitle": "Comments"
-     },
-     "CommentContainer": {
-        "commentContainerComponentSeeMore": "See More comment",
-        "commentContainerComponentHidden": "Hide comment"
-     },
-     "CreateCommentToolbar":{
-        "commentCreateComment": "Post Comment",
-        "commentPlaceholderInput": "Please enter your comment"
-     },
-     "RecruitmentPost": {
+        "normalPostSeeMoreContent": "Liked by",
+        "normalPostHiddentContent": "Show less"
+    },
+    "Comment": {
+        "commentReplyComment": "Reply",
+        "commentDeleteComment": "Delete",
+        "commentAuthor": "Author",
+        "modalListCommentTitle": "Comments"
+    },
+    "CommentContainer": {
+        "commentContainerComponentSeeMore": "See more",
+        "commentContainerComponentHidden": "Show less"
+    },
+    "CreateCommentToolbar": {
+        "commentCreateComment": "Post comment",
+        "commentPlaceholderInput": "Enter comment content"
+    },
+    "RecruitmentPost": {
         "recruitmentPostType": "Recruitment",
         "recruitmentPostButtonSeeDetail": "See Details",
-        "recruitmentPostCurrency":"vnd/Month"
-    },  
+        "recruitmentPostCurrency": "vnd/Month"
+    },
+    "SurveyPost": {
+        "surveyPostType": "Survey",
+        "surveyPostButton": "Conduct Survey",
+        "surveyPostButtonSetting": "Edit Answers"
+    },
+    "Faculty": {
+        "facultyOfElectricalEngineering": "Faculty of Electrical Engineering",
+        "facultyOfInformationTechnology": "Faculty of Information Technology",
+        "facultyOfAutomationTechnology": "Faculty of Automation Technology",
+        "facultyOfMechanicalEngineeringAndManufacturing": "Faculty of Mechanical Engineering and Manufacturing",
+        "automobileEngineeringDepartment": "Automobile Engineering Department",
+        "facultyOfFinanceAndAccounting": "Faculty of Finance and Accounting",
+        "facultyOfBusinessAdministration": "Faculty of Business Administration",
+        "facultyOfTourism": "Faculty of Tourism",
+        "departmentOfEnglish": "Department of English",
+        "departmentOfKoreanLanguage": "Department of Korean Language",
+        "japaneseLanguageDepartment": "Japanese Language Department"
+    },
+    "ModalUserLiked": {
+        "modalUserLikedTitle": "List of Users who Liked"
+    },
+    "MenuOption": {
+        "menuOptionSaveArticle": "Save Article",
+        "menuOptionUnSaveArticle": "Unsave Article",
+        "menuOptionDeleteArticle": "Delete Article",
+        "menuOptionViewResumeList": "View CV List",
+        "menuOptionViewSurveyResults": "View Survey Results",
+        "menuOptionViewSurveyUpdateNormalPost": "Edit Article"
+    },
+    "CreatePostToolbar": {
+        "createPostToolbarTitle": "Create New Post",
+        "createPostToolbarNormalPost": "Text/Image",
+        "createPostToolbarSurveyPost": "Create Survey Post",
+        "createPostToolbarRecruitmentPost": "Recruitment Post"
+    },
+    "ModalCreateNormalPost": {
+        "modalCreateNormalPostTitle": "Create Post",
+        "modalCreateNormalPostPlaceholder": "Please enter the content of the post",
+        "modalCreateNormalPostEntryImages": "Images",
+        "modalCreateNormalPostButton": "Post"
+    },
+    "BusinessSelectFacultyToolbar": {
+        "businessSelectFacultyToolbarTitle": "Select the faculty to display posts"
+    },
+    "NotifyFacultyDontHaveAnyPost": {
+        "textNotifyFacultyDontHaveAnyPost": "No posts in this faculty yet"
+    },
     "Profile": {
         "profileOperatingHours": "Operating Hours",
         "profileTaxID": "Tax ID",
@@ -228,215 +447,198 @@
         "profileEmail": "Email",
         "profileArticles": "Articles",
         "profilePosition": "Position",
-        "profileRole": "Role",
-        "chat": "Send Message",
+        "profileRole": "Student",
+        "chat": "Chat",
         "call": "Call",
         "unFollow": "Unfollow",
         "follow": "Follow",
-        "updateProfile": "Update Profile",
-        "unUpdate": "Not Updated Yet"
-    },      
-     "SurveyPost": {
-        "surveyPostType": "Survey",
-        "surveyPostButton": "Conduct Survey",
-        "surveyPostButtonSetting": "Edit Survey"
+        "updateProfile": "Update Personal Information",
+        "unUpdate": "Not updated yet"
     },
-    "Faculty":{
-        "facultyOfElectricalEngineering": "Electrical Engineering Faculty",
-        "facultyOfInformationTechnology": "Information Technology Faculty",
-        "facultyOfAutomationTechnology": "Automation Technology Faculty",
-        "facultyOfMechanicalEngineeringAndManufacturing": "Mechanical Engineering and Manufacturing Faculty",
-        "automobileEngineeringDepartment": "Automobile Engineering Department",
-        "facultyOfFinanceAndAccounting": "Finance and Accounting Faculty",
-        "facultyOfBusinessAdministration": "Business Administration Faculty",
-        "facultyOfTourism": "Tourism Faculty",
-        "departmentOfEnglish": "English Department",
-        "departmentOfKoreanLanguage": "Korean Language Department",
-        "japaneseLanguageDepartment": "Japanese Language Department"        
-        },
-        "ModalUserLiked": {
-            "modalUserLikedTitle": "List of users who liked"
-        },
-        "MenuOption": {
-          "menuOptionSaveArticle": "Save post",
-          "menuOptionUnSaveArticle": "Un save post",
-          "menuOptionDeleteArticle": "Delete post",
-          "menuOptionViewResumeList": "View list CV",
-          "menuOptionViewSurveyResults": "View survey results",
-          "menuOptionViewSurveyUpdateNormalPost": "Edit Post"
-        },
-        "CreatePostToolbar": {
-         "createPostToolbarTitle": "Create New Post",
-         "createPostToolbarNormalPost": "Text/Image",
-         "createPostToolbarSurveyPost": "Create Survey Post",
-         "createPostToolbarRecruitmentPost": "Job Recruitment Post"
-        },
-        "ModalCreateNormalPost": {
-        "modalCreateNormalPostTitle": "Create post",
-        "modalCreateNormalPostPlaceholder": "Please enter your post",
-        "modalCreateNormalPostEntryImages": "Photo",
-        "modalCreateNormalPostButton": "Post"
-        },
-        "BusinessSelectFacultyToolbar": {
-          "businessSelectFacultyToolbarTitle": "Please select the faculty you want to display posts for"
-        },
-        "NotifyFacultyDontHaveAnyPost": {
-            "textNotifyFacultyDontHaveAnyPost": "No posts available in this faculty"
-        },
-        "Group":{
-            "groupTdc": "Group by TDC - Thu Duc College of Technology",
-            "groupConnectBusiness": "Connect Business Community",
-            "electricalElectronicsGroup": "Electrical - Electronics Group",
-            "informationTechnologyGroup": "Information Technology Group",
-            "automationTechnologyGroup": "Automation Technology Group",
-            "mechanicalEngineeringAndManufacturingGroup": "Mechanical Engineering and Manufacturing Group",
-            "automotiveMechanicalGroup": "Automotive Mechanical Group",
-            "financeAccountingGroup": "Finance - Accounting Group",
-            "businessAdministrationGroup": "Business Administration Group",
-            "tourismGroup": "Tourism Group",
-            "englishGroup": "English Group",
-            "koreanGroup": "Korean Group",
-            "japaneseLanguageDepartmentGroup": "Japanese Language Department Group"
-        },
-        "ModalUpdate":{
-            "modalUpdateTitle": "Update Account Information",
-            "modalUpdatePlaceholderPhoneNumber": "Phone Number",
-            "modalUpdatePlaceholderEmail": "Email",
-            "modalUpdateBackground": "Background Image",
-            "modalUpdateAvatar": "Profile Picture",
-            "modalUpdateButtonText": "Update"
-        },
-        "Validate": {
-            "validatePhoneNull": "Phone number cannot be empty",
-            "validatePhoneUnCorrectFormat": "Incorrect phone number format",
-            "validateEmailNull": "Email cannot be empty",
-            "validateEmailUnCorrectFormat": "Incorrect email format",
-            "validateEmailHadUsed": "Email has already been registered, please enter a different email",
-            "validateEmailHasMaxLength": "Email cannot exceed 255 characters",
-            "validateNameHasMaxLength": "Name cannot exceed 255 characters",
-            "validateNameHasSpecialCharacter": "Name cannot contain special characters",
-            "validateAddressNull": "Address cannot be empty",
-            "validatePresentorNull": "Representative name cannot be empty",
-            "validateRepresentorSpecialCharacter": "Name cannot contain special characters",
-            "validateRepresentorMaxLength": "Name cannot exceed 255 characters",
-            "validateTaxCodeNull": "Tax code cannot be empty",
-            "validateNameNull": "Name cannot be empty",
-            "validateNameSpecialCharacter": "Name cannot contain special characters",
-            "validateNameMaxLength": "Name cannot exceed 255 characters",
-            "validateNameTimeActiveUnCorrect": "Incorrect operating hours",
-            "validateTaxCodeFormat": "Incorrect tax code format",
-            "validateTaxCodeMaxLength": "Tax code cannot exceed 255 characters",
-            "validateAddressMaxLength": "Address cannot exceed 255 characters"                  
-        },
-        "ModalListUserLiked": {
-            "modalListUserLikedTitle": "List of Likes"
-         },
-         "ModalLoadingComment": {
-            "modalLoadingCommentTitle": "Loading data"
-        },
-        "CreatePostSelector": {
-            "createPostSelectorPlaceHolder": "Enter post content",
-            "createPostSelectorSurveyText": "Survey",
-            "createPostSelectorRecruitmentText": "Recruitment",
-            "createPostSelectorNormalText": "Normal"
-        },
-        "SelectFaculty": {
-            "selectFacultyPlaceholder": "Select faculty...",
-            "selectFacultyTextSearch": "Search..."
-        },
-        "FacultyDashboard": {
-            "facultyDashboardNotifyNotHavePost": "No posts yet"
-        },
-        "StudentDashboard": {
-            "studentDashboardGroupTitle": "Group by TDC - Thu Duc College of Technology"
-        },
-        "OptionScreen": {
-            "optionScreenFollowText": "Follow",
-            "optionScreenSaveText": "Save",
-            "optionScreenUpdateProfileText": "Update Profile"
-        },
-        "BusinessUpdate": {
-            "businessUpdateCompanyName": "Company Name",
-            "businessUpdateEmail": "Email",
-            "businessUpdateRepresentorFullName": "Representative Full Name",
-            "businessUpdateCompanyTaxId": "Tax ID",
-            "businessUpdateCompanyAddress": "Address",
-            "businessUpdateCompanyPhoneNumber": "Phone Number",
-            "businessUpdateCompanyTimeActiveStart": "Active Start Time",
-            "businessUpdateCompanyTimeActiveEnd": "Active End Time",
-            "businessUpdateCompanyAvatar": "Avatar Image",
-            "businessUpdateCompanyButton": "Update Personal Information",
-            "businessUpdateCompanyNamePlaceholder": "Enter company name",
-            "businessUpdateEmailPlaceholder": "Enter email",
-            "businessUpdateRepresentorFullNamePlaceholder": "Enter representative full name",
-            "businessUpdateCompanyTaxIdPlaceholder": "Enter tax ID",
-            "businessUpdateCompanyAddressPlaceholder": "Enter address",
-            "businessUpdateCompanyPhoneNumberPlaceholder": "Enter phone number",
-            "businessUpdateTimeActive": "To"
-        },
-        "CreateNormalPost": {
-            "createNormalPostTitle": "Add Post",
-            "updateNormalPostTitle": "Update Post",
-            "createNormalPostPlaceholder": "Please enter the content of the post",
-            "createNormalPostButtonText": "Add Image",
-            "createNormalPostButtonFinish": "Finish",
-            "createNormalPostAlertButton": "OK",
-            "createNormalPostAlertTextChar": "characters",
-            "createNormalPostAlertQuestion": "Are you sure you want to delete this image?",
-            "createNormalPostAlertTitle": "Warning",
-            "createNormalPostAllertButton": "はい",
-            "createNormalPostAllertTextChar": "文字",
-            "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
-            "createNormalPostAllerTitle": "警告"
-        },        
-        "ModalReviewBackground": {
-            "modalReviewBackgroundTextSave": "Save",
-            "modalReviewBackgroundTextCancel": "Cancel"
-        },        
-        "AlertNotify": {
-            "alertNotifyTitle": "Notification",
-            "alertNotifyCreateNewPostFail": "Failed to create a new post",
-            "alertNotifyCreateNewPostSuccess": "Successfully created a new post",
-            "alertNotifyUpdatePostFail": "Failed to update the post",
-            "alertNotifyUpdatePostSuccess": "Successfully updated the post",
-            "alertNotifyPostContentCannotNull": "Post content cannot be empty",
-            "alertNotifyCharacter": "Character",
-            "alertNotifyTextAccept": "Accept",
-            "alertNotifyTextReject": "Reject",
-            "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "The number of characters cannot exceed the limit"            
-        },
-        "UpdateProfile": {
-            "updateProfileAlertSuccess": "Update successful",
-            "updateProfileAlertFail": "Update failed, please try again"
-        },
-        "ToastMessenger": {
-            "toastMessengerTextTitle": "Warning",
-            "toastMessengerTextWarning": "System error, please try again later"
-        },
-        "FacultyUpdate": {
-            "facultyUpdateName": "Faculty Name",
-            "facultyUpdateNamePlaceholder": "Please enter the faculty name"
-        },
-        "Update": {
-            "updatePhoneNumber": "Phone Number",
-            "updatePhoneNumberPlaceholder": "Enter phone number",
-            "updateAvatarTitle": "Profile Picture",
-            "updateProfileButtonTitle": "Update Profile Information"
-        },
-        "StudentUpdate": {
-            "studentUpdateName": "Full Name",
-            "facultyUpdateNamePlaceholder": "Please enter your name"
-        },
-        "Notify": {
-            "updatePhoneNumber": "Phone Number",
-            "updatePhoneNumberPlaceholder": "Enter phone number",
-            "updateAvatarTitle": "Profile Picture",
-            "updateProfileButtonTitle": "Update Profile Information"
-        },
-        "ModalComment": {
-            "modalCommentTextChar": "characters",
-            "modalCommentCommentNotNull": "Comment content cannot be empty",
-            "modalCommentTextNumberLimited": "Comment content cannot exceed",
-            "modalCommentCreateFail": "Failed to create comment"
-        }                
+    "Group": {
+        "groupTdc": "TDC Group - Thu Duc College of Technology",
+        "groupConnectBusiness": "Connect Business Group",
+        "electricalElectronicsGroup": "Electrical - Electronics Group",
+        "informationTechnologyGroup": "Information Technology Group",
+        "automationTechnologyGroup": "Automation Technology Group",
+        "mechanicalEngineeringAndManufacturingGroup": "Mechanical Engineering and Manufacturing Group",
+        "automotiveMechanicalGroup": "Automotive Mechanical Group",
+        "financeAccountingGroup": "Finance - Accounting Group",
+        "businessAdministrationGroup": "Business Administration Group",
+        "tourismGroup": "Tourism Group",
+        "englishGroup": "English Group",
+        "koreanGroup": "Korean Group",
+        "japaneseLanguageDepartmentGroup": "Japanese Language Department Group"
+    },
+    "ModalUpdate": {
+        "modalUpdateTitle": "Update Account Information",
+        "modalUpdatePlaceholderPhoneNumber": "Phone Number",
+        "modalUpdatePlaceholderEmail": "Email",
+        "modalUpdateBackground": "Background",
+        "modalUpdateAvatar": "Avatar",
+        "modalUpdateButtonText": "Update"
+    },
+    "Validate": {
+        "validatePhoneNull": "Phone number cannot be empty",
+        "validatePhoneUnCorrectFormat": "Incorrect phone number format",
+        "validateEmailNull": "Email cannot be empty",
+        "validateEmailUnCorrectFormat": "Incorrect email format",
+        "validateEmailHadUsed": "Email is already registered, please enter another email",
+        "validateEmailHasMaxLength": "Email must not exceed 255 characters",
+        "validateNameHasMaxLength": "Name must not exceed 255 characters",
+        "validateNameHasSpecialCharacter": "Name must not contain special characters",
+        "validateAddressNull": "Address cannot be empty",
+        "validatePresentorNull": "Representative name cannot be empty",
+        "validateRepresentorSpecialCharacter": "Name must not contain special characters",
+        "validateRepresentorMaxLength": "Name must not exceed 255 characters",
+        "validateTaxCodeNull": "Tax code cannot be empty",
+        "validateNameNull": "Name cannot be empty",
+        "validateNameSpecialCharacter": "Name must not contain special characters",
+        "validateNameMaxLength": "Name must not exceed 255 characters",
+        "validateNameTimeActiveUnCorrect": "Incorrect operating time",
+        "validateTaxCodeFormat": "Incorrect tax code format",
+        "validateTaxCodeMaxLength": "Tax code must not exceed 255 characters",
+        "validateAddressMaxLength": "Address must not exceed 255 characters"
+    },
+    "ModalListUserLiked": {
+        "modalListUserLikedTitle": "List of Likers"
+    },
+    "ModalLoadingComment": {
+        "modalLoadingCommentTitle": "Loading Data"
+    },
+    "CreatePostSelector": {
+        "createPostSelectorPlaceHolder": "Enter post content",
+        "createPostSelectorSurveyText": "Survey",
+        "createPostSelectorRecruitmentText": "Recruitment",
+        "createPostSelectorNormalText": "Normal"
+    },
+    "SelectFaculty": {
+        "selectFacultyPlaceholder": "Select faculty...",
+        "selectFacultyTextSearch": "Search..."
+    },
+    "FacultyDashboard": {
+        "facultyDashboardNotifyNotHavePost": "No posts yet"
+    },
+    "StudentDashboard": {
+        "studentDashboardGroupTitle": "TDC Group - Thu Duc College of Technology"
+    },
+    "OptionScreen": {
+        "optionScreenFollowText": "Follow",
+        "optionScreenSaveText": "Save",
+        "optionScreenUpdateProfileText": "Update Profile"
+    },
+    "BusinessUpdate": {
+        "businessUpdateCompanyName": "Company Name",
+        "businessUpdateEmail": "Email",
+        "businessUpdateRepresentorFullName": "Representative's Full Name",
+        "businessUpdateCompanyTaxId": "Tax ID",
+        "businessUpdateCompanyAddress": "Company Address",
+        "businessUpdateCompanyPhoneNumber": "Company Phone Number",
+        "businessUpdateCompanyTimeActiveStart": "Start Time of Operation",
+        "businessUpdateCompanyTimeActiveEnd": "End Time of Operation",
+        "businessUpdateCompanyAvatar": "Company Avatar",
+        "businessUpdateCompanyButton": "Update Profile",
+        "businessUpdateCompanyNamePlaceholder": "Enter company name",
+        "businessUpdateEmailPlaceholder": "Enter email",
+        "businessUpdateRepresentorFullNamePlaceholder": "Enter representative's full name",
+        "businessUpdateCompanyTaxIdPlaceholder": "Enter tax ID",
+        "businessUpdateCompanyAddressPlaceholder": "Enter company address",
+        "businessUpdateCompanyPhoneNumberPlaceholder": "Enter company phone number",
+        "businessUpdateTimeActive": "To"
+    },
+    "CreateNormalPost": {
+        "createNormalPostTitle": "Add Post",
+        "updateNormalPostTitle": "Update Post",
+        "createNormalPostPlaceholder": "Enter post content",
+        "createNormalPostButtonText": "Add Image",
+        "createNormalPostButtonFinish": "Finish",
+        "createNormalPostAllertButton": "agree",
+        "createNormalPostAllertTextChar": "characters",
+        "createNormalPostAllertQuestion": "Do you really want to delete this image?",
+        "createNormalPostAllerTitle": "Warning"
+    },
+    "ModalReviewBackground": {
+        "modalReviewBackgroundTextSave": "Save",
+        "modalReviewBackgroundTextCancel": "Cancel Save"
+    },
+    "AlertNotify": {
+        "alertNotifyTitle": "Notification",
+        "alertNotifyCreateNewPostFail": "Failed to create new post",
+        "alertNotifyCreateNewPostSuccess": "Successfully created a new post",
+        "alertNotifyUpdatePostFail": "Failed to update post",
+        "alertNotifyUpdatePostSuccess": "Successfully updated post",
+        "alertNotifyPostContentCannotNull": "Post content cannot be empty",
+        "alertNotifyCharacter": "Character",
+        "alertNotifyTextAccept": "Accept",
+        "alertNotifyTextReject": "Reject",
+        "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "Number of characters cannot exceed"
+    },
+    "UpdateProfile": {
+        "updateProfileAlertSuccess": "Update successful",
+        "updateProfileAlertFail": "Update failed, please try again"
+    },
+    "ToastMessenger": {
+        "toastMessengerTextTitle": "Warning",
+        "toastMessengerTextWarning": "System error, please try again later"
+    },
+    "FacultyUpdate": {
+        "facultyUpdateName": "Faculty Name",
+        "facultyUpdateNamePlaceholder": "Enter faculty name"
+    },
+    "StudentUpdate": {
+        "studentUpdateName": "Full Name",
+        "facultyUpdateNamePlaceholder": "Enter your name"
+    },
+    "Update": {
+        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumberPlaceholder": "Enter phone number",
+        "updateAvatarTitle": "Avatar",
+        "updateProfileButtonTitle": "Update Profile"
+    },
+    "Notify": {
+        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumberPlaceholder": "Enter phone number",
+        "updateAvatarTitle": "Avatar",
+        "updateProfileButtonTitle": "Update Profile"
+    },
+    "ModalComment": {
+        "modalCommentTextChar": "characters",
+        "modalCommentCommentNotNull": "Comment content cannot be empty",
+        "modalCommentTextNumberLimited": "Comment content cannot exceed",
+        "modalCommentCreateFail": "Failed to create comment"
+    },
+    "ApprovingScreen": {
+        "isLoading": "Loading data...",
+        "emptyMessage": "No new posts"
+    },
+    "PostApproveItem": {
+        "isLoading": "Loading"
+    },
+    "ModalPostRejectReason": {
+        "default": "Default",
+        "survey": "Survey",
+        "recruitment": "Recruitment",
+        "successDeleteMessage": "Success !!!",
+        "successAcceptMessage": "Success !!!",
+        "successDeleteMessageContent": "Successfully deleted the post",
+        "rejectSuccessMessage": "Post rejected successfully",
+        "notePlaceholder": "Note...",
+        "acceptPostMenuItem": "Approve post",
+        "rejectPostMenuItem": "Reject post",
+        "isLoading": "Rejecting post",
+        "rejectDetails": "Details",
+        "pendingPostUpdate": "Edit",
+        "pendingPostDelete": "Delete post"
+    },
+    "PenddingPostScreen": {
+        "peddingPostTab": "Pending",
+        "rejectedPostTab": "Rejected",
+        "loading": "Loading...",
+        "emptyMessage": "No posts"
+    },
+    "UserItem": {
+        "follow": "Follow",
+        "unFollow": "Unfollow",
+        "profile": "Profile"
+    }
 }

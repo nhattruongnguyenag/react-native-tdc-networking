@@ -43,6 +43,7 @@ export const TEXT_WARNING_CONTENT_COMMENT_NULL = 'nội dung bình luận không
 export const TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED = 'nội dung bình luận không thể quá'
 export const TEXT_SEE_DETAIL = 'Xem chi tiết'
 export const TEXT_JOIN_SURVEY = 'Tham gia khảo sát'
+export const TEXT_DETAIL_SURVEY = 'Chi tiết câu hỏi'
 export const TEXT_SURVEY = 'khảo sát'
 export const TEXT_RECRUITMENT = 'Tuyển dụng'
 export const TEXT_SURVEY_TITLE = 'Tiêu đề khảo sát'
@@ -276,13 +277,7 @@ export const TEXT_SEE_CV = 'Xem chi tiết cv'
 export const TEXT_NOTIFICATION_LIST_EMPTY = 'Không có hồ sơ ứng tuyển'
 export const TEXT_TITLE_LOADER = 'Đang tải dữ liệu...'
 
+export const TEXT_SUBJECT_AUTHENTICATE_REGISTRATION = 'Xác thực tài khoản'
+export const TITLE_SUBJECT_AUTHENTICATE_REGISTRATION = 'xác thực tài khoản'
 
-/**
- * 
- * 
- * TEXT_CHAR, TEXT_WARNING_CONTENT_COMMENT_NULL, TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED, TEXT_WARNING_CREATE_COMMENT_FAIL
- * export const TEXT_CHAR = 'ký tự'
- * export const TEXT_WARNING_CONTENT_COMMENT_NULL = 'nội dung bình luận không thể để trống'
- * export const TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED = 'nội dung bình luận không thể quá'
- * export const TEXT_WARNING_CREATE_COMMENT_FAIL = 'Tạo bình luận thất bại'
- */
+

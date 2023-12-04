@@ -1,6 +1,12 @@
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios, { AxiosResponse } from 'axios'
+import moment from 'moment'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import {
-  Alert,
   Image,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,22 +14,21 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import ActionSheet from 'react-native-actionsheet'
+import DatePicker from 'react-native-date-picker'
+import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Business } from '../types/Business'
-import axios, { AxiosResponse } from 'axios'
+import TextValidate from '../components/common/TextValidate'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
+import { Business } from '../types/Business'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { ActivityIndicator } from 'react-native-paper'
-import { COLOR_BTN_BLUE } from '../constants/Color'
-import ActionSheet from 'react-native-actionsheet'
-import { useAppSelector } from '../redux/Hook'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
-import { useNavigation, ParamListBase } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
 import {
   InputTextValidate,
   isBlank,
@@ -35,63 +40,6 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/common/TextValidate'
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment'
-import {
-  TEXT_ACTIVETIME_END,
-  TEXT_ACTIVETIME_START,
-  TEXT_ALERT_REGISTER_FAILT,
-  TEXT_ALERT_REGISTER_SUCCESS,
-  TEXT_ERROR_ACTIVE_NOTFORMAT,
-  TEXT_ERROR_ADDRESS_NOTEMPTY,
-  TEXT_ERROR_ADDRESS_NOTMAXLENGTH,
-  TEXT_ERROR_BUSINESSNAME_NOTEMPTY,
-  TEXT_ERROR_BUSINESSNAME_NOTMAXLENGTH,
-  TEXT_ERROR_BUSINESSNAME_NOTSPECIALCHARACTER,
-  TEXT_ERROR_CHECKSAMEEMAIL,
-  TEXT_ERROR_CONFIMPASSWORD,
-  TEXT_ERROR_CONFIMPASS_MATCHPASS,
-  TEXT_ERROR_EMAIL_NOTFORMAT,
-  TEXT_ERROR_EMAIL_NOTIMPTY,
-  TEXT_ERROR_EMAIL_NOTLENGTH,
-  TEXT_ERROR_PASSWORD_NOTFORMAT,
-  TEXT_ERROR_PASSWORD_NOTIMPTY,
-  TEXT_ERROR_PASSWORD_NOTLENGTH,
-  TEXT_ERROR_PHONE_NOTEMPTY,
-  TEXT_ERROR_PHONE_NOTFORMAT,
-  TEXT_ERROR_REPRESENTER_NOTEMPTY,
-  TEXT_ERROR_REPRESENTNAME_NOTMAXLENGTH,
-  TEXT_ERROR_REPRESENTNAME_NOTSPECIALCHARACTER,
-  TEXT_ERROR_TAXCODE_NOTEMPTY,
-  TEXT_ERROR_TAXCODE_NOTFORMAT,
-  TEXT_ERROR_TAXCODE_NOTMAXLENGTH,
-  TEXT_IMAGE_PICKER,
-  TEXT_LOGIN,
-  TEXT_PLACEHODER_BUSINESSNAME,
-  TEXT_PLACEHOLDER_ADDRESS,
-  TEXT_PLACEHOLDER_CONFIMPASS,
-  TEXT_PLACEHOLDER_EMAIL,
-  TEXT_PLACEHOLDER_PASSWORD,
-  TEXT_PLACEHOLDER_PHONE,
-  TEXT_PLACEHOLDER_REPRESENTER,
-  TEXT_PLACEHOLDER_TAXCODE,
-  TEXT_REGISTER,
-  TEXT_REQUEST_LOGIN,
-  TEXT_TITLE_ADDRESS,
-  TEXT_TITLE_BUSINESSNAME,
-  TEXT_TITLE_CONFIMPASS,
-  TEXT_TITLE_EMAIL_REGISTER,
-  TEXT_TITLE_NITIFICATION,
-  TEXT_TITLE_PASSWORD,
-  TEXT_TITLE_PHONE,
-  TEXT_TITLE_REGISTER_BUSINESS,
-  TEXT_TITLE_REPRESENTER,
-  TEXT_TITLE_TAXCODE,
-  TEXT_TO_ACTIVETIME
-} from '../constants/StringVietnamese'
-import { useDispatch } from 'react-redux'
-import { setImagesUpload } from '../redux/Slice'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -118,7 +66,7 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 }
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
-  const dispatch  = useDispatch();
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
@@ -135,53 +83,55 @@ export default function BusinessRegistrationScreen() {
     email: '',
     name: '',
     image: '',
-    confimPassword: ''
+    confimPassword: '',
+    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
+    content: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
     name: {
-      textError: TEXT_ERROR_BUSINESSNAME_NOTEMPTY,
+      textError: t('RegisterBusinessComponent.errorNameEmpty'),
       isVisible: false,
       isError: true
     },
     representor: {
-      textError: TEXT_ERROR_REPRESENTER_NOTEMPTY,
+      textError: t('RegisterBusinessComponent.errorRepresentEmpty'),
       isVisible: false,
       isError: true
     },
     email: {
-      textError: TEXT_ERROR_EMAIL_NOTIMPTY,
+      textError: t('RegisterBusinessComponent.errorEmailEmpty'),
       isVisible: false,
       isError: true
     },
     taxCode: {
-      textError: TEXT_ERROR_TAXCODE_NOTEMPTY,
+      textError: t('RegisterBusinessComponent.errorTaxCodeEmpty'),
       isVisible: false,
       isError: true
     },
     address: {
-      textError: TEXT_ERROR_ADDRESS_NOTEMPTY,
+      textError: t('RegisterBusinessComponent.errorAddressEmpty'),
       isVisible: false,
       isError: true
     },
     phone: {
-      textError: TEXT_ERROR_PHONE_NOTEMPTY,
+      textError: t('RegisterBusinessComponent.errorPhoneEmpty'),
       isVisible: false,
       isError: true
     },
     activeTime: {
-      textError: TEXT_ERROR_ACTIVE_NOTFORMAT,
+      textError: t('RegisterBusinessComponent.activeTimeNotFormat'),
       isVisible: false,
       isError: true
     },
     password: {
-      textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
+      textError: t('RegisterBusinessComponent.errorPasswordEmpty'),
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: TEXT_ERROR_CONFIMPASSWORD,
+      textError: t('RegisterBusinessComponent.errorConfimPasswordEmpty'),
       isVisible: false,
       isError: true
     }
@@ -200,7 +150,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_BUSINESSNAME_NOTEMPTY
+            textError: t('RegisterBusinessComponent.errorNameEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -210,7 +160,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_BUSINESSNAME_NOTSPECIALCHARACTER
+            textError: t('RegisterBusinessComponent.errorNameNotSpecial')
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -220,7 +170,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_BUSINESSNAME_NOTMAXLENGTH
+            textError: t('RegisterBusinessComponent.errorNameNotLengthMax')
           }
         })
       } else {
@@ -246,7 +196,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.representor,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_REPRESENTER_NOTEMPTY
+            textError: t('RegisterBusinessComponent.errorRepresentEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -255,7 +205,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: TEXT_ERROR_REPRESENTNAME_NOTSPECIALCHARACTER,
+            textError: t('RegisterBusinessComponent.errorRepresentNotSpecial'),
             isVisible: true
           }
         })
@@ -265,7 +215,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: TEXT_ERROR_REPRESENTNAME_NOTMAXLENGTH,
+            textError: t('RegisterBusinessComponent.errorRepresentNotLengthMax'),
             isVisible: true
           }
         })
@@ -292,7 +242,7 @@ export default function BusinessRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: TEXT_ERROR_CHECKSAMEEMAIL,
+              textError: t('RegisterBusinessComponent.errorSameEmail'),
               isVisible: true
             }
           })
@@ -313,7 +263,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: TEXT_ERROR_EMAIL_NOTIMPTY,
+            textError: t('RegisterBusinessComponent.errorEmailEmpty'),
             isVisible: true
           }
         })
@@ -323,7 +273,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: TEXT_ERROR_EMAIL_NOTLENGTH,
+            textError: t('RegisterBusinessComponent.errorEmailNotLengthMax'),
             isVisible: true
           }
         })
@@ -333,7 +283,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: TEXT_ERROR_EMAIL_NOTFORMAT,
+            textError: t('RegisterBusinessComponent.errorEmailNotFormat'),
             isVisible: true
           }
         })
@@ -359,7 +309,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
+            textError: t('RegisterBusinessComponent.errorPasswordEmpty'),
             isVisible: true
           }
         })
@@ -369,7 +319,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTLENGTH,
+            textError: t('RegisterBusinessComponent.errorPassNotLengthMax'),
             isVisible: true
           }
         })
@@ -379,7 +329,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTFORMAT,
+            textError: t('RegisterBusinessComponent.errorPassNotFormat'),
             isVisible: true
           }
         })
@@ -405,7 +355,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASSWORD,
+            textError: t('RegisterBusinessComponent.errorConfimPasswordEmpty'),
             isVisible: true
           }
         })
@@ -415,7 +365,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASS_MATCHPASS,
+            textError: t('RegisterBusinessComponent.errorConfimPassNotMatch'),
             isVisible: true
           }
         })
@@ -441,7 +391,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: TEXT_ERROR_TAXCODE_NOTEMPTY,
+            textError: t('RegisterBusinessComponent.errorTaxCodeEmpty'),
             isVisible: true
           }
         })
@@ -451,7 +401,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: TEXT_ERROR_TAXCODE_NOTMAXLENGTH,
+            textError: t('RegisterBusinessComponent.errorTaxCodeNotLengthMax'),
             isVisible: true
           }
         })
@@ -461,7 +411,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: TEXT_ERROR_TAXCODE_NOTFORMAT,
+            textError: t('RegisterBusinessComponent.errorTaxCodeNotFormat'),
             isVisible: true
           }
         })
@@ -487,7 +437,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: TEXT_ERROR_ADDRESS_NOTEMPTY,
+            textError: t('RegisterBusinessComponent.errorAddressEmpty'),
             isVisible: true
           }
         })
@@ -497,7 +447,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: TEXT_ERROR_ADDRESS_NOTMAXLENGTH,
+            textError: t('RegisterBusinessComponent.errorAddressNotLengthMax'),
             isVisible: true
           }
         })
@@ -523,7 +473,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: TEXT_ERROR_PHONE_NOTEMPTY,
+            textError: t('RegisterBusinessComponent.errorPhoneEmpty'),
             isVisible: true
           }
         })
@@ -533,7 +483,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: TEXT_ERROR_PHONE_NOTFORMAT,
+            textError: t('RegisterBusinessComponent.errorPhoneNotFormat'),
             isVisible: true
           }
         })
@@ -577,7 +527,7 @@ export default function BusinessRegistrationScreen() {
         activeTime: {
           ...validate.activeTime,
           isError: true,
-          textError: TEXT_ERROR_ACTIVE_NOTFORMAT,
+          textError: t('RegisterBusinessComponent.activeTimeNotFormat'),
           isVisible: true
         }
       })
@@ -597,7 +547,15 @@ export default function BusinessRegistrationScreen() {
   useEffect(() => {
     setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
+  const [modalVisible, setModalVisible] = useState(false)
 
+  const openModal = () => {
+    setModalVisible(true)
+  }
+
+  const closeModal = () => {
+    setModalVisible(false)
+  }
   const onSubmit = useCallback(() => {
     console.log(business.activeTime)
     if (isAllFieldsValid(validate)) {
@@ -606,12 +564,10 @@ export default function BusinessRegistrationScreen() {
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
-          dispatch(setImagesUpload([]));
-          navigation.navigate(LOGIN_SCREEN)
+          openModal()
+          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
-          Alert.alert(TEXT_ALERT_REGISTER_FAILT, TEXT_ERROR_CHECKSAMEEMAIL)
           setIsLoading(false)
         })
     } else {
@@ -625,253 +581,310 @@ export default function BusinessRegistrationScreen() {
     }
   }, [validate])
 
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 100,
+    height: 230
+  }
   return (
-    <ScrollView style={{backgroundColor:'#fff'}}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
-            <Icon name='chevron-left' size={20} color={'#ffff'} />
-          </TouchableOpacity>
-          <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>{TEXT_TITLE_REGISTER_BUSINESS}</Text>
+    <PaperProvider>
+      <ScrollView style={{ backgroundColor: '#fff' }}>
+        <SafeAreaView>
+          <View style={styles.header}>
+            <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
+              <Icon name='chevron-left' size={20} color={'#ffff'} />
+            </TouchableOpacity>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.txtHeader}>{t('RegisterBusinessComponent.titleRegisterBusiness')}</Text>
+            </View>
           </View>
-        </View>
-        <View>
-          <TextInputWithTitle
-            value={business.name}
-            title={TEXT_TITLE_BUSINESSNAME}
-            placeholder={TEXT_PLACEHODER_BUSINESSNAME}
-            onChangeText={(value) => handleNameChange(value)}
-            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
-          />
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.name?.textError}
-            isError={validate.name?.isError}
-            isVisible={validate.name?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={business.email}
-            title={TEXT_TITLE_EMAIL_REGISTER}
-            placeholder={TEXT_PLACEHOLDER_EMAIL}
-            onChangeText={(value) => handleEmailChange(value)}
-            onBlur={() => handleCheckEmail()}
-            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.email?.textError}
-            isError={validate.email?.isError}
-            isVisible={validate.email?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={business.representor}
-            title={TEXT_TITLE_REPRESENTER}
-            placeholder={TEXT_PLACEHOLDER_REPRESENTER}
-            onChangeText={(value) => handleRepresentoreChange(value)}
-            textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.representor?.textError}
-            isError={validate.representor?.isError}
-            isVisible={validate.representor?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={business.taxCode}
-            title={TEXT_TITLE_TAXCODE}
-            placeholder={TEXT_PLACEHOLDER_TAXCODE}
-            onChangeText={(value) => handleTaxCodeChange(value)}
-            textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.taxCode?.textError}
-            isError={validate.taxCode?.isError}
-            isVisible={validate.taxCode?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={business.address}
-            title={TEXT_TITLE_ADDRESS}
-            placeholder={TEXT_PLACEHOLDER_ADDRESS}
-            onChangeText={(value) => handleAddressChange(value)}
-            textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
-          />
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.address?.textError}
-            isError={validate.address?.isError}
-            isVisible={validate.address?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={business.phone}
-            title={TEXT_TITLE_PHONE}
-            placeholder={TEXT_PLACEHOLDER_PHONE}
-            onChangeText={(value) => handlePhoneChange(value)}
-            textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.phone?.textError}
-            isError={validate.phone?.isError}
-            isVisible={validate.phone?.isVisible}
-          />
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+          <View>
             <TextInputWithTitle
-              value={timeStart}
-              textInputRef={timeStartRef}
-              onFocus={() => {
-                setShowDatePickerStart(true)
-              }}
-              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title={TEXT_ACTIVETIME_START}
-              placeholder={moment().format('HH:mm')}
+              defaultValue={business.name}
+              title={t('RegisterBusinessComponent.titleBusinessName')}
+              placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
+              onChangeText={(value) => handleNameChange(value)}
+              textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
             />
-            <Text style={styles.txt}>{TEXT_TO_ACTIVETIME}</Text>
-            <DatePicker
-              modal
-              mode='time'
-              locale='vi'
-              open={showDatePickerStart}
-              date={new Date()}
-              onConfirm={(time) => {
-                setTimeStart(moment(time).format('HH:mm'))
-                timeStartRef.current?.blur()
-                setShowDatePickerStart(false)
-              }}
-              onCancel={() => {
-                timeStartRef.current?.blur()
-                setShowDatePickerStart(false)
-              }}
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.name?.textError}
+              isError={validate.name?.isError}
+              isVisible={validate.name?.isVisible}
             />
 
             <TextInputWithTitle
-              value={timeEnd}
-              textInputRef={timeEndRef}
-              onFocus={() => {
-                setShowDatePickerEnd(true)
-              }}
-              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title={TEXT_ACTIVETIME_END}
-              placeholder={moment().format('HH:mm')}
+              defaultValue={business.email}
+              title={t('RegisterBusinessComponent.titleEmail')}
+              placeholder={t('RegisterBusinessComponent.placeholderEmail')}
+              onChangeText={(value) => handleEmailChange(value)}
+              onBlur={() => handleCheckEmail()}
+              textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
             />
 
-            <DatePicker
-              modal
-              mode='time'
-              locale='vi'
-              open={showDatePickerEnd}
-              date={new Date()}
-              onConfirm={(time) => {
-                setTimeEnd(moment(time).format('HH:mm'))
-                timeEndRef.current?.blur()
-                setShowDatePickerEnd(false)
-              }}
-              onCancel={() => {
-                timeEndRef.current?.blur()
-                setShowDatePickerEnd(false)
-              }}
-            />
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.activeTime?.textError}
-            isError={validate.activeTime?.isError}
-            isVisible={validate.activeTime?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_PASSWORD}</Text>
-            <TextInput
-              value={business.password}
-              placeholder={TEXT_PLACEHOLDER_PASSWORD}
-              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck.secureTextEntry ? true : false}
-              onChangeText={(value) => handlePasswordChange(value)}
-            />
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
-              <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-            </TouchableOpacity>
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.password?.textError}
-            isError={validate.password?.isError}
-            isVisible={validate.password?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_CONFIMPASS}</Text>
-            <TextInput
-              value={business.confimPassword}
-              placeholder={TEXT_PLACEHOLDER_CONFIMPASS}
-              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck1.secureTextEntry ? true : false}
-              onChangeText={(value) => handleConfirmPasswordChange(value)}
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.email?.textError}
+              isError={validate.email?.isError}
+              isVisible={validate.email?.isVisible}
             />
 
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
-              <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-            </TouchableOpacity>
-          </View>
+            <TextInputWithTitle
+              defaultValue={business.representor}
+              title={t('RegisterBusinessComponent.titleRepresent')}
+              placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
+              onChangeText={(value) => handleRepresentoreChange(value)}
+              textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
+            />
 
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.confimPassword?.textError}
-            isError={validate.confimPassword?.isError}
-            isVisible={validate.confimPassword?.isVisible}
-          />
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.representor?.textError}
+              isError={validate.representor?.isError}
+              isVisible={validate.representor?.isVisible}
+            />
 
-          <View style={styles.group}>
-            <View style={styles.logo}>
-              <Text style={styles.txt}>{TEXT_IMAGE_PICKER}</Text>
-              <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
-                <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+            <TextInputWithTitle
+              defaultValue={business.taxCode}
+              title={t('RegisterBusinessComponent.titleTaxCode')}
+              placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
+              onChangeText={(value) => handleTaxCodeChange(value)}
+              textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
+            />
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.taxCode?.textError}
+              isError={validate.taxCode?.isError}
+              isVisible={validate.taxCode?.isVisible}
+            />
+
+            <TextInputWithTitle
+              defaultValue={business.address}
+              title={t('RegisterBusinessComponent.titleAddress')}
+              placeholder={t('RegisterBusinessComponent.placeholderAddress')}
+              onChangeText={(value) => handleAddressChange(value)}
+              textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
+            />
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.address?.textError}
+              isError={validate.address?.isError}
+              isVisible={validate.address?.isVisible}
+            />
+
+            <TextInputWithTitle
+              defaultValue={business.phone}
+              title={t('RegisterBusinessComponent.titlePhone')}
+              placeholder={t('RegisterBusinessComponent.placeholderPhone')}
+              onChangeText={(value) => handlePhoneChange(value)}
+              textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
+            />
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.phone?.textError}
+              isError={validate.phone?.isError}
+              isVisible={validate.phone?.isVisible}
+            />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+              <TextInputWithTitle
+                defaultValue={timeStart}
+                textInputRef={timeStartRef}
+                onFocus={() => {
+                  setShowDatePickerStart(true)
+                }}
+                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+                title={t('RegisterBusinessComponent.titleTimeStart')}
+                placeholder={moment().format('HH:mm')}
+              />
+              <Text style={styles.txt}>{t('RegisterBusinessComponent.titleTo')}</Text>
+              <DatePicker
+                modal
+                mode='time'
+                locale='vi'
+                open={showDatePickerStart}
+                date={new Date()}
+                onConfirm={(time) => {
+                  setTimeStart(moment(time).format('HH:mm'))
+                  timeStartRef.current?.blur()
+                  setShowDatePickerStart(false)
+                }}
+                onCancel={() => {
+                  timeStartRef.current?.blur()
+                  setShowDatePickerStart(false)
+                }}
+              />
+
+              <TextInputWithTitle
+                defaultValue={timeEnd}
+                textInputRef={timeEndRef}
+                onFocus={() => {
+                  setShowDatePickerEnd(true)
+                }}
+                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+                title={t('RegisterBusinessComponent.titleTimeEnd')}
+                placeholder={moment().format('HH:mm')}
+              />
+
+              <DatePicker
+                modal
+                mode='time'
+                locale='vi'
+                open={showDatePickerEnd}
+                date={new Date()}
+                onConfirm={(time) => {
+                  setTimeEnd(moment(time).format('HH:mm'))
+                  timeEndRef.current?.blur()
+                  setShowDatePickerEnd(false)
+                }}
+                onCancel={() => {
+                  timeEndRef.current?.blur()
+                  setShowDatePickerEnd(false)
+                }}
+              />
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.activeTime?.textError}
+              isError={validate.activeTime?.isError}
+              isVisible={validate.activeTime?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterBusinessComponent.titlePass')}</Text>
+              <TextInput
+                value={business.password}
+                placeholder={t('RegisterBusinessComponent.placeholderPass')}
+                style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck.secureTextEntry ? true : false}
+                onChangeText={(value) => handlePasswordChange(value)}
+              />
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
+                <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
               </TouchableOpacity>
             </View>
-            <View style={{ alignItems: 'center' }}>
-              {imagesUpload ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
-              )}
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.password?.textError}
+              isError={validate.password?.isError}
+              isVisible={validate.password?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterBusinessComponent.titleConfimPass')}</Text>
+              <TextInput
+                value={business.confimPassword}
+                placeholder={t('RegisterBusinessComponent.placeholderConfimPass')}
+                style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck1.secureTextEntry ? true : false}
+                onChangeText={(value) => handleConfirmPasswordChange(value)}
+              />
+
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
+                <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+              </TouchableOpacity>
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.confimPassword?.textError}
+              isError={validate.confimPassword?.isError}
+              isVisible={validate.confimPassword?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <View style={styles.logo}>
+                <Text style={styles.txt}>{t('RegisterBusinessComponent.avata')}</Text>
+                <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
+                  <Icon name='camera-retro' size={20}></Icon>
+                  <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                {imagesUpload ? (
+                  <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                ) : (
+                  ''
+                )}
+              </View>
             </View>
           </View>
-        </View>
 
-        <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>{TEXT_REGISTER}</Text>
-          <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
-        </TouchableOpacity>
-
-        <View style={styles.login}>
-          <Text>{TEXT_REQUEST_LOGIN}{' '}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(LOGIN_SCREEN)
-            }}
-          >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{TEXT_LOGIN}</Text>
+          <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
+            <Text style={styles.txtRegister}>{t('RegisterBusinessComponent.titleRegister')}</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+          <Portal>
+            <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
+              <View style={styles.headerModal}>
+                <Text style={styles.txtModal}>Thông báo</Text>
+              </View>
+              <View style={styles.container}>
+                <Text style={styles.txt}>Đăng ký tài khoản thành công! Kiểm tra email để xác thực tài khoản</Text>
+              </View>
+              <View style={styles.btnBottom}>
+                <TouchableOpacity style={[styles.btnItem, { marginRight: 5 }]}>
+                  <Text style={styles.txtBottom} onPress={closeModal}>
+                    Tôi hiểu rồi!
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </Portal>
+          <View style={styles.login}>
+            <Text>{t('RegisterBusinessComponent.requestLogin')} </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(LOGIN_SCREEN)
+              }}
+            >
+              <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+                {t('RegisterBusinessComponent.titleLogin')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </PaperProvider>
   )
 }
 
 const styles = StyleSheet.create({
+  btnBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  btnItem: {
+    padding: 5,
+    backgroundColor: '#1e90ff',
+    borderRadius: 10
+  },
+  txtBottom: {
+    color: COLOR_WHITE,
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  headerModal: {
+    borderBottomWidth: 0.7
+  },
+  txtModal: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 14
+  },
   header: { backgroundColor: COLOR_BTN_BLUE, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
   txtHeader: {
     color: '#ffffff',
