@@ -1,6 +1,6 @@
-import { PostResponseModal } from "./PostResponseModal";
+import { PostResponseModel } from "./PostResponseModel";
 
-export interface RecruitmentResponsePostModal extends PostResponseModal {
+export interface RecruitmentPostResponseModel extends PostResponseModel {
     title: string
     salary: number
     benefit: string

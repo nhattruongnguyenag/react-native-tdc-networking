@@ -9,7 +9,7 @@ import { useGetPostsQuery } from './redux/Service'
 import { isAdmin, isFaculty } from './utils/UserHelper'
 
 export default function ApprovalPostScreen() {
-  const {userLogin} = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
   const t = useTranslation()
   const group = useMemo(() => {
     if (isAdmin(userLogin)) {
@@ -31,7 +31,7 @@ export default function ApprovalPostScreen() {
     active: 0,
     group: group,
     ownerFaculty: faculty
-  }, {refetchOnFocus: true, refetchOnMountOrArgChange: true})
+  }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 
   return (
     <SafeAreaView style={styles.body}>
@@ -43,6 +43,7 @@ export default function ApprovalPostScreen() {
               data?.data.length ?
                 <Fragment>
                   <FlatList
+                    keyExtractor={(item, index) => index.toString()}
                     data={data?.data}
                     renderItem={({ item, index }) =>
                       <PostApprovalItem

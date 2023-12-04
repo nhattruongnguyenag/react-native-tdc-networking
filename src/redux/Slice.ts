@@ -8,11 +8,11 @@ import { ModalImage } from '../types/ModalImage'
 import { ModalUserReaction } from '../types/ModalUserReaction'
 import { Choice, ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
-import { SurveyPostRequest } from '../types/SurveyPost'
+import { SurveyPostRequest } from '../types/SurveyPostRequest'
 import { Message } from '../types/Message'
-import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
 import { User } from '../types/User'
 import { SHORT_ANSWER } from '../components/survey/AddQuestionModal'
+import { PostRejectedLog } from '../types/PostRejectLog'
 
 export interface TDCSocialNetworkState {
   postRejectLog: PostRejectedLog | null
