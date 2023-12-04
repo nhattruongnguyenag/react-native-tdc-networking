@@ -34,10 +34,8 @@ locale.set('vi', require('moment/locale/vi'))
 locale.set('en', require('moment/locale/es'))
 locale.set('ja', require('moment/locale/ja'))
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
-import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
@@ -52,6 +50,7 @@ import {
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
+  MANAGEMENT_JOB_APPLY_SCREEN,
   MESSENGER_SCREEN,
   NOTIFICATION_SCREEN, OPTION_SCREEN, PEDDING_POST_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
@@ -63,7 +62,6 @@ import {
   DETAIL_SURVEY_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
-import { useAppSelector } from './redux/Hook'
 import { store } from './redux/Store'
 import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
@@ -96,8 +94,15 @@ import SplashScreen from './screens/SplashScreen'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
+import { useAppSelector } from './redux/Hook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_LANGUAGE } from './constants/KeyValue';
+
+const vie = require('moment/locale/vi')
+moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
+import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
@@ -132,7 +137,7 @@ export type RootStackParamList = {
   CREATE_NORMAL_POST_SCREEN: { groupId: number } | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
-  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?: number, cvUrl?: string } | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
@@ -140,9 +145,10 @@ export type RootStackParamList = {
   OPTION_SCREEN: undefined
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
   APPLICATION_OPTION_SCREEN: undefined
+  MANAGEMENT_JOB_APPLY_SCREEN: undefined
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
-  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number, status?: string } | undefined
+  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
 }
@@ -227,7 +233,7 @@ export function DrawerNavigator(): JSX.Element {
 
 export function StackNavigator(): JSX.Element {
   const t = useTranslation()
-
+  
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}
@@ -416,6 +422,12 @@ export function StackNavigator(): JSX.Element {
         name={APPLICATION_OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.applicationOptionScreen')} /> }}
         component={ApplicationOptionScreen}
+      />
+
+      <RootStack.Screen
+        name={MANAGEMENT_JOB_APPLY_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.manageJobApply')} /> }}
+        component={ManagementJobApplyScreen}
       />
 
       <RootStack.Screen

@@ -234,34 +234,6 @@ export const TEXT_ACTIVETIME_START = 'Thời gian bắt đầu'
 export const TEXT_ACTIVETIME_END = 'Thời gian kết thúc'
 export const TEXT_TITLE_REGISTER_BUSINESS = 'Đăng ký doanh nghiệp'
 
-export const TEXT_TITLE_RECRUITMENT_DETAIL = 'Chi tiết tuyển dụng'
-export const TEXT_TITLE_RECRUITMENT = 'Vị trí tuyển dụng'
-export const TEXT_EMPLOYMENTTYPE = 'Hình thức làm việc'
-export const TEXT_SALARY = 'Lương'
-export const TEXT_SALARY_UNIT_MONTH = 'vnd/tháng'
-export const TEXT_EXPIRATION = 'Thời hạn ứng tuyển'
-export const TEXT_LOCATION = 'Địa chỉ làm việc'
-export const TEXT_BENEFIT = 'Phúc lợi'
-export const TEXT_DESCRIPTION_JOB = 'Mô tả công việc'
-export const TEXT_REQUIREMENT_JOB = 'Yêu cầu công việc'
-export const TEXT_BTN_APPLY_JOB = 'Nộp đơn ứng tuyển'
-
-export const TEXT_GO_BACK = 'Quay lại'
-export const TEXT_CONTINUTE = 'Tiếp tục'
-export const TEXT_SELECTED_TYPE = '---Lựa chọn vai trò đăng ký---'
-export const TEXT_TITLE_SELECTED_TYPE = 'Chọn vai trò'
-export const TEXT_WARNING_SELECTED_TYPE = 'Hãy chọn hình thức đăng ký'
-export const TEXT_TYPE_STUDENT = 'Sinh viên'
-export const TEXT_TYPE_BUSINESS = 'Doanh nghiệp'
-export const TEXT_TITLE_NITIFICATION = 'Thông báo'
-
-export const TEXT_TITLE_LIST_JOB_APPLY = 'Danh sách hồ sơ ứng tuyển'
-export const TEXT_NOTIFICATION_UPDATE_NULL = 'Chưa được cập nhật'
-export const TEXT_SEE_CV = 'Xem chi tiết cv'
-export const TEXT_NOTIFICATION_LIST_EMPTY = 'Không có hồ sơ ứng tuyển'
-export const TEXT_TITLE_LOADER = 'Đang tải dữ liệu...'
-
-
 
 
 
