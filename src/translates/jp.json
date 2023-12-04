@@ -53,7 +53,19 @@
         "listEmpty":"求人応募はありません",
         "updateNull":"更新しない",
         "seeDetailCV":"履歴書の詳細を見る",
-        "titleLoader":"読み込み中..."
+        "titleLoader":"読み込み中...",
+        "textReceived" : "受け取った",
+        "textIn_progress" : "処理",
+        "textNot_meet_standard_quality" : "標準品質を満たしていない",
+        "textInterview" : "インタビュー",
+        "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
+        "textAccept" : "受け入れる",
+        "textChangeSucces" : "プロファイルステータスが正常に変更されました",
+        "textChangeStatus" : "プロファイルステータスの変更",
+        "textCancel" : "キャンクル",
+        "textChange" : "変化",
+        "textSelectStatus" : "ステータスの選択",
+        "textNotification" : "通知"
     },
 
     "RegisterStudentComponent":{
@@ -159,8 +171,6 @@
         "textInterview" : "インタビュー",
         "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
         "textAccept" : "受け入れる",
-        "textChangeCv" : "求人応募を更新する",
-        "textChangeStatusJob" : "プロファイルのステータスを更新する",
         "textNotification" : "通知",
         "textDeleteSucces" : "プロファイルを正常にキャンセルしました",
         "textLoader" : "読み込み中...",
@@ -168,19 +178,7 @@
         "textSeeCv" : "見る",
         "textDelete" : "キャンセルします",
         "textChangeProfile" : "更新する"
-     },
-     "ChangeStatusJobApply":{
-        "textReceived" : "受け取った",
-        "textIn_progress" : "処理",
-        "textNot_meet_standard_quality" : "標準品質を満たしていない",
-        "textInterview" : "インタビュー",
-        "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
-        "textAccept" : "受け入れる",
-        "textNotification" : "通知",
-        "textChangeSucces" : "プロファイルステータスが正常に変更されました",
-        "textChangeStatus" : "プロファイルステータスの変更",
-        "textDelete" : "キャンクル",
-        "textChange" : "変化"
+       
      },
     "NotificationsComponent": {
         "notification": "通知",

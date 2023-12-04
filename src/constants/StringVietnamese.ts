@@ -41,6 +41,7 @@ export const TEXT_WARNING_CONTENT_COMMENT_NULL = 'nội dung bình luận không
 export const TEXT_WARNING_CONTENT_COMMENT_NUMBER_LIMITED = 'nội dung bình luận không thể quá'
 export const TEXT_SEE_DETAIL = 'Xem chi tiết'
 export const TEXT_JOIN_SURVEY = 'Tham gia khảo sát'
+export const TEXT_DETAIL_SURVEY = 'Chi tiết câu hỏi'
 export const TEXT_SURVEY = 'khảo sát'
 export const TEXT_RECRUITMENT = 'Tuyển dụng'
 export const TEXT_SURVEY_TITLE = 'Tiêu đề khảo sát'

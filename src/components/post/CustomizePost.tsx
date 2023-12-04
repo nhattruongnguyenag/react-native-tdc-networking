@@ -1,15 +1,14 @@
-import { View, StyleSheet, Text } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import Toast from 'react-native-toast-message'
+import { savePostAPI } from '../../api/CallApi'
+import { RootStackParamList } from '../../App'
 import { COLOR_WHITE } from '../../constants/Color'
-import CustomizeHeaderPost from './CustomizeHeaderPost'
-import CustomizeBottomPost from './CustomizeBottomPost'
-import CustomizeBodyPost from './CustomizeBodyPost'
-import CustomizeImagePost from './CustomizeImagePost'
-import { Post } from '../../types/Post'
-import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { openModalComments, openModalImage, openModalUserReaction, updatePostWhenHaveChangeComment } from '../../redux/Slice'
-import { Like } from '../../types/Like'
-import { LikeAction } from '../../types/LikeActions'
+import { LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
+import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import {
   CLICK_DELETE_POST_EVENT,
   CLICK_SAVE_POST_EVENT,
@@ -25,17 +24,18 @@ import {
   TYPE_SURVEY_POST,
   TYPE_SURVEY_POST_TXT
 } from '../../constants/Variables'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
+import { openModalComments, openModalImage, openModalUserReaction, updatePostWhenHaveChangeComment } from '../../redux/Slice'
+import { Like } from '../../types/Like'
+import { LikeAction } from '../../types/LikeActions'
+import { Post } from '../../types/Post'
+import { numberDayPassed } from '../../utils/FormatTime'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
-import { numberDayPassed } from '../../utils/FormatTime'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import {LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
-import { RootStackParamList } from '../../App'
-import { savePostAPI } from '../../api/CallApi'
-import { SERVER_ADDRESS } from '../../constants/SystemConstant'
-import Toast from 'react-native-toast-message'
-import { TEXT_NOTIFICATION_SAVE_SUCCESS, TEXT_NOTIFYCATIONS } from '../../constants/StringVietnamese'
+import CustomizeBodyPost from './CustomizeBodyPost'
+import CustomizeBottomPost from './CustomizeBottomPost'
+import CustomizeHeaderPost from './CustomizeHeaderPost'
+import CustomizeImagePost from './CustomizeImagePost'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
@@ -187,7 +187,7 @@ const CustomizePost = (props: Post) => {
     console.log('====================================');
     console.log('handleSeeListCvPost' + post.id);
     console.log('====================================');
-    navigation.navigate(LIST_JOB_APPLY_SCREEN, {postId: post.id})
+    navigation.navigate(LIST_JOB_APPLY_SCREEN, { postId: post.id })
   }
 
   const handleSeeResultSurveyPost = () => {
@@ -282,6 +282,7 @@ const CustomizePost = (props: Post) => {
         <CustomizeSurveyPost
           id={post.id}
           title={post.title ?? ''}
+          active={post.active}
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
         />

@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, TextInput, TextStyle, View } from 'react-native'
+import { KeyboardTypeOptions, StyleProp, StyleSheet, Text, TextInput, TextStyle, View } from 'react-native'
 import React from 'react'
 
 interface TextInputWithTitleProps {
@@ -10,8 +10,9 @@ interface TextInputWithTitleProps {
   numberOfLine?: number
   onFocus?: () => void
   onBlur?: () => void
-  value?: string
+  defaultValue?: string
   textInputRef?: React.LegacyRef<TextInput>
+  keyboardType?: KeyboardTypeOptions
 }
 
 export default function TextInputWithTitle(props: TextInputWithTitleProps) {
@@ -19,8 +20,9 @@ export default function TextInputWithTitle(props: TextInputWithTitleProps) {
     <View style={styles.group}>
       <Text style={[styles.txt, { display: props.title ? 'flex' : 'none' }]}>{props.title}</Text>
       <TextInput
+        keyboardType={props.keyboardType}
+        defaultValue={props.defaultValue}
         ref={props.textInputRef}
-        value={props.value}
         onBlur={() => props.onBlur && props.onBlur()}
         onFocus={() => props.onFocus && props.onFocus()}
         numberOfLines={props.numberOfLine ? props.numberOfLine : 1}

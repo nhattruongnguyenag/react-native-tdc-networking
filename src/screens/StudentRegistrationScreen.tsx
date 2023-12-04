@@ -534,7 +534,7 @@ export default function StudentRegistrationScreen() {
 
           <View style={styles.form}>
             <TextInputWithTitle
-              value={student.name}
+              defaultValue={student.name}
               title={t('RegisterStudentComponent.titleStudentName')}
               placeholder={t('RegisterStudentComponent.placeholderStudentName')}
               onChangeText={(value) => handleStudentNameChange(value)}
@@ -549,7 +549,7 @@ export default function StudentRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={student.studentCode}
+              defaultValue={student.studentCode}
               title={t('RegisterStudentComponent.titleStudentCode')}
               placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
               onChangeText={(value) => handleStudentCodeChange(value)}
@@ -564,7 +564,7 @@ export default function StudentRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={student.email}
+              defaultValue={student.email}
               title={t('RegisterStudentComponent.titleEmail')}
               placeholder={t('RegisterStudentComponent.placeholderEmail')}
               onChangeText={(value) => handleEmailChange(value)}

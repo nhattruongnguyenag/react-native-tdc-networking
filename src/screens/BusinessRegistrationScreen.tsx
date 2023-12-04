@@ -570,7 +570,6 @@ export default function BusinessRegistrationScreen() {
           navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
-          openModal()
           setIsLoading(false)
         })
     } else {
@@ -607,7 +606,7 @@ export default function BusinessRegistrationScreen() {
           </View>
           <View>
             <TextInputWithTitle
-              value={business.name}
+              defaultValue={business.name}
               title={t('RegisterBusinessComponent.titleBusinessName')}
               placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
               onChangeText={(value) => handleNameChange(value)}
@@ -621,7 +620,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={business.email}
+              defaultValue={business.email}
               title={t('RegisterBusinessComponent.titleEmail')}
               placeholder={t('RegisterBusinessComponent.placeholderEmail')}
               onChangeText={(value) => handleEmailChange(value)}
@@ -637,7 +636,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={business.representor}
+              defaultValue={business.representor}
               title={t('RegisterBusinessComponent.titleRepresent')}
               placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
               onChangeText={(value) => handleRepresentoreChange(value)}
@@ -652,7 +651,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={business.taxCode}
+              defaultValue={business.taxCode}
               title={t('RegisterBusinessComponent.titleTaxCode')}
               placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
               onChangeText={(value) => handleTaxCodeChange(value)}
@@ -667,7 +666,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={business.address}
+              defaultValue={business.address}
               title={t('RegisterBusinessComponent.titleAddress')}
               placeholder={t('RegisterBusinessComponent.placeholderAddress')}
               onChangeText={(value) => handleAddressChange(value)}
@@ -681,7 +680,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={business.phone}
+              defaultValue={business.phone}
               title={t('RegisterBusinessComponent.titlePhone')}
               placeholder={t('RegisterBusinessComponent.placeholderPhone')}
               onChangeText={(value) => handlePhoneChange(value)}
@@ -696,7 +695,7 @@ export default function BusinessRegistrationScreen() {
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
               <TextInputWithTitle
-                value={timeStart}
+                defaultValue={timeStart}
                 textInputRef={timeStartRef}
                 onFocus={() => {
                   setShowDatePickerStart(true)
@@ -724,7 +723,7 @@ export default function BusinessRegistrationScreen() {
               />
 
               <TextInputWithTitle
-                value={timeEnd}
+                defaultValue={timeEnd}
                 textInputRef={timeEndRef}
                 onFocus={() => {
                   setShowDatePickerEnd(true)

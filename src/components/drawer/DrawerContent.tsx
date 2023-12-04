@@ -13,12 +13,13 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  APPLICATION_OPTION_SCREEN,
   MANAGEMENT_JOB_APPLY_SCREEN,
+  BUSINESS_DASHBOARD_SCREEN,
+  APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN,
   CREATE_SURVEY_SCREEN,
   LOGIN_SCREEN,
-  BUSINESS_DASHBOARD_SCREEN
+  PEDDING_POST_SCREEN
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
@@ -80,9 +81,22 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           />
         )}
 
-        {(isAdmin(userLogin) || isFaculty(userLogin)) && (
+        <DrawerItem
+          label={t('DrawerContentComponent.userJobApplyProfile')}
+          onPress={() => {
+          }}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
+          )}
+        />
+
+        {
+          (isAdmin(userLogin) || isFaculty(userLogin)) &&
           <DrawerItem
-            label={t('DrawerContentComponent.waitingPost')}
+            label={t('DrawerContentComponent.approvingPost')}
             onPress={() => {
               navigation.navigate(APPROVAL_POST_SCREEN)
             }}
@@ -93,7 +107,20 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
               <FontAwesome6Icon style={{ width: 15 }} name='bars-progress' size={16} color={'#0088ff'} />
             )}
           />
-        )}
+        }
+
+        <DrawerItem
+          label={t('DrawerContentComponent.peddingPost')}
+          onPress={() => {
+            navigation.navigate(PEDDING_POST_SCREEN)
+          }}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon style={{ width: 15 }} name='list' size={16} color={'#0088ff'} />
+          )}
+        />
 
         <DrawerItem
           label={t('DrawerContentComponent.option')}
@@ -116,7 +143,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           labelStyle={{ color: '#f12749' }}
           icon={({ color, focused, size }) => <FontAwesome6Icon name='power-off' size={16} color={'#f12749'} />}
         />
-      </DrawerContentScrollView>
-    </View>
+      </DrawerContentScrollView >
+    </View >
   )
 }

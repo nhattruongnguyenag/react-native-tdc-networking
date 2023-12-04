@@ -49,11 +49,22 @@
     },
 
     "ListJobApplyComponent":{
-        "titleListJobApply": "List of job application",
         "listEmpty":"There are no job application",
         "updateNull":"Not update",
         "seeDetailCV":"See cv details",
-        "titleLoader":"Loading..."
+        "titleLoader":"Loading...",
+        "textReceived" : "Received",
+        "textIn_progress" : "In progress",
+        "textNot_meet_standard_quality" : "Not meet standard quality",
+        "textInterview" : "Interview",
+        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
+        "textAccept" : "Accept",
+        "textChangeSucces" : "Change profile status successfully",
+        "textChangeStatus" : "Change profile status",
+        "textCancel" : "Cancle",
+        "textChange" : "Change",
+        "textSelectStatus" : "Select status change",
+        "textNotification" : "Notification"
     },
 
     "RegisterStudentComponent":{
@@ -159,28 +170,13 @@
         "textInterview" : "Interview",
         "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
         "textAccept" : "Accept",
-        "textChangeCv" : "Update job application",
-        "textChangeStatusJob" : "Update profile status",
+        "textChangeProfile" : "Update job application",
         "textNotification" : "Notification",
         "textDeleteSucces" : "Cancel profile successfully",
         "textLoader" : "Loading...",
         "textListJobNull" : "No job application",
         "textSeeCv" : "See profile",
-        "textDelete" : "Cancle profile",
-        "textChangeProfile" : "Update profile"
-     },
-     "ChangeStatusJobApply":{
-        "textReceived" : "Received",
-        "textIn_progress" : "In progress",
-        "textNot_meet_standard_quality" : "Not meet standard quality",
-        "textInterview" : "Interview",
-        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
-        "textAccept" : "Accept",
-        "textNotification" : "Notification",
-        "textChangeSucces" : "Change profile status successfully",
-        "textChangeStatus" : "Change profile status",
-        "textDelete" : "Cancle",
-        "textChange" : "Change"
+        "textDelete" : "Cancle profile"
      },
     "NotificationsComponent": {
         "notification": "Notification",

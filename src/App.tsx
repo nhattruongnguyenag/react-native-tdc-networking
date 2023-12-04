@@ -42,11 +42,11 @@ import {
   ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
-  CHANGE_STATUS_JOB_APPLY_SCREEN,
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
-  CREATE_SURVEY_SCREEN, DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
+  CREATE_SURVEY_SCREEN,
+  DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
@@ -54,13 +54,14 @@ import {
   LOGIN_SCREEN,
   MANAGEMENT_JOB_APPLY_SCREEN,
   MESSENGER_SCREEN,
-  NOTIFICATION_SCREEN, OPTION_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
+  NOTIFICATION_SCREEN, OPTION_SCREEN, PEDDING_POST_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
-  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR
+  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
+  DETAIL_SURVEY_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -105,7 +106,10 @@ import { Conversation } from './types/Conversation'
 import AcceptScreen from './screens/AcceptScreen'
 
 import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
-import ComponentJobApply from './components/jobapply/ComponentJobApply'
+import PenddingPostScreen from './screens/PenddingPostScreen'
+import DetailSurveyPost from './screens/DetailSurveyPostScreen'
+import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
+import { SurveyPostResponseModel } from './types/response/SurveyPostResponseModel'
 
 
 export type RootStackParamList = {
@@ -126,15 +130,15 @@ export type RootStackParamList = {
   BUSINESS_REGISTER_SCREEN: undefined
   TOP_TAB_NAVIGATOR: undefined
   DRAWER_TAB_NAVIGATOR: undefined
-  CREATE_RECRUITMENT_SCREEN: undefined
-  CREATE_SURVEY_SCREEN: undefined
+  CREATE_RECRUITMENT_SCREEN: { recruitmentPostId?: number, groupId?: number } | undefined
+  CREATE_SURVEY_SCREEN: { surveyPostId?: number, groupId?: number } | undefined
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { group: number } | undefined
+  CREATE_NORMAL_POST_SCREEN: { groupId: number } | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
@@ -149,6 +153,8 @@ export type RootStackParamList = {
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
   CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
+  PEDDING_POST_SCREEN: undefined
+  DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -430,13 +436,28 @@ export function StackNavigator(): JSX.Element {
 
       <RootStack.Screen
         name={APPROVAL_POST_SCREEN}
-        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.approvalPostScreen')} /> }}
-        component={ApprovalPostScreen}
-      />
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.approvalPostScreen')} />
+        }}
+        component={ApprovalPostScreen} />
+
       <RootStack.Screen
-        name={CHANGE_STATUS_JOB_APPLY_SCREEN}
-        options={{ header: () => null}}
-        component={ComponentJobApply}
+        name={PEDDING_POST_SCREEN}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.pendingPostScreen')} />
+        }}
+        component={PenddingPostScreen}
+      />
+
+      <RootStack.Screen
+        name={DETAIL_SURVEY_SCREEN}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.detailSurveyScreen')} />
+        }}
+        component={DetailSurveyPostScreen}
       />
     </RootStack.Navigator>
   )

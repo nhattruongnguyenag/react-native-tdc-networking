@@ -1,13 +1,12 @@
 import { useIsFocused } from '@react-navigation/native'
-import React, { Fragment, memo, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { Modal } from 'react-native-paper'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { useAcceptPostMutation, useRejectPostMutation } from '../../redux/Service'
+import { useRejectPostMutation } from '../../redux/Service'
 import { setPostRejectLog } from '../../redux/Slice'
 import ButtonFullWith from '../buttons/ButtonFullWith'
 import ButtonWithLoader from '../buttons/ButtonWithLoader'
-import { PostRejectedLog } from './PostApprovalItem'
 
 function ModalPostRejectReason() {
     const { postRejectLog } = useAppSelector(state => state.TDCSocialNetworkReducer)

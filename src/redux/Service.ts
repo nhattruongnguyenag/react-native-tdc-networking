@@ -1,26 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
 import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { PostRejectedLog } from '../types/PostRejectLog'
+import { RecruitmentPost } from '../types/RecruitmentPost'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { RecruitmentPostRequest } from '../types/request/RecruitmentPostRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
+import { FollowUserModel } from '../types/response/FollowUserModel'
 import { MessageResponseData } from '../types/response/MessageResponseData'
-import { PostResponseModal } from '../types/response/PostResponseModal'
+import { PostResponseModel } from '../types/response/PostResponseModel'
 import { SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
-import { SurveyPostRequest } from '../types/SurveyPost'
-import { FollowUserModel } from '../types/response/FollowUserModel'
+import { SurveyPostRequest } from '../types/SurveyPostRequest'
 import { buildPostSearchRequest } from '../utils/PostHelper'
 import { JobApplyRespose } from '../types/response/JobApplyResponse'
 import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
 import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
 import { PostSavedModel } from '../types/response/PostSavedModel'
 import { NotificationModel } from '../types/response/NotificationModel'
+import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -84,7 +85,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
-    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPostRequest>({
+    addRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
       query: (data) => ({
         url: 'api/posts/recruitment',
         method: 'POST',
@@ -124,7 +125,7 @@ export const TDCSocialNetworkAPI = createApi({
         }
       })
     }),
-    
+
     sendEmail: builder.mutation<MessageResponseData, string>({
       query: (data) => ({
         url: 'api/users/get/email/reset',
@@ -140,11 +141,11 @@ export const TDCSocialNetworkAPI = createApi({
         url: `api/posts/survey/${surveyPostId}/result`
       })
     }),
-    getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
+    getPosts: builder.query<Data<PostResponseModel[]>, PostSearchRequest>({
       query: (data) => (
         {
-        url: `api/posts/search?${buildPostSearchRequest(data)}`
-      }),
+          url: `api/posts/search?${buildPostSearchRequest(data)}`
+        }),
       providesTags: (result) => {
         if (result) {
           return [
@@ -159,8 +160,14 @@ export const TDCSocialNetworkAPI = createApi({
     getJobProfile: builder.query<Data<JobApplyRespose[]>, number | undefined>({
       query: (userId) => (
         {
-        url: `api/job/user/${userId}`
-      }),
+          url: `api/job/user/${userId}`
+        }),
+    }),
+    getProfileApply: builder.query<Data<JobApplyResponseData[]>, number | undefined>({
+      query: (postId) => (
+        {
+          url: `api/job/post/${postId}`
+        }),
     }),
     rejectPost: builder.mutation<MessageResponseData, PostRejectedLog>({
       query: (data) => ({
@@ -183,6 +190,57 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+    }),
+    getPostRejectLog: builder.query<Data<PostRejectedLog>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/approval/log/post/${data.postId}`
+        })
+    }),
+    deletePost: builder.mutation<MessageResponseData, { postId: number }>({
+      query: (data) => ({
+        url: `api/posts/${data.postId}`,
+        method: 'DELETE',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+    }),
+    getRecruitmentPostUpdate: builder.query<RecruitmentPost, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/recruitment/${data.postId}/update`
+        })
+    }),
+    updateRecruitmentPost: builder.mutation<MessageResponseData, RecruitmentPost>({
+      query: (data) => ({
+        url: 'api/posts/recruitment',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.id }])
+    }),
+    getSurveyPostUpdate: builder.query<Data<SurveyPostRequest>, { postId: number }>({
+      query: (data) => (
+        {
+          url: `api/posts/survey/${data.postId}/update`
+        })
+    }),
+    updateSurveyPost: builder.mutation<MessageResponseData, SurveyPostRequest>({
+      query: (data) => ({
+        url: 'api/posts/survey',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
     })
   })
 })
@@ -190,7 +248,9 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetProfileApplyQuery,
   useGetJobProfileQuery,
+  useGetPostRejectLogQuery,
   useGetNotificationsUserQuery,
   useGetListPostSavedQuery,
   useGetFollowingUserQuery,
@@ -208,5 +268,10 @@ export const {
   useSendEmailMutation,
   useRejectPostMutation,
   useAcceptPostMutation,
-  useJobApplyUpdateMutation
+  useJobApplyUpdateMutation,
+  useDeletePostMutation,
+  useGetRecruitmentPostUpdateQuery,
+  useUpdateRecruitmentPostMutation,
+  useGetSurveyPostUpdateQuery,
+  useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI
