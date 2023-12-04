@@ -3,4 +3,5 @@ export interface NormalPost {
   type: string
   images: any[]
   content: string
+  groupId:number
 }

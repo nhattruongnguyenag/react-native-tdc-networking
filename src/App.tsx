@@ -60,7 +60,7 @@ import {
   SPLASH_SCREEN,
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
-  SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
+  UPDATE_PROFILE, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
   DETAIL_SURVEY_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
@@ -76,7 +76,7 @@ import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
-import FollowingScreen from './screens/FollowingScreen'
+import MyProfileScreen from './screens/MyProfileScreen'
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
 import ImageViewScreen from './screens/ImageViewScreen'
 import IntermediationScreen from './screens/IntermediationScreen'
@@ -102,14 +102,21 @@ const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
-
 import AcceptScreen from './screens/AcceptScreen'
-
+import UpdateProfile from './screens/UpdateProfile'
+import { Student } from './types/Student'
+import { Faculty } from './types/Faculty'
+import { Business } from './types/Business'
+import { NormalPost } from './types/NormalPost'
+import { UpdateNormalPost } from './types/UpdateNormalPost'
+import CustomizeModalImage from './components/modal/CustomizeModalImage'
+import CustomizeModalUserReacted from './components/modal/CustomizeModalUserReacted'
+import CustomizeModalComments from './components/modal/CustomizeModalComments'
 import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
-import { SurveyPostResponseModel } from './types/response/SurveyPostResponseModel'
+import { SurveyPostResponseModel } from './types/response/SurveyResponsePostModal'
 
 
 export type RootStackParamList = {
@@ -138,7 +145,7 @@ export type RootStackParamList = {
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { groupId: number } | undefined
+  CREATE_NORMAL_POST_SCREEN: { group: number } | UpdateNormalPost | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
   JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
@@ -146,12 +153,13 @@ export type RootStackParamList = {
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
   LIST_POST_SAVED_SCREEN: undefined
-  OPTION_SCREEN: undefined
+  OPTION_SCREEN: { userData: Student | Faculty | Business | null }
   SURVEY_RESULT_SCREEN: { surveyPostId: number } | undefined
   APPLICATION_OPTION_SCREEN: undefined
   MANAGEMENT_JOB_APPLY_SCREEN: undefined
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
+  UPDATE_PROFILE: { userData: Student | Faculty | Business | null }
   CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
@@ -423,6 +431,11 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={UPDATE_PROFILE}
+        options={{ header: () => <ToolbarWithBackPress title={t("ToolbarTitle.createUpdateProfile")} /> }}
+        component={UpdateProfile}
+      />
+      <RootStack.Screen
         name={APPLICATION_OPTION_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.applicationOptionScreen')} /> }}
         component={ApplicationOptionScreen}
@@ -495,7 +508,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
-      <TopTab.Screen name={FOLLOWING_SCREEN} component={FollowingScreen} />
+      <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
 }

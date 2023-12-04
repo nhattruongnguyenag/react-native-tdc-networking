@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import FeatherIcon from 'react-native-vector-icons/Feather'
@@ -6,21 +6,21 @@ import React from 'react'
 import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_GREY, COLOR_SUCCESS, COLOR_WHITE } from '../../constants/Color'
 import { formatVietNamCurrency } from '../../utils/FormatCurrency'
 import { numberDayPassed } from '../../utils/FormatTime'
-import { TEXT_SEE_DETAIL } from '../../constants/StringVietnamese'
 
 interface RecruitmentPostType {
-  id: number,
-  createdAt: string,
-  location: string,
-  title: string,
-  salary: string,
-  employmentType: string,
+  id: number
+  createdAt: string
+  location: string
+  title: string
+  salary: string
+  employmentType: string
+  current: string
+  textButton: string
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
 // Constant
 const ICON_SIZE = 15;
 export default function CustomizeRecruitmentPost(props: Readonly<RecruitmentPostType>) {
-
   return (
     <View>
       <View style={styles.containerContentRecruitment}>
@@ -42,7 +42,7 @@ export default function CustomizeRecruitmentPost(props: Readonly<RecruitmentPost
 
               <View style={styles.rowAndCenter}>
                 <FontAwesome6Icon name='money-bill-1' size={ICON_SIZE} color={COLOR_GREY} />
-                <Text style={styles.salary}>{' '}{formatVietNamCurrency(props.salary)}{' '}vnd/ Tháng</Text>
+                <Text style={styles.salary}>{' '}{formatVietNamCurrency(props.salary)}{' '}{props.current}</Text>
               </View>
 
               <View style={styles.rowAndCenter}>
@@ -52,13 +52,23 @@ export default function CustomizeRecruitmentPost(props: Readonly<RecruitmentPost
             </View>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
-              <View style={styles.bottomButton}>
-                <Text style={styles.txtBtnSeeMore}>{TEXT_SEE_DETAIL}</Text>
-                <FeatherIcon style={styles.iconArrow} name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
-              </View>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}
+                style={{ flexDirection: 'row' }} 
+              >
+                <View style={styles.bottomButton}>
+                  <Text style={styles.txtBtnSeeMore}>{props.textButton}</Text>
+                  <FeatherIcon
+                    style={styles.iconArrow}
+                    name='chevrons-right'
+                    size={ICON_SIZE}
+                    color={COLOR_WHITE}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+
           </View>
         </View>
       </View>
@@ -71,7 +81,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: COLOR_WHITE,
     flexDirection: 'row',
-    marginTop:10,
+    marginTop: 10,
   },
   leftContainer: {
     width: '15%',
@@ -116,10 +126,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: COLOR_BLUE_BANNER,
     padding: 5,
+    marginTop:10,
     alignItems: 'center',
     marginVertical: 5,
-    width: '32%',
-    borderRadius: 5
+    borderRadius: 5,
   },
   item: {
     marginVertical: 2,

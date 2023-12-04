@@ -1,26 +1,19 @@
+import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios from 'axios'
+import React, { useRef, useState } from 'react'
 import {
   Alert,
-  Image,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
+  Image, SafeAreaView, StyleSheet,
+  Text, TouchableOpacity,
   View
 } from 'react-native'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { BACKGROUND_BLUE, COLOR_BLACK, COLOR_BTN_BLUE } from '../constants/Color'
-import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { RootStackParamList } from '../App'
-import Video from 'react-native-video'
 import { ActivityIndicator } from 'react-native-paper'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import Video from 'react-native-video'
+import { RootStackParamList } from '../App'
+import { COLOR_BTN_BLUE } from '../constants/Color'
 import { LOGIN_SCREEN } from '../constants/Screen'
-import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { TEXT_SUBJECT_RESET_PASSWORD } from '../constants/StringVietnamese'
 export default function AcceptScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'ACCEPT_SCREEN'>>()
   const email = route.params?.email ?? ''

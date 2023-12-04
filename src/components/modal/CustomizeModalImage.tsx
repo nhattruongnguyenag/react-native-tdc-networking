@@ -1,5 +1,5 @@
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState, memo } from 'react'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { closeModalImage } from '../../redux/Slice'
@@ -9,13 +9,16 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
+import { useTranslation } from 'react-multi-lang'
 
 const CustomizeModalImage = () => {
+  const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { modalImageData, userIdOfProfileNow, currentScreenNowIsProfileScreen } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
-  const [imageActive, setImageActive] = useState(0)
-  // Function
+
+  const [imageActiveId, setImageActiveId] = useState(modalImageData?.imageIdClicked);
+
   const handleCheckImageHaveError = (id: number) => {
     let result: boolean = false
     modalImageData?.listImageError.some((item: number) => {
@@ -28,18 +31,22 @@ const CustomizeModalImage = () => {
 
   const onChange = (nativeEvent: any) => {
     if (nativeEvent) {
-      const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
-      if (slide != imageActive) {
-        setImageActive(slide)
+      const windowWidth = nativeEvent.layoutMeasurement.width;
+      const scrollX = nativeEvent.contentOffset.x;
+      const activeImageIndex = Math.floor((scrollX + windowWidth / 2) / windowWidth);
+      const activeImageId = modalImageData?.images[activeImageIndex]?.id;
+      if (activeImageId !== imageActiveId) {
+        setImageActiveId(activeImageId);
       }
     }
-  }
+  };
+
 
   const closeModal = () => {
     dispatch(closeModalImage())
   }
 
-  const handleClickIntoUserNameOrAvatarEvent = () => {
+  const handleClickIntoUserNameOrAvatarEvent = useCallback(() => {
     if (userIdOfProfileNow !== modalImageData?.userId) {
       closeModal();
       if (currentScreenNowIsProfileScreen) {
@@ -48,7 +55,7 @@ const CustomizeModalImage = () => {
         navigation.navigate(PROFILE_SCREEN, { userId: modalImageData?.userId ?? 0, group: modalImageData?.group ?? '' })
       }
     }
-  }
+  }, [userIdOfProfileNow, modalImageData?.userId])
 
   return (
     <Modal statusBarTranslucent={true} transparent>
@@ -57,9 +64,11 @@ const CustomizeModalImage = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         pagingEnabled
+        contentOffset={{ x: (modalImageData?.images.findIndex(item => item.id === imageActiveId) ?? 0) * WINDOW_WIDTH, y: 0 }}
       >
-        {modalImageData?.images.map((item, index) => (
+        {modalImageData?.images.map((item) => (
           <CustomizeImageModalShow
+            t={t}
             key={item.id}
             closeModal={closeModal}
             data={item}
@@ -70,11 +79,11 @@ const CustomizeModalImage = () => {
         ))}
       </ScrollView>
       <View style={styles.container}>
-        {modalImageData?.images.map((item, index) => (
+        {modalImageData?.images.map((item) => (
           <Text
             key={item.id}
             style={
-              imageActive == index
+              imageActiveId === item.id
                 ? styles.nodeActive
                 : styles.nodeUnActive
             }
@@ -84,6 +93,8 @@ const CustomizeModalImage = () => {
     </Modal>
   )
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -164,4 +175,4 @@ const styles = StyleSheet.create({
     margin: 2,
   }
 })
-export default CustomizeModalImage
+export default memo(CustomizeModalImage)

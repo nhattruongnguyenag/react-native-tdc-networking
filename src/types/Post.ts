@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-multi-lang'
 import { Comment } from './Comment'
 import { Images } from './Images'
 import { Like } from './Like'
@@ -27,6 +28,7 @@ export interface Post {
   description: string | null
   isSave: number
   group: string
+  handleUnSave: (post_id: number) => void
+  handleDelete: (post_id: number) => void
   active: number
-  handleUnSave: (post_id: number) => void | undefined
 }

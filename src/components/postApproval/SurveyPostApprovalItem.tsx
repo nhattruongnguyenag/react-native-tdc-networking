@@ -2,9 +2,8 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
-import { DETAIL_SURVEY_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen'
+import { DETAIL_SURVEY_SCREEN } from '../../constants/Screen'
 import { SurveyPostResponseModel } from '../../types/response/SurveyResponsePostModal'
 import { isSurveyPost } from '../../utils/PostHelper'
 import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
@@ -22,8 +21,7 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
 
     const handleClickBtnSurveyDetailEvent = () => {
         if (isSurveyPost(props.post)) {
-            // navigation.navigate(DETAIL_SURVEY_SCREEN, { survey: props.post })
-            navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: props.post.id })
+            navigation.navigate(DETAIL_SURVEY_SCREEN, { survey: props.post })
         }
     }
 
@@ -31,6 +29,7 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
 
     return (
         <CustomizeSurveyPost
+            textButton=''
             id={surveyPost.id}
             title={surveyPost.title ?? t('PostApproveItem.isLoading')}
             active={surveyPost.active}
