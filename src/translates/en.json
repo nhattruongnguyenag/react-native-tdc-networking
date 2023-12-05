@@ -42,7 +42,10 @@
         "benefit": "Benefits",
         "descriptionJob": "Job Description",
         "requipmentJob": "Job Requirements",
-        "btnApplyJob": "Apply Now"
+        "btnApplyJob": "Apply Now",
+        "textNotification": "Notification",
+        "textNoApply":"You are not eligible to apply",
+        "textApplied":"You have applied! Please go to job application profile to track your application profile status"
     },
     "ListJobApplyComponent": {
         "listEmpty": "No job applications",
@@ -103,7 +106,8 @@
         "titleRegister": "Register",
         "titleLogin": "Log In",
         "requestLogin": "Already have an account?",
-        "titleNotification": "Notification"
+        "titleNotification": "Notification",
+        "textAccountAuthen":"Account authentication"
     },
     "RegisterBusinessComponent": {
         "titleRegisterBusiness": "Business Registration",
@@ -151,7 +155,8 @@
         "titleRegister": "Register",
         "titleLogin": "Log In",
         "requestLogin": "Already have an account?",
-        "titleNotification": "Notification"
+        "titleNotification": "Notification",
+        "textAccountAuthen":"Account authentication"
     },
     "ManageJobApply": {
         "textReceived": "Received",
@@ -286,7 +291,8 @@
         "jobApplyScreenEmptyCvTextTitle": "Notification",
         "jobApplyScreenSaveSuccessTextContent": "Application submitted successfully",
         "jobApplyScreenChangeSuccessTextContent": "Application edited successfully",
-        "jobApplyScreenSaveSuccessTextTitle": "Notification"
+        "jobApplyScreenSaveSuccessTextTitle": "Notification",
+        "jobApplyScreenUploadErrorFormat": "PDF format is incorrect"
     },
     "MessageScreen": {
         "messageScreenLoaderTitle": "Loading messages..."

@@ -13,7 +13,7 @@ import { useAppSelector } from '../redux/Hook'
 import { useJobApplyMutation, useJobApplyUpdateMutation } from '../redux/Service'
 import { Data } from '../types/Data'
 import { FileUploadRequest } from '../types/request/FileUploadRequest'
-import { handleUploadDocumentFiles, handleUploadImages } from '../utils/UploadUtils'
+import { handleUploadDocumentFiles } from '../utils/UploadUtils'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 
 const cvSourceDefalutValue: FileUploadRequest = {
@@ -30,7 +30,6 @@ export default function JobApplyScreen() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [jobApplyRequest, jobApplyResponse] = useJobApplyMutation()
   const [jobApplyUpdateRequest, jobApplyUpdateResponse] = useJobApplyUpdateMutation()
-  const [isBtnFinishDisable, setBtnFinishDisable] = useState(true)
   const [cvSource, setCVSource] = useState<FileUploadRequest>(cvSourceDefalutValue)
   useEffect(() => {
     if (route.params?.profileId) {
@@ -109,7 +108,7 @@ export default function JobApplyScreen() {
     }
 
     if (cvSource.type.includes('image')) {
-      handleUploadImages([cvSource], onResult)
+      Alert.alert( t('JobApplyScreen.jobApplyScreenSaveSuccessTextTitle'), t('JobApplyScreen.jobApplyScreenUploadErrorFormat'))
     } else {
       handleUploadDocumentFiles([cvSource], onResult)
     }
@@ -140,7 +139,7 @@ export default function JobApplyScreen() {
         }}
       >
         <Text style={styles.btnTitle}>
-          {cvSource.size === 0 || cvSource.uri == ''
+          {cvSource.size === 0
             ? t('JobApplyScreen.jobApplyScreenButtonAddCvTitle')
             : t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle')}
         </Text>

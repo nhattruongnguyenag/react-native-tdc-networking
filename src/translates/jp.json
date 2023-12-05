@@ -36,13 +36,16 @@
         "titleJob": "求人のポジション",
         "employeType": "雇用形態",
         "salary": "給与",
-        "salaryUnitMonth": "VND/月",
+        "salaryUnitMonth": "ドン/月",
         "expiration": "応募締め切り",
         "location": "勤務先の住所",
         "benefit": "福利厚生",
         "descriptionJob": "仕事の説明",
         "requipmentJob": "仕事の要件",
-        "btnApplyJob": "今すぐ応募"
+        "btnApplyJob": "今すぐ応募",
+        "textNotification": "通知",
+        "textNoApply":"あなたには応募資格がありません",
+        "textApplied":"あなたは申請しました！ 応募プロファイルのステータスを追跡するには、「求人応募プロファイル」に移動してください。"
     },
     "ListJobApplyComponent": {
         "listEmpty": "求人応募はありません",
@@ -103,7 +106,8 @@
         "titleRegister": "登録",
         "titleLogin": "ログイン",
         "requestLogin": "すでにアカウントをお持ちですか？",
-        "titleNotification": "通知"
+        "titleNotification": "通知",
+        "textAccountAuthen":"アカウント認証"
     },
     "RegisterBusinessComponent": {
         "titleRegisterBusiness": "ビジネス登録",
@@ -155,7 +159,8 @@
         "titleRegister": "登録",
         "titleLogin": "ログイン",
         "requestLogin": "すでにアカウントをお持ちですか？",
-        "titleNotification": "通知"
+        "titleNotification": "通知",
+        "textAccountAuthen":"アカウント認証"
     },
     "ManageJobApply": {
         "textReceived": "受信済み",
@@ -290,7 +295,8 @@
         "jobApplyScreenEmptyCvTextTitle": "通知",
         "jobApplyScreenSaveSuccessTextContent": "応募が成功裏に提出されました",
         "jobApplyScreenChangeSuccessTextContent": "応募が成功裏に編集されました",
-        "jobApplyScreenSaveSuccessTextTitle": "通知"
+        "jobApplyScreenSaveSuccessTextTitle": "通知",
+        "jobApplyScreenUploadErrorFormat": "PDF形式が正しくありません"
     },
     "MessageScreen": {
         "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
