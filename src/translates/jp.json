@@ -293,7 +293,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "通知"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
+        "messageScreenLoaderTitle": "メッセージを読み込んでいます...",
+        "messageEmptyList": "新しいメッセージはありません"
     },
     "MessengerToolbar": {
         "userStatusActive": "アクティブ",

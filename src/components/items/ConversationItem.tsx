@@ -5,7 +5,9 @@ import { useTranslation } from 'react-multi-lang'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
+import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { MESSENGER_SCREEN } from '../../constants/Screen'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { Conversation } from '../../types/Conversation'
@@ -56,7 +58,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
     >
       <View style={styles.avatarGroup}>
         {data?.receiver.image ? (
-          <Avatar.Image size={60} source={{ uri: data?.receiver?.image }} />
+          <Avatar.Image size={60} source={{ uri: API_URL_RENDER_IMAGE + data?.receiver?.image }} />
         ) : (
           <DefaultAvatar identifer={data?.receiver.name[0]} />
         )}

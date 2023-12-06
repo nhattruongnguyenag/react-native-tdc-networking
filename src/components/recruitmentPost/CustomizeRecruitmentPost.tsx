@@ -14,8 +14,8 @@ interface RecruitmentPostType {
   title: string
   salary: string
   employmentType: string
-  current: string
-  textButton: string
+  current?: string
+  textButton?: string
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
 // Constant

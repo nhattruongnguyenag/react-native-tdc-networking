@@ -4,6 +4,7 @@ import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from '
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
+import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
 import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
@@ -134,7 +135,7 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
         </View>
         <View style={{ opacity: isLastItem || isSingleItem ? 1 : 0 }}>
           {props.message.sender.image ? (
-            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: props.message.sender.image }} />
+            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + props.message.sender.image }} />
           ) : (
             <DefaultAvatar size={AVATAR_HEIGHT} identifer={props.message.sender.name[0]} />
           )}

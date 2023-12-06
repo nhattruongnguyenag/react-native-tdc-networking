@@ -31,7 +31,6 @@ function BarItem(props: BarItemProps) {
       <Pressable
         onPress={() => {
           setTooltipVisible(true)
-          console.log(props.data.color)
         }}
         style={[styles.barChartItemContainer, { backgroundColor: props.data.color + (tooltipVisible ? 'b3' : 'ff') }]}
       >

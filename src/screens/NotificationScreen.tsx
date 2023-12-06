@@ -1,32 +1,20 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-  Vibration,
-  Alert
-} from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import Icon1 from 'react-native-vector-icons/Entypo'
-import Icon2 from 'react-native-vector-icons/AntDesign'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import axios from 'axios'
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { useAppDispatch, useAppSelector } from '../redux/Hook'
-import { TEXT_NOTIFICATION, TEXT_NOTIFICATION_ALL_READ, TEXT_NOTIFICATION_DELETE, TEXT_NOTIFICATION_NOT_READ } from '../constants/StringVietnamese'
-import moment from 'moment'
+import axios from 'axios'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { useGetNotificationsUserQuery } from '../redux/Service'
-import NotificationItem from '../components/items/NotificationItem'
+import {
+  Dimensions, Pressable, StyleSheet,
+  Text,
+  View
+} from 'react-native'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import Icon2 from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import NotificationListView from '../components/listviews/NotificationListView'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
+import { useGetNotificationsUserQuery } from '../redux/Service'
 const { height, width } = Dimensions.get('screen')
 
 // man hinh hien thi danh sach thong bao
@@ -66,7 +54,6 @@ export default function NotificationScreen() {
 
   const handleItem = (id: number) => {
     try {
-      // navigation.navigate('Man hinh muon den', { id: id })
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
         userId: userLogin?.id

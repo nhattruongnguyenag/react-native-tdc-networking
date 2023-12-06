@@ -8,7 +8,6 @@ import Loading from '../components/common/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSentItem from '../components/messages/MessageSentItem'
-import { MESSAGE_SCREEN_LOADER_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setConversationMessages, setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
@@ -47,6 +46,8 @@ export default function MessengerScreen() {
 
     const onMessageReceived = (payload: Message) => {
       setLoading(false)
+      console.log(payload.body)
+
       const messages = JSON.parse(payload.body) as MessageModel[]
       dispatch(setConversationMessages(messages))
     }
@@ -114,13 +115,20 @@ export default function MessengerScreen() {
         <Loading title={t('MessageScreen.messageScreenLoaderTitle')} />
       ) : (
         <Fragment>
-          <FlatList
-            inverted
-            initialNumToRender={5}
-            showsVerticalScrollIndicator={false}
-            data={conversationMessages}
-            renderItem={({ item, index }) => messageRenderItems(item, index)}
-          />
+          {
+            conversationMessages.length > 0 ?
+              <FlatList
+                inverted
+                initialNumToRender={5}
+                showsVerticalScrollIndicator={false}
+                data={conversationMessages}
+                renderItem={({ item, index }) => messageRenderItems(item, index)}
+              />
+              :
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>{t('MessageScreen.messageEmptyList')}</Text>
+              </View>
+          }
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}
