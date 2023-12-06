@@ -293,7 +293,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Đang tải tin nhắn..."
+        "messageScreenLoaderTitle": "Đang tải tin nhắn...",
+        "messageEmptyList": "Chưa có tin nhắn mới"
     },
     "MessengerToolbar": {
         "userStatusActive": "Đang hoạt động",
