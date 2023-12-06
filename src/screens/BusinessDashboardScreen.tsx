@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, RefreshControl, ScrollView, Text } from 'react-native'
+import { FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizeModalImage from '../components/modal/CustomizeModalImage'
@@ -24,6 +24,7 @@ import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { GROUP_CONNECT_BUSINESS_ID } from '../constants/Groups'
+import { Post } from '../types/Post'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -31,7 +32,7 @@ export default function BusinessDashboardScreen() {
   const code = groupBusiness;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [businessPost, setBusinessPost] = useState([]);
+  const [businessPost, setBusinessPost] = useState<Post[]>([]);
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
@@ -135,7 +136,7 @@ export default function BusinessDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { groupId: GROUP_CONNECT_BUSINESS_ID });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: GROUP_CONNECT_BUSINESS_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_CONNECT_BUSINESS_ID });
     } else {
@@ -163,35 +164,39 @@ export default function BusinessDashboardScreen() {
 
 
   const renderItem = useCallback((item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={item.user['roleCodes']}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={code}
-        handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost}
-        active={item.active} />
-    )
+    if (item.active === 1) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={code}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active} />
+      )
+    } else {
+      return null;
+    }
   }, [businessPost])
 
   return (
@@ -211,7 +216,6 @@ export default function BusinessDashboardScreen() {
         refreshControl={<RefreshControl
           refreshing={false}
           onRefresh={() => {
-            // TODO
           }}
         />}
       >
@@ -227,13 +231,15 @@ export default function BusinessDashboardScreen() {
               />
             </View> : null
         }
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          extraData={businessPost}
-          data={businessPost}
-          renderItem={({ item }) => renderItem(item)}
-        />
+        <View style={styles.wrapperPost}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            extraData={businessPost}
+            data={businessPost}
+            renderItem={({ item }) => renderItem(item)}
+          />
+        </View>
       </ScrollView>
     </View>
   )
@@ -245,5 +251,8 @@ const styles = StyleSheet.create({
   },
   toolbarCreatePost: {
     marginBottom: 20,
+  },
+  wrapperPost: {
+    marginTop: 5,
   }
 })

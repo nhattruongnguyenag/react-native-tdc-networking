@@ -636,7 +636,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
             <SafeAreaView>
                 <View>
                     <TextInputWithTitle
-                        value={name}
+                        defaultValue={name}
                         title={t("BusinessUpdate.businessUpdateCompanyName")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
@@ -649,7 +649,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={representor}
+                        defaultValue={representor}
                         title={t("BusinessUpdate.businessUpdateRepresentorFullName")}
                         placeholder={t("BusinessUpdate.businessUpdateRepresentorFullNamePlaceholder")}
                         onChangeText={(value) => handleRepresentoreChange(value)}
@@ -664,7 +664,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     />
 
                     <TextInputWithTitle
-                        value={taxCode}
+                        defaultValue={taxCode}
                         title={t("BusinessUpdate.businessUpdateCompanyTaxId")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyTaxIdPlaceholder")}
                         onChangeText={(value) => handleTaxCodeChange(value)}
@@ -679,7 +679,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     />
 
                     <TextInputWithTitle
-                        value={address}
+                        defaultValue={address}
                         title={t("BusinessUpdate.businessUpdateCompanyAddress")}
                         placeholder={t("BusinessUpdate.businessUpdateCompanyAddressPlaceholder")}
                         onChangeText={(value) => handleAddressChange(value)}
@@ -692,7 +692,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         isVisible={validate.address?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={phone}
+                        defaultValue={phone}
                         title={t("Update.updatePhoneNumber")}
                         placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
@@ -707,7 +707,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                         <View style={{ width: '45%' }}>
                             <TextInputWithTitle
-                                value={timeStart}
+                                defaultValue={timeStart}
                                 textInputRef={timeStartRef}
                                 onFocus={() => {
                                     setShowDatePickerStart(true)
@@ -735,7 +735,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                         </View>
                         <View style={{ width: '45%' }}>
                             <TextInputWithTitle
-                                value={timeEnd}
+                                defaultValue={timeEnd}
                                 textInputRef={timeEndRef}
                                 onFocus={() => {
                                     setShowDatePickerEnd(true)
@@ -1039,7 +1039,7 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
             <SafeAreaView>
                 <View>
                     <TextInputWithTitle
-                        value={name}
+                        defaultValue={name}
                         title={t("FacultyUpdate.facultyUpdateName")}
                         placeholder={t("FacultyUpdate.facultyUpdateNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
@@ -1052,7 +1052,7 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={phone}
+                        defaultValue={phone}
                         title={t("Update.updatePhoneNumber")}
                         placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}
@@ -1342,7 +1342,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
             <SafeAreaView>
                 <View>
                     <TextInputWithTitle
-                        value={name}
+                        defaultValue={name}
                         title={t("StudentUpdate.studentUpdateName")}
                         placeholder={t("StudentUpdate.facultyUpdateNamePlaceholder")}
                         onChangeText={(value) => handleNameChange(value)}
@@ -1355,7 +1355,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                         isVisible={validate.name?.isVisible}
                     />
                     <TextInputWithTitle
-                        value={phone}
+                        defaultValue={phone}
                         title={t("Update.updatePhoneNumber")}
                         placeholder={t("Update.updatePhoneNumberPlaceholder")}
                         onChangeText={(value) => handlePhoneChange(value)}

@@ -8,11 +8,10 @@ import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload,
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables';
 import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import CustomizeModalBigImageShow from '../components/modal/CustomizeModalBigImageShow';
-import { useIsFocused } from '@react-navigation/native';
 import { Student } from '../types/Student';
 import { Faculty } from '../types/Faculty';
 import { Business } from '../types/Business';
@@ -27,16 +26,18 @@ import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import { useGetPostsByIdQuery } from '../redux/Service';
+import { isFaculty, isStudent } from '../utils/UserHelper';
 
 const MyProfileScreen = () => {
   const t = useTranslation();
   const [imageFocus, setImageFocus] = useState<string>("");
-  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [group, setGroup] = useState((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : 'group_connect_business');
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+  const [group, setGroup] = useState((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).facultyGroupCode : 'group_connect_business');
   const [isCalled, setIsCalled] = useState(false);
+
   const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
   const isFocused = useIsFocused();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [post, setPost] = useState<any[]>([]);
   const [userInfo, setUserInfo] = useState<Student | Faculty | Business | null>();
   const [isFollow, setIsFollow] = useState<boolean>(false);
@@ -59,9 +60,7 @@ const MyProfileScreen = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('=================call my profile===================');
       setIsLoading(false);
-      setPost([]);
       setIsCalled(true);
       setTypeAuthorPost(data.data.user['roleCodes']);
       setUserInfo(data.data.user);
@@ -82,7 +81,7 @@ const MyProfileScreen = () => {
     if (userLogin?.roleCodes.includes(TYPE_POST_STUDENT)) {
       groupOfUser = 'group_tdc';
     } else if (userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) {
-      groupOfUser = userLogin.facultyGroupCode;
+      groupOfUser = (userLogin as Faculty).facultyGroupCode;
     } else {
       groupOfUser = 'group_connect_business'
     }
@@ -129,36 +128,40 @@ const MyProfileScreen = () => {
 
 
   const renderItem = useCallback((item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={item.user['roleCodes']}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={group ?? ""}
-        handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost}
-        active={item.active} 
-      />
-    )
+    if (item.active === 1) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={group ?? ""}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active}
+        />
+      )
+    } else {
+      return null;
+    }
   }, [post])
 
   const handleClickButtonEvent = (flag: number) => {
@@ -264,14 +267,17 @@ const MyProfileScreen = () => {
               userData={userInfo}
               handleClickButtonEvent={handleClickButtonEvent}
               handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
-            {
-              post.length !== 0 && <FlatList
-                scrollEnabled={false}
-                showsVerticalScrollIndicator={false}
-                data={post}
-                renderItem={({ item }) => renderItem(item)}
-              />
-            }
+            <View style={styles.wrapperPost}>
+              {
+                post.length !== 0 && <FlatList
+                  scrollEnabled={false}
+                  extraData={post}
+                  showsVerticalScrollIndicator={false}
+                  data={post}
+                  renderItem={({ item }) => renderItem(item)}
+                />
+              }
+            </View>
           </ScrollView>
           <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
         </>
@@ -292,6 +298,9 @@ const styles = StyleSheet.create({
   },
   txtTitlePostArea: {
     color: COLOR_BLACK
+  },
+  wrapperPost: {
+    marginTop: 5,
   }
 })
 export default MyProfileScreen

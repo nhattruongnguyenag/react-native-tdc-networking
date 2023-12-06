@@ -12,7 +12,7 @@ import { ADD_QUESTION_SCREEN } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { useGetSurveyPostUpdateQuery } from '../redux/Service'
 import { setSurveyPostRequest, updateSurveyDescription, updateSurveyTitle } from '../redux/Slice'
-import { SurveyPostRequest } from '../types/SurveyPostRequest'
+import { SurveyPostRequest } from '../types/SurveyPost'
 import { ErrorMessage, isExistFieldInvalid, validateField } from '../utils/ValidateHelper'
 import { InputTextValidate } from '../utils/ValidateUtils'
 

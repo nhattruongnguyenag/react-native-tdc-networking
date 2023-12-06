@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../App'
 import { useAppSelector } from '../../redux/Hook'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { memo } from 'react'
 
 export interface CustomizeProfileType {
     isFollow: boolean
@@ -104,4 +105,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default CustomizeProfile
+export default memo(CustomizeProfile)

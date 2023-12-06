@@ -27,17 +27,20 @@ import AccordionItem from './AccordionItem'
 import DrawerHeader from './DrawerHeader'
 
 import { useTranslation } from 'react-multi-lang'
-import { useAppSelector } from '../../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { isAdmin, isFaculty, isStudent, isBusiness } from '../../utils/UserHelper'
 import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
 import { getGroupForPost } from '../../utils/GetGroup'
 import { groupBusiness, groupStudent } from '../../constants/Variables'
+import { useDispatch } from 'react-redux'
+import { setIsLogout } from '../../redux/Slice'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-
+  const dispatch = useAppDispatch()
   const logout = useCallback(() => {
+    dispatch(setIsLogout(true));
     AsyncStorage.removeItem(TOKEN_KEY)
     AsyncStorage.removeItem(USER_LOGIN_KEY)
     navigation.navigate(LOGIN_SCREEN)
@@ -109,10 +112,21 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             pressColor={'#0088ff03'}
             labelStyle={{ color: '#0088ff' }}
             icon={({ color, focused, size }) => (
-              <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
+              <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
             )}
           />
         )}
+
+        <DrawerItem
+          label={t('DrawerContentComponent.userJobApplyProfile')}
+          onPress={() => { }}
+          inactiveBackgroundColor={'#fff'}
+          pressColor={'#0088ff03'}
+          labelStyle={{ color: '#0088ff' }}
+          icon={({ color, focused, size }) => (
+            <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
+          )}
+        />
 
         {(isAdmin(userLogin) || isFaculty(userLogin)) && (
           <DrawerItem

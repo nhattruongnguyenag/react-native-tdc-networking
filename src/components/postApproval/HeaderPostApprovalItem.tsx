@@ -16,10 +16,11 @@ import { useAcceptPostMutation, useDeletePostMutation, useGetPostRejectLogQuery 
 import { setPostRejectLog } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
-import { PostResponseModel } from '../../types/response/PostResponseModel'
+import { PostResponseModal } from '../../types/response/PostResponseModal'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from './PostApprovalItem'
 
+// SERVER_ADDRESS + `api/images/`
 const RECRUITMENT_BADGE_COLOR = '#999fac'
 const SURVEY_BADGE_COLOR = '#00C9F4'
 const TEXT_IMAGE_BADGE_COLOR = '#00A255'
@@ -71,7 +72,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
         }
     }
 
-    const onUpdatePost = (post?: PostResponseModel) => {
+    const onUpdatePost = (post?: PostResponseModal) => {
         if (post) {
             if (post.type === TYPE_POST_RECRUITMENT) {
                 navigation.navigate(CREATE_RECRUITMENT_SCREEN, { recruitmentPostId: post.id })

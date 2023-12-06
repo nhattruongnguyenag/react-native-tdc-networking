@@ -522,7 +522,8 @@
         "selectFacultyTextSearch":"Tìm kiếm.."
     },
     "FacultyDashboard": {
-        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào"
+        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào",
+        "facultyDashboarNotYetSelectFaculty": "Vui lòng chọn khoa"
     },
     "StudentDashboard": {
         "studentDashboardGroupTitle": "Group TDC - Trường Cao Đẳng Công Nghệ Thủ Đức"

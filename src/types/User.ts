@@ -10,4 +10,5 @@ export interface User {
   updatedAt: string
   roleCodes: string
   code: string
+  background:string
 }

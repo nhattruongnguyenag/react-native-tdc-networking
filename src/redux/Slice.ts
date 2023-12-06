@@ -8,11 +8,11 @@ import { ModalImage } from '../types/ModalImage'
 import { ModalUserReaction } from '../types/ModalUserReaction'
 import { Choice, ChoiceProps, Question } from '../types/Question'
 import { Student } from '../types/Student'
-import { SurveyPostRequest } from '../types/SurveyPostRequest'
+import { SurveyPostRequest } from '../types/SurveyPost'
 import { Message } from '../types/Message'
+import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
 import { User } from '../types/User'
 import { SHORT_ANSWER } from '../components/survey/AddQuestionModal'
-import { PostRejectedLog } from '../types/PostRejectLog'
 
 export interface TDCSocialNetworkState {
   postRejectLog: PostRejectedLog | null
@@ -34,6 +34,7 @@ export interface TDCSocialNetworkState {
   userIdOfProfileNow: number
   currentScreenNowIsProfileScreen: boolean
   defaultLanguage: string
+  logout: boolean
 }
 
 const initialState: TDCSocialNetworkState = {
@@ -56,6 +57,7 @@ const initialState: TDCSocialNetworkState = {
   updatePost: false,
   userIdOfProfileNow: 0,
   currentScreenNowIsProfileScreen: false,
+  logout: false
 }
 
 export const TDCSocialNetworkSlice = createSlice({
@@ -98,7 +100,7 @@ export const TDCSocialNetworkSlice = createSlice({
         state.surveyPostRequest.questions = [...state.surveyPostRequest.questions, action.payload]
       }
     },
-    updateQuestion: (state, action: PayloadAction<{ index: number, question: Question }>) => {
+    updateQuestion: (state, action: PayloadAction<{ index: number; question: Question }>) => {
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions[action.payload.index] = action.payload.question
       }
@@ -108,20 +110,19 @@ export const TDCSocialNetworkSlice = createSlice({
         state.surveyPostRequest.questions.splice(action.payload, 1)
       }
     },
-    addChoice: (state, action: PayloadAction<{ questionIndex: number, choice: Choice }>) => {
+    addChoice: (state, action: PayloadAction<{ questionIndex: number; choice: Choice }>) => {
       const data = action.payload
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions[data.questionIndex].choices?.push(data.choice)
       }
     },
-    updateChoice: (state, action: PayloadAction<{ questionIndex: number, choiceIndex: number, content: string }>) => {
+    updateChoice: (state, action: PayloadAction<{ questionIndex: number; choiceIndex: number; content: string }>) => {
       const data = action.payload
       if (state.surveyPostRequest) {
-          state.surveyPostRequest.questions[data.questionIndex].choices[data.choiceIndex].content = data.content
-
-        }
+        state.surveyPostRequest.questions[data.questionIndex].choices[data.choiceIndex].content = data.content
+      }
     },
-    deleteChoice: (state, action: PayloadAction<{ questionIndex: number, choiceIndex: number }>) => {
+    deleteChoice: (state, action: PayloadAction<{ questionIndex: number; choiceIndex: number }>) => {
       const data = action.payload
       if (state.surveyPostRequest) {
         state.surveyPostRequest.questions[data.questionIndex].choices.splice(data.choiceIndex, 1)
@@ -165,6 +166,9 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setPostRejectLog: (state, action: PayloadAction<PostRejectedLog | null>) => {
       state.postRejectLog = action.payload
+    },
+    setIsLogout: (state, action: PayloadAction<boolean>) => {
+      state.logout = action.payload
     }
   }
 })
@@ -196,7 +200,8 @@ export const {
   setSelectConversation,
   updatePostWhenHaveChangeComment,
   goToProfileScreen,
-  setCurrentScreenNowIsProfileScreen
+  setCurrentScreenNowIsProfileScreen,
+  setIsLogout
 } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer

@@ -16,7 +16,7 @@ interface DataItem {
 }
 
 interface SelectFacultyToolbarType {
-    flag: string
+    flag: boolean
     handleSelectFacultyEvent: (code: string) => void
 }
 
@@ -44,6 +44,7 @@ const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
         })
         return facultiesHadTranslated;
     }
+    
     return (
         <View>
             <View style={styles.group}>

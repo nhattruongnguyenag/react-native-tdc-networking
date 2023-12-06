@@ -2,7 +2,7 @@ import { FlatList, ScrollView, StyleSheet, View, RefreshControl, Text } from 're
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables'
+import { TYPE_NORMAL_POST, TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { deletePostAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
@@ -11,7 +11,6 @@ import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -21,6 +20,10 @@ import { WINDOW_HEIGHT } from '../utils/SystemDimensions'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
 import { useGetFacultyPostsQuery } from '../redux/Service'
+import { Post } from '../types/Post'
+import { isFaculty, isStudent } from '../utils/UserHelper'
+import { Student } from '../types/Student'
+import { Faculty } from '../types/Faculty'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -28,12 +31,13 @@ export default function FacultyDashboardScreen() {
   const isFocused = useIsFocused();
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { updatePost, userLogin } = useAppSelector(
+  const [flag, setFlag] = useState(true);
+  const { updatePost, userLogin, logout } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
   const [code, setCode] = useState("");
   const dispatch = useAppDispatch();
-  const [facultyPost, setFacultyPost] = useState([]);
+  const [facultyPost, setFacultyPost] = useState<Post[]>([]);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data, isFetching } = useGetFacultyPostsQuery(
     {
@@ -45,7 +49,6 @@ export default function FacultyDashboardScreen() {
     }
   );
 
-
   useEffect(() => {
     if (data) {
       setIsLoading(false);
@@ -56,8 +59,7 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
-    setFacultyPost([]);
-    setCode((userLogin?.roleCodes.includes(TYPE_POST_STUDENT) || userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) ? userLogin.facultyGroupCode : '');
+    setCode((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).facultyGroupCode : '');
   }, [userLogin]);
 
   useEffect(() => {
@@ -97,14 +99,14 @@ export default function FacultyDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: userLogin?.facultyGroupId ?? 0 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: (userLogin as Faculty).facultyGroupId ?? 0 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {
       navigation.navigate(CREATE_SURVEY_SCREEN);
     }
   }
-  // passed
+
   const handleClickIntoAvatar = () => {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
@@ -127,101 +129,125 @@ export default function FacultyDashboardScreen() {
     setCode(_code);
   }, [])
 
+  useEffect(() => {
+    if (userLogin?.roleCodes.includes(TYPE_POST_BUSINESS)) {
+      setFlag(!flag);
+      setFacultyPost([]);
+      setCode('');
+    }
+  }, [logout])
+
   const renderItem = useCallback((item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={item.user['roleCodes']}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={code}
-        handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost} 
-        active={item.active} 
+    if (item.active === 1) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={code}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active}
         />
-    )
-  },[facultyPost])
+      )
+    } else {
+      return null;
+    }
+  }, [facultyPost])
+
+
 
   return (
-    userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl
-          refreshing={false}
-          onRefresh={() => {
-            // TODO
-          }}
-        />}
-      >
-        {
-          userLogin?.roleCodes.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
-            <CustomizeCreatePostToolbar
-              role={userLogin?.roleCodes ?? ''}
-              handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
-              handleClickIntoAvatar={handleClickIntoAvatar}
-              image={userLogin?.image ?? null}
-              name={userLogin?.name ?? ''}
-            />
-          </View> : null
-        }
-
-        {
-          isLoading ? <SkeletonPost /> : <FlatList
-            scrollEnabled={false}
+    <>
+      {
+        userLogin?.roleCodes !== TYPE_POST_BUSINESS ? <View style={styles.container}>
+          <ScrollView
             showsVerticalScrollIndicator={false}
-            data={facultyPost}
-            renderItem={({ item }) => renderItem(item)}
-          />
-        }
-      </ScrollView>
-    </View> : <ScrollView
-      showsVerticalScrollIndicator={false}>
-      <CustomizeSelectFacultyToolbar
-        flag={t("SelectFaculty.selectFacultyPlaceholder")}
-        handleSelectFacultyEvent={handleSelectFacultyEvent}
-      />
-      <View>
-        {isLoading ? (
-          <View style={styles.businessRolePostShow}>
-            <SkeletonPost />
-          </View>
-        ) : (
-          <>
-            {facultyPost.length ? (
-              <FlatList
-                style={styles.businessRolePostShow}
+            refreshControl={<RefreshControl
+              refreshing={false}
+              onRefresh={() => {
+              }}
+            />}
+          >
+            {
+              userLogin?.roleCodes.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
+                <CustomizeCreatePostToolbar
+                  role={userLogin?.roleCodes ?? ''}
+                  handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}
+                  handleClickIntoAvatar={handleClickIntoAvatar}
+                  image={userLogin?.image ?? null}
+                  name={userLogin?.name ?? ''}
+                />
+              </View> : null
+            }
+
+            {
+              isLoading ? <SkeletonPost /> : <FlatList
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
+                extraData={facultyPost}
                 data={facultyPost}
                 renderItem={({ item }) => renderItem(item)}
               />
-            ) : (
-              code !== "" && <View style={styles.wrapperWhenDontHaveAnyPost}>
-                <Text>{t("FacultyDashboard.facultyDashboardNotifyNotHavePost")}</Text>
+            }
+          </ScrollView>
+        </View> : <ScrollView
+          showsVerticalScrollIndicator={false}>
+          <CustomizeSelectFacultyToolbar
+            flag={flag}
+            handleSelectFacultyEvent={handleSelectFacultyEvent}
+          />
+          <View>
+            {isLoading ? (
+              <View style={styles.businessRolePostShow}>
+                <SkeletonPost />
               </View>
+            ) : (
+              <>
+                {facultyPost.length ? (
+                  <View style={styles.wrapperPost}>
+                    <FlatList
+                      style={styles.businessRolePostShow}
+                      scrollEnabled={false}
+                      showsVerticalScrollIndicator={false}
+                      data={facultyPost}
+                      renderItem={({ item }) => renderItem(item)}
+                    />
+                  </View>
+                ) : (
+                  <View style={styles.wrapperWhenDontHaveAnyPost}>
+                    <Text>
+                      {code.trim() === ""
+                        ? t("FacultyDashboard.facultyDashboarNotYetSelectFaculty")
+                        : t("FacultyDashboard.facultyDashboardNotifyNotHavePost")}
+                    </Text>
+                  </View>
+                )}
+              </>
             )}
-          </>
-        )}
-      </View>
-    </ScrollView>
+          </View>
+        </ScrollView>
+      }
+    </>
   )
 }
 
@@ -245,5 +271,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  wrapperPost: {
+    marginTop: 5,
   }
 })

@@ -5,14 +5,14 @@ import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
 import { RootStackParamList } from '../../App'
 import { RECRUITMENT_DETAIL_SCREEN } from '../../constants/Screen'
-import { RecruitmentPostResponseModel } from '../../types/response/RecruitmentPostResponseModel'
+import { RecruitmentResponsePostModal } from '../../types/response/RecruitmentResponsePostModal'
 import { isRecruitmentPost } from '../../utils/PostHelper'
 import CustomizeRecruitmentPost from '../recruitmentPost/CustomizeRecruitmentPost'
 import { PostApprovalItemProps } from './PostApprovalItem'
 
 export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-    const [recruitmentPost, setRecruitmentPost] = useState<RecruitmentPostResponseModel>({} as RecruitmentPostResponseModel)
+    const [recruitmentPost, setRecruitmentPost] = useState<RecruitmentResponsePostModal>({} as RecruitmentResponsePostModal)
 
     const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
         console.log(idPost)

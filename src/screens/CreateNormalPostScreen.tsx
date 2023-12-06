@@ -69,6 +69,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyCreateNewPostSuccess"), false)
             setContent('');
             dispatch(setImagesUpload([]));
+            setImages([]);
             Keyboard.dismiss()
             navigation.goBack();
           } else {
@@ -83,8 +84,9 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           const status = await updateNormalPostAPI(apiUrl, data)
           setIsLoading(false)
           if (status === 201) {
-            setContent('')
+            setContent('');
             dispatch(setImagesUpload([]));
+            setImages([]);
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostSuccess"), false)
             Keyboard.dismiss()
             navigation.goBack();
@@ -115,7 +117,9 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   }
 
   const HandleClickIntoIconBtnArrowLeft = () => {
+    setContent('');
     dispatch(setImagesUpload([]));
+    setImages([]);
     navigation.goBack()
   }
   const handleLongClickIntoImage = async (imageName: string) => {

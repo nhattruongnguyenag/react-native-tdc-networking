@@ -15,12 +15,11 @@ import { COLOR_BTN_BLUE, COLOR_DANGER } from '../constants/Color'
 import { ActivityIndicator } from 'react-native-paper'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { ACCEPT_FORGOTTEN_PASSWORD_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import { inlineStyles } from 'react-native-svg'
 import { isEmail } from '../utils/ValidateUtils'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { TEXT_SUBJECT_RESET_PASSWORD, TEXT_TITLE, TITLE_SUBJECT_RESET_PASSWORD } from '../constants/StringVietnamese'
 
 export default function ForgottenPasswordScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -43,10 +42,10 @@ export default function ForgottenPasswordScreen() {
   const onSubmit = () => {
     setIsLoading(true)
     axios
-      .post(SERVER_ADDRESS + 'api/users/get/email/reset', { to: email , subject: TEXT_SUBJECT_RESET_PASSWORD , content: ''})
+      .post(SERVER_ADDRESS + 'api/users/get/email/reset', { email: email })
       .then((response) => {
         setIsLoading(false)
-        navigation.navigate(ACCEPT_SCREEN, { email: email , subject: TEXT_SUBJECT_RESET_PASSWORD , title: TITLE_SUBJECT_RESET_PASSWORD , url: 'api/users/get/email/reset'})
+        navigation.navigate(ACCEPT_FORGOTTEN_PASSWORD_SCREEN, { email: email })
       })
       .catch((error) => {
         Alert.alert('Xác nhận thất bại', 'Email này chưa được đăng ký')
