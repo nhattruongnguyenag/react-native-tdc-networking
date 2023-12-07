@@ -67,7 +67,7 @@ export default function StudentRegistrationScreen() {
   const [student, setStudent] = useState<
     Omit<
       Student,
-      'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect' | 'facultyGroupCode'
+      'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect' | 'facultyGroupCode' | 'background' | 'phone'
     >
   >({
     id: 0,
@@ -78,8 +78,6 @@ export default function StudentRegistrationScreen() {
     image: '',
     facultyId: 0,
     majorId: 0,
-    background: '',
-    phone: '',
     studentCode: '',
     confimPassword: '',
     subject: t('RegisterStudentComponent.textAccountAuthen'),
@@ -137,8 +135,8 @@ export default function StudentRegistrationScreen() {
       isError: true
     }
   })
-  const [value, setValue] = useState('Chọn khoa')
-  const [item, setItem] = useState('Chọn ngành')
+  const [value, setValue] = useState(t('RegisterStudentComponent.placeholderFaculity'))
+  const [item, setItem] = useState(t('RegisterStudentComponent.placeholderMajor'))
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
   })
@@ -461,14 +459,13 @@ export default function StudentRegistrationScreen() {
   }, [student])
 
   useEffect(() => {
-    console.log(imagesUpload)
     setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
 
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      console.log(student)
+      setStudent({...student, image: imagesUpload? imagesUpload[0] : ''})
       axios
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
@@ -496,7 +493,8 @@ export default function StudentRegistrationScreen() {
       setValidate({ ...validate })
     }
   }, [validate])
-
+   console.log(student.image)
+   
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
@@ -666,9 +664,9 @@ export default function StudentRegistrationScreen() {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload && (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              )}
+              {imagesUpload != null ? (
+                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }}/>
+              ):''}
             </View>
           </View>
         </View>

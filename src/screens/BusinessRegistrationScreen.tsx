@@ -7,7 +7,7 @@ import { useTranslation } from 'react-multi-lang'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import DatePicker from 'react-native-date-picker'
-import { ActivityIndicator} from 'react-native-paper'
+import { ActivityIndicator } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextValidate from '../components/common/TextValidate'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
@@ -539,7 +539,6 @@ export default function BusinessRegistrationScreen() {
   }, [imagesUpload])
 
   const onSubmit = useCallback(() => {
-    
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
       console.log(business)
@@ -669,7 +668,7 @@ export default function BusinessRegistrationScreen() {
             isError={validate.phone?.isError}
             isVisible={validate.phone?.isVisible}
           />
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <TextInputWithTitle
               defaultValue={timeStart}
               textInputRef={timeStartRef}
@@ -697,7 +696,7 @@ export default function BusinessRegistrationScreen() {
                 setShowDatePickerStart(false)
               }}
             />
-
+          
             <TextInputWithTitle
               defaultValue={timeEnd}
               textInputRef={timeEndRef}
@@ -786,8 +785,10 @@ export default function BusinessRegistrationScreen() {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload && (
+              {imagesUpload !== null ? (
                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+              ) : (
+                ''
               )}
             </View>
           </View>
@@ -872,7 +873,7 @@ const styles = StyleSheet.create({
     borderColor: '#97A1B0',
     paddingLeft: 10,
     borderRadius: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   btnRegister: {
     backgroundColor: COLOR_BTN_BLUE,
@@ -922,6 +923,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderColor: '#228b22',
-    borderWidth: 2
+    borderWidth: 2,
   }
 })

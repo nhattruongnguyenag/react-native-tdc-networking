@@ -139,9 +139,9 @@ export default function JobApplyScreen() {
         }}
       >
         <Text style={styles.btnTitle}>
-          {cvSource.size === 0
-            ? t('JobApplyScreen.jobApplyScreenButtonAddCvTitle')
-            : t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle')}
+          {cvSource.size !== 0 || route.params?.profileId
+            ? t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle') 
+            : t('JobApplyScreen.jobApplyScreenButtonAddCvTitle')}
         </Text>
         <FontAwesome6Icon style={styles.btnIcon} name='upload' size={20} color='#fff' />
       </Pressable>

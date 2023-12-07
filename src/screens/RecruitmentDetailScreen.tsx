@@ -103,7 +103,7 @@ export default function RecruitmentDetailScreen() {
                         <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
                         <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}>
                           {' '}
-                          {formatVietNamCurrency(data.salary)} {t('RecuitmentPostDetailComponent.salaryUnitMonth')}
+                          {formatVietNamCurrency(data.salary)}{' '}{t('RecuitmentPostDetailComponent.salaryUnitMonth')}
                         </Text>
                       </View>
                     </View>

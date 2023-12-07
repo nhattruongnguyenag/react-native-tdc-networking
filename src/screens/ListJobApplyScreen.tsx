@@ -18,6 +18,7 @@ import { t } from 'react-multi-lang'
 import { useGetProfileApplyQuery, useJobApplyUpdateMutation } from '../redux/Service'
 import { Dropdown } from 'react-native-element-dropdown'
 import { Modal, PaperProvider, Portal } from 'react-native-paper'
+import RNFS from 'react-native-fs'
 
 interface JobApplyResponseData {
   status: string
@@ -176,11 +177,9 @@ export default function ListJobApplyScreen() {
                             </View>
                           </TouchableOpacity>
                           <TouchableOpacity onPress={() => openModal(item.status)}>
-                            <View style={[styles.itemChild, { flexDirection: 'row', alignItems: 'center' }]}>
-                              <Text style={[styles.lbl, { color: COLOR_SUCCESS }]}>
-                                {t('ListJobApplyComponent.textChangeStatus')}
-                              </Text>
-                            </View>
+                            <Text style={[styles.lbl, { color: COLOR_SUCCESS, marginLeft: 15 }]}>
+                              {t('ListJobApplyComponent.textChangeStatus')}
+                            </Text>
                           </TouchableOpacity>
 
                           <Portal>
@@ -251,12 +250,12 @@ const styles = StyleSheet.create({
   bottomBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-around',
     marginVertical: 10
   },
   btnBottom: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%'
   },
