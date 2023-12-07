@@ -4,7 +4,7 @@ import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { Modal } from 'react-native-paper'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { useRejectPostMutation } from '../../redux/Service'
-import { setPostRejectLog } from '../../redux/Slice'
+import { setPostRejectId, setPostRejectLog } from '../../redux/Slice'
 import ButtonFullWith from '../buttons/ButtonFullWith'
 import ButtonWithLoader from '../buttons/ButtonWithLoader'
 
@@ -30,6 +30,7 @@ function ModalPostRejectReason() {
     useEffect(() => {
         if (rejectPostResponse.data) {
             setVisible(false)
+            dispatch(setPostRejectId(postRejectLog?.postId))
             Alert.alert("Thành công !!!", "Đã từ chối bài viết thành công")
         }
     }, [rejectPostResponse.data])

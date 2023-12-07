@@ -13,7 +13,7 @@ import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringV
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
 import { useAcceptPostMutation, useDeletePostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
-import { setPostRejectLog } from '../../redux/Slice'
+import { setPostAcceptId, setPostDeleteId, setPostRejectLog } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
 import { PostResponseModel } from '../../types/response/PostResponseModel'
@@ -83,26 +83,28 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
 
     useEffect(() => {
         if (deletePostResponse.data) {
+            dispatch(setPostDeleteId(props.post?.id))
             Alert.alert(t('ModalPostRejectReason.successDeleteMessage'), t('ModalPostRejectReason.successDeleteMessageContent'))
         }
     }, [deletePostResponse.data])
 
     useEffect(() => {
         if (acceptPostResponse.data) {
-            Alert.alert(t('ModalPostRejectReason.successAcceptMessage'), t('ModalPostRejectReason.rejectSuccessMessage'))
+            dispatch(setPostAcceptId(props.post?.id))
+            Alert.alert(t('ModalPostRejectReason.successAcceptMessage'), t('ModalPostRejectReason.acceptSuccessageMessage'))
         }
     }, [acceptPostResponse.data])
 
     return (
         <View style={styles.body}>
-            {Boolean(props.post?.user.image) ? (
+            {Boolean(props.post?.user?.image) ? (
                 <Image source={{ uri: SERVER_ADDRESS + 'api/images/' + props.post?.user.image }} style={{ width: 45, height: 45, borderRadius: 999 }} />
             ) : (
-                <DefaultAvatar size={45} identifer={props.post?.user.name ? props.post?.user.name[0] : ''} />
+                <DefaultAvatar size={45} identifer={props.post?.user?.name ? props.post?.user.name[0] : ''} />
             )}
 
             <View style={styles.postInfoPrimaryWrapper}>
-                <Text style={styles.postPrimaryTitle}>{props.post?.user.name ?? t('ModalPostRejectReason.isLoading')}</Text>
+                <Text style={styles.postPrimaryTitle}>{props.post?.user?.name ?? t('ModalPostRejectReason.isLoading')}</Text>
                 <View style={styles.postInfoSecondaryWrapper}>
                     <Text>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : t('ModalPostRejectReason.isLoading')}</Text>
                     <View style={[styles.postTypeBadge, { backgroundColor: badgeColor }]}>

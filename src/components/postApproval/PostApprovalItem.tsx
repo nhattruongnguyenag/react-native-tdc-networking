@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import { PostResponseModel } from '../../types/response/PostResponseModel'
 import { SCREEN_WIDTH } from '../../utils/SystemDimensions'
+import SkeletonPostItem from '../SkeletonPostItem'
 import HeaderPostApprovalItem from './HeaderPostApprovalItem'
 import RecruitmentPostApprovalItem from './RecruitmentPostApprovalItem'
 import SurveyPostApprovalItem from './SurveyPostApprovalItem'
@@ -16,23 +17,31 @@ export interface PostApprovalItemProps {
     type?: number
     post?: PostResponseModel
     onAcceptedPost?: (postId: number) => void
+    loading?: boolean
 }
 
 export default function PostApprovalItem(props: PostApprovalItemProps) {
 
     return (
         <Pressable style={styles.container}>
-            <HeaderPostApprovalItem
-                type={props.type}
-                post={props.post}
-                onAcceptedPost={props.onAcceptedPost}
-            />
+            {
+                props.loading ?
+                    <SkeletonPostItem />
+                    :
+                    <Fragment>
+                        <HeaderPostApprovalItem
+                            type={props.type}
+                            post={props.post}
+                            onAcceptedPost={props.onAcceptedPost}
+                        />
 
-            <View style={styles.postBody}>
-                {props.post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={props.post} />}
-                {props.post?.type === TYPE_RECRUITMENT_POST && <RecruitmentPostApprovalItem post={props.post} />}
-                {props.post?.type === TYPE_SURVEY_POST && <SurveyPostApprovalItem post={props.post} />}
-            </View>
+                        <View style={styles.postBody}>
+                            {props.post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={props.post} />}
+                            {props.post?.type === TYPE_RECRUITMENT_POST && <RecruitmentPostApprovalItem post={props.post} />}
+                            {props.post?.type === TYPE_SURVEY_POST && <SurveyPostApprovalItem post={props.post} />}
+                        </View>
+                    </Fragment>
+            }
         </Pressable>
     )
 }
