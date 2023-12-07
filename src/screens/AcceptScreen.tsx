@@ -2,20 +2,17 @@ import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-naviga
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import axios from 'axios'
 import React, { useRef, useState } from 'react'
-import {
-  Alert,
-  Image, SafeAreaView, StyleSheet,
-  Text, TouchableOpacity,
-  View
-} from 'react-native'
+import { Alert, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import Video from 'react-native-video'
 import { RootStackParamList } from '../App'
 import { COLOR_BTN_BLUE } from '../constants/Color'
 import { LOGIN_SCREEN } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 export default function AcceptScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'ACCEPT_SCREEN'>>()
+  const t = useTranslation()
   const email = route.params?.email ?? ''
   const subject = route.params?.subject ?? ''
   const title = route.params?.title ?? ''
@@ -29,9 +26,9 @@ export default function AcceptScreen() {
 
   const onSubmit = () => {
     setIsLoading(true)
-    axios.post(SERVER_ADDRESS + url, { to: email , subject: subject , content: '' }).then((response) => {
+    axios.post(SERVER_ADDRESS + url, { to: email, subject: subject, content: '' }).then((response) => {
       setIsLoading(false)
-      Alert.alert('Thông báo', 'Đã gửi lại liên kết tới ' + email)
+      Alert.alert(t('AcceptScreen.titleNotify'), t('AcceptScreen.descriptionNotify') + email)
     })
   }
 
@@ -46,9 +43,9 @@ export default function AcceptScreen() {
         </View>
         <View style={styles.block}>
           <View>
-            <Text style={styles.txtLogin}>Kiểm tra email</Text>
+            <Text style={styles.txtLogin}>{t('AcceptScreen.checkEmail')}</Text>z
             <Text style={styles.txtDetail}>
-              Chúng tôi đã gửi đến email bạn liên kết {title}, vui lòng kiểm tra email
+              {t('AcceptScreen.description1') + title + t('AcceptScreen.description2')}
             </Text>
           </View>
           <TouchableOpacity
@@ -57,14 +54,19 @@ export default function AcceptScreen() {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={styles.txtB}>Quay về</Text>
+            <Text style={styles.txtB}>{t('AcceptScreen.back')}</Text>
           </TouchableOpacity>
           <View>
             <Text style={styles.txtBottom}>
-                Chưa nhận được email ??,&nbsp;   
-                <Text onPressIn={() => setTap(true)} onPressOut={() => setTap(false)} onPress={onSubmit} style={tap?styles.txtClick_Tap:styles.txtClick}>
-                 Gửi lại
-                </Text>
+            {t('AcceptScreen.notSend')}&nbsp;
+              <Text
+                onPressIn={() => setTap(true)}
+                onPressOut={() => setTap(false)}
+                onPress={onSubmit}
+                style={tap ? styles.txtClick_Tap : styles.txtClick}
+              >
+                {t('AcceptScreen.sendAgain')}
+              </Text>
             </Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </View>

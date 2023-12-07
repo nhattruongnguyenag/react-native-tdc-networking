@@ -20,9 +20,10 @@ import { inlineStyles } from 'react-native-svg'
 import { isEmail } from '../utils/ValidateUtils'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { TEXT_SUBJECT_RESET_PASSWORD, TEXT_TITLE, TITLE_SUBJECT_RESET_PASSWORD } from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 export default function ForgottenPasswordScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [checkEmail, setCheckEmail] = useState(true)
   const [email, setEmail] = useState('')
@@ -43,10 +44,10 @@ export default function ForgottenPasswordScreen() {
   const onSubmit = () => {
     setIsLoading(true)
     axios
-      .post(SERVER_ADDRESS + 'api/users/get/email/reset', { to: email , subject: TEXT_SUBJECT_RESET_PASSWORD , content: ''})
+      .post(SERVER_ADDRESS + 'api/users/get/email/reset', { to: email , subject:  t('ForgettenPassword.textSubjectResetPassword'), content: ''})
       .then((response) => {
         setIsLoading(false)
-        navigation.navigate(ACCEPT_SCREEN, { email: email , subject: TEXT_SUBJECT_RESET_PASSWORD , title: TITLE_SUBJECT_RESET_PASSWORD , url: 'api/users/get/email/reset'})
+        navigation.navigate(ACCEPT_SCREEN, { email: email , subject:  t('ForgettenPassword.titleSubjectResetPassword') , title:  t('ForgettenPassword.titleSubjectResetPassword') , url: 'api/users/get/email/reset'})
       })
       .catch((error) => {
         Alert.alert('Xác nhận thất bại', 'Email này chưa được đăng ký')
@@ -62,10 +63,12 @@ export default function ForgottenPasswordScreen() {
         </View>
         <View>
           <View>
-            <Text style={styles.txtLogin}>Quên mật khẩu</Text>
+            <Text style={styles.txtLogin}>
+              {t('ForgettenPassword.textForgetPassword')}
+            </Text>
           </View>
           <View style={styles.form}>
-            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>Email sai định dạng hoặc rỗng</Text> : ''}
+            {!checkEmail ? <Text style={{ color: 'red', marginTop: 10 }}>{t('ForgettenPassword.textNotification')}</Text> : ''}
             <View style={styles.group}>
               <Icon style={styles.icon} name='at' />
               <TextInput
@@ -81,7 +84,7 @@ export default function ForgottenPasswordScreen() {
             style={[styles.btnLogin, { opacity: isBtnDisabled ? 0.5 : 1 }]}
             onPress={() => onSubmit()}
           >
-            <Text style={styles.txtB}>Xác nhận</Text>
+            <Text style={styles.txtB}>{t('ForgettenPassword.textAccept')}</Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
         </View>
@@ -94,7 +97,7 @@ export default function ForgottenPasswordScreen() {
           }}
         >
           <Icon style={tap ? styles.iconBack_Tap : styles.iconBack} name='arrow-left' />
-          <Text style={tap ? styles.txtClick_Tap : styles.txtClick}>&nbsp;Quay lại</Text>
+          <Text style={tap ? styles.txtClick_Tap : styles.txtClick}>&nbsp;{t('ForgettenPassword.textBack')}</Text>
         </Text>
       </SafeAreaView>
     </ScrollView>

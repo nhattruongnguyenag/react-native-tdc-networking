@@ -640,5 +640,27 @@
         "follow": "Follow",
         "unFollow": "Unfollow",
         "profile": "Profile"
+    },
+    "ForgettenPassword":{
+        "textForgetPassword": "Forgot password",
+        "textNotification": "Email is incorrectly formatted or empty",
+        "textSubjectResetPassword": "Update password",
+        "titleSubjectResetPassword": "change the password",
+        "textAccept":"Confirm",
+        "textBack": "Come back"
+    },
+    "AcceptScreen":{
+        "checkEmail": "Check email",
+        "description1":"We have sent your email the link",
+        "description2":", please check your email",
+        "titleNotify":"Notification",
+        "descriptionNotify":"Link have been sent again to ",
+        "back": "Come back",
+        "notSend": "Haven't received email??,",
+        "sendAgain": "Send again"
+    },
+    "AuthenticateRegistraion":{
+        "textSubjectAuthenRegistration": "Verify account",
+        "titleSubjectAuthenRegistration": "verify account"
     }
 }
