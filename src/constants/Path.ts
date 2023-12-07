@@ -6,3 +6,6 @@ export const API_URL_STUDENT_POST = SERVER_ADDRESS + 'api/posts/group?code=group
 export const API_URL_FACULTY_POST = SERVER_ADDRESS + 'api/posts/group?code='
 export const API_URL_LIKE = SERVER_ADDRESS + 'api/posts/like'
 export const API_URL_GET_POST_BY_USER_ID = SERVER_ADDRESS + 'api/posts/group/user/detail'
+export const API_URL_DELETE_POST = SERVER_ADDRESS + 'api/posts/'
+export const API_URL_SAVE_POST = SERVER_ADDRESS + 'api/posts/user/save'
+export const API_URL_FOLLOW = SERVER_ADDRESS + 'api/users/follow'

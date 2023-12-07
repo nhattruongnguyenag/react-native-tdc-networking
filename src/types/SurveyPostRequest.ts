@@ -1,11 +1,11 @@
 import { Question } from './Question'
 
 export interface SurveyPostRequest {
-  groupId: number
+  postId?: number
+  groupId?: number
   type: string
   title: string
   description: string
-  images: string[]
-  userId: number
+  userId?: number
   questions: Question[]
 }

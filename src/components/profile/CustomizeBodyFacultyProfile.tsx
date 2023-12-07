@@ -2,24 +2,23 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLOR_BLACK, COLOR_BTN_BLUE, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import IconFontisto from 'react-native-vector-icons/Fontisto'
-import IconEvilIcons from 'react-native-vector-icons/EvilIcons'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFeather from 'react-native-vector-icons/Feather'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { FOLLOW_ACTION, MENU_CLICK_ACTION, MESSENGER_ACTION } from '../../constants/Variables'
+import { useTranslation } from 'react-multi-lang'
 
 
 interface FacultyProfileType {
+    t:ReturnType<typeof useTranslation>
+    isFollow: boolean,
     handleClickButtonEvent: (flag: number) => void,
-    timeWork: string,
-    address: string,
     phone: string,
     email: string,
     name: string,
-    numberPost: number
+    numberPost: number,
+    isSameUser: boolean,
 }
-
-
 export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfileType>) {
     return (
         <View style={styles.containerInfo}>
@@ -27,63 +26,62 @@ export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfi
             <Text style={[styles.name, styles.paddingVertical]}>{props.name}</Text>
             {/* Btn action */}
             <View style={[styles.buttonContainer, styles.paddingBottom]}>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
-                    style={[styles.buttonAction,
-                    styles.marginRightBtnAction]}
-                >
-                    <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
-                    <Text style={styles.txtContentBtn}>
-                        Gửi tin nhắn
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
-                    style={[styles.buttonAction,
-                    styles.marginRightBtnAction]}
-                >
-                    <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
-                    <Text style={styles.txtContentBtn}>
-                        Theo dõi
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
-                    style={[
-                        styles.marginRightBtnAction, styles.btnOption]}
-                >
-                    <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
-                </TouchableOpacity>
+                {
+                    !props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(MESSENGER_ACTION)}
+                        style={[styles.buttonAction,
+                        styles.marginRightBtnAction]}
+                    >
+                        <IconFontisto name='messenger' size={20} color={COLOR_WHITE} />
+                        <Text style={styles.txtContentBtn}>
+                            {props.t("Profile.chat")}
+                        </Text>
+                    </TouchableOpacity>
+                }
+                {
+                    !props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(FOLLOW_ACTION)}
+                        style={[styles.buttonAction,
+                        styles.marginRightBtnAction]}
+                    >
+                        {
+                            props.isFollow ? <IconIonicons name='person-remove-sharp' size={20} color={COLOR_WHITE} /> : <IconIonicons name='person-add' size={20} color={COLOR_WHITE} />
+                        }
+                        <Text style={styles.txtContentBtn}>
+                            {
+                               props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
+                            }
+                        </Text>
+                    </TouchableOpacity>
+                }
+
+                {
+                    props.isSameUser && <TouchableOpacity
+                        onPress={() => props.handleClickButtonEvent(MENU_CLICK_ACTION)}
+                        style={[
+                            styles.marginRightBtnAction, styles.btnOption]}
+                    >
+                        <IconEntypo name='dots-three-horizontal' size={20} color={COLOR_BLACK} />
+                    </TouchableOpacity>
+                }
             </View>
             {/* Info */}
             <View>
                 <View style={styles.infoContainer}>
-                    <IconIonicons
-                        style={styles.iconInfo}
-                        name='time-outline' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Thời gian hoạt động: {props.timeWork}</Text>
-                </View>
-                <View style={styles.infoContainer}>
-                    <IconEvilIcons
-                        style={styles.iconInfo}
-                        name='location' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Địa chỉ: {props.address}</Text>
-                </View>
-                <View style={styles.infoContainer}>
                     <IconFeather
                         style={styles.iconInfo}
                         name='phone-call' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Điện thoại: {props.phone}</Text>
+                    <Text style={styles.textInfo}>{props.t("Profile.profilePhone")}: {props.phone}</Text>
                 </View>
                 <View style={styles.infoContainer}>
                     <IconFontisto
                         style={styles.iconInfo}
                         name='email' size={20} color={COLOR_BLACK} />
-                    <Text style={styles.textInfo}>Email: {props.email}</Text>
+                    <Text style={styles.textInfo}>{props.t("Profile.profileEmail")}: {props.email}</Text>
                 </View>
             </View>
             {/* Number post */}
-            <Text style={[styles.paddingVertical]}>Bài viết ({props.numberPost})</Text>
+            <Text style={[styles.paddingVertical]}>{props.t("Profile.profileArticles")} ({props.numberPost})</Text>
             {/* Post */}
         </View>
     )

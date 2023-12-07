@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { QUESTION_COMPONENT_ADD_TEXT_TITLE } from '../../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { CONDUCT_MODE, EDIT_MODE } from '../../constants/Variables'
 import { QuestionProps } from '../../types/Question'
 import CheckboxInputWithTitle from '../inputs/CheckboxInputWithTitle'
 import QuestionBottomBarOptions from './QuestionBottomBarOptions'
@@ -12,31 +13,33 @@ interface MultiChoiceQuestionProps extends QuestionProps {
 
 export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
   const [selectedChoiceIds, setSelectedChoiceIds] = useState<number[]>([])
+  const t = useTranslation()
 
   useEffect(() => {
     props.onChangeValue && props.onChangeValue(selectedChoiceIds)
   }, [selectedChoiceIds])
 
   return (
-    <View style={styles.itemBody}>
+    <Pressable style={styles.itemBody}>
       <QuestionTitle
-        title={`${QUESTION_COMPONENT_ADD_TEXT_TITLE} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
+        required={props.mode.includes(CONDUCT_MODE) ? props.dataResponse?.required : props.data?.required}
+        title={`${t('MultiChoiceQuestion.questionComponentAddTextTitle')} ${(props.index ?? -1) + 1}. ${props.data?.title ?? props.dataResponse?.title}`}
         index={props.index ?? 0}
         isDisableBtnDelete={props.isDisableDeleteBtn}
       />
       {(props.data?.choices &&
         props.data.choices.map((item, index) => {
-          return <CheckboxInputWithTitle label={item} key={index} />
+          return <CheckboxInputWithTitle label={item.content} key={index} />
         })) ||
         (props.dataResponse?.choices &&
           props.dataResponse.choices.map((item, index) => {
             return (
               <CheckboxInputWithTitle
                 onPress={() => {
-                  if (selectedChoiceIds.indexOf(item.voteQuestionId) != -1) {
-                    setSelectedChoiceIds(selectedChoiceIds.filter((value) => value != item.voteQuestionId))
+                  if (selectedChoiceIds.indexOf(item.id) != -1) {
+                    setSelectedChoiceIds(selectedChoiceIds.filter((value) => value != item.id))
                   } else {
-                    setSelectedChoiceIds([...selectedChoiceIds, item.voteQuestionId])
+                    setSelectedChoiceIds([...selectedChoiceIds, item.id])
                   }
                 }}
                 label={item.content}
@@ -45,12 +48,12 @@ export default function MultiChoiceQuestion(props: MultiChoiceQuestionProps) {
             )
           }))}
       {
-        props.editMode && <QuestionBottomBarOptions
-          reviewMode={props.reviewMode}
-          conductMode={props.conductMode}
-          index={props.index} />
+        props.mode.includes(EDIT_MODE) && <QuestionBottomBarOptions
+          mode={props.mode}
+          index={props.index}
+          onBtnUpdateQuestionPress={props.onUpdateQuestion} />
       }
-    </View>
+    </Pressable>
   )
 }
 

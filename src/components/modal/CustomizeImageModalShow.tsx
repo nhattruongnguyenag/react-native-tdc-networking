@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Image } from 'react-native'
-import React from 'react'
+import React, { useTransition, memo } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
+import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { useTranslation } from 'react-multi-lang'
 
 interface ImageModalShowType {
+  t: ReturnType<typeof useTranslation>
   closeModal: () => void
   data: any
   authorInfo: any
@@ -15,7 +18,7 @@ interface ImageModalShowType {
   handleClickIntoUserNameOrAvatarEvent: () => void
 }
 
-export default function CustomizeImageModalShow(props: Readonly<ImageModalShowType>) {
+const CustomizeImageModalShow = (props: Readonly<ImageModalShowType>) => {
   return (
     <TouchableOpacity onPress={() => props.closeModal()} style={styles.wrapperContent}>
       <Pressable style={styles.containerContent}>
@@ -32,7 +35,7 @@ export default function CustomizeImageModalShow(props: Readonly<ImageModalShowTy
                 <DefaultAvatar identifer={props.authorInfo.name[0]} size={40} />
             }
             <Text style={styles.useName} numberOfLines={1}>
-              {props.authorInfo?.name}
+              {getFacultyTranslated(props.authorInfo?.name, props.t)}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => props.closeModal()}>
@@ -104,3 +107,4 @@ const styles = StyleSheet.create({
     width: '75%'
   }
 })
+export default memo(CustomizeImageModalShow)

@@ -9,90 +9,72 @@ import { onFocus } from '@reduxjs/toolkit/dist/query/core/setupListeners'
 import { TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Icon2 from 'react-native-vector-icons/AntDesign'
+import { useGetFollowingUserQuery } from '../../redux/Service'
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 
 
 let stompClient: Client
 const FollowingList = () => {
-  const [data, setData] = useState([])
-  const [searchData, setSearchData] = useState([])
+  const t = useTranslation()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const isFocused = useIsFocused()
   const [search, setSearch] = useState('')
-
-
-  useEffect(() => {
-    stompClient = getStompClient()
-    const onConnected = () => {
-      stompClient.subscribe(`/topic/user/detail/follow/following`, onMessageReceived)
-      stompClient.send(
-        `/app/user/detail/follow/following`,
-        {},
-        JSON.stringify({
-          userId: userLogin?.id,
-        })
-      )
+  const { data, isFetching } = useGetFollowingUserQuery(
+    {
+      id: userLogin?.id,
+    },
+    {
+      pollingInterval: 500
     }
-    const onMessageReceived = (payload: any) => {
-      setData(JSON.parse(payload.body))
-    }
-    const onError = (err: string | Frame) => {
-      console.log('Loi ko lay dc du lieu')
-    }
-    stompClient.connect({}, onConnected, onError)
-  }, [isFocused])
+  )
+  const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
 
   const handleFollow = (userFollowId: number) => {
-    stompClient.send(
-      `/app/user/detail/follow/following`,
-      {},
-      JSON.stringify({
-        userId: userLogin?.id,
-        userFollowId: userFollowId
-      })
+    axios.post(`${SERVER_ADDRESS}api/users/follow`, {
+      userFollowId: userFollowId,
+      userId: userLogin?.id
+    }
     )
   }
   const handleDelSearch = () => {
     setSearch('')
   }
 
-  const getDataSearch = (i: string)=>{
-    setSearch(i)
-    stompClient.send(
-      `/app/user/detail/follow/following/search`,
-      {},
-      JSON.stringify({
-        userId: userLogin?.id,
-        search: search
-      })
-    )
-  }
-  
-
   return (
-    <View>
+    <View style={styles.screen}>
       <View style={styles.search}>
-          <TextInput
-            value={search}
-            style={styles.txt_input} placeholder='Tìm kiếm ...'
-            onChangeText={(i) => getDataSearch(i)}
-          />
-          <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
-          {search != '' ? (
-            <Pressable
-              style={{ position: 'absolute', right: 0, paddingRight: 20, marginTop: 20 }}
-              onPress={handleDelSearch}
-            >
-              <Icon2 name='closecircleo' size={18} color='grey' />
-            </Pressable>
-          ) : null}
-        </View>
-      <FollowListView data={data} handleFollow={handleFollow} />
+        <TextInput
+          value={search}
+          style={styles.txt_input} placeholder={t('FollowComponent.search')}
+          onChangeText={(i) => setSearch(i)}
+        />
+        <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
+        {search != '' ? (
+          <Pressable
+            style={{ position: 'absolute', right: 0, paddingRight: 20, marginTop: 20 }}
+            onPress={handleDelSearch}
+          >
+            <Icon2 name='closecircleo' size={18} color='grey' />
+          </Pressable>
+        ) : null}
+      </View>
+      {
+        search == '' ? 
+        (<FollowListView data={data?.data} handleFollow={handleFollow} />) 
+        : 
+        (<FollowListView data={filter} handleFollow={handleFollow} />)
+      }
+      
     </View>
   )
 
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   search: {
     marginTop: 10,
     marginBottom: 10,

@@ -1,13 +1,16 @@
 import {
   Alert,
+  Button,
   Image,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  useWindowDimensions
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
@@ -15,14 +18,14 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
-import { COLOR_BTN_BLUE } from '../constants/Color'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { Student } from '../types/Student'
 import axios, { AxiosResponse } from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import { ActivityIndicator } from 'react-native-paper'
+import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
 import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
@@ -35,49 +38,8 @@ import {
   isPassword
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
-import {
-  TEXT_ALERT_REGISTER_FAILT,
-  TEXT_ALERT_REGISTER_SUCCESS,
-  TEXT_ERROR_CHECKSAMEEMAIL,
-  TEXT_ERROR_CONFIMPASSWORD,
-  TEXT_ERROR_CONFIMPASS_MATCHPASS,
-  TEXT_ERROR_EMAIL_NOTFORMAT,
-  TEXT_ERROR_EMAIL_NOTIMPTY,
-  TEXT_ERROR_EMAIL_NOTLENGTH,
-  TEXT_ERROR_FACULITYNOTEMPTY,
-  TEXT_ERROR_MAJORNAME,
-  TEXT_ERROR_MAJORNAME_NOTEMPTY,
-  TEXT_ERROR_PASSWORD_NOTFORMAT,
-  TEXT_ERROR_PASSWORD_NOTIMPTY,
-  TEXT_ERROR_PASSWORD_NOTLENGTH,
-  TEXT_ERROR_STUDENTCODE,
-  TEXT_ERROR_STUDENTCODE_NOTFORMAT,
-  TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER,
-  TEXT_ERROR_STUDENTNAME,
-  TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
-  TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
-  TEXT_IMAGE_PICKER,
-  TEXT_LOGIN,
-  TEXT_PLACEHOLDER_CONFIMPASS,
-  TEXT_PLACEHOLDER_EMAIL,
-  TEXT_PLACEHOLDER_FACULITY,
-  TEXT_PLACEHOLDER_FACULiTY_SEARCH,
-  TEXT_PLACEHOLDER_MAJOR,
-  TEXT_PLACEHOLDER_PASSWORD,
-  TEXT_PLACEHOLDER_STUDENTCODE,
-  TEXT_PLACEHOLDER_STUDENTNAME,
-  TEXT_REGISTER,
-  TEXT_REQUEST_LOGIN,
-  TEXT_TITLE_CONFIMPASS,
-  TEXT_TITLE_EMAIL_REGISTER,
-  TEXT_TITLE_FACULITY,
-  TEXT_TITLE_MAJOR,
-  TEXT_TITLE_NITIFICATION,
-  TEXT_TITLE_PASSWORD,
-  TEXT_TITLE_REGISTER_STUDENT,
-  TEXT_TITLE_STUDENTCODE,
-  TEXT_TITLE_STUDENTNAME
-} from '../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
+import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TEXT_SUBJECT_RESET_PASSWORD, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -100,8 +62,14 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
+  type OpenURLButtonProps = {
+    url: string
+    children: string
+  }
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -117,65 +85,69 @@ export default function StudentRegistrationScreen() {
     email: '',
     name: '',
     image: '',
-    facultyName: '',
-    major: '',
+    facultyId: 0,
+    majorId: 0,
+    background: '',
+    phone: '',
     studentCode: '',
-    confimPassword: ''
+    confimPassword: '',
+    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
+    content:''
   })
   const [dataRequest, setDataRequest] = useState([
     {
-      id: '',
+      id: 0,
       name: '',
       majors: [
         {
-          id: '',
+          id: 0,
           name: ''
         }
       ]
     }
   ])
 
-  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: '', name: '' }])
+  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: 0, name: '' }])
   const [isLoading, setIsLoading] = useState(false)
   const [validate, setValidate] = useState<RegisterStudent>({
     name: {
-      textError: TEXT_ERROR_STUDENTNAME,
+      textError: t('RegisterStudentComponent.errorStudentNameEmpty'),
       isVisible: false,
       isError: true
     },
     email: {
-      textError: TEXT_ERROR_EMAIL_NOTIMPTY,
+      textError: t('RegisterStudentComponent.errorEmailEmpty'),
       isVisible: false,
       isError: true
     },
     studentCode: {
-      textError: TEXT_ERROR_STUDENTCODE,
+      textError: t('RegisterStudentComponent.errorStudentCodeEmpty'),
       isVisible: false,
       isError: true
     },
     facultyName: {
-      textError: TEXT_ERROR_FACULITYNOTEMPTY,
+      textError: t('RegisterStudentComponent.errorFaculityEmpty'),
       isVisible: false,
       isError: true
     },
     major: {
-      textError: TEXT_ERROR_MAJORNAME,
+      textError: t('RegisterStudentComponent.errorMajor'),
       isVisible: false,
       isError: true
     },
     password: {
-      textError: TEXT_ERROR_PASSWORD_NOTIMPTY,
+      textError: t('RegisterStudentComponent.errorPasswordEmpty'),
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: TEXT_ERROR_CONFIMPASSWORD,
+      textError: t('RegisterStudentComponent.errorConfimPasswordEmpty'),
       isVisible: false,
       isError: true
     }
   })
-  const [value, setValue] = useState('')
-  const [item, setItem] = useState('')
+  const [value, setValue] = useState('Chọn khoa')
+  const [item, setItem] = useState('Chọn ngành')
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
   })
@@ -202,7 +174,7 @@ export default function StudentRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTNAME
+            textError: t('RegisterStudentComponent.errorStudentNameEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -211,7 +183,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: TEXT_ERROR_STUDENTNAME_NOTSPECIAL_CHARACTER,
+            textError: t('RegisterStudentComponent.errorStudentNameNotSpecial'),
             isVisible: true
           }
         })
@@ -221,7 +193,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: TEXT_ERROR_STUDENTNAME_NOTLENGTHMAX,
+            textError: t('RegisterStudentComponent.errorStudentNameNotLengthMax'),
             isVisible: true
           }
         })
@@ -249,7 +221,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE
+            textError: t('RegisterStudentComponent.errorStudentCodeEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -259,7 +231,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE_NOTSPECIAL_CHARACTER
+            textError: t('RegisterStudentComponent.errorStudentCodeNotSpecial')
           }
         })
       } else if (!stCode.test(value)) {
@@ -269,7 +241,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_STUDENTCODE_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorStudentCodeNotFormat')
           }
         })
       } else {
@@ -295,7 +267,7 @@ export default function StudentRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: TEXT_ERROR_CHECKSAMEEMAIL,
+              textError: t('RegisterStudentComponent.errorSameEmail'),
               isVisible: true
             }
           })
@@ -315,7 +287,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTIMPTY
+            textError: t('RegisterStudentComponent.errorEmailEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -325,7 +297,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTLENGTH
+            textError: t('RegisterStudentComponent.errorEmailNotLengthMax')
           }
         })
       } else if (!isEmail(value)) {
@@ -335,7 +307,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_EMAIL_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorEmailNotFormat')
           }
         })
       } else {
@@ -361,7 +333,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTIMPTY
+            textError: t('RegisterStudentComponent.errorPasswordEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
@@ -371,7 +343,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTLENGTH
+            textError: t('RegisterStudentComponent.errorPassNotLengthMax')
           }
         })
       } else if (!isPassword(value)) {
@@ -381,7 +353,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_PASSWORD_NOTFORMAT
+            textError: t('RegisterStudentComponent.errorPassNotFormat')
           }
         })
       } else {
@@ -407,7 +379,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASSWORD
+            textError: t('RegisterStudentComponent.errorConfimPasswordEmpty')
           }
         })
       } else if (value != student.password) {
@@ -417,7 +389,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_CONFIMPASS_MATCHPASS
+            textError: t('RegisterStudentComponent.errorConfimPassNotMatch')
           }
         })
       } else {
@@ -434,16 +406,16 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleMajorNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, major: value })
-      if (isBlank(value)) {
+    (value: number) => {
+      setStudent({ ...student, majorId: value })
+      if (value == null) {
         setValidate({
           ...validate,
           major: {
             ...validate.major,
             isError: true,
             isVisible: true,
-            textError: TEXT_ERROR_MAJORNAME_NOTEMPTY
+            textError: t('RegisterStudentComponent.errorMajorEmpty')
           }
         })
       } else {
@@ -460,16 +432,17 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleFacultyNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, facultyName: value })
-      if (isBlank(value)) {
+    (value: any) => {
+      setStudent({ ...student, facultyId: value.id })
+      setDataNganhRequest(value.majors)
+      if (value == null) {
         setValidate({
           ...validate,
           facultyName: {
             ...validate.facultyName,
             isVisible: true,
             isError: true,
-            textError: TEXT_ERROR_FACULITYNOTEMPTY
+            textError: t('RegisterStudentComponent.errorFaculityEmpty')
           }
         })
       } else {
@@ -490,11 +463,6 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
-        dataRequest.map((data) => {
-          if (data.name === student.facultyName) {
-            setDataNganhRequest(data.majors)
-          }
-        })
       })
       .catch((error) => {
         console.log(error)
@@ -505,19 +473,29 @@ export default function StudentRegistrationScreen() {
     setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
   }, [imagesUpload])
 
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const openModal = () => {
+    setModalVisible(true)
+  }
+
+  const closeModal = () => {
+    setModalVisible(false)
+  }
+
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
+      console.log(student)
       axios
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
-          Alert.alert(TEXT_TITLE_NITIFICATION, TEXT_ALERT_REGISTER_SUCCESS)
-          navigation.navigate(LOGIN_SCREEN)
+          openModal()
+          navigation.navigate(ACCEPT_SCREEN, { email: student.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           console.log(error)
-          Alert.alert(TEXT_ALERT_REGISTER_FAILT, TEXT_ERROR_CHECKSAMEEMAIL)
           setIsLoading(false)
         })
     } else {
@@ -533,204 +511,247 @@ export default function StudentRegistrationScreen() {
     }
   }, [validate])
 
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 100,
+    height: 230
+  }
+
   return (
-    <ScrollView style={{backgroundColor:'#fff'}}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
-            <Icon name='chevron-left' size={20} color={'#ffff'} />
-          </TouchableOpacity>
-          <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>{TEXT_TITLE_REGISTER_STUDENT}</Text>
-          </View>
-        </View>
-
-        <View style={styles.form}>
-          <TextInputWithTitle
-            value={student.name}
-            title={TEXT_TITLE_STUDENTNAME}
-            placeholder={TEXT_PLACEHOLDER_STUDENTNAME}
-            onChangeText={(value) => handleStudentNameChange(value)}
-            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.name?.textError}
-            isError={validate.name?.isError}
-            isVisible={validate.name?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={student.studentCode}
-            title={TEXT_TITLE_STUDENTCODE}
-            placeholder={TEXT_PLACEHOLDER_STUDENTCODE}
-            onChangeText={(value) => handleStudentCodeChange(value)}
-            textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.studentCode?.textError}
-            isError={validate.studentCode?.isError}
-            isVisible={validate.studentCode?.isVisible}
-          />
-
-          <TextInputWithTitle
-            value={student.email}
-            title={TEXT_TITLE_EMAIL_REGISTER}
-            placeholder={TEXT_PLACEHOLDER_EMAIL}
-            onChangeText={(value) => handleEmailChange(value)}
-            onBlur={() => handleCheckEmail()}
-            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
-          />
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.email?.textError}
-            isError={validate.email?.isError}
-            isVisible={validate.email?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_FACULITY}</Text>
-            <Dropdown
-              style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={dataRequest}
-              search
-              labelField='name'
-              valueField='id'
-              placeholder={TEXT_PLACEHOLDER_FACULITY}
-              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
-              value={value}
-              onChange={(item) => {
-                setValue(item.id)
-                handleFacultyNameChange(item.name)
-              }}
-            />
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.facultyName?.textError}
-            isError={validate.facultyName?.isError}
-            isVisible={validate.facultyName?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_MAJOR}</Text>
-            <Dropdown
-              placeholder={TEXT_PLACEHOLDER_MAJOR}
-              style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={dataNganhRequest}
-              search
-              labelField='name'
-              valueField='id'
-              searchPlaceholder={TEXT_PLACEHOLDER_FACULiTY_SEARCH}
-              value={item}
-              onChange={(item) => {
-                setItem(item.id)
-                handleMajorNameChange(item.name)
-              }}
-            />
-          </View>
-
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.major?.textError}
-            isError={validate.major?.isError}
-            isVisible={validate.major?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_PASSWORD}</Text>
-            <TextInput
-              value={student.password}
-              placeholder={TEXT_PLACEHOLDER_PASSWORD}
-              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck.secureTextEntry ? true : false}
-              onChangeText={(value) => handlePasswordChange(value)}
-            ></TextInput>
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
-              <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+    <PaperProvider>
+      <ScrollView style={{ backgroundColor: '#fff' }}>
+        <SafeAreaView>
+          <View style={styles.header}>
+            <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
+              <Icon name='chevron-left' size={20} color={'#ffff'} />
             </TouchableOpacity>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.txtHeader}>{t('RegisterStudentComponent.titleRegisterStudent')}</Text>
+            </View>
           </View>
 
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.password?.textError}
-            isError={validate.password?.isError}
-            isVisible={validate.password?.isVisible}
-          />
-
-          <View style={styles.group}>
-            <Text style={styles.txt}>{TEXT_TITLE_CONFIMPASS}</Text>
-            <TextInput
-              value={student.confimPassword}
-              placeholder={TEXT_PLACEHOLDER_CONFIMPASS}
-              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
-              secureTextEntry={isCheck1.secureTextEntry ? true : false}
-              onChangeText={(value) => handleConfirmPasswordChange(value)}
+          <View style={styles.form}>
+            <TextInputWithTitle
+              defaultValue={student.name}
+              title={t('RegisterStudentComponent.titleStudentName')}
+              placeholder={t('RegisterStudentComponent.placeholderStudentName')}
+              onChangeText={(value) => handleStudentNameChange(value)}
+              textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
             />
 
-            <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
-              <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-            </TouchableOpacity>
-          </View>
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.name?.textError}
+              isError={validate.name?.isError}
+              isVisible={validate.name?.isVisible}
+            />
 
-          <TextValidate
-            customStyle={{ marginLeft: 10 }}
-            textError={validate.confimPassword?.textError}
-            isError={validate.confimPassword?.isError}
-            isVisible={validate.confimPassword?.isVisible}
-          />
+            <TextInputWithTitle
+              defaultValue={student.studentCode}
+              title={t('RegisterStudentComponent.titleStudentCode')}
+              placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
+              onChangeText={(value) => handleStudentCodeChange(value)}
+              textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
+            />
 
-          <View style={styles.group}>
-            <View style={styles.logo}>
-              <Text style={styles.txt}>{TEXT_IMAGE_PICKER}</Text>
-              <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
-                <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.studentCode?.textError}
+              isError={validate.studentCode?.isError}
+              isVisible={validate.studentCode?.isVisible}
+            />
+
+            <TextInputWithTitle
+              defaultValue={student.email}
+              title={t('RegisterStudentComponent.titleEmail')}
+              placeholder={t('RegisterStudentComponent.placeholderEmail')}
+              onChangeText={(value) => handleEmailChange(value)}
+              onBlur={() => handleCheckEmail()}
+              textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
+            />
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.email?.textError}
+              isError={validate.email?.isError}
+              isVisible={validate.email?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleFaculity')}</Text>
+              <Dropdown
+                style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={dataRequest}
+                search
+                labelField='name'
+                valueField='id'
+                placeholder={value}
+                searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
+                value={value}
+                onChange={(item) => {
+                  setValue(item.name)
+                  handleFacultyNameChange(item)
+                }}
+              />
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.facultyName?.textError}
+              isError={validate.facultyName?.isError}
+              isVisible={validate.facultyName?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
+              <Dropdown
+                placeholder={item}
+                style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={dataNganhRequest}
+                search
+                labelField='name'
+                valueField='id'
+                searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
+                value={item}
+                onChange={(item) => {
+                  setItem(item.name)
+                  handleMajorNameChange(item.id)
+                }}
+              />
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.major?.textError}
+              isError={validate.major?.isError}
+              isVisible={validate.major?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titlePass')}</Text>
+              <TextInput
+                value={student.password}
+                placeholder={t('RegisterStudentComponent.placeholderPass')}
+                style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck.secureTextEntry ? true : false}
+                onChangeText={(value) => handlePasswordChange(value)}
+              ></TextInput>
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
+                <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
               </TouchableOpacity>
             </View>
-            <View style={{ alignItems: 'center' }}>
-              {imagesUpload ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
-              )}
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.password?.textError}
+              isError={validate.password?.isError}
+              isVisible={validate.password?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.titleConfimPass')}</Text>
+              <TextInput
+                value={student.confimPassword}
+                placeholder={t('RegisterStudentComponent.placeholderConfimPass')}
+                style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
+                secureTextEntry={isCheck1.secureTextEntry ? true : false}
+                onChangeText={(value) => handleConfirmPasswordChange(value)}
+              />
+
+              <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
+                <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+              </TouchableOpacity>
+            </View>
+
+            <TextValidate
+              customStyle={{ marginLeft: 10 }}
+              textError={validate.confimPassword?.textError}
+              isError={validate.confimPassword?.isError}
+              isVisible={validate.confimPassword?.isVisible}
+            />
+
+            <View style={styles.group}>
+              <View style={styles.logo}>
+                <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
+                <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
+                  <Icon name='camera-retro' size={20}></Icon>
+                  <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                {imagesUpload ? (
+                  <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                ) : (
+                  ''
+                )}
+              </View>
             </View>
           </View>
-        </View>
 
-        <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>{TEXT_REGISTER}</Text>
-          <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
-        </TouchableOpacity>
-        <View style={styles.login}>
-          <Text>{TEXT_REQUEST_LOGIN} </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(LOGIN_SCREEN)
-            }}
-          >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>{TEXT_LOGIN}</Text>
+          <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
+            <Text style={styles.txtRegister}>{t('RegisterStudentComponent.titleRegister')}</Text>
+            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+          <Portal>
+            <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
+              <View style={styles.headerModal}>
+                <Text style={styles.txtModal}>Thông báo</Text>
+              </View>
+              <View style={styles.container}>
+                <Text style={styles.txt}>Đăng ký tài khoản thành công! Kiểm tra email để xác thực tài khoản</Text>
+              </View>
+              <View style={styles.btnBottom}>
+                <TouchableOpacity style={[styles.btnItem, { marginRight: 5 }]}>
+                  <Text style={styles.txtBottom} onPress={closeModal}>
+                    Tôi hiểu rồi!
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </Portal>
+          <View style={styles.login}>
+            <Text>{t('RegisterStudentComponent.requestLogin')} </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(LOGIN_SCREEN)
+              }}
+            >
+              <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+                {t('RegisterStudentComponent.titleLogin')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </PaperProvider>
   )
 }
 
 const styles = StyleSheet.create({
+  headerModal: {
+    borderBottomWidth: 0.7
+  },
+  txtModal: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 14
+  },
   header: {
     backgroundColor: '#1e90ff',
     alignItems: 'center',
@@ -836,5 +857,21 @@ const styles = StyleSheet.create({
   textInput: {
     borderColor: '#228b22',
     borderWidth: 2
+  },
+  btnBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  btnItem: {
+    padding: 5,
+    backgroundColor: '#1e90ff',
+    borderRadius: 10
+  },
+  txtBottom: {
+    color: COLOR_WHITE,
+    fontWeight: 'bold',
+    fontSize: 18
   }
 })

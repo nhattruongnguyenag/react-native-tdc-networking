@@ -7,15 +7,17 @@ interface ButtonFullWithProps {
   title?: string
   onPress?: () => void
   contentStyle?: StyleProp<ViewStyle>
-  iconName: string
+  iconName?: string
   btnStyle?: StyleProp<ViewStyle>
   textColor?: string
   disable?: boolean
+  loading?: boolean
 }
 
 export default function ButtonFullWith(props: ButtonFullWithProps) {
   return (
     <Button
+      loading={props.loading}
       disabled={Boolean(props.disable)}
       contentStyle={[props.contentStyle]}
       icon={props.iconName}

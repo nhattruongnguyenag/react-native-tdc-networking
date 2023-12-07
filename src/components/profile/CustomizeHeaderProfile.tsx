@@ -8,6 +8,7 @@ import { SCREEN_HEIGHT } from '../../utils/SystemDimensions'
 import { CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, SEE_AVATAR, SEE_BACKGROUND } from '../../constants/Variables'
 
 interface HeaderProfileType {
+  isSameUser: boolean,
   background: string,
   avatar: string | null,
   name: string,
@@ -23,11 +24,13 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
           style={styles.imageBackground}
           source={{ uri: SERVER_ADDRESS + `api/images/${props.background}` }} />
         <View style={styles.wrapperCameraBackground}>
-          <Pressable
-            onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
-            style={[styles.btnUploadImageBackground, styles.border]}>
-            <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-          </Pressable>
+          {
+            props.isSameUser && <Pressable
+              onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
+              style={[styles.btnUploadImageBackground, styles.border]}>
+              <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
+            </Pressable>
+          }
         </View>
       </Pressable>
       <Pressable
@@ -42,11 +45,6 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
                 style={styles.avatar}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
               />
-              <Pressable
-                onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
-                style={[styles.btnUploadImageAvatar, styles.border]}>
-                <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-              </Pressable>
             </View>
             :
             <View style={styles.imageAvatarWrapper}>
