@@ -299,7 +299,8 @@
         "jobApplyScreenUploadErrorFormat": "PDF形式が正しくありません"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "メッセージを読み込んでいます..."
+        "messageScreenLoaderTitle": "メッセージを読み込んでいます...",
+        "messageEmptyList": "新しいメッセージはありません"
     },
     "MessengerToolbar": {
         "userStatusActive": "アクティブ",
@@ -632,6 +633,7 @@
         "successAcceptMessage": "成功！！！",
         "successDeleteMessageContent": "投稿を正常に削除しました",
         "rejectSuccessMessage": "投稿が正常に拒否されました",
+        "acceptSuccessageMessage": "投稿が正常に承認されました",
         "notePlaceholder": "メモ...",
         "acceptPostMenuItem": "投稿を承認",
         "rejectPostMenuItem": "投稿を拒否",
@@ -650,5 +652,8 @@
         "follow": "フォロー",
         "unFollow": "フォローを解除",
         "profile": "プロフィール"
+    },
+    "NoMorePost": {
+        "noMorePost": "新しい投稿はありません"
     }
 }

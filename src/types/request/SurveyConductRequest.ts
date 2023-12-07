@@ -1,4 +1,5 @@
 export interface SurveyConductRequest {
+  post_id: number
   user_id: number
   answers: AnswerRequest[]
 }

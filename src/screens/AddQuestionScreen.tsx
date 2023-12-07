@@ -63,7 +63,6 @@ export default function AddQuestionScreen() {
           setSelectedType(null)
         }}
         onCompleteSaveQuestion={(question) => {
-          console.log(question)
           dispatch(addQuestion(question))
         }} />
 

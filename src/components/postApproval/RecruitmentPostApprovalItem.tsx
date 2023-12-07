@@ -15,7 +15,6 @@ export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps
     const [recruitmentPost, setRecruitmentPost] = useState<RecruitmentPostResponseModel>({} as RecruitmentPostResponseModel)
 
     const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-        console.log(idPost)
         navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
     }
 
@@ -39,5 +38,3 @@ export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps
         />
     )
 }
-
-const styles = StyleSheet.create({})

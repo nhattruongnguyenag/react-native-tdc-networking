@@ -298,7 +298,8 @@
         "jobApplyScreenUploadErrorFormat": "PDF format is incorrect"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Loading messages..."
+        "messageScreenLoaderTitle": "Loading messages...",
+        "messageEmptyList": "No new messages"
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
@@ -631,6 +632,7 @@
         "successAcceptMessage": "Success !!!",
         "successDeleteMessageContent": "Successfully deleted the post",
         "rejectSuccessMessage": "Post rejected successfully",
+        "acceptSuccessageMessage": "Successfully approved the post",
         "notePlaceholder": "Note...",
         "acceptPostMenuItem": "Approve post",
         "rejectPostMenuItem": "Reject post",
@@ -649,5 +651,8 @@
         "follow": "Follow",
         "unFollow": "Unfollow",
         "profile": "Profile"
+    },
+    "NoMorePost": {
+        "noMorePost": "No new posts"
     }
 }

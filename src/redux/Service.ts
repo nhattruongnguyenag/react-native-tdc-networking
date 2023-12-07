@@ -23,6 +23,13 @@ import { PostSavedModel } from '../types/response/PostSavedModel'
 import { NotificationModel } from '../types/response/NotificationModel'
 import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
 import { Post } from '../types/Post'
+import { createEntityAdapter } from '@reduxjs/toolkit'
+
+const itemsAdapter = createEntityAdapter({
+  selectId: (item: PostResponseModel) => item.id
+})
+
+const itemsSelector = itemsAdapter.getSelectors()
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -204,7 +211,7 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       }),
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
     }),
     getRecruitmentPostUpdate: builder.query<RecruitmentPost, { postId: number }>({
       query: (data) => ({
@@ -280,6 +287,7 @@ export const {
   useGetFollowingUserQuery,
   useGetFollowerUserQuery,
   useGetPostsQuery,
+  useLazyGetPostsQuery,
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,
@@ -303,3 +311,8 @@ export const {
   useGetPostsByIdQuery,
   useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI
+
+export {
+  itemsSelector,
+  itemsAdapter
+}

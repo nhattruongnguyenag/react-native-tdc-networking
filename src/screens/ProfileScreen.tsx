@@ -63,12 +63,13 @@ const ProfileScreen = ({ route }: any) => {
 
     useEffect(() => {
         if (data) {
-            console.log('================call profile====================');
             setIsLoading(false);
             setPost([]);
             setIsCalled(true);
-            setTypeAuthorPost(data.data.user['roleCodes']);
-            setUserInfo(data.data.user);
+            if (data.data.user !== null) {
+                setTypeAuthorPost(data.data.user['roleCodes']);
+                setUserInfo(data.data.user);
+            }
             setIsFollow(data.data.isFollow)
             setPost(data.data.posts);
             setIsLoading(false);
@@ -144,7 +145,7 @@ const ProfileScreen = ({ route }: any) => {
                 group={group}
                 handleUnSave={handleSavePost}
                 handleDelete={handleDeletePost}
-                active={item.active} 
+                active={item.active}
             />
         )
     }, [post]

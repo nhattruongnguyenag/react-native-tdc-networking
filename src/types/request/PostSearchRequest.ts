@@ -6,4 +6,6 @@ export interface PostSearchRequest {
     userId?: number
     postId?: number
     type?: string
+    limit?: number
+    offset?: number
 }
