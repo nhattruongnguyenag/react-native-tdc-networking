@@ -120,7 +120,7 @@ import { SurveyPostResponseModel } from './types/response/SurveyResponsePostModa
 
 
 export type RootStackParamList = {
-  ACCEPT_SCREEN: { email: string , subject: string , title: string, url: string } | undefined
+  ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -145,10 +145,10 @@ export type RootStackParamList = {
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { group: number } | UpdateNormalPost | undefined
+  CREATE_NORMAL_POST_SCREEN: { group: number } | { updateNormalPost: UpdateNormalPost } | undefined
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
-  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?: number, cvUrl?: string } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
@@ -160,7 +160,7 @@ export type RootStackParamList = {
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
   UPDATE_PROFILE: { userData: Student | Faculty | Business | null }
-  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
+  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number, status?: string } | undefined
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
 }
@@ -245,7 +245,7 @@ export function DrawerNavigator(): JSX.Element {
 
 export function StackNavigator(): JSX.Element {
   const t = useTranslation()
-  
+
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}

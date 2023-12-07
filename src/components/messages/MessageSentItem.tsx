@@ -5,6 +5,7 @@ import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from '
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
+import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { MESSAGE_ITEM_STATUS_RECEIVED, MESSAGE_ITEM_STATUS_SEEN } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
@@ -149,7 +150,7 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
         </View>
         <View style={{ opacity: isLastItem || isSingleItem ? 1 : 0 }}>
           {props.message.sender.image ? (
-            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: props.message.sender.image }} />
+            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + props.message.sender.image }} />
           ) : (
             <DefaultAvatar size={AVATAR_HEIGHT} identifer={props.message.sender.name[0]} />
           )}
@@ -205,7 +206,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
                 <Image
                   style={MessageSectionTimeItemStyle.imageItem}
                   source={{
-                    uri: SERVER_ADDRESS + 'api/images/' + item,
+                    uri: API_URL_RENDER_IMAGE + item,
                     width:
                       images.length > 1 && images.length % 2 == 1 && index == images.length - 1
                         ? imageWidth * 2 + 3
@@ -219,7 +220,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
         </View>
 
         {data.sender.image ? (
-          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: data.sender.image }} />
+          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + data.sender.image }} />
         ) : (
           <DefaultAvatar size={AVATAR_HEIGHT} identifer={data.sender.name[0]} />
         )}

@@ -59,12 +59,14 @@ const MyProfileScreen = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('=================call my profile===================');
       setIsLoading(false);
       setPost([]);
       setIsCalled(true);
-      setTypeAuthorPost(data.data.user['roleCodes']);
-      setUserInfo(data.data.user);
+      if (data.data.user) {
+        setTypeAuthorPost(data.data.user['roleCodes']);
+        setUserInfo(data.data.user);
+      }
+
       setIsFollow(data.data.isFollow)
       setPost(data.data.posts);
       setIsLoading(false);
@@ -173,7 +175,6 @@ const MyProfileScreen = () => {
     } else if (flag === FOLLOW_ACTION) {
       handleClickFollowEvent();
     } else if (flag === CALL_ACTION) {
-      console.log('call');
     } else {
       handleClickIntoButtonMenu3dotEvent();
     }

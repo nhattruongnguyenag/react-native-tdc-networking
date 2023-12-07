@@ -289,7 +289,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "Notification"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Loading messages..."
+        "messageScreenLoaderTitle": "Loading messages...",
+        "messageEmptyList": "No new messages"
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
@@ -622,6 +623,7 @@
         "successAcceptMessage": "Success !!!",
         "successDeleteMessageContent": "Successfully deleted the post",
         "rejectSuccessMessage": "Post rejected successfully",
+        "acceptSuccessageMessage": "Successfully approved the post",
         "notePlaceholder": "Note...",
         "acceptPostMenuItem": "Approve post",
         "rejectPostMenuItem": "Reject post",
@@ -662,5 +664,8 @@
     "AuthenticateRegistraion":{
         "textSubjectAuthenRegistration": "Verify account",
         "titleSubjectAuthenRegistration": "verify account"
+    },
+    "NoMorePost": {
+        "noMorePost": "No new posts"
     }
 }

@@ -9,7 +9,6 @@ interface QuestionTitleProps {
 }
 
 export default function QuestionTitle(props: QuestionTitleProps) {
-  console.log('required', props.required)
   return (
     <View style={styles.body}>
       <Text style={styles.questionTitle}>{props.title}</Text>

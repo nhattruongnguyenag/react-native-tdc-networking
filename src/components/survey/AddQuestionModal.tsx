@@ -217,7 +217,6 @@ export default function AddQuestionModal(props: AddQuestionModalProps) {
                     ...choices[index],
                     content: value
                   }
-                  console.log(JSON.stringify(choices))
 
                   setQuestion({
                     ...question,
