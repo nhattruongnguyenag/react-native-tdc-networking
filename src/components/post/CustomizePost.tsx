@@ -41,9 +41,6 @@ import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
-  console.log('====================================');
-  console.log("CustomizePost");
-  console.log('====================================');
   const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   let post = props

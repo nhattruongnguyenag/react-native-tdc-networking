@@ -1,24 +1,27 @@
 import { Pressable, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NormalOptionItem from '../components/option/NormalOptionItem'
 import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAppDispatch } from '../redux/Hook';
 import { setDefaultLanguage } from '../redux/Slice';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LABEL_LANGUAGE } from '../constants/KeyValue';
+import { useTranslation } from 'react-multi-lang';
 const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
   { label: 'Japanese', value: 'ja' },
-
+  
 ];
 export default function ApplicationOptionScreen() {
   const dispatch = useAppDispatch()
-  const [language, setLanguage] = useState('vi')
+  const [language, setLanguage] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-
+  const [label, setLabel] = useState('Vietnamese');
+  const t = useTranslation()
 
   const openModal = () => {
     setModalVisible(true);
@@ -28,19 +31,31 @@ export default function ApplicationOptionScreen() {
     setModalVisible(false);
   };
 
-
   // 
   const handleChangeLangue = () => {
     dispatch(setDefaultLanguage(language))
+    AsyncStorage.setItem(LABEL_LANGUAGE, JSON.stringify(label))
     setModalVisible(false);
   }
 
+  useEffect(() => {
+    AsyncStorage.getItem(LABEL_LANGUAGE)
+      .then((json) => {
+        if (json) {
+          const label_ = JSON.parse(json)
+          
+          if (label_) {
+            setLabel(label_)
+          }
+        }
+      })
+  },[])
 
   const renderLabel = () => {
     if (value || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-          Ngôn ngữ
+          {t('ApplicationOptionComponent.language')}
         </Text>
       );
     }
@@ -54,14 +69,14 @@ export default function ApplicationOptionScreen() {
     <View style={styles.body}>
       <PaperProvider>
         <View style={styles.option}>
-          <NormalOptionItem iconName='globe' title='Ngôn ngữ' onItemPress={openModal} />
-          <NormalOptionItem iconName='user' title='Thông tin cá nhân' />
-          <NormalOptionItem iconName='key' title='Mật khẩu' />
+          <NormalOptionItem iconName='globe' title={t('ApplicationOptionComponent.language')} onItemPress={openModal} />
+          <NormalOptionItem iconName='user' title={t('ApplicationOptionComponent.info')} />
+          <NormalOptionItem iconName='key' title={t('ApplicationOptionComponent.password')} />
         </View>
         <Portal>
           <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
             <View style={styles.header}>
-              <Text style={styles.txtHeader}>Ngôn ngữ</Text>
+              <Text style={styles.txtHeader}>{t('ApplicationOptionComponent.language')}</Text>
             </View>
             <View style={styles.container}>
               {renderLabel()}
@@ -76,13 +91,14 @@ export default function ApplicationOptionScreen() {
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? "Vietnamese" : '...'}
+                placeholder={!isFocus ? label : '...'}
                 searchPlaceholder="Search..."
                 value={value}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={item => {
                   setLanguage(item.value)
+                  setLabel(item.label)
                   setIsFocus(false);
                 }}
               />
@@ -97,10 +113,9 @@ export default function ApplicationOptionScreen() {
                 styles.btn
               ]} onPress={closeModal}>
                 {({ pressed }) => (
-                  <Text style={{ fontWeight: 'bold' }} >Hủy</Text>
+                  <Text style={{ fontWeight: 'bold' }} >{t('ApplicationOptionComponent.cancel')}</Text>
                 )}
               </Pressable>
-
               <Pressable style={({ pressed }) => [
                 {
                   backgroundColor: pressed
@@ -110,7 +125,7 @@ export default function ApplicationOptionScreen() {
                 styles.btn
               ]}  onPress={handleChangeLangue}>
                 {({ pressed }) => (
-                  <Text style={{ fontWeight: 'bold' }}>Thay đổi</Text>
+                  <Text style={{ fontWeight: 'bold' }}>{t('ApplicationOptionComponent.change')}</Text>
                 )}
               </Pressable>
             </View>

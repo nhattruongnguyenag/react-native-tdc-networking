@@ -120,9 +120,17 @@ export default function SearchScreen() {
   }
 
   const likeAction = (obj: LikeAction) => {
+    obj.code = TYPE_POST_BUSINESS
+    // like(obj)
   }
 
+  // const like = useCallback((likeData: LikeAction) => {
+  //   stompClient.send(`/app/posts/group/like`, {}, JSON.stringify(likeData))
+  // }, [code])
+
+
   const handleUnSave = () => { }
+  const handleDelete = () => { }
 
   const checkType = () => {
     switch (subjects) {
@@ -158,8 +166,9 @@ export default function SearchScreen() {
                   description={item.description ?? null}
                   isSave={item.isSave}
                   group={''}
-                  handleUnSave={handleUnSave}
-                />
+                  handleUnSave={handleUnSave} 
+                  handleDelete={handleDelete} 
+                  active={0}                />
               ))}
           </>
         )

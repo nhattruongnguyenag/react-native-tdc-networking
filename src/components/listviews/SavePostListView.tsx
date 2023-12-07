@@ -47,8 +47,9 @@ const SavePostListView = (props: SavePostType) => {
                     description={item.description ?? null}
                     isSave={item.isSave}
                     group={''}
-                    handleUnSave={handleUnSave}
-                />
+                    handleUnSave={handleUnSave} handleDelete={function (post_id: number): void {
+                        throw new Error('Function not implemented.')
+                    } } active={0}                />
                 )}
         </ScrollView>
     )

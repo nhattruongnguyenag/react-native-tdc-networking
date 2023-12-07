@@ -202,6 +202,7 @@ export function DrawerNavigator(): JSX.Element {
         if (json) {
           const defaultLanguage = JSON.parse(json)
           if (defaultLanguage) {
+            moment.locale(defaultLanguage, locale.get(defaultLanguage))
             setDefaultLanguage(defaultLanguage)
           }
         }

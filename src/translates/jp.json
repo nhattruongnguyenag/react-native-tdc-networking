@@ -644,5 +644,12 @@
         "follow": "フォロー",
         "unFollow": "フォローを解除",
         "profile": "プロフィール"
+    },
+    "ApplicationOptionComponent": {
+        "language": "言語",
+        "info": "個人情報",
+        "password": "パスワード",
+        "cancel": "キャンセル",
+        "change": "変更"
     }
 }

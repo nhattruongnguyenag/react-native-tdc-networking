@@ -640,5 +640,12 @@
         "follow": "Follow",
         "unFollow": "Unfollow",
         "profile": "Profile"
+    },
+    "ApplicationOptionComponent": {
+        "language": "Language",
+        "info": "Personal Information",
+        "password": "Password",
+        "cancel": "Cancel",
+        "change": "Change"
     }
 }

@@ -645,5 +645,12 @@
         "follow": "Theo dõi",
         "unFollow": "Hủy theo dõi",
         "profile": "Trang cá nhân"
+    },
+    "ApplicationOptionComponent": {
+        "language": "Ngôn ngữ",
+        "info": "Thông tin cá nhân",
+        "password":"Mật khẩu",
+        "cancel": "Hủy",
+        "change": "Thay đổi"
     }
 }
