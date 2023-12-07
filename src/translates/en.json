@@ -623,6 +623,7 @@
         "successAcceptMessage": "Success !!!",
         "successDeleteMessageContent": "Successfully deleted the post",
         "rejectSuccessMessage": "Post rejected successfully",
+        "acceptSuccessageMessage": "Successfully approved the post",
         "notePlaceholder": "Note...",
         "acceptPostMenuItem": "Approve post",
         "rejectPostMenuItem": "Reject post",
@@ -641,5 +642,8 @@
         "follow": "Follow",
         "unFollow": "Unfollow",
         "profile": "Profile"
+    },
+    "NoMorePost": {
+        "noMorePost": "No new posts"
     }
 }

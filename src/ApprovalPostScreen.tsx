@@ -1,16 +1,25 @@
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native'
 import Loading from './components/common/Loading'
 import ModalPostRejectReason from './components/postApproval/ModalPostRejectReason'
+import NoMorePost from './components/postApproval/NoMorePost'
 import PostApprovalItem, { POST_APPROVAL } from './components/postApproval/PostApprovalItem'
-import { useAppSelector } from './redux/Hook'
+import SkeletonPostApprove from './components/postApproval/SkeletonPostApprove'
+import { useAppDispatch, useAppSelector } from './redux/Hook'
 import { useGetPostsQuery } from './redux/Service'
+import { setPostAcceptId, setPostRejectId } from './redux/Slice'
+import { PostResponseModel } from './types/response/PostResponseModel'
+import { buildPostSearchRequest } from './utils/PostHelper'
 import { isAdmin, isFaculty } from './utils/UserHelper'
 
+const LIMIT = 3
+
 export default function ApprovalPostScreen() {
-  const { userLogin } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const { userLogin, postRejectId, postAcceptId } = useAppSelector(state => state.TDCSocialNetworkReducer)
+  const [offset, setOffset] = useState(0)
   const t = useTranslation()
+  const dispatch = useAppDispatch()
   const group = useMemo(() => {
     if (isAdmin(userLogin)) {
       return "group_connect_business"
@@ -27,36 +36,82 @@ export default function ApprovalPostScreen() {
     return ""
   }, [userLogin])
 
-  const { data, isLoading } = useGetPostsQuery({
+  const { data, isLoading, isFetching } = useGetPostsQuery({
     active: 0,
     group: group,
-    ownerFaculty: faculty
+    ownerFaculty: faculty,
+    limit: LIMIT,
+    offset: offset
   }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
+
+  const [posts, setPosts] = useState<PostResponseModel[]>([])
+
+  useEffect(() => {
+    if (data) {
+      setPosts([...posts, ...data.data])
+    }
+  }, [data])
+
+  useEffect(() => {
+    console.log(buildPostSearchRequest({
+      active: 0,
+      group: group,
+      ownerFaculty: faculty,
+      limit: LIMIT,
+      offset: offset
+    }))
+  }, [offset])
+
+  useEffect(() => {
+    if (postRejectId) {
+      setPosts([...posts].filter(post => post.id !== postRejectId))
+      dispatch(setPostRejectId(undefined))
+    }
+  }, [postRejectId])
+
+  useEffect(() => {
+    if (postAcceptId) {
+      setPosts([...posts].filter(post => post.id !== postAcceptId))
+      dispatch(setPostAcceptId(undefined))
+    }
+  }, [postAcceptId])
+
+  const onLoadMore = useCallback(() => {
+    if (data && data.data.length === LIMIT) {
+      setOffset(posts.length)
+    }
+  }, [posts, data])
 
   return (
     <SafeAreaView style={styles.body}>
       {
-        isLoading ? <Loading title={t('ApprovingScreen.isLoading')} />
+        isLoading ? <Loading title={t('PenddingPostScreen.loading')} />
           :
-          <Fragment>
+          <>
             {
-              data?.data.length ?
-                <Fragment>
+              posts.length > 0 ?
+                <>
                   <FlatList
-                    keyExtractor={(item, index) => index.toString()}
-                    data={data?.data}
+                    data={posts}
                     renderItem={({ item, index }) =>
                       <PostApprovalItem
-                        type={POST_APPROVAL}
                         post={item}
-                      />}
+                        type={POST_APPROVAL}
+                        loading={isFetching && index === posts.length - 1}
+                      />
+                    }
+                    ListFooterComponent={data && data.data.length < LIMIT ?
+                      <NoMorePost />
+                      :
+                      <SkeletonPostApprove loading={isFetching} />}
+                    onEndReached={() => onLoadMore()}
                   />
                   <ModalPostRejectReason />
-                </Fragment>
+                </>
                 :
-                <Text style={{ marginTop: -60 }}>{t('ApprovingScreen.emptyMessage')}</Text>
+                <Text style={{ marginTop: -60 }}>{t('PenddingPostScreen.emptyMessage')}</Text>
             }
-          </Fragment>
+          </>
       }
     </SafeAreaView>
   )
