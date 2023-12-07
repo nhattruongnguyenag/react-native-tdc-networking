@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View, Button, Image, TouchableOpacity, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
@@ -22,18 +22,49 @@ const ListPostSavedScreen = () => {
   const [search, setSearch] = useState('')
   const [value, setValue] = useState(null)
   const t = useTranslation()
+  const [data, setData] = useState<Post[]>()
 
-  const { data, isFetching } = useGetListPostSavedQuery(userLogin ? userLogin.id : -1, {
-    pollingInterval: 1000
-  })
-  const filter = (data?.data)?.filter(item => item.type == 'thong-thuong' ? (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')) : item.title?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ')))
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/save`, onMessageReceived)
+    }
+    const onMessageReceived = (payload: any) => {
+      console.log('123');
+      setData(JSON.parse(payload.body))
+    }
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
 
-  const likeAction = () => {
-    axios
-      .post(`${SERVER_ADDRESS}api/posts/like`, {
-        postId: 1,
-        userId: 1
+  useEffect(() => {
+    axios.get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`).then((response) => {
+      setData(response.data.data)
+    })
+  }, [])
+
+  const likeAction = (obj: LikeAction) => {
+    like(obj)
+  }
+
+  const like = useCallback(async (likeData: LikeAction) => {
+    stompClient.send(`/app/posts/save/user/like`,
+      {}, JSON.stringify(likeData))
+  }, [])
+
+  const handleUnSave = (post_id: number) => {
+    stompClient.send(
+      `/app/posts/save/user/unsave`,
+      {},
+      JSON.stringify({
+        postId: post_id,
+        userId: userLogin?.id
       })
+    )
+  }
+  const handleDelete = (post_id: number) => {
   }
 
   return (
@@ -47,25 +78,47 @@ const ListPostSavedScreen = () => {
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
       </View>
       <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={<RefreshControl
-        refreshing={false}
-        onRefresh={() => data}
-      />}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl
+          refreshing={false}
+          onRefresh={() => data}
+        />}
       >
-        {
-          search == '' ?
-            <SavePostListView data={data?.data}/>
-            : 
-            <SavePostListView data={filter}/>
-        }
+            {
+              data?.map((item: any) => <CustomizePost
+                id={item.id}
+                userId={item.user['id']}
+                name={item.user['name']}
+                avatar={item.user['image']}
+                typeAuthor={'Doanh Nghiệp'}
+                available={null}
+                timeCreatePost={item.createdAt}
+                content={item.content}
+                type={item.type}
+                likes={item.likes}
+                comments={item.comment}
+                commentQty={item.commentQuantity}
+                images={item.images}
+                role={item.user['roleCodes']}
+                likeAction={likeAction}
+                location={item.location ?? null}
+                title={item.title ?? null}
+                expiration={item.expiration ?? null}
+                salary={item.salary ?? null}
+                employmentType={item.employmentType ?? null}
+                description={item.description ?? null}
+                isSave={item.isSave}
+                group={''}
+                handleUnSave={handleUnSave}
+                handleDelete={handleDelete}
+                active={0} />
+              )}
       </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-
   search: {
     marginTop: 10,
     marginBottom: 10,

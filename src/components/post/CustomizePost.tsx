@@ -179,7 +179,7 @@ const CustomizePost = (props: Post) => {
   }
 
   const identifyTypeAuthor = useCallback((type: string) => {
-    console.log("identifyTypeAuthor");
+    // console.log("identifyTypeAuthor");
     if (type == TYPE_POST_FACULTY) {
       return t("Post.normalPostIdentifyAuthorFaculty")
     } else if (type == TYPE_POST_BUSINESS) {
