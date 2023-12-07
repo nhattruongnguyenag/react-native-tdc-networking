@@ -169,7 +169,7 @@ const CustomizePost = (props: Post) => {
       content: props.content,
       images: props.images
     }
-    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost })
+    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost: updateNormalPost })
   }
 
   const handleSeeListCvPost = () => {
