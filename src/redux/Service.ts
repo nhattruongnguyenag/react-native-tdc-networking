@@ -3,33 +3,26 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
 import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { Post } from '../types/Post'
 import { PostRejectedLog } from '../types/PostRejectLog'
 import { RecruitmentPost } from '../types/RecruitmentPost'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
+import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
+import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
 import { FollowUserModel } from '../types/response/FollowUserModel'
+import { JobApplyRespose } from '../types/response/JobApplyResponse'
+import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
 import { MessageResponseData } from '../types/response/MessageResponseData'
+import { NotificationModel } from '../types/response/NotificationModel'
 import { PostResponseModel } from '../types/response/PostResponseModel'
+import { PostSavedModel } from '../types/response/PostSavedModel'
 import { SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPostRequest'
 import { buildPostSearchRequest } from '../utils/PostHelper'
-import { JobApplyRespose } from '../types/response/JobApplyResponse'
-import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
-import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
-import { PostSavedModel } from '../types/response/PostSavedModel'
-import { NotificationModel } from '../types/response/NotificationModel'
-import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
-import { Post } from '../types/Post'
-import { createEntityAdapter } from '@reduxjs/toolkit'
-
-const itemsAdapter = createEntityAdapter({
-  selectId: (item: PostResponseModel) => item.id
-})
-
-const itemsSelector = itemsAdapter.getSelectors()
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -311,8 +304,3 @@ export const {
   useGetPostsByIdQuery,
   useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI
-
-export {
-  itemsSelector,
-  itemsAdapter
-}

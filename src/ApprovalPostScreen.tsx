@@ -20,6 +20,7 @@ export default function ApprovalPostScreen() {
   const [offset, setOffset] = useState(0)
   const t = useTranslation()
   const dispatch = useAppDispatch()
+  const [isFirstLoading, setIsFirstLoading] = useState(true)
   const group = useMemo(() => {
     if (isAdmin(userLogin)) {
       return "group_connect_business"
@@ -48,6 +49,7 @@ export default function ApprovalPostScreen() {
 
   useEffect(() => {
     if (data) {
+      setIsFirstLoading(false)
       setPosts([...posts, ...data.data])
     }
   }, [data])
@@ -89,7 +91,7 @@ export default function ApprovalPostScreen() {
           :
           <>
             {
-              posts.length > 0 ?
+              data && posts.length > 0 ?
                 <>
                   <FlatList
                     data={posts}
