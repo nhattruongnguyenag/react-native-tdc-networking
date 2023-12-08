@@ -334,8 +334,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ メッセージ"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "送信中...",
         "messageItemStatusReceived": "受信済み",
         "messageItemStatusSeen": "表示済み"
+    },
+    "MessageDate": {
+        "today": "今日",
+        "yesterday": "昨日"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "追加",

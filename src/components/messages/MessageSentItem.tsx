@@ -9,7 +9,7 @@ import { COLOR_BLUE } from '../../constants/Color'
 import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
-import { IMAGES, SENDING } from '../../screens/MessageScreen'
+import { IMAGES, RECEIVED, SEEN, SENDING } from '../../screens/MessageScreen'
 import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
 import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
@@ -119,6 +119,18 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
 
   const [isVisibleMessageStatus, setStatusMessageVisible] = useState(false)
 
+  const messageStatus = useMemo(() => {
+    if (props.message.status === RECEIVED) {
+      return 'MessageSentItem.messageItemStatusReceived'
+    } else if (props.message.status === SEEN) {
+      return 'MessageSentItem.messageItemStatusSeen'
+    } else if (props.message.status === SENDING) {
+      return 'MessageSentItem.messageItemStatusSending'
+    }
+
+    return ''
+  }, [props.message])
+
   return (
     <View
       style={{
@@ -158,8 +170,13 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
         </View>
       </View>
       <View style={styles.messageStatus}>
-        <Text style={{ textAlign: 'right', fontSize: 13, display: isVisibleMessageStatus ? 'flex' : 'none' }}>
-          {Boolean(props.message.status) ? t('MessageSentItem.messageItemStatusReceived') : t('MessageSentItem.messageItemStatusSeen')}
+        <Text style={{
+          textAlign: 'right',
+          fontSize: 12, marginTop: 2,
+          display: isVisibleMessageStatus || props.message.status === SENDING ? 'flex' : 'none',
+          color: props.message.status === SENDING ? COLOR_BLUE : '#555'
+        }}>
+          {t(messageStatus)}
         </Text>
       </View>
     </View>
@@ -248,9 +265,11 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
 }
 
 export default function MessageSentItem(props: MessageItemProps): React.JSX.Element {
+  const t = useTranslation()
+
   return (
     <View style={[{ alignItems: 'flex-end' }, MessageSectionTimeItemStyle.body]}>
-      <MessageSectionTitle title={getMessageSectionTitle(props.data.createdAt)} visible={props.dayHeaderVisible} />
+      <MessageSectionTitle title={getMessageSectionTitle(t, props.data.createdAt)} visible={props.dayHeaderVisible} />
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>
         <View style={[MessageSectionTimeItemStyle.messageContentWrapper, styles.messageContentWrapper]}>
           {messageContentRenderItems(props.data, props.index)}
