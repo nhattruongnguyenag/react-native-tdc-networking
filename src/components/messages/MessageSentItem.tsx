@@ -265,9 +265,11 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
 }
 
 export default function MessageSentItem(props: MessageItemProps): React.JSX.Element {
+  const t = useTranslation()
+
   return (
     <View style={[{ alignItems: 'flex-end' }, MessageSectionTimeItemStyle.body]}>
-      <MessageSectionTitle title={getMessageSectionTitle(props.data.createdAt)} visible={props.dayHeaderVisible} />
+      <MessageSectionTitle title={getMessageSectionTitle(t, props.data.createdAt)} visible={props.dayHeaderVisible} />
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>
         <View style={[MessageSectionTimeItemStyle.messageContentWrapper, styles.messageContentWrapper]}>
           {messageContentRenderItems(props.data, props.index)}

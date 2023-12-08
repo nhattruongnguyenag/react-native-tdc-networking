@@ -330,8 +330,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Message"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Sending...",
         "messageItemStatusReceived": "Received",
         "messageItemStatusSeen": "Seen"
+    },
+    "MessageDate": {
+        "today": "Today",
+        "yesterday": "Yesterday"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Add",

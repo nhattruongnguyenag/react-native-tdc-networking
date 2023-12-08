@@ -1,5 +1,6 @@
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
@@ -224,9 +225,11 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
 }
 
 export default function MessageReceivedItem(props: MessageItemProps) {
+  const t = useTranslation()
+
   return (
     <Pressable style={MessageSectionTimeItemStyle.body}>
-      <MessageSectionTitle title={getMessageSectionTitle(props.data.createdAt)} visible={props.dayHeaderVisible} />
+      <MessageSectionTitle title={getMessageSectionTitle(t, props.data.createdAt)} visible={props.dayHeaderVisible} />
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>
         <View style={[MessageSectionTimeItemStyle.messageContentWrapper, styles.messageContentWrapper]}>
           {messageContentRenderItems(props.data, props.index)}

@@ -338,6 +338,10 @@
         "messageItemStatusReceived": "Đã nhận",
         "messageItemStatusSeen": "Đã xem"
     },
+    "MessageDate": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua"
+    },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Thêm",
         "addQuestionViewComponentButtonComplete": "Hoàn tất",
