@@ -24,8 +24,8 @@ export default function DrawerHeader() {
 
 const styles = StyleSheet.create({
   body: {
-    borderTopWidth: 20,
-    borderTopColor: '#e0e0e0',
+    borderTopWidth: 22,
+    borderTopColor: '#f0f0f0',
     padding: 15
   },
   avatar: {
