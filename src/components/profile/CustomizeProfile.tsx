@@ -10,7 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { useAppSelector } from '../../redux/Hook'
 import { useTranslation } from 'react-multi-lang'
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { memo } from 'react'
 
 export interface CustomizeProfileType {

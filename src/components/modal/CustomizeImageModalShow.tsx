@@ -6,7 +6,7 @@ import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
 import CustomizeLayoutImageNotify from '../post/CustomizeLayoutImageNotifyPost'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { useTranslation } from 'react-multi-lang'
 
 interface ImageModalShowType {

@@ -231,7 +231,8 @@
         "createSurveyScreen": "Create Survey",
         "createRecruitmentScreen": "Create Job Posting",
         "createUpdateProfile": "Update Personal Information",
-        "manageJobApply": "Manage application job"
+        "manageJobApply": "Manage application job",
+        "studentAndFacultyScreen": "Student discussion group"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Go back",

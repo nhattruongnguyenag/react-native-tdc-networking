@@ -24,6 +24,7 @@ import { Post } from '../types/Post'
 import { isFaculty, isStudent } from '../utils/UserHelper'
 import { Student } from '../types/Student'
 import { Faculty } from '../types/Faculty'
+import { GetPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -59,7 +60,7 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
-    setCode((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).facultyGroupCode : '');
+    setCode((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).code : '');
   }, [userLogin]);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export default function FacultyDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: (userLogin as Faculty).facultyGroupId ?? 0 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: -1 });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN);
     } else {
@@ -138,40 +139,36 @@ export default function FacultyDashboardScreen() {
   }, [logout])
 
   const renderItem = useCallback((item: any) => {
-    if (item.active === 1) {
-      return (
-        <CustomizePost
-          id={item.id}
-          userId={item.user['id']}
-          name={item.user['name']}
-          avatar={item.user['image']}
-          typeAuthor={item.user['roleCodes']}
-          available={null}
-          timeCreatePost={item.createdAt}
-          content={item.content}
-          type={item.type}
-          likes={item.likes}
-          comments={item.comment}
-          commentQty={item.commentQuantity}
-          images={item.images}
-          role={item.user['roleCodes']}
-          likeAction={likeAction}
-          location={item.location ?? null}
-          title={item.title ?? null}
-          expiration={item.expiration ?? null}
-          salary={item.salary ?? null}
-          employmentType={item.employmentType ?? null}
-          description={item.description ?? null}
-          isSave={item.isSave}
-          group={code}
-          handleUnSave={handleSavePost}
-          handleDelete={handleDeletePost}
-          active={item.active}
-        />
-      )
-    } else {
-      return null;
-    }
+    return (
+      <CustomizePost
+        id={item.id}
+        userId={item.user['id']}
+        name={item.user['name']}
+        avatar={item.user['image']}
+        typeAuthor={item.user['roleCodes']}
+        available={null}
+        timeCreatePost={item.createdAt}
+        content={item.content}
+        type={item.type}
+        likes={item.likes}
+        comments={item.comment}
+        commentQty={item.commentQuantity}
+        images={item.images}
+        role={item.user['roleCodes']}
+        likeAction={likeAction}
+        location={item.location ?? null}
+        title={item.title ?? null}
+        expiration={item.expiration ?? null}
+        salary={item.salary ?? null}
+        employmentType={item.employmentType ?? null}
+        description={item.description ?? null}
+        isSave={item.isSave}
+        group={code}
+        handleUnSave={handleSavePost}
+        handleDelete={handleDeletePost}
+        active={item.active}
+      />
+    )
   }, [facultyPost])
 
 

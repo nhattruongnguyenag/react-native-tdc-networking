@@ -586,7 +586,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     }, [validate, imagesUpload])
 
     useEffect(() => {
-        if (isAllFieldsValidStudent(validate)) {
+        if (isAllFieldsValidBusiness(validate)) {
             axios
                 .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business', business)
                 .then((responseUpdate: any) => {
@@ -989,7 +989,7 @@ export function UpdateFaculty(props: Readonly<UpdateType>) {
     }, [validate, imagesUpload])
 
     useEffect(() => {
-        if (isAllFieldsValidStudent(validate)) {
+        if (isAllFieldsValidFaculty(validate)) {
             axios
                 .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/faculty', faculty)
                 .then((responseUpdate: any) => {

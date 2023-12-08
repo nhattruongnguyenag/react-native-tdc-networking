@@ -13,14 +13,13 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  FACULTY_DASHBOARD_SCREEN,
-  STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   MANAGEMENT_JOB_APPLY_SCREEN,
   BUSINESS_DASHBOARD_SCREEN,
   APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN,
   LOGIN_SCREEN,
-  PEDDING_POST_SCREEN
+  PEDDING_POST_SCREEN,
+  STUDENT_AND_FACULTY_GROUP
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
@@ -29,11 +28,11 @@ import DrawerHeader from './DrawerHeader'
 import { useTranslation } from 'react-multi-lang'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { isAdmin, isFaculty, isStudent, isBusiness } from '../../utils/UserHelper'
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
-import { getGroupForPost } from '../../utils/GetGroup'
-import { groupBusiness, groupStudent } from '../../constants/Variables'
-import { useDispatch } from 'react-redux'
+import { TYPE_POST_BUSINESS, groupBusiness } from '../../constants/Variables'
 import { setIsLogout } from '../../redux/Slice'
+import { Faculty } from '../../types/Faculty'
+import { Student } from '../../types/Student'
+import { getGroupForPost } from '../../utils/GetGroup'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -47,15 +46,14 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
   }, [])
 
   const t = useTranslation()
-
+  const isUserFacultyOrStudent = (isFaculty(userLogin) || isStudent(userLogin));
+  const groupCode = isUserFacultyOrStudent ? (userLogin as unknown as Faculty || userLogin as unknown as Student).facultyGroupCode : "";
   const getScreenOfUser = (role: string) => {
-    let screen = '';
-    if (role === TYPE_POST_STUDENT) {
-      screen = STUDENT_DISCUSSION_DASHBOARD_SCREEN;
-    } else if (role === TYPE_POST_FACULTY) {
-      screen = FACULTY_DASHBOARD_SCREEN;
-    } else {
+    let screen: string = '';
+    if (role === TYPE_POST_BUSINESS) {
       screen = BUSINESS_DASHBOARD_SCREEN;
+    } else {
+      screen = STUDENT_AND_FACULTY_GROUP;
     }
     navigation.navigate(screen);
   }
@@ -76,17 +74,16 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           {isStudent(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
-              label={getGroupForPost(groupStudent, t)}
+              label={getGroupForPost(groupCode, t)}
               onPress={() => getScreenOfUser(userLogin.roleCodes)}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
           )}
-
           {isFaculty(userLogin) && (
             <DrawerItem
               style={{ marginStart: 60 }}
-              label={getGroupForPost(userLogin?.facultyGroupCode + "", t)}
+              label={getGroupForPost(groupCode, t)}
               onPress={() => getScreenOfUser(userLogin.roleCodes)}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}

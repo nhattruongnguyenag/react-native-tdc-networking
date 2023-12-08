@@ -27,6 +27,7 @@ import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import { useGetPostsByIdQuery } from '../redux/Service';
 import { isFaculty, isStudent } from '../utils/UserHelper';
+import { GetPostActive } from '../utils/GetPostActive';
 
 const MyProfileScreen = () => {
   const t = useTranslation();
@@ -128,7 +129,7 @@ const MyProfileScreen = () => {
 
 
   const renderItem = useCallback((item: any) => {
-    if (item.active === 1) {
+    if (GetPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}

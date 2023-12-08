@@ -227,7 +227,8 @@
         "createUpdateProfile": "Cập nhật thông tin cá nhân",
         "manageJobApply": "Quản lý hồ sơ ứng tuyển",
         "pendingPostScreen": "Bài viết đang chờ",
-        "detailSurveyScreen": "Chi tiết câu hỏi"
+        "detailSurveyScreen": "Chi tiết câu hỏi",
+        "studentAndFacultyScreen": "Nhóm thảo luận của sinh viên "
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",

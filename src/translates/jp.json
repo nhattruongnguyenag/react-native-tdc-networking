@@ -233,7 +233,8 @@
         "createSurveyScreen": "調査を作成",
         "createRecruitmentScreen": "求人の作成",
         "createUpdateProfile": "個人情報を更新",
-        "manageJobApply": "アプリケーションジョブの管理"
+        "manageJobApply": "アプリケーションジョブの管理",
+        "studentAndFacultyScreen": "学生のディスカッショングループ" 
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "戻る",

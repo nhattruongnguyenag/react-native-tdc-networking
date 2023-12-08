@@ -25,6 +25,7 @@ import { useTranslation } from 'react-multi-lang'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { GROUP_CONNECT_BUSINESS_ID } from '../constants/Groups'
 import { Post } from '../types/Post'
+import { GetPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -164,7 +165,7 @@ export default function BusinessDashboardScreen() {
 
 
   const renderItem = useCallback((item: any) => {
-    if (item.active === 1) {
+    if (GetPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}

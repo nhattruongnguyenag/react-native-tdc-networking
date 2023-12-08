@@ -23,12 +23,13 @@ import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProf
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
-import { getFacultyTranslated } from '../utils/getFacultyTranslated ';
+import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
 import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import SkeletonPost from '../components/SkeletonPost';
 import { useGetPostsByIdQuery } from '../redux/Service';
+import { GetPostActive } from '../utils/GetPostActive';
 
 const ProfileScreen = ({ route }: any) => {
     const t = useTranslation();
@@ -114,7 +115,7 @@ const ProfileScreen = ({ route }: any) => {
     }
 
     const renderItem = useCallback((item: any) => {
-        if (item.active === 1) {
+        if (GetPostActive(item.active)) {
             return (
                 <CustomizePost
                     id={item.id}
@@ -243,7 +244,6 @@ const ProfileScreen = ({ route }: any) => {
                             <RefreshControl
                                 refreshing={false}
                                 onRefresh={() => {
-                                    // TODO
                                 }}
                             />
                         }

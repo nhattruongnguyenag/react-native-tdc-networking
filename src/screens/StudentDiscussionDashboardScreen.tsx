@@ -20,6 +20,7 @@ import { useTranslation } from 'react-multi-lang'
 import { useGetStudentPostsQuery } from '../redux/Service'
 import { GROUP_TDC_ID } from '../constants/Groups'
 import { Post } from '../types/Post'
+import { GetPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
@@ -114,7 +115,7 @@ export default function StudentDiscussionDashboardScreen() {
   }
 
   const renderItem = useCallback((item: any) => {
-    if(item.active === 1){
+    if (GetPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}

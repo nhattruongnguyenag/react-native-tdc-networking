@@ -34,7 +34,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { useTranslation } from 'react-multi-lang'
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 
 export const NUM_OF_LINES = 5
