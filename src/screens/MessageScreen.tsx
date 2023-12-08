@@ -3,6 +3,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
+import { Asset } from 'react-native-image-picker'
 import { Client, Frame, Message } from 'stompjs'
 import Loading from '../components/common/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
@@ -12,8 +13,16 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setConversationMessages, setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Message'
+import { handleUploadImage } from '../utils/ImageHelper'
 
 let stompClient: Client
+
+export const PLAIN_TEXT = 'plain/text'
+export const IMAGES = 'images'
+
+export const RECEIVED = 0
+export const SEEN = 1
+export const SENDING = 2
 
 export default function MessengerScreen() {
   const t = useTranslation()
@@ -46,8 +55,6 @@ export default function MessengerScreen() {
 
     const onMessageReceived = (payload: Message) => {
       setLoading(false)
-      console.log(payload.body)
-
       const messages = JSON.parse(payload.body) as MessageModel[]
       dispatch(setConversationMessages(messages))
     }
@@ -63,9 +70,9 @@ export default function MessengerScreen() {
     const message = {
       senderId: senderId,
       receiverId: receiverId,
-      type: 'plain/text',
+      type: PLAIN_TEXT,
       content: messageContent,
-      status: 0
+      status: RECEIVED
     }
 
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
@@ -94,20 +101,32 @@ export default function MessengerScreen() {
     [conversationMessages]
   )
 
-  useEffect(() => {
-    if (imagesUpload && imagesUpload.length > 0) {
-      const message = {
-        senderId: senderId,
-        receiverId: receiverId,
-        type: 'images',
-        content: imagesUpload?.join(','),
-        status: 0
+  const onImagePickerResult = (result: Asset[]) => {
+    if (selectConversation
+      && selectConversation.receiver
+      && selectConversation.sender) {
+      const tempMessage: MessageModel = {
+        content: result.map(item => item.uri).join(','),
+        receiver: selectConversation.receiver,
+        sender: selectConversation.sender,
+        type: IMAGES,
+        status: SENDING
       }
+      dispatch(setConversationMessages([tempMessage, ...conversationMessages]))
 
-      stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
-      dispatch(setImagesUpload([]))
+      handleUploadImage(result, (images) => {
+        const message = {
+          senderId: senderId,
+          receiverId: receiverId,
+          type: IMAGES,
+          content: images.join(','),
+          status: RECEIVED
+        }
+
+        stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
+      })
     }
-  }, [imagesUpload])
+  }
 
   return (
     <View style={styles.body}>
@@ -134,6 +153,7 @@ export default function MessengerScreen() {
             textInputMessageRef={textInputMessageRef}
             onButtonSendPress={onButtonSendPress}
             onInputMessageContent={(value) => setMessageContent(value)}
+            onImagePickerResult={(result) => onImagePickerResult(result)}
           />
         </Fragment>
       )}

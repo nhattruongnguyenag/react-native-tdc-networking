@@ -6,5 +6,5 @@ export interface Message extends Base {
   sender: User
   receiver: User
   content: string
-  status: 0
+  status: number
 }

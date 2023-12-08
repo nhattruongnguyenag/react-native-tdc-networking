@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export function isApproximatelyTime(time: string, timeToCompare: string): boolean {
+export function isApproximatelyTime(time?: string, timeToCompare?: string): boolean {
   if (moment(time).hours() === moment(timeToCompare).hours()) {
     return Math.abs(moment(time).minutes() - moment(timeToCompare).minutes()) <= 1
   }

@@ -2,9 +2,11 @@ import React, { LegacyRef, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, TextInput, View } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
+import { Asset } from 'react-native-image-picker'
 import { PURPLE_COLOR } from '../../constants/Color'
 import IconButton from '../buttons/IconButton'
 import CustomizedImagePicker from '../CustomizedImagePicker'
+import ImagePicker from '../ImagePicker'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -12,6 +14,7 @@ interface MessageBottomBarProps {
   onInputMessageContent?: (value: string) => void
   onInputMessageFocus?: () => void
   onInputMessageBlur?: () => void
+  onImagePickerResult: (result: Asset[]) => void
   textInputMessageRef: LegacyRef<TextInput>
 }
 
@@ -67,7 +70,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
         customStyle={{ marginLeft: 'auto' }}
       />
 
-      <CustomizedImagePicker optionsRef={(ref) => setImagePickerOptionsRef(ref)} />
+      <ImagePicker optionsRef={(ref) => setImagePickerOptionsRef(ref)} onResult={(result) => props.onImagePickerResult(result)}/>
     </View>
   )
 }

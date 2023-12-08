@@ -39,7 +39,7 @@ import {
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
 import { useTranslation } from 'react-multi-lang'
-import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TEXT_SUBJECT_RESET_PASSWORD, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
+import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -495,7 +495,6 @@ export default function StudentRegistrationScreen() {
           navigation.navigate(ACCEPT_SCREEN, { email: student.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
-          console.log(error)
           setIsLoading(false)
         })
     } else {
