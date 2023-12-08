@@ -75,6 +75,8 @@ export default function MessengerScreen() {
       status: RECEIVED
     }
 
+    setTempMessage({ type: PLAIN_TEXT, content: messageContent })
+
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
     setMessageContent('')
   }, [messageContent])
@@ -102,29 +104,33 @@ export default function MessengerScreen() {
   )
 
   const onImagePickerResult = (result: Asset[]) => {
+    setTempMessage({ type: IMAGES, content: result.map(item => item.uri).join(',') })
+
+    handleUploadImage(result, (images) => {
+      const message = {
+        senderId: senderId,
+        receiverId: receiverId,
+        type: IMAGES,
+        content: images.join(','),
+        status: RECEIVED
+      }
+
+      stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
+    })
+  }
+
+  const setTempMessage = (message: { type: string, content: string }) => {
     if (selectConversation
       && selectConversation.receiver
       && selectConversation.sender) {
       const tempMessage: MessageModel = {
-        content: result.map(item => item.uri).join(','),
+        content: message.content,
         receiver: selectConversation.receiver,
         sender: selectConversation.sender,
-        type: IMAGES,
+        type: message.type,
         status: SENDING
       }
       dispatch(setConversationMessages([tempMessage, ...conversationMessages]))
-
-      handleUploadImage(result, (images) => {
-        const message = {
-          senderId: senderId,
-          receiverId: receiverId,
-          type: IMAGES,
-          content: images.join(','),
-          status: RECEIVED
-        }
-
-        stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
-      })
     }
   }
 
