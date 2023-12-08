@@ -1,14 +1,15 @@
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Image, Pressable, ProgressBarAndroidBase, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
+import { COLOR_BLUE } from '../../constants/Color'
 import { API_URL_RENDER_IMAGE } from '../../constants/Path'
-import { MESSAGE_ITEM_STATUS_RECEIVED, MESSAGE_ITEM_STATUS_SEEN } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
+import { IMAGES, SENDING } from '../../screens/MessageScreen'
 import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
 import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
@@ -166,12 +167,15 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
 }
 
 const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
+  const t = useTranslation()
   const [visible, setIsVisible] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const images = data.content.split(',')
   let imageWidth = 100
   let imageHeight = 100
   let col = 2
+
+  console.log(data.id, images)
 
   if (images.length === 1) {
     imageWidth = 250
@@ -182,7 +186,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
   const imageURIs = useMemo(() => {
     return images.map<ImageUri>((item, index) => {
       return {
-        uri: SERVER_ADDRESS + 'api/images/' + item
+        uri: data.id ? SERVER_ADDRESS + 'api/images/' + item : item
       }
     })
   }, [])
@@ -206,7 +210,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
                 <Image
                   style={MessageSectionTimeItemStyle.imageItem}
                   source={{
-                    uri: API_URL_RENDER_IMAGE + item,
+                    uri: data.id ? API_URL_RENDER_IMAGE + item : item,
                     width:
                       images.length > 1 && images.length % 2 == 1 && index == images.length - 1
                         ? imageWidth * 2 + 3
@@ -226,8 +230,8 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
         )}
       </View>
 
-      <Text style={{ marginLeft: 'auto', marginRight: AVATAR_HEIGHT + 20, marginBottom: 10, fontSize: 11 }}>
-        {moment(data.createdAt).format('hh:mm a')}
+      <Text style={{ marginLeft: 'auto', marginRight: AVATAR_HEIGHT + 20, marginBottom: 10, fontSize: 11, color: data.status === SENDING ? COLOR_BLUE : '#555' }}>
+        {data.status === SENDING ? t('MessageSentItem.messageItemStatusSending') : moment(data.createdAt).format('hh:mm a')}
       </Text>
 
       <ImageView

@@ -334,6 +334,7 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Tin nhắn"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Đang gửi",
         "messageItemStatusReceived": "Đã nhận",
         "messageItemStatusSeen": "Đã xem"
     },

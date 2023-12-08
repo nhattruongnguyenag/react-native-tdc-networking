@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { User } from '../types/User'
 
-export function getMessageSectionTitle(date: string): string {
+export function getMessageSectionTitle(date?: string): string {
   const formater = 'dddd, DD MMM YYYY'
   let yesterday = moment().subtract(1, 'days').format(formater)
   const today = moment().format(formater)
