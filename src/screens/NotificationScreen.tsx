@@ -11,15 +11,19 @@ import {
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import Icon2 from 'react-native-vector-icons/AntDesign'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { RootStackParamList } from '../App'
 import NotificationListView from '../components/listviews/NotificationListView'
+import { SURVEY_CONDUCT_SCREEN } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
 import { useGetNotificationsUserQuery } from '../redux/Service'
 const { height, width } = Dimensions.get('screen')
 
+const NOTIFICATION_CREATE_SURVEY = 'create_survey'
+
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -53,6 +57,18 @@ export default function NotificationScreen() {
   }
 
   const handleItem = (id: number) => {
+    const notification = data?.data.find(item => id === item.id)
+
+    if (notification && notification.type === NOTIFICATION_CREATE_SURVEY) {
+      const data = notification.data.split(':')
+      if (data.length >= 2 && data[0] === 'id') {
+        const surveyPostId = parseInt(data[1])
+        if (!isNaN(surveyPostId)) {
+          navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })
+        }
+      }
+    }
+
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
@@ -124,9 +140,15 @@ export default function NotificationScreen() {
         </View>
         {
           search == '' ?
-            <NotificationListView data={data?.data} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead} />
+            <NotificationListView data={data?.data}
+              handleItem={handleItem}
+              handleDelNotification={handleDelNotification}
+              handleIsRead={handleIsRead} />
             :
-            <NotificationListView data={filter} handleItem={handleItem} handleDelNotification={handleDelNotification} handleIsRead={handleIsRead} />
+            <NotificationListView data={filter}
+              handleItem={handleItem}
+              handleDelNotification={handleDelNotification}
+              handleIsRead={handleIsRead} />
         }
       </View>
     </>
