@@ -1,12 +1,6 @@
-import { ParamListBase, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import axios, { AxiosResponse } from 'axios'
-import moment from 'moment'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-multi-lang'
 import {
+  Alert,
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,21 +8,22 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import ActionSheet from 'react-native-actionsheet'
-import DatePicker from 'react-native-date-picker'
-import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import TextValidate from '../components/common/TextValidate'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
-import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
-import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import { useAppSelector } from '../redux/Hook'
 import { Business } from '../types/Business'
+import axios, { AxiosResponse } from 'axios'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
+import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
+import ActionSheet from 'react-native-actionsheet'
+import { useAppSelector } from '../redux/Hook'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import { useNavigation, ParamListBase } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { LOGIN_SCREEN } from '../constants/Screen'
 import {
   InputTextValidate,
   isBlank,
@@ -40,6 +35,10 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
+import TextValidate from '../components/common/TextValidate'
+import DatePicker from 'react-native-date-picker'
+import moment from 'moment'
+import { useTranslation } from 'react-multi-lang'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -83,9 +82,7 @@ export default function BusinessRegistrationScreen() {
     email: '',
     name: '',
     image: '',
-    confimPassword: '',
-    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
-    content: ''
+    confimPassword: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
@@ -565,7 +562,6 @@ export default function BusinessRegistrationScreen() {
         .then((response) => {
           setIsLoading(false)
           openModal()
-          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           setIsLoading(false)
@@ -603,7 +599,7 @@ export default function BusinessRegistrationScreen() {
           </View>
           <View>
             <TextInputWithTitle
-              defaultValue={business.name}
+              value={business.name}
               title={t('RegisterBusinessComponent.titleBusinessName')}
               placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
               onChangeText={(value) => handleNameChange(value)}
@@ -617,7 +613,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              defaultValue={business.email}
+              value={business.email}
               title={t('RegisterBusinessComponent.titleEmail')}
               placeholder={t('RegisterBusinessComponent.placeholderEmail')}
               onChangeText={(value) => handleEmailChange(value)}
@@ -633,7 +629,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              defaultValue={business.representor}
+              value={business.representor}
               title={t('RegisterBusinessComponent.titleRepresent')}
               placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
               onChangeText={(value) => handleRepresentoreChange(value)}
@@ -648,7 +644,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              defaultValue={business.taxCode}
+              value={business.taxCode}
               title={t('RegisterBusinessComponent.titleTaxCode')}
               placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
               onChangeText={(value) => handleTaxCodeChange(value)}
@@ -663,7 +659,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              defaultValue={business.address}
+              value={business.address}
               title={t('RegisterBusinessComponent.titleAddress')}
               placeholder={t('RegisterBusinessComponent.placeholderAddress')}
               onChangeText={(value) => handleAddressChange(value)}
@@ -677,7 +673,7 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              defaultValue={business.phone}
+              value={business.phone}
               title={t('RegisterBusinessComponent.titlePhone')}
               placeholder={t('RegisterBusinessComponent.placeholderPhone')}
               onChangeText={(value) => handlePhoneChange(value)}
@@ -692,7 +688,7 @@ export default function BusinessRegistrationScreen() {
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
               <TextInputWithTitle
-                defaultValue={timeStart}
+                value={timeStart}
                 textInputRef={timeStartRef}
                 onFocus={() => {
                   setShowDatePickerStart(true)
@@ -720,7 +716,7 @@ export default function BusinessRegistrationScreen() {
               />
 
               <TextInputWithTitle
-                defaultValue={timeEnd}
+                value={timeEnd}
                 textInputRef={timeEndRef}
                 onFocus={() => {
                   setShowDatePickerEnd(true)

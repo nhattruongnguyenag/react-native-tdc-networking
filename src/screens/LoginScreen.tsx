@@ -19,7 +19,7 @@ import { ActivityIndicator } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { COLOR_BTN_BLUE } from '../constants/Color'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
-import { setUserLogin } from '../redux/Slice'
+import { setIsLogout, setUserLogin } from '../redux/Slice'
 import { Faculty } from '../types/Faculty'
 import { useTranslation } from 'react-multi-lang'
 import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
@@ -80,6 +80,7 @@ export default function LoginScreen() {
               AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token))
               AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data))
               dispatch(setUserLogin(response.data.data))
+              dispatch(setIsLogout(false))
               navigation.navigate(TOP_TAB_NAVIGATOR)
             }
           })
@@ -129,7 +130,7 @@ export default function LoginScreen() {
                   onChangeText={(value) => handleCheckPassword(value)}
                 ></TextInput>
               </View>
-             
+
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>

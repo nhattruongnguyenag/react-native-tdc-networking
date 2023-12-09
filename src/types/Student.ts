@@ -9,6 +9,4 @@ export interface Student extends User {
   facultyGroupCode: string
   background: string
   phone: string
-  subject: string
-  content: string
 }

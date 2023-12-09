@@ -13,16 +13,17 @@ import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCR
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
-import { useAcceptPostMutation, useDeletePostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
+import { useAcceptPostMutation, useDeletePostMutation } from '../../redux/Service'
 import { setPostAcceptId, setPostDeleteId, setPostRejectLog } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
-import { PostResponseModel } from '../../types/response/PostResponseModel'
+import { PostResponseModal } from '../../types/response/PostResponseModal'
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 import { isRecruitmentPost, isSurveyPost, isTextImagePost } from '../../utils/PostHelper'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from './PostApprovalItem'
 
+// SERVER_ADDRESS + `api/images/`
 const RECRUITMENT_BADGE_COLOR = '#999fac'
 const SURVEY_BADGE_COLOR = '#00C9F4'
 const TEXT_IMAGE_BADGE_COLOR = '#00A255'
@@ -74,7 +75,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
         }
     }
 
-    const onUpdatePost = (post?: PostResponseModel) => {
+    const onUpdatePost = (post?: PostResponseModal) => {
         if (post) {
             if (isRecruitmentPost(post)) {
                 navigation.navigate(CREATE_RECRUITMENT_SCREEN, { recruitmentPostId: post.id })
@@ -82,7 +83,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                 navigation.navigate(CREATE_SURVEY_SCREEN, { surveyPostId: post.id })
             } else if (isTextImagePost(post)) {
                 const updateNormalPost: UpdateNormalPost = {
-                    postId: post.id,
+                    postId: post.id ?? 0,
                     content: post.content,
                     images: post.images
                 }

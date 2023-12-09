@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { LOGIN_SCREEN } from '../constants/Screen'
 import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { Student } from '../types/Student'
 import axios, { AxiosResponse } from 'axios'
@@ -39,7 +39,6 @@ import {
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
 import { useTranslation } from 'react-multi-lang'
-import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -91,8 +90,6 @@ export default function StudentRegistrationScreen() {
     phone: '',
     studentCode: '',
     confimPassword: '',
-    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
-    content:''
   })
   const [dataRequest, setDataRequest] = useState([
     {
@@ -432,9 +429,8 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleFacultyNameChange = useCallback(
-    (value: any) => {
-      setStudent({ ...student, facultyId: value.id })
-      setDataNganhRequest(value.majors)
+    (value: number) => {
+      setStudent({ ...student, facultyId: value })
       if (value == null) {
         setValidate({
           ...validate,
@@ -463,6 +459,11 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
+        dataRequest.map((data) => {
+          if (data.id == student.facultyId) {
+            setDataNganhRequest(data.majors)
+          }
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -486,13 +487,11 @@ export default function StudentRegistrationScreen() {
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      console.log(student)
       axios
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
           setIsLoading(false)
           openModal()
-          navigation.navigate(ACCEPT_SCREEN, { email: student.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           setIsLoading(false)
@@ -596,7 +595,7 @@ export default function StudentRegistrationScreen() {
                 value={value}
                 onChange={(item) => {
                   setValue(item.name)
-                  handleFacultyNameChange(item)
+                  handleFacultyNameChange(item.id)
                 }}
               />
             </View>

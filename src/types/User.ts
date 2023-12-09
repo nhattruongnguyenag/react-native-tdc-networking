@@ -11,4 +11,5 @@ export interface User {
   lastActive?: string
   roleCodes?: string
   code: string
+  background:string
 }

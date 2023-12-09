@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLOR_BLACK, COLOR_BTN_BLUE, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import IconFontisto from 'react-native-vector-icons/Fontisto'
@@ -19,7 +19,7 @@ interface StudentProfileType {
     name: string,
     isSameUser: boolean,
 }
-export default function CustomizeBodyStudentProfile(props: Readonly<StudentProfileType>) {
+const CustomizeBodyStudentProfile = (props: Readonly<StudentProfileType>) => {
     return (
         <View style={styles.containerInfo}>
             {/* Name */}
@@ -183,3 +183,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 })
+
+export default memo(CustomizeBodyStudentProfile )
