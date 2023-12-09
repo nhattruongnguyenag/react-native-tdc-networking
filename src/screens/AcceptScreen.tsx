@@ -43,7 +43,7 @@ export default function AcceptScreen() {
         </View>
         <View style={styles.block}>
           <View>
-            <Text style={styles.txtLogin}>{t('AcceptScreen.checkEmail')}</Text>z
+            <Text style={styles.txtLogin}>{t('AcceptScreen.checkEmail')}</Text>
             <Text style={styles.txtDetail}>
               {t('AcceptScreen.description1') + title + t('AcceptScreen.description2')}
             </Text>
