@@ -1,20 +1,23 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { Faculty } from '../types/Faculty'
 import { Business } from '../types/Business'
 import { Conversation, SelectedConversation } from '../types/Conversation'
+import { Faculty } from '../types/Faculty'
+import { Message } from '../types/Message'
 import { ModalComments } from '../types/ModalComments'
 import { ModalImage } from '../types/ModalImage'
 import { ModalUserReaction } from '../types/ModalUserReaction'
-import { Choice, ChoiceProps, Question } from '../types/Question'
+import { Choice, Question } from '../types/Question'
 import { Student } from '../types/Student'
-import { SurveyPostRequest } from '../types/SurveyPost'
-import { Message } from '../types/Message'
 import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
-import { User } from '../types/User'
 import { SHORT_ANSWER } from '../components/survey/AddQuestionModal'
+import { SurveyPostRequest } from '../types/SurveyPostRequest'
+import { User } from '../types/User'
 
 export interface TDCSocialNetworkState {
+  postAcceptId: number | undefined
+  postRejectId: number | undefined
+  postDeleteId: number | undefined
   postRejectLog: PostRejectedLog | null
   surveyPostRequest: SurveyPostRequest | null
   questions: Question[]
@@ -38,6 +41,9 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  postDeleteId: undefined,
+  postAcceptId: undefined,
+  postRejectId: undefined,
   postRejectLog: null,
   defaultLanguage: 'vi',
   conversationMessages: [],
@@ -169,6 +175,15 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setIsLogout: (state, action: PayloadAction<boolean>) => {
       state.logout = action.payload
+    },
+    setPostDeleteId: (state, action: PayloadAction<number | undefined>) => {
+      state.postDeleteId = action.payload
+    },
+    setPostRejectId: (state, action: PayloadAction<number | undefined>) => {
+      state.postRejectId = action.payload
+    },
+    setPostAcceptId: (state, action: PayloadAction<number | undefined>) => {
+      state.postAcceptId = action.payload
     }
   }
 })
@@ -201,7 +216,10 @@ export const {
   updatePostWhenHaveChangeComment,
   goToProfileScreen,
   setCurrentScreenNowIsProfileScreen,
-  setIsLogout
+  setIsLogout,
+  setPostDeleteId,
+  setPostAcceptId,
+  setPostRejectId
 } = TDCSocialNetworkSlice.actions
 
 export default TDCSocialNetworkSlice.reducer

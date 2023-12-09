@@ -1,28 +1,29 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { PostRejectedLog } from '../components/postApproval/PostApprovalItem'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
 import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { Post } from '../types/Post'
+import { PostRejectedLog } from '../types/PostRejectLog'
+import { RecruitmentPost } from '../types/RecruitmentPost'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
+import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
+import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
 import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { RecruitmentPost } from '../types/RecruitmentPost'
 import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
-import { MessageResponseData } from '../types/response/MessageResponseData'
 import { PostResponseModal } from '../types/response/PostResponseModal'
+import { JobApplyRespose } from '../types/response/JobApplyResponse'
+import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
+import { MessageResponseData } from '../types/response/MessageResponseData'
+import { NotificationModel } from '../types/response/NotificationModel'
+import { PostResponseModel } from '../types/response/PostResponseModel'
+import { PostSavedModel } from '../types/response/PostSavedModel'
 import { SurveyResponse } from '../types/response/QuestionResponse'
 import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { FollowUserModel } from '../types/response/FollowUserModel'
 import { buildPostSearchRequest } from '../utils/PostHelper'
-import { JobApplyRespose } from '../types/response/JobApplyResponse'
-import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
-import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
-import { PostSavedModel } from '../types/response/PostSavedModel'
-import { NotificationModel } from '../types/response/NotificationModel'
-import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
-import { Post } from '../types/Post'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -203,7 +204,7 @@ export const TDCSocialNetworkAPI = createApi({
           'Content-type': 'application/json; charset=UTF-8'
         }
       }),
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: 'LIST' }])
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
     }),
     getRecruitmentPostUpdate: builder.query<RecruitmentPost, { postId: number }>({
       query: (data) => ({
@@ -285,6 +286,7 @@ export const {
   useGetFollowingUserQuery,
   useGetFollowerUserQuery,
   useGetPostsQuery,
+  useLazyGetPostsQuery,
   useGetSurveyResultQuery,
   useGetQuestionsFromSurveyPostQuery,
   useGetConversationsByUserIdQuery,

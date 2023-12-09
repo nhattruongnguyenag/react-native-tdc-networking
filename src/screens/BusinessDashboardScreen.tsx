@@ -221,7 +221,7 @@ export default function BusinessDashboardScreen() {
         />}
       >
         {
-          userLogin?.roleCodes.includes(TYPE_POST_BUSINESS) ?
+          userLogin?.roleCodes?.includes(TYPE_POST_BUSINESS) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}

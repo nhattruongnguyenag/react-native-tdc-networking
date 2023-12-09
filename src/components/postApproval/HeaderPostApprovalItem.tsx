@@ -1,22 +1,25 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import axios, { AxiosResponse } from 'axios'
 import moment from 'moment'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { Alert, Image, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { RootStackParamList } from '../../App'
-import { CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN } from '../../constants/Screen'
+import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../../constants/Screen'
 import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
-import { useAcceptPostMutation, useDeletePostMutation, useGetPostRejectLogQuery } from '../../redux/Service'
-import { setPostRejectLog } from '../../redux/Slice'
+import { useAcceptPostMutation, useDeletePostMutation } from '../../redux/Service'
+import { setPostAcceptId, setPostDeleteId, setPostRejectLog } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
 import { PostResponseModal } from '../../types/response/PostResponseModal'
+import { UpdateNormalPost } from '../../types/UpdateNormalPost'
+import { isRecruitmentPost, isSurveyPost, isTextImagePost } from '../../utils/PostHelper'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from './PostApprovalItem'
 
@@ -26,7 +29,7 @@ const SURVEY_BADGE_COLOR = '#00C9F4'
 const TEXT_IMAGE_BADGE_COLOR = '#00A255'
 
 export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const dispatch = useAppDispatch()
     const [acceptPost, acceptPostResponse] = useAcceptPostMutation()
     const [deletePost, deletePostResponse] = useDeletePostMutation()
@@ -74,36 +77,54 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
 
     const onUpdatePost = (post?: PostResponseModal) => {
         if (post) {
-            if (post.type === TYPE_POST_RECRUITMENT) {
+            if (isRecruitmentPost(post)) {
                 navigation.navigate(CREATE_RECRUITMENT_SCREEN, { recruitmentPostId: post.id })
-            } else if (post.type === TYPE_POST_SURVEY) {
+            } else if (isSurveyPost(post)) {
                 navigation.navigate(CREATE_SURVEY_SCREEN, { surveyPostId: post.id })
+            } else if (isTextImagePost(post)) {
+                const updateNormalPost: UpdateNormalPost = {
+                    postId: post.id ?? 0,
+                    content: post.content,
+                    images: post.images
+                }
+                navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost: updateNormalPost })
             }
         }
     }
 
     useEffect(() => {
         if (deletePostResponse.data) {
+            dispatch(setPostDeleteId(props.post?.id))
             Alert.alert(t('ModalPostRejectReason.successDeleteMessage'), t('ModalPostRejectReason.successDeleteMessageContent'))
         }
     }, [deletePostResponse.data])
 
     useEffect(() => {
         if (acceptPostResponse.data) {
-            Alert.alert(t('ModalPostRejectReason.successAcceptMessage'), t('ModalPostRejectReason.rejectSuccessMessage'))
+            dispatch(setPostAcceptId(props.post?.id))
+            Alert.alert(t('ModalPostRejectReason.successAcceptMessage'), t('ModalPostRejectReason.acceptSuccessageMessage'))
         }
     }, [acceptPostResponse.data])
 
+    const handleNavigateToProfileScreen = () => {
+        console.log(props.post)
+        if (props.post && props.post.user) {
+            navigation.navigate(PROFILE_SCREEN, { userId: props.post.user.id, group: props.post.group.code })
+        }
+    }
+
     return (
         <View style={styles.body}>
-            {Boolean(props.post?.user.image) ? (
-                <Image source={{ uri: SERVER_ADDRESS + 'api/images/' + props.post?.user.image }} style={{ width: 45, height: 45, borderRadius: 999 }} />
-            ) : (
-                <DefaultAvatar size={45} identifer={props.post?.user.name ? props.post?.user.name[0] : ''} />
-            )}
+            <Pressable onPress={() => handleNavigateToProfileScreen()}>
+                {Boolean(props.post?.user?.image) ? (
+                    <Image source={{ uri: SERVER_ADDRESS + 'api/images/' + props.post?.user?.image }} style={{ width: 45, height: 45, borderRadius: 999 }} />
+                ) : (
+                    <DefaultAvatar size={45} identifer={props.post?.user?.name ? props.post?.user.name[0] : ''} />
+                )}
+            </Pressable>
 
             <View style={styles.postInfoPrimaryWrapper}>
-                <Text style={styles.postPrimaryTitle}>{props.post?.user.name ?? t('ModalPostRejectReason.isLoading')}</Text>
+                <Text onPress={() => handleNavigateToProfileScreen()} style={styles.postPrimaryTitle}>{props.post?.user?.name ?? t('ModalPostRejectReason.isLoading')}</Text>
                 <View style={styles.postInfoSecondaryWrapper}>
                     <Text>{props.post?.createdAt ? moment(props.post.createdAt).fromNow() : t('ModalPostRejectReason.isLoading')}</Text>
                     <View style={[styles.postTypeBadge, { backgroundColor: badgeColor }]}>

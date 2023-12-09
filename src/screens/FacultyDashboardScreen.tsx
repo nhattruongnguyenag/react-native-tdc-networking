@@ -60,8 +60,21 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
-    setCode((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).code : '');
+    if ((isStudent(userLogin) || isFaculty(userLogin))) {
+      if (isFaculty(userLogin)) {
+        setCode(userLogin?.code);
+      } else {
+        setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode));
+      }
+    }
   }, [userLogin]);
+
+  const getFacultyByFacultyGroupCode = (group: string): string => {
+    let faculty = group.substring(group.indexOf('_')+1)
+    faculty = "khoa_" + faculty;
+    return faculty;
+  }
+
 
   useEffect(() => {
     if (facultyPost.length > 0 || isCalled || code.trim() === "") {
@@ -131,7 +144,7 @@ export default function FacultyDashboardScreen() {
   }, [])
 
   useEffect(() => {
-    if (userLogin?.roleCodes.includes(TYPE_POST_BUSINESS)) {
+    if (userLogin?.roleCodes?.includes(TYPE_POST_BUSINESS)) {
       setFlag(!flag);
       setFacultyPost([]);
       setCode('');
@@ -170,8 +183,9 @@ export default function FacultyDashboardScreen() {
           active={item.active}
         />
       )
-    } else
+    } else {
       return null;
+    }
   }, [facultyPost])
 
 
@@ -189,7 +203,7 @@ export default function FacultyDashboardScreen() {
             />}
           >
             {
-              userLogin?.roleCodes.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
+              userLogin?.roleCodes?.includes(TYPE_POST_FACULTY) ? <View style={styles.toolbarCreatePost}>
                 <CustomizeCreatePostToolbar
                   role={userLogin?.roleCodes ?? ''}
                   handleClickToCreateButtonEvent={handleClickToCreateButtonEvent}

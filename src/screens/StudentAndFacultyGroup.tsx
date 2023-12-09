@@ -130,7 +130,7 @@ export default function StudentAndFacultyGroup() {
     }, [])
 
     useEffect(() => {
-        if (userLogin?.roleCodes.includes(TYPE_POST_BUSINESS)) {
+        if (userLogin?.roleCodes?.includes(TYPE_POST_BUSINESS)) {
             setFlag(!flag);
             setFacultyPost([]);
             setCode('');

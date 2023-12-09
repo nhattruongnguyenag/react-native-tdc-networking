@@ -8,7 +8,8 @@ export interface User {
   isTyping: number
   isMessageConnect: number
   updatedAt: string
-  roleCodes: string
+  lastActive?: string
+  roleCodes?: string
   code: string
   background:string
 }

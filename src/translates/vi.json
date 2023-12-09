@@ -294,7 +294,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Đang tải tin nhắn..."
+        "messageScreenLoaderTitle": "Đang tải tin nhắn...",
+        "messageEmptyList": "Chưa có tin nhắn mới"
     },
     "MessengerToolbar": {
         "userStatusActive": "Đang hoạt động",
@@ -334,8 +335,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Tin nhắn"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Đang gửi...",
         "messageItemStatusReceived": "Đã nhận",
         "messageItemStatusSeen": "Đã xem"
+    },
+    "MessageDate": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Thêm",
@@ -631,6 +637,7 @@
         "successAcceptMessage": "Thành công !!!",
         "successDeleteMessageContent": "Đã xóa bài viết thành công",
         "rejectSuccessMessage": "Đã từ chối bài viết thành công",
+        "acceptSuccessageMessage": "Đã duyệt bài viết thành công",
         "notePlaceholder": "Ghi chú...",
         "acceptPostMenuItem": "Duyệt bài viết",
         "rejectPostMenuItem": "Từ chối bài viết",
@@ -649,5 +656,8 @@
         "follow": "Theo dõi",
         "unFollow": "Hủy theo dõi",
         "profile": "Trang cá nhân"
+    },
+    "NoMorePost": {
+        "noMorePost": "Không có bài viết mới"
     }
 }

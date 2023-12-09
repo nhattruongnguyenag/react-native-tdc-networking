@@ -296,7 +296,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "Notification"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Loading messages..."
+        "messageScreenLoaderTitle": "Loading messages...",
+        "messageEmptyList": "No new messages"
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
@@ -334,8 +335,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Message"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Sending...",
         "messageItemStatusReceived": "Received",
         "messageItemStatusSeen": "Seen"
+    },
+    "MessageDate": {
+        "today": "Today",
+        "yesterday": "Yesterday"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Add",
@@ -418,208 +424,194 @@
         "surveyPostButtonJoinSurvey": "Join Survey",
         "surveyPostButtonDetailQuestion": "Detailed Questions"
     },
-    "Faculty":{
-        "facultyOfElectricalEngineering": "Electrical Engineering Faculty",
-        "facultyOfInformationTechnology": "Information Technology Faculty",
-        "facultyOfAutomationTechnology": "Automation Technology Faculty",
-        "facultyOfMechanicalEngineeringAndManufacturing": "Mechanical Engineering and Manufacturing Faculty",
-        "automobileEngineeringDepartment": "Automobile Engineering Department",
-        "facultyOfFinanceAndAccounting": "Finance and Accounting Faculty",
-        "facultyOfBusinessAdministration": "Business Administration Faculty",
-        "facultyOfTourism": "Tourism Faculty",
-        "departmentOfEnglish": "English Department",
-        "departmentOfKoreanLanguage": "Korean Language Department",
-        "japaneseLanguageDepartment": "Japanese Language Department"        
-        },
-        "ModalUserLiked": {
-            "modalUserLikedTitle": "List of users who liked"
-        },
-        "MenuOption": {
-          "menuOptionSaveArticle": "Save post",
-          "menuOptionUnSaveArticle": "Un save post",
-          "menuOptionDeleteArticle": "Delete post",
-          "menuOptionViewResumeList": "View list CV",
-          "menuOptionViewSurveyResults": "View survey results",
-          "menuOptionViewSurveyUpdateNormalPost": "Edit Post"
-        },
-        "CreatePostToolbar": {
-         "createPostToolbarTitle": "Create New Post",
-         "createPostToolbarNormalPost": "Text/Image",
-         "createPostToolbarSurveyPost": "Create Survey Post",
-         "createPostToolbarRecruitmentPost": "Job Recruitment Post"
-        },
-        "ModalCreateNormalPost": {
-        "modalCreateNormalPostTitle": "Create post",
-        "modalCreateNormalPostPlaceholder": "Please enter your post",
-        "modalCreateNormalPostEntryImages": "Photo",
-        "modalCreateNormalPostButton": "Post"
-        },
-        "BusinessSelectFacultyToolbar": {
-          "businessSelectFacultyToolbarTitle": "Please select the faculty you want to display posts for"
-        },
-        "NotifyFacultyDontHaveAnyPost": {
-            "textNotifyFacultyDontHaveAnyPost": "No posts available in this faculty"
-        },
-        "Group":{
-            "groupTdc": "Group by TDC - Thu Duc College of Technology",
-            "groupConnectBusiness": "Connect Business Community",
-            "electricalElectronicsGroup": "Electrical - Electronics Group",
-            "informationTechnologyGroup": "Information Technology Group",
-            "automationTechnologyGroup": "Automation Technology Group",
-            "mechanicalEngineeringAndManufacturingGroup": "Mechanical Engineering and Manufacturing Group",
-            "automotiveMechanicalGroup": "Automotive Mechanical Group",
-            "financeAccountingGroup": "Finance - Accounting Group",
-            "businessAdministrationGroup": "Business Administration Group",
-            "tourismGroup": "Tourism Group",
-            "englishGroup": "English Group",
-            "koreanGroup": "Korean Group",
-            "japaneseLanguageDepartmentGroup": "Japanese Language Department Group"
-        },
-        "ModalUpdate":{
-            "modalUpdateTitle": "Update Account Information",
-            "modalUpdatePlaceholderPhoneNumber": "Phone Number",
-            "modalUpdatePlaceholderEmail": "Email",
-            "modalUpdateBackground": "Background Image",
-            "modalUpdateAvatar": "Profile Picture",
-            "modalUpdateButtonText": "Update"
-        },
-        "Validate": {
-            "validatePhoneNull": "Phone number cannot be empty",
-            "validatePhoneUnCorrectFormat": "Incorrect phone number format",
-            "validateEmailNull": "Email cannot be empty",
-            "validateEmailUnCorrectFormat": "Incorrect email format",
-            "validateEmailHadUsed": "Email has already been registered, please enter a different email",
-            "validateEmailHasMaxLength": "Email cannot exceed 255 characters",
-            "validateNameHasMaxLength": "Name cannot exceed 255 characters",
-            "validateNameHasSpecialCharacter": "Name cannot contain special characters",
-            "validateAddressNull": "Address cannot be empty",
-            "validatePresentorNull": "Representative name cannot be empty",
-            "validateRepresentorSpecialCharacter": "Name cannot contain special characters",
-            "validateRepresentorMaxLength": "Name cannot exceed 255 characters",
-            "validateTaxCodeNull": "Tax code cannot be empty",
-            "validateNameNull": "Name cannot be empty",
-            "validateNameSpecialCharacter": "Name cannot contain special characters",
-            "validateNameMaxLength": "Name cannot exceed 255 characters",
-            "validateNameTimeActiveUnCorrect": "Incorrect operating hours",
-            "validateTaxCodeFormat": "Incorrect tax code format",
-            "validateTaxCodeMaxLength": "Tax code cannot exceed 255 characters",
-            "validateAddressMaxLength": "Address cannot exceed 255 characters"                  
-        },
-        "ModalListUserLiked": {
-            "modalListUserLikedTitle": "List of Likes"
-         },
-         "ModalLoadingComment": {
-            "modalLoadingCommentTitle": "Loading data"
-        },
-        "CreatePostSelector": {
-            "createPostSelectorPlaceHolder": "Enter post content",
-            "createPostSelectorSurveyText": "Survey",
-            "createPostSelectorRecruitmentText": "Recruitment",
-            "createPostSelectorNormalText": "Normal"
-        },
-        "SelectFaculty": {
-            "selectFacultyPlaceholder": "Select faculty...",
-            "selectFacultyTextSearch": "Search..."
-        },
-        "FacultyDashboard": {
-            "facultyDashboardNotifyNotHavePost": "No posts yet",
-            "facultyDashboarNotYetSelectFaculty": "Please select a faculty"
-        },        
-        "StudentDashboard": {
-            "studentDashboardGroupTitle": "Group by TDC - Thu Duc College of Technology"
-        },
-        "OptionScreen": {
-            "optionScreenFollowText": "Follow",
-            "optionScreenSaveText": "Save",
-            "optionScreenUpdateProfileText": "Update Profile"
-        },
-        "BusinessUpdate": {
-            "businessUpdateCompanyName": "Company Name",
-            "businessUpdateEmail": "Email",
-            "businessUpdateRepresentorFullName": "Representative Full Name",
-            "businessUpdateCompanyTaxId": "Tax ID",
-            "businessUpdateCompanyAddress": "Address",
-            "businessUpdateCompanyPhoneNumber": "Phone Number",
-            "businessUpdateCompanyTimeActiveStart": "Active Start Time",
-            "businessUpdateCompanyTimeActiveEnd": "Active End Time",
-            "businessUpdateCompanyAvatar": "Avatar Image",
-            "businessUpdateCompanyButton": "Update Personal Information",
-            "businessUpdateCompanyNamePlaceholder": "Enter company name",
-            "businessUpdateEmailPlaceholder": "Enter email",
-            "businessUpdateRepresentorFullNamePlaceholder": "Enter representative full name",
-            "businessUpdateCompanyTaxIdPlaceholder": "Enter tax ID",
-            "businessUpdateCompanyAddressPlaceholder": "Enter address",
-            "businessUpdateCompanyPhoneNumberPlaceholder": "Enter phone number",
-            "businessUpdateTimeActive": "To"
-        },
-        "CreateNormalPost": {
-            "createNormalPostTitle": "Add Post",
-            "updateNormalPostTitle": "Update Post",
-            "createNormalPostPlaceholder": "Please enter the content of the post",
-            "createNormalPostButtonText": "Add Image",
-            "createNormalPostButtonFinish": "Finish",
-            "createNormalPostAlertButton": "OK",
-            "createNormalPostAlertTextChar": "characters",
-            "createNormalPostAlertQuestion": "Are you sure you want to delete this image?",
-            "createNormalPostAlertTitle": "Warning",
-            "createNormalPostAllertButton": "Oke",
-            "createNormalPostAllertTextChar": "文字",
-            "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
-            "createNormalPostAllerTitle": "警告"
-        },        
-        "ModalReviewBackground": {
-            "modalReviewBackgroundTextSave": "Save",
-            "modalReviewBackgroundTextCancel": "Cancel"
-        },        
-        "AlertNotify": {
-            "alertNotifyTitle": "Notification",
-            "alertNotifyCreateNewPostFail": "Failed to create a new post",
-            "alertNotifyCreateNewPostSuccess": "Successfully created a new post",
-            "alertNotifyUpdatePostFail": "Failed to update the post",
-            "alertNotifyUpdatePostSuccess": "Successfully updated the post",
-            "alertNotifyPostContentCannotNull": "Post content cannot be empty",
-            "alertNotifyCharacter": "Character",
-            "alertNotifyTextAccept": "Accept",
-            "alertNotifyTextReject": "Reject",
-            "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "The number of characters cannot exceed the limit"            
-        },
-        "UpdateProfile": {
-            "updateProfileAlertSuccess": "Update successful",
-            "updateProfileAlertFail": "Update failed, please try again"
-        },
-        "ToastMessenger": {
-            "toastMessengerTextTitle": "Warning",
-            "toastMessengerTextWarning": "System error, please try again later"
-        },
-        "FacultyUpdate": {
-            "facultyUpdateName": "Faculty Name",
-            "facultyUpdateNamePlaceholder": "Please enter the faculty name"
-        },
-        "Update": {
-            "updatePhoneNumber": "Phone Number",
-            "updatePhoneNumberPlaceholder": "Enter phone number",
-            "updateAvatarTitle": "Profile Picture",
-            "updateProfileButtonTitle": "Update Profile Information"
-        },
-        "StudentUpdate": {
-            "studentUpdateName": "Full Name",
-            "facultyUpdateNamePlaceholder": "Please enter your name"
-        },
-        "Notify": {
-            "updatePhoneNumber": "Phone Number",
-            "updatePhoneNumberPlaceholder": "Enter phone number",
-            "updateAvatarTitle": "Profile Picture",
-            "updateProfileButtonTitle": "Update Profile Information"
-        },
-        "ModalComment": {
-            "modalCommentTextChar": "characters",
-            "modalCommentCommentNotNull": "Comment content cannot be empty",
-            "modalCommentTextNumberLimited": "Comment content cannot exceed",
-            "modalCommentCreateFail": "Failed to create comment"
-        },                
-       "UserItem": {
-            "follow": "Follow",
-            "unFollow": "Unfollow",
-            "profile": "Profile"
+    "Group": {
+        "groupTdc": "TDC Group - Thu Duc College of Technology",
+        "groupConnectBusiness": "Connect Business Group",
+        "electricalElectronicsGroup": "Electrical - Electronics Group",
+        "informationTechnologyGroup": "Information Technology Group",
+        "automationTechnologyGroup": "Automation Technology Group",
+        "mechanicalEngineeringAndManufacturingGroup": "Mechanical Engineering and Manufacturing Group",
+        "automotiveMechanicalGroup": "Automotive Mechanical Group",
+        "financeAccountingGroup": "Finance - Accounting Group",
+        "businessAdministrationGroup": "Business Administration Group",
+        "tourismGroup": "Tourism Group",
+        "englishGroup": "English Group",
+        "koreanGroup": "Korean Group",
+        "japaneseLanguageDepartmentGroup": "Japanese Language Department Group"
+    },
+    "ModalUpdate": {
+        "modalUpdateTitle": "Update Account Information",
+        "modalUpdatePlaceholderPhoneNumber": "Phone Number",
+        "modalUpdatePlaceholderEmail": "Email",
+        "modalUpdateBackground": "Background",
+        "modalUpdateAvatar": "Avatar",
+        "modalUpdateButtonText": "Update"
+    },
+    "Validate": {
+        "validatePhoneNull": "Phone number cannot be empty",
+        "validatePhoneUnCorrectFormat": "Incorrect phone number format",
+        "validateEmailNull": "Email cannot be empty",
+        "validateEmailUnCorrectFormat": "Incorrect email format",
+        "validateEmailHadUsed": "Email is already registered, please enter another email",
+        "validateEmailHasMaxLength": "Email must not exceed 255 characters",
+        "validateNameHasMaxLength": "Name must not exceed 255 characters",
+        "validateNameHasSpecialCharacter": "Name must not contain special characters",
+        "validateAddressNull": "Address cannot be empty",
+        "validatePresentorNull": "Representative name cannot be empty",
+        "validateRepresentorSpecialCharacter": "Name must not contain special characters",
+        "validateRepresentorMaxLength": "Name must not exceed 255 characters",
+        "validateTaxCodeNull": "Tax code cannot be empty",
+        "validateNameNull": "Name cannot be empty",
+        "validateNameSpecialCharacter": "Name must not contain special characters",
+        "validateNameMaxLength": "Name must not exceed 255 characters",
+        "validateNameTimeActiveUnCorrect": "Incorrect operating time",
+        "validateTaxCodeFormat": "Incorrect tax code format",
+        "validateTaxCodeMaxLength": "Tax code must not exceed 255 characters",
+        "validateAddressMaxLength": "Address must not exceed 255 characters"
+    },
+    "ModalListUserLiked": {
+        "modalListUserLikedTitle": "List of Likers"
+    },
+    "ModalLoadingComment": {
+        "modalLoadingCommentTitle": "Loading Data"
+    },
+    "CreatePostSelector": {
+        "createPostSelectorPlaceHolder": "Enter post content",
+        "createPostSelectorSurveyText": "Survey",
+        "createPostSelectorRecruitmentText": "Recruitment",
+        "createPostSelectorNormalText": "Normal"
+    },
+    "SelectFaculty": {
+        "selectFacultyPlaceholder": "Select faculty...",
+        "selectFacultyTextSearch": "Search..."
+    },
+    "FacultyDashboard": {
+        "facultyDashboardNotifyNotHavePost": "No posts yet"
+    },
+    "StudentDashboard": {
+        "studentDashboardGroupTitle": "TDC Group - Thu Duc College of Technology"
+    },
+    "OptionScreen": {
+        "optionScreenFollowText": "Follow",
+        "optionScreenSaveText": "Save",
+        "optionScreenUpdateProfileText": "Update Profile"
+    },
+    "BusinessUpdate": {
+        "businessUpdateCompanyName": "Company Name",
+        "businessUpdateEmail": "Email",
+        "businessUpdateRepresentorFullName": "Representative's Full Name",
+        "businessUpdateCompanyTaxId": "Tax ID",
+        "businessUpdateCompanyAddress": "Company Address",
+        "businessUpdateCompanyPhoneNumber": "Company Phone Number",
+        "businessUpdateCompanyTimeActiveStart": "Start Time of Operation",
+        "businessUpdateCompanyTimeActiveEnd": "End Time of Operation",
+        "businessUpdateCompanyAvatar": "Company Avatar",
+        "businessUpdateCompanyButton": "Update Profile",
+        "businessUpdateCompanyNamePlaceholder": "Enter company name",
+        "businessUpdateEmailPlaceholder": "Enter email",
+        "businessUpdateRepresentorFullNamePlaceholder": "Enter representative's full name",
+        "businessUpdateCompanyTaxIdPlaceholder": "Enter tax ID",
+        "businessUpdateCompanyAddressPlaceholder": "Enter company address",
+        "businessUpdateCompanyPhoneNumberPlaceholder": "Enter company phone number",
+        "businessUpdateTimeActive": "To"
+    },
+    "CreateNormalPost": {
+        "createNormalPostTitle": "Add Post",
+        "updateNormalPostTitle": "Update Post",
+        "createNormalPostPlaceholder": "Enter post content",
+        "createNormalPostButtonText": "Add Image",
+        "createNormalPostButtonFinish": "Finish",
+        "createNormalPostAllertButton": "agree",
+        "createNormalPostAllertTextChar": "characters",
+        "createNormalPostAllertQuestion": "Do you really want to delete this image?",
+        "createNormalPostAllerTitle": "Warning"
+    },
+    "ModalReviewBackground": {
+        "modalReviewBackgroundTextSave": "Save",
+        "modalReviewBackgroundTextCancel": "Cancel Save"
+    },
+    "AlertNotify": {
+        "alertNotifyTitle": "Notification",
+        "alertNotifyCreateNewPostFail": "Failed to create new post",
+        "alertNotifyCreateNewPostSuccess": "Successfully created a new post",
+        "alertNotifyUpdatePostFail": "Failed to update post",
+        "alertNotifyUpdatePostSuccess": "Successfully updated post",
+        "alertNotifyPostContentCannotNull": "Post content cannot be empty",
+        "alertNotifyCharacter": "Character",
+        "alertNotifyTextAccept": "Accept",
+        "alertNotifyTextReject": "Reject",
+        "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "Number of characters cannot exceed"
+    },
+    "UpdateProfile": {
+        "updateProfileAlertSuccess": "Update successful",
+        "updateProfileAlertFail": "Update failed, please try again"
+    },
+    "ToastMessenger": {
+        "toastMessengerTextTitle": "Warning",
+        "toastMessengerTextWarning": "System error, please try again later"
+    },
+    "FacultyUpdate": {
+        "facultyUpdateName": "Faculty Name",
+        "facultyUpdateNamePlaceholder": "Enter faculty name"
+    },
+    "StudentUpdate": {
+        "studentUpdateName": "Full Name",
+        "facultyUpdateNamePlaceholder": "Enter your name"
+    },
+    "Update": {
+        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumberPlaceholder": "Enter phone number",
+        "updateAvatarTitle": "Avatar",
+        "updateProfileButtonTitle": "Update Profile"
+    },
+    "Notify": {
+        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumberPlaceholder": "Enter phone number",
+        "updateAvatarTitle": "Avatar",
+        "updateProfileButtonTitle": "Update Profile"
+    },
+    "ModalComment": {
+        "modalCommentTextChar": "characters",
+        "modalCommentCommentNotNull": "Comment content cannot be empty",
+        "modalCommentTextNumberLimited": "Comment content cannot exceed",
+        "modalCommentCreateFail": "Failed to create comment"
+    },
+    "ApprovingScreen": {
+        "isLoading": "Loading data...",
+        "emptyMessage": "No new posts"
+    },
+    "PostApproveItem": {
+        "isLoading": "Loading"
+    },
+    "ModalPostRejectReason": {
+        "default": "Default",
+        "survey": "Survey",
+        "recruitment": "Recruitment",
+        "successDeleteMessage": "Success !!!",
+        "successAcceptMessage": "Success !!!",
+        "successDeleteMessageContent": "Successfully deleted the post",
+        "rejectSuccessMessage": "Post rejected successfully",
+        "acceptSuccessageMessage": "Successfully approved the post",
+        "notePlaceholder": "Note...",
+        "acceptPostMenuItem": "Approve post",
+        "rejectPostMenuItem": "Reject post",
+        "isLoading": "Rejecting post",
+        "rejectDetails": "Details",
+        "pendingPostUpdate": "Edit",
+        "pendingPostDelete": "Delete post"
+    },
+    "PenddingPostScreen": {
+        "peddingPostTab": "Pending",
+        "rejectedPostTab": "Rejected",
+        "loading": "Loading...",
+        "emptyMessage": "No posts"
+    },
+    "UserItem": {
+        "follow": "Follow",
+        "unFollow": "Unfollow",
+        "profile": "Profile"
+    },
+    "NoMorePost": {
+        "noMorePost": "No new posts"
     }
 }

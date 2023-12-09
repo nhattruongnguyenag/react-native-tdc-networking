@@ -23,13 +23,13 @@ import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProf
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
-import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
 import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import SkeletonPost from '../components/SkeletonPost';
 import { useGetPostsByIdQuery } from '../redux/Service';
 import { GetPostActive } from '../utils/GetPostActive';
+import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
 
 const ProfileScreen = ({ route }: any) => {
     const t = useTranslation();
@@ -65,8 +65,10 @@ const ProfileScreen = ({ route }: any) => {
         if (data) {
             setIsLoading(false);
             setIsCalled(true);
-            setTypeAuthorPost(data.data.user['roleCodes']);
-            setUserInfo(data.data.user);
+            if (data.data.user !== null) {
+                setTypeAuthorPost(data.data.user['roleCodes']);
+                setUserInfo(data.data.user);
+            }
             setIsFollow(data.data.isFollow)
             setPost(data.data.posts);
             setIsLoading(false);

@@ -28,10 +28,10 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
 
     return (
         <CustomizeSurveyPost
-            id={surveyPost.id}
+            id={surveyPost.id ?? 0}
             title={surveyPost.title ?? t('PostApproveItem.isLoading')}
             active={surveyPost.active}
-            handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
+            handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id ?? 0)}
             description={surveyPost.description ?? t('PostApproveItem.isLoading')}
             textButton={t("SurveyPost.surveyPostButton")}
             textSeeDetailSurvey={t("SurveyPost.surveyPostButtonDetailQuestion")}

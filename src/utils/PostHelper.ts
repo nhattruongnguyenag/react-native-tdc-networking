@@ -6,13 +6,13 @@ import { TextImagePostResponseModal } from "../types/response/TextImagePostRespo
 export function buildPostSearchRequest(postSearchRequest: PostSearchRequest) {
     let key: keyof PostSearchRequest
     let params: String[] = []
+
     for (key in postSearchRequest) {
-        if (postSearchRequest[key]) {
+        if (Boolean(postSearchRequest[key]) !==  undefined && String(postSearchRequest[key]).trim().length > 0) {
             params.push(`${key}=${postSearchRequest[key]}`)
         }
     }
 
-    console.log(params.join('&'))
     return params.join('&')
 }
 

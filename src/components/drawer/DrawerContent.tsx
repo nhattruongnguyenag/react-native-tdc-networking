@@ -75,7 +75,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             <DrawerItem
               style={{ marginStart: 60 }}
               label={getGroupForPost(groupCode, t)}
-              onPress={() => getScreenOfUser(userLogin.roleCodes)}
+              onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
@@ -84,22 +84,22 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             <DrawerItem
               style={{ marginStart: 60 }}
               label={getGroupForPost(groupCode, t)}
-              onPress={() => getScreenOfUser(userLogin.roleCodes)}
+              onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
               inactiveBackgroundColor={'#fff'}
               pressColor={'#0088ff03'}
             />
           )}
 
-          {isBusiness(userLogin) && (
-            <DrawerItem
-              style={{ marginStart: 60 }}
-              label={getGroupForPost(groupBusiness, t)}
-              onPress={() => getScreenOfUser(userLogin.roleCodes)}
-              inactiveBackgroundColor={'#fff'}
-              pressColor={'#0088ff03'}
-            />
-          )}
-        </List.Accordion>
+            {isBusiness(userLogin) && (
+              <DrawerItem
+                style={{ marginStart: 60 }}
+                label={getGroupForPost(groupBusiness, t)}
+                onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
+                inactiveBackgroundColor={'#fff'}
+                pressColor={'#0088ff03'}
+              />
+            )}
+          </List.Accordion>
 
         {isStudent(userLogin) && (
           <DrawerItem
@@ -138,16 +138,19 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
           />
         )}
 
-        <DrawerItem
-          label={t('DrawerContentComponent.peddingPost')}
-          onPress={() => navigation.navigate(PEDDING_POST_SCREEN)}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{ width: 15 }} name='list' size={16} color={'#0088ff'} />
-          )}
-        />
+        {
+          isStudent(userLogin) &&
+          <DrawerItem
+            label={t('DrawerContentComponent.peddingPost')}
+            onPress={() => navigation.navigate(PEDDING_POST_SCREEN)}
+            inactiveBackgroundColor={'#fff'}
+            pressColor={'#0088ff03'}
+            labelStyle={{ color: '#0088ff' }}
+            icon={({ color, focused, size }) => (
+              <FontAwesome6Icon style={{ width: 15 }} name='list' size={16} color={'#0088ff'} />
+            )}
+          />
+        }
 
         <DrawerItem
           label={t('DrawerContentComponent.option')}

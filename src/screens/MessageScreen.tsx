@@ -3,18 +3,26 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
+import { Asset } from 'react-native-image-picker'
 import { Client, Frame, Message } from 'stompjs'
 import Loading from '../components/common/Loading'
 import MessageBottomBar from '../components/messages/MessageBottomBar'
 import MessageReceivedItem from '../components/messages/MessageReceivedItem'
 import MessageSentItem from '../components/messages/MessageSentItem'
-import { MESSAGE_SCREEN_LOADER_TITLE } from '../constants/StringVietnamese'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { setConversationMessages, setImagesUpload } from '../redux/Slice'
 import { getStompClient } from '../sockets/SocketClient'
 import { Message as MessageModel } from '../types/Message'
+import { handleUploadImage } from '../utils/ImageHelper'
 
 let stompClient: Client
+
+export const PLAIN_TEXT = 'plain/text'
+export const IMAGES = 'images'
+
+export const RECEIVED = 0
+export const SEEN = 1
+export const SENDING = 2
 
 export default function MessengerScreen() {
   const t = useTranslation()
@@ -62,10 +70,12 @@ export default function MessengerScreen() {
     const message = {
       senderId: senderId,
       receiverId: receiverId,
-      type: 'plain/text',
+      type: PLAIN_TEXT,
       content: messageContent,
-      status: 0
+      status: RECEIVED
     }
+
+    setTempMessage({ type: PLAIN_TEXT, content: messageContent })
 
     stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
     setMessageContent('')
@@ -93,20 +103,36 @@ export default function MessengerScreen() {
     [conversationMessages]
   )
 
-  useEffect(() => {
-    if (imagesUpload && imagesUpload.length > 0) {
+  const onImagePickerResult = (result: Asset[]) => {
+    setTempMessage({ type: IMAGES, content: result.map(item => item.uri).join(',') })
+
+    handleUploadImage(result, (images) => {
       const message = {
         senderId: senderId,
         receiverId: receiverId,
-        type: 'images',
-        content: imagesUpload?.join(','),
-        status: 0
+        type: IMAGES,
+        content: images.join(','),
+        status: RECEIVED
       }
 
       stompClient.send(`/app/messages/${senderId}/${receiverId}`, {}, JSON.stringify(message))
-      dispatch(setImagesUpload([]))
+    })
+  }
+
+  const setTempMessage = (message: { type: string, content: string }) => {
+    if (selectConversation
+      && selectConversation.receiver
+      && selectConversation.sender) {
+      const tempMessage: MessageModel = {
+        content: message.content,
+        receiver: selectConversation.receiver,
+        sender: selectConversation.sender,
+        type: message.type,
+        status: SENDING
+      }
+      dispatch(setConversationMessages([tempMessage, ...conversationMessages]))
     }
-  }, [imagesUpload])
+  }
 
   return (
     <View style={styles.body}>
@@ -114,18 +140,26 @@ export default function MessengerScreen() {
         <Loading title={t('MessageScreen.messageScreenLoaderTitle')} />
       ) : (
         <Fragment>
-          <FlatList
-            inverted
-            initialNumToRender={5}
-            showsVerticalScrollIndicator={false}
-            data={conversationMessages}
-            renderItem={({ item, index }) => messageRenderItems(item, index)}
-          />
+          {
+            conversationMessages.length > 0 ?
+              <FlatList
+                inverted
+                initialNumToRender={5}
+                showsVerticalScrollIndicator={false}
+                data={conversationMessages}
+                renderItem={({ item, index }) => messageRenderItems(item, index)}
+              />
+              :
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>{t('MessageScreen.messageEmptyList')}</Text>
+              </View>
+          }
 
           <MessageBottomBar
             textInputMessageRef={textInputMessageRef}
             onButtonSendPress={onButtonSendPress}
             onInputMessageContent={(value) => setMessageContent(value)}
+            onImagePickerResult={(result) => onImagePickerResult(result)}
           />
         </Fragment>
       )}
