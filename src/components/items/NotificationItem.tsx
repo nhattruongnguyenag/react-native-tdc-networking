@@ -31,7 +31,7 @@ export default function NotificationItem(props: NotificatonsType) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-    
+
     return (
             <View>
                 <Pressable
