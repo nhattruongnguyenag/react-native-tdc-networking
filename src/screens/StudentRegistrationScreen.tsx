@@ -462,6 +462,11 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
+        dataRequest.map((data) => {
+          if (data.id == student.facultyId) {
+            setDataNganhRequest(data.majors)
+          }
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -485,7 +490,6 @@ export default function StudentRegistrationScreen() {
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      console.log(student)
       axios
         .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
         .then((response) => {
@@ -595,7 +599,7 @@ export default function StudentRegistrationScreen() {
                 value={value}
                 onChange={(item) => {
                   setValue(item.name)
-                  handleFacultyNameChange(item)
+                  handleFacultyNameChange(item.id)
                 }}
               />
             </View>

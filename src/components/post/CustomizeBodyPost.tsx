@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, memo } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK } from '../../constants/Color'
 import { useTranslation } from 'react-multi-lang'
 
@@ -25,9 +25,9 @@ const CustomizeBodyPost = (props: PostContentType) => {
     let data: any = null
     if (showMore) {
       data = seeMore ? (
-        <Text style={styles.bodyTxtSeeMore}>{t("Post.normalPostSeeMoreContent")}</Text>
+        <Text style={styles.bodyTxtSeeMore}>{t("CommentContainer.commentContainerComponentSeeMore")}</Text>
       ) : (
-        <Text style={styles.bodyTxtSeeMore}>{t("Post.normalPostHiddentContent")}</Text>
+        <Text style={styles.bodyTxtSeeMore}>{t("CommentContainer.commentContainerComponentHidden")}</Text>
       )
     }
     return data
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   }
 })
-export default CustomizeBodyPost
+export default memo(CustomizeBodyPost)

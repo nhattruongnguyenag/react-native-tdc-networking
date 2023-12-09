@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { memo } from 'react'
-import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY, COLOR_GREY_FEEBLE } from '../../constants/Color'
+import { COLOR_BLACK, COLOR_BLUE_BANNER, COLOR_BUTTON, COLOR_GREY } from '../../constants/Color'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -25,7 +25,6 @@ interface CustomizeCommentType {
 }
 
 const CustomizeComment = (props: CustomizeCommentType) => {
-
     return props.type === 0 ?
         (<View style={styles.containerType0}>
             <TouchableOpacity

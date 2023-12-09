@@ -13,46 +13,47 @@ import { List } from 'react-native-paper'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../constants/KeyValue'
 import {
-  FACULTY_DASHBOARD_SCREEN,
-  STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   MANAGEMENT_JOB_APPLY_SCREEN,
   BUSINESS_DASHBOARD_SCREEN,
   APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN,
   LOGIN_SCREEN,
-  PEDDING_POST_SCREEN
+  PEDDING_POST_SCREEN,
+  STUDENT_AND_FACULTY_GROUP
 } from '../../constants/Screen'
 import Divider from '../common/Divider'
 import AccordionItem from './AccordionItem'
 import DrawerHeader from './DrawerHeader'
 
 import { useTranslation } from 'react-multi-lang'
-import { useAppSelector } from '../../redux/Hook'
+import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { isAdmin, isFaculty, isStudent, isBusiness } from '../../utils/UserHelper'
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/StringVietnamese'
+import { TYPE_POST_BUSINESS, groupBusiness } from '../../constants/Variables'
+import { setIsLogout } from '../../redux/Slice'
+import { Faculty } from '../../types/Faculty'
+import { Student } from '../../types/Student'
 import { getGroupForPost } from '../../utils/GetGroup'
-import { groupBusiness, groupStudent } from '../../constants/Variables'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
-
+  const dispatch = useAppDispatch()
   const logout = useCallback(() => {
+    dispatch(setIsLogout(true));
     AsyncStorage.removeItem(TOKEN_KEY)
     AsyncStorage.removeItem(USER_LOGIN_KEY)
     navigation.navigate(LOGIN_SCREEN)
   }, [])
 
   const t = useTranslation()
-
-  const getScreenOfUser = (role?: string) => {
-    let screen = '';
-    if (role === TYPE_POST_STUDENT) {
-      screen = STUDENT_DISCUSSION_DASHBOARD_SCREEN;
-    } else if (role === TYPE_POST_FACULTY) {
-      screen = FACULTY_DASHBOARD_SCREEN;
-    } else {
+  const isUserFacultyOrStudent = (isFaculty(userLogin) || isStudent(userLogin));
+  const groupCode = isUserFacultyOrStudent ? (userLogin as unknown as Faculty || userLogin as unknown as Student).facultyGroupCode : "";
+  const getScreenOfUser = (role: string) => {
+    let screen: string = '';
+    if (role === TYPE_POST_BUSINESS) {
       screen = BUSINESS_DASHBOARD_SCREEN;
+    } else {
+      screen = STUDENT_AND_FACULTY_GROUP;
     }
     navigation.navigate(screen);
   }
@@ -64,45 +65,41 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
 
-        {
-          isStudent(userLogin) &&
-          <List.Accordion
-            titleNumberOfLines={5}
-            title={<AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />}
-            titleStyle={{ fontSize: 17 }}
-            id={0}
-          >
-            {isStudent(userLogin) && (
-              <DrawerItem
-                style={{ marginStart: 60 }}
-                label={getGroupForPost(groupStudent, t)}
-                onPress={() => getScreenOfUser(userLogin.roleCodes)}
-                inactiveBackgroundColor={'#fff'}
-                pressColor={'#0088ff03'}
-              />
-            )}
-
-            {isFaculty(userLogin) && (
-              <DrawerItem
-                style={{ marginStart: 60 }}
-                label={getGroupForPost(userLogin?.facultyGroupCode + "", t)}
-                onPress={() => getScreenOfUser(userLogin.roleCodes)}
-                inactiveBackgroundColor={'#fff'}
-                pressColor={'#0088ff03'}
-              />
-            )}
+        <List.Accordion
+          titleNumberOfLines={5}
+          title={<AccordionItem title={t('DrawerContentComponent.userGroup')} iconName='users-line' />}
+          titleStyle={{ fontSize: 17 }}
+          id={0}
+        >
+          {isStudent(userLogin) && (
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(groupCode, t)}
+              onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          )}
+          {isFaculty(userLogin) && (
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(groupCode, t)}
+              onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          )}
 
             {isBusiness(userLogin) && (
               <DrawerItem
                 style={{ marginStart: 60 }}
                 label={getGroupForPost(groupBusiness, t)}
-                onPress={() => getScreenOfUser(userLogin.roleCodes)}
+                onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
                 inactiveBackgroundColor={'#fff'}
                 pressColor={'#0088ff03'}
               />
             )}
           </List.Accordion>
-        }
 
         {isStudent(userLogin) && (
           <DrawerItem

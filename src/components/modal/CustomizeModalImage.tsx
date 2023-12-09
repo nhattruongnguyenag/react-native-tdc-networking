@@ -58,7 +58,7 @@ const CustomizeModalImage = () => {
   }, [userIdOfProfileNow, modalImageData?.userId])
 
   return (
-    <Modal statusBarTranslucent={true} transparent>
+    <Modal animationType='slide' statusBarTranslucent={true} transparent>
       <ScrollView
         onScroll={({ nativeEvent }) => onChange(nativeEvent)}
         horizontal={true}

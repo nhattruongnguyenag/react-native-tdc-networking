@@ -1,5 +1,6 @@
 import { User } from './User'
 
 export interface Faculty extends User {
-  facultyGroupCode: string
+  facultyGroupCode: string,
+  facultyGroupId:number
 }
