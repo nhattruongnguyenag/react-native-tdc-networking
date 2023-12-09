@@ -33,6 +33,9 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
             active={surveyPost.active}
             handleClickBtnSeeDetailEvent={() => handleClickBtnSurveyDetailEvent(surveyPost.id)}
             description={surveyPost.description ?? t('PostApproveItem.isLoading')}
+            textButton={t("SurveyPost.surveyPostButton")}
+            textSeeDetailSurvey={t("SurveyPost.surveyPostButtonDetailQuestion")}
+            textJoinSurvey={t("SurveyPost.surveyPostButtonJoinSurvey")}
         />
     )
 }

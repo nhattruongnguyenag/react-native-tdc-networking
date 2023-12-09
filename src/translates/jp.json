@@ -397,8 +397,10 @@
     },    
      "SurveyPost": {
         "surveyPostType": "アンケート",
-        "surveyPostButton": "アンケートを実施する",
-        "surveyPostButtonSetting": "アンケートを編集する"
+        "surveyPostButton": "アンケートを実施",
+        "surveyPostButtonSetting": "回答を編集",
+        "surveyPostButtonJoinSurvey": "アンケートに参加",
+        "surveyPostButtonDetailQuestion": "詳細な質問"        
     },
     "Faculty":{
         "facultyOfElectricalEngineering": "電気工学学部",

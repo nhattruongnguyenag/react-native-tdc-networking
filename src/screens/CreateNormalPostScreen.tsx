@@ -21,7 +21,7 @@ import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
-import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_NORMAL_POST } from '../constants/Variables'
 import { handlePutDataAPI, updateNormalPostAPI } from '../api/CallApi'
 import { NormalPost } from '../types/NormalPost'
 import { setImagesUpload } from '../redux/Slice'
@@ -41,7 +41,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState(userLogin?.id ?? 0);
   const [postId, setPostId] = useState(-1);
-  const [type, setType] = useState('thong-thuong');
+  const [type, setType] = useState(TYPE_NORMAL_POST);
 
   useEffect(() => {
     if (updateNormalPost != undefined) {

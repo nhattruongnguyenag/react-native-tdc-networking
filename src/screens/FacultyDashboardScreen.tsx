@@ -139,36 +139,39 @@ export default function FacultyDashboardScreen() {
   }, [logout])
 
   const renderItem = useCallback((item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={item.user['roleCodes']}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={code}
-        handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost}
-        active={item.active}
-      />
-    )
+    if (GetPostActive(item.active)) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={code}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active}
+        />
+      )
+    } else
+      return null;
   }, [facultyPost])
 
 

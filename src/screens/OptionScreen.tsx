@@ -8,8 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_UPDATE_PROFILE } from '../constants/StringVietnamese'
-import { COLOR_BLACK, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../constants/Color'
+import { COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../constants/Color'
 import { useTranslation } from 'react-multi-lang'
 
 export default function OptionScreen({ route }: any) {
@@ -35,11 +34,11 @@ export default function OptionScreen({ route }: any) {
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenFollowText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleSaveItem}>
-                    <View style={styles.wrapperIcon}><Icon2 name='bookmark-alt' size={21}  color={COLOR_GREY} /></View>
+                    <View style={styles.wrapperIcon}><Icon2 name='bookmark-alt' size={21} color={COLOR_GREY} /></View>
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenSaveText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleUpdateProfile}>
-                    <View style={styles.wrapperIcon}><FontAwesomeIcon name='pencil-square-o' size={21}  color={COLOR_GREY} /></View>
+                    <View style={styles.wrapperIcon}><FontAwesomeIcon name='pencil-square-o' size={21} color={COLOR_GREY} /></View>
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenUpdateProfileText")}</Text>
                 </Pressable>
             </ScrollView>
@@ -72,14 +71,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4.84,
         elevation: 5,
-        flex:1,
+        flex: 1,
     },
     txt: {
         fontSize: 15,
         color: COLOR_GREY,
-        flex:0.9
+        flex: 0.9
     },
-    wrapperIcon:{
-        flex:0.1,
+    wrapperIcon: {
+        flex: 0.1,
     }
 })

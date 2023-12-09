@@ -102,7 +102,6 @@ const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
-import UpdateProfile from './screens/UpdateProfile'
 import { Student } from './types/Student'
 import { Faculty } from './types/Faculty'
 import { Business } from './types/Business'
@@ -116,6 +115,7 @@ import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
+import UpdateProfile from './screens/UpdateProfile'
 
 export type RootStackParamList = {
   ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined

@@ -400,7 +400,9 @@
      "SurveyPost": {
         "surveyPostType": "Khảo sát",
         "surveyPostButton": "Tiến hành khảo sát",
-        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời"
+        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời",
+        "surveyPostButtonJoinSurvey": "Tham gia khảo sát",
+        "surveyPostButtonDetailQuestion": "Chi tiết câu hỏi"
     },
     "Faculty":{
         "facultyOfElectricalEngineering": "Khoa điện - Điện tử",

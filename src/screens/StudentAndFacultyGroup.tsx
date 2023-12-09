@@ -23,6 +23,7 @@ import { Post } from '../types/Post'
 import { isFaculty, isStudent } from '../utils/UserHelper'
 import { Student } from '../types/Student'
 import { Faculty } from '../types/Faculty'
+import { GetPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function StudentAndFacultyGroup() {
@@ -141,6 +142,7 @@ export default function StudentAndFacultyGroup() {
     }
 
     const renderItem = useCallback((item: any) => {
+        if (GetPostActive(item.active)) {
             return (
                 <CustomizePost
                     id={item.id}
@@ -171,6 +173,9 @@ export default function StudentAndFacultyGroup() {
                     active={item.active}
                 />
             )
+        } else {
+            return null;
+        }
     }, [facultyPost])
 
 

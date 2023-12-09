@@ -414,7 +414,9 @@
      "SurveyPost": {
         "surveyPostType": "Survey",
         "surveyPostButton": "Conduct Survey",
-        "surveyPostButtonSetting": "Edit Survey"
+        "surveyPostButtonSetting": "Edit Answers",
+        "surveyPostButtonJoinSurvey": "Join Survey",
+        "surveyPostButtonDetailQuestion": "Detailed Questions"
     },
     "Faculty":{
         "facultyOfElectricalEngineering": "Electrical Engineering Faculty",
