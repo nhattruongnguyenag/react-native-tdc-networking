@@ -109,21 +109,10 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             pressColor={'#0088ff03'}
             labelStyle={{ color: '#0088ff' }}
             icon={({ color, focused, size }) => (
-              <FontAwesome6Icon style={{ width: 15 }} name='paste' size={16} color={'#0088ff'} />
+              <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
             )}
           />
         )}
-
-        <DrawerItem
-          label={t('DrawerContentComponent.userJobApplyProfile')}
-          onPress={() => { }}
-          inactiveBackgroundColor={'#fff'}
-          pressColor={'#0088ff03'}
-          labelStyle={{ color: '#0088ff' }}
-          icon={({ color, focused, size }) => (
-            <FontAwesome6Icon style={{ width: 15 }} name='file-lines' size={16} color={'#0088ff'} />
-          )}
-        />
 
         {(isAdmin(userLogin) || isFaculty(userLogin)) && (
           <DrawerItem

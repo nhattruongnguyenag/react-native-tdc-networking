@@ -40,7 +40,7 @@ export default function StudentDiscussionDashboardScreen() {
   const { data, isFetching } = useGetStudentPostsQuery({
     id: userLogin?.id ?? 0
   }, {
-    pollingInterval: 2000
+    pollingInterval: 1000
   });
 
   useEffect(() => {
