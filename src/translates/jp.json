@@ -395,11 +395,13 @@
         "recruitmentPostButtonSeeDetail": "詳細を見る",
         "recruitmentPostCurrency":"vnd/月"
     },    
-     "SurveyPost": {
+    "SurveyPost": {
         "surveyPostType": "アンケート",
         "surveyPostButton": "アンケートを実施する",
-        "surveyPostButtonSetting": "アンケートを編集する"
-    },
+        "surveyPostButtonSetting": "回答を編集する",
+        "surveyPostButtonJoinSurvey": "アンケートに参加する",
+        "surveyPostButtonDetailQuestion": "質問の詳細"
+    },    
     "Faculty":{
         "facultyOfElectricalEngineering": "電気工学学部",
         "facultyOfInformationTechnology": "情報技術学部",

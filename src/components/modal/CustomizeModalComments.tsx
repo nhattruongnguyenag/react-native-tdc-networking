@@ -190,7 +190,6 @@ const CustomizeModalComments = () => {
         }
 
         const onError = (err: string | Frame) => {
-            console.log(err)
         }
         stompClient.connect({}, onConnected, onError)
     }, [])

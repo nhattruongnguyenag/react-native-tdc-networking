@@ -55,14 +55,6 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
 
     if (userLogin?.id === props.userId) {
       options.push({
-        type: CLICK_DELETE_POST_EVENT,
-        name: props.t("MenuOption.menuOptionDeleteArticle"),
-        visible: true
-      });
-    }
-
-    if (userLogin?.id === props.userId) {
-      options.push({
         type: CLICK_UPDATE_POST,
         name: props.t("MenuOption.menuOptionViewSurveyUpdateNormalPost"),
         visible: true
@@ -84,6 +76,15 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         visible: true
       });
     }
+
+    if (userLogin?.id === props.userId) {
+      options.push({
+        type: CLICK_DELETE_POST_EVENT,
+        name: props.t("MenuOption.menuOptionDeleteArticle"),
+        visible: true
+      });
+    }
+
 
     return options;
   }, [props.isSave, props.userId, props.type, userLogin?.id, props.t]);

@@ -82,9 +82,9 @@ const MyProfileScreen = () => {
 
   useEffect(() => {
     let groupOfUser = '';
-    if (userLogin?.roleCodes.includes(TYPE_POST_STUDENT)) {
+    if (userLogin?.roleCodes?.includes(TYPE_POST_STUDENT)) {
       groupOfUser = 'group_tdc';
-    } else if (userLogin?.roleCodes.includes(TYPE_POST_FACULTY)) {
+    } else if (userLogin?.roleCodes?.includes(TYPE_POST_FACULTY)) {
       groupOfUser = (userLogin as Faculty).facultyGroupCode;
     } else {
       groupOfUser = 'group_connect_business'
