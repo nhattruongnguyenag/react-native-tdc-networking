@@ -196,7 +196,7 @@ export default function BusinessDashboardScreen() {
           active={item.active} />
       )
     } else {
-      return null;
+      return null
     }
   }, [businessPost])
 

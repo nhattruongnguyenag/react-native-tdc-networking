@@ -229,7 +229,7 @@ export const TDCSocialNetworkAPI = createApi({
     }),
     getFacultyPosts: builder.query<Data<Post[]>, { faculty: string; id: number }>({
       query: (data) => ({
-        url: `api/posts/search?faculty=${data.faculty}&userLogin=${data.id}`,
+        url: `api/posts/search?faculty=${data.faculty}&userLogin=${data.id}&group=none`,
         method: 'GET'
       })
     }),
