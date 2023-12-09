@@ -9,7 +9,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { useEffect, useTransition } from 'react'
-import { Text } from 'react-native'
+import { StatusBar, Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
 import Toast from 'react-native-toast-message'

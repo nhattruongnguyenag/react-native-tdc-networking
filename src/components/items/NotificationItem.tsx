@@ -17,6 +17,8 @@ export interface NotificatonsType {
     id: any
     status: string
     image: string
+    data: string
+    type: string
     createdAt: any
     content: string
     handleItem: (id: number) => void;

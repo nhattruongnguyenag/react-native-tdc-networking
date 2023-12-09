@@ -494,7 +494,6 @@ export default function StudentRegistrationScreen() {
           navigation.navigate(ACCEPT_SCREEN, { email: student.email , subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration') , title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration') , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
-          console.log(error)
           setIsLoading(false)
         })
     } else {

@@ -1,4 +1,5 @@
 export const COLOR_BUTTON = '#0065FF'
+export const COLOR_BLUE = '#0065FF'
 export const COLOR_WHITE = '#fff'
 export const COLOR_BORDER = '#D9D9D9'
 export const COLOR_TEXT_CREATE_NORMAL_POST = '#0065FF'
