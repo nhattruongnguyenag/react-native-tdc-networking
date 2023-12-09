@@ -227,7 +227,8 @@
         "createUpdateProfile": "Cập nhật thông tin cá nhân",
         "manageJobApply": "Quản lý hồ sơ ứng tuyển",
         "pendingPostScreen": "Bài viết đang chờ",
-        "detailSurveyScreen": "Chi tiết câu hỏi"
+        "detailSurveyScreen": "Chi tiết câu hỏi",
+        "studentAndFacultyScreen": "Nhóm thảo luận của sinh viên "
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
@@ -405,7 +406,9 @@
      "SurveyPost": {
         "surveyPostType": "Khảo sát",
         "surveyPostButton": "Tiến hành khảo sát",
-        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời"
+        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời",
+        "surveyPostButtonJoinSurvey": "Tham gia khảo sát",
+        "surveyPostButtonDetailQuestion": "Chi tiết câu hỏi"
     },
     "Faculty":{
         "facultyOfElectricalEngineering": "Khoa điện - Điện tử",
@@ -528,7 +531,8 @@
         "selectFacultyTextSearch":"Tìm kiếm.."
     },
     "FacultyDashboard": {
-        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào"
+        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào",
+        "facultyDashboarNotYetSelectFaculty": "Vui lòng chọn khoa"
     },
     "StudentDashboard": {
         "studentDashboardGroupTitle": "Group TDC - Trường Cao Đẳng Công Nghệ Thủ Đức"

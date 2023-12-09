@@ -6,7 +6,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../constants/Variables'
-import { TYPE_POST_FACULTY, TYPE_POST_STUDENT} from '../constants/Variables'
+import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables'
 import DefaultAvatar from './common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useTranslation } from 'react-multi-lang'
@@ -109,7 +109,18 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLOR_WHITE
+        backgroundColor: COLOR_WHITE,
+        marginHorizontal:5,
+        borderRadius:5,
+        marginTop:5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4.84,
+        elevation: 5,
     },
     header: {
         flexDirection: 'row',

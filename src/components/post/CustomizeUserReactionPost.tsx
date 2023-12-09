@@ -12,9 +12,6 @@ interface UserReactionType {
 }
 
 const CustomizeUserReaction = (props: UserReactionType) => {
-  console.log('====================================');
-  console.log("CustomizeUserReaction");
-  console.log('====================================');
   return (
     <TouchableOpacity onPress={() => props.handleClickIntoUserReactedEvent(props.id)} style={styles.container}>
       {

@@ -44,7 +44,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
       {
         type: CLICK_SAVE_POST_EVENT,
         name: props.t("MenuOption.menuOptionSaveArticle"),
-        visible: props.isSave === 0
+        visible: props.isSave === 0 && userLogin?.id !== props.userId
       },
       {
         type: CLICK_UN_SAVE_POST,
@@ -52,14 +52,6 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         visible: props.isSave === 1
       }
     ];
-
-    if (userLogin?.id === props.userId && props.isSave !== 1) {
-      options.push({
-        type: CLICK_DELETE_POST_EVENT,
-        name: props.t("MenuOption.menuOptionDeleteArticle"),
-        visible: true
-      });
-    }
 
     if (userLogin?.id === props.userId) {
       options.push({
@@ -84,6 +76,15 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
         visible: true
       });
     }
+
+    if (userLogin?.id === props.userId) {
+      options.push({
+        type: CLICK_DELETE_POST_EVENT,
+        name: props.t("MenuOption.menuOptionDeleteArticle"),
+        visible: true
+      });
+    }
+
 
     return options;
   }, [props.isSave, props.userId, props.type, userLogin?.id, props.t]);

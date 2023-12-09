@@ -8,6 +8,4 @@ export interface Business extends User {
   activeTime: string
   confimPassword: string
   phone: string
-  subject: string
-  content: string
 }

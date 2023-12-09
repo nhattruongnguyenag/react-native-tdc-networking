@@ -8,8 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { TEXT_FOLLOW, TEXT_SAVE, TEXT_UPDATE_PROFILE } from '../constants/StringVietnamese'
-import { COLOR_BLACK, COLOR_WHITE } from '../constants/Color'
+import { COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../constants/Color'
 import { useTranslation } from 'react-multi-lang'
 
 export default function OptionScreen({ route }: any) {
@@ -30,16 +29,16 @@ export default function OptionScreen({ route }: any) {
     return (
         <View style={styles.screen}>
             <ScrollView>
-                <Pressable style={styles.item} onPress={handleFollowItem}>
-                    <Icon1 name='account-eye' size={21} color='red' />
+                <Pressable style={[styles.item, styles.firstItem]} onPress={handleFollowItem}>
+                    <View style={styles.wrapperIcon}><Icon1 name='account-eye' size={21} color={COLOR_GREY} /></View>
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenFollowText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleSaveItem}>
-                    <Icon2 name='bookmark-alt' size={21} color='#8a2be2' />
+                    <View style={styles.wrapperIcon}><Icon2 name='bookmark-alt' size={21} color={COLOR_GREY} /></View>
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenSaveText")}</Text>
                 </Pressable>
                 <Pressable style={styles.item} onPress={handleUpdateProfile}>
-                    <FontAwesomeIcon name='pencil-square-o' size={21} color={COLOR_BLACK} />
+                    <View style={styles.wrapperIcon}><FontAwesomeIcon name='pencil-square-o' size={21} color={COLOR_GREY} /></View>
                     <Text style={styles.txt}>{t("OptionScreen.optionScreenUpdateProfileText")}</Text>
                 </Pressable>
             </ScrollView>
@@ -49,19 +48,37 @@ export default function OptionScreen({ route }: any) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: 'grey'
+        flex: 1,
+        backgroundColor: COLOR_WHITE
+    },
+    firstItem: {
+        marginTop: 15,
     },
     item: {
         height: 50,
-        backgroundColor: COLOR_WHITE,
-        marginBottom: 1,
+        backgroundColor: COLOR_GREY_FEEBLE,
         paddingLeft: 20,
+        marginVertical: 5,
+        marginHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center',
+        borderRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4.84,
+        elevation: 5,
+        flex: 1,
     },
     txt: {
         fontSize: 15,
-        color: COLOR_BLACK,
-        paddingLeft: 10
+        color: COLOR_GREY,
+        flex: 0.9
+    },
+    wrapperIcon: {
+        flex: 0.1,
     }
 })

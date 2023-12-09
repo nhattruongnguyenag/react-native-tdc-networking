@@ -1,8 +1,8 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, LogBox } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import CustomizeLayoutImageNotify from './CustomizeLayoutImageNotifyPost'
-import { SCREEN_HEIGHT} from '../../utils/SystemDimensions'
+import { SCREEN_HEIGHT } from '../../utils/SystemDimensions'
 import { Images } from '../../types/Images'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 LogBox.ignoreLogs(['Warning: ...'])
@@ -38,6 +38,10 @@ const CustomizeImagePost = (props: ImagePostType) => {
   }
 
   useEffect(() => {
+    determineNumberHiddenImages();
+  }, [props.images])
+
+  const determineNumberHiddenImages = useCallback(() => {
     if (props.images && props.images.length > 0) {
       setNumberImageRemaining(props.images.length - 5)
       try {
@@ -54,7 +58,8 @@ const CustomizeImagePost = (props: ImagePostType) => {
         setTypeImageLayout(TYPE_LAYOUT_WIDTH_GREATER_HEIGHT)
       }
     }
-  }, [])
+  }, [props.images])
+
 
   switch (imageQty) {
     // 1 dieu kien sap xep
@@ -569,7 +574,7 @@ const styles = StyleSheet.create({
     aspectRatio: 2 / 1
   },
   imageOnePost: {
-    objectFit:'cover',
+    objectFit: 'cover',
     width: '100%',
     height: '100%'
   },
@@ -651,4 +656,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CustomizeImagePost
+export default memo(CustomizeImagePost)

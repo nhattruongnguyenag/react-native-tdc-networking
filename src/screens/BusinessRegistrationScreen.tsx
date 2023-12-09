@@ -5,6 +5,7 @@ import moment from 'moment'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import {
+  Alert,
   Image,
   SafeAreaView,
   ScrollView,

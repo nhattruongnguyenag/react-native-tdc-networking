@@ -1,7 +1,7 @@
-import { PostResponseModel } from "./PostResponseModel";
+import { PostResponseModal } from "./PostResponseModal";
 import { QuestionResponse } from "./QuestionResponse";
 
-export interface SurveyPostResponseModel extends PostResponseModel {
+export interface SurveyResponsePostModal extends PostResponseModal {
     title: string
     description: string
     questions: QuestionResponse[]
