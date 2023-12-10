@@ -615,7 +615,7 @@
         "textForgetPassword": "Forgot password",
         "textNotification": "Email is incorrectly formatted or empty",
         "textSubjectResetPassword": "Update password",
-        "titleSubjectResetPassword": "change the password",
+        "titleSubjectResetPassword": " change the password",
         "textAccept":"Confirm",
         "textBack": "Come back"
     },
@@ -631,7 +631,7 @@
     },
     "AuthenticateRegistraion":{
         "textSubjectAuthenRegistration": "Verify account",
-        "titleSubjectAuthenRegistration": "verify account"
+        "titleSubjectAuthenRegistration": " verify account"
     },
     "NoMorePost": {
         "noMorePost": "No new posts"

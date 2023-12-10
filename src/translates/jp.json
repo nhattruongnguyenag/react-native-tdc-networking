@@ -627,7 +627,7 @@
         "textForgetPassword": "パスワードをお忘れですか",
         "textNotification": "電子メールの形式が正しくないか、空です",
         "textSubjectResetPassword": "パスワードを更新する",
-        "titleSubjectResetPassword": "パスワードを変更する",
+        "titleSubjectResetPassword": " パスワードを変更する",
         "textAccept":"確認する",
         "textBack": "戻ってくる"
     },
@@ -643,7 +643,7 @@
     },
     "AuthenticateRegistraion":{
         "textSubjectAuthenRegistration": "認証登録",
-        "titleSubjectAuthenRegistration": "アカウント認証"
+        "titleSubjectAuthenRegistration": " アカウント認証"
     },
     "NoMorePost": {
         "noMorePost": "新しい投稿はありません"

@@ -661,7 +661,7 @@
         "textForgetPassword": "Quên mật khẩu",
         "textNotification": "Email sai định dạng hoặc rỗng",
         "textSubjectResetPassword": "Cập nhật mật khẩu",
-        "titleSubjectResetPassword": "thay đổi mật khẩu",
+        "titleSubjectResetPassword": " thay đổi mật khẩu",
         "textAccept":"Xác nhận",
         "textBack": "Quay lại"
     },
@@ -677,7 +677,7 @@
     },
     "AuthenticateRegistraion":{
         "textSubjectAuthenRegistration": "Xác thực tài khoản",
-        "titleSubjectAuthenRegistration": "xác thực tài khoản"
+        "titleSubjectAuthenRegistration": " xác thực tài khoản"
     },
     "NoMorePost": {
         "noMorePost": "Không có bài viết mới"
