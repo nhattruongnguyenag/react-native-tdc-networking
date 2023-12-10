@@ -622,5 +622,30 @@
         "follow": "フォロー",
         "unFollow": "フォロー解除",
         "profile": "プロフィール"
+    },
+    "ForgettenPassword":{
+        "textForgetPassword": "パスワードをお忘れですか",
+        "textNotification": "電子メールの形式が正しくないか、空です",
+        "textSubjectResetPassword": "パスワードを更新する",
+        "titleSubjectResetPassword": " パスワードを変更する",
+        "textAccept":"確認する",
+        "textBack": "戻ってくる"
+    },
+    "AcceptScreen":{
+        "checkEmail": "メールをチェックする",
+        "description1":"メールにリンクを送信しました",
+        "description2":"、 メールを確認してください",
+        "titleNotify":"通知",
+        "descriptionNotify":"リンクを再送信しました ",
+        "back": "戻る",
+        "notSend": "メールが届かない??、",
+        "sendAgain": "に送る"
+    },
+    "AuthenticateRegistraion":{
+        "textSubjectAuthenRegistration": "認証登録",
+        "titleSubjectAuthenRegistration": " アカウント認証"
+    },
+    "NoMorePost": {
+        "noMorePost": "新しい投稿はありません"
     }
 }

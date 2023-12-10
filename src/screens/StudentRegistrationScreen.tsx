@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { Student } from '../types/Student'
 import axios, { AxiosResponse } from 'axios'
@@ -90,6 +90,8 @@ export default function StudentRegistrationScreen() {
     phone: '',
     studentCode: '',
     confimPassword: '',
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+    content:''
   })
   const [dataRequest, setDataRequest] = useState([
     {
@@ -429,8 +431,9 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleFacultyNameChange = useCallback(
-    (value: number) => {
-      setStudent({ ...student, facultyId: value })
+    (value: any) => {
+      setStudent({ ...student, facultyId: value.id })
+      setDataNganhRequest(value.majors)
       if (value == null) {
         setValidate({
           ...validate,
@@ -492,6 +495,7 @@ export default function StudentRegistrationScreen() {
         .then((response) => {
           setIsLoading(false)
           openModal()
+          navigation.navigate(ACCEPT_SCREEN, { email: student.email , subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration') , title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration') , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           setIsLoading(false)
@@ -595,7 +599,7 @@ export default function StudentRegistrationScreen() {
                 value={value}
                 onChange={(item) => {
                   setValue(item.name)
-                  handleFacultyNameChange(item.id)
+                  handleFacultyNameChange(item)
                 }}
               />
             </View>
