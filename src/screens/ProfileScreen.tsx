@@ -8,11 +8,10 @@ import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload,
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../constants/Variables';
 import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import CustomizeModalBigImageShow from '../components/modal/CustomizeModalBigImageShow';
-import { useIsFocused } from '@react-navigation/native';
 import { Student } from '../types/Student';
 import { Faculty } from '../types/Faculty';
 import { Business } from '../types/Business';
@@ -24,12 +23,13 @@ import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProf
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
-import { getFacultyTranslated } from '../utils/getFacultyTranslated ';
 import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import SkeletonPost from '../components/SkeletonPost';
 import { useGetPostsByIdQuery } from '../redux/Service';
+import { GetPostActive } from '../utils/GetPostActive';
+import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
 
 const ProfileScreen = ({ route }: any) => {
     const t = useTranslation();
@@ -64,7 +64,6 @@ const ProfileScreen = ({ route }: any) => {
     useEffect(() => {
         if (data) {
             setIsLoading(false);
-            setPost([]);
             setIsCalled(true);
             if (data.data.user !== null) {
                 setTypeAuthorPost(data.data.user['roleCodes']);
@@ -118,36 +117,40 @@ const ProfileScreen = ({ route }: any) => {
     }
 
     const renderItem = useCallback((item: any) => {
-        return (
-            <CustomizePost
-                id={item.id}
-                userId={item.user['id']}
-                name={item.user['name']}
-                avatar={item.user['image']}
-                typeAuthor={item.user['roleCodes']}
-                available={null}
-                timeCreatePost={item.createdAt}
-                content={item.content}
-                type={item.type}
-                likes={item.likes}
-                comments={item.comment}
-                commentQty={item.commentQuantity}
-                images={item.images}
-                role={item.user['roleCodes']}
-                likeAction={likeAction}
-                location={item.location ?? null}
-                title={item.title ?? null}
-                expiration={item.expiration ?? null}
-                salary={item.salary ?? null}
-                employmentType={item.employmentType ?? null}
-                description={item.description ?? null}
-                isSave={item.isSave}
-                group={group}
-                handleUnSave={handleSavePost}
-                handleDelete={handleDeletePost}
-                active={item.active}
-            />
-        )
+        if (GetPostActive(item.active)) {
+            return (
+                <CustomizePost
+                    id={item.id}
+                    userId={item.user['id']}
+                    name={item.user['name']}
+                    avatar={item.user['image']}
+                    typeAuthor={item.user['roleCodes']}
+                    available={null}
+                    timeCreatePost={item.createdAt}
+                    content={item.content}
+                    type={item.type}
+                    likes={item.likes}
+                    comments={item.comment}
+                    commentQty={item.commentQuantity}
+                    images={item.images}
+                    role={item.user['roleCodes']}
+                    likeAction={likeAction}
+                    location={item.location ?? null}
+                    title={item.title ?? null}
+                    expiration={item.expiration ?? null}
+                    salary={item.salary ?? null}
+                    employmentType={item.employmentType ?? null}
+                    description={item.description ?? null}
+                    isSave={item.isSave}
+                    group={group}
+                    handleUnSave={handleSavePost}
+                    handleDelete={handleDeletePost}
+                    active={item.active}
+                />
+            )
+        } else {
+            return null;
+        }
     }, [post]
     )
 
@@ -243,7 +246,6 @@ const ProfileScreen = ({ route }: any) => {
                             <RefreshControl
                                 refreshing={false}
                                 onRefresh={() => {
-                                    // TODO
                                 }}
                             />
                         }
@@ -255,27 +257,32 @@ const ProfileScreen = ({ route }: any) => {
                             userData={userInfo}
                             handleClickButtonEvent={handleClickButtonEvent}
                             handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
-                        <View style={styles.titlePostArea}>
-                            <Text style={styles.txtTitlePostArea}>
-                                {
-                                    getFacultyTranslated(userInfo?.name + "", t)
-                                }
-                                {' '}
-                                <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
-                                {' '}
-                                {
-                                    getGroupForPost(group, t)
-                                }
-                            </Text>
-                        </View>
                         {
-                            post.length !== 0 && <FlatList
-                                scrollEnabled={false}
-                                showsVerticalScrollIndicator={false}
-                                data={post}
-                                renderItem={({ item }) => renderItem(item)}
-                            />
+                            userInfo !== undefined && <View style={styles.titlePostArea}>
+                                <Text style={styles.txtTitlePostArea}>
+                                    {
+                                        getFacultyTranslated(userInfo?.name + "", t)
+                                    }
+                                    {' '}
+                                    <IconAntDesign name='caretright' size={15} color={COLOR_BLACK} />
+                                    {' '}
+                                    {
+                                        getGroupForPost(group, t)
+                                    }
+                                </Text>
+                            </View>
                         }
+                        <View style={styles.wrapperPost}>
+                            {
+                                post.length !== 0 && <FlatList
+                                    extraData={post}
+                                    scrollEnabled={false}
+                                    showsVerticalScrollIndicator={false}
+                                    data={post}
+                                    renderItem={({ item }) => renderItem(item)}
+                                />
+                            }
+                        </View>
                     </ScrollView>
                     <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
                 </>
@@ -296,6 +303,9 @@ const styles = StyleSheet.create({
     },
     txtTitlePostArea: {
         color: COLOR_BLACK
+    },
+    wrapperPost: {
+        marginTop: 5,
     }
 })
 export default ProfileScreen

@@ -4,7 +4,17 @@ import axios, { AxiosResponse } from 'axios'
 import moment from 'moment'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import DatePicker from 'react-native-date-picker'
 import { ActivityIndicator } from 'react-native-paper'
@@ -79,7 +89,7 @@ export default function BusinessRegistrationScreen() {
     name: '',
     image: '',
     confimPassword: '',
-    subject: t('RegisterBusinessComponent.textAccountAuthen'),
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
     content: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
@@ -550,7 +560,7 @@ export default function BusinessRegistrationScreen() {
         })
         console.log(business)
       })
-        
+
       return
       axios
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
@@ -558,8 +568,8 @@ export default function BusinessRegistrationScreen() {
           setIsLoading(false)
           navigation.navigate(ACCEPT_SCREEN, {
             email: business.email,
-            subject: t('RegisterBusinessComponent.textAccountAuthen'),
-            title: t('RegisterBusinessComponent.textAccountAuthen'),
+            subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+            title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
             url: 'api/users/get/email/authen/register'
           })
         })

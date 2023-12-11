@@ -70,7 +70,7 @@ export default function StudentRegistrationScreen() {
     majorId: 0,
     studentCode: '',
     confimPassword: '',
-    subject: t('RegisterStudentComponent.textAccountAuthen'),
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
     content: ''
   })
   const [dataRequest, setDataRequest] = useState([
@@ -442,6 +442,11 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
+        dataRequest.map((data) => {
+          if (data.id == student.facultyId) {
+            setDataNganhRequest(data.majors)
+          }
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -464,8 +469,8 @@ export default function StudentRegistrationScreen() {
               setIsLoading(false)
               navigation.navigate(ACCEPT_SCREEN, {
                 email: student.email,
-                subject: t('RegisterStudentComponent.textAccountAuthen'),
-                title: t('RegisterStudentComponent.textAccountAuthen'),
+                subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+                title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
                 url: 'api/users/get/email/authen/register'
               })
             })

@@ -8,7 +8,6 @@ import CustomizeImagePost from './CustomizeImagePost'
 import { Post } from '../../types/Post'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { openModalComments, openModalImage, openModalUserReaction } from '../../redux/Slice'
-import { Like } from '../../types/Like'
 import { LikeAction } from '../../types/LikeActions'
 import {
   TYPE_POST_BUSINESS,
@@ -32,18 +31,15 @@ import CustomizeSurveyPost from '../surveyPost/CustomizeSurveyPost'
 import { numberDayPassed } from '../../utils/FormatTime'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, DETAIL_SURVEY_SCREEN } from '../../constants/Screen'
+import { CREATE_NORMAL_POST_SCREEN, LIST_JOB_APPLY_SCREEN, PROFILE_SCREEN, RECRUITMENT_DETAIL_SCREEN, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN } from '../../constants/Screen'
 import { RootStackParamList } from '../../App'
 import { useTranslation } from 'react-multi-lang'
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
 const CustomizePost = (props: Post) => {
-  console.log('====================================');
-  console.log("CustomizePost");
-  console.log('====================================');
   const t = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   let post = props
@@ -137,7 +133,7 @@ const CustomizePost = (props: Post) => {
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
-  const handleClickMenuOption = useCallback((flag: number) => {
+  const handleClickMenuOption = (flag: number) => {
     switch (flag) {
       case CLICK_SAVE_POST_EVENT:
         post.handleUnSave(post.id);
@@ -155,21 +151,23 @@ const CustomizePost = (props: Post) => {
         handleSeeResultSurveyPost();
         break
       case CLICK_UPDATE_POST:
-        handleUpdateNormalPostEvent();
+        if (post.type.includes(TYPE_NORMAL_POST)) {
+          handleUpdateNormalPostEvent();
+        }
         break
       default:
         return '';
     }
-  }, [])
+  }
 
   const handleUpdateNormalPostEvent = () => {
-    console.log("handleUpdateNormalPostEvent")
+    console.log("handleUpdateNormalPostEvent");
     const updateNormalPost: UpdateNormalPost = {
       postId: props.id,
       content: props.content,
       images: props.images
     }
-    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost: updateNormalPost })
+    navigation.navigate(CREATE_NORMAL_POST_SCREEN, { updateNormalPost: updateNormalPost });
   }
 
   const handleSeeListCvPost = () => {
@@ -182,13 +180,12 @@ const CustomizePost = (props: Post) => {
   }
 
   const identifyTypeAuthor = useCallback((type: string) => {
-    console.log("identifyTypeAuthor");
     if (type == TYPE_POST_FACULTY) {
       return t("Post.normalPostIdentifyAuthorFaculty")
     } else if (type == TYPE_POST_BUSINESS) {
       return t("Post.normalPostIdentifyAuthorCompany")
     } else {
-      return null
+      return null;
     }
   }, [])
 
@@ -288,6 +285,8 @@ const CustomizePost = (props: Post) => {
           handleClickBtnSeeDetailEvent={handleClickBtnSurveyDetailEvent}
           description={props.description ?? ''}
           textButton={t("SurveyPost.surveyPostButton")}
+          textSeeDetailSurvey={t("SurveyPost.surveyPostButtonDetailQuestion")}
+          textJoinSurvey={t("SurveyPost.surveyPostButtonJoinSurvey")}
         />
         <CustomizeBottomPost
           isLike={handleCheckLiked}
@@ -306,7 +305,17 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
     backgroundColor: COLOR_WHITE,
-    marginBottom: 20
+    marginBottom: 20,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4.84,
+    elevation: 5,
   },
   wrapHeader: {
     flexDirection: 'row',

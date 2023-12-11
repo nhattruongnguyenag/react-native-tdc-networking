@@ -10,7 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 import { useTranslation } from 'react-multi-lang'
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 
 const CustomizeModalUserReacted = () => {
   const t = useTranslation();
@@ -33,7 +33,7 @@ const CustomizeModalUserReacted = () => {
     }
   }
   return (
-    <Modal transparent statusBarTranslucent={true}>
+    <Modal animationType='slide' transparent statusBarTranslucent={true}>
       <TouchableOpacity onPress={() => handleClickIntoBtnIconClose()} style={styles.container}>
         <Pressable style={styles.wrapLayout}>
           <View style={styles.header}>

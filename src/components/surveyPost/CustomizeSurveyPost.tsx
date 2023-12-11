@@ -12,6 +12,8 @@ interface RecruitmentPostType {
   title: string
   description: string
   active: number
+  textSeeDetailSurvey: string
+  textJoinSurvey: string
   handleClickBtnSeeDetailEvent: (id: number) => void
 }
 
@@ -30,7 +32,7 @@ export default function CustomizeSurveyPost(props: Readonly<RecruitmentPostType>
             style={{ flexDirection: 'row' }}
             onPress={() => props.handleClickBtnSeeDetailEvent(props.id)}>
             <View style={styles.bottomButton}>
-              <Text style={styles.txtBtn}>{props.active === 1 ? TEXT_JOIN_SURVEY : TEXT_DETAIL_SURVEY}</Text>
+              <Text style={styles.txtBtn}>{props.active === 1 ? props.textJoinSurvey : props.textSeeDetailSurvey}</Text>
               <FeatherIcon name='chevrons-right' size={ICON_SIZE} color={COLOR_WHITE} />
             </View>
           </TouchableOpacity>

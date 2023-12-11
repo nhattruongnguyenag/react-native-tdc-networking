@@ -5,7 +5,7 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import axios from 'axios'
 import { COLOR_WHITE } from '../constants/Color'
 import { useTranslation } from 'react-multi-lang'
-import { getFacultyTranslated } from '../utils/getFacultyTranslated '
+import { getFacultyTranslated } from '../utils/GetFacultyTranslated '
 
 
 interface DataItem {
@@ -16,7 +16,7 @@ interface DataItem {
 }
 
 interface SelectFacultyToolbarType {
-    flag: string
+    flag: boolean
     handleSelectFacultyEvent: (code: string) => void
 }
 
@@ -44,6 +44,7 @@ const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
         })
         return facultiesHadTranslated;
     }
+    
     return (
         <View>
             <View style={styles.group}>

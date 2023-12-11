@@ -3,33 +3,27 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { Conversation } from '../types/Conversation'
 import { Data } from '../types/Data'
 import { DeviceToken } from '../types/DeviceToken'
+import { Post } from '../types/Post'
 import { PostRejectedLog } from '../types/PostRejectLog'
 import { RecruitmentPost } from '../types/RecruitmentPost'
 import { FCMNotificationRequest } from '../types/request/FCMNotificationRequest'
 import { JobApplyRequest } from '../types/request/JobApplyRequest'
-import { PostSearchRequest } from '../types/request/PostSearchRequest'
-import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
-import { FollowUserModel } from '../types/response/FollowUserModel'
-import { MessageResponseData } from '../types/response/MessageResponseData'
-import { PostResponseModel } from '../types/response/PostResponseModel'
-import { SurveyResponse } from '../types/response/QuestionResponse'
-import { SurveyItemResult } from '../types/response/SurveyResult'
-import { SurveyPostRequest } from '../types/SurveyPostRequest'
-import { buildPostSearchRequest } from '../utils/PostHelper'
-import { JobApplyRespose } from '../types/response/JobApplyResponse'
 import { JobApplyUpdateRequest } from '../types/request/JobApplyUpdateRequest'
 import { JobUpdateStatus } from '../types/request/JobUpdateStatus'
-import { PostSavedModel } from '../types/response/PostSavedModel'
-import { NotificationModel } from '../types/response/NotificationModel'
+import { PostSearchRequest } from '../types/request/PostSearchRequest'
+import { SurveyConductRequest } from '../types/request/SurveyConductRequest'
+import { PostResponseModal } from '../types/response/PostResponseModal'
+import { JobApplyRespose } from '../types/response/JobApplyResponse'
 import { JobApplyResponseData } from '../types/response/JobApplyResponseData'
-import { Post } from '../types/Post'
-import { createEntityAdapter } from '@reduxjs/toolkit'
-
-const itemsAdapter = createEntityAdapter({
-  selectId: (item: PostResponseModel) => item.id
-})
-
-const itemsSelector = itemsAdapter.getSelectors()
+import { MessageResponseData } from '../types/response/MessageResponseData'
+import { NotificationModel } from '../types/response/NotificationModel'
+import { PostResponseModel } from '../types/response/PostResponseModel'
+import { PostSavedModel } from '../types/response/PostSavedModel'
+import { SurveyResponse } from '../types/response/QuestionResponse'
+import { SurveyItemResult } from '../types/response/SurveyResult'
+import { SurveyPostRequest } from '../types/SurveyPost'
+import { FollowUserModel } from '../types/response/FollowUserModel'
+import { buildPostSearchRequest } from '../utils/PostHelper'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -149,11 +143,10 @@ export const TDCSocialNetworkAPI = createApi({
         url: `api/posts/survey/${surveyPostId}/result`
       })
     }),
-    getPosts: builder.query<Data<PostResponseModel[]>, PostSearchRequest>({
-      query: (data) => (
-        {
-          url: `api/posts/search?${buildPostSearchRequest(data)}`
-        }),
+    getPosts: builder.query<Data<PostResponseModal[]>, PostSearchRequest>({
+      query: (data) => ({
+        url: `api/posts/search?${buildPostSearchRequest(data)}`
+      }),
       providesTags: (result) => {
         if (result) {
           return [
@@ -236,19 +229,25 @@ export const TDCSocialNetworkAPI = createApi({
     }),
     getFacultyPosts: builder.query<Data<Post[]>, { faculty: string; id: number }>({
       query: (data) => ({
-        url: `api/posts/group?code=${data.faculty}&userLogin=${data.id}`,
+        url: `api/posts/search?faculty=${data.faculty}&userLogin=${data.id}&group=none`,
+        method: 'GET'
+      })
+    }),
+    getFacultyAndStudentPosts: builder.query<Data<Post[]>, { faculty: string; id: number }>({
+      query: (data) => ({
+        url: `api/posts/search?group=${data.faculty}&userLogin=${data.id}`,
         method: 'GET'
       })
     }),
     getBusinessPosts: builder.query<Data<Post[]>, { id: number }>({
       query: (data) => ({
-        url: `api/posts/group?code=group_connect_business&userLogin=${data.id}`,
+        url: `api/posts/search?group=group_connect_business&userLogin=${data.id}`,
         method: 'GET'
       })
     }),
     getStudentPosts: builder.query<Data<Post[]>, { id: number }>({
       query: (data) => ({
-        url: `api/posts/group?code=group_tdc&userLogin=${data.id}`,
+        url: `api/posts/search?group=group_tdc&userLogin=${data.id}`,
         method: 'GET'
       })
     }),
@@ -306,13 +305,9 @@ export const {
   useUpdateRecruitmentPostMutation,
   useGetSurveyPostUpdateQuery,
   useGetFacultyPostsQuery,
+  useGetFacultyAndStudentPostsQuery,
   useGetBusinessPostsQuery,
   useGetStudentPostsQuery,
   useGetPostsByIdQuery,
   useUpdateSurveyPostMutation
 } = TDCSocialNetworkAPI
-
-export {
-  itemsSelector,
-  itemsAdapter
-}

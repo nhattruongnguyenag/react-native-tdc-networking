@@ -1,34 +1,35 @@
 {
     "DrawerContentComponent": {
-        "userGroup": "Your Group",
+        "userGroup": "Your group",
         "userJobApplyProfile": "Job Application Profile",
-        "approvingPost": "Approving Posts",
-        "peddingPost": "Pending Posts",
+        "waitingPost": "Pending Posts",
         "option": "Options",
-        "logout": "Log Out"
+        "logout": "Logout"
     },
+
     "LoginComponent": {
-        "titleLogin": "Log In",
+        "titleLogin": "Sign in",
         "emailId": "Email ID",
         "password": "Password",
-        "errorEmail": "Incorrect or empty email format",
-        "errorPass": "Incorrect or empty password format",
+        "errorEmail": "Email is incorrectly formatted or empty",
+        "errorPass": "Password is incorrectly formatted or empty",
         "showPass": "Show",
         "hidePass": "Hide",
-        "loginFail": "Login Failed",
+        "loginFail": "Sign in failed",
         "alertLoginFail": "Incorrect email or password",
-        "forgotPass": "Forgot Password?",
-        "titleRegister": "Register",
-        "requestRegister": "Don't have an account?"
+        "forgotPass": "Forgot password?",
+        "titleRegister": "Sign up",
+        "requestRegister": "Don't have account?"
     },
-    "RegisterComponent": {
+
+    "RegisterComponent":{
         "typeStudent": "Student",
         "typeBusiness": "Business",
         "titleNotification": "Notification",
-        "warningSelectedType": "Please select a registration role",
-        "titleSelectedType": "Select Role",
+        "warningSelectedType": "Please select the registration role",
+        "titleSelectedType": "Select role",
         "selectedType": "---Select registration role---",
-        "goBack": "Go Back",
+        "goBack": "Go back",
         "continute": "Continue"
     },
     "RecuitmentPostDetailComponent": {
@@ -47,23 +48,24 @@
         "textNoApply":"You are not eligible to apply",
         "textApplied":"You have applied! Please go to job application profile to track your application profile status"
     },
-    "ListJobApplyComponent": {
-        "listEmpty": "No job applications",
-        "updateNull": "Not updated",
-        "seeDetailCV": "View CV",
-        "titleLoader": "Loading data...",
-        "textReceived": "Received",
-        "textIn_progress": "In Progress",
-        "textNot_meet_standard_quality": "Under Review",
-        "textInterview": "Interview",
-        "textInterview_not_meet_standard_quality": "Did not pass interview",
-        "textAccept": "Accepted",
-        "textSelectStatus": "Select status to change",
-        "textChangeSucces": "Status changed successfully",
-        "textChangeStatus": "Change status",
-        "textCancel": "Cancel",
-        "textChange": "Change",
-        "textNotification": "Notification"
+
+    "ListJobApplyComponent":{
+        "listEmpty":"There are no job application",
+        "updateNull":"Not update",
+        "seeDetailCV":"See cv details",
+        "titleLoader":"Loading...",
+        "textReceived" : "Received",
+        "textIn_progress" : "In progress",
+        "textNot_meet_standard_quality" : "Not meet standard quality",
+        "textInterview" : "Interview",
+        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
+        "textAccept" : "Accept",
+        "textChangeSucces" : "Change profile status successfully",
+        "textChangeStatus" : "Change profile status",
+        "textCancel" : "Cancle",
+        "textChange" : "Change",
+        "textSelectStatus" : "Select status change",
+        "textNotification" : "Notification"
     },
     "RegisterStudentComponent": {
         "titleRegisterStudent": "Student Registration",
@@ -161,35 +163,32 @@
         "titleNotification": "Notification",
         "textAccountAuthen":"Account authentication"
     },
-    "ManageJobApply": {
-        "textReceived": "Received",
-        "textIn_progress": "In Progress",
-        "textNot_meet_standard_quality": "Under Review",
-        "textInterview": "Interview",
-        "textInterview_not_meet_standard_quality": "Did not pass interview",
-        "textAccept": "Accepted",
-        "textNotification": "Notification",
-        "textDeleteSucces": "Canceled application successfully",
-        "textLoader": "Loading data...",
-        "textListJobNull": "No job applications",
-        "textSeeCv": "View CV",
-        "textDelete": "Cancel Application",
-        "textChangeProfile": "Edit Profile"
-    },
+    "ManageJobApply":{
+        "textReceived" : "Received",
+        "textIn_progress" : "In progress",
+        "textNot_meet_standard_quality" : "Not meet standard quality",
+        "textInterview" : "Interview",
+        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
+        "textAccept" : "Accept",
+        "textChangeProfile" : "Update job application",
+        "textNotification" : "Notification",
+        "textDeleteSucces" : "Cancel profile successfully",
+        "textLoader" : "Loading...",
+        "textListJobNull" : "No job application",
+        "textSeeCv" : "See profile",
+        "textDelete" : "Cancle profile"
+     },
     "NotificationsComponent": {
         "notification": "Notification",
         "readAll": "Mark all as read",
         "deleteNotification": "Delete notification",
         "unReadNotification": "Mark as unread",
-        "search": "Search notifications..."
+        "search": "Search notifications ..."
     },
     "FollowComponent": {
         "following": "Following",
-        "follower": "Followers",
-        "search": "Search users..."
-    },
-    "SavedPostListComponent": {
-        "search": "Enter search content..."
+        "follower": "Follows you",
+        "search": "Search for users..."
     },
     "SearchComponent": {
         "user": "User",
@@ -199,7 +198,10 @@
         "post": "Post",
         "normal": "Post",
         "survey": "Survey",
-        "recruitment": "Job Post",
+        "recruitment": "Recruitment",
+        "search": "Enter search content..."
+    },
+    "SavedPostListComponent": {
         "search": "Enter search content..."
     },
     "ToolbarTitle": {
@@ -214,34 +216,33 @@
         "addQuestionScreen": "Add Question",
         "reviewSurveyPostScreen": "Review Post",
         "surveyConductScreen": "Conduct Survey",
-        "jobApplyScreen": "Job Apply",
+        "jobApplyScreen": "Job Application",
         "listPostSavedScreen": "Saved Posts",
         "createNormalPostScreen": "",
-        "listJobApplyScreen": "List Job Applications",
-        "listFollowScreen": "List Follow",
+        "listJobApplyScreen": "Job Application List",
+        "listFollowScreen": "Follow List",
         "profileScreen": "User Profile",
         "detailJobApply": "Job Application Details",
         "optionScreen": "Options",
         "splashScreen": "",
         "surveyResultScreen": "Survey Results",
         "applicationOptionScreen": "Application Options",
-        "approvalPostScreen": "Approve Post",
+        "approvalPostScreen": "Approve Posts",
         "createSurveyScreen": "Create Survey",
-        "createRecruitmentScreen": "Create Recruitment Post",
+        "createRecruitmentScreen": "Create Job Posting",
         "createUpdateProfile": "Update Personal Information",
-        "manageJobApply": "Manage Job Applications",
-        "pendingPostScreen": "Pending Posts",
-        "detailSurveyScreen": "Survey Details"
+        "manageJobApply": "Manage application job",
+        "studentAndFacultyScreen": "Student discussion group"
     },
     "AddQuestionScreen": {
-        "textButtonGoBack": "Go Back",
+        "textButtonGoBack": "Go back",
         "textButtonGoNext": "Next",
         "textEmptyQuestionErrorTitle": "Error",
-        "textEmptyQuestionErrorContent": "Add at least 1 question to the survey"
+        "textEmptyQuestionErrorContent": "Add at least 1 question for the survey"
     },
     "ConversationScreen": {
         "allConversationTabTitle": "All Conversations",
-        "allActiveConversationTabTitle": "Active Conversations"
+        "allActiveConversationTabTitle": "Active"
     },
     "RecruitmentScreen": {
         "recruitmentBenefitEmptyValidate": "Benefits cannot be empty",
@@ -255,20 +256,18 @@
         "recruitmentSalaryEmptyValidate": "Salary cannot be empty",
         "recruitmentSaveDescPlaceholder": "Job description...",
         "recruitmentSaveDescTitle": "Job Description",
-        "recruitmentSaveEmploymentTypePlaceholder": "Employment Type...",
+        "recruitmentSaveEmploymentTypePlaceholder": "Employment type...",
         "recruitmentSaveExpirationPickerLocale": "en",
         "recruitmentSaveExpirationTitle": "Application Deadline",
-        "recruitmentSaveLocationPlaceholder": "Work Location...",
+        "recruitmentSaveLocationPlaceholder": "Work location...",
         "recruitmentSaveLocationTitle": "Work Location",
         "recruitmentSaveRequirementPlaceholder": "Requirements...",
         "recruitmentSaveRequirementTitle": "Job Requirements",
         "recruitmentSaveSallaryPlaceholder": "Salary...",
         "recruitmentSaveSallaryTitle": "Salary",
         "recruitmentSaveSaveEmploymentTypeTitle": "Employment Type",
-        "recruitmentSaveSuccessContent": "Recruitment post has been published",
-        "recruitmentSaveSuccessTitle": "Success!!!",
-        "recruitmentUpdateSuccessTitle": "Success!!!",
-        "recruitmentUpdateSuccessContent": "Recruitment post has been updated",
+        "recruitmentSaveSuccessContent": "Job posting has been created",
+        "recruitmentSaveSuccessTitle": "Success!",
         "recruitmentSaveTitlePlaceholder": "Enter title...",
         "recruitmentSaveTitleTitle": "Title",
         "recruitmentTitleEmptyValidate": "Title cannot be empty",
@@ -288,7 +287,7 @@
     "JobApplyScreen": {
         "jobApplyScreenButtonAddCvTitle": "Add CV",
         "jobApplyScreenButtonComplete": "Complete",
-        "jobApplyScreenButtonGoBack": "Go Back",
+        "jobApplyScreenButtonGoBack": "Go back",
         "jobApplyScreenButtonUpdateCvTitle": "Update CV",
         "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the application",
         "jobApplyScreenEmptyCvTextTitle": "Notification",
@@ -303,27 +302,25 @@
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
-        "userStatusInactive": "Online"
+        "userStatusInactive": "Last seen"
     },
     "ReviewSurveyPostScreen": {
-        "reviewSurveyScreenAnswerTitle": "Question",
+        "reviewSurveyScreenAnswerTitle": "Questions",
         "reviewSurveyScreenButtonComplete": "Complete",
         "reviewSurveyScreenButtonGoBack": "Go Back",
         "reviewSurveyScreenSaveFailContent": "Save failed",
         "reviewSurveyScreenSaveFailTitle": "Error",
-        "reviewSurveyScreenSaveSuccessTitle": "Success",
-        "reviewSurveyScreenSaveSuccessContent": "Survey added successfully",
-        "reviewSurveyScreenUpdateSuccessTitle": "Success",
-        "reviewSurveyScreenUpdateSuccessContent": "Survey updated successfully"
+        "reviewSurveyScreenSaveSuccessContent": "Save successful",
+        "reviewSurveyScreenSaveSuccessTitle": "Success"
     },
     "SurveyConductScreen": {
-        "surveyConductScreenSaveSuccessTitle": "Success!!!",
-        "surveyConductScreenSaveSuccessContent": "Answers have been saved\nThank you for participating in the survey",
+        "surveyConductScreenSaveSuccessTitle": "Success!",
+        "surveyConductScreenSaveSuccessContent": "Answers have been saved.\nThank you for participating in the survey",
         "surveyConductScreenShortAnswerError": "Please enter a short answer",
         "surveyConductScreenMultiQuestionMulitiChoice": "Please select at least one answer",
         "surveyConductScreenMultiQuestionOneChoice": "Please select one answer",
         "surveyConductScreenLoaderTitle": "Loading data...",
-        "surveyConductScreenButtonGoBack": "Go Back",
+        "surveyConductScreenButtonGoBack": "Go back",
         "surveyConductScreenButtonComplete": "Complete"
     },
     "SurveyResultScreen": {
@@ -339,8 +336,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Message"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Sending...",
         "messageItemStatusReceived": "Received",
         "messageItemStatusSeen": "Seen"
+    },
+    "MessageDate": {
+        "today": "Today",
+        "yesterday": "Yesterday"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Add",
@@ -350,15 +352,13 @@
         "addQuestionViewComponentMultiChoiceQuestion": "Multiple Choice",
         "addQuestionViewComponentOneChoiceQuestion": "Quiz",
         "addQuestionViewComponentQuestionEmptyErrorContent": "Please select a question type",
-        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!!!",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!",
         "addQuestionViewComponentQuestionTypeDropdownSearch": "Search...",
-        "addQuestionViewComponentQuestionTypeDropdownTitle": "Select question type",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Select question type ---",
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Title cannot contain special characters",
         "addQuestionViewComponentTitleEmptyValidate": "Title cannot be empty",
         "addQuestionViewComponentTitleInputPlaceholder": "Enter question title...",
-        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters",
-        "addChoiceValidateErrorTitle": "Notification",
-        "addChoiceValidateErrorContent": "Please add at least one choice for the question"
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters"
     },
     "MultiChoiceQuestion": {
         "questionComponentAddTextTitle": "Question"
@@ -367,87 +367,40 @@
         "questionBottomBarQuestionRequireToggle": "Required"
     },
     "ShortAnswerQuestion": {
-        "shortAnswerQuestionComponentTitlePlaceholder": "Enter answer..."
+        "shortAnswerQuestionComponentTitlePlaceholder": "Enter your answer..."
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " votes"
     },
     "Post": {
-        "normalPostIdentifyAuthorCompany": "Business",
+        "normalPostIdentifyAuthorCompany": "Company",
         "normalPostIdentifyAuthorFaculty": "Faculty",
         "normalPostIdentifyAuthorStudent": "",
         "typePostRecruitment": "Recruitment",
         "typePostSurvey": "Survey",
         "normalPostLikeBy": "Liked by",
-        "normalPostSeeMoreContent": "Liked by",
-        "normalPostHiddentContent": "Show less"
-    },
-    "Comment": {
-        "commentReplyComment": "Reply",
-        "commentDeleteComment": "Delete",
-        "commentAuthor": "Author",
-        "modalListCommentTitle": "Comments"
-    },
-    "CommentContainer": {
-        "commentContainerComponentSeeMore": "See more",
-        "commentContainerComponentHidden": "Show less"
-    },
-    "CreateCommentToolbar": {
-        "commentCreateComment": "Post comment",
-        "commentPlaceholderInput": "Enter comment content"
-    },
-    "RecruitmentPost": {
+        "normalPostSeeMoreContent": "See more",
+        "normalPostHiddentContent": "Hide"
+    },    
+     "Comment": {
+         "commentReplyComment": "Reply",
+         "commentDeleteComment": "Delete",
+         "commentAuthor": "Author",
+         "modalListCommentTitle": "Comments"
+     },
+     "CommentContainer": {
+        "commentContainerComponentSeeMore": "See More comment",
+        "commentContainerComponentHidden": "Hide comment"
+     },
+     "CreateCommentToolbar":{
+        "commentCreateComment": "Post Comment",
+        "commentPlaceholderInput": "Please enter your comment"
+     },
+     "RecruitmentPost": {
         "recruitmentPostType": "Recruitment",
         "recruitmentPostButtonSeeDetail": "See Details",
-        "recruitmentPostCurrency": "vnd/Month"
-    },
-    "SurveyPost": {
-        "surveyPostType": "Survey",
-        "surveyPostButton": "Conduct Survey",
-        "surveyPostButtonSetting": "Edit Answers"
-    },
-    "Faculty": {
-        "facultyOfElectricalEngineering": "Faculty of Electrical Engineering",
-        "facultyOfInformationTechnology": "Faculty of Information Technology",
-        "facultyOfAutomationTechnology": "Faculty of Automation Technology",
-        "facultyOfMechanicalEngineeringAndManufacturing": "Faculty of Mechanical Engineering and Manufacturing",
-        "automobileEngineeringDepartment": "Automobile Engineering Department",
-        "facultyOfFinanceAndAccounting": "Faculty of Finance and Accounting",
-        "facultyOfBusinessAdministration": "Faculty of Business Administration",
-        "facultyOfTourism": "Faculty of Tourism",
-        "departmentOfEnglish": "Department of English",
-        "departmentOfKoreanLanguage": "Department of Korean Language",
-        "japaneseLanguageDepartment": "Japanese Language Department"
-    },
-    "ModalUserLiked": {
-        "modalUserLikedTitle": "List of Users who Liked"
-    },
-    "MenuOption": {
-        "menuOptionSaveArticle": "Save Article",
-        "menuOptionUnSaveArticle": "Unsave Article",
-        "menuOptionDeleteArticle": "Delete Article",
-        "menuOptionViewResumeList": "View CV List",
-        "menuOptionViewSurveyResults": "View Survey Results",
-        "menuOptionViewSurveyUpdateNormalPost": "Edit Article"
-    },
-    "CreatePostToolbar": {
-        "createPostToolbarTitle": "Create New Post",
-        "createPostToolbarNormalPost": "Text/Image",
-        "createPostToolbarSurveyPost": "Create Survey Post",
-        "createPostToolbarRecruitmentPost": "Recruitment Post"
-    },
-    "ModalCreateNormalPost": {
-        "modalCreateNormalPostTitle": "Create Post",
-        "modalCreateNormalPostPlaceholder": "Please enter the content of the post",
-        "modalCreateNormalPostEntryImages": "Images",
-        "modalCreateNormalPostButton": "Post"
-    },
-    "BusinessSelectFacultyToolbar": {
-        "businessSelectFacultyToolbarTitle": "Select the faculty to display posts"
-    },
-    "NotifyFacultyDontHaveAnyPost": {
-        "textNotifyFacultyDontHaveAnyPost": "No posts in this faculty yet"
-    },
+        "recruitmentPostCurrency":"vnd/Month"
+    },  
     "Profile": {
         "profileOperatingHours": "Operating Hours",
         "profileTaxID": "Tax ID",
@@ -457,13 +410,20 @@
         "profileEmail": "Email",
         "profileArticles": "Articles",
         "profilePosition": "Position",
-        "profileRole": "Student",
-        "chat": "Chat",
+        "profileRole": "Role",
+        "chat": "Send Message",
         "call": "Call",
         "unFollow": "Unfollow",
         "follow": "Follow",
-        "updateProfile": "Update Personal Information",
-        "unUpdate": "Not updated yet"
+        "updateProfile": "Update Profile",
+        "unUpdate": "Not Updated Yet"
+    },      
+     "SurveyPost": {
+        "surveyPostType": "Survey",
+        "surveyPostButton": "Conduct Survey",
+        "surveyPostButtonSetting": "Edit Answers",
+        "surveyPostButtonJoinSurvey": "Join Survey",
+        "surveyPostButtonDetailQuestion": "Detailed Questions"
     },
     "Group": {
         "groupTdc": "TDC Group - Thu Duc College of Technology",
@@ -651,6 +611,28 @@
         "follow": "Follow",
         "unFollow": "Unfollow",
         "profile": "Profile"
+    },
+    "ForgettenPassword":{
+        "textForgetPassword": "Forgot password",
+        "textNotification": "Email is incorrectly formatted or empty",
+        "textSubjectResetPassword": "Update password",
+        "titleSubjectResetPassword": " change the password",
+        "textAccept":"Confirm",
+        "textBack": "Come back"
+    },
+    "AcceptScreen":{
+        "checkEmail": "Check email",
+        "description1":"We have sent your email the link",
+        "description2":", please check your email",
+        "titleNotify":"Notification",
+        "descriptionNotify":"Link have been sent again to ",
+        "back": "Come back",
+        "notSend": "Haven't received email??,",
+        "sendAgain": "Send again"
+    },
+    "AuthenticateRegistraion":{
+        "textSubjectAuthenRegistration": "Verify account",
+        "titleSubjectAuthenRegistration": " verify account"
     },
     "NoMorePost": {
         "noMorePost": "No new posts"

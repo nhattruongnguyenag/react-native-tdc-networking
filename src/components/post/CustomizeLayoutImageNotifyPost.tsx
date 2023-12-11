@@ -1,14 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { COLOR_BLACK, COLOR_IMAGE_ERROR } from '../../constants/Color'
 
 //  Constant
 const TEXT_IMAGE_ERROR = `Count't Load Activity`
 const CustomizeLayoutImageNotify = () => {
-  console.log('====================================');
-  console.log("CustomizeLayoutImageNotify");
-  console.log('====================================');
   return (
     <View style={styles.container}>
       <Ionicons name='refresh-outline' size={30} color={COLOR_BLACK} />
@@ -25,4 +22,4 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_IMAGE_ERROR
   }
 })
-export default CustomizeLayoutImageNotify
+export default memo(CustomizeLayoutImageNotify)
