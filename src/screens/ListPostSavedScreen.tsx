@@ -30,7 +30,6 @@ const ListPostSavedScreen = () => {
       stompClient.subscribe(`/topic/posts/save`, onMessageReceived)
     }
     const onMessageReceived = (payload: any) => {
-      console.log('123');
       setData(JSON.parse(payload.body))
     }
     const onError = (err: string | Frame) => {

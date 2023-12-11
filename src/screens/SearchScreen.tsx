@@ -71,9 +71,7 @@ export default function SearchScreen() {
       stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
     }
     const onMessageReceived = (payload: any) => {
-      console.log(payload.body)
       setMasterData(JSON.parse(payload.body))
-      setQty(masterData.length)
     }
     const onError = (err: string | Frame) => {
       console.log(err)
