@@ -42,7 +42,10 @@
         "benefit": "Phúc lợi",
         "descriptionJob": "Mô tả công việc",
         "requipmentJob": "Yêu cầu công việc",
-        "btnApplyJob": "Nộp đơn ứng tuyển"
+        "btnApplyJob": "Nộp đơn ứng tuyển",
+        "textNotification": "Thông báo",
+        "textNoApply":"Bạn không thuộc đối tượng ứng tuyển",
+        "textApplied":"Bạn đã ứng tuyển! Vui lòng vào hồ sơ ứng tuyển để theo dõi tình trạng hồ sơ"
     },
     "ListJobApplyComponent": {
         "listEmpty": "Không có hồ sơ ứng tuyển",
@@ -103,7 +106,8 @@
         "titleRegister": "Đăng ký",
         "titleLogin": "Đăng nhập",
         "requestLogin": "Đã có tài khoản?",
-        "titleNotification": "Thông báo"
+        "titleNotification": "Thông báo",
+        "textAccountAuthen":"Xác thực tài khoản"
     },
     "RegisterBusinessComponent": {
         "titleRegisterBusiness": "Đăng ký doanh nghiệp",
@@ -155,7 +159,8 @@
         "titleRegister": "Đăng ký",
         "titleLogin": "Đăng nhập",
         "requestLogin": "Đã có tài khoản?",
-        "titleNotification": "Thông báo"
+        "titleNotification": "Thông báo",
+        "textAccountAuthen":"Xác thực tài khoản"
     },
     "ManageJobApply": {
         "textReceived": "Đã nhận",
@@ -291,7 +296,8 @@
         "jobApplyScreenEmptyCvTextTitle": "Thông báo",
         "jobApplyScreenSaveSuccessTextContent": "Nộp đơn thành công",
         "jobApplyScreenChangeSuccessTextContent": "Sửa đơn thành công",
-        "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
+        "jobApplyScreenSaveSuccessTextTitle": "Thông báo",
+        "jobApplyScreenUploadErrorFormat": "Không đúng định dạng pdf"
     },
     "MessageScreen": {
         "messageScreenLoaderTitle": "Đang tải tin nhắn...",

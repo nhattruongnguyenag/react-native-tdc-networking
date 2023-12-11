@@ -17,7 +17,7 @@ import {
 } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import DatePicker from 'react-native-date-picker'
-import { ActivityIndicator, Modal, PaperProvider, Portal } from 'react-native-paper'
+import { ActivityIndicator } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextValidate from '../components/common/TextValidate'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
@@ -40,6 +40,11 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
+import { useAddBusinessMutation } from '../redux/Service'
+import { BusinessRequest } from '../types/request/BusinessRequest'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -64,15 +69,15 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
   const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
-  const [business, setBusiness] = useState<
-    Omit<Business, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'roleCodes' | 'isTyping' | 'isMessageConnect'>
-  >({
+  const [business, setBusiness] = useState<BusinessRequest>({
     password: '',
     representor: '',
     phone: '',
@@ -82,11 +87,11 @@ export default function BusinessRegistrationScreen() {
     activeTime: timeStart + '-' + timeEnd,
     email: '',
     name: '',
-    image: '',
     confimPassword: '',
     subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
     content: ''
   })
+  const [saveBusiness, businessRegisterResponse] = useAddBusinessMutation()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
@@ -544,32 +549,19 @@ export default function BusinessRegistrationScreen() {
     }
   }, [timeStart, timeEnd])
 
-  useEffect(() => {
-    setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
-  }, [imagesUpload])
-  const [modalVisible, setModalVisible] = useState(false)
-
-  const openModal = () => {
-    setModalVisible(true)
-  }
-
-  const closeModal = () => {
-    setModalVisible(false)
-  }
   const onSubmit = useCallback(() => {
-    console.log(business.activeTime)
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      axios
-        .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
-        .then((response) => {
-          setIsLoading(false)
-          openModal()
-          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration') , title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration') , url: 'api/users/get/email/authen/register'})
+      if (imagePicker) {
+        handleUploadImage(imagePicker, (data) => {
+          saveBusiness({
+            ...business,
+            image: data[0]
+          })
         })
-        .catch((error) => {
-          setIsLoading(false)
-        })
+      } else {
+        saveBusiness(business)
+      }
     } else {
       let key: keyof RegisterBusiness
       for (key in validate) {
@@ -579,279 +571,271 @@ export default function BusinessRegistrationScreen() {
       }
       setValidate({ ...validate })
     }
-  }, [validate])
+  }, [validate, imagePicker])
 
-  const containerStyle = {
-    backgroundColor: 'white',
-    padding: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 100,
-    height: 230
-  }
+  useEffect(() => {
+    if (businessRegisterResponse.data) {
+      setIsLoading(false)
+      navigation.navigate(ACCEPT_SCREEN, {
+        email: business.email,
+        subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+        title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
+        url: 'api/users/get/email/authen/register'
+      })
+    }
+  }, [businessRegisterResponse])
   return (
-    <PaperProvider>
-      <ScrollView style={{ backgroundColor: '#fff' }}>
-        <SafeAreaView>
-          <View style={styles.header}>
-            <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
-              <Icon name='chevron-left' size={20} color={'#ffff'} />
-            </TouchableOpacity>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.txtHeader}>{t('RegisterBusinessComponent.titleRegisterBusiness')}</Text>
-            </View>
-          </View>
-          <View>
-            <TextInputWithTitle
-              defaultValue={business.name}
-              title={t('RegisterBusinessComponent.titleBusinessName')}
-              placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
-              onChangeText={(value) => handleNameChange(value)}
-              textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
-            />
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.name?.textError}
-              isError={validate.name?.isError}
-              isVisible={validate.name?.isVisible}
-            />
-
-            <TextInputWithTitle
-              defaultValue={business.email}
-              title={t('RegisterBusinessComponent.titleEmail')}
-              placeholder={t('RegisterBusinessComponent.placeholderEmail')}
-              onChangeText={(value) => handleEmailChange(value)}
-              onBlur={() => handleCheckEmail()}
-              textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
-            />
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.email?.textError}
-              isError={validate.email?.isError}
-              isVisible={validate.email?.isVisible}
-            />
-
-            <TextInputWithTitle
-              defaultValue={business.representor}
-              title={t('RegisterBusinessComponent.titleRepresent')}
-              placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
-              onChangeText={(value) => handleRepresentoreChange(value)}
-              textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
-            />
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.representor?.textError}
-              isError={validate.representor?.isError}
-              isVisible={validate.representor?.isVisible}
-            />
-
-            <TextInputWithTitle
-              defaultValue={business.taxCode}
-              title={t('RegisterBusinessComponent.titleTaxCode')}
-              placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
-              onChangeText={(value) => handleTaxCodeChange(value)}
-              textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
-            />
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.taxCode?.textError}
-              isError={validate.taxCode?.isError}
-              isVisible={validate.taxCode?.isVisible}
-            />
-
-            <TextInputWithTitle
-              defaultValue={business.address}
-              title={t('RegisterBusinessComponent.titleAddress')}
-              placeholder={t('RegisterBusinessComponent.placeholderAddress')}
-              onChangeText={(value) => handleAddressChange(value)}
-              textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
-            />
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.address?.textError}
-              isError={validate.address?.isError}
-              isVisible={validate.address?.isVisible}
-            />
-
-            <TextInputWithTitle
-              defaultValue={business.phone}
-              title={t('RegisterBusinessComponent.titlePhone')}
-              placeholder={t('RegisterBusinessComponent.placeholderPhone')}
-              onChangeText={(value) => handlePhoneChange(value)}
-              textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
-            />
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.phone?.textError}
-              isError={validate.phone?.isError}
-              isVisible={validate.phone?.isVisible}
-            />
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-              <TextInputWithTitle
-                defaultValue={timeStart}
-                textInputRef={timeStartRef}
-                onFocus={() => {
-                  setShowDatePickerStart(true)
-                }}
-                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-                title={t('RegisterBusinessComponent.titleTimeStart')}
-                placeholder={moment().format('HH:mm')}
-              />
-              <Text style={styles.txt}>{t('RegisterBusinessComponent.titleTo')}</Text>
-              <DatePicker
-                modal
-                mode='time'
-                locale='vi'
-                open={showDatePickerStart}
-                date={new Date()}
-                onConfirm={(time) => {
-                  setTimeStart(moment(time).format('HH:mm'))
-                  timeStartRef.current?.blur()
-                  setShowDatePickerStart(false)
-                }}
-                onCancel={() => {
-                  timeStartRef.current?.blur()
-                  setShowDatePickerStart(false)
-                }}
-              />
-
-              <TextInputWithTitle
-                defaultValue={timeEnd}
-                textInputRef={timeEndRef}
-                onFocus={() => {
-                  setShowDatePickerEnd(true)
-                }}
-                textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-                title={t('RegisterBusinessComponent.titleTimeEnd')}
-                placeholder={moment().format('HH:mm')}
-              />
-
-              <DatePicker
-                modal
-                mode='time'
-                locale='vi'
-                open={showDatePickerEnd}
-                date={new Date()}
-                onConfirm={(time) => {
-                  setTimeEnd(moment(time).format('HH:mm'))
-                  timeEndRef.current?.blur()
-                  setShowDatePickerEnd(false)
-                }}
-                onCancel={() => {
-                  timeEndRef.current?.blur()
-                  setShowDatePickerEnd(false)
-                }}
-              />
-            </View>
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.activeTime?.textError}
-              isError={validate.activeTime?.isError}
-              isVisible={validate.activeTime?.isVisible}
-            />
-
-            <View style={styles.group}>
-              <Text style={styles.txt}>{t('RegisterBusinessComponent.titlePass')}</Text>
-              <TextInput
-                value={business.password}
-                placeholder={t('RegisterBusinessComponent.placeholderPass')}
-                style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
-                secureTextEntry={isCheck.secureTextEntry ? true : false}
-                onChangeText={(value) => handlePasswordChange(value)}
-              />
-              <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
-                <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-              </TouchableOpacity>
-            </View>
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.password?.textError}
-              isError={validate.password?.isError}
-              isVisible={validate.password?.isVisible}
-            />
-
-            <View style={styles.group}>
-              <Text style={styles.txt}>{t('RegisterBusinessComponent.titleConfimPass')}</Text>
-              <TextInput
-                value={business.confimPassword}
-                placeholder={t('RegisterBusinessComponent.placeholderConfimPass')}
-                style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
-                secureTextEntry={isCheck1.secureTextEntry ? true : false}
-                onChangeText={(value) => handleConfirmPasswordChange(value)}
-              />
-
-              <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
-                <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
-              </TouchableOpacity>
-            </View>
-
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={validate.confimPassword?.textError}
-              isError={validate.confimPassword?.isError}
-              isVisible={validate.confimPassword?.isVisible}
-            />
-
-            <View style={styles.group}>
-              <View style={styles.logo}>
-                <Text style={styles.txt}>{t('RegisterBusinessComponent.avata')}</Text>
-                <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
-                  <Icon name='camera-retro' size={20}></Icon>
-                  <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
-                </TouchableOpacity>
-              </View>
-              <View style={{ alignItems: 'center' }}>
-                {imagesUpload ? (
-                  <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-                ) : (
-                  ''
-                )}
-              </View>
-            </View>
-          </View>
-
-          <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-            <Text style={styles.txtRegister}>{t('RegisterBusinessComponent.titleRegister')}</Text>
-            <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
+    <ScrollView style={{ backgroundColor: '#fff' }}>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
+            <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
-          <Portal>
-            <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={containerStyle}>
-              <View style={styles.headerModal}>
-                <Text style={styles.txtModal}>Thông báo</Text>
-              </View>
-              <View style={styles.container}>
-                <Text style={styles.txt}>Đăng ký tài khoản thành công! Kiểm tra email để xác thực tài khoản</Text>
-              </View>
-              <View style={styles.btnBottom}>
-                <TouchableOpacity style={[styles.btnItem, { marginRight: 5 }]}>
-                  <Text style={styles.txtBottom} onPress={closeModal}>
-                    Tôi hiểu rồi!
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Modal>
-          </Portal>
-          <View style={styles.login}>
-            <Text>{t('RegisterBusinessComponent.requestLogin')} </Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(LOGIN_SCREEN)
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.txtHeader}>{t('RegisterBusinessComponent.titleRegisterBusiness')}</Text>
+          </View>
+        </View>
+        <View>
+          <TextInputWithTitle
+            defaultValue={business.name}
+            title={t('RegisterBusinessComponent.titleBusinessName')}
+            placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
+            onChangeText={(value) => handleNameChange(value)}
+            textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
+          />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.name?.textError}
+            isError={validate.name?.isError}
+            isVisible={validate.name?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={business.email}
+            title={t('RegisterBusinessComponent.titleEmail')}
+            placeholder={t('RegisterBusinessComponent.placeholderEmail')}
+            onChangeText={(value) => handleEmailChange(value)}
+            onBlur={() => handleCheckEmail()}
+            textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.email?.textError}
+            isError={validate.email?.isError}
+            isVisible={validate.email?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={business.representor}
+            title={t('RegisterBusinessComponent.titleRepresent')}
+            placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
+            onChangeText={(value) => handleRepresentoreChange(value)}
+            textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.representor?.textError}
+            isError={validate.representor?.isError}
+            isVisible={validate.representor?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={business.taxCode}
+            title={t('RegisterBusinessComponent.titleTaxCode')}
+            placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
+            onChangeText={(value) => handleTaxCodeChange(value)}
+            textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.taxCode?.textError}
+            isError={validate.taxCode?.isError}
+            isVisible={validate.taxCode?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={business.address}
+            title={t('RegisterBusinessComponent.titleAddress')}
+            placeholder={t('RegisterBusinessComponent.placeholderAddress')}
+            onChangeText={(value) => handleAddressChange(value)}
+            textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
+          />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.address?.textError}
+            isError={validate.address?.isError}
+            isVisible={validate.address?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={business.phone}
+            title={t('RegisterBusinessComponent.titlePhone')}
+            placeholder={t('RegisterBusinessComponent.placeholderPhone')}
+            onChangeText={(value) => handlePhoneChange(value)}
+            textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.phone?.textError}
+            isError={validate.phone?.isError}
+            isVisible={validate.phone?.isVisible}
+          />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <TextInputWithTitle
+              defaultValue={timeStart}
+              textInputRef={timeStartRef}
+              onFocus={() => {
+                setShowDatePickerStart(true)
               }}
-            >
-              <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
-                {t('RegisterBusinessComponent.titleLogin')}
-              </Text>
+              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+              title={t('RegisterBusinessComponent.titleTimeStart')}
+              placeholder={moment().format('HH:mm')}
+            />
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titleTo')}</Text>
+            <DatePicker
+              modal
+              mode='time'
+              locale='vi'
+              open={showDatePickerStart}
+              date={new Date()}
+              onConfirm={(time) => {
+                setTimeStart(moment(time).format('HH:mm'))
+                timeStartRef.current?.blur()
+                setShowDatePickerStart(false)
+              }}
+              onCancel={() => {
+                timeStartRef.current?.blur()
+                setShowDatePickerStart(false)
+              }}
+            />
+
+            <TextInputWithTitle
+              defaultValue={timeEnd}
+              textInputRef={timeEndRef}
+              onFocus={() => {
+                setShowDatePickerEnd(true)
+              }}
+              textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
+              title={t('RegisterBusinessComponent.titleTimeEnd')}
+              placeholder={moment().format('HH:mm')}
+            />
+
+            <DatePicker
+              modal
+              mode='time'
+              locale='vi'
+              open={showDatePickerEnd}
+              date={new Date()}
+              onConfirm={(time) => {
+                setTimeEnd(moment(time).format('HH:mm'))
+                timeEndRef.current?.blur()
+                setShowDatePickerEnd(false)
+              }}
+              onCancel={() => {
+                timeEndRef.current?.blur()
+                setShowDatePickerEnd(false)
+              }}
+            />
+          </View>
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.activeTime?.textError}
+            isError={validate.activeTime?.isError}
+            isVisible={validate.activeTime?.isVisible}
+          />
+
+          <View style={styles.group}>
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titlePass')}</Text>
+            <TextInput
+              value={business.password}
+              placeholder={t('RegisterBusinessComponent.placeholderPass')}
+              style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
+              secureTextEntry={isCheck.secureTextEntry ? true : false}
+              onChangeText={(value) => handlePasswordChange(value)}
+            />
+            <TouchableOpacity style={styles.icon} onPress={() => onCheck()}>
+              <Icon name={!isCheck.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
-      </ScrollView>
-    </PaperProvider>
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.password?.textError}
+            isError={validate.password?.isError}
+            isVisible={validate.password?.isVisible}
+          />
+
+          <View style={styles.group}>
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titleConfimPass')}</Text>
+            <TextInput
+              value={business.confimPassword}
+              placeholder={t('RegisterBusinessComponent.placeholderConfimPass')}
+              style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
+              secureTextEntry={isCheck1.secureTextEntry ? true : false}
+              onChangeText={(value) => handleConfirmPasswordChange(value)}
+            />
+
+            <TouchableOpacity style={styles.icon} onPress={() => onCheck1()}>
+              <Icon name={!isCheck1.secureTextEntry ? 'eye' : 'eye-slash'} style={styles.icon1} />
+            </TouchableOpacity>
+          </View>
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.confimPassword?.textError}
+            isError={validate.confimPassword?.isError}
+            isVisible={validate.confimPassword?.isVisible}
+          />
+
+          <View style={styles.group}>
+            <View style={styles.logo}>
+              <Text style={styles.txt}>{t('RegisterBusinessComponent.avata')}</Text>
+              <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
+                <Icon name='camera-retro' size={20}></Icon>
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    console.log(result)
+                    setImagePicker(result)
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              {imagePicker && imagePicker.length > 0 && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: imagePicker && imagePicker.length > 0 ? imagePicker[0].uri : '' }}
+                />
+              )}
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
+          <Text style={styles.txtRegister}>{t('RegisterBusinessComponent.titleRegister')}</Text>
+          <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
+        </TouchableOpacity>
+
+        <View style={styles.login}>
+          <Text>{t('RegisterBusinessComponent.requestLogin')} </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(LOGIN_SCREEN)
+            }}
+          >
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+              {t('RegisterBusinessComponent.titleLogin')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   )
 }
 
