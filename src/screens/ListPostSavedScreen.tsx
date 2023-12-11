@@ -23,7 +23,8 @@ const ListPostSavedScreen = () => {
   const [value, setValue] = useState(null)
   const t = useTranslation()
   const [data, setData] = useState<Post[]>()
-
+  
+  ////////////////////////////////////////////////
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
@@ -37,7 +38,6 @@ const ListPostSavedScreen = () => {
     }
     stompClient.connect({}, onConnected, onError)
   }, [])
-
   useEffect(() => {
     axios.get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`).then((response) => {
       setData(response.data.data)
@@ -66,16 +66,48 @@ const ListPostSavedScreen = () => {
   const handleDelete = (post_id: number) => {
   }
 
+  //////////////////////////////////////////////////
+  const searchBox = () => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      stompClient.subscribe(`/topic/posts/save/${userLogin?.id}/search/${search}`, onMessageReceived)
+    }
+    const onMessageReceived = (payload: any) => {
+      // setData(JSON.parse(payload.body))
+      console.log(payload.body);
+      
+    }
+    const onError = (err: string | Frame) => {
+      console.log('aaaaaaaaaaaaaaaaaaaaa');
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+
+    stompClient.send(`/app/posts/save/${userLogin?.id}/search/abc/listen`,
+      {})
+
+  }
+
+  const searchPost = (i:string) => {
+    setSearch(i)
+    // console.log(search);
+    
+    // stompClient.send(`/app/posts/save/user/search/${i}/listen`,
+    //   {})
+  }
+
+
   return (
     <View style={styles.searchScreen}>
-      <View style={styles.search}>
+      {/* <View style={styles.search}>
         <TextInput
           value={search}
           style={styles.txt_input} placeholder={t('SavedPostListComponent.search')}
-          onChangeText={(i) => setSearch(i)}
+          onChangeText={(i) => searchPost(i)}
+          onPressIn={() => searchBox()}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
-      </View>
+      </View> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
@@ -83,35 +115,35 @@ const ListPostSavedScreen = () => {
           onRefresh={() => data}
         />}
       >
-            {
-              data?.map((item: any) => <CustomizePost
-                id={item.id}
-                userId={item.user['id']}
-                name={item.user['name']}
-                avatar={item.user['image']}
-                typeAuthor={'Doanh Nghiệp'}
-                available={null}
-                timeCreatePost={item.createdAt}
-                content={item.content}
-                type={item.type}
-                likes={item.likes}
-                comments={item.comment}
-                commentQty={item.commentQuantity}
-                images={item.images}
-                role={item.user['roleCodes']}
-                likeAction={likeAction}
-                location={item.location ?? null}
-                title={item.title ?? null}
-                expiration={item.expiration ?? null}
-                salary={item.salary ?? null}
-                employmentType={item.employmentType ?? null}
-                description={item.description ?? null}
-                isSave={item.isSave}
-                group={''}
-                handleUnSave={handleUnSave}
-                handleDelete={handleDelete}
-                active={0} />
-              )}
+        {
+          data?.map((item: any) => <CustomizePost
+            id={item.id}
+            userId={item.user['id']}
+            name={item.user['name']}
+            avatar={item.user['image']}
+            typeAuthor={'Doanh Nghiệp'}
+            available={null}
+            timeCreatePost={item.createdAt}
+            content={item.content}
+            type={item.type}
+            likes={item.likes}
+            comments={item.comment}
+            commentQty={item.commentQuantity}
+            images={item.images}
+            role={item.user['roleCodes']}
+            likeAction={likeAction}
+            location={item.location ?? null}
+            title={item.title ?? null}
+            expiration={item.expiration ?? null}
+            salary={item.salary ?? null}
+            employmentType={item.employmentType ?? null}
+            description={item.description ?? null}
+            isSave={item.isSave}
+            group={''}
+            handleUnSave={handleUnSave}
+            handleDelete={handleDelete}
+            active={0} />
+          )}
       </ScrollView>
     </View>
   )

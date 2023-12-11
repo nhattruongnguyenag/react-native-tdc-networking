@@ -66,6 +66,7 @@ export default function SearchScreen() {
   ])
 
   useEffect(() => {
+    
     stompClient = getStompClient()
     const onConnected = () => {
       stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
@@ -81,6 +82,8 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
+    console.log(subjects);
+    console.log(type)
     if (subjects == 'user') {
       stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
         userId: userLogin?.id,
