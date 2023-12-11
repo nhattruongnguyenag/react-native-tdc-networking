@@ -657,14 +657,13 @@
         "unFollow": "Hủy theo dõi",
         "profile": "Trang cá nhân"
     },
-<<<<<<< HEAD
     "ApplicationOptionComponent": {
         "language": "Ngôn ngữ",
         "info": "Thông tin cá nhân",
         "password":"Mật khẩu",
         "cancel": "Hủy",
         "change": "Thay đổi"
-=======
+    },
     "ForgettenPassword":{
         "textForgetPassword": "Quên mật khẩu",
         "textNotification": "Email sai định dạng hoặc rỗng",
@@ -689,6 +688,5 @@
     },
     "NoMorePost": {
         "noMorePost": "Không có bài viết mới"
->>>>>>> develop
     }
 }

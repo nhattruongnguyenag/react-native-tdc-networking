@@ -29,13 +29,13 @@ export default function ApplicationOptionScreen() {
 
   const closeModal = () => {
     setModalVisible(false);
-  };
+  }
 
-  // 
+
   const handleChangeLangue = () => {
     dispatch(setDefaultLanguage(language))
     AsyncStorage.setItem(LABEL_LANGUAGE, JSON.stringify(label))
-    setModalVisible(false);
+    setModalVisible(false)
   }
 
   useEffect(() => {
@@ -60,8 +60,8 @@ export default function ApplicationOptionScreen() {
       );
     }
     return null;
-  };
-  // 
+  }
+
 
   const containerStyle = { backgroundColor: 'white', padding: 20, marginLeft: 20, marginRight: 20, marginBottom: 100, height: 230 };
   return (
