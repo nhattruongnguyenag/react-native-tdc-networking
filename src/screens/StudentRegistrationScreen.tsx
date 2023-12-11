@@ -1,13 +1,4 @@
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -35,6 +26,9 @@ import {
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
 import { useTranslation } from 'react-multi-lang'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -62,14 +56,10 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 export default function StudentRegistrationScreen() {
   const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [student, setStudent] = useState<
-    Omit<
-      Student,
-      'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect' | 'facultyGroupCode' | 'background' | 'phone'
-    >
-  >({
+  const [student, setStudent] = useState<Student>({
     id: 0,
     password: '',
     code: Date.now().toString(),
@@ -458,29 +448,33 @@ export default function StudentRegistrationScreen() {
       })
   }, [student])
 
-  useEffect(() => {
-    setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
-  }, [imagesUpload])
-
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      setStudent({...student, image: imagesUpload? imagesUpload[0] : ''})
-      axios
-        .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
-        .then((response) => {
-          setIsLoading(false)
-          navigation.navigate(ACCEPT_SCREEN, {
-            email: student.email,
-            subject: t('RegisterStudentComponent.textAccountAuthen'),
-            title: t('RegisterStudentComponent.textAccountAuthen'),
-            url: 'api/users/get/email/authen/register'
+      if (imagePicker) {
+        handleUploadImage(imagePicker, (data) => {
+          setStudent({
+            ...student,
+            image: data[0]
           })
+
+          axios
+            .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
+            .then((response) => {
+              setIsLoading(false)
+              navigation.navigate(ACCEPT_SCREEN, {
+                email: student.email,
+                subject: t('RegisterStudentComponent.textAccountAuthen'),
+                title: t('RegisterStudentComponent.textAccountAuthen'),
+                url: 'api/users/get/email/authen/register'
+              })
+            })
+            .catch((error) => {
+              console.log(error)
+              setIsLoading(false)
+            })
         })
-        .catch((error) => {
-          console.log(error)
-          setIsLoading(false)
-        })
+      }
     } else {
       let key: keyof RegisterStudent
 
@@ -492,9 +486,8 @@ export default function StudentRegistrationScreen() {
 
       setValidate({ ...validate })
     }
-  }, [validate])
-   console.log(student.image)
-   
+  }, [validate, imagePicker])
+
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
@@ -660,13 +653,22 @@ export default function StudentRegistrationScreen() {
               <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    console.log(result)
+                    setImagePicker(result)
+                  }}
+                />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload != null ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }}/>
-              ):''}
+              {imagePicker && imagePicker.length > 0 && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: imagePicker && imagePicker.length > 0 ? imagePicker[0].uri : '' }}
+                />
+              )}
             </View>
           </View>
         </View>

@@ -30,6 +30,10 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
+import { err } from 'react-native-svg/lib/typescript/xml'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -58,6 +62,7 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 export default function BusinessRegistrationScreen() {
   const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
   const [business, setBusiness] = useState<
@@ -534,14 +539,19 @@ export default function BusinessRegistrationScreen() {
     }
   }, [timeStart, timeEnd])
 
-  useEffect(() => {
-    setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
-  }, [imagesUpload])
-
   const onSubmit = useCallback(() => {
-    if (isAllFieldsValid(validate)) {
-      setIsLoading(true)
-      console.log(business)
+    // if (isAllFieldsValid(validate)) {
+    //   setIsLoading(true)
+    if (imagePicker) {
+      handleUploadImage(imagePicker, (data) => {
+        setBusiness({
+          ...business,
+          image: data[0]
+        })
+        console.log(business)
+      })
+        
+      return
       axios
         .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
         .then((response) => {
@@ -552,21 +562,23 @@ export default function BusinessRegistrationScreen() {
             title: t('RegisterBusinessComponent.textAccountAuthen'),
             url: 'api/users/get/email/authen/register'
           })
-          console.log(response.data.data)
         })
         .catch((error) => {
+          console.log(error)
+
           setIsLoading(false)
         })
-    } else {
-      let key: keyof RegisterBusiness
-      for (key in validate) {
-        if (validate[key].isError) {
-          validate[key].isVisible = true
-        }
-      }
-      setValidate({ ...validate })
     }
-  }, [validate])
+    // } else {
+    //   let key: keyof RegisterBusiness
+    //   for (key in validate) {
+    //     if (validate[key].isError) {
+    //       validate[key].isVisible = true
+    //     }
+    //   }
+    //   setValidate({ ...validate })
+    // }
+  }, [validate, imagePicker])
 
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
@@ -696,7 +708,7 @@ export default function BusinessRegistrationScreen() {
                 setShowDatePickerStart(false)
               }}
             />
-          
+
             <TextInputWithTitle
               defaultValue={timeEnd}
               textInputRef={timeEndRef}
@@ -781,14 +793,21 @@ export default function BusinessRegistrationScreen() {
               <Text style={styles.txt}>{t('RegisterBusinessComponent.avata')}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    console.log(result)
+                    setImagePicker(result)
+                  }}
+                />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload !== null ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
+              {imagePicker && imagePicker.length > 0 && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: imagePicker && imagePicker.length > 0 ? imagePicker[0].uri : '' }}
+                />
               )}
             </View>
           </View>
@@ -873,7 +892,7 @@ const styles = StyleSheet.create({
     borderColor: '#97A1B0',
     paddingLeft: 10,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 10
   },
   btnRegister: {
     backgroundColor: COLOR_BTN_BLUE,
@@ -923,6 +942,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderColor: '#228b22',
-    borderWidth: 2,
+    borderWidth: 2
   }
 })
