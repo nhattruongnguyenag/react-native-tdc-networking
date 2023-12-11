@@ -227,7 +227,8 @@
         "createUpdateProfile": "Cập nhật thông tin cá nhân",
         "manageJobApply": "Quản lý hồ sơ ứng tuyển",
         "pendingPostScreen": "Bài viết đang chờ",
-        "detailSurveyScreen": "Chi tiết câu hỏi"
+        "detailSurveyScreen": "Chi tiết câu hỏi",
+        "studentAndFacultyScreen": "Nhóm thảo luận của sinh viên "
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
@@ -293,7 +294,8 @@
         "jobApplyScreenSaveSuccessTextTitle": "Thông báo"
     },
     "MessageScreen": {
-        "messageScreenLoaderTitle": "Đang tải tin nhắn..."
+        "messageScreenLoaderTitle": "Đang tải tin nhắn...",
+        "messageEmptyList": "Chưa có tin nhắn mới"
     },
     "MessengerToolbar": {
         "userStatusActive": "Đang hoạt động",
@@ -333,8 +335,13 @@
         "messageBottomBarComponentInputTextPlaceholder": "@ Tin nhắn"
     },
     "MessageSentItem": {
+        "messageItemStatusSending": "Đang gửi...",
         "messageItemStatusReceived": "Đã nhận",
         "messageItemStatusSeen": "Đã xem"
+    },
+    "MessageDate": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua"
     },
     "AddQuestionView": {
         "addQuestionViewStartAddQuestion": "Thêm",
@@ -399,7 +406,9 @@
      "SurveyPost": {
         "surveyPostType": "Khảo sát",
         "surveyPostButton": "Tiến hành khảo sát",
-        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời"
+        "surveyPostButtonSetting": "Chỉnh sửa câu trả lời",
+        "surveyPostButtonJoinSurvey": "Tham gia khảo sát",
+        "surveyPostButtonDetailQuestion": "Chi tiết câu hỏi"
     },
     "Faculty":{
         "facultyOfElectricalEngineering": "Khoa điện - Điện tử",
@@ -522,7 +531,8 @@
         "selectFacultyTextSearch":"Tìm kiếm.."
     },
     "FacultyDashboard": {
-        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào"
+        "facultyDashboardNotifyNotHavePost": "Chưa có bài viết nào",
+        "facultyDashboarNotYetSelectFaculty": "Vui lòng chọn khoa"
     },
     "StudentDashboard": {
         "studentDashboardGroupTitle": "Group TDC - Trường Cao Đẳng Công Nghệ Thủ Đức"
@@ -627,6 +637,7 @@
         "successAcceptMessage": "Thành công !!!",
         "successDeleteMessageContent": "Đã xóa bài viết thành công",
         "rejectSuccessMessage": "Đã từ chối bài viết thành công",
+        "acceptSuccessageMessage": "Đã duyệt bài viết thành công",
         "notePlaceholder": "Ghi chú...",
         "acceptPostMenuItem": "Duyệt bài viết",
         "rejectPostMenuItem": "Từ chối bài viết",
@@ -646,11 +657,38 @@
         "unFollow": "Hủy theo dõi",
         "profile": "Trang cá nhân"
     },
+<<<<<<< HEAD
     "ApplicationOptionComponent": {
         "language": "Ngôn ngữ",
         "info": "Thông tin cá nhân",
         "password":"Mật khẩu",
         "cancel": "Hủy",
         "change": "Thay đổi"
+=======
+    "ForgettenPassword":{
+        "textForgetPassword": "Quên mật khẩu",
+        "textNotification": "Email sai định dạng hoặc rỗng",
+        "textSubjectResetPassword": "Cập nhật mật khẩu",
+        "titleSubjectResetPassword": " thay đổi mật khẩu",
+        "textAccept":"Xác nhận",
+        "textBack": "Quay lại"
+    },
+    "AcceptScreen":{
+        "checkEmail": "Kiểm tra email",
+        "description1":"Chúng tôi đã gửi đến email bạn liên kết",
+        "description2":", vui lòng kiểm tra email",
+        "titleNotify":"Thông báo",
+        "descriptionNotify":"Đã gửi lại liên kết tới ",
+        "back": "Quay về",
+        "notSend": "Chưa nhận được email ??,",
+        "sendAgain": "Gửi lại"
+    },
+    "AuthenticateRegistraion":{
+        "textSubjectAuthenRegistration": "Xác thực tài khoản",
+        "titleSubjectAuthenRegistration": " xác thực tài khoản"
+    },
+    "NoMorePost": {
+        "noMorePost": "Không có bài viết mới"
+>>>>>>> develop
     }
 }

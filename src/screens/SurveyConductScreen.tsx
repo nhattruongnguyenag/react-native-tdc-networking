@@ -35,13 +35,14 @@ export default function SurveyConductScreen() {
     const [validates, setValidates] = useState<InputTextValidate[]>([]);
     const [surveyConductRequestAPI, surveyConductRequestResult] = useAddSurveyConductAnswerMutation();
 
+    const postId = route.params?.surveyPostId ?? -1
+    const userId = userLogin?.id ?? -1
+
     const [surveyConductRequest, setSurveyConductRequest] = useState<SurveyConductRequest>({
         user_id: userLogin?.id ?? -1,
+        post_id: postId,
         answers: []
     })
-
-    const postId = route.params?.surveyPostId ?? -1;
-    const userId = userLogin?.id ?? -1;
 
     const { data, isLoading, isSuccess } = useGetQuestionsFromSurveyPostQuery({ postId: postId, userLogin: userId }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 

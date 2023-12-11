@@ -18,7 +18,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { PROFILE_SCREEN } from '../../constants/Screen';
 import { useTranslation } from 'react-multi-lang';
-import { getFacultyTranslated } from '../../utils/getFacultyTranslated ';
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated ';
 import ActionSheet from 'react-native-actionsheet';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -190,7 +190,6 @@ const CustomizeModalComments = () => {
         }
 
         const onError = (err: string | Frame) => {
-            console.log(err)
         }
         stompClient.connect({}, onConnected, onError)
     }, [])

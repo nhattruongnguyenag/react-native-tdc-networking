@@ -9,3 +9,4 @@ export const API_URL_GET_POST_BY_USER_ID = SERVER_ADDRESS + 'api/posts/group/use
 export const API_URL_DELETE_POST = SERVER_ADDRESS + 'api/posts/'
 export const API_URL_SAVE_POST = SERVER_ADDRESS + 'api/posts/user/save'
 export const API_URL_FOLLOW = SERVER_ADDRESS + 'api/users/follow'
+export const API_URL_RENDER_IMAGE = SERVER_ADDRESS + 'api/images/'

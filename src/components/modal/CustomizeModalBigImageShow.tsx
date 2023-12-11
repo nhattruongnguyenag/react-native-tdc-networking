@@ -12,7 +12,7 @@ interface ModalBigImageShowType {
 }
 const CustomizeModalBigImageShow = (props: Readonly<ModalBigImageShowType>) => {
     return (
-        <Modal statusBarTranslucent={true} visible={props.visible}>
+        <Modal animationType='slide' statusBarTranslucent={true} visible={props.visible}>
             <View style={styles.container}>
 
                 <Image

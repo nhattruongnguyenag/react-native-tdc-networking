@@ -1,4 +1,5 @@
 import { Business } from "../types/Business";
+import { Faculty } from "../types/Faculty";
 import { Student } from "../types/Student";
 import { User } from "../types/User";
 
@@ -10,14 +11,14 @@ export function isBusiness(user?: any): user is Business {
     return user !== undefined && user instanceof Object && user !== null && (user as User).roleCodes.includes('doanh-nghiep')
 }
 
-export function isFaculty(user?: any): user is Business {
+export function isFaculty(user?: any): user is Faculty {
     return user !== undefined && user instanceof Object && user !== null && (user as User).roleCodes.includes('khoa')
 }
 
-export function isCensorShip(user?: any): user is Business {
+export function isCensorShip(user?: any): user is User {
     return user !== undefined && user instanceof Object && user !== null && (user as User).roleCodes.includes('kiem-duyet')
 }
 
-export function isAdmin(user?: any): user is Business {
+export function isAdmin(user?: any): user is User {
     return user !== undefined && user instanceof Object && user !== null && (user as User).roleCodes.includes('quan-tri-vien')
 }

@@ -19,6 +19,8 @@ import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
 import { useGetStudentPostsQuery } from '../redux/Service'
 import { GROUP_TDC_ID } from '../constants/Groups'
+import { Post } from '../types/Post'
+import { GetPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
@@ -32,22 +34,20 @@ export default function StudentDiscussionDashboardScreen() {
   )
   const dispatch = useAppDispatch()
   const [refreshing, setRefreshing] = useState(false)
-  const [studentsPost, setStudentPost] = useState([])
+  const [studentsPost, setStudentPost] = useState<Post[]>([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { data, isFetching } = useGetStudentPostsQuery({
     id: userLogin?.id ?? 0
   }, {
-    pollingInterval: 2000
+    pollingInterval: 1000
   });
 
   useEffect(() => {
     if (data) {
       setIsLoading(false);
       setStudentPost([]);
-      if (data.data !== null) {
-        setStudentPost(data.data);
-      }
+      setStudentPost(data.data);
       setIsCalled(true);
     }
   }, [data]);
@@ -89,7 +89,7 @@ export default function StudentDiscussionDashboardScreen() {
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { groupId: GROUP_TDC_ID });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: GROUP_TDC_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
       navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_TDC_ID })
     } else {
@@ -115,36 +115,40 @@ export default function StudentDiscussionDashboardScreen() {
   }
 
   const renderItem = useCallback((item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={item.user['roleCodes']}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={code}
-        handleUnSave={handleSavePost}
-        handleDelete={handleDeletePost}
-        active={item.active} 
+    if (GetPostActive(item.active)) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={code}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active}
         />
-    )
+      )
+    }else{
+      return null
+    }
   }, [studentsPost])
 
   return (
@@ -158,7 +162,6 @@ export default function StudentDiscussionDashboardScreen() {
         refreshControl={<RefreshControl
           refreshing={refreshing}
           onRefresh={() => {
-            // TODO
           }} />}
       >
         {/* Image banner */}
@@ -173,7 +176,7 @@ export default function StudentDiscussionDashboardScreen() {
         </View>
         {/* Create post */}
         {
-          userLogin?.roleCodes.includes(TYPE_POST_STUDENT) ?
+          userLogin?.roleCodes?.includes(TYPE_POST_STUDENT) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}
@@ -184,12 +187,15 @@ export default function StudentDiscussionDashboardScreen() {
               />
             </View> : null
         }
-        <FlatList
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          data={studentsPost}
-          renderItem={({ item }) => renderItem(item)}
-        />
+        <View style={styles.wrapperPost}>
+          <FlatList
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            data={studentsPost}
+            extraData={studentsPost}
+            renderItem={({ item }) => renderItem(item)}
+          />
+        </View>
       </ScrollView>
     </View>
   )
@@ -216,5 +222,8 @@ const styles = StyleSheet.create({
   },
   toolbarCreatePost: {
     marginBottom: 20,
+  },
+  wrapperPost: {
+    marginTop: 5,
   }
 })

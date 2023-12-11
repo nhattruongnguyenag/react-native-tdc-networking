@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { User } from '../types/User'
 
-export function getMessageSectionTitle(date: string): string {
+export function getMessageSectionTitle(t: (content: string) => void, date?: string): string {
   const formater = 'dddd, DD MMM YYYY'
   let yesterday = moment().subtract(1, 'days').format(formater)
   const today = moment().format(formater)
@@ -10,9 +10,9 @@ export function getMessageSectionTitle(date: string): string {
   let dateConverted = ''
 
   if (today === mesageSectionDate) {
-    dateConverted = 'Hôm nay, ' + moment(date).format('hh:mm a')
+    dateConverted = `${t('MessageDate.today')}, ` + moment(date).format('hh:mm a')
   } else if (yesterday == mesageSectionDate) {
-    dateConverted = 'Hôm qua, ' + moment(date).format('hh:mm a')
+    dateConverted = `${t('MessageDate.yesterday')}, ` + moment(date).format('hh:mm a')
   } else {
     dateConverted = capitalizeFirstLetter(moment(date).format('dddd, DD MMM YYYY hh:mm a'))
   }

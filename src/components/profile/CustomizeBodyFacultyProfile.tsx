@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLOR_BLACK, COLOR_BTN_BLUE, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import IconFontisto from 'react-native-vector-icons/Fontisto'
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-multi-lang'
 
 
 interface FacultyProfileType {
-    t:ReturnType<typeof useTranslation>
+    t: ReturnType<typeof useTranslation>
     isFollow: boolean,
     handleClickButtonEvent: (flag: number) => void,
     phone: string,
@@ -19,7 +19,7 @@ interface FacultyProfileType {
     numberPost: number,
     isSameUser: boolean,
 }
-export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfileType>) {
+const CustomizeBodyFacultyProfile = (props: Readonly<FacultyProfileType>) => {
     return (
         <View style={styles.containerInfo}>
             {/* Name */}
@@ -49,7 +49,7 @@ export default function CustomizeBodyFacultyProfile(props: Readonly<FacultyProfi
                         }
                         <Text style={styles.txtContentBtn}>
                             {
-                               props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
+                                props.isFollow ? props.t("Profile.unFollow") : props.t("Profile.follow")
                             }
                         </Text>
                     </TouchableOpacity>
@@ -167,3 +167,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 })
+
+export default memo(CustomizeBodyFacultyProfile) 

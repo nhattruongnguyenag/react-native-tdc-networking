@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Pressable } from 'react-native'
-import React from 'react'
-import { COLOR_BLACK, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
+import React, { memo } from 'react'
+import { COLOR_BLACK, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import IconEntypo from 'react-native-vector-icons/Entypo'
@@ -14,7 +14,7 @@ interface HeaderProfileType {
   name: string,
   handleClickIntoHeaderComponentEvent: (flag: number) => void
 }
-export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType>) {
+const CustomizeHeaderProfile = (props: Readonly<HeaderProfileType>) => {
   return (
     <View>
       <Pressable
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   border: {
     borderWidth: 2,
-    borderColor: COLOR_WHITE,
+    borderColor: COLOR_GREY_FEEBLE,
   },
   avatar: {
     width: '100%',
@@ -115,3 +115,5 @@ const styles = StyleSheet.create({
     bottom: 10,
   }
 })
+
+export default memo(CustomizeHeaderProfile)

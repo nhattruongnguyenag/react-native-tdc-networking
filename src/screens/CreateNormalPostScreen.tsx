@@ -21,7 +21,7 @@ import ActionSheet from 'react-native-actionsheet'
 import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
-import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER } from '../constants/Variables'
+import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_NORMAL_POST } from '../constants/Variables'
 import { handlePutDataAPI, updateNormalPostAPI } from '../api/CallApi'
 import { NormalPost } from '../types/NormalPost'
 import { setImagesUpload } from '../redux/Slice'
@@ -41,7 +41,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState(userLogin?.id ?? 0);
   const [postId, setPostId] = useState(-1);
-  const [type, setType] = useState('thong-thuong');
+  const [type, setType] = useState(TYPE_NORMAL_POST);
 
   useEffect(() => {
     if (updateNormalPost != undefined) {
@@ -69,6 +69,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyCreateNewPostSuccess"), false)
             setContent('');
             dispatch(setImagesUpload([]));
+            setImages([]);
             Keyboard.dismiss()
             navigation.goBack();
           } else {
@@ -83,8 +84,9 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           const status = await updateNormalPostAPI(apiUrl, data)
           setIsLoading(false)
           if (status === 201) {
-            setContent('')
+            setContent('');
             dispatch(setImagesUpload([]));
+            setImages([]);
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostSuccess"), false)
             Keyboard.dismiss()
             navigation.goBack();
@@ -115,7 +117,9 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   }
 
   const HandleClickIntoIconBtnArrowLeft = () => {
+    setContent('');
     dispatch(setImagesUpload([]));
+    setImages([]);
     navigation.goBack()
   }
   const handleLongClickIntoImage = async (imageName: string) => {

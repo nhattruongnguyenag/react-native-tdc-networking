@@ -5,6 +5,7 @@ import moment from 'moment'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import {
+  Alert,
   Image,
   SafeAreaView,
   ScrollView,
@@ -23,7 +24,6 @@ import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
-import { TEXT_SUBJECT_AUTHENTICATE_REGISTRATION, TITLE_SUBJECT_AUTHENTICATE_REGISTRATION } from '../constants/StringVietnamese'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
 import { Business } from '../types/Business'
@@ -84,7 +84,7 @@ export default function BusinessRegistrationScreen() {
     name: '',
     image: '',
     confimPassword: '',
-    subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION,
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
     content: ''
   })
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
@@ -565,7 +565,7 @@ export default function BusinessRegistrationScreen() {
         .then((response) => {
           setIsLoading(false)
           openModal()
-          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: TEXT_SUBJECT_AUTHENTICATE_REGISTRATION , title: TITLE_SUBJECT_AUTHENTICATE_REGISTRATION , url: 'api/users/get/email/authen/register'})
+          navigation.navigate(ACCEPT_SCREEN, { email: business.email , subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration') , title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration') , url: 'api/users/get/email/authen/register'})
         })
         .catch((error) => {
           setIsLoading(false)

@@ -9,7 +9,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { useEffect, useTransition } from 'react'
-import { Text } from 'react-native'
+import { StatusBar, Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
 import Toast from 'react-native-toast-message'
@@ -34,10 +34,8 @@ locale.set('vi', require('moment/locale/vi'))
 locale.set('en', require('moment/locale/es'))
 locale.set('ja', require('moment/locale/ja'))
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
-import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
   ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
@@ -45,8 +43,7 @@ import {
   CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
-  CREATE_SURVEY_SCREEN,
-  DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
+  CREATE_SURVEY_SCREEN, DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
@@ -61,11 +58,12 @@ import {
   STUDENT_DISCUSSION_DASHBOARD_SCREEN,
   STUDENT_REGISTER_SCREEN,
   UPDATE_PROFILE, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
-  DETAIL_SURVEY_SCREEN
+  DETAIL_SURVEY_SCREEN,
+  STUDENT_AND_FACULTY_GROUP
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
-import AcceptForgottenPasswordScreen from './screens/AcceptScreen'
+import AcceptScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
@@ -97,13 +95,13 @@ import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboa
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
 import { useAppSelector } from './redux/Hook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEFAULT_LANGUAGE } from './constants/KeyValue';
 
 const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
 import SurveyResultScreen from './screens/SurveyResultScreen'
 import { Conversation } from './types/Conversation'
-import AcceptScreen from './screens/AcceptScreen'
-import UpdateProfile from './screens/UpdateProfile'
 import { Student } from './types/Student'
 import { Faculty } from './types/Faculty'
 import { Business } from './types/Business'
@@ -116,11 +114,11 @@ import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import PenddingPostScreen from './screens/PenddingPostScreen'
 import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
-import { SurveyPostResponseModel } from './types/response/SurveyResponsePostModal'
-
+import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
+import UpdateProfile from './screens/UpdateProfile'
 
 export type RootStackParamList = {
-  ACCEPT_SCREEN: { email: string , subject: string , title: string, url: string } | undefined
+  ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
   BUSINESS_DASHBOARD_SCREEN: undefined
@@ -145,10 +143,10 @@ export type RootStackParamList = {
   LIST_FOLLOW_SCREEN: undefined
   ADD_QUESTION_SCREEN: undefined
   REVIEW_SURVEY_POST_SCREEN: undefined
-  CREATE_NORMAL_POST_SCREEN: { group: number } | UpdateNormalPost | undefined
+  CREATE_NORMAL_POST_SCREEN: { group: number } | { updateNormalPost: UpdateNormalPost }
   SURVEY_CONDUCT_SCREEN: { surveyPostId: number } | undefined
   RECRUITMENT_DETAIL_SCREEN: { postId: number } | undefined
-  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?:number, cvUrl?: string} | undefined
+  JOB_APPLY_SCREEN: { recruitmentPostId?: number, profileId?: number, cvUrl?: string } | undefined
   LIST_JOB_APPLY_SCREEN: { postId: number } | undefined
   DETAIL_JOB_APPLY: { cvId: number } | undefined
   PROFILE_SCREEN: { userId: number, group: string } | undefined
@@ -160,9 +158,10 @@ export type RootStackParamList = {
   WAITTING_POST_SCREEN: undefined
   APPROVAL_POST_SCREEN: undefined
   UPDATE_PROFILE: { userData: Student | Faculty | Business | null }
-  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number , status?: string} | undefined
+  CHANGE_STATUS_JOB_APPLY_SCREEN: { profileId?: number, status?: string } | undefined
   PEDDING_POST_SCREEN: undefined
-  DETAIL_SURVEY_SCREEN: { survey: SurveyPostResponseModel } | undefined
+  DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
+  STUDENT_AND_FACULTY_GROUP: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -246,7 +245,7 @@ export function DrawerNavigator(): JSX.Element {
 
 export function StackNavigator(): JSX.Element {
   const t = useTranslation()
-  
+
   return (
     <RootStack.Navigator
       initialRouteName={INITIAL_SCREEN}
@@ -472,6 +471,15 @@ export function StackNavigator(): JSX.Element {
             title={t('ToolbarTitle.detailSurveyScreen')} />
         }}
         component={DetailSurveyPostScreen}
+      />
+
+      <RootStack.Screen
+        name={STUDENT_AND_FACULTY_GROUP}
+        options={{
+          header: () => <ToolbarWithBackPress
+            title={t('ToolbarTitle.studentAndFacultyScreen')} />
+        }}
+        component={StudentAndFacultyGroup}
       />
     </RootStack.Navigator>
   )

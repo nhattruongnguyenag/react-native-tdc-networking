@@ -17,6 +17,8 @@ export interface NotificatonsType {
     id: any
     status: string
     image: string
+    data: string
+    type: string
     createdAt: any
     content: string
     handleItem: (id: number) => void;
@@ -29,7 +31,7 @@ export default function NotificationItem(props: NotificatonsType) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-    
+
     return (
             <View>
                 <Pressable

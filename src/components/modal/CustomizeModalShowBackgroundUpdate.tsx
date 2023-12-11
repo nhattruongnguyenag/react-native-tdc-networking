@@ -13,7 +13,7 @@ interface ModalBigImageShowType {
 
 const CustomizeModalShowBackgroundUpdate = (props: Readonly<ModalBigImageShowType>) => {
     return (
-        <Modal statusBarTranslucent={true} visible={true} transparent={true}>
+        <Modal animationType='slide' statusBarTranslucent={true} visible={true} transparent={true}>
             <View style={styles.container}>
                 <View style={styles.wrapperImage}>
                     <Image
