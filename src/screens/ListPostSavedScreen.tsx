@@ -67,26 +67,26 @@ const ListPostSavedScreen = () => {
   }
 
   //////////////////////////////////////////////////
-  const searchBox = () => {
-    stompClient = getStompClient()
-    const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/save/${userLogin?.id}/search/${search}`, onMessageReceived)
-    }
-    const onMessageReceived = (payload: any) => {
-      // setData(JSON.parse(payload.body))
-      console.log(payload.body);
+  // const searchBox = () => {
+  //   stompClient = getStompClient()
+  //   const onConnected = () => {
+  //     stompClient.subscribe(`/topic/posts/save/${userLogin?.id}/search/${search}`, onMessageReceived)
+  //   }
+  //   const onMessageReceived = (payload: any) => {
+  //     // setData(JSON.parse(payload.body))
+  //     console.log(payload.body);
       
-    }
-    const onError = (err: string | Frame) => {
-      console.log('aaaaaaaaaaaaaaaaaaaaa');
-      console.log(err)
-    }
-    stompClient.connect({}, onConnected, onError)
+  //   }
+  //   const onError = (err: string | Frame) => {
+  //     console.log('aaaaaaaaaaaaaaaaaaaaa');
+  //     console.log(err)
+  //   }
+  //   stompClient.connect({}, onConnected, onError)
 
-    stompClient.send(`/app/posts/save/${userLogin?.id}/search/abc/listen`,
-      {})
+  //   stompClient.send(`/app/posts/save/${userLogin?.id}/search/abc/listen`,
+  //     {})
 
-  }
+  // }
 
   const searchPost = (i:string) => {
     setSearch(i)
