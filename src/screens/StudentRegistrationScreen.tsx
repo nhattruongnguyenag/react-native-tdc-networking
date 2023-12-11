@@ -29,6 +29,8 @@ import { useTranslation } from 'react-multi-lang'
 import ImagePicker from '../components/ImagePicker'
 import { Asset } from 'react-native-image-picker'
 import { handleUploadImage } from '../utils/ImageHelper'
+import { StudentRequest } from '../types/request/StudentRequest'
+import { useAddStudentMutation } from '../redux/Service'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -58,8 +60,8 @@ export default function StudentRegistrationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-  const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [student, setStudent] = useState<Student>({
+  const [saveStudent, saveStudentResponse] = useAddStudentMutation()
+  const [student, setStudent] = useState<StudentRequest>({
     id: 0,
     password: '',
     code: Date.now().toString(),
@@ -442,11 +444,6 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
-        dataRequest.map((data) => {
-          if (data.id == student.facultyId) {
-            setDataNganhRequest(data.majors)
-          }
-        })
       })
       .catch((error) => {
         console.log(error)
@@ -458,27 +455,13 @@ export default function StudentRegistrationScreen() {
       setIsLoading(true)
       if (imagePicker) {
         handleUploadImage(imagePicker, (data) => {
-          setStudent({
+          saveStudent({
             ...student,
             image: data[0]
           })
-
-          axios
-            .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
-            .then((response) => {
-              setIsLoading(false)
-              navigation.navigate(ACCEPT_SCREEN, {
-                email: student.email,
-                subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
-                title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
-                url: 'api/users/get/email/authen/register'
-              })
-            })
-            .catch((error) => {
-              console.log(error)
-              setIsLoading(false)
-            })
         })
+      } else {
+        saveStudent(student)
       }
     } else {
       let key: keyof RegisterStudent
@@ -493,6 +476,17 @@ export default function StudentRegistrationScreen() {
     }
   }, [validate, imagePicker])
 
+  useEffect(() => {
+    if (saveStudentResponse.data) {
+      setIsLoading(false)
+      navigation.navigate(ACCEPT_SCREEN, {
+        email: student.email,
+        subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+        title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
+        url: 'api/users/get/email/authen/register'
+      })
+    }
+  }, [saveStudentResponse])
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>

@@ -43,7 +43,8 @@ import {
 import ImagePicker from '../components/ImagePicker'
 import { Asset } from 'react-native-image-picker'
 import { handleUploadImage } from '../utils/ImageHelper'
-import { err } from 'react-native-svg/lib/typescript/xml'
+import { useAddBusinessMutation } from '../redux/Service'
+import { BusinessRequest } from '../types/request/BusinessRequest'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -68,6 +69,7 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
   const t = useTranslation()
@@ -75,9 +77,7 @@ export default function BusinessRegistrationScreen() {
   const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
-  const [business, setBusiness] = useState<
-    Omit<Business, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'roleCodes' | 'isTyping' | 'isMessageConnect'>
-  >({
+  const [business, setBusiness] = useState<BusinessRequest>({
     password: '',
     representor: '',
     phone: '',
@@ -87,11 +87,11 @@ export default function BusinessRegistrationScreen() {
     activeTime: timeStart + '-' + timeEnd,
     email: '',
     name: '',
-    image: '',
     confimPassword: '',
     subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
     content: ''
   })
+  const [saveBusiness, businessRegisterResponse] = useAddBusinessMutation()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
@@ -550,46 +550,40 @@ export default function BusinessRegistrationScreen() {
   }, [timeStart, timeEnd])
 
   const onSubmit = useCallback(() => {
-    // if (isAllFieldsValid(validate)) {
-    //   setIsLoading(true)
-    if (imagePicker) {
-      handleUploadImage(imagePicker, (data) => {
-        setBusiness({
-          ...business,
-          image: data[0]
-        })
-        console.log(business)
-      })
-
-      return
-      axios
-        .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
-        .then((response) => {
-          setIsLoading(false)
-          navigation.navigate(ACCEPT_SCREEN, {
-            email: business.email,
-            subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
-            title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
-            url: 'api/users/get/email/authen/register'
+    if (isAllFieldsValid(validate)) {
+      setIsLoading(true)
+      if (imagePicker) {
+        handleUploadImage(imagePicker, (data) => {
+          saveBusiness({
+            ...business,
+            image: data[0]
           })
         })
-        .catch((error) => {
-          console.log(error)
-
-          setIsLoading(false)
-        })
+      } else {
+        saveBusiness(business)
+      }
+    } else {
+      let key: keyof RegisterBusiness
+      for (key in validate) {
+        if (validate[key].isError) {
+          validate[key].isVisible = true
+        }
+      }
+      setValidate({ ...validate })
     }
-    // } else {
-    //   let key: keyof RegisterBusiness
-    //   for (key in validate) {
-    //     if (validate[key].isError) {
-    //       validate[key].isVisible = true
-    //     }
-    //   }
-    //   setValidate({ ...validate })
-    // }
   }, [validate, imagePicker])
 
+  useEffect(() => {
+    if (businessRegisterResponse.data) {
+      setIsLoading(false)
+      navigation.navigate(ACCEPT_SCREEN, {
+        email: business.email,
+        subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+        title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
+        url: 'api/users/get/email/authen/register'
+      })
+    }
+  }, [businessRegisterResponse])
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
