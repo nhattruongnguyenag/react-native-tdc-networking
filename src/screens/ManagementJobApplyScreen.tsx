@@ -80,77 +80,62 @@ export default function ManagementJobApplyScreen() {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR_WHITE }}>
           <>
-            {data?.data.length == 0? (
-              <Text
-                style={{
-                  marginVertical: '50%',
-                  marginHorizontal: '25%',
-                  width: 'auto',
-                  fontSize: 20,
-                  fontWeight: 'bold'
-                }}
-              >
-                {t('ManageJobApply.textListJobNull')}
-              </Text>
+            {data?.data.length == 0 ? (
+              <Text style={styles.textListNull}>{t('ManageJobApply.textListJobNull')}</Text>
             ) : (
-              data?.data.map((data, index) =>
-                data.status === value ? (
-                  <View style={styles.form} key={index}>
-                    <View style={styles.group}>
-                      <View style={{ flex: 3 }}>
-                        {data.companyAvatar == '' ? (
-                          <DefaultAvatar
-                            size={80}
-                            identifer={data.companyName[0].replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
-                          />
-                        ) : (
-                          <Image
-                            source={{ uri: SERVER_ADDRESS + `api/images/${data.companyAvatar}` }}
-                            style={styles.img}
-                          />
-                        )}
-                      </View>
-                      <View style={styles.item}>
-                        <Text style={styles.txt}>{data.jobTitle}</Text>
-                        <Text style={styles.txt}>{data.companyName}</Text>
+              data?.data.map(
+                (data, index) =>
+                  data.status === value && (
+                    <View style={styles.form} key={index}>
+                      <View style={styles.group}>
+                        <View style={{ flex: 3 }}>
+                          {data.companyAvatar == '' ? (
+                            <DefaultAvatar
+                              size={80}
+                              identifer={data.companyName[0].replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            />
+                          ) : (
+                            <Image
+                              source={{ uri: SERVER_ADDRESS + `api/images/${data.companyAvatar}` }}
+                              style={styles.img}
+                            />
+                          )}
+                        </View>
+                        <View style={styles.item}>
+                          <Text style={styles.txt}>{data.jobTitle}</Text>
+                          <Text style={styles.txt}>{data.companyName}</Text>
 
-                        <View style={styles.itemChild}>
-                          <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-                          <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>
-                            {formatDateTime(data.createdAt)}
-                          </Text>
+                          <View style={styles.itemChild}>
+                            <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
+                            <Text style={{ marginLeft: 10, color: COLOR_BLACK, fontWeight: 'bold' }}>
+                              {formatDateTime(data.createdAt)}
+                            </Text>
+                          </View>
                         </View>
                       </View>
-                    </View>
-                    <View style={styles.btnBottom}>
-                      <TouchableOpacity>
-                        <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
-                          {t('ManageJobApply.textSeeCv')}
-                        </Text>
-                      </TouchableOpacity>
-                      {data.status.match('accept') ? (
-                        ''
-                      ) : (
+                      <View style={styles.btnBottom}>
                         <TouchableOpacity>
-                          <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
-                            {t('ManageJobApply.textDelete')}
+                          <Text style={styles.txtBtnBottom} onPress={() => handleGetDetailJobApply(data.id)}>
+                            {t('ManageJobApply.textSeeCv')}
                           </Text>
                         </TouchableOpacity>
-                      )}
-                       {data.status != 'received' ? (
-                        ''
-                      ) : (
-                      <TouchableOpacity>
-                        <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id, data.cvUrl)}>
-                          {t('ManageJobApply.textChangeProfile')}
-                        </Text>
-                      </TouchableOpacity>
-                      )}
+                        {data.status !== 'accept' && (
+                          <TouchableOpacity>
+                            <Text style={styles.txtBtnBottom} onPress={() => handleDeleteCv(data.id)}>
+                              {t('ManageJobApply.textDelete')}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        {data.status === 'received' && (
+                          <TouchableOpacity>
+                            <Text style={styles.txtBtnBottom} onPress={() => handleUpdateCv(data.id, data.cvUrl)}>
+                              {t('ManageJobApply.textChangeProfile')}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                ) : (
-                  ''
-                )
+                  )
               )
             )}
           </>
@@ -161,6 +146,13 @@ export default function ManagementJobApplyScreen() {
 }
 
 const styles = StyleSheet.create({
+  textListNull: {
+    marginVertical: '50%',
+    marginHorizontal: '25%',
+    width: 'auto',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
   header: {
     borderBottomWidth: 0.7
   },
