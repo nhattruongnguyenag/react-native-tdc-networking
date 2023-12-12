@@ -622,14 +622,9 @@
         "password": "パスワード",
         "cancel": "キャンセル",
         "change": "変更"
-<<<<<<< HEAD
     }
     ,
     "ForgettenPassword":{
-=======
-    },
-    "ForgettenPassword": {
->>>>>>> origin/feature/bao/Update
         "textForgetPassword": "パスワードをお忘れですか",
         "textNotification": "電子メールの形式が正しくないか、空です",
         "textSubjectResetPassword": "パスワードを更新する",

@@ -1,7 +1,7 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
 import {
   Dimensions, Pressable, StyleSheet,
@@ -35,6 +35,7 @@ export default function NotificationScreen() {
       id: userLogin?.id ?? -1
     }
   )
+
   const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
 
   const handleIsRead = (id: any) => {
@@ -94,6 +95,8 @@ export default function NotificationScreen() {
   const handleOpenSearch = () => {
     setOpenSearch(!openSearch)
   }
+
+  
 
   return (
     <>

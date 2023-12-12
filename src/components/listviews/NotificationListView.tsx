@@ -22,16 +22,16 @@ export interface NotificatonsListViewType {
 }
 
 export default function NotificationListView(props: NotificatonsListViewType) {
+    
     return (
         <ScrollView style={styles.platList}>
             {
                 props.data?.map((item: any) => <NotificationItem
                     id={item.id}
                     status={item.status}
-                    image={item.image}
-                    data={item.data}
                     type={item.type}
                     user={item.user}
+                    dataValue={item.dataValue}
                     createdAt={item.createdAt}
                     content={item.content}
                     handleItem={props.handleItem}

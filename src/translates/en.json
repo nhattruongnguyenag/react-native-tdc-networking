@@ -612,11 +612,7 @@
         "cancel": "Cancel",
         "change": "Change"
     },
-<<<<<<< HEAD
-    "ForgettenPassword":{
-=======
     "ForgettenPassword": {
->>>>>>> origin/feature/bao/Update
         "textForgetPassword": "Forgot password",
         "textNotification": "Email is incorrectly formatted or empty",
         "textSubjectResetPassword": "Update password",

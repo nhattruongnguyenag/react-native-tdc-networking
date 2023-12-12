@@ -17,11 +17,10 @@ import { User } from '../../types/User';
 export interface NotificatonsType {
     id: any
     status: string
-    image: string
-    data: string
     type: string
     createdAt: any
     content: string
+    dataValue: any
     user: any
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
@@ -33,17 +32,18 @@ export default function NotificationItem(props: NotificatonsType) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    let content = '';
 
     const checkType = () => {
         switch (props.type) {
-            case 'user':
-                return <Text>Doanh nghiệp A vừa đăng khảo sát</Text>
+            case 'user_like_post':
+                return <Text>{}</Text>
                 break
             // case 
-        }
-        
+            default: <Text>Rong</Text>
+                break
+        }   
     }
-
     return (
         <View>
             <Pressable
@@ -53,12 +53,10 @@ export default function NotificationItem(props: NotificatonsType) {
                 <View style={styles.cont}>
                     <Image
                         style={styles.image}
-                        source={{
-                            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
-                        }}
+                        source={{ uri: SERVER_ADDRESS + `api/images/${props.user.image}` }} 
                     />
                     <View style={styles.content}>
-                        <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>{props.type}</Text>
+                        <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>{checkType()}</Text>
                         {/* {props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content} */}
                         <Text style={styles.tg}>{moment(props.createdAt).fromNow()}</Text>
                     </View>
