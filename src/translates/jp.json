@@ -6,7 +6,6 @@
         "option": "オプション",
         "logout": "ログアウト"
     },
-
     "LoginComponent": {
         "titleLogin": "ログイン",
         "emailId": "電子メールID",
@@ -21,8 +20,7 @@
         "titleRegister": "登録する",
         "requestRegister": "アカウントがありませんか?"
     },
-
-    "RegisterComponent":{
+    "RegisterComponent": {
         "typeStudent": "学生",
         "typeBusiness": "企業",
         "titleNotification": "通知",
@@ -32,154 +30,149 @@
         "goBack": "戻ってくる",
         "continute": "続く"
     },
-
-    "RecuitmentPostDetailComponent":{
-        "titleRecruitmentDetail":"募集内容",
-        "titleLoader":"読み込み中...",
-        "titleJob":"職位",
-        "employeType":"勤務形態",
-        "salary":"賃金",
-        "salaryUnitMonth":"ドン/月",
-        "expiration":"申請期限",
-        "location":"勤務先住所",
-        "benefit":"福祉",
-        "descriptionJob":"仕事内容",
-        "requipmentJob":"職務要件",
-        "btnApplyJob":"求人に応募する"
+    "RecuitmentPostDetailComponent": {
+        "titleRecruitmentDetail": "募集内容",
+        "titleLoader": "読み込み中...",
+        "titleJob": "職位",
+        "employeType": "勤務形態",
+        "salary": "賃金",
+        "salaryUnitMonth": "ドン/月",
+        "expiration": "申請期限",
+        "location": "勤務先住所",
+        "benefit": "福祉",
+        "descriptionJob": "仕事内容",
+        "requipmentJob": "職務要件",
+        "btnApplyJob": "求人に応募する"
     },
-
-    "ListJobApplyComponent":{
+    "ListJobApplyComponent": {
         "titleListJobApply": "求人応募一覧",
-        "listEmpty":"求人応募はありません",
-        "updateNull":"更新しない",
-        "seeDetailCV":"履歴書の詳細を見る",
-        "titleLoader":"読み込み中...",
-        "textReceived" : "受け取った",
-        "textIn_progress" : "処理",
-        "textNot_meet_standard_quality" : "標準品質を満たしていない",
-        "textInterview" : "インタビュー",
-        "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
-        "textAccept" : "受け入れる",
-        "textChangeSucces" : "プロファイルステータスが正常に変更されました",
-        "textChangeStatus" : "プロファイルステータスの変更",
-        "textCancel" : "キャンクル",
-        "textChange" : "変化",
-        "textSelectStatus" : "ステータスの選択",
-        "textNotification" : "通知"
+        "listEmpty": "求人応募はありません",
+        "updateNull": "更新しない",
+        "seeDetailCV": "履歴書の詳細を見る",
+        "titleLoader": "読み込み中...",
+        "textReceived": "受け取った",
+        "textIn_progress": "処理",
+        "textNot_meet_standard_quality": "標準品質を満たしていない",
+        "textInterview": "インタビュー",
+        "textInterview_not_meet_standard_quality": "インタビューが標準の品質を満たしていない",
+        "textAccept": "受け入れる",
+        "textChangeSucces": "プロファイルステータスが正常に変更されました",
+        "textChangeStatus": "プロファイルステータスの変更",
+        "textCancel": "キャンクル",
+        "textChange": "変化",
+        "textSelectStatus": "ステータスの選択",
+        "textNotification": "通知"
     },
-
-    "RegisterStudentComponent":{
-        "titleRegisterStudent":"学生登録",
-        "avata":"アバター",
-        "placeholderConfimPass":"登録パスワードの確認...",
-        "titleConfimPass":"パスワードを認証する",
-        "placeholderPass":"登録パスワードを入力してください...",
-        "titlePass":"登録パスワード",
-        "placeholderMajor":"専攻を選択してください...",
-        "titleMajor":"メジャー",
-        "placeholderFaculity":"学部を選択する...",
-        "titleFaculity":"学部",
-        "placeholderSearch":"検索...",
-        "placeholderStudentCode":"学生コードを入力してください...",
-        "titleStudentCode":"学生コード",
-        "titleStudentName":"生徒のフルネーム",
-        "placeholderStudentName":"生徒のフルネームを入力してください...",
-        "registerSusccess":"サインアップの成功",
-        "registerFail":"登録に失敗しました",
-        "errorStudentNameEmpty":"生徒名を空白にすることはできません",
-        "errorStudentCodeEmpty":"学籍番号を空白にすることはできません",
-        "errorFaculityEmpty":"教員名を空白にすることはできません",
-        "errorMajor":"専攻を選択する前に学部を選択してください",
-        "errorMajorEmpty":"業界名を空白にすることはできません",
-        "errorPasswordEmpty":"パスワードを空白にすることはできません",
-        "errorConfimPasswordEmpty":"パスワードの確認を空白にすることはできません",
-        "errorSameEmail":"メールアドレスが登録されました！ 別のメールアドレスを入力してください",
-        "errorStudentNameNotSpecial":"学生名に特殊文字を含めることはできません",
-        "errorStudentCodeNotSpecial":"学籍番号に特殊文字を含めることはできません",
-        "errorStudentNameNotLengthMax":"学生名は 255 文字を超えてはなりません",
-        "errorStudentCodeNotFormat":"学籍番号の形式が間違っています",
-        "errorConfimPassNotMatch":"パスワードの確認に失敗しました",
-        "titleEmail":"電子メールID",
-        "placeholderEmail":"メールIDを入力してください...",
-        "errorEmailEmpty":"メールアドレスを空白にすることはできません",
-        "errorEmailNotFormat":"メールの形式が間違っています",
-        "errorEmailNotLengthMax":"電子メールは 255 文字を超えてはなりません",
-        "errorPassNotLengthMax":"パスワードは8文字を超えてはなりません",
-        "errorPassNotFormat":"パスワードの形式が間違っています",
-        "titleRegister":"登録する",
-        "titleLogin":"ログイン",
-        "requestLogin":"すでにアカウントをお持ちですか?",
+    "RegisterStudentComponent": {
+        "titleRegisterStudent": "学生登録",
+        "avata": "アバター",
+        "placeholderConfimPass": "登録パスワードの確認...",
+        "titleConfimPass": "パスワードを認証する",
+        "placeholderPass": "登録パスワードを入力してください...",
+        "titlePass": "登録パスワード",
+        "placeholderMajor": "専攻を選択してください...",
+        "titleMajor": "メジャー",
+        "placeholderFaculity": "学部を選択する...",
+        "titleFaculity": "学部",
+        "placeholderSearch": "検索...",
+        "placeholderStudentCode": "学生コードを入力してください...",
+        "titleStudentCode": "学生コード",
+        "titleStudentName": "生徒のフルネーム",
+        "placeholderStudentName": "生徒のフルネームを入力してください...",
+        "registerSusccess": "サインアップの成功",
+        "registerFail": "登録に失敗しました",
+        "errorStudentNameEmpty": "生徒名を空白にすることはできません",
+        "errorStudentCodeEmpty": "学籍番号を空白にすることはできません",
+        "errorFaculityEmpty": "教員名を空白にすることはできません",
+        "errorMajor": "専攻を選択する前に学部を選択してください",
+        "errorMajorEmpty": "業界名を空白にすることはできません",
+        "errorPasswordEmpty": "パスワードを空白にすることはできません",
+        "errorConfimPasswordEmpty": "パスワードの確認を空白にすることはできません",
+        "errorSameEmail": "メールアドレスが登録されました！ 別のメールアドレスを入力してください",
+        "errorStudentNameNotSpecial": "学生名に特殊文字を含めることはできません",
+        "errorStudentCodeNotSpecial": "学籍番号に特殊文字を含めることはできません",
+        "errorStudentNameNotLengthMax": "学生名は 255 文字を超えてはなりません",
+        "errorStudentCodeNotFormat": "学籍番号の形式が間違っています",
+        "errorConfimPassNotMatch": "パスワードの確認に失敗しました",
+        "titleEmail": "電子メールID",
+        "placeholderEmail": "メールIDを入力してください...",
+        "errorEmailEmpty": "メールアドレスを空白にすることはできません",
+        "errorEmailNotFormat": "メールの形式が間違っています",
+        "errorEmailNotLengthMax": "電子メールは 255 文字を超えてはなりません",
+        "errorPassNotLengthMax": "パスワードは8文字を超えてはなりません",
+        "errorPassNotFormat": "パスワードの形式が間違っています",
+        "titleRegister": "登録する",
+        "titleLogin": "ログイン",
+        "requestLogin": "すでにアカウントをお持ちですか?",
         "titleNotification": "通知"
     },
-
-    "RegisterBusinessComponent":{
-        "titleRegisterBusiness":"企業登記",
-        "avata":"アバター",
-        "placeholderConfimPass":"登録パスワードの確認...",
-        "titleConfimPass":"パスワードを認証する",
-        "placeholderPass":"登録パスワードを入力してください...",
-        "titlePass":"登録パスワード",
-        "placeholderTaxCode":"税コードを入力してください...",
-        "titleTaxCode":"税コード",
-        "placeholderPhone":"電話番号を入力してください...",
-        "titlePhone":"電話番号",
-        "placeholderAddress":"住所を入力してください...",
-        "titleAddress":"住所",
-        "placeholderRepresent":"代表者のフルネームを入力してください...",
-        "titleRepresent":"代表者の氏名",
-        "titleTimeStart":"始まる時間",
-        "titleTimeEnd":"終了時間",
-        "titleTo":"から",
-        "titleBusinessName":"会社名",
-        "placeholderBusinessName":"事業名を入力してください...",
-        "registerSusccess":"サインアップの成功",
-        "registerFail":"登録に失敗しました",
-        "errorNameEmpty":"会社名を空白にすることはできません",
-        "errorTaxCodeEmpty":"税コードを空白のままにすることはできません",
-        "errorTaxCodeNotLengthMax":"税コードは 255 文字を超えてはなりません",
-        "errorTaxCodeNotFormat":"税コードの形式が間違っています",
-        "errorPhoneEmpty":"電話番号は空白のままにすることはできません",
-        "errorPhoneNotFormat":"電話番号の形式が間違っています",
-        "errorRepresentEmpty":"代表者名は空白にすることはできません",
-        "errorAddressEmpty":"住所を空白のままにすることはできません",
-        "errorAddressNotLengthMax":"アドレスは 255 文字を超えてはなりません",
-        "errorPasswordEmpty":"パスワードを空白にすることはできません",
-        "errorConfimPasswordEmpty":"パスワードの確認を空白にすることはできません",
-        "errorSameEmail":"メールアドレスが登録されました！ 別のメールアドレスを入力してください",
-        "activeTimeNotFormat":"稼働時間の形式が間違っています",
-        "errorNameNotSpecial":"会社名に特殊文字は含まれていません",
-        "errorNameNotLengthMax":"会社名は 255 文字を超えてはなりません",
-        "errorRepresentNotSpecial":"代表者名に特殊文字は含まれません",
-        "errorRepresentNotLengthMax":"代表者名は255文字以内にしてください",
-        "errorConfimPassNotMatch":"パスワードの確認に失敗しました",
-        "titleEmail":"電子メールID",
-        "placeholderEmail":"メールIDを入力してください...",
-        "errorEmailEmpty":"メールアドレスを空白にすることはできません",
-        "errorEmailNotFormat":"メールの形式が間違っています",
-        "errorEmailNotLengthMax":"電子メールは 255 文字を超えてはなりません",
-        "errorPassNotLengthMax":"パスワードは8文字を超えてはなりません",
-        "errorPassNotFormat":"パスワードの形式が間違っています",
-        "titleRegister":"登録する",
-        "titleLogin":"ログイン",
-        "requestLogin":"すでにアカウントをお持ちですか?",
+    "RegisterBusinessComponent": {
+        "titleRegisterBusiness": "企業登記",
+        "avata": "アバター",
+        "placeholderConfimPass": "登録パスワードの確認...",
+        "titleConfimPass": "パスワードを認証する",
+        "placeholderPass": "登録パスワードを入力してください...",
+        "titlePass": "登録パスワード",
+        "placeholderTaxCode": "税コードを入力してください...",
+        "titleTaxCode": "税コード",
+        "placeholderPhone": "電話番号を入力してください...",
+        "titlePhone": "電話番号",
+        "placeholderAddress": "住所を入力してください...",
+        "titleAddress": "住所",
+        "placeholderRepresent": "代表者のフルネームを入力してください...",
+        "titleRepresent": "代表者の氏名",
+        "titleTimeStart": "始まる時間",
+        "titleTimeEnd": "終了時間",
+        "titleTo": "から",
+        "titleBusinessName": "会社名",
+        "placeholderBusinessName": "事業名を入力してください...",
+        "registerSusccess": "サインアップの成功",
+        "registerFail": "登録に失敗しました",
+        "errorNameEmpty": "会社名を空白にすることはできません",
+        "errorTaxCodeEmpty": "税コードを空白のままにすることはできません",
+        "errorTaxCodeNotLengthMax": "税コードは 255 文字を超えてはなりません",
+        "errorTaxCodeNotFormat": "税コードの形式が間違っています",
+        "errorPhoneEmpty": "電話番号は空白のままにすることはできません",
+        "errorPhoneNotFormat": "電話番号の形式が間違っています",
+        "errorRepresentEmpty": "代表者名は空白にすることはできません",
+        "errorAddressEmpty": "住所を空白のままにすることはできません",
+        "errorAddressNotLengthMax": "アドレスは 255 文字を超えてはなりません",
+        "errorPasswordEmpty": "パスワードを空白にすることはできません",
+        "errorConfimPasswordEmpty": "パスワードの確認を空白にすることはできません",
+        "errorSameEmail": "メールアドレスが登録されました！ 別のメールアドレスを入力してください",
+        "activeTimeNotFormat": "稼働時間の形式が間違っています",
+        "errorNameNotSpecial": "会社名に特殊文字は含まれていません",
+        "errorNameNotLengthMax": "会社名は 255 文字を超えてはなりません",
+        "errorRepresentNotSpecial": "代表者名に特殊文字は含まれません",
+        "errorRepresentNotLengthMax": "代表者名は255文字以内にしてください",
+        "errorConfimPassNotMatch": "パスワードの確認に失敗しました",
+        "titleEmail": "電子メールID",
+        "placeholderEmail": "メールIDを入力してください...",
+        "errorEmailEmpty": "メールアドレスを空白にすることはできません",
+        "errorEmailNotFormat": "メールの形式が間違っています",
+        "errorEmailNotLengthMax": "電子メールは 255 文字を超えてはなりません",
+        "errorPassNotLengthMax": "パスワードは8文字を超えてはなりません",
+        "errorPassNotFormat": "パスワードの形式が間違っています",
+        "titleRegister": "登録する",
+        "titleLogin": "ログイン",
+        "requestLogin": "すでにアカウントをお持ちですか?",
         "titleNotification": "通知"
     },
-    "ManageJobApply":{
-        "textReceived" : "受け取った",
-        "textIn_progress" : "処理",
-        "textNot_meet_standard_quality" : "標準品質を満たしていない",
-        "textInterview" : "インタビュー",
-        "textInterview_not_meet_standard_quality" : "インタビューが標準の品質を満たしていない",
-        "textAccept" : "受け入れる",
-        "textNotification" : "通知",
-        "textDeleteSucces" : "プロファイルを正常にキャンセルしました",
-        "textLoader" : "読み込み中...",
-        "textListJobNull" : "求人応募はありません",
-        "textSeeCv" : "見る",
-        "textDelete" : "キャンセルします",
-        "textChangeProfile" : "更新する"
-       
-     },
+    "ManageJobApply": {
+        "textReceived": "受け取った",
+        "textIn_progress": "処理",
+        "textNot_meet_standard_quality": "標準品質を満たしていない",
+        "textInterview": "インタビュー",
+        "textInterview_not_meet_standard_quality": "インタビューが標準の品質を満たしていない",
+        "textAccept": "受け入れる",
+        "textNotification": "通知",
+        "textDeleteSucces": "プロファイルを正常にキャンセルしました",
+        "textLoader": "読み込み中...",
+        "textListJobNull": "求人応募はありません",
+        "textSeeCv": "見る",
+        "textDelete": "キャンセルします",
+        "textChangeProfile": "更新する"
+    },
     "NotificationsComponent": {
         "notification": "通知",
         "readAll": "すべて既読としてマークする",
@@ -234,7 +227,7 @@
         "createRecruitmentScreen": "求人の作成",
         "createUpdateProfile": "個人情報を更新",
         "manageJobApply": "アプリケーションジョブの管理",
-        "studentAndFacultyScreen": "学生のディスカッショングループ" 
+        "studentAndFacultyScreen": "学生のディスカッショングループ"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "戻る",
@@ -375,34 +368,34 @@
         "normalPostLikeBy": "いいね",
         "normalPostSeeMoreContent": "もっと見る",
         "normalPostHiddentContent": "非表示"
-    },    
-     "Comment": {
-         "commentReplyComment": "返信",
-         "commentDeleteComment": "削除",
-         "commentAuthor": "著者",
-         "modalListCommentTitle": "コメント"
-     },
-     "CommentContainer": {
+    },
+    "Comment": {
+        "commentReplyComment": "返信",
+        "commentDeleteComment": "削除",
+        "commentAuthor": "著者",
+        "modalListCommentTitle": "コメント"
+    },
+    "CommentContainer": {
         "commentContainerComponentSeeMore": "もっと見る",
         "commentContainerComponentHidden": "隠す"
-     },     
-     "CreateCommentToolbar":{
+    },
+    "CreateCommentToolbar": {
         "commentCreateComment": "コメント投稿",
         "commentPlaceholderInput": "コメントを入力してください"
-     },
-     "RecruitmentPost": {
+    },
+    "RecruitmentPost": {
         "recruitmentPostType": "採用",
         "recruitmentPostButtonSeeDetail": "詳細を見る",
-        "recruitmentPostCurrency":"vnd/月"
-    },    
+        "recruitmentPostCurrency": "vnd/月"
+    },
     "SurveyPost": {
         "surveyPostType": "アンケート",
         "surveyPostButton": "アンケートを実施する",
         "surveyPostButtonSetting": "回答を編集する",
         "surveyPostButtonJoinSurvey": "アンケートに参加する",
         "surveyPostButtonDetailQuestion": "質問の詳細"
-    },    
-    "Faculty":{
+    },
+    "Faculty": {
         "facultyOfElectricalEngineering": "電気工学学部",
         "facultyOfInformationTechnology": "情報技術学部",
         "facultyOfAutomationTechnology": "自動化技術学部",
@@ -419,12 +412,12 @@
         "modalUserLikedTitle": "いいねしたユーザーのリスト"
     },
     "MenuOption": {
-      "menuOptionSaveArticle": "記事を保存",
-      "menuOptionUnSaveArticle": "記事の保存を解除",
-      "menuOptionDeleteArticle": "記事を削除",
-      "menuOptionViewResumeList": "履歴書リストを表示",
-      "menuOptionViewSurveyResults": "調査結果を表示",
-      "menuOptionViewSurveyUpdateNormalPost": "投稿を編集する"
+        "menuOptionSaveArticle": "記事を保存",
+        "menuOptionUnSaveArticle": "記事の保存を解除",
+        "menuOptionDeleteArticle": "記事を削除",
+        "menuOptionViewResumeList": "履歴書リストを表示",
+        "menuOptionViewSurveyResults": "調査結果を表示",
+        "menuOptionViewSurveyUpdateNormalPost": "投稿を編集する"
     },
     "CreatePostToolbar": {
         "createPostToolbarTitle": "新しい投稿を作成する",
@@ -433,18 +426,18 @@
         "createPostToolbarRecruitmentPost": "求人投稿"
     },
     "ModalCreateNormalPost": {
-      "modalCreateNormalPostTitle": "投稿を作成する",
-      "modalCreateNormalPostPlaceholder": "投稿内容を入力してください",
-      "modalCreateNormalPostEntryImages": "写真",
-      "modalCreateNormalPostButton": "投稿する"
+        "modalCreateNormalPostTitle": "投稿を作成する",
+        "modalCreateNormalPostPlaceholder": "投稿内容を入力してください",
+        "modalCreateNormalPostEntryImages": "写真",
+        "modalCreateNormalPostButton": "投稿する"
     },
     "BusinessSelectFacultyToolbar": {
-      "businessSelectFacultyToolbarTitle": "表示したい学部を選択してください"
+        "businessSelectFacultyToolbarTitle": "表示したい学部を選択してください"
     },
     "NotifyFacultyDontHaveAnyPost": {
         "textNotifyFacultyDontHaveAnyPost": "この学部にはまだ投稿がありません"
-      },
-      "Profile": {
+    },
+    "Profile": {
         "profileOperatingHours": "営業時間",
         "profileTaxID": "税ID",
         "profileRepresentative": "代表者",
@@ -459,9 +452,9 @@
         "unFollow": "フォロー解除",
         "follow": "フォローする",
         "updateProfile": "プロフィールを更新",
-        "unUpdate":"まだ更新されていません"
+        "unUpdate": "まだ更新されていません"
     },
-        "Group": {
+    "Group": {
         "groupTdc": "TDC - Thu Duc College of Technologyによるグループ",
         "groupConnectBusiness": "ビジネスコミュニティに接続するグループ",
         "electricalElectronicsGroup": "電気 - 電子グループ",
@@ -475,149 +468,149 @@
         "englishGroup": "英語グループ",
         "koreanGroup": "韓国語グループ",
         "japaneseLanguageDepartmentGroup": "日本語学科グループ"
-        },
-        "ModalUpdate":{
-            "modalUpdateTitle": "アカウント情報を更新する",
-            "modalUpdatePlaceholderPhoneNumber": "電話番号",
-            "modalUpdatePlaceholderEmail": "メール",
-            "modalUpdateBackground": "背景画像",
-            "modalUpdateAvatar": "プロフィール画像",
-            "modalUpdateButtonText": "更新する"
-        },
-        "Validate": {
-            "validatePhoneNull": "電話番号は空白にできません",
-            "validatePhoneUnCorrectFormat": "正しくない電話番号の形式です",
-            "validateEmailNull": "メールアドレスは空白にできません",
-            "validateEmailUnCorrectFormat": "正しくないメールアドレスの形式です",
-            "validateEmailHadUsed": "このメールアドレスはすでに登録されています。別のメールアドレスを入力してください",
-            "validateEmailHasMaxLength": "メールアドレスは255文字を超えることはできません",
-            "validateNameHasMaxLength": "名前は255文字を超えることはできません",
-            "validateNameHasSpecialCharacter": "名前には特殊文字を含めることはできません",
-            "validateAddressNull": "住所は空白にできません",
-            "validatePresentorNull": "代表者の名前は空白にできません",
-            "validateRepresentorSpecialCharacter": "名前に特殊文字を含めることはできません",
-            "validateRepresentorMaxLength": "名前は255文字を超えることはできません",
-            "validateTaxCodeNull": "税金コードは空白にできません",
-            "validateNameNull": "名前は空白にできません",
-            "validateNameSpecialCharacter": "名前に特殊文字を含めることはできません",
-            "validateNameMaxLength": "名前は255文字を超えることはできません",
-            "validateNameTimeActiveUnCorrect": "営業時間が正しくありません",
-            "validateTaxCodeFormat": "誤った税金コードの形式です",
-            "validateTaxCodeMaxLength": "税金コードは255文字を超えることはできません",
-            "validateAddressMaxLength": "住所は255文字を超えることはできません"            
-        },
-        "ModalListUserLiked": {
-            "modalListUserLikedTitle": "いいねリスト"
-         },
-         "ModalLoadingComment": {
-            "modalLoadingCommentTitle": "データを読み込んでいます"
-        },
-        "CreatePostSelector": {
-            "createPostSelectorPlaceHolder": "投稿内容を入力してください",
-            "createPostSelectorSurveyText": "調査",
-            "createPostSelectorRecruitmentText": "募集",
-            "createPostSelectorNormalText": "通常"
-        },
-        "SelectFaculty": {
-            "selectFacultyPlaceholder": "学科を選択...",
-            "selectFacultyTextSearch": "検索..."
-        },
-        "FacultyDashboard": {
-            "facultyDashboardNotifyNotHavePost": "まだ投稿がありません",
-            "facultyDashboarNotYetSelectFaculty": "学部を選択してください"
-        },        
-        "StudentDashboard": {
-            "studentDashboardGroupTitle": "TDCによるグループ - Thu Duc College of Technology"
-        },
-        "OptionScreen": {
-            "optionScreenFollowText": "フォロー",
-            "optionScreenSaveText": "保存",
-            "optionScreenUpdateProfileText": "プロフィールを更新"
-        },
-        "BusinessUpdate": {
-            "businessUpdateCompanyName": "企業名",
-            "businessUpdateEmail": "Eメール",
-            "businessUpdateRepresentorFullName": "代表者氏名",
-            "businessUpdateCompanyTaxId": "税ID",
-            "businessUpdateCompanyAddress": "住所",
-            "businessUpdateCompanyPhoneNumber": "電話番号",
-            "businessUpdateCompanyTimeActiveStart": "活動開始時刻",
-            "businessUpdateCompanyTimeActiveEnd": "活動終了時刻",
-            "businessUpdateCompanyAvatar": "アバター画像",
-            "businessUpdateCompanyButton": "個人情報を更新",
-            "businessUpdateCompanyNamePlaceholder": "企業名を入力",
-            "businessUpdateEmailPlaceholder": "メールを入力",
-            "businessUpdateRepresentorFullNamePlaceholder": "代表者のフルネームを入力",
-            "businessUpdateCompanyTaxIdPlaceholder": "税IDを入力",
-            "businessUpdateCompanyAddressPlaceholder": "住所を入力",
-            "businessUpdateCompanyPhoneNumberPlaceholder": "電話番号を入力",
-            "businessUpdateTimeActive": "まで"
-        },
-        "CreateNormalPost": {
-            "createNormalPostTitle": "投稿を追加",
-            "updateNormalPostTitle": "投稿を更新",
-            "createNormalPostPlaceholder": "投稿の内容を入力してください",
-            "createNormalPostButtonText": "画像を追加",
-            "createNormalPostButtonFinish": "完了",
-            "createNormalPostAlertButton": "了解",
-            "createNormalPostAlertTextChar": "文字",
-            "createNormalPostAlertQuestion": "この画像を本当に削除しますか？",
-            "createNormalPostAlertTitle": "警告",
-            "createNormalPostAllertButton": "はい",
-            "createNormalPostAllertTextChar": "文字",
-            "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
-            "createNormalPostAllerTitle": "警告"
-        },        
-        "ModalReviewBackground": {
-            "modalReviewBackgroundTextSave": "保存",
-            "modalReviewBackgroundTextCancel": "保存をキャンセル"
-        },                
-        "AlertNotify": {
-            "alertNotifyTitle": "お知らせ",
-            "alertNotifyCreateNewPostFail": "新しい投稿の作成に失敗しました",
-            "alertNotifyCreateNewPostSuccess": "新しい投稿が成功製造されました",
-            "alertNotifyUpdatePostFail": "投稿の更新に失敗しました",
-            "alertNotifyUpdatePostSuccess": "投稿の更新に成功しました",
-            "alertNotifyPostContentCannotNull": "投稿の内容は空白にできません",
-            "alertNotifyCharacter": "文字",
-            "alertNotifyTextAccept": "承認",
-            "alertNotifyTextReject": "拒否",
-            "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "文字数は制限を超えていてはいけません"            
-        },
-        "UpdateProfile": {
-            "updateProfileAlertSuccess": "更新が成功しました",
-            "updateProfileAlertFail": "更新に失敗しました。もう一度お試しください"
-        },
-        "ToastMessenger": {
-            "toastMessengerTextTitle": "警告",
-            "toastMessengerTextWarning": "システムエラーが発生しました。後でもう一度お試しください"
-        },
-        "FacultyUpdate": {
-            "facultyUpdateName": "学科名",
-            "facultyUpdateNamePlaceholder": "学科名を入力してください"
-        },
-        "Update": {
-            "updatePhoneNumber": "電話番号",
-            "updatePhoneNumberPlaceholder": "電話番号を入力してください",
-            "updateAvatarTitle": "プロフィール写真",
-            "updateProfileButtonTitle": "プロフィール情報を更新"
-        },
-        "StudentUpdate": {
-            "studentUpdateName": "フルネーム",
-            "facultyUpdateNamePlaceholder": "お名前を入力してください"
-        },
-        "Notify": {
-            "updatePhoneNumber": "電話番号",
-            "updatePhoneNumberPlaceholder": "電話番号を入力してください",
-            "updateAvatarTitle": "プロフィール画像",
-            "updateProfileButtonTitle": "プロフィール情報を更新"
-        },
-        "ModalComment": {
-            "modalCommentTextChar": "文字",
-            "modalCommentCommentNotNull": "コメントの内容は空白にできません",
-            "modalCommentTextNumberLimited": "コメントの内容は",
-            "modalCommentCreateFail": "コメントの作成に失敗しました"
-        },
+    },
+    "ModalUpdate": {
+        "modalUpdateTitle": "アカウント情報を更新する",
+        "modalUpdatePlaceholderPhoneNumber": "電話番号",
+        "modalUpdatePlaceholderEmail": "メール",
+        "modalUpdateBackground": "背景画像",
+        "modalUpdateAvatar": "プロフィール画像",
+        "modalUpdateButtonText": "更新する"
+    },
+    "Validate": {
+        "validatePhoneNull": "電話番号は空白にできません",
+        "validatePhoneUnCorrectFormat": "正しくない電話番号の形式です",
+        "validateEmailNull": "メールアドレスは空白にできません",
+        "validateEmailUnCorrectFormat": "正しくないメールアドレスの形式です",
+        "validateEmailHadUsed": "このメールアドレスはすでに登録されています。別のメールアドレスを入力してください",
+        "validateEmailHasMaxLength": "メールアドレスは255文字を超えることはできません",
+        "validateNameHasMaxLength": "名前は255文字を超えることはできません",
+        "validateNameHasSpecialCharacter": "名前には特殊文字を含めることはできません",
+        "validateAddressNull": "住所は空白にできません",
+        "validatePresentorNull": "代表者の名前は空白にできません",
+        "validateRepresentorSpecialCharacter": "名前に特殊文字を含めることはできません",
+        "validateRepresentorMaxLength": "名前は255文字を超えることはできません",
+        "validateTaxCodeNull": "税金コードは空白にできません",
+        "validateNameNull": "名前は空白にできません",
+        "validateNameSpecialCharacter": "名前に特殊文字を含めることはできません",
+        "validateNameMaxLength": "名前は255文字を超えることはできません",
+        "validateNameTimeActiveUnCorrect": "営業時間が正しくありません",
+        "validateTaxCodeFormat": "誤った税金コードの形式です",
+        "validateTaxCodeMaxLength": "税金コードは255文字を超えることはできません",
+        "validateAddressMaxLength": "住所は255文字を超えることはできません"
+    },
+    "ModalListUserLiked": {
+        "modalListUserLikedTitle": "いいねリスト"
+    },
+    "ModalLoadingComment": {
+        "modalLoadingCommentTitle": "データを読み込んでいます"
+    },
+    "CreatePostSelector": {
+        "createPostSelectorPlaceHolder": "投稿内容を入力してください",
+        "createPostSelectorSurveyText": "調査",
+        "createPostSelectorRecruitmentText": "募集",
+        "createPostSelectorNormalText": "通常"
+    },
+    "SelectFaculty": {
+        "selectFacultyPlaceholder": "学科を選択...",
+        "selectFacultyTextSearch": "検索..."
+    },
+    "FacultyDashboard": {
+        "facultyDashboardNotifyNotHavePost": "まだ投稿がありません",
+        "facultyDashboarNotYetSelectFaculty": "学部を選択してください"
+    },
+    "StudentDashboard": {
+        "studentDashboardGroupTitle": "TDCによるグループ - Thu Duc College of Technology"
+    },
+    "OptionScreen": {
+        "optionScreenFollowText": "フォロー",
+        "optionScreenSaveText": "保存",
+        "optionScreenUpdateProfileText": "プロフィールを更新"
+    },
+    "BusinessUpdate": {
+        "businessUpdateCompanyName": "企業名",
+        "businessUpdateEmail": "Eメール",
+        "businessUpdateRepresentorFullName": "代表者氏名",
+        "businessUpdateCompanyTaxId": "税ID",
+        "businessUpdateCompanyAddress": "住所",
+        "businessUpdateCompanyPhoneNumber": "電話番号",
+        "businessUpdateCompanyTimeActiveStart": "活動開始時刻",
+        "businessUpdateCompanyTimeActiveEnd": "活動終了時刻",
+        "businessUpdateCompanyAvatar": "アバター画像",
+        "businessUpdateCompanyButton": "個人情報を更新",
+        "businessUpdateCompanyNamePlaceholder": "企業名を入力",
+        "businessUpdateEmailPlaceholder": "メールを入力",
+        "businessUpdateRepresentorFullNamePlaceholder": "代表者のフルネームを入力",
+        "businessUpdateCompanyTaxIdPlaceholder": "税IDを入力",
+        "businessUpdateCompanyAddressPlaceholder": "住所を入力",
+        "businessUpdateCompanyPhoneNumberPlaceholder": "電話番号を入力",
+        "businessUpdateTimeActive": "まで"
+    },
+    "CreateNormalPost": {
+        "createNormalPostTitle": "投稿を追加",
+        "updateNormalPostTitle": "投稿を更新",
+        "createNormalPostPlaceholder": "投稿の内容を入力してください",
+        "createNormalPostButtonText": "画像を追加",
+        "createNormalPostButtonFinish": "完了",
+        "createNormalPostAlertButton": "了解",
+        "createNormalPostAlertTextChar": "文字",
+        "createNormalPostAlertQuestion": "この画像を本当に削除しますか？",
+        "createNormalPostAlertTitle": "警告",
+        "createNormalPostAllertButton": "はい",
+        "createNormalPostAllertTextChar": "文字",
+        "createNormalPostAllertQuestion": "この写真を本当に削除しますか？",
+        "createNormalPostAllerTitle": "警告"
+    },
+    "ModalReviewBackground": {
+        "modalReviewBackgroundTextSave": "保存",
+        "modalReviewBackgroundTextCancel": "保存をキャンセル"
+    },
+    "AlertNotify": {
+        "alertNotifyTitle": "お知らせ",
+        "alertNotifyCreateNewPostFail": "新しい投稿の作成に失敗しました",
+        "alertNotifyCreateNewPostSuccess": "新しい投稿が成功製造されました",
+        "alertNotifyUpdatePostFail": "投稿の更新に失敗しました",
+        "alertNotifyUpdatePostSuccess": "投稿の更新に成功しました",
+        "alertNotifyPostContentCannotNull": "投稿の内容は空白にできません",
+        "alertNotifyCharacter": "文字",
+        "alertNotifyTextAccept": "承認",
+        "alertNotifyTextReject": "拒否",
+        "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "文字数は制限を超えていてはいけません"
+    },
+    "UpdateProfile": {
+        "updateProfileAlertSuccess": "更新が成功しました",
+        "updateProfileAlertFail": "更新に失敗しました。もう一度お試しください"
+    },
+    "ToastMessenger": {
+        "toastMessengerTextTitle": "警告",
+        "toastMessengerTextWarning": "システムエラーが発生しました。後でもう一度お試しください"
+    },
+    "FacultyUpdate": {
+        "facultyUpdateName": "学科名",
+        "facultyUpdateNamePlaceholder": "学科名を入力してください"
+    },
+    "Update": {
+        "updatePhoneNumber": "電話番号",
+        "updatePhoneNumberPlaceholder": "電話番号を入力してください",
+        "updateAvatarTitle": "プロフィール写真",
+        "updateProfileButtonTitle": "プロフィール情報を更新"
+    },
+    "StudentUpdate": {
+        "studentUpdateName": "フルネーム",
+        "facultyUpdateNamePlaceholder": "お名前を入力してください"
+    },
+    "Notify": {
+        "updatePhoneNumber": "電話番号",
+        "updatePhoneNumberPlaceholder": "電話番号を入力してください",
+        "updateAvatarTitle": "プロフィール画像",
+        "updateProfileButtonTitle": "プロフィール情報を更新"
+    },
+    "ModalComment": {
+        "modalCommentTextChar": "文字",
+        "modalCommentCommentNotNull": "コメントの内容は空白にできません",
+        "modalCommentTextNumberLimited": "コメントの内容は",
+        "modalCommentCreateFail": "コメントの作成に失敗しました"
+    },
     "UserItem": {
         "follow": "フォロー",
         "unFollow": "フォロー解除",
@@ -629,27 +622,32 @@
         "password": "パスワード",
         "cancel": "キャンセル",
         "change": "変更"
+<<<<<<< HEAD
     }
     ,
     "ForgettenPassword":{
+=======
+    },
+    "ForgettenPassword": {
+>>>>>>> origin/feature/bao/Update
         "textForgetPassword": "パスワードをお忘れですか",
         "textNotification": "電子メールの形式が正しくないか、空です",
         "textSubjectResetPassword": "パスワードを更新する",
         "titleSubjectResetPassword": " パスワードを変更する",
-        "textAccept":"確認する",
+        "textAccept": "確認する",
         "textBack": "戻ってくる"
     },
-    "AcceptScreen":{
+    "AcceptScreen": {
         "checkEmail": "メールをチェックする",
-        "description1":"メールにリンクを送信しました",
-        "description2":"、 メールを確認してください",
-        "titleNotify":"通知",
-        "descriptionNotify":"リンクを再送信しました ",
+        "description1": "メールにリンクを送信しました",
+        "description2": "、 メールを確認してください",
+        "titleNotify": "通知",
+        "descriptionNotify": "リンクを再送信しました ",
         "back": "戻る",
         "notSend": "メールが届かない??、",
         "sendAgain": "に送る"
     },
-    "AuthenticateRegistraion":{
+    "AuthenticateRegistraion": {
         "textSubjectAuthenRegistration": "認証登録",
         "titleSubjectAuthenRegistration": " アカウント認証"
     },
