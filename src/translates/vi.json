@@ -379,7 +379,6 @@
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " lượt bình chọn"
     },
-    
     "Post":{
         "normalPostIdentifyAuthorCompany": "Doanh nghiệp",
         "normalPostIdentifyAuthorFaculty": "Khoa",
@@ -663,6 +662,13 @@
         "unFollow": "Hủy theo dõi",
         "profile": "Trang cá nhân"
     },
+    "ApplicationOptionComponent": {
+        "language": "Ngôn ngữ",
+        "info": "Thông tin cá nhân",
+        "password":"Mật khẩu",
+        "cancel": "Hủy",
+        "change": "Thay đổi"
+    },
     "ForgettenPassword":{
         "textForgetPassword": "Quên mật khẩu",
         "textNotification": "Email sai định dạng hoặc rỗng",
@@ -687,5 +693,10 @@
     },
     "NoMorePost": {
         "noMorePost": "Không có bài viết mới"
+    },
+    "language": {
+        "vietnamese": "Tiếng Việt",
+        "english": "Tiếng Anh",
+        "japanese": "Tiếng Nhật"
     }
 }

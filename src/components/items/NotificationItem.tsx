@@ -12,6 +12,7 @@ import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { useAppSelector } from '../../redux/Hook';
 import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
+import { User } from '../../types/User';
 
 export interface NotificatonsType {
     id: any
@@ -21,6 +22,7 @@ export interface NotificatonsType {
     type: string
     createdAt: any
     content: string
+    user: any
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
     handleDelNotification: (id: number) => void;
@@ -32,39 +34,50 @@ export default function NotificationItem(props: NotificatonsType) {
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
+    const checkType = () => {
+        switch (props.type) {
+            case 'user':
+                return <Text>Doanh nghiệp A vừa đăng khảo sát</Text>
+                break
+            // case 
+        }
+        
+    }
+
     return (
-            <View>
-                <Pressable
-                    onPress={() => props.handleItem(props.id)}
-                    style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
-                >
-                    <View style={styles.cont}>
-                        <Image
-                            style={styles.image}
-                            source={{
-                                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
-                            }}
-                        />
-                        <View style={styles.content}>
-                            <Text style={[styles.name, {color: props.status === '1' ? '#a9a9a9' : '#000000'}]}>{props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content}</Text>
-                            <Text style={styles.tg}>{moment(props.createdAt).fromNow()}</Text>
-                        </View>
+        <View>
+            <Pressable
+                onPress={() => props.handleItem(props.id)}
+                style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
+            >
+                <View style={styles.cont}>
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
+                        }}
+                    />
+                    <View style={styles.content}>
+                        <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>{props.type}</Text>
+                        {/* {props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content} */}
+                        <Text style={styles.tg}>{moment(props.createdAt).fromNow()}</Text>
                     </View>
-                    <Menu style={styles.menu} key={props.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
-                        <MenuTrigger>
-                            <Icon1 name='dots-three-vertical' size={17} color='#000000' />
-                        </MenuTrigger>
-                        <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
-                            <MenuOption onSelect={() => props.handleDelNotification(props.id)}>
-                                <Text style={styles.option}>{t('NotificationsComponent.deleteNotification')}</Text>
-                            </MenuOption>
-                            <MenuOption onSelect={() => props.handleIsRead(props.id)}>
-                                <Text style={styles.option}>{t('NotificationsComponent.unReadNotification')}</Text>
-                            </MenuOption>
-                        </MenuOptions>
-                    </Menu>
-                </Pressable>
-            </View>
+                </View>
+                <Menu style={styles.menu} key={props.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
+                    <MenuTrigger>
+                        <Icon1 name='dots-three-vertical' size={17} color='#000000' />
+                    </MenuTrigger>
+                    <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
+                        <MenuOption onSelect={() => props.handleDelNotification(props.id)}>
+                            <Text style={styles.option}>{t('NotificationsComponent.deleteNotification')}</Text>
+                        </MenuOption>
+                        <MenuOption onSelect={() => props.handleIsRead(props.id)}>
+                            <Text style={styles.option}>{t('NotificationsComponent.unReadNotification')}</Text>
+                        </MenuOption>
+                    </MenuOptions>
+                </Menu>
+            </Pressable>
+        </View>
     )
 }
 
