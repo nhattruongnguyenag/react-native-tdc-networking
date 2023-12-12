@@ -24,6 +24,9 @@ import { SurveyItemResult } from '../types/response/SurveyResult'
 import { SurveyPostRequest } from '../types/SurveyPost'
 import { FollowUserModel } from '../types/response/FollowUserModel'
 import { buildPostSearchRequest } from '../utils/PostHelper'
+import { Business } from '../types/Business'
+import { BusinessRequest } from '../types/request/BusinessRequest'
+import { StudentRequest } from '../types/request/StudentRequest'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -100,6 +103,26 @@ export const TDCSocialNetworkAPI = createApi({
     addSurveyConductAnswer: builder.mutation<MessageResponseData, SurveyConductRequest>({
       query: (data) => ({
         url: 'api/posts/survey/conduct',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+    }),
+    addBusiness: builder.mutation<MessageResponseData, BusinessRequest>({
+      query: (data) => ({
+        url: 'api/business/register',
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+    }),
+    addStudent: builder.mutation<MessageResponseData, StudentRequest>({
+      query: (data) => ({
+        url: 'api/student/register',
         method: 'POST',
         body: data,
         headers: {
@@ -278,6 +301,8 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useAddStudentMutation,
+  useAddBusinessMutation,
   useGetProfileApplyQuery,
   useGetJobProfileQuery,
   useGetPostRejectLogQuery,

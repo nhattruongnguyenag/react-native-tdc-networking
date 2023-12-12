@@ -16,7 +16,8 @@ import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
 import { useAppSelector } from '../redux/Hook'
 import Loading from '../components/common/Loading'
-import { useTranslation } from 'react-multi-lang'
+import { t } from 'react-multi-lang'
+import { isStudent } from '../utils/UserHelper'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -32,7 +33,8 @@ export default function RecruitmentDetailScreen() {
     benefit: '',
     description: '',
     requirement: '',
-    title: ''
+    title: '',
+    isApplyJob: 0
   })
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState([data.benefit])
@@ -55,7 +57,13 @@ export default function RecruitmentDetailScreen() {
   }, [postId])
 
   const onSubmit = () => {
-    navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
+    if (data.isApplyJob === 1) {
+      Alert.alert(t('RecuitmentPostDetailComponent.textNotification'), t('RecuitmentPostDetailComponent.textApplied'))
+    } else if (!isStudent(userLogin)) {
+      Alert.alert(t('RecuitmentPostDetailComponent.textNotification'), t('RecuitmentPostDetailComponent.textNoApply'))
+    } else {
+      navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
+    }
   }
 
   useEffect(() => {
@@ -64,41 +72,38 @@ export default function RecruitmentDetailScreen() {
     setRequirement(data.requirement.split(','))
   }, [data.benefit, data.description, data.requirement])
 
-  const t = useTranslation()
   return (
     <>
       {isLoading ? (
         <Loading title={t('RecuitmentPostDetailComponent.titleLoader')} />
       ) : (
-        <ScrollView style={{backgroundColor:'#fff'}}>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
           <>
-            {data.title == '' ? (
-              ''
-            ) : (
+            {data.title !== '' && (
               <>
-                <SafeAreaView style={styles.container}>
+                <SafeAreaView>
                   <View style={styles.group}>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.titleJob')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK,marginLeft:10}}>{data.title}</Text>
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}>{data.title}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.employeType')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='briefcase' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK ,marginLeft:10}}> {data.employmentType}</Text>
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {data.employmentType}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.salary')}</Text>
                       <View style={styles.iconRecuitment}>
                         <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK,marginLeft:10 }}>
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}>
                           {' '}
-                          {formatVietNamCurrency(data.salary)} {t('RecuitmentPostDetailComponent.salaryUnitMonth')}
+                          {formatVietNamCurrency(data.salary)}{' '}{t('RecuitmentPostDetailComponent.salaryUnitMonth')}
                         </Text>
                       </View>
                     </View>
@@ -107,14 +112,14 @@ export default function RecruitmentDetailScreen() {
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.expiration')}</Text>
                       <View style={styles.iconRecuitment}>
                         <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK,marginLeft:10 }}> {formatDateTime(data.expiration)}</Text>
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {formatDateTime(data.expiration)}</Text>
                       </View>
                     </View>
                     <View style={styles.item}>
                       <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.location')}</Text>
                       <View style={styles.iconRecuitment}>
                         <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-                        <Text style={{ color: COLOR_BLACK ,marginLeft:10}}> {data.location}</Text>
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {data.location}</Text>
                       </View>
                     </View>
                   </View>
@@ -186,7 +191,6 @@ export default function RecruitmentDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
   txtHeader: {
     color: COLOR_BLACK,
     paddingVertical: 10,
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     marginVertical: 5,
-    marginRight: 5,
+    marginRight: 5
   },
   headerWelfare: {
     fontSize: 16,
