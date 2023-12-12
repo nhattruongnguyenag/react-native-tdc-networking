@@ -611,14 +611,13 @@
         "unFollow": "Unfollow",
         "profile": "Profile"
     },
-<<<<<<< HEAD
     "ApplicationOptionComponent": {
         "language": "Language",
         "info": "Personal Information",
         "password": "Password",
         "cancel": "Cancel",
         "change": "Change"
-=======
+    },
     "ForgettenPassword":{
         "textForgetPassword": "Forgot password",
         "textNotification": "Email is incorrectly formatted or empty",
@@ -643,6 +642,5 @@
     },
     "NoMorePost": {
         "noMorePost": "No new posts"
->>>>>>> develop
     }
 }

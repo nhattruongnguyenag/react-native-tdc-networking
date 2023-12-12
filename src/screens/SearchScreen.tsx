@@ -18,6 +18,7 @@ import CustomizePost from '../components/post/CustomizePost'
 import { LikeAction } from '../types/LikeActions'
 import { setDefaultLanguage } from '../redux/Slice'
 import { useTranslation } from 'react-multi-lang'
+import { LikeSearch } from '../types/LikeSearch'
 
 
 let stompClient: Client
@@ -65,15 +66,32 @@ export default function SearchScreen() {
     }
   ])
 
-  useEffect(() => {
-    
-    stompClient = getStompClient()
-    const onConnected = () => {
-      stompClient.subscribe(`/topic/find/${subjects}`, onMessageReceived)
-    }
-    const onMessageReceived = (payload: any) => {
+
+  const onMessageFindUserReceived = (payload: any) => {
+    //kiem tra subjects
+    if (subjects == 'user') {
+      console.log(JSON.parse(payload.body));
       setMasterData(JSON.parse(payload.body))
     }
+  }
+
+  const onMessageFindPostReceived = (payload: any) => {
+    if (subjects == 'post') {
+      console.log(JSON.parse(payload.body));
+      setMasterData(JSON.parse(payload.body))
+    }
+  }
+
+  useEffect(() => {
+
+    stompClient = getStompClient()
+    const onConnected = () => {
+      if (stompClient.connected) {
+        stompClient.subscribe(`/topic/find/user`, onMessageFindUserReceived)
+        stompClient.subscribe(`/topic/find/post`, onMessageFindPostReceived)
+      }
+    }
+
     const onError = (err: string | Frame) => {
       console.log(err)
     }
@@ -82,8 +100,6 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
-    console.log(subjects);
-    console.log(type)
     if (subjects == 'user') {
       stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
         userId: userLogin?.id,
@@ -93,16 +109,12 @@ export default function SearchScreen() {
       }))
     }
     else {
-      axios
-        .post(URL, {
-          userLogin: userLogin?.id,
-          type: type,
-          name: search
-        })
-        .then((response) => {
-          setMasterData(response.data.data)
-          setQty(masterData.length)
-        })
+      stompClient.send(`/app/find/post/unsave`, {}, JSON.stringify({
+        userId: userLogin?.id,
+        type: type,
+        search: search,
+        postId: null
+      }))
     }
   }
 
@@ -121,16 +133,30 @@ export default function SearchScreen() {
   }
 
   const likeAction = (obj: LikeAction) => {
-    obj.code = TYPE_POST_BUSINESS
-    // like(obj)
+    const likeData: Omit<LikeSearch, 'code'> = {
+      postId: obj.postId,
+      userId: obj.userId,
+      type: type,
+      search: search
+    }
+    like(likeData)
   }
 
-  // const like = useCallback((likeData: LikeAction) => {
-  //   stompClient.send(`/app/posts/group/like`, {}, JSON.stringify(likeData))
-  // }, [code])
+  const like = useCallback((likeData: Omit<LikeSearch, 'code'>) => {
+    console.log(likeData)
+    stompClient.send(`/app/find/post/like`, {}, JSON.stringify(likeData))
+  }, [subjects])
 
 
-  const handleUnSave = () => { }
+  const handleUnSave = (idPost: number) => {
+    stompClient.send(`/app/find/post/unsave`, {}, JSON.stringify({
+      userId: userLogin?.id,
+      type: type,
+      search: search,
+      postId: idPost
+    }))
+  }
+
   const handleDelete = () => { }
 
   const checkType = () => {
@@ -140,7 +166,7 @@ export default function SearchScreen() {
         break
       case 'post':
         return (
-          <>
+          <ScrollView>
             {masterData != null &&
               masterData.map((item: any) => (
                 <CustomizePost
@@ -167,11 +193,11 @@ export default function SearchScreen() {
                   description={item.description ?? null}
                   isSave={item.isSave}
                   group={''}
-                  handleUnSave={handleUnSave} 
-                  handleDelete={handleDelete} 
-                  active={0}                />
+                  handleUnSave={handleUnSave}
+                  handleDelete={handleDelete}
+                  active={0} />
               ))}
-          </>
+          </ScrollView>
         )
         break
       default:
@@ -206,7 +232,7 @@ export default function SearchScreen() {
                 setType(item.label === t('SearchComponent.post') ? items[1].children[0].value : items[0].children[0].value)
                 setLabel2(item.label === t('SearchComponent.post') ? items[1].children[0].label : items[0].children[0].label)
               }}
-             
+
             />
             <Dropdown
               style={[styles.dropDown2]}
@@ -228,9 +254,9 @@ export default function SearchScreen() {
         </View>
       </View>
       <MenuProvider>
-        <ScrollView>
+        <>
           {checkType()}
-        </ScrollView>
+        </>
       </MenuProvider>
     </View>
   )

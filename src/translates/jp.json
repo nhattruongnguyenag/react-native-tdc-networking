@@ -623,14 +623,14 @@
         "unFollow": "フォロー解除",
         "profile": "プロフィール"
     },
-<<<<<<< HEAD
     "ApplicationOptionComponent": {
         "language": "言語",
         "info": "個人情報",
         "password": "パスワード",
         "cancel": "キャンセル",
         "change": "変更"
-=======
+    }
+    ,
     "ForgettenPassword":{
         "textForgetPassword": "パスワードをお忘れですか",
         "textNotification": "電子メールの形式が正しくないか、空です",
@@ -655,6 +655,5 @@
     },
     "NoMorePost": {
         "noMorePost": "新しい投稿はありません"
->>>>>>> develop
     }
 }

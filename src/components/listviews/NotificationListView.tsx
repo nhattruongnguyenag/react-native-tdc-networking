@@ -31,6 +31,7 @@ export default function NotificationListView(props: NotificatonsListViewType) {
                     image={item.image}
                     data={item.data}
                     type={item.type}
+                    user={item.user}
                     createdAt={item.createdAt}
                     content={item.content}
                     handleItem={props.handleItem}
