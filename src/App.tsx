@@ -211,7 +211,6 @@ export function DrawerNavigator(): JSX.Element {
   useEffect(() => {
     setDefaultLanguage(defaultLanguage)
     moment.locale(defaultLanguage, locale.get(defaultLanguage))
-    AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(defaultLanguage))
   }, [defaultLanguage])
 
   return (
