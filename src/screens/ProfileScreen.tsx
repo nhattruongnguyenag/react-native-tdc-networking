@@ -30,6 +30,7 @@ import SkeletonPost from '../components/SkeletonPost';
 import { useGetPostsByIdQuery } from '../redux/Service';
 import { GetPostActive } from '../utils/GetPostActive';
 import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
+import { isFaculty } from '../utils/UserHelper';
 
 const ProfileScreen = ({ route }: any) => {
     const t = useTranslation();
@@ -258,7 +259,7 @@ const ProfileScreen = ({ route }: any) => {
                             handleClickButtonEvent={handleClickButtonEvent}
                             handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
                         {
-                            userInfo !== undefined && <View style={styles.titlePostArea}>
+                            (userInfo !== undefined) && <View style={styles.titlePostArea}>
                                 <Text style={styles.txtTitlePostArea}>
                                     {
                                         getFacultyTranslated(userInfo?.name + "", t)

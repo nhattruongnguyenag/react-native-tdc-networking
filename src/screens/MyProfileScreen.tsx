@@ -51,7 +51,7 @@ const MyProfileScreen = () => {
   const { data, isFetching } = useGetPostsByIdQuery(
     {
       userId: userLogin?.id ?? 0,
-      groupCode: group,
+      groupCode: group ?? "",
       userLogin: userLogin?.id ?? 0
     },
     {
