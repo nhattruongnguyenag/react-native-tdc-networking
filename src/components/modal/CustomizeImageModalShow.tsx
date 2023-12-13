@@ -8,12 +8,14 @@ import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { useTranslation } from 'react-multi-lang'
+import { ModalImage } from '../../types/ModalImage'
+import { Images } from '../../types/Images'
 
 interface ImageModalShowType {
   t: ReturnType<typeof useTranslation>
   closeModal: () => void
-  data: any
-  authorInfo: any
+  data: Images
+  authorInfo: ModalImage
   handleCheckImageHaveError: (id: number) => boolean
   handleClickIntoUserNameOrAvatarEvent: () => void
 }

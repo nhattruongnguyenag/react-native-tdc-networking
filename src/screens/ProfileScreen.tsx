@@ -8,7 +8,7 @@ import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload,
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../constants/Variables';
 import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import CustomizeModalBigImageShow from '../components/modal/CustomizeModalBigImageShow';
@@ -28,20 +28,22 @@ import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import SkeletonPost from '../components/SkeletonPost';
 import { useGetPostsByIdQuery } from '../redux/Service';
-import { GetPostActive } from '../utils/GetPostActive';
+import { getPostActive } from '../utils/GetPostActive';
 import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
+import { Post } from '../types/Post';
 
-const ProfileScreen = ({ route }: any) => {
+const ProfileScreen = () => {
     const t = useTranslation();
+    const route = useRoute<RouteProp<RootStackParamList, 'PROFILE_SCREEN'>>()
     const [imageFocus, setImageFocus] = useState<string>("");
-    const { userId, group } = route.params;
+    const { userId, group } = route.params ?? { userId: 0, group: "" };
     const [loadingBackground, setLoadingBackground] = useState(false);
     const [isCalled, setIsCalled] = useState(false);
     const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-    const [post, setPost] = useState<any[]>([]);
+    const [post, setPost] = useState<Post[]>([]);
     const [userInfo, setUserInfo] = useState<Student | Faculty | Business | null>();
     const [isFollow, setIsFollow] = useState<boolean>(false);
     const [typeAuthorPost, setTypeAuthorPost] = useState('');
@@ -60,6 +62,8 @@ const ProfileScreen = ({ route }: any) => {
             pollingInterval: 2000
         }
     );
+
+    console.log();
 
     useEffect(() => {
         if (data) {
@@ -117,7 +121,7 @@ const ProfileScreen = ({ route }: any) => {
     }
 
     const renderItem = useCallback((item: any) => {
-        if (GetPostActive(item.active)) {
+        if (getPostActive(item.active)) {
             return (
                 <CustomizePost
                     id={item.id}
@@ -258,7 +262,7 @@ const ProfileScreen = ({ route }: any) => {
                             handleClickButtonEvent={handleClickButtonEvent}
                             handleClickIntoHeaderComponentEvent={handleClickIntoHeaderComponentEvent} />
                         {
-                            userInfo !== undefined && <View style={styles.titlePostArea}>
+                            (userInfo !== undefined && getGroupForPost(group, t) !== "") && <View style={styles.titlePostArea}>
                                 <Text style={styles.txtTitlePostArea}>
                                     {
                                         getFacultyTranslated(userInfo?.name + "", t)

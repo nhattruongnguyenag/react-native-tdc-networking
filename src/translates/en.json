@@ -2,193 +2,195 @@
     "DrawerContentComponent": {
         "userGroup": "Your group",
         "userJobApplyProfile": "Job Application Profile",
-        "waitingPost": "Pending Posts",
+        "approvingPost": "Approving posts",
+        "peddingPost": "Pending posts",
         "option": "Options",
         "logout": "Logout"
     },
-
     "LoginComponent": {
-        "titleLogin": "Sign in",
+        "titleLogin": "Log in",
         "emailId": "Email ID",
         "password": "Password",
-        "errorEmail": "Email is incorrectly formatted or empty",
-        "errorPass": "Password is incorrectly formatted or empty",
+        "errorEmail": "Incorrect or empty email format",
+        "errorPass": "Incorrect or empty password format",
         "showPass": "Show",
         "hidePass": "Hide",
-        "loginFail": "Sign in failed",
+        "loginFail": "Login failed",
         "alertLoginFail": "Incorrect email or password",
         "forgotPass": "Forgot password?",
-        "titleRegister": "Sign up",
-        "requestRegister": "Don't have account?"
+        "titleRegister": "Register",
+        "requestRegister": "Don't have an account?"
     },
-
-    "RegisterComponent":{
+    "RegisterComponent": {
         "typeStudent": "Student",
         "typeBusiness": "Business",
         "titleNotification": "Notification",
-        "warningSelectedType": "Please select the registration role",
+        "warningSelectedType": "Please select a registration role",
         "titleSelectedType": "Select role",
         "selectedType": "---Select registration role---",
-        "goBack": "Go back",
+        "goBack": "Back",
         "continute": "Continue"
     },
-
-    "RecuitmentPostDetailComponent":{
-        "titleRecruitmentDetail":"Recruitment details",
-        "titleLoader":"Loading...",
-        "titleJob":"Vacancies",
-        "employeType":"Working form",
-        "salary":"Salary",
-        "salaryUnitMonth":"vnd/month",
-        "expiration":"Application deadline",
-        "location":"Address",
-        "benefit":"Benefits",
-        "descriptionJob":"Description",
-        "requipmentJob":"requirement",
-        "btnApplyJob":"Apply for job"
+    "RecuitmentPostDetailComponent": {
+        "titleLoader": "Loading data...",
+        "titleJob": "Job position",
+        "employeType": "Employment type",
+        "salary": "Salary",
+        "salaryUnitMonth": "VND/month",
+        "expiration": "Application deadline",
+        "location": "Work address",
+        "benefit": "Benefits",
+        "descriptionJob": "Job description",
+        "requipmentJob": "Job requirements",
+        "btnApplyJob": "Apply for the job",
+        "textNotification": "Notification",
+        "textNoApply": "You are not eligible to apply",
+        "textApplied": "You have applied! Please check your application profile for status"
     },
-
-    "ListJobApplyComponent":{
-        "listEmpty":"There are no job application",
-        "updateNull":"Not update",
-        "seeDetailCV":"See cv details",
-        "titleLoader":"Loading...",
-        "textReceived" : "Received",
-        "textIn_progress" : "In progress",
-        "textNot_meet_standard_quality" : "Not meet standard quality",
-        "textInterview" : "Interview",
-        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
-        "textAccept" : "Accept",
-        "textChangeSucces" : "Change profile status successfully",
-        "textChangeStatus" : "Change profile status",
-        "textCancel" : "Cancle",
-        "textChange" : "Change",
-        "textSelectStatus" : "Select status change",
-        "textNotification" : "Notification"
+    "ListJobApplyComponent": {
+        "listEmpty": "No job applications",
+        "updateNull": "Not updated",
+        "seeDetailCV": "View CV",
+        "titleLoader": "Loading data...",
+        "textReceived": "Received",
+        "textIn_progress": "In progress",
+        "textNot_meet_standard_quality": "Review",
+        "textInterview": "Interview",
+        "textInterview_not_meet_standard_quality": "Did not pass interview",
+        "textAccept": "Accepted",
+        "textSelectStatus": "Select status to change",
+        "textChangeSucces": "Status changed successfully",
+        "textChangeStatus": "Change status",
+        "textCancel": "Cancel",
+        "textChange": "Change",
+        "textNotification": "Notification"
     },
-
-    "RegisterStudentComponent":{
-        "titleRegisterStudent":"Sign up for student",
-        "avata":"Avatar",
-        "placeholderConfimPass":"Enter confirm password...",
-        "titleConfimPass":"Confirm password",
-        "placeholderPass":"Enter password...",
-        "titlePass":"Password",
-        "placeholderMajor":"Select major...",
-        "titleMajor":"Major",
-        "placeholderFaculity":"Select faculty...",
-        "titleFaculity":"Faculty",
-        "placeholderSearch":"Search...",
-        "placeholderStudentCode":"Enter your student code...",
-        "titleStudentCode":"Student code",
-        "titleStudentName":"Full name",
-        "placeholderStudentName":"Enter full name...",
-        "registerSusccess":"Sign up success",
-        "registerFail":"Sign up failed",
-        "errorStudentNameEmpty":"Student name can't be blank",
-        "errorStudentCodeEmpty":"Student code can't be blank",
-        "errorFaculityEmpty":"Faculty name can't be blank",
-        "errorMajor":"Please select a faculty before choosing a major",
-        "errorMajorEmpty":"Major name can't be blank",
-        "errorPasswordEmpty":"Password can't be blank",
-        "errorConfimPasswordEmpty":"Confirm password can't be blank",
-        "errorSameEmail":"Email has been registered! Please enter another email",
-        "errorStudentNameNotSpecial":"Student name can't contain special characters",
-        "errorStudentCodeNotSpecial":"Student code can't contain special characters",
-        "errorStudentNameNotLengthMax":"Student name must not exceed 255 characters",
-        "errorStudentCodeNotFormat":"Student code is in wrong format",
-        "errorConfimPassNotMatch":"Confirm password failed",
-        "titleEmail":"Email ID",
-        "placeholderEmail":"Enter email ID...",
-        "errorEmailEmpty":"Email can't be blank",
-        "errorEmailNotFormat":"Email is in wrong format",
-        "errorEmailNotLengthMax":"Email must not exceed 255 characters",
-        "errorPassNotLengthMax":"Password must not exceed 8 characters",
-        "errorPassNotFormat":"Password is in wrong format",
-        "titleRegister":"Sign up",
-        "titleLogin":"Sign in",
-        "requestLogin":"Do have account?",
-        "titleNotification": "Notification"
+    "RegisterStudentComponent": {
+        "titleRegisterStudent": "Student registration",
+        "avata": "Avatar",
+        "placeholderConfimPass": "Confirm registration password...",
+        "titleConfimPass": "Confirm password",
+        "placeholderPass": "Enter registration password...",
+        "titlePass": "Password",
+        "placeholderMajor": "Select major...",
+        "titleMajor": "Major",
+        "placeholderFaculity": "Select faculty...",
+        "titleFaculity": "Faculty",
+        "placeholderSearch": "Search...",
+        "placeholderStudentCode": "Enter student code...",
+        "titleStudentCode": "Student code",
+        "titleStudentName": "Student name",
+        "placeholderStudentName": "Enter student name...",
+        "registerSusccess": "Registration successful",
+        "registerFail": "Registration failed",
+        "errorStudentNameEmpty": "Student name cannot be empty",
+        "errorStudentCodeEmpty": "Student code cannot be empty",
+        "errorFaculityEmpty": "Faculty name cannot be empty",
+        "errorMajor": "Please select a faculty before choosing a major",
+        "errorMajorEmpty": "Major name cannot be empty",
+        "errorPasswordEmpty": "Password cannot be empty",
+        "errorConfimPasswordEmpty": "Confirm password cannot be empty",
+        "errorSameEmail": "Email is already registered! Please enter a different email",
+        "errorStudentNameNotSpecial": "Student name cannot contain special characters",
+        "errorStudentCodeNotSpecial": "Student code cannot contain special characters",
+        "errorStudentNameNotLengthMax": "Student name cannot exceed 255 characters",
+        "errorStudentCodeNotFormat": "Incorrect student code format",
+        "errorConfimPassNotMatch": "Confirm password does not match",
+        "titleEmail": "Email ID",
+        "placeholderEmail": "Enter email ID...",
+        "errorEmailEmpty": "Email cannot be empty",
+        "errorEmailNotFormat": "Incorrect email format",
+        "errorEmailNotLengthMax": "Email cannot exceed 255 characters",
+        "errorPassNotLengthMax": "Password cannot exceed 8 characters",
+        "errorPassNotFormat": "Incorrect password format",
+        "titleRegister": "Register",
+        "titleLogin": "Log in",
+        "requestLogin": "Already have an account?",
+        "titleNotification": "Notification",
+        "textAccountAuthen": "Account authentication"
     },
-
-    "RegisterBusinessComponent":{
-        "titleRegisterBusiness":"Sign up for business",
-        "avata":"Avatar",
-        "placeholderConfimPass":"Enter confirm password...",
-        "titleConfimPass":"Confirm password",
-        "placeholderPass":"Enter password...",
-        "titlePass":"Password",
-        "placeholderTaxCode":"Enter tax code...",
-        "titleTaxCode":"Tax code",
-        "placeholderPhone":"Enter your phone number...",
-        "titlePhone":"Phone number",
-        "placeholderAddress":"Enter address...",
-        "titleAddress":"Address",
-        "placeholderRepresent":"Enter the representative's full name...",
-        "titleRepresent":"Representative's full name",
-        "titleTimeStart":"Time start",
-        "titleTimeEnd":"Time end",
-        "titleTo":"to",
-        "titleBusinessName":"Business name",
-        "placeholderBusinessName":"Enter business name...",
-        "registerSusccess":"Sign up success",
-        "registerFail":"Sign up failed",
-        "errorNameEmpty":"Business name can't be blank",
-        "errorTaxCodeEmpty":"Tax code can't be blank",
-        "errorTaxCodeNotLengthMax":"Tax code must not exceed 255 characters",
-        "errorTaxCodeNotFormat":"Tax code is in wrong format",
-        "errorPhoneEmpty":"Phone number can't be blank",
-        "errorPhoneNotFormat":"Phone number is in wrong format",
-        "errorRepresentEmpty":"Representative's name can't be blank",
-        "errorAddressEmpty":"Address can't be blank",
-        "errorAddressNotLengthMax":"Address must not exceed 255 characters",
-        "errorPasswordEmpty":"Password can't be blank",
-        "errorConfimPasswordEmpty":"Confirm password can't be blank",
-        "errorSameEmail":"Email has been registered! Please enter another email",
-        "activeTimeNotFormat":"Active time is in wrong format",
-        "errorNameNotSpecial":"Business name can't contain special characters",
-        "errorNameNotLengthMax":"Business name must not exceed 255 characters",
-        "errorRepresentNotSpecial":"Representative's name can't contain special characters",
-        "errorRepresentNotLengthMax":"Representative's name must not exceed 255 characters",
-        "errorConfimPassNotMatch":"Confirm password failed",
-        "titleEmail":"Email ID",
-        "placeholderEmail":"Enter email ID...",
-        "errorEmailEmpty":"Email can't be blank",
-        "errorEmailNotFormat":"Email is in wrong format",
-        "errorEmailNotLengthMax":"Email must not exceed 255 characters",
-        "errorPassNotLengthMax":"Password must not exceed 8 characters",
-        "errorPassNotFormat":"Password is in wrong format",
-        "titleRegister":"Sign up",
-        "titleLogin":"Sign in",
-        "requestLogin":"Do have account?",
-        "titleNotification": "Notification"
+    "RegisterBusinessComponent": {
+        "titleRegisterBusiness": "Business registration",
+        "avata": "Avatar",
+        "placeholderConfimPass": "Confirm registration password...",
+        "titleConfimPass": "Confirm password",
+        "placeholderPass": "Enter registration password...",
+        "titlePass": "Password",
+        "placeholderTaxCode": "Enter tax code...",
+        "titleTaxCode": "Tax code",
+        "placeholderPhone": "Enter phone number...",
+        "titlePhone": "Phone number",
+        "placeholderAddress": "Enter address...",
+        "titleAddress": "Address",
+        "placeholderRepresent": "Enter representative's name...",
+        "titleRepresent": "Representative's name",
+        "titleTimeStart": "Start time",
+        "titleTimeEnd": "End time",
+        "titleTo": "to",
+        "titleBusinessName": "Business name",
+        "placeholderBusinessName": "Enter business name...",
+        "registerSusccess": "Registration successful",
+        "registerFail": "Registration failed",
+        "errorNameEmpty": "Business name cannot be empty",
+        "errorTaxCodeEmpty": "Tax code cannot be empty",
+        "errorTaxCodeNotLengthMax": "Tax code cannot exceed 255 characters",
+        "errorTaxCodeNotFormat": "Incorrect tax code format",
+        "errorPhoneEmpty": "Phone number cannot be empty",
+        "errorPhoneNotFormat": "Incorrect phone number format",
+        "errorRepresentEmpty": "Representative's name cannot be empty",
+        "errorAddressEmpty": "Address cannot be empty",
+        "errorAddressNotLengthMax": "Address cannot exceed 255 characters",
+        "errorPasswordEmpty": "Password cannot be empty",
+        "errorConfimPasswordEmpty": "Confirm password cannot be empty",
+        "errorSameEmail": "Email is already registered! Please enter a different email",
+        "activeTimeNotFormat": "Incorrect operating time format",
+        "errorNameNotSpecial": "Business name cannot contain special characters",
+        "errorNameNotLengthMax": "Business name cannot exceed 255 characters",
+        "errorRepresentNotSpecial": "Representative's name cannot contain special characters",
+        "errorRepresentNotLengthMax": "Representative's name cannot exceed 255 characters",
+        "errorConfimPassNotMatch": "Confirm password does not match",
+        "titleEmail": "Email ID",
+        "placeholderEmail": "Enter email ID...",
+        "errorEmailEmpty": "Email cannot be empty",
+        "errorEmailNotFormat": "Incorrect email format",
+        "errorEmailNotLengthMax": "Email cannot exceed 255 characters",
+        "errorPassNotLengthMax": "Password cannot exceed 8 characters",
+        "errorPassNotFormat": "Incorrect password format",
+        "titleRegister": "Register",
+        "titleLogin": "Log in",
+        "requestLogin": "Already have an account?",
+        "titleNotification": "Notification",
+        "textAccountAuthen": "Account authentication"
     },
-    "ManageJobApply":{
-        "textReceived" : "Received",
-        "textIn_progress" : "In progress",
-        "textNot_meet_standard_quality" : "Not meet standard quality",
-        "textInterview" : "Interview",
-        "textInterview_not_meet_standard_quality" : "Interview not meet standard quality",
-        "textAccept" : "Accept",
-        "textChangeProfile" : "Update job application",
-        "textNotification" : "Notification",
-        "textDeleteSucces" : "Cancel profile successfully",
-        "textLoader" : "Loading...",
-        "textListJobNull" : "No job application",
-        "textSeeCv" : "See profile",
-        "textDelete" : "Cancle profile"
-     },
+    "ManageJobApply": {
+        "textReceived": "Received",
+        "textIn_progress": "In progress",
+        "textNot_meet_standard_quality": "Review",
+        "textInterview": "Interview",
+        "textInterview_not_meet_standard_quality": "Did not pass interview",
+        "textAccept": "Accepted",
+        "textNotification": "Notification",
+        "textDeleteSucces": "Cancelled application successfully",
+        "textLoader": "Loading data...",
+        "textListJobNull": "No job applications",
+        "textSeeCv": "View CV",
+        "textDelete": "Cancel application",
+        "textChangeProfile": "Edit profile"
+    },
     "NotificationsComponent": {
         "notification": "Notification",
         "readAll": "Mark all as read",
         "deleteNotification": "Delete notification",
         "unReadNotification": "Mark as unread",
-        "search": "Search notifications ..."
+        "search": "Search notification..."
     },
     "FollowComponent": {
         "following": "Following",
         "follower": "Follows you",
-        "search": "Search for users..."
+        "search": "Search user..."
+    },
+    "SavedPostListComponent": {
+        "search": "Enter search content..."
     },
     "SearchComponent": {
         "user": "User",
@@ -201,48 +203,47 @@
         "recruitment": "Recruitment",
         "search": "Enter search content..."
     },
-    "SavedPostListComponent": {
-        "search": "Enter search content..."
-    },
     "ToolbarTitle": {
-        "recruitmentDetailScreen": "Recruitment Details",
+        "recruitmentDetailScreen": "Recruitment details",
         "topTabNavigator": "TDC Social Network",
         "drawerTabNavigator": "TDC Social Network",
-        "forgottenPasswordScreen": "Forgot Password",
-        "acceptForgottenPasswordScreen": "Confirm Email",
+        "forgottenPasswordScreen": "Forgot password",
+        "acceptForgottenPasswordScreen": "Confirm email",
         "searchScreen": "Search",
         "conversationScreen": "Conversation",
         "messengerScreen": "Messenger",
-        "addQuestionScreen": "Add Question",
-        "reviewSurveyPostScreen": "Review Post",
-        "surveyConductScreen": "Conduct Survey",
-        "jobApplyScreen": "Job Application",
-        "listPostSavedScreen": "Saved Posts",
+        "addQuestionScreen": "Add question",
+        "reviewSurveyPostScreen": "Review post",
+        "surveyConductScreen": "Conduct survey",
+        "jobApplyScreen": "Apply for job",
+        "listPostSavedScreen": "Saved posts",
         "createNormalPostScreen": "",
-        "listJobApplyScreen": "Job Application List",
-        "listFollowScreen": "Follow List",
-        "profileScreen": "User Profile",
-        "detailJobApply": "Job Application Details",
+        "listJobApplyScreen": "Job application list",
+        "listFollowScreen": "Follow list",
+        "profileScreen": "User profile",
+        "detailJobApply": "Job application details",
         "optionScreen": "Options",
         "splashScreen": "",
-        "surveyResultScreen": "Survey Results",
-        "applicationOptionScreen": "Application Options",
-        "approvalPostScreen": "Approve Posts",
-        "createSurveyScreen": "Create Survey",
-        "createRecruitmentScreen": "Create Job Posting",
-        "createUpdateProfile": "Update Personal Information",
-        "manageJobApply": "Manage application job",
+        "surveyResultScreen": "Survey result",
+        "applicationOptionScreen": "Application options",
+        "approvalPostScreen": "Approve post",
+        "createSurveyScreen": "Add survey",
+        "createRecruitmentScreen": "Add recruitment post",
+        "createUpdateProfile": "Update personal information",
+        "manageJobApply": "Manage job applications",
+        "pendingPostScreen": "Pending posts",
+        "detailSurveyScreen": "Question details",
         "studentAndFacultyScreen": "Student discussion group"
     },
     "AddQuestionScreen": {
-        "textButtonGoBack": "Go back",
+        "textButtonGoBack": "Back",
         "textButtonGoNext": "Next",
         "textEmptyQuestionErrorTitle": "Error",
-        "textEmptyQuestionErrorContent": "Add at least 1 question for the survey"
+        "textEmptyQuestionErrorContent": "Add at least 1 question to the survey"
     },
     "ConversationScreen": {
-        "allConversationTabTitle": "All Conversations",
-        "allActiveConversationTabTitle": "Active"
+        "allConversationTabTitle": "All conversations",
+        "allActiveConversationTabTitle": "Active conversations"
     },
     "RecruitmentScreen": {
         "recruitmentBenefitEmptyValidate": "Benefits cannot be empty",
@@ -250,24 +251,26 @@
         "recruitmentBenefitTitle": "Benefits",
         "recruitmentDescEmptyValidate": "Description cannot be empty",
         "recruitmentEmploymentTypeEmptyValidate": "Employment type cannot be empty",
-        "recruitmentExpirationValidate": "Expiration date cannot be in the past",
-        "recruitmentLocationEmptyValidate": "Work location cannot be empty",
+        "recruitmentExpirationValidate": "Deadline cannot be in the past",
+        "recruitmentLocationEmptyValidate": "Work address cannot be empty",
         "recruitmentRequirementEmptyValidate": "Requirements cannot be empty",
         "recruitmentSalaryEmptyValidate": "Salary cannot be empty",
         "recruitmentSaveDescPlaceholder": "Job description...",
-        "recruitmentSaveDescTitle": "Job Description",
+        "recruitmentSaveDescTitle": "Job description",
         "recruitmentSaveEmploymentTypePlaceholder": "Employment type...",
         "recruitmentSaveExpirationPickerLocale": "en",
-        "recruitmentSaveExpirationTitle": "Application Deadline",
-        "recruitmentSaveLocationPlaceholder": "Work location...",
-        "recruitmentSaveLocationTitle": "Work Location",
+        "recruitmentSaveExpirationTitle": "Application deadline",
+        "recruitmentSaveLocationPlaceholder": "Work address...",
+        "recruitmentSaveLocationTitle": "Work address",
         "recruitmentSaveRequirementPlaceholder": "Requirements...",
-        "recruitmentSaveRequirementTitle": "Job Requirements",
+        "recruitmentSaveRequirementTitle": "Job requirements",
         "recruitmentSaveSallaryPlaceholder": "Salary...",
         "recruitmentSaveSallaryTitle": "Salary",
-        "recruitmentSaveSaveEmploymentTypeTitle": "Employment Type",
-        "recruitmentSaveSuccessContent": "Job posting has been created",
+        "recruitmentSaveSaveEmploymentTypeTitle": "Employment type",
+        "recruitmentSaveSuccessContent": "Recruitment post has been published",
         "recruitmentSaveSuccessTitle": "Success!",
+        "recruitmentUpdateSuccessTitle": "Success!",
+        "recruitmentUpdateSuccessContent": "Recruitment post has been updated",
         "recruitmentSaveTitlePlaceholder": "Enter title...",
         "recruitmentSaveTitleTitle": "Title",
         "recruitmentTitleEmptyValidate": "Title cannot be empty",
@@ -289,11 +292,12 @@
         "jobApplyScreenButtonComplete": "Complete",
         "jobApplyScreenButtonGoBack": "Go back",
         "jobApplyScreenButtonUpdateCvTitle": "Update CV",
-        "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the application",
+        "jobApplyScreenEmptyCvTextContent": "Please add a CV to complete the registration",
         "jobApplyScreenEmptyCvTextTitle": "Notification",
         "jobApplyScreenSaveSuccessTextContent": "Application submitted successfully",
-        "jobApplyScreenChangeSuccessTextContent": "Change submitted successfully",
-        "jobApplyScreenSaveSuccessTextTitle": "Notification"
+        "jobApplyScreenChangeSuccessTextContent": "Application updated successfully",
+        "jobApplyScreenSaveSuccessTextTitle": "Notification",
+        "jobApplyScreenUploadErrorFormat": "Incorrect PDF format"
     },
     "MessageScreen": {
         "messageScreenLoaderTitle": "Loading messages...",
@@ -301,19 +305,21 @@
     },
     "MessengerToolbar": {
         "userStatusActive": "Active",
-        "userStatusInactive": "Last seen"
+        "userStatusInactive": "Inactive"
     },
     "ReviewSurveyPostScreen": {
         "reviewSurveyScreenAnswerTitle": "Questions",
         "reviewSurveyScreenButtonComplete": "Complete",
-        "reviewSurveyScreenButtonGoBack": "Go Back",
+        "reviewSurveyScreenButtonGoBack": "Go back",
         "reviewSurveyScreenSaveFailContent": "Save failed",
         "reviewSurveyScreenSaveFailTitle": "Error",
-        "reviewSurveyScreenSaveSuccessContent": "Save successful",
-        "reviewSurveyScreenSaveSuccessTitle": "Success"
+        "reviewSurveyScreenSaveSuccessTitle": "Success",
+        "reviewSurveyScreenSaveSuccessContent": "Survey successfully added",
+        "reviewSurveyScreenUpdateSuccessTitle": "Success",
+        "reviewSurveyScreenUpdateSuccessContent": "Survey updated successfully"
     },
     "SurveyConductScreen": {
-        "surveyConductScreenSaveSuccessTitle": "Success!",
+        "surveyConductScreenSaveSuccessTitle": "Success!!!",
         "surveyConductScreenSaveSuccessContent": "Answers have been saved.\nThank you for participating in the survey",
         "surveyConductScreenShortAnswerError": "Please enter a short answer",
         "surveyConductScreenMultiQuestionMulitiChoice": "Please select at least one answer",
@@ -349,15 +355,17 @@
         "addQuestionViewComponentShortAnswer": "Short Answer",
         "addQuestionViewComponentChoiceInputPlaceholder": "Choice",
         "addQuestionViewComponentMultiChoiceQuestion": "Multiple Choice",
-        "addQuestionViewComponentOneChoiceQuestion": "Quiz",
+        "addQuestionViewComponentOneChoiceQuestion": "Single Choice",
         "addQuestionViewComponentQuestionEmptyErrorContent": "Please select a question type",
-        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!",
+        "addQuestionViewComponentQuestionEmptyErrorTitle": "Error!!!",
         "addQuestionViewComponentQuestionTypeDropdownSearch": "Search...",
-        "addQuestionViewComponentQuestionTypeDropdownTitle": "--- Select question type ---",
+        "addQuestionViewComponentQuestionTypeDropdownTitle": "Select question type",
         "addQuestionViewComponentTitleContainsSpecialCharacterValidate": "Title cannot contain special characters",
         "addQuestionViewComponentTitleEmptyValidate": "Title cannot be empty",
         "addQuestionViewComponentTitleInputPlaceholder": "Enter question title...",
-        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters"
+        "addQuestionViewComponentTitleOver255CharacterValidate": "Title cannot exceed 255 characters",
+        "addChoiceValidateErrorTitle": "Notification",
+        "addChoiceValidateErrorContent": "Please add at least one choice to the question"
     },
     "MultiChoiceQuestion": {
         "questionComponentAddTextTitle": "Question"
@@ -366,7 +374,7 @@
         "questionBottomBarQuestionRequireToggle": "Required"
     },
     "ShortAnswerQuestion": {
-        "shortAnswerQuestionComponentTitlePlaceholder": "Enter your answer..."
+        "shortAnswerQuestionComponentTitlePlaceholder": "Enter answer..."
     },
     "BarItemComponentNumberVote": {
         "barItemComponentNumberOfVote": " votes"
@@ -378,28 +386,77 @@
         "typePostRecruitment": "Recruitment",
         "typePostSurvey": "Survey",
         "normalPostLikeBy": "Liked by",
-        "normalPostSeeMoreContent": "See more",
-        "normalPostHiddentContent": "Hide"
-    },    
-     "Comment": {
-         "commentReplyComment": "Reply",
-         "commentDeleteComment": "Delete",
-         "commentAuthor": "Author",
-         "modalListCommentTitle": "Comments"
-     },
-     "CommentContainer": {
-        "commentContainerComponentSeeMore": "See More comment",
-        "commentContainerComponentHidden": "Hide comment"
-     },
-     "CreateCommentToolbar":{
-        "commentCreateComment": "Post Comment",
-        "commentPlaceholderInput": "Please enter your comment"
-     },
-     "RecruitmentPost": {
+        "normalPostSeeMoreContent": "Liked by",
+        "normalPostHiddentContent": "Hidden"
+    },
+    "Comment": {
+        "commentReplyComment": "Reply",
+        "commentDeleteComment": "Delete",
+        "commentAuthor": "Author",
+        "modalListCommentTitle": "Comments"
+    },
+    "CommentContainer": {
+        "commentContainerComponentSeeMore": "See more",
+        "commentContainerComponentHidden": "Show less"
+    },
+    "CreateCommentToolbar": {
+        "commentCreateComment": "Post comment",
+        "commentPlaceholderInput": "Enter comment..."
+    },
+    "RecruitmentPost": {
         "recruitmentPostType": "Recruitment",
-        "recruitmentPostButtonSeeDetail": "See Details",
-        "recruitmentPostCurrency":"vnd/Month"
-    },  
+        "recruitmentPostButtonSeeDetail": "See details",
+        "recruitmentPostCurrency": "vnd/Month"
+    },
+    "SurveyPost": {
+        "surveyPostType": "Survey",
+        "surveyPostButton": "Conduct Survey",
+        "surveyPostButtonSetting": "Edit Answers",
+        "surveyPostButtonJoinSurvey": "Join Survey",
+        "surveyPostButtonDetailQuestion": "Details"
+    },
+    "Faculty": {
+        "facultyOfElectricalEngineering": "Faculty of Electrical Engineering",
+        "facultyOfInformationTechnology": "Faculty of Information Technology",
+        "facultyOfAutomationTechnology": "Faculty of Automation Technology",
+        "facultyOfMechanicalEngineeringAndManufacturing": "Faculty of Mechanical Engineering and Manufacturing",
+        "automobileEngineeringDepartment": "Automobile Engineering Department",
+        "facultyOfFinanceAndAccounting": "Faculty of Finance and Accounting",
+        "facultyOfBusinessAdministration": "Faculty of Business Administration",
+        "facultyOfTourism": "Faculty of Tourism",
+        "departmentOfEnglish": "Department of English",
+        "departmentOfKoreanLanguage": "Department of Korean Language",
+        "japaneseLanguageDepartment": "Japanese Language Department"
+    },
+    "ModalUserLiked": {
+        "modalUserLikedTitle": "List of users who liked"
+    },
+    "MenuOption": {
+        "menuOptionSaveArticle": "Save post",
+        "menuOptionUnSaveArticle": "Unsave post",
+        "menuOptionDeleteArticle": "Delete post",
+        "menuOptionViewResumeList": "View CV list",
+        "menuOptionViewSurveyResults": "View survey results",
+        "menuOptionViewSurveyUpdateNormalPost": "Edit post"
+    },
+    "CreatePostToolbar": {
+        "createPostToolbarTitle": "Create New Post",
+        "createPostToolbarNormalPost": "Text/Image",
+        "createPostToolbarSurveyPost": "Create Survey Post",
+        "createPostToolbarRecruitmentPost": "Recruitment Post"
+    },
+    "ModalCreateNormalPost": {
+        "modalCreateNormalPostTitle": "Create post",
+        "modalCreateNormalPostPlaceholder": "Please enter post content",
+        "modalCreateNormalPostEntryImages": "Images",
+        "modalCreateNormalPostButton": "Post"
+    },
+    "BusinessSelectFacultyToolbar": {
+        "businessSelectFacultyToolbarTitle": "Select the faculty to display posts"
+    },
+    "NotifyFacultyDontHaveAnyPost": {
+        "textNotifyFacultyDontHaveAnyPost": "No posts yet in this faculty"
+    },
     "Profile": {
         "profileOperatingHours": "Operating Hours",
         "profileTaxID": "Tax ID",
@@ -407,26 +464,19 @@
         "profileAddress": "Address",
         "profilePhone": "Phone",
         "profileEmail": "Email",
-        "profileArticles": "Articles",
+        "profileArticles": "Posts",
         "profilePosition": "Position",
-        "profileRole": "Role",
-        "chat": "Send Message",
+        "profileRole": "Student",
+        "chat": "Chat",
         "call": "Call",
         "unFollow": "Unfollow",
         "follow": "Follow",
-        "updateProfile": "Update Profile",
-        "unUpdate": "Not Updated Yet"
-    },      
-     "SurveyPost": {
-        "surveyPostType": "Survey",
-        "surveyPostButton": "Conduct Survey",
-        "surveyPostButtonSetting": "Edit Answers",
-        "surveyPostButtonJoinSurvey": "Join Survey",
-        "surveyPostButtonDetailQuestion": "Detailed Questions"
+        "updateProfile": "Update personal information",
+        "unUpdate": "Not updated yet"
     },
     "Group": {
         "groupTdc": "TDC Group - Thu Duc College of Technology",
-        "groupConnectBusiness": "Connect Business Group",
+        "groupConnectBusiness": "Business Connection Group",
         "electricalElectronicsGroup": "Electrical - Electronics Group",
         "informationTechnologyGroup": "Information Technology Group",
         "automationTechnologyGroup": "Automation Technology Group",
@@ -452,28 +502,28 @@
         "validatePhoneUnCorrectFormat": "Incorrect phone number format",
         "validateEmailNull": "Email cannot be empty",
         "validateEmailUnCorrectFormat": "Incorrect email format",
-        "validateEmailHadUsed": "Email is already registered, please enter another email",
-        "validateEmailHasMaxLength": "Email must not exceed 255 characters",
-        "validateNameHasMaxLength": "Name must not exceed 255 characters",
-        "validateNameHasSpecialCharacter": "Name must not contain special characters",
+        "validateEmailHadUsed": "Email has already been registered, please enter another email",
+        "validateEmailHasMaxLength": "Email cannot exceed 255 characters",
+        "validateNameHasMaxLength": "Name cannot exceed 255 characters",
+        "validateNameHasSpecialCharacter": "Name cannot contain special characters",
         "validateAddressNull": "Address cannot be empty",
         "validatePresentorNull": "Representative name cannot be empty",
-        "validateRepresentorSpecialCharacter": "Name must not contain special characters",
-        "validateRepresentorMaxLength": "Name must not exceed 255 characters",
+        "validateRepresentorSpecialCharacter": "Name cannot contain special characters",
+        "validateRepresentorMaxLength": "Name cannot exceed 255 characters",
         "validateTaxCodeNull": "Tax code cannot be empty",
         "validateNameNull": "Name cannot be empty",
-        "validateNameSpecialCharacter": "Name must not contain special characters",
-        "validateNameMaxLength": "Name must not exceed 255 characters",
+        "validateNameSpecialCharacter": "Name cannot contain special characters",
+        "validateNameMaxLength": "Name cannot exceed 255 characters",
         "validateNameTimeActiveUnCorrect": "Incorrect operating time",
         "validateTaxCodeFormat": "Incorrect tax code format",
-        "validateTaxCodeMaxLength": "Tax code must not exceed 255 characters",
-        "validateAddressMaxLength": "Address must not exceed 255 characters"
+        "validateTaxCodeMaxLength": "Tax code cannot exceed 255 characters",
+        "validateAddressMaxLength": "Address cannot exceed 255 characters"
     },
     "ModalListUserLiked": {
-        "modalListUserLikedTitle": "List of Likers"
+        "modalListUserLikedTitle": "List of liked users"
     },
     "ModalLoadingComment": {
-        "modalLoadingCommentTitle": "Loading Data"
+        "modalLoadingCommentTitle": "Loading data"
     },
     "CreatePostSelector": {
         "createPostSelectorPlaceHolder": "Enter post content",
@@ -486,49 +536,50 @@
         "selectFacultyTextSearch": "Search..."
     },
     "FacultyDashboard": {
-        "facultyDashboardNotifyNotHavePost": "No posts yet"
+        "facultyDashboardNotifyNotHavePost": "No posts yet",
+        "facultyDashboarNotYetSelectFaculty": "Please select a faculty"
     },
     "StudentDashboard": {
-        "studentDashboardGroupTitle": "TDC Group - Thu Duc College of Technology"
+        "studentDashboardGroupTitle": "Group TDC - Thu Duc Technology College"
     },
     "OptionScreen": {
         "optionScreenFollowText": "Follow",
         "optionScreenSaveText": "Save",
-        "optionScreenUpdateProfileText": "Update Profile"
+        "optionScreenUpdateProfileText": "Update profile"
     },
     "BusinessUpdate": {
-        "businessUpdateCompanyName": "Company Name",
+        "businessUpdateCompanyName": "Company name",
         "businessUpdateEmail": "Email",
-        "businessUpdateRepresentorFullName": "Representative's Full Name",
-        "businessUpdateCompanyTaxId": "Tax ID",
-        "businessUpdateCompanyAddress": "Company Address",
-        "businessUpdateCompanyPhoneNumber": "Company Phone Number",
-        "businessUpdateCompanyTimeActiveStart": "Start Time of Operation",
-        "businessUpdateCompanyTimeActiveEnd": "End Time of Operation",
-        "businessUpdateCompanyAvatar": "Company Avatar",
-        "businessUpdateCompanyButton": "Update Profile",
+        "businessUpdateRepresentorFullName": "Representative name",
+        "businessUpdateCompanyTaxId": "Tax code",
+        "businessUpdateCompanyAddress": "Address",
+        "businessUpdateCompanyPhoneNumber": "Phone number",
+        "businessUpdateCompanyTimeActiveStart": "Start time",
+        "businessUpdateCompanyTimeActiveEnd": "End time",
+        "businessUpdateCompanyAvatar": "Avatar",
+        "businessUpdateCompanyButton": "Update profile",
         "businessUpdateCompanyNamePlaceholder": "Enter company name",
         "businessUpdateEmailPlaceholder": "Enter email",
-        "businessUpdateRepresentorFullNamePlaceholder": "Enter representative's full name",
-        "businessUpdateCompanyTaxIdPlaceholder": "Enter tax ID",
-        "businessUpdateCompanyAddressPlaceholder": "Enter company address",
-        "businessUpdateCompanyPhoneNumberPlaceholder": "Enter company phone number",
+        "businessUpdateRepresentorFullNamePlaceholder": "Enter representative name",
+        "businessUpdateCompanyTaxIdPlaceholder": "Enter tax code",
+        "businessUpdateCompanyAddressPlaceholder": "Enter address",
+        "businessUpdateCompanyPhoneNumberPlaceholder": "Enter phone number",
         "businessUpdateTimeActive": "To"
     },
     "CreateNormalPost": {
-        "createNormalPostTitle": "Add Post",
-        "updateNormalPostTitle": "Update Post",
+        "createNormalPostTitle": "Add post",
+        "updateNormalPostTitle": "Update post",
         "createNormalPostPlaceholder": "Enter post content",
-        "createNormalPostButtonText": "Add Image",
+        "createNormalPostButtonText": "Add images",
         "createNormalPostButtonFinish": "Finish",
-        "createNormalPostAllertButton": "agree",
+        "createNormalPostAllertButton": "Agree",
         "createNormalPostAllertTextChar": "characters",
         "createNormalPostAllertQuestion": "Do you really want to delete this image?",
         "createNormalPostAllerTitle": "Warning"
     },
     "ModalReviewBackground": {
         "modalReviewBackgroundTextSave": "Save",
-        "modalReviewBackgroundTextCancel": "Cancel Save"
+        "modalReviewBackgroundTextCancel": "Cancel save"
     },
     "AlertNotify": {
         "alertNotifyTitle": "Notification",
@@ -537,13 +588,13 @@
         "alertNotifyUpdatePostFail": "Failed to update post",
         "alertNotifyUpdatePostSuccess": "Successfully updated post",
         "alertNotifyPostContentCannotNull": "Post content cannot be empty",
-        "alertNotifyCharacter": "Character",
-        "alertNotifyTextAccept": "Accept",
-        "alertNotifyTextReject": "Reject",
+        "alertNotifyCharacter": "characters",
+        "alertNotifyTextAccept": "Agree",
+        "alertNotifyTextReject": "Cancel",
         "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber": "Number of characters cannot exceed"
     },
     "UpdateProfile": {
-        "updateProfileAlertSuccess": "Update successful",
+        "updateProfileAlertSuccess": "Successfully updated",
         "updateProfileAlertFail": "Update failed, please try again"
     },
     "ToastMessenger": {
@@ -551,28 +602,28 @@
         "toastMessengerTextWarning": "System error, please try again later"
     },
     "FacultyUpdate": {
-        "facultyUpdateName": "Faculty Name",
+        "facultyUpdateName": "Faculty name",
         "facultyUpdateNamePlaceholder": "Enter faculty name"
     },
     "StudentUpdate": {
-        "studentUpdateName": "Full Name",
+        "studentUpdateName": "Full name",
         "facultyUpdateNamePlaceholder": "Enter your name"
     },
     "Update": {
-        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumber": "Phone number",
         "updatePhoneNumberPlaceholder": "Enter phone number",
         "updateAvatarTitle": "Avatar",
-        "updateProfileButtonTitle": "Update Profile"
+        "updateProfileButtonTitle": "Update profile"
     },
     "Notify": {
-        "updatePhoneNumber": "Phone Number",
+        "updatePhoneNumber": "Phone number",
         "updatePhoneNumberPlaceholder": "Enter phone number",
         "updateAvatarTitle": "Avatar",
-        "updateProfileButtonTitle": "Update Profile"
+        "updateProfileButtonTitle": "Update profile"
     },
     "ModalComment": {
         "modalCommentTextChar": "characters",
-        "modalCommentCommentNotNull": "Comment content cannot be empty",
+        "modalCommentCommentNotNull": "Comment cannot be empty",
         "modalCommentTextNumberLimited": "Comment content cannot exceed",
         "modalCommentCreateFail": "Failed to create comment"
     },
@@ -581,17 +632,17 @@
         "emptyMessage": "No new posts"
     },
     "PostApproveItem": {
-        "isLoading": "Loading"
+        "isLoading": "Loading..."
     },
     "ModalPostRejectReason": {
         "default": "Default",
         "survey": "Survey",
         "recruitment": "Recruitment",
-        "successDeleteMessage": "Success !!!",
-        "successAcceptMessage": "Success !!!",
-        "successDeleteMessageContent": "Successfully deleted the post",
-        "rejectSuccessMessage": "Post rejected successfully",
-        "acceptSuccessageMessage": "Successfully approved the post",
+        "successDeleteMessage": "Success!",
+        "successAcceptMessage": "Success!",
+        "successDeleteMessageContent": "Successfully deleted post",
+        "rejectSuccessMessage": "Successfully rejected post",
+        "acceptSuccessageMessage": "Successfully approved post",
         "notePlaceholder": "Note...",
         "acceptPostMenuItem": "Approve post",
         "rejectPostMenuItem": "Reject post",
@@ -611,7 +662,41 @@
         "unFollow": "Unfollow",
         "profile": "Profile"
     },
+    "ApplicationOptionComponent": {
+        "language": "Language",
+        "info": "Personal information",
+        "password": "Password",
+        "cancel": "Cancel",
+        "change": "Change"
+    },
+    "ForgettenPassword": {
+        "textForgetPassword": "Forgot password",
+        "textNotification": "Incorrect or empty email format",
+        "textSubjectResetPassword": "Update password",
+        "titleSubjectResetPassword": " change password",
+        "textAccept": "Confirm",
+        "textBack": "Back"
+    },
+    "AcceptScreen": {
+        "checkEmail": "Check email",
+        "description1": "We have sent a link to your email",
+        "description2": ", please check your email",
+        "titleNotify": "Notification",
+        "descriptionNotify": "Resent link to ",
+        "back": "Back",
+        "notSend": "Not received email yet?",
+        "sendAgain": "Resend"
+    },
+    "AuthenticateRegistraion": {
+        "textSubjectAuthenRegistration": "Account verification",
+        "titleSubjectAuthenRegistration": " account verification"
+    },
     "NoMorePost": {
         "noMorePost": "No new posts"
+    },
+    "language": {
+        "vietnamese": "Vietnamese",
+        "english": "English",
+        "japanese": "Japanese"
     }
 }

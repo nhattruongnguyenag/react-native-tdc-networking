@@ -22,10 +22,9 @@ import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCR
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupBusiness, TYPE_POST_BUSINESS } from '../constants/Variables'
 import { ToastMessenger } from '../utils/ToastMessenger'
 import { useTranslation } from 'react-multi-lang'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { GROUP_CONNECT_BUSINESS_ID } from '../constants/Groups'
-import { Post } from '../types/Post'
-import { GetPostActive } from '../utils/GetPostActive'
+import { getPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -33,11 +32,10 @@ export default function BusinessDashboardScreen() {
   const code = groupBusiness;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [businessPost, setBusinessPost] = useState<Post[]>([]);
+  const [businessPost, setBusinessPost] = useState<any[]>([]);
   const { isOpenModalImage, isOpenModalComments, isOpenModalUserReaction, updatePost } = useAppSelector(
     (state) => state.TDCSocialNetworkReducer
   )
-  const isFocused = useIsFocused();
   const { deviceToken, userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [updateToken, updateTokenResponse] = useSaveDeviceTokenMutation()
   const dispatch = useAppDispatch()
@@ -165,7 +163,7 @@ export default function BusinessDashboardScreen() {
 
 
   const renderItem = useCallback((item: any) => {
-    if (GetPostActive(item.active)) {
+    if (getPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}

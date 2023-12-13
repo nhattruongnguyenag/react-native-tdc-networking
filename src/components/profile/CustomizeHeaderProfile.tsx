@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Pressable } from 'react-native'
 import React, { memo } from 'react'
-import { COLOR_BLACK, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
+import { COLOR_BLACK, COLOR_GREY_FEEBLE } from '../../constants/Color'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import IconEntypo from 'react-native-vector-icons/Entypo'

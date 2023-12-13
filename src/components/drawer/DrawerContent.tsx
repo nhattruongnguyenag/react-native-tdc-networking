@@ -128,7 +128,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         )}
 
         {
-          isStudent(userLogin) &&
+          (isStudent(userLogin) || isBusiness(userLogin)) &&
           <DrawerItem
             label={t('DrawerContentComponent.peddingPost')}
             onPress={() => navigation.navigate(PEDDING_POST_SCREEN)}

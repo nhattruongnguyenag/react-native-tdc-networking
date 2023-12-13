@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { UpdateNormalPost } from '../types/UpdateNormalPost'
 
 export const postAPI = async (apiUrlPost: string) => {
   try {

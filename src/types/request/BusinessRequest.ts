@@ -1,13 +1,15 @@
-import { User } from './User'
-
-export interface Business extends User {
+export interface BusinessRequest {
   password: string
   representor: string
   taxCode: string
   address: string
   activeTime: string
-  confimPassword: string
   phone: string
   subject: string
   content: string
+  image?: string
+  code: string
+  email: string
+  name: string
+  confimPassword: string
 }

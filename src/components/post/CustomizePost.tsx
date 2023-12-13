@@ -124,12 +124,10 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-    console.log("handleClickBtnSurveyDetailEvent");
     navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-    console.log("handleClickBtnRecruitmentDetailEvent");
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
@@ -161,7 +159,6 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleUpdateNormalPostEvent = () => {
-    console.log("handleUpdateNormalPostEvent");
     const updateNormalPost: UpdateNormalPost = {
       postId: props.id,
       content: props.content,
@@ -175,7 +172,6 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleSeeResultSurveyPost = () => {
-    console.log("handleSeeResultSurveyPost");
     navigation.navigate(SURVEY_RESULT_SCREEN, { surveyPostId: post.id })
   }
 

@@ -8,22 +8,20 @@ import { TYPE_POST_BUSINESS } from '../../constants/StringVietnamese'
 
 export interface SavePostType {
     data: any
+    likeAction: (obj: LikeAction) => void;
+    handleUnSave: (userId: number) => void;
+    handleDelete: (userId: number) => void;   
 }
 
 
 
-const likeAction = (obj: LikeAction) => {
-    // obj.code = TYPE_POST_BUSINESS
-    // like(obj)
-}
-const handleUnSave = (post_id: number) => {
-}
-const SavePostListView = (props: SavePostType) => {
+
+const SavePostListView = ({data, likeAction, handleUnSave, handleDelete}: SavePostType) => {
 
     return (
         <ScrollView>
             {
-                props.data?.map((item: any) => <CustomizePost
+                data?.map((item: any) => <CustomizePost
                     id={item.id}
                     userId={item.user['id']}
                     name={item.user['name']}
@@ -38,7 +36,7 @@ const SavePostListView = (props: SavePostType) => {
                     commentQty={item.commentQuantity}
                     images={item.images}
                     role={item.user['roleCodes']}
-                    likeAction={likeAction}
+                    likeAction={item.likeAction}
                     location={item.location ?? null}
                     title={item.title ?? null}
                     expiration={item.expiration ?? null}
@@ -48,7 +46,8 @@ const SavePostListView = (props: SavePostType) => {
                     isSave={item.isSave}
                     group={''}
                     handleUnSave={handleUnSave}
-                />
+                    handleDelete={handleDelete}
+                    active={0} />
                 )}
         </ScrollView>
     )

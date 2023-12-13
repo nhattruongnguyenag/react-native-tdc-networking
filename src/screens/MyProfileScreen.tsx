@@ -27,7 +27,7 @@ import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import { useGetPostsByIdQuery } from '../redux/Service';
 import { isFaculty, isStudent } from '../utils/UserHelper';
-import { GetPostActive } from '../utils/GetPostActive';
+import { getPostActive } from '../utils/GetPostActive';
 
 const MyProfileScreen = () => {
   const t = useTranslation();
@@ -35,7 +35,6 @@ const MyProfileScreen = () => {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
   const [group, setGroup] = useState((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).facultyGroupCode : 'group_connect_business');
   const [isCalled, setIsCalled] = useState(false);
-
   const [isShowAvatar, setIsShowAvatar] = useState<boolean>(false);
   const isFocused = useIsFocused();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -51,7 +50,7 @@ const MyProfileScreen = () => {
   const { data, isFetching } = useGetPostsByIdQuery(
     {
       userId: userLogin?.id ?? 0,
-      groupCode: group,
+      groupCode: group ?? "",
       userLogin: userLogin?.id ?? 0
     },
     {
@@ -132,7 +131,7 @@ const MyProfileScreen = () => {
 
 
   const renderItem = useCallback((item: any) => {
-    if (GetPostActive(item.active)) {
+    if (getPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}
@@ -258,7 +257,6 @@ const MyProfileScreen = () => {
               <RefreshControl
                 refreshing={false}
                 onRefresh={() => {
-                  // TODO
                 }}
               />
             }

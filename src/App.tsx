@@ -37,7 +37,7 @@ locale.set('ja', require('moment/locale/ja'))
 import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
 import {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
+  ACCEPT_SCREEN, ADD_QUESTION_SCREEN, APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN, BUSINESS_DASHBOARD_SCREEN,
   BUSINESS_REGISTER_SCREEN,
   CONVERSATION_SCREEN,
@@ -63,7 +63,7 @@ import {
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
-import AcceptForgottenPasswordScreen from './screens/AcceptForgottenPasswordScreen'
+import AcceptScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
@@ -118,7 +118,6 @@ import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
 import UpdateProfile from './screens/UpdateProfile'
 
 export type RootStackParamList = {
-  ACCEPT_FORGOTTEN_PASSWORD_SCREEN: { email: string } | undefined
   ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
   FORGOTTEN_PASSWORD_SCREEN: undefined
   CONVERSATION_SCREEN: undefined
@@ -202,6 +201,7 @@ export function DrawerNavigator(): JSX.Element {
         if (json) {
           const defaultLanguage = JSON.parse(json)
           if (defaultLanguage) {
+            moment.locale(defaultLanguage, locale.get(defaultLanguage))
             setDefaultLanguage(defaultLanguage)
           }
         }
@@ -288,9 +288,9 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
-        name={ACCEPT_FORGOTTEN_PASSWORD_SCREEN}
+        name={ACCEPT_SCREEN}
         options={{ title: t('ToolbarTitle.acceptForgottenPasswordScreen'), header: () => null }}
-        component={AcceptForgottenPasswordScreen}
+        component={AcceptScreen}
       />
 
       <RootStack.Screen
