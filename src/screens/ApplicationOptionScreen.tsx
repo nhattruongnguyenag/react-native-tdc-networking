@@ -34,7 +34,7 @@ export default function ApplicationOptionScreen() {
 
   const handleChangeLangue = () => {
     dispatch(setDefaultLanguage(language))
-    AsyncStorage.setItem(LABEL_LANGUAGE, JSON.stringify(label))
+    // AsyncStorage.setItem(LABEL_LANGUAGE, JSON.stringify(label))
     setModalVisible(false)
   }
 

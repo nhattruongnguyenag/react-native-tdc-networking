@@ -668,17 +668,6 @@
         "password": "パスワード",
         "cancel": "キャンセル",
         "change": "変更"
-<<<<<<< HEAD
-    }
-    ,
-    "ForgettenPassword":{
-        "textForgetPassword": "パスワードをお忘れですか",
-        "textNotification": "電子メールの形式が正しくないか、空です",
-        "textSubjectResetPassword": "パスワードを更新する",
-        "titleSubjectResetPassword": " パスワードを変更する",
-        "textAccept": "確認する",
-        "textBack": "戻ってくる"
-=======
     },
     "ForgettenPassword": {
         "textForgetPassword": "パスワードを忘れた",
@@ -687,7 +676,6 @@
         "titleSubjectResetPassword": " パスワードの変更",
         "textAccept": "確認",
         "textBack": "戻る"
->>>>>>> develop
     },
     "AcceptScreen": {
         "checkEmail": "メールを確認",

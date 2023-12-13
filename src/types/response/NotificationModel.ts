@@ -7,5 +7,4 @@ export interface NotificationModel {
   type: string
   data: string
   status: string
-  user: User
 }

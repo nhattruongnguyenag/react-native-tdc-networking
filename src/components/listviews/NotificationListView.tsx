@@ -10,7 +10,7 @@ import { PROFILE_SCREEN } from '../../constants/Screen';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { useAppSelector } from '../../redux/Hook';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 import NotificationItem from '../items/NotificationItem';
 
@@ -24,13 +24,18 @@ export interface NotificatonsListViewType {
 export default function NotificationListView(props: NotificatonsListViewType) {
     
     return (
-        <ScrollView style={styles.platList}>
+        <ScrollView style={styles.platList}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl
+          refreshing={false}
+          onRefresh={() => props.data}
+        />}>
             {
                 props.data?.map((item: any) => <NotificationItem
                     id={item.id}
                     status={item.status}
                     type={item.type}
-                    user={item.user}
+                    userInteracted={item.userInteracted}
                     dataValue={item.dataValue}
                     createdAt={item.createdAt}
                     content={item.content}
