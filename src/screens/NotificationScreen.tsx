@@ -39,10 +39,9 @@ export default function NotificationScreen() {
     } 
   )
 
-  
-
   const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
 
+  
   const handleIsRead = (id: number) => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/makeNotSeen`, {

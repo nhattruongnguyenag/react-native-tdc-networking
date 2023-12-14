@@ -698,5 +698,24 @@
         "vietnamese": "ベトナム語",
         "english": "英語",
         "japanese": "日本語"
+    },
+    "Notifications": {
+        "register_success": "TDCソーシャルネットワークへようこそ！",
+        "change_password_success": "パスワードの変更が成功しました！",
+        "update_post": "投稿を更新しました",
+        "create_survey": " が調査を作成しました",
+        "save_post": "投稿を保存しました",
+        "user_like_post": " があなたの投稿をいいねしました",
+        "user_comment_post": " があなたの投稿にコメントしました",
+        "user_reply_comment": " があなたのコメントに返信しました",
+        "user_conduct_survey": " があなたの調査を実施しました",
+        "post_log": "理由: ",
+        "accept_post": "あなたの投稿が承認されました",
+        "user_update": "アカウント情報の更新が成功しました",
+        "user_follow": " があなたをフォローしました",
+        "user_change_language": "言語の変更が成功しました",
+        "user_apply_job": "次の求人に応募しました:",
+        "user_create_watch_job": " が次の求人に応募しました:",
+        "in_group": " に"
     }
 }

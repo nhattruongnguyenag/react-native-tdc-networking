@@ -177,13 +177,6 @@
         "textDelete": "Hủy hồ sơ",
         "textChangeProfile": "Chỉnh sửa hồ sơ"
     },
-    "NotificationsComponent": {
-        "notification": "Thông báo",
-        "readAll": "Đánh dấu tất cả đã đọc",
-        "deleteNotification": "Xóa thông báo",
-        "unReadNotification": "Đánh dấu chưa đọc",
-        "search": "Tìm kiếm thông báo ..."
-    },
     "FollowComponent": {
         "following": "Đang theo dõi",
         "follower": "Đang theo dõi bạn",
@@ -388,27 +381,27 @@
         "normalPostLikeBy" : "Thích bởi",
         "normalPostSeeMoreContent" : "Thích bởi",
         "normalPostHiddentContent" : "Ẩn bớt"
-     },
-     "Comment": {
-         "commentReplyComment":"Trả lời",
-         "commentDeleteComment":"Xóa",
-         "commentAuthor": "Tác giả",
-         "modalListCommentTitle": "Bình luận"
-     },
-     "CommentContainer": {
+    },
+    "Comment": {
+        "commentReplyComment":"Trả lời",
+        "commentDeleteComment":"Xóa",
+        "commentAuthor": "Tác giả",
+        "modalListCommentTitle": "Bình luận"
+    },
+    "CommentContainer": {
         "commentContainerComponentSeeMore": "Xem thêm",
         "commentContainerComponentHidden": "Ẩn bớt"
-     },
-     "CreateCommentToolbar":{
+    },
+    "CreateCommentToolbar":{
         "commentCreateComment": "Đăng bình luận",
         "commentPlaceholderInput":"Hãy nhập nội dung bình luận"
-     },
-     "RecruitmentPost": {
+    },
+    "RecruitmentPost": {
         "recruitmentPostType": "Tuyển dụng",
         "recruitmentPostButtonSeeDetail": "Xem chi tiết",
         "recruitmentPostCurrency":"vnd/Tháng"
     },    
-     "SurveyPost": {
+    "SurveyPost": {
         "surveyPostType": "Khảo sát",
         "surveyPostButton": "Tiến hành khảo sát",
         "surveyPostButtonSetting": "Chỉnh sửa câu trả lời",
@@ -456,29 +449,29 @@
     },
     "NotifyFacultyDontHaveAnyPost": {
         "textNotifyFacultyDontHaveAnyPost": "Chưa có bài viết nào ở khoa này"
-      },
-      "Profile": {
-        "profileOperatingHours": "Giờ làm việc",
-        "profileTaxID": "Mã số thuế",
-        "profileRepresentative": "Đại diện",
-        "profileAddress": "Địa chỉ",
-        "profilePhone": "Điện thoại",
-        "profileEmail": "Email",
-        "profileArticles": "Bài viết",
-        "profilePosition": "Vị trí",
-        "profileRole": "Sinh viên",
-        "chat": "Nhắn tin",
-        "call": "Gọi điện",
-        "unFollow": "Hủy theo dõi",
-        "follow": "Theo dõi",
-        "updateProfile": "Cập nhật thông tin cá nhân",
-        "unUpdate":"chưa được cập nhật "
     },
-    "Group": {
-        "groupTdc": "Nhóm TDC - Trường Cao Đẳng Công Nghệ Thủ Đức",
-        "groupConnectBusiness": "Nhóm Kết nối Doanh nghiệp",
-        "electricalElectronicsGroup": "Nhóm Điện - Điện tử",
-        "informationTechnologyGroup": "Nhóm Công nghệ Thông tin",
+      "Profile": {
+          "profileOperatingHours": "Giờ làm việc",
+          "profileTaxID": "Mã số thuế",
+          "profileRepresentative": "Đại diện",
+          "profileAddress": "Địa chỉ",
+          "profilePhone": "Điện thoại",
+          "profileEmail": "Email",
+          "profileArticles": "Bài viết",
+          "profilePosition": "Vị trí",
+          "profileRole": "Sinh viên",
+          "chat": "Nhắn tin",
+          "call": "Gọi điện",
+          "unFollow": "Hủy theo dõi",
+          "follow": "Theo dõi",
+          "updateProfile": "Cập nhật thông tin cá nhân",
+          "unUpdate":"chưa được cập nhật "
+        },
+        "Group": {
+            "groupTdc": "Nhóm TDC - Trường Cao Đẳng Công Nghệ Thủ Đức",
+            "groupConnectBusiness": "Nhóm Kết nối Doanh nghiệp",
+            "electricalElectronicsGroup": "Nhóm Điện - Điện tử",
+            "informationTechnologyGroup": "Nhóm Công nghệ Thông tin",
         "automationTechnologyGroup": "Nhóm Công nghệ Tự động hóa",
         "mechanicalEngineeringAndManufacturingGroup": "Nhóm Kỹ thuật Cơ khí và Chế tạo",
         "automotiveMechanicalGroup": "Nhóm Cơ khí Ô tô",
@@ -521,8 +514,8 @@
     },
     "ModalListUserLiked": {
         "modalListUserLikedTitle": "Danh sách người thích"
-     },
-     "ModalLoadingComment": {
+    },
+    "ModalLoadingComment": {
         "modalLoadingCommentTitle": "Đang tải dữ liệu"
     },
     "CreatePostSelector": {
@@ -593,7 +586,7 @@
         "alertNotifyTextReject":"Hủy bỏ",
         "alertNotifyPostContentHaveNumberCharacterGreaterThanLimitedNumber":"số  lượng ký tự không được vượt quá"
     },
-   "UpdateProfile":{
+    "UpdateProfile":{
         "updateProfileAlertSuccess":"Cập nhật thành công",
         "updateProfileAlertFail":"Cập nhật thất bại vui lòng thử lại"
     },
@@ -698,5 +691,31 @@
         "vietnamese": "Tiếng Việt",
         "english": "Tiếng Anh",
         "japanese": "Tiếng Nhật"
+    },
+    "NotificationsComponent": {
+        "notification": "Thông báo",
+        "readAll": "Đánh dấu tất cả đã đọc",
+        "deleteNotification": "Xóa thông báo",
+        "unReadNotification": "Đánh dấu chưa đọc",
+        "search": "Tìm kiếm thông báo ..."
+    },
+    "Notifications": {
+        "register_success": "Chào mừng bạn đến với TDC Social Network!",
+        "change_password_success": "Bạn đã thay đổi mật khẩu thành công!",
+        "update_post": "Bạn đã cập nhật bài viết",
+        "create_survey": " vừa đăng khảo sát",
+        "save_post": "Bạn vừa lưu bài viết",
+        "user_like_post": " đã thích bài viết của bạn",
+        "user_comment_post": " đã bình luận bài viết của bạn",
+        "user_reply_comment": " đã trả lời bình luận của bạn",
+        "user_conduct_survey": " đã thực hiện khảo sát của bạn",
+        "post_log": "Bài viết của bạn đã bị từ chối vì ",
+        "accept_post": "Bài viết của bạn đã được duyệt",
+        "user_update": "Bạn vừa cập nhật thông tin tài khoản thành công",
+        "user_follow": " vừa theo dõi bạn",
+        "user_change_language": "Bạn vừa thay đổi ngôn ngữ thành công",
+        "user_apply_job": "Bạn vừa ứng tuyển cho bài đăng:",
+        "user_create_watch_job": " vừa ứng tuyển bài đăng:",
+        "in_group": " trong"
     }
 }

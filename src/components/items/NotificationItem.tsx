@@ -15,6 +15,7 @@ import moment from 'moment';
 import { User } from '../../types/User';
 import { Avatar } from 'react-native-paper';
 import DefaultAvatar from '../common/DefaultAvatar';
+import { useIsFocused } from '@react-navigation/native';
 
 export interface NotificatonsType {
     id: any
@@ -36,6 +37,12 @@ export interface Value {
     group: string
     defaultImage: string
     time: string
+    // header: tên của những thông báo có người tương tác
+    // body: chứa nội dung thông báo
+    // image: chứa hình của người tương tác hoặc là của mình
+    // group: chỉ những thông báo có trả về bài viết ms có tên nhóm
+    // defaultImage: chỉ những thông báo trả về do admin xử lý, trả về hình của admin
+    // time: thời gian của thông báo
 }
 
 export default function NotificationItem(props: NotificatonsType) {
@@ -44,6 +51,7 @@ export default function NotificationItem(props: NotificatonsType) {
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const [use, setUse] = useState([])
+    const isFocused = useIsFocused();
     const [value, setValue] = useState<Value>({
         header: '',
         body: '',
@@ -55,29 +63,67 @@ export default function NotificationItem(props: NotificatonsType) {
 
     useEffect(() => {
         checkType()
-    }, [])
+    }, [isFocused])
     const checkType = () => {
         switch (props.type) {
             // Thong bao dang ky thanh cong
             case 'resgister_success':
                 // return <Text>Bạn đã đăng ký thành công!</Text>
-
+                setValue({
+                    ...value, defaultImage: 'admin', 
+                    header: '', 
+                    body: t('Notifications.register_success'),
+                    image: '',
+                    group: '',
+                    time:  props.createdAt
+                })
                 break
             // THong báo thay đổi mk
             case 'change_password_success':
-                setValue({ ...value, header: "bbbbbbbbbbbbbbb" })
+                setValue({
+                    ...value, defaultImage: 'admin', 
+                    header: '', 
+                    body: t('Notifications.change_password_success'),
+                    image: '',
+                    group: '',
+                    time:  props.createdAt
+                })
                 break
             // Cập nhật bài viết cá nhân
             case 'update_post':
-                return <></>
+                setValue({
+                    ...value,
+                    defaultImage: '',
+                    header: '',
+                    body: t('Notifications.update_post'),
+                    image: props.dataValue.user.image,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
+                    time: props.createdAt
+                })
                 break
             // Doanh nghiệp đăng khảo sát
             case 'create_survey':
-                return <Text></Text>
+                setValue({
+                    ...value,
+                    defaultImage: '',
+                    header: props.userInteracted.name,
+                    body: t('Notifications.create_survey'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
+                    time: props.createdAt
+                })
                 break
             // Bài viết đã lưu
             case 'save_post':
-                return <Text></Text>
+                setValue({
+                    ...value,
+                    defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.save_post'),
+                    image: '',
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
+                    time: props.createdAt
+                })
                 break
             // Người dùng like bài viết của mình
             case 'user_like_post':
@@ -85,9 +131,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value,
                     defaultImage: props.userInteracted.name,
                     header: props.userInteracted.name,
-                    body: " đã thích bài viết của bạn",
+                    body: t('Notifications.user_like_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -96,9 +142,10 @@ export default function NotificationItem(props: NotificatonsType) {
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, body: " đã bình luận bài viết của bạn",
+                    header: props.userInteracted.name, 
+                    body: t('Notifications.user_comment_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -107,9 +154,10 @@ export default function NotificationItem(props: NotificatonsType) {
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, body: " đã trả lời bình luận của bạn",
+                    header: props.userInteracted.name, 
+                    body: t('Notifications.user_reply_comment'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -118,9 +166,10 @@ export default function NotificationItem(props: NotificatonsType) {
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, body: " đã thực hiện khảo sát của bạn",
+                    header: props.userInteracted.name, 
+                    body: t('Notifications.user_conduct_survey'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -131,9 +180,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value,
                     defaultImage: 'admin',
                     header: '',
-                    body: 'Bài viết của bạn đã bị từ chối vì ' + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "',
+                    body: t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "',
                     image: '',
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -143,9 +192,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value,
                     defaultImage: 'admin',
                     header: '',
-                    body: "Bài viết của bạn đã được duyệt",
+                    body: t('Notifications.accept_post'),
                     image: '',
-                    group: props.dataValue.group.name,
+                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
                     time: props.createdAt
                 })
                 break
@@ -154,7 +203,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 setValue({
                     ...value, defaultImage: 'admin', 
                     header: '', 
-                    body: "Bạn vừa cập nhật thông tin tài khoản thành công",
+                    body: t('Notifications.user_update'),
                     image: '',
                     group: '',
                     time:  props.createdAt
@@ -166,7 +215,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value,
                     defaultImage: props.userInteracted.name,
                     header: props.userInteracted.name,
-                    body: " vừa theo dõi bạn",
+                    body: t('Notifications.user_follow'),
                     image: props.userInteracted.image,
                     group: '',
                     time: props.createdAt
@@ -177,7 +226,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 setValue({
                     ...value, defaultImage: 'admin', 
                     header: '', 
-                    body: "Bạn vừa thay đổi thành công",
+                    body: t('Notifications.user_change_language'),
                     image: '',
                     group: '',
                     time:  props.createdAt
@@ -185,11 +234,25 @@ export default function NotificationItem(props: NotificatonsType) {
                 break
             // Thông báo cho người nộp tuyển dụng
             case 'user_apply_job':
-                return <Text></Text>
+                setValue({
+                    ...value, defaultImage: 'admin', 
+                    header: '', 
+                    body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
+                    image: props.dataValue.studentAvatar,
+                    group: '',
+                    time:  props.createdAt
+                })
                 break
             // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
-            case 'user_apply_job':
-                return <Text></Text>
+            case 'user_create_watch_job':
+                setValue({
+                    ...value, defaultImage: '', 
+                    header: props.userInteracted.name, 
+                    body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
+                    image: props.userInteracted.image,
+                    group: props.dataValue.group.name,
+                    time:  props.createdAt
+                })
                 break
             default: <></>
                 break
@@ -213,7 +276,7 @@ export default function NotificationItem(props: NotificatonsType) {
                         <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>
                             <Text style={styles.nameTxt}>{value.header}</Text>
                             {value.body}
-                            {value.group != '' ? ' trong' : '.'}
+                            {value.group != '' ? t('Notifications.in_group') : '.'}
                             <Text style={styles.nameTxt}> {value.group != '' ? (value.group) + '.' : ''}</Text>
                         </Text>
                         {/* {props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content} */}
@@ -261,8 +324,8 @@ const styles = StyleSheet.create({
         marginBottom: 1
     },
     image: {
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         borderRadius: 50,
         paddingVertical: 20,
         borderColor: '#0065ff',

@@ -28,6 +28,10 @@ const FollowingList = () => {
       pollingInterval: 500
     }
   )
+
+  useEffect(() => {console.log(data);
+  },[data, isFetching])
+
   const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
 
   const handleFollow = (userFollowId: number) => {
