@@ -59,7 +59,8 @@ import {
   STUDENT_REGISTER_SCREEN,
   UPDATE_PROFILE, SURVEY_CONDUCT_SCREEN, SURVEY_RESULT_SCREEN, TOP_TAB_NAVIGATOR,
   DETAIL_SURVEY_SCREEN,
-  STUDENT_AND_FACULTY_GROUP
+  STUDENT_AND_FACULTY_GROUP,
+  DETAIL_POST_SCREEN
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
 import { store } from './redux/Store'
@@ -116,6 +117,7 @@ import DetailSurveyPost from './screens/DetailSurveyPostScreen'
 import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
 import UpdateProfile from './screens/UpdateProfile'
+import DetailPost from './screens/DetailPost'
 
 export type RootStackParamList = {
   ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
@@ -162,6 +164,7 @@ export type RootStackParamList = {
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
   STUDENT_AND_FACULTY_GROUP: undefined
+  DETAIL_POST_SCREEN: {post: any, notificationType: string} | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -371,6 +374,12 @@ export function StackNavigator(): JSX.Element {
       />
 
       <RootStack.Screen
+        name={DETAIL_POST_SCREEN}
+        options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.detailPost')} /> }}
+        component={DetailPost}
+      />
+
+      <RootStack.Screen
         name={JOB_APPLY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.jobApplyScreen')} /> }}
         component={JobApplyScreen}
@@ -480,6 +489,7 @@ export function StackNavigator(): JSX.Element {
         }}
         component={StudentAndFacultyGroup}
       />
+      
     </RootStack.Navigator>
   )
 }

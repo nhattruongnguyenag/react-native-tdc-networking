@@ -13,10 +13,11 @@ import Icon2 from 'react-native-vector-icons/AntDesign'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { RootStackParamList } from '../App'
 import NotificationListView from '../components/listviews/NotificationListView'
-import { SURVEY_CONDUCT_SCREEN } from '../constants/Screen'
+import { DETAIL_JOB_APPLY, DETAIL_POST_SCREEN, SURVEY_CONDUCT_SCREEN } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
 import { useGetNotificationsUserQuery } from '../redux/Service'
+import { ACCEPT_POST, CREATE_SURVEY, POST_LOG, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_LIKE_POST, USER_REPLY_COMMENT } from '../constants/TypeNotification'
 const { height, width } = Dimensions.get('screen')
 
 const NOTIFICATION_CREATE_SURVEY = 'create_survey'
@@ -33,15 +34,15 @@ export default function NotificationScreen() {
   const { data, isFetching } = useGetNotificationsUserQuery(
     {
       id: userLogin?.id ?? -1
-    }, 
+    },
     {
       pollingInterval: 1000
-    } 
+    }
   )
 
   const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
 
-  
+
   const handleIsRead = (id: number) => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/makeNotSeen`, {
@@ -64,16 +65,46 @@ export default function NotificationScreen() {
   const handleItem = (id: number) => {
     const notification = data?.data.find(item => id === item.id)
 
-    if (notification && notification.type === NOTIFICATION_CREATE_SURVEY) {
-      const data = notification.data.split(':')
-      if (data.length >= 2 && data[0] === 'id') {
-        const surveyPostId = parseInt(data[1])
-        if (!isNaN(surveyPostId)) {
-          navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })
-        }
+    if (notification) {
+      switch (notification.type) {
+        case UPDATE_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'update_post' })
+          break
+        case CREATE_SURVEY:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'create_survey' })
+          break
+        case SAVE_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'save_post' })
+          break
+        case USER_LIKE_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_like_post' })
+          break
+        case USER_COMMENT_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_comment_post' })
+          break
+        case USER_REPLY_COMMENT:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_reply_comment' })
+          break
+        case USER_CONDUCT_SURVEY:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_conduct_survey' })
+          break
+        case ACCEPT_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'accept_post' })
+          break
+        case USER_CREATE_WATCH_JOB:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_create_watch_job' })
+          break
+        case POST_LOG:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'post_log' })
+          break
+        case USER_APPLY_JOB:
+          navigation.navigate(DETAIL_JOB_APPLY, { cvId: notification.dataValue.id })
+          break
+        default:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: null, notificationType: '' })
+          break
       }
     }
-
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
@@ -100,7 +131,7 @@ export default function NotificationScreen() {
     setOpenSearch(!openSearch)
   }
 
-  
+
 
   return (
     <>

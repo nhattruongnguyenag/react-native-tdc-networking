@@ -29,9 +29,6 @@ const FollowingList = () => {
     }
   )
 
-  useEffect(() => {console.log(data);
-  },[data, isFetching])
-
   const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
 
   const handleFollow = (userFollowId: number) => {
@@ -41,6 +38,7 @@ const FollowingList = () => {
     }
     )
   }
+
   const handleDelSearch = () => {
     setSearch('')
   }
@@ -64,12 +62,12 @@ const FollowingList = () => {
         ) : null}
       </View>
       {
-        search == '' ? 
-        (<FollowListView data={data?.data} handleFollow={handleFollow} />) 
-        : 
-        (<FollowListView data={filter} handleFollow={handleFollow} />)
+        search == '' ?
+          (<FollowListView data={data?.data} handleFollow={handleFollow} />)
+          :
+          (<FollowListView data={filter} handleFollow={handleFollow} />)
       }
-      
+
     </View>
   )
 

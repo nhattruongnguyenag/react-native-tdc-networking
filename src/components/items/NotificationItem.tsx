@@ -6,7 +6,7 @@ import { useTranslation } from 'react-multi-lang';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { PROFILE_SCREEN } from '../../constants/Screen';
+import { PROFILE_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { useAppSelector } from '../../redux/Hook';
@@ -16,6 +16,7 @@ import { User } from '../../types/User';
 import { Avatar } from 'react-native-paper';
 import DefaultAvatar from '../common/DefaultAvatar';
 import { useIsFocused } from '@react-navigation/native';
+import { ACCEPT_POST, CHANGE_PASSWORD_SUCCESS, CREATE_SURVEY, POST_LOG, REGISTER_SUCCESS, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_CHANGE_LANGUAGE, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_FOLLOW, USER_LIKE_POST, USER_REPLY_COMMENT, USER_UPDATE } from '../../constants/TypeNotification';
 
 export interface NotificatonsType {
     id: any
@@ -67,30 +68,30 @@ export default function NotificationItem(props: NotificatonsType) {
     const checkType = () => {
         switch (props.type) {
             // Thong bao dang ky thanh cong
-            case 'resgister_success':
+            case REGISTER_SUCCESS:
                 // return <Text>Bạn đã đăng ký thành công!</Text>
                 setValue({
-                    ...value, defaultImage: 'admin', 
-                    header: '', 
+                    ...value, defaultImage: 'admin',
+                    header: '',
                     body: t('Notifications.register_success'),
                     image: '',
                     group: '',
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             // THong báo thay đổi mk
-            case 'change_password_success':
+            case CHANGE_PASSWORD_SUCCESS:
                 setValue({
-                    ...value, defaultImage: 'admin', 
-                    header: '', 
+                    ...value, defaultImage: 'admin',
+                    header: '',
                     body: t('Notifications.change_password_success'),
                     image: '',
                     group: '',
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             // Cập nhật bài viết cá nhân
-            case 'update_post':
+            case UPDATE_POST:
                 setValue({
                     ...value,
                     defaultImage: '',
@@ -102,7 +103,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Doanh nghiệp đăng khảo sát
-            case 'create_survey':
+            case CREATE_SURVEY:
                 setValue({
                     ...value,
                     defaultImage: '',
@@ -114,7 +115,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Bài viết đã lưu
-            case 'save_post':
+            case SAVE_POST:
                 setValue({
                     ...value,
                     defaultImage: 'admin',
@@ -126,7 +127,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Người dùng like bài viết của mình
-            case 'user_like_post':
+            case USER_LIKE_POST:
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
@@ -138,11 +139,11 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Người dùng comment bài viết của mình
-            case 'user_comment_post':
+            case USER_COMMENT_POST:
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, 
+                    header: props.userInteracted.name,
                     body: t('Notifications.user_comment_post'),
                     image: props.userInteracted.image,
                     group: props.dataValue.group != null ? props.dataValue.group.name : '',
@@ -150,11 +151,11 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Trả lời comment của mình trong bài viết
-            case 'user_reply_comment':
+            case USER_REPLY_COMMENT:
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, 
+                    header: props.userInteracted.name,
                     body: t('Notifications.user_reply_comment'),
                     image: props.userInteracted.image,
                     group: props.dataValue.group != null ? props.dataValue.group.name : '',
@@ -162,11 +163,11 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Người trả lời khảo sát của mình
-            case 'user_conduct_survey':
+            case USER_CONDUCT_SURVEY:
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
-                    header: props.userInteracted.name, 
+                    header: props.userInteracted.name,
                     body: t('Notifications.user_conduct_survey'),
                     image: props.userInteracted.image,
                     group: props.dataValue.group != null ? props.dataValue.group.name : '',
@@ -174,7 +175,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Bài viết không được duyệt
-            case 'post_log':
+            case POST_LOG:
                 console.log(props.dataValue.content.length)
                 setValue({
                     ...value,
@@ -187,7 +188,7 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Bài viết đã được duyệt
-            case 'accept_post':
+            case ACCEPT_POST:
                 setValue({
                     ...value,
                     defaultImage: 'admin',
@@ -199,18 +200,18 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Cập nhật trang cá nhân 
-            case 'user_update':
+            case USER_UPDATE:
                 setValue({
-                    ...value, defaultImage: 'admin', 
-                    header: '', 
+                    ...value, defaultImage: 'admin',
+                    header: '',
                     body: t('Notifications.user_update'),
                     image: '',
                     group: '',
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             // Có người follow mình
-            case 'user_follow':
+            case USER_FOLLOW:
                 setValue({
                     ...value,
                     defaultImage: props.userInteracted.name,
@@ -222,41 +223,46 @@ export default function NotificationItem(props: NotificatonsType) {
                 })
                 break
             // Thay đổi ngôn ngữ
-            case 'user_change_language':
+            case USER_CHANGE_LANGUAGE:
                 setValue({
-                    ...value, defaultImage: 'admin', 
-                    header: '', 
+                    ...value, defaultImage: 'admin',
+                    header: '',
                     body: t('Notifications.user_change_language'),
                     image: '',
                     group: '',
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             // Thông báo cho người nộp tuyển dụng
-            case 'user_apply_job':
+            case USER_APPLY_JOB:
                 setValue({
-                    ...value, defaultImage: 'admin', 
-                    header: '', 
+                    ...value, defaultImage: 'admin',
+                    header: '',
                     body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
                     image: props.dataValue.studentAvatar,
                     group: '',
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
-            case 'user_create_watch_job':
+            case USER_CREATE_WATCH_JOB:
                 setValue({
-                    ...value, defaultImage: '', 
-                    header: props.userInteracted.name, 
+                    ...value, defaultImage: '',
+                    header: props.userInteracted.name,
                     body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
                     image: props.userInteracted.image,
                     group: props.dataValue.group.name,
-                    time:  props.createdAt
+                    time: props.createdAt
                 })
                 break
             default: <></>
                 break
         }
+
+    }
+    const handleConductNow = (surveyPostId: number) => {
+        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })
+        
     }
     return (
         <View>
@@ -279,7 +285,18 @@ export default function NotificationItem(props: NotificatonsType) {
                             {value.group != '' ? t('Notifications.in_group') : '.'}
                             <Text style={styles.nameTxt}> {value.group != '' ? (value.group) + '.' : ''}</Text>
                         </Text>
-                        {/* {props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content} */}
+                        {
+                            props.type == 'create_survey' ?
+                                <Pressable 
+                                onPress={() =>{
+                                    handleConductNow(props.dataValue.id)
+                                    
+                                    } } style={styles.surveyBtn}>
+                                    <Text style={styles.surveyTxt}>Khảo sát ngay!!</Text>
+                                </Pressable>
+                                : null
+
+                        }
                         <Text style={styles.tg}>{moment(value.time).fromNow()}</Text>
                     </View>
                 </View>
@@ -356,5 +373,20 @@ const styles = StyleSheet.create({
         paddingTop: 7,
         paddingBottom: 7,
         paddingLeft: 5
+    },
+    surveyBtn: {
+        backgroundColor: '#0065ff',
+        marginTop: 5,
+        marginBottom: 5,
+
+        width: '50%',
+        height: 30,
+        borderRadius: 6,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    surveyTxt: {
+        fontWeight: 'bold',
+        color: '#ffffff'
     }
 })

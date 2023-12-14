@@ -233,7 +233,8 @@
         "manageJobApply": "応募管理",
         "pendingPostScreen": "保留中の投稿",
         "detailSurveyScreen": "質問詳細",
-        "studentAndFacultyScreen": "学生のディスカッショングループ"
+        "studentAndFacultyScreen": "学生のディスカッショングループ",
+        "detailPost": "お知らせの詳細"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "戻る",

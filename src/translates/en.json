@@ -233,7 +233,8 @@
         "manageJobApply": "Manage job applications",
         "pendingPostScreen": "Pending posts",
         "detailSurveyScreen": "Question details",
-        "studentAndFacultyScreen": "Student discussion group"
+        "studentAndFacultyScreen": "Student discussion group",
+        "detailPost": "Notification details"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Back",

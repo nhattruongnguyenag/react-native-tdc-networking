@@ -226,7 +226,8 @@
         "manageJobApply": "Quản lý hồ sơ ứng tuyển",
         "pendingPostScreen": "Bài viết đang chờ",
         "detailSurveyScreen": "Chi tiết câu hỏi",
-        "studentAndFacultyScreen": "Nhóm thảo luận của sinh viên "
+        "studentAndFacultyScreen": "Nhóm thảo luận của sinh viên ",
+        "detailPost": "Chi tiết thông báo"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Quay lại",
