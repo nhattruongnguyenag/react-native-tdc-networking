@@ -8,7 +8,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 interface CustomizeCommentType {
     textDelete: string,
     textReply: string,
-    tagName: any,
+    tagName: string,
     userId: number | undefined,
     authorCommentId: number,
     type: number,

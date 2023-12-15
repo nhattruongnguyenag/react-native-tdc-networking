@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Image } from 'react-native'
-import React, { useTransition, memo } from 'react'
+import React, { memo } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
@@ -8,12 +8,14 @@ import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import DefaultAvatar from '../common/DefaultAvatar'
 import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { useTranslation } from 'react-multi-lang'
+import { ModalImage } from '../../types/ModalImage'
+import { Images } from '../../types/Images'
 
 interface ImageModalShowType {
   t: ReturnType<typeof useTranslation>
   closeModal: () => void
-  data: any
-  authorInfo: any
+  data: Images
+  authorInfo: ModalImage
   handleCheckImageHaveError: (id: number) => boolean
   handleClickIntoUserNameOrAvatarEvent: () => void
 }

@@ -11,43 +11,49 @@ import {
   Keyboard
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK } from '../constants/Color'
+import { COLOR_BUTTON, COLOR_WHITE, COLOR_BORDER, COLOR_BLACK, COLOR_GREY } from '../constants/Color'
 import IconButton from '../components/buttons/IconButton'
 import { SCREEN_HEIGHT, WINDOW_HEIGHT } from '../utils/SystemDimensions'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import CustomizeModalLoading from '../components/modal/CustomizeModalLoading'
 import ActionSheet from 'react-native-actionsheet'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
 import { useAppSelector } from '../redux/Hook'
 import { isLengthInRange, isNotBlank } from '../utils/ValidateUtils'
 import { NUMBER_MAX_CHARACTER, NUMBER_MIN_CHARACTER, TYPE_NORMAL_POST } from '../constants/Variables'
 import { handlePutDataAPI, updateNormalPostAPI } from '../api/CallApi'
 import { NormalPost } from '../types/NormalPost'
-import { setImagesUpload } from '../redux/Slice'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-multi-lang'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
+
+interface ImageUpdate {
+  id: number,
+  uri: string
+}
 
 export default function CreateNormalPostScreen({ navigation, route }: any) {
   const t = useTranslation();
-  const dispatch = useDispatch();
   const { group, updateNormalPost } = route.params
   let alertString = null
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const apiUrl = SERVER_ADDRESS + 'api/posts/normal'
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-  const { userLogin, imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [images, setImages] = useState<any>([]);
-  const [content, setContent] = useState('');
-  const [userId, setUserId] = useState(userLogin?.id ?? 0);
-  const [postId, setPostId] = useState(-1);
-  const [type, setType] = useState(TYPE_NORMAL_POST);
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const [images, setImages] = useState<string[]>([]);
+  const [content, setContent] = useState<string>('');
+  const [userId, setUserId] = useState<number>(userLogin?.id ?? 0);
+  const [postId, setPostId] = useState<number>(-1);
+  const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
+  const [type, setType] = useState<string>(TYPE_NORMAL_POST);
+  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
 
   useEffect(() => {
     if (updateNormalPost != undefined) {
       setPostId(updateNormalPost.postId);
       setContent(updateNormalPost.content);
-      const listImages = updateNormalPost.images.map((item: any) => { return item.uri })
+      const listImages = updateNormalPost.images.map((item: ImageUpdate) => { return item.uri })
       setImages(listImages)
     }
   }, [updateNormalPost])
@@ -68,7 +74,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           if (status === 201) {
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyCreateNewPostSuccess"), false)
             setContent('');
-            dispatch(setImagesUpload([]));
+            setImagePicker(null);
             setImages([]);
             Keyboard.dismiss()
             navigation.goBack();
@@ -85,7 +91,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
           setIsLoading(false)
           if (status === 201) {
             setContent('');
-            dispatch(setImagesUpload([]));
+            setImagePicker(null);
             setImages([]);
             showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostSuccess"), false)
             Keyboard.dismiss()
@@ -118,7 +124,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
 
   const HandleClickIntoIconBtnArrowLeft = () => {
     setContent('');
-    dispatch(setImagesUpload([]));
+    setImagePicker(null);
     setImages([]);
     navigation.goBack()
   }
@@ -173,19 +179,19 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   }
 
   const handleDeleteImage = (imageName: string) => {
-    const newImage = images.filter((item: any) => item !== imageName)
+    const newImage = images.filter((item: string) => item !== imageName)
     setImages(newImage)
   }
 
   useEffect(() => {
-    if (imagesUpload && imagesUpload.length != 0) {
-      if (images && images.length != 0) {
-        setImages([...images, ...imagesUpload])
-      } else {
-        setImages(imagesUpload)
-      }
+    if (Boolean(imagePicker)) {
+      setIsUploadingImage(true);
+      handleUploadImage(imagePicker ?? [], (data) => {
+        setImages([...images, ...data])
+        setIsUploadingImage(false)
+      })
     }
-  }, [imagesUpload])
+  }, [imagePicker])
 
   return (
     <>
@@ -200,7 +206,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
                 <IconEntypo name={'chevron-left'} size={25} color={COLOR_BLACK} />
               </TouchableOpacity>
               <Text style={styles.tabBarTxt}>{postId === -1 ? t("CreateNormalPost.createNormalPostTitle") : t("CreateNormalPost.updateNormalPostTitle")}</Text>
-              <TouchableOpacity onPress={handleClickCompleteButton} style={styles.wrapTabBarBtnRight}>
+              <TouchableOpacity disabled={isUploadingImage} onPress={handleClickCompleteButton} style={isUploadingImage ? styles.wrapTabBarBtnRightUnAble : styles.wrapTabBarBtnRightAble}>
                 <Text style={styles.tabBarBtnRightTxt}>{t("CreateNormalPost.createNormalPostButtonFinish")}</Text>
               </TouchableOpacity>
             </View>
@@ -225,7 +231,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
             <View style={styles.wrapperBodyImage}>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                 {images.length != 0 &&
-                  images.map((item: any, index: number) => (
+                  images.map((item: string, index: number) => (
                     <Pressable
                       onLongPress={() => handleLongClickIntoImage(item)}
                       key={index.toString()}
@@ -248,7 +254,12 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
                   inactiveBackgroundColor='#ffffff00'
                   activeBackgroundColor='#ffffff1a'
                 />
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    setImagePicker(result)
+                  }}
+                />
                 <Text style={styles.bottomText}>{t("CreateNormalPost.createNormalPostButtonText")}</Text>
               </View>
             </TouchableOpacity>
@@ -285,10 +296,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10
   },
-  wrapTabBarBtnRight: {
+  wrapTabBarBtnRightAble: {
     width: 77,
     height: 31,
     backgroundColor: COLOR_BUTTON,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  wrapTabBarBtnRightUnAble: {
+    width: 77,
+    height: 31,
+    backgroundColor: COLOR_GREY,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'

@@ -22,9 +22,7 @@ import { useTranslation } from 'react-multi-lang'
 import { useGetFacultyPostsQuery } from '../redux/Service'
 import { Post } from '../types/Post'
 import { isFaculty, isStudent } from '../utils/UserHelper'
-import { Student } from '../types/Student'
-import { Faculty } from '../types/Faculty'
-import { GetPostActive } from '../utils/GetPostActive'
+import { getPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function FacultyDashboardScreen() {
@@ -64,7 +62,7 @@ export default function FacultyDashboardScreen() {
       if (isFaculty(userLogin)) {
         setCode(userLogin?.code);
       } else {
-        setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode));
+        setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode ?? ""));
       }
     }
   }, [userLogin]);
@@ -152,7 +150,7 @@ export default function FacultyDashboardScreen() {
   }, [logout])
 
   const renderItem = useCallback((item: any) => {
-    if (GetPostActive(item.active)) {
+    if (getPostActive(item.active)) {
       return (
         <CustomizePost
           id={item.id}

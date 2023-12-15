@@ -23,7 +23,7 @@ import { Post } from '../types/Post'
 import { isFaculty, isStudent } from '../utils/UserHelper'
 import { Student } from '../types/Student'
 import { Faculty } from '../types/Faculty'
-import { GetPostActive } from '../utils/GetPostActive'
+import { getPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function StudentAndFacultyGroup() {
@@ -59,7 +59,7 @@ export default function StudentAndFacultyGroup() {
     }, [data])
 
     useEffect(() => {
-        setCode((isStudent(userLogin) || isFaculty(userLogin)) ? (userLogin as Student | Faculty).facultyGroupCode : '');
+        setCode((isStudent(userLogin) || isFaculty(userLogin)) ? ((userLogin as Student | Faculty).facultyGroupCode ?? "") : "");
     }, [userLogin]);
 
     useEffect(() => {
@@ -142,7 +142,7 @@ export default function StudentAndFacultyGroup() {
     }
 
     const renderItem = useCallback((item: any) => {
-        if (GetPostActive(item.active)) {
+        if (getPostActive(item.active)) {
             return (
                 <CustomizePost
                     id={item.id}

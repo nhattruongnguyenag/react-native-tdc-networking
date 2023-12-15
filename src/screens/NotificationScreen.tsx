@@ -39,7 +39,7 @@ export default function NotificationScreen() {
       pollingInterval: 1000
     }
   )
-
+  
   const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
 
 
