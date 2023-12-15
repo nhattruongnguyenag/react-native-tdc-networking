@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { UpdateNormalPost } from '../types/UpdateNormalPost'
 
 export const postAPI = async (apiUrlPost: string) => {
   try {
@@ -49,12 +48,14 @@ export const updateNormalPostAPI = async (urlUpdate: string, data: any) => {
   }
 }
 
-export const updateImageUserProfile = async (urlUpdate: string, data: any) => {
+export const updateImageUserProfile = async (urlUpdate: string, data: any): Promise<number> => {
+  let status = 404;
   try {
     const response = await axios.post(urlUpdate, data);
-    return response.data.status;
+    status = response.data.status;
   } catch (error) {
   }
+  return status
 }
 
 export const followAPI = async (urlFollow: string, followData: any) => {

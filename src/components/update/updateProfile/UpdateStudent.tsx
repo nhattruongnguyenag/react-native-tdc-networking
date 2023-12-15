@@ -5,7 +5,6 @@ import { useTranslation } from 'react-multi-lang';
 import { useDispatch } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
 import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isPhone } from '../../../utils/ValidateUtils';
-import { useAppSelector } from '../../../redux/Hook';
 import {
     Alert,
     Image,
@@ -13,7 +12,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View
 } from 'react-native'
@@ -27,13 +25,15 @@ import { Student } from '../../../types/Student';
 import { Faculty } from '../../../types/Faculty';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../../constants/KeyValue';
-import { setImagesUpload, setUserLogin } from '../../../redux/Slice';
+import { setUserLogin } from '../../../redux/Slice';
 import TextInputWithTitle from '../../inputs/TextInputWithTitle';
 import TextValidate from '../../common/TextValidate';
-import CustomizedImagePicker from '../../CustomizedImagePicker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 import { COLOR_BTN_BLUE, COLOR_GREY } from '../../../constants/Color';
+import { Asset } from 'react-native-image-picker';
+import ImagePicker from '../../ImagePicker';
+import { handleUploadImage } from '../../../utils/ImageHelper';
 
 interface UpdateType {
     userData: any
@@ -66,6 +66,9 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     const [name, setName] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
     const [isUploading, setIsUploading] = useState(false);
+    const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
 
     const [student, setStudent] = useState({
         id: props.userData?.id ?? 0,
@@ -83,11 +86,6 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
         setStudent({ ...student, image: props.userData?.image })
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
     }, [props.userData]);
-
-
-    const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-    const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-
 
     const [validate, setValidate] = useState<StudentUpdate>({
         name: {
@@ -216,8 +214,17 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
     }
 
     useEffect(() => {
-        setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : imageAvatarTemporary })
-    }, [imagesUpload, imageAvatarTemporary])
+        if (Boolean(imagePicker)) {
+            setIsUploadingImage(true);
+        }
+        handleUploadImage(imagePicker ?? [], (data) => {
+            setStudent({ ...student, image: imagePicker ? data[0] : imageAvatarTemporary })
+            setIsUploadingImage(false)
+        })
+    }, [imagePicker, imageAvatarTemporary])
+
+
+
 
     const asyncForValidate = async () => {
         const validationPromises = [
@@ -231,7 +238,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
         setIsUploading(true);
         asyncForValidate();
         setPassValidate(!passValidate)
-    }, [validate, imagesUpload])
+    }, [validate, imagePicker])
 
     useEffect(() => {
         if (isAllFieldsValidStudent(validate)) {
@@ -246,7 +253,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
                                 dispatch(setUserLogin(response.data.data))
-                                dispatch(setImagesUpload([]));
+                                setImagePicker([]);
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
@@ -278,6 +285,7 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
             setIsUploading(false);
         }
     }, [passValidate])
+
     return (
         <ScrollView>
             <SafeAreaView>
@@ -313,12 +321,17 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                             <Text style={styles.txt}>{t("Update.updateAvatarTitle")}</Text>
                             <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                                 <Icon name='camera-retro' size={20}></Icon>
-                                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                                <ImagePicker
+                                    optionsRef={(ref) => setImagePickerOption(ref)}
+                                    onResult={(result) => {
+                                        setImagePicker(result)
+                                    }}
+                                />
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {(imagesUpload !== null && imagesUpload?.length !== 0) ? (
-                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                            {Boolean(imagePicker) ? (
+                                <Image style={styles.img} source={{ uri: (imagePicker?.[0]?.uri) ?? '' }} />
                             ) : (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
@@ -326,8 +339,8 @@ export function UpdateStudent(props: Readonly<UpdateType>) {
                     </View>
                 </View>
                 <TouchableOpacity
-                    disabled={isUploading}
-                    style={[styles.btnRegister, isUploading ? styles.btnDisable : styles.btnAble]}
+                    disabled={isUploading || isUploadingImage}
+                    style={[styles.btnRegister, (isUploading || isUploadingImage) ? styles.btnDisable : styles.btnAble]}
                     onPress={() => onSubmit(student)}
                 >
                     {

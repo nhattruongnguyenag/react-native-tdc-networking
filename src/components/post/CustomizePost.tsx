@@ -36,6 +36,7 @@ import { RootStackParamList } from '../../App'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
+import { Like } from '../../types/Like'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
@@ -104,7 +105,7 @@ const CustomizePost = (props: Post) => {
 
   const handleCheckLiked = useMemo(() => {
     let result = false;
-    post.likes.some((item: any) => {
+    post.likes.some((item: Like) => {
       if (item.id === userLogin?.id) {
         result = true;
       }
@@ -124,12 +125,10 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleClickBtnSurveyDetailEvent = (idPost: number) => {
-    console.log("handleClickBtnSurveyDetailEvent");
     navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: idPost })
   }
 
   const handleClickBtnRecruitmentDetailEvent = (idPost: number) => {
-    console.log("handleClickBtnRecruitmentDetailEvent");
     navigation.navigate(RECRUITMENT_DETAIL_SCREEN, { postId: idPost })
   }
 
@@ -161,7 +160,6 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleUpdateNormalPostEvent = () => {
-    console.log("handleUpdateNormalPostEvent");
     const updateNormalPost: UpdateNormalPost = {
       postId: props.id,
       content: props.content,
@@ -175,7 +173,6 @@ const CustomizePost = (props: Post) => {
   }
 
   const handleSeeResultSurveyPost = () => {
-    console.log("handleSeeResultSurveyPost");
     navigation.navigate(SURVEY_RESULT_SCREEN, { surveyPostId: post.id })
   }
 

@@ -40,6 +40,7 @@ export const getFacultyTranslated = (name: string, t: ReturnType<typeof useTrans
       break
     case FacultyOfMechanicalEngineeringAndManufacturing:
       result = FACULTY_MECHANICAL_ENGINEERING_AND_MANUFACTURING
+      break
     case AutomobileEngineeringDepartment:
       result = AUTOMOBILE_ENGINEERING_DEPARTMENT
       break

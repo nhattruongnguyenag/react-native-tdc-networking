@@ -19,7 +19,7 @@ const BOTTOM_ICON_SIZE = 30
 const CustomizeBottomPost = (props: BottomPostType) => {
   const numberUserReacted: number = props.likes?.length
   const formatLikeQty: string = props.likes?.length > 1000 ? props.likes?.length / 1000 + 'k' : props.likes?.length + ''
-  const renderItem = (item: any) => {
+  const renderItem = (item: Like) => {
     return Boolean(item.image) ?
       <Image
         key={item.id}

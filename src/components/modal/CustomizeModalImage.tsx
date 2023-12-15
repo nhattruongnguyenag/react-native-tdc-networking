@@ -10,6 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
 import { useTranslation } from 'react-multi-lang'
+import { Images } from '../../types/Images'
 
 const CustomizeModalImage = () => {
   const t = useTranslation();
@@ -66,7 +67,7 @@ const CustomizeModalImage = () => {
         pagingEnabled
         contentOffset={{ x: (modalImageData?.images.findIndex(item => item.id === imageActiveId) ?? 0) * WINDOW_WIDTH, y: 0 }}
       >
-        {modalImageData?.images.map((item) => (
+        {modalImageData?.images.map((item:Images) => (
           <CustomizeImageModalShow
             t={t}
             key={item.id}

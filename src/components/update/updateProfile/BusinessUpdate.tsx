@@ -5,7 +5,6 @@ import { useTranslation } from 'react-multi-lang';
 import { useDispatch } from 'react-redux';
 import { ActivityIndicator } from 'react-native-paper';
 import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isPhone, isTime, isType } from '../../../utils/ValidateUtils';
-import { useAppSelector } from '../../../redux/Hook';
 import ActionSheet from 'react-native-actionsheet';
 import {
     Alert,
@@ -27,7 +26,7 @@ import { Student } from '../../../types/Student';
 import { Faculty } from '../../../types/Faculty';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TOKEN_KEY, USER_LOGIN_KEY } from '../../../constants/KeyValue';
-import { setImagesUpload, setUserLogin } from '../../../redux/Slice';
+import { setUserLogin } from '../../../redux/Slice';
 import TextInputWithTitle from '../../inputs/TextInputWithTitle';
 import TextValidate from '../../common/TextValidate';
 import CustomizedImagePicker from '../../CustomizedImagePicker';
@@ -36,6 +35,8 @@ import { ParamListBase } from '@react-navigation/native';
 import { COLOR_BTN_BLUE, COLOR_GREY } from '../../../constants/Color';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import { handleUploadImage } from '../../../utils/ImageHelper';
+import { Asset } from 'react-native-image-picker';
 
 
 interface UpdateType {
@@ -78,6 +79,9 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
     const [address, setAddress] = useState('');
     const [imageAvatarTemporary, setImageAvatarTemporary] = useState('');
     const [isUploading, setIsUploading] = useState(false);
+    const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
 
     const [business, setBusiness] = useState({
         id: props.userData?.id ?? 0,
@@ -101,9 +105,6 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
         setBusiness({ ...business, image: props.userData?.image })
         props.userData?.image ? setImageAvatarTemporary(props.userData?.image) : setImageAvatarTemporary("");
     }, [props.userData]);
-
-    const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-    const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
     const [validate, setValidate] = useState<BusinessUpdate>({
         name: {
@@ -429,17 +430,20 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
             })
         }
     }, [timeStart, timeEnd])
-    // Dont focus
-    useEffect(() => {
-        setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : imageAvatarTemporary })
-    }, [imagesUpload])
+
     const showAlert = () => {
         Alert.alert(t("UpdateProfile.updateProfileAlertFail"))
     }
 
     useEffect(() => {
-        setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : imageAvatarTemporary })
-    }, [imagesUpload, imageAvatarTemporary])
+        if (Boolean(imagePicker)) {
+            setIsUploadingImage(true);
+        }
+        handleUploadImage(imagePicker ?? [], (data) => {
+            setBusiness({ ...business, image: imagePicker ? data[0] : imageAvatarTemporary })
+            setIsUploadingImage(false)
+        })
+    }, [imagePicker, imageAvatarTemporary])
 
     const asyncForValidate = async () => {
         const validationPromises = [
@@ -456,7 +460,7 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
         setIsUploading(true);
         asyncForValidate();
         setPassValidate(!passValidate)
-    }, [validate, imagesUpload])
+    }, [validate, imagePicker])
 
     useEffect(() => {
         if (isAllFieldsValidBusiness(validate)) {
@@ -470,8 +474,8 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                             if (response.status === 200 || response.status === 201) {
                                 AsyncStorage.setItem(TOKEN_KEY, JSON.stringify(token));
                                 AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data));
-                                dispatch(setUserLogin(response.data.data))
-                                dispatch(setImagesUpload([]));
+                                dispatch(setUserLogin(response.data.data));
+                                setImagePicker([]);
                                 props._navigation.pop(2);
                             } else {
                                 showAlert();
@@ -651,8 +655,8 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            {(imagesUpload !== null && imagesUpload?.length !== 0) ? (
-                                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
+                            {Boolean(imagePicker) ? (
+                                <Image style={styles.img} source={{ uri: (imagePicker?.[0]?.uri) ?? '' }} />
                             ) : (
                                 <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imageAvatarTemporary}` }} />
                             )}
@@ -660,8 +664,8 @@ export function UpdateBusiness(props: Readonly<UpdateType>) {
                     </View>
                 </View>
                 <TouchableOpacity
-                    disabled={isUploading}
-                    style={[styles.btnRegister, isUploading ? styles.btnDisable : styles.btnAble]}
+                    disabled={isUploading || isUploadingImage}
+                    style={[styles.btnRegister, (isUploading || isUploadingImage) ? styles.btnDisable : styles.btnAble]}
                     onPress={() => onSubmit(business)}
                 >
                     {
