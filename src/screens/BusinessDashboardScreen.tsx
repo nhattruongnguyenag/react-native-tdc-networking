@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import CustomizeModalComments from '../components/modal/CustomizeModalComments'
 import CustomizeModalUserReacted from '../components/modal/CustomizeModalUserReacted'
 import messaging from '@react-native-firebase/messaging'
-import { setConversations, setDeviceToken } from '../redux/Slice'
+import { setConversations, setDefaultLanguage, setDeviceToken } from '../redux/Slice'
 import { useGetBusinessPostsQuery, useSaveDeviceTokenMutation } from '../redux/Service'
 import { getStompClient } from '../sockets/SocketClient'
 import { Client, Frame, Message } from 'stompjs'
@@ -25,6 +25,10 @@ import { useTranslation } from 'react-multi-lang'
 import { useNavigation } from '@react-navigation/native'
 import { GROUP_CONNECT_BUSINESS_ID } from '../constants/Groups'
 import { getPostActive } from '../utils/GetPostActive'
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { DEFAULT_LANGUAGE } from '../constants/KeyValue'
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
@@ -58,6 +62,14 @@ export default function BusinessDashboardScreen() {
   }, [data])
 
   useEffect(() => {
+    axios.post(`${SERVER_ADDRESS}api/option/get`,{
+      userId: userLogin?.id,
+      optionKey: 'language'
+    }).then((response) => {
+      dispatch(setDefaultLanguage(response.data.data.value))
+      AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(response.data.data.value))
+    })
+
     const getFCMToken = async () => {
       try {
         const token = await messaging().getToken()
