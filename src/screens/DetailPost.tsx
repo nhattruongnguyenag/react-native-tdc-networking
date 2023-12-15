@@ -1,17 +1,38 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
 import CustomizePost from '../components/post/CustomizePost';
-
+import { Client, Frame } from 'stompjs';
+import { getStompClient } from '../sockets/SocketClient';
+let stompClient: Client
 const DetailPost = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'DETAIL_POST_SCREEN'>>();
   const post = route.params?.post ?? null
   const notificationType = route.params?.notificationType ?? ''
+  const [data, setData] = useState<any>()
+
+  useEffect(() => {
+    stompClient = getStompClient()
+    const onConnected = () => {
+      if (stompClient.connected) {
+        stompClient.subscribe(`/topic/find/user`, onMessageReceived)
+      }
+    }
+    const onMessageReceived = (payload: any) => {
+      
+    }
+    const onError = (err: string | Frame) => {
+      console.log(err)
+    }
+    stompClient.connect({}, onConnected, onError)
+  }, [])
 
   const likeAction = () => { }
   const handleUnSave = () => { }
   const handleDelete = () => { }
+
+
 
   if (post) {
     if (notificationType == 'post_log') {

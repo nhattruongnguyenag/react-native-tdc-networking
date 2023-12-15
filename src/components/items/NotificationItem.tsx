@@ -186,12 +186,13 @@ export default function NotificationItem(props: NotificatonsType) {
                 break
             // Bài viết không được duyệt
             case POST_LOG:
-                console.log(props.dataValue.content.length)
                 setValue({
                     ...value,
                     defaultImage: 'admin',
                     header: '',
-                    body: t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "',
+                    body: props.dataValue != null ?
+                     t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "' 
+                     : '',
                     image: '',
                     group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
                     time: props.createdAt,
