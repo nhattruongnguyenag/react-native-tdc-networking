@@ -77,7 +77,6 @@ import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
 import MyProfileScreen from './screens/MyProfileScreen'
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
-import ImageViewScreen from './screens/ImageViewScreen'
 import IntermediationScreen from './screens/IntermediationScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
 import ListFollowScreen from './screens/ListFollowScreen'
@@ -347,12 +346,6 @@ export function StackNavigator(): JSX.Element {
         name={CREATE_SURVEY_SCREEN}
         options={{ header: () => <ToolbarWithBackPress title={t('ToolbarTitle.createSurveyScreen')} /> }}
         component={CreateSurveyPostScreen}
-      />
-
-      <RootStack.Screen
-        name={IMAGE_VIEW_SCREEN}
-        options={{ header: () => null }}
-        component={ImageViewScreen}
       />
 
       <RootStack.Screen
