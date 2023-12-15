@@ -5,12 +5,12 @@ export interface ErrorMessage {
     blank: string
 }
 
-export const validateField = (error: ErrorMessage, validate: InputTextValidate, value: string) => {
-    if (isBlank(value)) {
-        validate.textError = error.blank
-        validate.isError = true
-        validate.isVisible = true
-        return false
+export const validateField = (error: ErrorMessage, validate: InputTextValidate, value: Object) => {
+    if (Number.isNaN(value) || isBlank(String(value))) {
+      validate.textError = error.blank
+      validate.isError = true
+      validate.isVisible = true
+      return false
     }
 
     validate.textError = ''
