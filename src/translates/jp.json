@@ -717,6 +717,7 @@
         "user_change_language": "言語の変更が成功しました",
         "user_apply_job": "次の求人に応募しました:",
         "user_create_watch_job": " が次の求人に応募しました:",
-        "in_group": " に"
+        "in_group": " に",
+        "survey_txt": "すぐに調査 >>"
     }
 }

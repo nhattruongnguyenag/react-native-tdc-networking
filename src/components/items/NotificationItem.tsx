@@ -29,6 +29,7 @@ export interface NotificatonsType {
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
     handleDelNotification: (id: number) => void;
+    handleItemCanNotClick: (id: number) => void;
 }
 
 export interface Value {
@@ -38,6 +39,7 @@ export interface Value {
     group: string
     defaultImage: string
     time: string
+    canClick: boolean
     // header: tên của những thông báo có người tương tác
     // body: chứa nội dung thông báo
     // image: chứa hình của người tương tác hoặc là của mình
@@ -59,7 +61,8 @@ export default function NotificationItem(props: NotificatonsType) {
         image: '',
         group: '',
         defaultImage: '',
-        time: ''
+        time: '',
+        canClick: false,
     })
 
     useEffect(() => {
@@ -97,9 +100,10 @@ export default function NotificationItem(props: NotificatonsType) {
                     defaultImage: '',
                     header: '',
                     body: t('Notifications.update_post'),
-                    image: props.dataValue.user.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    image: props.dataValue != null ? props.dataValue.user.image : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Doanh nghiệp đăng khảo sát
@@ -110,8 +114,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.create_survey'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Bài viết đã lưu
@@ -122,8 +127,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: '',
                     body: t('Notifications.save_post'),
                     image: '',
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Người dùng like bài viết của mình
@@ -134,8 +140,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_like_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Người dùng comment bài viết của mình
@@ -146,8 +153,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_comment_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Trả lời comment của mình trong bài viết
@@ -158,8 +166,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_reply_comment'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Người trả lời khảo sát của mình
@@ -170,8 +179,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_conduct_survey'),
                     image: props.userInteracted.image,
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Bài viết không được duyệt
@@ -183,8 +193,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: '',
                     body: t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "',
                     image: '',
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Bài viết đã được duyệt
@@ -195,8 +206,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: '',
                     body: t('Notifications.accept_post'),
                     image: '',
-                    group: props.dataValue.group != null ? props.dataValue.group.name : '',
-                    time: props.createdAt
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Cập nhật trang cá nhân 
@@ -239,9 +251,10 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value, defaultImage: 'admin',
                     header: '',
                     body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
-                    image: props.dataValue.studentAvatar,
+                    image: props.dataValue != null ? props.dataValue.studentAvatar : '',
                     group: '',
-                    time: props.createdAt
+                    time: props.createdAt,
+                    canClick: true
                 })
                 break
             // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
@@ -251,7 +264,18 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
                     image: props.userInteracted.image,
-                    group: props.dataValue.group.name,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            case 'user_update_avatar':
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: 'Bạn vừa cập nhật ảnh nền',
+                    image: '',
+                    group: '',
                     time: props.createdAt
                 })
                 break
@@ -260,14 +284,21 @@ export default function NotificationItem(props: NotificatonsType) {
         }
 
     }
-    const handleConductNow = (surveyPostId: number) => {
-        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })
-        
+    const handleConductNow = (surveyPostId: number, notificationId: number) => {
+        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })   
+        try {
+            axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
+              id: notificationId,
+              userId: userLogin?.id
+            })
+          } catch (error) {
+            console.error('Error updating name:', error)
+          }  
     }
     return (
         <View>
             <Pressable
-                onPress={() => props.handleItem(props.id)}
+                onPress={() => value.canClick == true ? props.handleItem(props.id) : props.handleItemCanNotClick(props.id)}
                 style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
             >
                 <View style={styles.cont}>
@@ -289,10 +320,9 @@ export default function NotificationItem(props: NotificatonsType) {
                             props.type == 'create_survey' ?
                                 <Pressable 
                                 onPress={() =>{
-                                    handleConductNow(props.dataValue.id)
-                                    
+                                    handleConductNow(props.dataValue.id, props.id)
                                     } } style={styles.surveyBtn}>
-                                    <Text style={styles.surveyTxt}>Khảo sát ngay!!</Text>
+                                    <Text style={styles.surveyTxt}>{t('Notifications.survey_txt')}</Text>
                                 </Pressable>
                                 : null
 

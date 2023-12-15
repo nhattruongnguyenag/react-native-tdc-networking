@@ -717,6 +717,7 @@
         "user_change_language": "You have successfully changed the language",
         "user_apply_job": "You have applied for the job posting:",
         "user_create_watch_job": " has applied for the job posting:",
-        "in_group": " in"
+        "in_group": " in",
+        "survey_txt": "Survey now >>"
     }
 }

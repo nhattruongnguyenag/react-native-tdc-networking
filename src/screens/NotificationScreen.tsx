@@ -115,6 +115,19 @@ export default function NotificationScreen() {
     }
   }
 
+  const handleItemCanNotClick = (id: number) => {
+    console.log('123');
+    
+    try {
+      axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
+        id: id,
+        userId: userLogin?.id
+      })
+    } catch (error) {
+      console.error('Error updating name:', error)
+    }
+  }
+
   const handleListIsRead = () => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/all`, { userId: userLogin?.id })
@@ -181,12 +194,14 @@ export default function NotificationScreen() {
             <NotificationListView data={data?.data}
               handleItem={handleItem}
               handleDelNotification={handleDelNotification}
-              handleIsRead={handleIsRead} />
+              handleIsRead={handleIsRead}
+              handleItemCanNotClick={handleItemCanNotClick} />
             :
             <NotificationListView data={filter}
               handleItem={handleItem}
               handleDelNotification={handleDelNotification}
-              handleIsRead={handleIsRead} />
+              handleIsRead={handleIsRead}
+              handleItemCanNotClick={handleItemCanNotClick} />
         }
       </View>
     </>

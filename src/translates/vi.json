@@ -703,20 +703,21 @@
     "Notifications": {
         "register_success": "Chào mừng bạn đến với TDC Social Network!",
         "change_password_success": "Bạn đã thay đổi mật khẩu thành công!",
-        "update_post": "Bạn đã cập nhật bài viết",
+        "update_post": "Bạn đã cập nhật bài viết!",
         "create_survey": " vừa đăng khảo sát",
-        "save_post": "Bạn vừa lưu bài viết",
+        "save_post": "Bạn vừa lưu bài viết!",
         "user_like_post": " đã thích bài viết của bạn",
         "user_comment_post": " đã bình luận bài viết của bạn",
         "user_reply_comment": " đã trả lời bình luận của bạn",
         "user_conduct_survey": " đã thực hiện khảo sát của bạn",
         "post_log": "Bài viết của bạn đã bị từ chối vì ",
-        "accept_post": "Bài viết của bạn đã được duyệt",
-        "user_update": "Bạn vừa cập nhật thông tin tài khoản thành công",
+        "accept_post": "Bài viết của bạn đã được duyệt!",
+        "user_update": "Bạn vừa cập nhật thông tin tài khoản thành công!",
         "user_follow": " vừa theo dõi bạn",
-        "user_change_language": "Bạn vừa thay đổi ngôn ngữ thành công",
+        "user_change_language": "Bạn vừa thay đổi ngôn ngữ thành công!",
         "user_apply_job": "Bạn vừa ứng tuyển cho bài đăng:",
         "user_create_watch_job": " vừa ứng tuyển bài đăng:",
-        "in_group": " trong"
+        "in_group": " trong",
+        "survey_txt": "Khảo sát ngay >>"
     }
 }

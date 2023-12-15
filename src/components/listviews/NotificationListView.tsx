@@ -19,6 +19,7 @@ export interface NotificatonsListViewType {
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
     handleDelNotification: (id: number) => void;
+    handleItemCanNotClick: (id: number) => void;
 }
 
 export default function NotificationListView(props: NotificatonsListViewType) {
@@ -42,6 +43,7 @@ export default function NotificationListView(props: NotificatonsListViewType) {
                     handleItem={props.handleItem}
                     handleIsRead={props.handleIsRead}
                     handleDelNotification={props.handleDelNotification}
+                    handleItemCanNotClick={props.handleItemCanNotClick}
                 />)
             }
         </ScrollView>
