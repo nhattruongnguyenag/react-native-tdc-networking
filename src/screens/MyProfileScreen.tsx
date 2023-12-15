@@ -48,7 +48,7 @@ const MyProfileScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>();
   const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
-  const [userInformation, setUserInfomation] = useState<object>({
+  const [userInformation, setUserInformation] = useState<object>({
     userId: userLogin?.id,
     avatar: undefined
   })
@@ -88,7 +88,7 @@ const MyProfileScreen = () => {
 
   useEffect(() => {
     let groupOfUser = '';
-    setUserInfomation({ ...userInformation, userId: userLogin?.id })
+    setUserInformation({ ...userInformation, userId: userLogin?.id })
     if (userLogin?.roleCodes?.includes(TYPE_POST_STUDENT)) {
       groupOfUser = 'group_tdc';
     } else if (userLogin?.roleCodes?.includes(TYPE_POST_FACULTY)) {
@@ -135,7 +135,7 @@ const MyProfileScreen = () => {
       "postId": id
     }
     const status = await savePostAPI(API_URL_SAVE_POST, data);
-    ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
 
 

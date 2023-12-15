@@ -112,6 +112,7 @@ export default function StudentDiscussionDashboardScreen() {
       "postId": id
     }
     const status = await savePostAPI(API_URL_SAVE_POST, data);
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
 
   const renderItem = useCallback((item: any) => {

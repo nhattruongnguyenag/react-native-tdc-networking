@@ -36,6 +36,7 @@ import { RootStackParamList } from '../../App'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 import { UpdateNormalPost } from '../../types/UpdateNormalPost'
+import { Like } from '../../types/Like'
 
 export const NUM_OF_LINES = 5
 export const HEADER_ICON_SIZE = 15
@@ -104,7 +105,7 @@ const CustomizePost = (props: Post) => {
 
   const handleCheckLiked = useMemo(() => {
     let result = false;
-    post.likes.some((item: any) => {
+    post.likes.some((item: Like) => {
       if (item.id === userLogin?.id) {
         result = true;
       }

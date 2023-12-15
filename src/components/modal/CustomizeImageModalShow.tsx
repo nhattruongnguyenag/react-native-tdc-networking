@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Image } from 'react-native'
-import React, { useTransition, memo } from 'react'
+import React, { memo } from 'react'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { COLOR_BLACK, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../utils/SystemDimensions'
