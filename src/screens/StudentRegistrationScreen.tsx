@@ -22,7 +22,8 @@ import {
   isContainSpecialCharacter,
   isEmail,
   isLengthInRange,
-  isPassword
+  isPassword,
+  isPhone
 } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
 import { useTranslation } from 'react-multi-lang'
@@ -40,6 +41,7 @@ interface RegisterStudent {
   facultyName: InputTextValidate
   password: InputTextValidate
   confimPassword: InputTextValidate
+  phone: InputTextValidate
 }
 
 const isAllFieldsValid = (validate: RegisterStudent): boolean => {
@@ -68,6 +70,7 @@ export default function StudentRegistrationScreen() {
     email: '',
     name: '',
     image: '',
+    phone: '',
     facultyId: 0,
     majorId: 0,
     studentCode: '',
@@ -103,6 +106,11 @@ export default function StudentRegistrationScreen() {
     },
     studentCode: {
       textError: t('RegisterStudentComponent.errorStudentCodeEmpty'),
+      isVisible: false,
+      isError: true
+    },
+    phone: {
+      textError: t('RegisterStudentComponent.errorPhoneEmpty'),
       isVisible: false,
       isError: true
     },
@@ -238,6 +246,43 @@ export default function StudentRegistrationScreen() {
     },
     [validate]
   )
+  const handlePhoneChange = useCallback(
+    (value: string) => {
+      setStudent({ ...student, phone: value })
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: t('RegisterStudentComponent.errorPhoneEmpty'),
+            isVisible: true
+          }
+        })
+      } else if (!isPhone(value)) {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: t('RegisterStudentComponent.errorPhoneNotFormat'),
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: false,
+            isVisible: false
+          }
+        })
+      }
+    },
+    [validate]
+  )
+
   const handleCheckEmail = useCallback(() => {
     axios
       .post(SERVER_ADDRESS + `api/users/check?email=${student.email}`)
@@ -528,6 +573,21 @@ export default function StudentRegistrationScreen() {
             textError={validate.studentCode?.textError}
             isError={validate.studentCode?.isError}
             isVisible={validate.studentCode?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={student.phone}
+            title={t('RegisterStudentComponent.titlePhone')}
+            placeholder={t('RegisterStudentComponent.placeholderPhone')}
+            onChangeText={(value) => handlePhoneChange(value)}
+            textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.phone?.textError}
+            isError={validate.phone?.isError}
+            isVisible={validate.phone?.isVisible}
           />
 
           <TextInputWithTitle
