@@ -7,5 +7,6 @@ export interface NotificationModel {
   type: string
   data: string
   status: string
-  user: User
+  dataValue: any | null
+  userInteracted: any | null
 }

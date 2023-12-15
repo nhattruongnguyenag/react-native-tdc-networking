@@ -22,7 +22,7 @@ import { TOKEN_KEY, USER_LOGIN_KEY } from '../constants/KeyValue'
 import { setIsLogout, setUserLogin } from '../redux/Slice'
 import { Faculty } from '../types/Faculty'
 import { useTranslation } from 'react-multi-lang'
-import { FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { BUSINESS_DASHBOARD_SCREEN, FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppDispatch } from '../redux/Hook'
 import { Business } from '../types/Business'
@@ -80,7 +80,7 @@ export default function LoginScreen() {
               AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data))
               dispatch(setUserLogin(response.data.data))
               dispatch(setIsLogout(false))
-              navigation.navigate(TOP_TAB_NAVIGATOR)
+              navigation.navigate(BUSINESS_DASHBOARD_SCREEN)
             }
           })
       })
