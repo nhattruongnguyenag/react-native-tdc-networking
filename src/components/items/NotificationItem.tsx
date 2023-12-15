@@ -110,7 +110,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case CREATE_SURVEY:
                 setValue({
                     ...value,
-                    defaultImage: '',
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.create_survey'),
                     image: props.userInteracted.image,
@@ -303,12 +303,12 @@ export default function NotificationItem(props: NotificatonsType) {
                 style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
             >
                 <View style={styles.cont}>
-                    {value.image != '' ? (
+                    {value.image ? (
                         <Image style={styles.image} source={{ uri: SERVER_ADDRESS + 'api/images/' + value.image }} />
                     ) : (
                         value.defaultImage == 'admin' ?
                             <Image style={styles.image} source={require('../../assets/splash/logo.png')} /> :
-                            <DefaultAvatar size={70} identifer={value.defaultImage[0]} />
+                            <DefaultAvatar size={60} identifer={value.defaultImage[0]} />
                     )}
                     <View style={styles.content}>
                         <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>
