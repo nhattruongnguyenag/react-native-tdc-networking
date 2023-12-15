@@ -1,31 +1,51 @@
 import { View, Text, Pressable, StyleSheet, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, { useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu'
 import Icon1 from 'react-native-vector-icons/Entypo'
 import { useTranslation } from 'react-multi-lang';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { PROFILE_SCREEN } from '../../constants/Screen';
+import { PROFILE_SCREEN, SURVEY_CONDUCT_SCREEN } from '../../constants/Screen';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../constants/SystemConstant';
 import { useAppSelector } from '../../redux/Hook';
 import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 import { User } from '../../types/User';
+import { Avatar } from 'react-native-paper';
+import DefaultAvatar from '../common/DefaultAvatar';
+import { useIsFocused } from '@react-navigation/native';
+import { ACCEPT_POST, CHANGE_PASSWORD_SUCCESS, CREATE_SURVEY, POST_LOG, REGISTER_SUCCESS, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_CHANGE_LANGUAGE, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_FOLLOW, USER_LIKE_POST, USER_REPLY_COMMENT, USER_UPDATE } from '../../constants/TypeNotification';
 
 export interface NotificatonsType {
     id: any
     status: string
-    image: string
-    data: string
+    dataValue: any
     type: string
     createdAt: any
     content: string
-    user: any
+    userInteracted: any
     handleItem: (id: number) => void;
     handleIsRead: (id: number) => void;
     handleDelNotification: (id: number) => void;
+    handleItemCanNotClick: (id: number) => void;
+}
+
+export interface Value {
+    header: string
+    body: string
+    image: string
+    group: string
+    defaultImage: string
+    time: string
+    canClick: boolean
+    // header: tên của những thông báo có người tương tác
+    // body: chứa nội dung thông báo
+    // image: chứa hình của người tương tác hoặc là của mình
+    // group: chỉ những thông báo có trả về bài viết ms có tên nhóm
+    // defaultImage: chỉ những thông báo trả về do admin xử lý, trả về hình của admin
+    // time: thời gian của thông báo
 }
 
 export default function NotificationItem(props: NotificatonsType) {
@@ -33,34 +53,282 @@ export default function NotificationItem(props: NotificatonsType) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+    const [use, setUse] = useState([])
+    const isFocused = useIsFocused();
+    const [value, setValue] = useState<Value>({
+        header: '',
+        body: '',
+        image: '',
+        group: '',
+        defaultImage: '',
+        time: '',
+        canClick: false,
+    })
 
+    useEffect(() => {
+        checkType()
+    }, [isFocused])
     const checkType = () => {
         switch (props.type) {
-            case 'user':
-                return <Text>Doanh nghiệp A vừa đăng khảo sát</Text>
+            // Thong bao dang ky thanh cong
+            case REGISTER_SUCCESS:
+                // return <Text>Bạn đã đăng ký thành công!</Text>
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.register_success'),
+                    image: '',
+                    group: '',
+                    time: props.createdAt
+                })
                 break
-            // case 
+            // THong báo thay đổi mk
+            case CHANGE_PASSWORD_SUCCESS:
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.change_password_success'),
+                    image: '',
+                    group: '',
+                    time: props.createdAt
+                })
+                break
+            // Cập nhật bài viết cá nhân
+            case UPDATE_POST:
+                setValue({
+                    ...value,
+                    defaultImage: '',
+                    header: '',
+                    body: t('Notifications.update_post'),
+                    image: props.dataValue != null ? props.dataValue.user.image : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Doanh nghiệp đăng khảo sát
+            case CREATE_SURVEY:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
+                    header: props.userInteracted.name,
+                    body: t('Notifications.create_survey'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Bài viết đã lưu
+            case SAVE_POST:
+                setValue({
+                    ...value,
+                    defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.save_post'),
+                    image: '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Người dùng like bài viết của mình
+            case USER_LIKE_POST:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name,
+                    header: props.userInteracted.name,
+                    body: t('Notifications.user_like_post'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Người dùng comment bài viết của mình
+            case USER_COMMENT_POST:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name,
+                    header: props.userInteracted.name,
+                    body: t('Notifications.user_comment_post'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Trả lời comment của mình trong bài viết
+            case USER_REPLY_COMMENT:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name,
+                    header: props.userInteracted.name,
+                    body: t('Notifications.user_reply_comment'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Người trả lời khảo sát của mình
+            case USER_CONDUCT_SURVEY:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name,
+                    header: props.userInteracted.name,
+                    body: t('Notifications.user_conduct_survey'),
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Bài viết không được duyệt
+            case POST_LOG:
+                setValue({
+                    ...value,
+                    defaultImage: 'admin',
+                    header: '',
+                    body: props.dataValue != null ?
+                     t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "' 
+                     : '',
+                    image: '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Bài viết đã được duyệt
+            case ACCEPT_POST:
+                setValue({
+                    ...value,
+                    defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.accept_post'),
+                    image: '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Cập nhật trang cá nhân 
+            case USER_UPDATE:
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.user_update'),
+                    image: '',
+                    group: '',
+                    time: props.createdAt
+                })
+                break
+            // Có người follow mình
+            case USER_FOLLOW:
+                setValue({
+                    ...value,
+                    defaultImage: props.userInteracted.name,
+                    header: props.userInteracted.name,
+                    body: t('Notifications.user_follow'),
+                    image: props.userInteracted.image,
+                    group: '',
+                    time: props.createdAt
+                })
+                break
+            // Thay đổi ngôn ngữ
+            case USER_CHANGE_LANGUAGE:
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: t('Notifications.user_change_language'),
+                    image: '',
+                    group: '',
+                    time: props.createdAt
+                })
+                break
+            // Thông báo cho người nộp tuyển dụng
+            case USER_APPLY_JOB:
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
+                    image: props.dataValue != null ? props.dataValue.studentAvatar : '',
+                    group: '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
+            case USER_CREATE_WATCH_JOB:
+                setValue({
+                    ...value, defaultImage: '',
+                    header: props.userInteracted.name,
+                    body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
+                    image: props.userInteracted.image,
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    time: props.createdAt,
+                    canClick: true
+                })
+                break
+            case 'user_update_avatar':
+                setValue({
+                    ...value, defaultImage: 'admin',
+                    header: '',
+                    body: 'Bạn vừa cập nhật ảnh nền',
+                    image: '',
+                    group: '',
+                    time: props.createdAt
+                })
+                break
+            default: <></>
+                break
         }
-        
-    }
 
+    }
+    const handleConductNow = (surveyPostId: number, notificationId: number) => {
+        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })   
+        try {
+            axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
+              id: notificationId,
+              userId: userLogin?.id
+            })
+          } catch (error) {
+            console.error('Error updating name:', error)
+          }  
+    }
     return (
         <View>
             <Pressable
-                onPress={() => props.handleItem(props.id)}
+                onPress={() => value.canClick == true ? props.handleItem(props.id) : props.handleItemCanNotClick(props.id)}
                 style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
             >
                 <View style={styles.cont}>
-                    <Image
-                        style={styles.image}
-                        source={{
-                            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
-                        }}
-                    />
+                    {value.image ? (
+                        <Image style={styles.image} source={{ uri: SERVER_ADDRESS + 'api/images/' + value.image }} />
+                    ) : (
+                        value.defaultImage == 'admin' ?
+                            <Image style={styles.image} source={require('../../assets/splash/logo.png')} /> :
+                            <DefaultAvatar size={60} identifer={value.defaultImage[0]} />
+                    )}
                     <View style={styles.content}>
-                        <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>{props.type}</Text>
-                        {/* {props.content.length > 150 ? `${props.content.substring(0, 150)}...` : props.content} */}
-                        <Text style={styles.tg}>{moment(props.createdAt).fromNow()}</Text>
+                        <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>
+                            <Text style={styles.nameTxt}>{value.header}</Text>
+                            {value.body}
+                            {value.group != '' ? t('Notifications.in_group') : '.'}
+                            <Text style={styles.nameTxt}> {value.group != '' ? (value.group) + '.' : ''}</Text>
+                        </Text>
+                        {
+                            props.type == 'create_survey' ?
+                                <Pressable 
+                                onPress={() =>{
+                                    handleConductNow(props.dataValue.id, props.id)
+                                    } } style={styles.surveyBtn}>
+                                    <Text style={styles.surveyTxt}>{t('Notifications.survey_txt')}</Text>
+                                </Pressable>
+                                : null
+
+                        }
+                        <Text style={styles.tg}>{moment(value.time).fromNow()}</Text>
                     </View>
                 </View>
                 <Menu style={styles.menu} key={props.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
@@ -82,6 +350,9 @@ export default function NotificationItem(props: NotificatonsType) {
 }
 
 const styles = StyleSheet.create({
+    nameTxt: {
+        fontWeight: 'bold',
+    },
     item: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -101,8 +372,8 @@ const styles = StyleSheet.create({
         marginBottom: 1
     },
     image: {
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         borderRadius: 50,
         paddingVertical: 20,
         borderColor: '#0065ff',
@@ -133,5 +404,20 @@ const styles = StyleSheet.create({
         paddingTop: 7,
         paddingBottom: 7,
         paddingLeft: 5
+    },
+    surveyBtn: {
+        backgroundColor: '#0065ff',
+        marginTop: 5,
+        marginBottom: 5,
+
+        width: '50%',
+        height: 30,
+        borderRadius: 6,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    surveyTxt: {
+        fontWeight: 'bold',
+        color: '#ffffff'
     }
 })

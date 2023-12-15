@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import NormalOptionItem from '../components/option/NormalOptionItem'
 import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
-import { useAppDispatch } from '../redux/Hook';
+import { useAppDispatch, useAppSelector } from '../redux/Hook';
 import { setDefaultLanguage } from '../redux/Slice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LABEL_LANGUAGE } from '../constants/KeyValue';
+import { DEFAULT_LANGUAGE, LABEL_LANGUAGE } from '../constants/KeyValue';
 import { useTranslation } from 'react-multi-lang';
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../constants/SystemConstant';
 const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
@@ -22,6 +24,7 @@ export default function ApplicationOptionScreen() {
   const [isFocus, setIsFocus] = useState(false);
   const [label, setLabel] = useState('Vietnamese');
   const t = useTranslation()
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
 
   const openModal = () => {
     setModalVisible(true);
@@ -33,22 +36,36 @@ export default function ApplicationOptionScreen() {
 
 
   const handleChangeLangue = () => {
-    dispatch(setDefaultLanguage(language))
-    AsyncStorage.setItem(LABEL_LANGUAGE, JSON.stringify(label))
-    setModalVisible(false)
+    axios.post(`${SERVER_ADDRESS}api/option/language`,{
+      userId: userLogin?.id,
+      value: language
+    }).then((response) => {
+      dispatch(setDefaultLanguage(language))
+      AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(language))
+      setModalVisible(false)
+    })
   }
 
   useEffect(() => {
-    AsyncStorage.getItem(LABEL_LANGUAGE)
-      .then((json) => {
-        if (json) {
-          const label_ = JSON.parse(json)
-          
-          if (label_) {
-            setLabel(label_)
-          }
-        }
-      })
+    axios.post(`${SERVER_ADDRESS}api/option/get`,{
+      userId: userLogin?.id,
+      optionKey: 'language'
+    }).then((response) => {
+      dispatch(setDefaultLanguage(response.data.data.value))
+      AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(response.data.data.value))
+      switch (response.data.data.value) {
+        case 'vi':
+          setLabel('Vietnamese')
+          break;
+        case 'en':
+          setLabel('English')
+          break;
+        case 'ja':
+          setLabel('Japanese')
+        default:
+          break;
+      }
+    })
   },[])
 
   const renderLabel = () => {

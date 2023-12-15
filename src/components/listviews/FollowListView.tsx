@@ -12,7 +12,7 @@ export interface FollowListViewProps {
     handleFollow: (userId: number) => void;
 }
 
-export default function ConversationListView({ data, handleFollow }: FollowListViewProps) {
+export default function FollowListView({ data, handleFollow }: FollowListViewProps) {
     return (
         <ScrollView>
             {

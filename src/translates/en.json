@@ -233,7 +233,8 @@
         "manageJobApply": "Manage job applications",
         "pendingPostScreen": "Pending posts",
         "detailSurveyScreen": "Question details",
-        "studentAndFacultyScreen": "Student discussion group"
+        "studentAndFacultyScreen": "Student discussion group",
+        "detailPost": "Notification details"
     },
     "AddQuestionScreen": {
         "textButtonGoBack": "Back",
@@ -698,5 +699,25 @@
         "vietnamese": "Vietnamese",
         "english": "English",
         "japanese": "Japanese"
+    },
+    "Notifications": {
+        "register_success": "Welcome to TDC Social Network!",
+        "change_password_success": "You have successfully changed your password!",
+        "update_post": "You have updated a post",
+        "create_survey": " has created a survey",
+        "save_post": "You have saved a post",
+        "user_like_post": " has liked your post",
+        "user_comment_post": " has commented on your post",
+        "user_reply_comment": " has replied to your comment",
+        "user_conduct_survey": " has conducted your survey",
+        "post_log": "Your post has been rejected because ",
+        "accept_post": "Your post has been approved",
+        "user_update": "You have successfully updated your account information",
+        "user_follow": " has started following you",
+        "user_change_language": "You have successfully changed the language",
+        "user_apply_job": "You have applied for the job posting:",
+        "user_create_watch_job": " has applied for the job posting:",
+        "in_group": " in",
+        "survey_txt": "Survey now >>"
     }
 }

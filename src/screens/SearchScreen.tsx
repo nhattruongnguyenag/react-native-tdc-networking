@@ -69,17 +69,13 @@ export default function SearchScreen() {
 
   const onMessageFindUserReceived = (payload: any) => {
     //kiem tra subjects
-    if (subjects == 'user') {
       console.log(JSON.parse(payload.body));
       setMasterData(JSON.parse(payload.body))
-    }
   }
 
   const onMessageFindPostReceived = (payload: any) => {
-    if (subjects == 'post') {
       console.log(JSON.parse(payload.body));
       setMasterData(JSON.parse(payload.body))
-    }
   }
 
   useEffect(() => {
@@ -166,7 +162,7 @@ export default function SearchScreen() {
         break
       case 'post':
         return (
-          <ScrollView>
+          <>
             {masterData != null &&
               masterData.map((item: any) => (
                 <CustomizePost
@@ -197,7 +193,7 @@ export default function SearchScreen() {
                   handleDelete={handleDelete}
                   active={0} />
               ))}
-          </ScrollView>
+          </>
         )
         break
       default:
@@ -254,9 +250,9 @@ export default function SearchScreen() {
         </View>
       </View>
       <MenuProvider>
-        <>
+        <ScrollView>
           {checkType()}
-        </>
+        </ScrollView>
       </MenuProvider>
     </View>
   )
