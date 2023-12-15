@@ -100,7 +100,7 @@ export default function CreateRecruitmentScreen() {
     userId: userLogin?.id ?? -1,
     type: 'tuyen-dung',
     title: '',
-    salary: -1,
+    salary: NaN,
     benefit: '',
     description: '',
     employmentType: '',
@@ -278,172 +278,176 @@ export default function CreateRecruitmentScreen() {
 
   return (
     <SafeAreaView style={styles.body}>
-      {
-        isFetching && recruitmentId !== -1 ? <Loading title='Loading...' />
-          :
-          <ScrollView>
-            <TextInputWithTitle
-              multiline
-              defaultValue={recruitmentModel?.title}
-              title={t('RecruitmentScreen.recruitmentSaveTitleTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveTitlePlaceholder')}
-              onChangeText={(value) => onTitleChangeText(value)}
-            />
+      {isFetching && recruitmentId !== -1 ? (
+        <Loading title='Loading...' />
+      ) : (
+        <ScrollView>
+          <TextInputWithTitle
+            multiline
+            defaultValue={recruitmentModel?.title}
+            title={t('RecruitmentScreen.recruitmentSaveTitleTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveTitlePlaceholder')}
+            onChangeText={(value) => onTitleChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.title?.textError)}
-              isError={validate.title?.isError}
-              isVisible={validate.title?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.title?.textError)}
+            isError={validate.title?.isError}
+            isVisible={validate.title?.isVisible}
+          />
 
-            <TextInputWithTitle
-              defaultValue={recruitmentModel?.employmentType}
-              title={t('RecruitmentScreen.recruitmentSaveSaveEmploymentTypeTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveEmploymentTypePlaceholder')}
-              onChangeText={(value) => onEmploymentTypeChangeText(value)}
-            />
+          <TextInputWithTitle
+            defaultValue={recruitmentModel?.employmentType}
+            title={t('RecruitmentScreen.recruitmentSaveSaveEmploymentTypeTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveEmploymentTypePlaceholder')}
+            onChangeText={(value) => onEmploymentTypeChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.employmentType?.textError)}
-              isError={validate.employmentType?.isError}
-              isVisible={validate.employmentType?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.employmentType?.textError)}
+            isError={validate.employmentType?.isError}
+            isVisible={validate.employmentType?.isVisible}
+          />
 
-            <TextInputWithTitle
-              defaultValue={recruitmentModel.expiration}
-              textInputRef={expirationRef}
-              onFocus={() => {
-                setShowDatePicker(true);
-              }}
-              title={t('RecruitmentScreen.recruitmentSaveExpirationTitle')}
-              placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
-            />
+          <TextInputWithTitle
+            defaultValue={recruitmentModel.expiration}
+            textInputRef={expirationRef}
+            onFocus={() => {
+              setShowDatePicker(true)
+            }}
+            title={t('RecruitmentScreen.recruitmentSaveExpirationTitle')}
+            placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.expiration?.textError)}
-              isError={validate.expiration?.isError}
-              isVisible={validate.expiration?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.expiration?.textError)}
+            isError={validate.expiration?.isError}
+            isVisible={validate.expiration?.isVisible}
+          />
 
-            <DatePicker
-              modal
-              mode="datetime"
-              locale={t('RecruitmentScreen.recruitmentSaveExpirationPickerLocale')}
-              open={showDatePicker}
-              date={new Date()}
-              onConfirm={(date) => {
-                setRecruitmentModel({
-                  ...recruitmentModel,
-                  expiration: moment(date).format('YYYY-MM-DD HH:mm:ss')
-                });
-                expirationRef.current?.blur();
-                setShowDatePicker(false);
-              }}
-              onCancel={() => {
-                expirationRef.current?.blur();
-                setShowDatePicker(false);
-              }}
-            />
+          <DatePicker
+            modal
+            mode='datetime'
+            locale={t('RecruitmentScreen.recruitmentSaveExpirationPickerLocale')}
+            open={showDatePicker}
+            date={new Date()}
+            onConfirm={(date) => {
+              setRecruitmentModel({
+                ...recruitmentModel,
+                expiration: moment(date).format('YYYY-MM-DD HH:mm:ss')
+              })
+              expirationRef.current?.blur()
+              setShowDatePicker(false)
+            }}
+            onCancel={() => {
+              expirationRef.current?.blur()
+              setShowDatePicker(false)
+            }}
+          />
 
-            <TextInputWithTitle
-              multiline
-              defaultValue={recruitmentModel?.location}
-              numberOfLine={3}
-              textInputStyle={{ textAlignVertical: 'top' }}
-              title={t('RecruitmentScreen.recruitmentSaveLocationTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveLocationPlaceholder')}
-              onChangeText={(value) => onLocationChangeText(value)}
-            />
+          <TextInputWithTitle
+            multiline
+            defaultValue={recruitmentModel?.location}
+            numberOfLine={3}
+            textInputStyle={{ textAlignVertical: 'top' }}
+            title={t('RecruitmentScreen.recruitmentSaveLocationTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveLocationPlaceholder')}
+            onChangeText={(value) => onLocationChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.location?.textError)}
-              isError={validate.location?.isError}
-              isVisible={validate.location?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.location?.textError)}
+            isError={validate.location?.isError}
+            isVisible={validate.location?.isVisible}
+          />
 
-            <TextInputWithTitle
-              multiline
-              defaultValue={recruitmentModel?.description}
-              numberOfLine={5}
-              textInputStyle={{ textAlignVertical: 'top' }}
-              title={t('RecruitmentScreen.recruitmentSaveDescTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveDescPlaceholder')}
-              onChangeText={(value) => onDescriptionChangeText(value)}
-            />
+          <TextInputWithTitle
+            multiline
+            defaultValue={recruitmentModel?.description}
+            numberOfLine={5}
+            textInputStyle={{ textAlignVertical: 'top' }}
+            title={t('RecruitmentScreen.recruitmentSaveDescTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveDescPlaceholder')}
+            onChangeText={(value) => onDescriptionChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.description?.textError)}
-              isError={validate.description?.isError}
-              isVisible={validate.description?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.description?.textError)}
+            isError={validate.description?.isError}
+            isVisible={validate.description?.isVisible}
+          />
 
-            <TextInputWithTitle
-              keyboardType='number-pad'
-              defaultValue={recruitmentModel?.salary === -1 ? '' : recruitmentModel?.salary.toString()}
-              title={t('RecruitmentScreen.recruitmentSaveSallaryTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveSallaryPlaceholder')}
-              onChangeText={(value) => onSalaryChangeText(value)}
-            />
+          <TextInputWithTitle
+            keyboardType='number-pad'
+            defaultValue={Number.isNaN(recruitmentModel.salary) ? '' : recruitmentModel.salary.toString()}
+            title={t('RecruitmentScreen.recruitmentSaveSallaryTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveSallaryPlaceholder')}
+            onChangeText={(value) => onSalaryChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.salary?.textError)}
-              isError={validate.salary?.isError}
-              isVisible={validate.salary?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.salary?.textError)}
+            isError={validate.salary?.isError}
+            isVisible={validate.salary?.isVisible}
+          />
 
-            <TextInputWithTitle
-              multiline
-              numberOfLine={5}
-              defaultValue={recruitmentModel?.requirement}
-              textInputStyle={{ textAlignVertical: 'top' }}
-              title={t('RecruitmentScreen.recruitmentSaveRequirementTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentSaveRequirementPlaceholder')}
-              onChangeText={(value) => onRequirementChangeText(value)}
-            />
+          <TextInputWithTitle
+            multiline
+            numberOfLine={5}
+            defaultValue={recruitmentModel?.requirement}
+            textInputStyle={{ textAlignVertical: 'top' }}
+            title={t('RecruitmentScreen.recruitmentSaveRequirementTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentSaveRequirementPlaceholder')}
+            onChangeText={(value) => onRequirementChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.requirement?.textError)}
-              isError={validate.requirement?.isError}
-              isVisible={validate.requirement?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.requirement?.textError)}
+            isError={validate.requirement?.isError}
+            isVisible={validate.requirement?.isVisible}
+          />
 
-            <TextInputWithTitle
-              multiline
-              numberOfLine={5}
-              defaultValue={recruitmentModel?.benefit}
-              textInputStyle={{ textAlignVertical: 'top' }}
-              title={t('RecruitmentScreen.recruitmentBenefitTitle')}
-              placeholder={t('RecruitmentScreen.recruitmentBenefitPlaceholder')}
-              onChangeText={(value) => onBenefitChangeText(value)}
-            />
+          <TextInputWithTitle
+            multiline
+            numberOfLine={5}
+            defaultValue={recruitmentModel?.benefit}
+            textInputStyle={{ textAlignVertical: 'top' }}
+            title={t('RecruitmentScreen.recruitmentBenefitTitle')}
+            placeholder={t('RecruitmentScreen.recruitmentBenefitPlaceholder')}
+            onChangeText={(value) => onBenefitChangeText(value)}
+          />
 
-            <TextValidate
-              customStyle={{ marginLeft: 10 }}
-              textError={t(validate.benefit?.textError)}
-              isError={validate.benefit?.isError}
-              isVisible={validate.benefit?.isVisible}
-            />
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={t(validate.benefit?.textError)}
+            isError={validate.benefit?.isError}
+            isVisible={validate.benefit?.isVisible}
+          />
 
-            <Button
-              loading={recruitmentModel.id ? updateRecruitmentPostResponse.isLoading : createRecruitmentPostResponse.isLoading}
-              icon="plus"
-              mode="contained"
-              rippleColor={'#0065FF80'}
-              buttonColor={'#0065FF'}
-              style={styles.buttonCreateRecruitment}
-              onPress={() => onBtnFinishPress()}
-            >
-              <Text style={styles.buttonCreateRecruitmentTitle}>{t('RecruitmentScreen.recruitmentSaveCompleteButton')}</Text>
-            </Button>
-          </ScrollView>
-      }
+          <Button
+            loading={
+              recruitmentModel.id ? updateRecruitmentPostResponse.isLoading : createRecruitmentPostResponse.isLoading
+            }
+            icon='plus'
+            mode='contained'
+            rippleColor={'#0065FF80'}
+            buttonColor={'#0065FF'}
+            style={styles.buttonCreateRecruitment}
+            onPress={() => onBtnFinishPress()}
+          >
+            <Text style={styles.buttonCreateRecruitmentTitle}>
+              {t('RecruitmentScreen.recruitmentSaveCompleteButton')}
+            </Text>
+          </Button>
+        </ScrollView>
+      )}
     </SafeAreaView>
   )
 }
