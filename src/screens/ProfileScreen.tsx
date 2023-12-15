@@ -4,7 +4,7 @@ import { API_URL_DELETE_POST, API_URL_FOLLOW, API_URL_LIKE, API_URL_SAVE_POST } 
 import CustomizePost from '../components/post/CustomizePost';
 import { LikeAction } from '../types/LikeActions';
 import { useAppDispatch, useAppSelector } from '../redux/Hook';
-import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setImagesUpload, setSelectConversation } from '../redux/Slice';
+import { goToProfileScreen, setCurrentScreenNowIsProfileScreen, setSelectConversation } from '../redux/Slice';
 import CustomizeProfile from '../components/profile/CustomizeProfile';
 import { CALL_ACTION, CLICK_CAMERA_BACKGROUND_EVENT, FOLLOW_ACTION, MESSENGER_ACTION, SEE_AVATAR, SEE_BACKGROUND } from '../constants/Variables';
 import { MESSENGER_SCREEN, OPTION_SCREEN } from '../constants/Screen';
@@ -23,7 +23,6 @@ import { deletePostAPI, followAPI, likePostAPI, savePostAPI, updateImageUserProf
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
 import { ToastMessenger } from '../utils/ToastMessenger';
 import { useTranslation } from 'react-multi-lang';
-import CustomizedImagePicker from '../components/CustomizedImagePicker';
 import ActionSheet from 'react-native-actionsheet';
 import CustomizeModalShowBackgroundUpdate from '../components/modal/CustomizeModalShowBackgroundUpdate';
 import SkeletonPost from '../components/SkeletonPost';
@@ -31,9 +30,13 @@ import { useGetPostsByIdQuery } from '../redux/Service';
 import { getPostActive } from '../utils/GetPostActive';
 import { getFacultyTranslated } from '../utils/GetFacultyTranslated ';
 import { Post } from '../types/Post';
+import ImagePicker from '../components/ImagePicker';
+import { handleUploadImage } from '../utils/ImageHelper';
+import { Asset } from 'react-native-image-picker';
 
 const ProfileScreen = () => {
     const t = useTranslation();
+    const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
     const route = useRoute<RouteProp<RootStackParamList, 'PROFILE_SCREEN'>>()
     const [imageFocus, setImageFocus] = useState<string>("");
     const { userId, group } = route.params ?? { userId: 0, group: "" };
@@ -49,7 +52,10 @@ const ProfileScreen = () => {
     const [typeAuthorPost, setTypeAuthorPost] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>();
-    const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer);
+    const [userInformation, setUserInfomation] = useState({
+        userId: userLogin?.id ?? 0,
+        avatar: undefined
+    });
     const dispatch = useAppDispatch()
 
     const { data, isFetching } = useGetPostsByIdQuery(
@@ -215,28 +221,23 @@ const ProfileScreen = () => {
 
     const handleShowImageBackgroundUpdate = (flag: boolean) => {
         if (flag) {
-            const data = {
-                userId: userLogin?.id,
-                avatar: undefined,
-                background: imagesUpload !== null ? imagesUpload[0] : undefined
-            }
-            const status = updateImageUserProfile(SERVER_ADDRESS + "api/users/change/image", data);
-            setLoadingBackground(!loadingBackground);
+            handleUploadImage(imagePicker ?? [], (data) => {
+                const status = updateImageUserProfile(SERVER_ADDRESS + "api/users/change/image", { ...userInformation, background: data[0] });
+            })
         }
-        dispatch(setImagesUpload([]));
+        setImagePicker(null);
     }
 
     return (
         <View>
             {
-                imagesUpload !== null && <>
-                    {
-                        (imagesUpload?.length !== 0 && isFocused) && <CustomizeModalShowBackgroundUpdate
-                            t={t}
-                            image={imagesUpload?.length !== 0 ? imagesUpload[0] : ""}
-                            handleShowImageBackgroundUpdate={handleShowImageBackgroundUpdate} />
-                    }
-                </>
+                Boolean(imagePicker) && isFocused && (
+                    <CustomizeModalShowBackgroundUpdate
+                        t={t}
+                        image={(imagePicker?.[0]?.uri) ?? ''}
+                        handleShowImageBackgroundUpdate={handleShowImageBackgroundUpdate}
+                    />
+                )
             }
             {
                 isLoading ? <SkeletonPost /> : <>
@@ -288,7 +289,12 @@ const ProfileScreen = () => {
                             }
                         </View>
                     </ScrollView>
-                    <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                    <ImagePicker
+                        optionsRef={(ref) => setImagePickerOption(ref)}
+                        onResult={(result) => {
+                            setImagePicker(result)
+                        }}
+                    />
                 </>
             }
         </View>

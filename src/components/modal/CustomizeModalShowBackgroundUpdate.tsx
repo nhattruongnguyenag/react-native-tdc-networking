@@ -2,7 +2,6 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import React, { memo } from 'react'
 import { COLOR_GREY, COLOR_WHITE } from '../../constants/Color'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../utils/SystemDimensions'
-import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useTranslation } from 'react-multi-lang'
 
 interface ModalBigImageShowType {
@@ -18,7 +17,7 @@ const CustomizeModalShowBackgroundUpdate = (props: Readonly<ModalBigImageShowTyp
                 <View style={styles.wrapperImage}>
                     <Image
                         style={styles.image}
-                        source={{ uri: SERVER_ADDRESS + `api/images/${props.image}` }} />
+                        source={{ uri: props.image }} />
                     <View style={styles.wrapperButton}>
                         <TouchableOpacity
                             onPress={() => props.handleShowImageBackgroundUpdate(false)}
