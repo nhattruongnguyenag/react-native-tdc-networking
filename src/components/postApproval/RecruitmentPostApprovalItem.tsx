@@ -27,14 +27,16 @@ export default function RecruitmentPostApprovalItem(props: PostApprovalItemProps
     const t = useTranslation()
 
     return (
-        <CustomizeRecruitmentPost
-            id={recruitmentPost.id}
-            location={recruitmentPost.location ?? t('PostApproveItem.isLoading')}
-            title={recruitmentPost.title ?? t('PostApproveItem.isLoading')}
-            salary={recruitmentPost.salary ? String(recruitmentPost.salary.toLocaleString()) : ''}
-            employmentType={recruitmentPost.employmentType ?? t('PostApproveItem.isLoading')}
-            handleClickBtnSeeDetailEvent={() => handleClickBtnRecruitmentDetailEvent(recruitmentPost.id)}
-            createdAt={recruitmentPost.createdAt ?? new Date()}
-        />
+      <CustomizeRecruitmentPost
+        id={recruitmentPost.id ?? -1}
+        location={recruitmentPost.location ?? ''}
+        title={recruitmentPost.title ?? ''}
+        salary={recruitmentPost.salary ? recruitmentPost.salary.toLocaleString() : ''}
+        employmentType={recruitmentPost.employmentType ?? ''}
+        handleClickBtnSeeDetailEvent={handleClickBtnRecruitmentDetailEvent}
+        createdAt={recruitmentPost.timeCreatePost}
+        current={t('RecruitmentPost.recruitmentPostCurrency')}
+        textButton={t('RecruitmentPost.recruitmentPostButtonSeeDetail')}
+      />
     )
 }

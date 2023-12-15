@@ -32,7 +32,6 @@ import { Student } from '../types/Student'
 import { Token } from '../types/Token'
 import { isEmail, isPassword } from '../utils/ValidateUtils'
 
-// man hinh dang nhap
 export default function LoginScreen() {
   const t = useTranslation()
   const dispatch = useAppDispatch()
