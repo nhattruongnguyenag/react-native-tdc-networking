@@ -695,7 +695,7 @@
     },
     "NotificationsComponent": {
         "notification": "Thông báo",
-        "readAll": "Đánh dấu tất cả đã đọc",
+        "readAll": "Đọc tất cả",
         "deleteNotification": "Xóa thông báo",
         "unReadNotification": "Đánh dấu chưa đọc",
         "search": "Tìm kiếm thông báo ..."

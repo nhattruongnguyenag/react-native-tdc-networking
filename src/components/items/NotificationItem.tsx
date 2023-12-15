@@ -16,7 +16,7 @@ import { User } from '../../types/User';
 import { Avatar } from 'react-native-paper';
 import DefaultAvatar from '../common/DefaultAvatar';
 import { useIsFocused } from '@react-navigation/native';
-import { ACCEPT_POST, CHANGE_PASSWORD_SUCCESS, CREATE_SURVEY, POST_LOG, REGISTER_SUCCESS, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_CHANGE_LANGUAGE, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_FOLLOW, USER_LIKE_POST, USER_REPLY_COMMENT, USER_UPDATE } from '../../constants/TypeNotification';
+import { ACCEPT_POST, CHANGE_PASSWORD_SUCCESS, CREATE_SURVEY, POST_LOG, REGISTER_SUCCESS, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_CHANGE_LANGUAGE, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_FOLLOW, USER_LIKE_POST, USER_REPLY_COMMENT, USER_UPDATE, USER_UPDATE_AVATAR } from '../../constants/TypeNotification';
 
 export interface NotificatonsType {
     id: any
@@ -72,7 +72,6 @@ export default function NotificationItem(props: NotificatonsType) {
         switch (props.type) {
             // Thong bao dang ky thanh cong
             case REGISTER_SUCCESS:
-                // return <Text>Bạn đã đăng ký thành công!</Text>
                 setValue({
                     ...value, defaultImage: 'admin',
                     header: '',
@@ -97,7 +96,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case UPDATE_POST:
                 setValue({
                     ...value,
-                    defaultImage: '',
+                    defaultImage: props.dataValue.user.name.length > 0 ? props.dataValue.user.name[0] : '',
                     header: '',
                     body: t('Notifications.update_post'),
                     image: props.dataValue != null ? props.dataValue.user.image : '',
@@ -136,7 +135,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case USER_LIKE_POST:
                 setValue({
                     ...value,
-                    defaultImage: props.userInteracted.name,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.user_like_post'),
                     image: props.userInteracted.image,
@@ -149,7 +148,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case USER_COMMENT_POST:
                 setValue({
                     ...value,
-                    defaultImage: props.userInteracted.name,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.user_comment_post'),
                     image: props.userInteracted.image,
@@ -162,7 +161,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case USER_REPLY_COMMENT:
                 setValue({
                     ...value,
-                    defaultImage: props.userInteracted.name,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.user_reply_comment'),
                     image: props.userInteracted.image,
@@ -175,7 +174,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case USER_CONDUCT_SURVEY:
                 setValue({
                     ...value,
-                    defaultImage: props.userInteracted.name,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.user_conduct_survey'),
                     image: props.userInteracted.image,
@@ -215,7 +214,8 @@ export default function NotificationItem(props: NotificatonsType) {
             // Cập nhật trang cá nhân 
             case USER_UPDATE:
                 setValue({
-                    ...value, defaultImage: 'admin',
+                    ...value, 
+                    defaultImage: 'admin',
                     header: '',
                     body: t('Notifications.user_update'),
                     image: '',
@@ -227,7 +227,7 @@ export default function NotificationItem(props: NotificatonsType) {
             case USER_FOLLOW:
                 setValue({
                     ...value,
-                    defaultImage: props.userInteracted.name,
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: t('Notifications.user_follow'),
                     image: props.userInteracted.image,
@@ -238,7 +238,8 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thay đổi ngôn ngữ
             case USER_CHANGE_LANGUAGE:
                 setValue({
-                    ...value, defaultImage: 'admin',
+                    ...value, 
+                    defaultImage: 'admin',
                     header: '',
                     body: t('Notifications.user_change_language'),
                     image: '',
@@ -249,7 +250,8 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thông báo cho người nộp tuyển dụng
             case USER_APPLY_JOB:
                 setValue({
-                    ...value, defaultImage: 'admin',
+                    ...value, 
+                    defaultImage: 'admin',
                     header: '',
                     body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
                     image: props.dataValue != null ? props.dataValue.studentAvatar : '',
@@ -261,7 +263,8 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
             case USER_CREATE_WATCH_JOB:
                 setValue({
-                    ...value, defaultImage: '',
+                    ...value, 
+                    defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
                     image: props.userInteracted.image,
@@ -270,20 +273,19 @@ export default function NotificationItem(props: NotificatonsType) {
                     canClick: true
                 })
                 break
-            case 'user_update_avatar':
+            case USER_UPDATE_AVATAR:
                 setValue({
                     ...value, defaultImage: 'admin',
                     header: '',
                     body: 'Bạn vừa cập nhật ảnh nền',
                     image: '',
                     group: '',
-                    time: props.createdAt
+                    time: props.createdAt,
                 })
                 break
             default: <></>
                 break
         }
-
     }
     const handleConductNow = (surveyPostId: number, notificationId: number) => {
         navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })   
@@ -319,7 +321,7 @@ export default function NotificationItem(props: NotificatonsType) {
                         </Text>
                         {
                             props.type == 'create_survey' ?
-                                <Pressable 
+                                <Pressable
                                 onPress={() =>{
                                     handleConductNow(props.dataValue.id, props.id)
                                     } } style={styles.surveyBtn}>

@@ -8,8 +8,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { useEffect, useTransition } from 'react'
-import { StatusBar, Text } from 'react-native'
+import React, { useEffect, useState, useTransition } from 'react'
+import { StatusBar, StyleSheet, Text } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
 import Toast from 'react-native-toast-message'
@@ -62,7 +62,7 @@ import {
   STUDENT_AND_FACULTY_GROUP,
   DETAIL_POST_SCREEN
 } from './constants/Screen'
-import { INITIAL_SCREEN } from './constants/SystemConstant'
+import { INITIAL_SCREEN, SERVER_ADDRESS } from './constants/SystemConstant'
 import { store } from './redux/Store'
 import AcceptScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
@@ -118,6 +118,8 @@ import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
 import UpdateProfile from './screens/UpdateProfile'
 import DetailPost from './screens/DetailPost'
+import { View } from 'react-native-reanimated/lib/typescript/Animated'
+import axios from 'axios'
 
 export type RootStackParamList = {
   ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
@@ -164,7 +166,7 @@ export type RootStackParamList = {
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
   STUDENT_AND_FACULTY_GROUP: undefined
-  DETAIL_POST_SCREEN: {post: any, notificationType: string} | undefined
+  DETAIL_POST_SCREEN: { post: any, notificationType: string } | undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -489,12 +491,22 @@ export function StackNavigator(): JSX.Element {
         }}
         component={StudentAndFacultyGroup}
       />
-      
+
     </RootStack.Navigator>
   )
 }
 // DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
+  const [qty, setQty] = useState(0)
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  setTimeout(() => {
+    axios.post(`${SERVER_ADDRESS}api/notifications/user/count`, {
+      id: userLogin?.id
+    }).then((response) => {
+      setQty(response.data.data)
+    })
+  }, 1000)
+
   return (
     <TopTab.Navigator
       screenOptions={({ route }) => ({
@@ -514,7 +526,13 @@ function TopTabNavigator(): JSX.Element {
             iconName = 'rss'
           }
 
-          return <Icon name={iconName} size={size} color={color} solid={focused} />
+          return <>
+            <Icon name={iconName} size={size} color={color} solid={focused} />
+            {
+              iconName == 'bell' ? <Text style={styles.border}><Text style={styles.qty}>{qty}</Text></Text> : ''
+            }
+
+          </>
         },
         tabBarActiveTintColor: '#0065FF',
         tabBarInactiveTintColor: '#808080',
@@ -548,4 +566,17 @@ function App(): JSX.Element {
   )
 }
 
+const styles = StyleSheet.create({
+  qty: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  border: {
+    position: 'absolute',
+    top: -10,
+    right: -8,
+    borderRadius: 100,
+    backgroundColor: 'red'
+  }
+})
 export default App

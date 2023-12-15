@@ -179,7 +179,7 @@
     },
     "NotificationsComponent": {
         "notification": "お知らせ",
-        "readAll": "すべて既読にする",
+        "readAll": "すべてを読む",
         "deleteNotification": "お知らせを削除",
         "unReadNotification": "未読にする",
         "search": "お知らせを検索..."

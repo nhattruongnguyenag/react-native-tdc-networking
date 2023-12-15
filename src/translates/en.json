@@ -179,7 +179,7 @@
     },
     "NotificationsComponent": {
         "notification": "Notification",
-        "readAll": "Mark all as read",
+        "readAll": "Read all",
         "deleteNotification": "Delete notification",
         "unReadNotification": "Mark as unread",
         "search": "Search notification..."

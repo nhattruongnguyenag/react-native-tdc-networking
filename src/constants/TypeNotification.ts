@@ -14,4 +14,5 @@ export const USER_FOLLOW =  'user_follow'
 export const USER_CHANGE_LANGUAGE =  'user_change_language'
 export const USER_APPLY_JOB =  'user_apply_job'
 export const USER_CREATE_WATCH_JOB =  'user_create_watch_job'
+export const USER_UPDATE_AVATAR =  'user_update_avatar'
 
