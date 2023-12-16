@@ -208,6 +208,7 @@
         "search": "Enter search content..."
     },
     "ToolbarTitle": {
+        "changePasswordScreen": "Change Password",
         "recruitmentDetailScreen": "Recruitment details",
         "topTabNavigator": "TDC Social Network",
         "drawerTabNavigator": "TDC Social Network",

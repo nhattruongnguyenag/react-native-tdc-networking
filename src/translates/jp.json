@@ -208,6 +208,7 @@
         "search": "検索内容を入力..."
     },
     "ToolbarTitle": {
+        "changePasswordScreen": "パスワードを変更",
         "recruitmentDetailScreen": "求人詳細",
         "topTabNavigator": "TDC ソーシャルネットワーク",
         "drawerTabNavigator": "TDC ソーシャルネットワーク",

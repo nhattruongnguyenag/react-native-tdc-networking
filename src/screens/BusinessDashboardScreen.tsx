@@ -29,10 +29,12 @@ import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DEFAULT_LANGUAGE } from '../constants/KeyValue'
+import { useIsFocused } from '@react-navigation/native';
 
 let stompClient: Client
 export default function BusinessDashboardScreen() {
   const t = useTranslation();
+  const isFocused = useIsFocused();
   const code = groupBusiness;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +54,18 @@ export default function BusinessDashboardScreen() {
     }
   );
 
+  useEffect(()=> {
+    setTimeout(() => {
+      axios.post(`${SERVER_ADDRESS}api/option/get`,{
+        userId: userLogin?.id,
+        optionKey: 'language'
+      }).then((response) => {
+        dispatch(setDefaultLanguage(response.data.data.value))
+        AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(response.data.data.value))
+      })
+    }, 6000)
+  })
+
   useEffect(() => {
     if (data) {
       setIsLoading(false);
@@ -62,14 +76,6 @@ export default function BusinessDashboardScreen() {
   }, [data])
 
   useEffect(() => {
-    axios.post(`${SERVER_ADDRESS}api/option/get`,{
-      userId: userLogin?.id,
-      optionKey: 'language'
-    }).then((response) => {
-      dispatch(setDefaultLanguage(response.data.data.value))
-      AsyncStorage.setItem(DEFAULT_LANGUAGE, JSON.stringify(response.data.data.value))
-    })
-
     const getFCMToken = async () => {
       try {
         const token = await messaging().getToken()

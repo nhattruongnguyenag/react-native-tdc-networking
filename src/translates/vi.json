@@ -201,6 +201,7 @@
         "search": "Nhập nội dung tìm kiếm..."
     },
     "ToolbarTitle": {
+        "changePasswordScreen": "Thay đổi mật khẩu",
         "recruitmentDetailScreen": "Chi tiết tuyển dụng",
         "topTabNavigator": "TDC Social Network",
         "drawerTabNavigator": "TDC Social Network",
