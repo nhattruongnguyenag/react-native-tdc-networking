@@ -2,7 +2,7 @@ import CustomizeHeaderProfile from './CustomizeHeaderProfile'
 import { StyleSheet, View } from 'react-native'
 import { COLOR_WHITE } from '../../constants/Color'
 import CustomizeBodyFacultyProfile from './CustomizeBodyFacultyProfile'
-import {TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/Variables'
+import { TYPE_POST_BUSINESS, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../../constants/Variables'
 import CustomizeBodyStudentProfile from './CustomizeBodyStudentProfile'
 import CustomizeBodyBusinessProfile from './CustomizeBodyBusinessProfile'
 import { useNavigation } from '@react-navigation/native'
@@ -37,7 +37,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     position={t("Profile.profileRole") ?? t("Profile.unUpdate")}
                     phone={props.userData.phone ?? t("Profile.unUpdate")}
                     email={props.userData.email ?? t("Profile.unUpdate")}
-                    numberPost={props.data.length ?? 0}
+                    numberPost={props.data ? props.data.length : 0}
                     name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
@@ -54,7 +54,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     phone={props.userData.phone ?? t("Profile.unUpdate")}
                     email={props.userData.email ?? t("Profile.unUpdate")}
                     name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
-                    numberPost={props.data.length ?? 0}
+                    numberPost={props.data ? props.data.length : 0}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
                 break;
@@ -66,7 +66,7 @@ const CustomizeProfile = (props: CustomizeProfileType) => {
                     phone={props.userData.phone ?? t("Profile.unUpdate")}
                     email={props.userData.email ?? t("Profile.unUpdate")}
                     name={getFacultyTranslated(props.userData.name, t) ?? t("Profile.unUpdate")}
-                    numberPost={props.data.length ?? 0}
+                    numberPost={props.data ? props.data.length : 0}
                     isSameUser={props.userData?.id === userLogin?.id}
                 />
                 break;

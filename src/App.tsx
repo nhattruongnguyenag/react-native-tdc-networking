@@ -8,8 +8,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { useEffect, useTransition } from 'react'
-import { StatusBar, Text } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
 import Toast from 'react-native-toast-message'
@@ -34,26 +34,24 @@ locale.set('vi', require('moment/locale/vi'))
 locale.set('en', require('moment/locale/es'))
 locale.set('ja', require('moment/locale/ja'))
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import moment from 'moment'
 import ApprovalPostScreen from './ApprovalPostScreen'
+import { DEFAULT_LANGUAGE } from './constants/KeyValue'
 import {
   ACCEPT_SCREEN,
   ADD_QUESTION_SCREEN,
   APPLICATION_OPTION_SCREEN,
   APPROVAL_POST_SCREEN,
   BUSINESS_DASHBOARD_SCREEN,
-  BUSINESS_REGISTER_SCREEN,
-  CONVERSATION_SCREEN,
+  BUSINESS_REGISTER_SCREEN, CHANGE_PASSWORD_SCREEN, CONVERSATION_SCREEN,
   CREATE_NORMAL_POST_SCREEN,
   CREATE_RECRUITMENT_SCREEN,
   CREATE_SURVEY_SCREEN,
-  DETAIL_JOB_APPLY,
-  DRAWER_TAB_NAVIGATOR,
+  DETAIL_JOB_APPLY, DETAIL_POST_SCREEN, DETAIL_SURVEY_SCREEN, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
   FOLLOWING_SCREEN,
-  FORGOTTEN_PASSWORD_SCREEN,
-  IMAGE_VIEW_SCREEN,
-  INTERMEDIATIOO_SCREEN,
+  FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN,
   JOB_APPLY_SCREEN,
   LIST_FOLLOW_SCREEN,
   LIST_JOB_APPLY_SCREEN,
@@ -68,32 +66,29 @@ import {
   RECRUITMENT_DETAIL_SCREEN,
   REVIEW_SURVEY_POST_SCREEN,
   SEACRH_SCREEN,
-  SPLASH_SCREEN,
-  STUDENT_DISCUSSION_DASHBOARD_SCREEN,
-  STUDENT_REGISTER_SCREEN,
-  UPDATE_PROFILE,
-  SURVEY_CONDUCT_SCREEN,
+  SPLASH_SCREEN, STUDENT_AND_FACULTY_GROUP, STUDENT_DISCUSSION_DASHBOARD_SCREEN,
+  STUDENT_REGISTER_SCREEN, SURVEY_CONDUCT_SCREEN,
   SURVEY_RESULT_SCREEN,
-  TOP_TAB_NAVIGATOR,
-  DETAIL_SURVEY_SCREEN,
-  STUDENT_AND_FACULTY_GROUP,
-  DETAIL_POST_SCREEN,
-  CHANGE_PASSWORD_SCREEN
+  TOP_TAB_NAVIGATOR, UPDATE_PROFILE
 } from './constants/Screen'
 import { INITIAL_SCREEN } from './constants/SystemConstant'
+import { useAppSelector } from './redux/Hook'
+import { useGetQualityNotificationQuery } from './redux/Service'
 import { store } from './redux/Store'
 import AcceptScreen from './screens/AcceptScreen'
 import AddQuestionScreen from './screens/AddQuestionScreen'
 import ApplicationOptionScreen from './screens/ApplicationOptionScreen'
 import BusinessDashboardScreen from './screens/BusinessDashboardScreen'
 import BusinessRegistrationScreen from './screens/BusinessRegistrationScreen'
+import ChangePasswordScreen from './screens/ChangePasswordScreen'
 import ConversationScreen from './screens/ConversationScreen'
 import CreateNormalPostScreen from './screens/CreateNormalPostScreen'
 import CreateRecruitmentScreen from './screens/CreateRecruitmentScreen'
 import CreateSurveyPostScreen from './screens/CreateSurveyPostScreen'
 import DetailJobApplyScreen from './screens/DetailJobApplyScreen'
+import DetailPost from './screens/DetailPost'
+import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import FacultyDashboardScreen from './screens/FacultyDashboardScreen'
-import MyProfileScreen from './screens/MyProfileScreen'
 import ForgottenPasswordScreen from './screens/ForgottenPasswordScreen'
 import IntermediationScreen from './screens/IntermediationScreen'
 import JobApplyScreen from './screens/JobApplyScreen'
@@ -101,41 +96,31 @@ import ListFollowScreen from './screens/ListFollowScreen'
 import ListJobApplyScreen from './screens/ListJobApplyScreen'
 import ListPostSavedScreen from './screens/ListPostSavedScreen'
 import LoginScreen from './screens/LoginScreen'
+import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
 import MessengerScreen from './screens/MessageScreen'
+import MyProfileScreen from './screens/MyProfileScreen'
 import NotificationScreen from './screens/NotificationScreen'
 import OptionScreen from './screens/OptionScreen'
+import PenddingPostScreen from './screens/PenddingPostScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import RecruitmentDetailScreen from './screens/RecruitmentDetailScreen'
 import ReviewSurveyPostScreen from './screens/ReviewSurveyPostScreen'
 import SearchScreen from './screens/SearchScreen'
 import SplashScreen from './screens/SplashScreen'
+import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
 import StudentDiscussionDashboardScreen from './screens/StudentDiscussionDashboardScreen'
 import StudentRegistrationScreen from './screens/StudentRegistrationScreen'
 import SurveyConductScreen from './screens/SurveyConductScreen'
-import { useAppSelector } from './redux/Hook'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DEFAULT_LANGUAGE } from './constants/KeyValue'
+import SurveyResultScreen from './screens/SurveyResultScreen'
+import UpdateProfile from './screens/UpdateProfile'
+import { Business } from './types/Business'
+import { Conversation } from './types/Conversation'
+import { Faculty } from './types/Faculty'
+import { Student } from './types/Student'
+import { UpdateNormalPost } from './types/UpdateNormalPost'
 
 const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
-import SurveyResultScreen from './screens/SurveyResultScreen'
-import { Conversation } from './types/Conversation'
-import { Student } from './types/Student'
-import { Faculty } from './types/Faculty'
-import { Business } from './types/Business'
-import { NormalPost } from './types/NormalPost'
-import { UpdateNormalPost } from './types/UpdateNormalPost'
-import CustomizeModalImage from './components/modal/CustomizeModalImage'
-import CustomizeModalUserReacted from './components/modal/CustomizeModalUserReacted'
-import CustomizeModalComments from './components/modal/CustomizeModalComments'
-import ManagementJobApplyScreen from './screens/ManagementJobApplyScreen'
-import PenddingPostScreen from './screens/PenddingPostScreen'
-import DetailSurveyPost from './screens/DetailSurveyPostScreen'
-import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
-import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
-import UpdateProfile from './screens/UpdateProfile'
-import DetailPost from './screens/DetailPost'
-import ChangePasswordScreen from './screens/ChangePasswordScreen'
 
 export type RootStackParamList = {
   ACCEPT_SCREEN: { email: string; subject: string; title: string; url: string } | undefined
@@ -501,6 +486,21 @@ export function StackNavigator(): JSX.Element {
 }
 // DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
+  const [qty, setQty] = useState<any>()
+  const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+  const { data, isFetching } = useGetQualityNotificationQuery(
+    {
+      id: userLogin?.id ?? -1
+    },
+    {
+      pollingInterval: 2000
+    }
+  )
+
+  useEffect(() => {
+    setQty(data?.data)
+  }, [data, isFetching])
+
   return (
     <TopTab.Navigator
       screenOptions={({ route }) => ({
@@ -520,7 +520,9 @@ function TopTabNavigator(): JSX.Element {
             iconName = 'rss'
           }
 
-          return <Icon name={iconName} size={size} color={color} solid={focused} />
+          return <>
+            <Icon name={iconName} size={size} color={color} solid={focused} />
+          </>
         },
         tabBarActiveTintColor: '#0065FF',
         tabBarInactiveTintColor: '#808080',
@@ -531,7 +533,9 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={BUSINESS_DASHBOARD_SCREEN} component={BusinessDashboardScreen} />
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
-      <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
+      <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} options={{
+        tabBarBadge: () => qty > 0 && <View style={styles.badgeWrapper}><Text style={[styles.border, {fontSize: qty >= 100 ? 9 : 13}]}>{qty}</Text></View>,
+      }} />
       <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
@@ -554,4 +558,22 @@ function App(): JSX.Element {
   )
 }
 
+const styles = StyleSheet.create({
+  qty: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  badgeWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+    backgroundColor: 'red'
+  },
+  border: {
+    color: '#fff'
+  }
+})
 export default App

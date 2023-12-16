@@ -28,7 +28,7 @@ const FollowerList = () => {
       pollingInterval: 500
     }
   )
-  const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
+  const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/d/g, 'đ')))
 
   const handleFollow = (userFollowId: number) => {
     axios.post(`${SERVER_ADDRESS}api/users/follow`, {
