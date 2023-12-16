@@ -76,10 +76,8 @@ export default function SearchScreen() {
   }
 
   const onMessageFindPostReceived = (payload: any) => {
-    if (subjects == 'post') {
       console.log(JSON.parse(payload.body));
       setMasterData(JSON.parse(payload.body))
-    }
   }
 
   useEffect(() => {
