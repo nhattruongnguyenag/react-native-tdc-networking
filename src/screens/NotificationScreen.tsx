@@ -36,11 +36,10 @@ export default function NotificationScreen() {
       id: userLogin?.id ?? -1
     },
     {
-      pollingInterval: 1000
+      pollingInterval: 800
     }
   )
-  
-  const filter = (data?.data)?.filter(item => (item.content).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/d/g, 'đ')))
+
 
 
   const handleIsRead = (id: number) => {
@@ -67,9 +66,6 @@ export default function NotificationScreen() {
 
     if (notification) {
       switch (notification.type) {
-        case UPDATE_POST:
-          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'update_post' })
-          break
         case CREATE_SURVEY:
           navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'create_survey' })
           break
@@ -136,13 +132,6 @@ export default function NotificationScreen() {
     }
   }
 
-  const handleDelSearch = () => {
-    setSearch('')
-  }
-
-  const handleOpenSearch = () => {
-    setOpenSearch(!openSearch)
-  }
 
 
 
@@ -157,47 +146,15 @@ export default function NotificationScreen() {
             </View>
             <View style={styles.tick}>
               <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
-                <Text style={styles.txtTick}>{t('NotificationsComponent.readAll')}</Text>
+                <Icon name='readme' size={20} color='#ffffff' /><Text style={styles.txtTick}>{t('NotificationsComponent.readAll')}</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.searchBtn}>
-              <TouchableOpacity style={styles.searchButton} onPress={handleOpenSearch}>
-                <Text>
-                  <Icon name='search' size={20} color='#ffffff' />
-                </Text>
-              </TouchableOpacity>
-            </View>
+            
           </View>
-          {openSearch && (
-            <View>
-              <TextInput
-                value={search}
-                style={styles.search}
-                placeholder={t('NotificationsComponent.search')}
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={(i) => setSearch(i)}
-              />
-              {search != '' ? (
-                <Pressable
-                  style={{ position: 'absolute', right: 0, paddingRight: 30, marginTop: 20 }}
-                  onPress={handleDelSearch}
-                >
-                  <Icon2 name='closecircleo' size={18} color='grey' />
-                </Pressable>
-              ) : null}
-            </View>
-          )}
+          
         </View>
         {
-          search == '' ?
             <NotificationListView data={data?.data}
-              handleItem={handleItem}
-              handleDelNotification={handleDelNotification}
-              handleIsRead={handleIsRead}
-              handleItemCanNotClick={handleItemCanNotClick} />
-            :
-            <NotificationListView data={filter}
               handleItem={handleItem}
               handleDelNotification={handleDelNotification}
               handleIsRead={handleIsRead}
@@ -249,16 +206,18 @@ const styles = StyleSheet.create({
   },
   tickButton: {
     backgroundColor: '#0065ff',
+    flexDirection: 'row',
+    justifyContent: 'center',
     width: '100%',
     height: 35,
     borderRadius: 6,
-    justifyContent: 'center',
     alignItems: 'center'
   },
   txtTick: {
     color: '#ffffff',
     fontSize: 13,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: 10
   },
   //Search
   searchBtn: {

@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { PROFILE_SCREEN } from '../../constants/Screen';
+import { SERVER_ADDRESS } from '../../constants/SystemConstant';
+import DefaultAvatar from '../common/DefaultAvatar';
 
 export interface UserItemType {
   id: number;
@@ -46,7 +48,7 @@ export default function UserItem(props: UserItemType) {
   const isNotFollow = () => {
     return (
       <TouchableOpacity style={styles.follow}
-      onPress={() => item.handleFollow(item.id)}
+        onPress={() => item.handleFollow(item.id)}
       >
         <Text style={{ color: 'white', fontWeight: 'bold' }}>{t('UserItem.follow')}</Text>
       </TouchableOpacity>
@@ -59,10 +61,12 @@ export default function UserItem(props: UserItemType) {
       key={item.id}
       onPress={() => navigation.navigate(PROFILE_SCREEN, { userId: item.id, group: item.group })}>
       <View style={styles.item2}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/splash/logo.png')}
-        />
+        {
+          item.image ?
+            <Image style={styles.image} source={{ uri: SERVER_ADDRESS + `api/images/${item.image}` }} />
+            :
+            <DefaultAvatar size={70} identifer={item.name[0]} />
+        }
         <Text style={styles.name}>{item.name}</Text>
       </View>
       <View>{item.isFollow ? isFollowed() : isNotFollow()}</View>
