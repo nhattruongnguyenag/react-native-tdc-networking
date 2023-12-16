@@ -681,7 +681,10 @@
         "textSubjectResetPassword": "パスワードの更新",
         "titleSubjectResetPassword": " パスワードの変更",
         "textAccept": "確認",
-        "textBack": "戻る"
+        "textBack": "戻る",
+        "textTitleNotification": "確認に失敗しました",
+        "textNotificationDes": "このメールは登録されていません",
+        "textPlaceHolderEmail": "メールアドレスを入力して"
     },
     "AcceptScreen": {
         "checkEmail": "メールを確認",
@@ -724,5 +727,21 @@
         "user_create_watch_job": " が次の求人に応募しました:",
         "in_group": " に",
         "survey_txt": "すぐに調査 >>"
+    },
+    "ChangePassword": {
+        "txtBlankNotificationPassword": "パスワードを空白にすることはできません",
+        "txtBlankNotificationNewPassword": "新しいパスワードを空白にすることはできません",
+        "txtFailTypeNotificationNewPassword": "新しいパスワードの形式が正しくありません",
+        "txtNotSameOldPassNotificationNewPassword": "新しいパスワードは古いパスワードと同じであってはなりません",
+        "txtBlankNotificationRePassword": "2 番目の新しいパスワードを空白にすることはできません",
+        "txtIsNotValidNotificationRePassword": "再入力したパスワードが一致しません",
+        "txtNotificationSuccess": "通知",
+        "txtNotificationSuccessDes": "パスワードが正常に更新されました",
+        "txtNotificationFailed": "エラー",
+        "txtNotificationFailedDes": "古いパスワードが一致しません",
+        "textAccept": "確認する",
+        "txtHolderNewPass": "新しいパスワードを入力してください",
+        "txtHolderPass": "古いパスワードを入力してください",
+        "txtHolderReNewPass": "新しいパスワードを入力"
     }
 }

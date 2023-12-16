@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { ACCEPT_SCREEN, APPLICATION_OPTION_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import { InputTextValidate, isBlank, isPassword } from '../utils/ValidateUtils'
 import TextValidate from '../components/common/TextValidate'
 import { useAppSelector } from '../redux/Hook'
@@ -42,17 +42,17 @@ export default function ChangePasswordScreen() {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<ChangePassword>({
     password: {
-      textError: 'Mật khẩu không được để trống',
+      textError: t('ChangePassword.txtBlankNotificationPassword'),
       isVisible: false,
       isError: true
     },
     newPassword: {
-      textError: 'Mật khẩu mới không được để trống',
+      textError: t('ChangePassword.txtBlankNotificationNewPassword'),
       isVisible: false,
       isError: true
     },
     reNewPassword: {
-      textError: 'Mật khâur mới lần hai không được để trống',
+      textError: t('ChangePassword.txtBlankNotificationRePassword'),
       isVisible: false,
       isError: true
     }
@@ -66,7 +66,6 @@ export default function ChangePasswordScreen() {
         password: {
           ...validate.password,
           isError: true,
-          textError: 'Mật khẩu cũ không được để trống',
           isVisible: true
         }
       })
@@ -90,7 +89,6 @@ export default function ChangePasswordScreen() {
         newPassword: {
           ...validate.newPassword,
           isError: true,
-          textError: 'Mật khẩu mới không được để trống',
           isVisible: true
         }
       })
@@ -100,7 +98,7 @@ export default function ChangePasswordScreen() {
         newPassword: {
           ...validate.newPassword,
           isError: true,
-          textError: 'Mật khẩu mới không đúng định dạng',
+          textError: t('ChangePassword.txtFailTypeNotificationNewPassword'),
           isVisible: true
         }
       })
@@ -110,7 +108,7 @@ export default function ChangePasswordScreen() {
         newPassword: {
           ...validate.newPassword,
           isError: true,
-          textError: 'Mật khẩu mới không được trùng với mật khẩu cũ',
+          textError: t('ChangePassword.txtNotSameOldPassNotificationNewPassword'),
           isVisible: true
         }
       })
@@ -134,7 +132,6 @@ export default function ChangePasswordScreen() {
         reNewPassword: {
           ...validate.reNewPassword,
           isError: true,
-          textError: t('RegisterBusinessComponent.errorPasswordEmpty'),
           isVisible: true
         }
       })
@@ -144,7 +141,7 @@ export default function ChangePasswordScreen() {
         reNewPassword: {
           ...validate.reNewPassword,
           isError: true,
-          textError: 'Mật khẩu nhập lại không trùng khớp',
+          textError: t('ChangePassword.txtIsNotValidNotificationRePassword'),
           isVisible: true
         }
       })
@@ -183,10 +180,11 @@ export default function ChangePasswordScreen() {
       })
       .then((response) => {
         setIsLoading(false)
-        console.log(response.data)
+        Alert.alert(t('ChangePassword.txtNotificationSuccess'), t('ChangePassword.txtNotificationSuccessDes'))
+        navigation.navigate(APPLICATION_OPTION_SCREEN)
       })
       .catch((error) => {
-        Alert.alert('Xác nhận thất bại', 'Email này chưa được đăng ký')
+        Alert.alert(t('ChangePassword.txtNotificationFailed'), t('ChangePassword.txtNotificationFailedDes'))
         setIsLoading(false)
       })
   }
@@ -199,7 +197,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='key' />
             <TextInput
               value={data.password}
-              placeholder='Pasword'
+              placeholder={t('ChangePassword.txtHolderPass')}
               style={styles.txtIP}
               onChangeText={(value) => handlePasswordChange(value)}
             ></TextInput>
@@ -215,7 +213,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='retweet' />
             <TextInput
               value={data.newPassword}
-              placeholder='New password'
+              placeholder={t('ChangePassword.txtHolderNewPass')}
               style={styles.txtIP}
               onChangeText={(value) => handleNewPasswordChange(value)}
             ></TextInput>
@@ -231,7 +229,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='redo' />
             <TextInput
               value={data.reNewPassword}
-              placeholder='Re-New Password'
+              placeholder={t('ChangePassword.txtHolderReNewPass')}
               style={styles.txtIP}
               onChangeText={(value) => handleReNewPasswordChange(value)}
             ></TextInput>
@@ -248,7 +246,7 @@ export default function ChangePasswordScreen() {
             style={[styles.btnLogin, { opacity: 1}]}
             onPress={() => onSubmit()}
           >
-            <Text style={styles.txtB}>{t('ForgettenPassword.textAccept')}</Text>
+            <Text style={styles.txtB}>{t('ChangePassword.textAccept')}</Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
         ) : (
@@ -257,7 +255,7 @@ export default function ChangePasswordScreen() {
             style={[styles.btnLogin, { opacity: 0.5 }]}
             onPress={() => onSubmit()}
           >
-            <Text style={styles.txtB}>{t('ForgettenPassword.textAccept')}</Text>
+            <Text style={styles.txtB}>{t('ChangePassword.textAccept')}</Text>
             <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
           </TouchableOpacity>
         )}
