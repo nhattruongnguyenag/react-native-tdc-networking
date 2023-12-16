@@ -113,8 +113,6 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
         }
     }
 
-    console.log(props.post.createdAt)
-
     return (
         <View style={styles.body}>
             <Pressable onPress={() => handleNavigateToProfileScreen()}>

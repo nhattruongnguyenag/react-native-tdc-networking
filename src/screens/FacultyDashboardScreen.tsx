@@ -47,7 +47,6 @@ export default function FacultyDashboardScreen() {
       pollingInterval: 2000
     }
   );
-
   useEffect(() => {
     if (data) {
       setIsLoading(false);
@@ -64,11 +63,15 @@ export default function FacultyDashboardScreen() {
       } else {
         setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode ?? ""));
       }
+    } else {
+      // reset data
+      setCode('');
+      setFacultyPost([]);
     }
   }, [userLogin]);
 
   const getFacultyByFacultyGroupCode = (group: string): string => {
-    let faculty = group.substring(group.indexOf('_')+1)
+    let faculty = group.substring(group.indexOf('_') + 1)
     faculty = "khoa_" + faculty;
     return faculty;
   }
@@ -138,7 +141,7 @@ export default function FacultyDashboardScreen() {
   }
 
   const handleSelectFacultyEvent = useCallback((_code: string) => {
-    setCode(_code);
+    setCode(getFacultyByFacultyGroupCode(_code));
   }, [])
 
   useEffect(() => {
@@ -235,7 +238,7 @@ export default function FacultyDashboardScreen() {
               </View>
             ) : (
               <>
-                {facultyPost.length ? (
+                {(facultyPost.length && Boolean(code)) ? (
                   <View style={styles.wrapperPost}>
                     <FlatList
                       style={styles.businessRolePostShow}

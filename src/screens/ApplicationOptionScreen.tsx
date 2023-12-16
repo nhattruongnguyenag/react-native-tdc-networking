@@ -12,7 +12,7 @@ import axios from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { CHANGE_PASSWORD_SCREEN } from '../constants/Screen'
+import { CHANGE_PASSWORD_SCREEN, MY_PROFILE_SCREEN } from '../constants/Screen'
 const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
@@ -96,7 +96,7 @@ export default function ApplicationOptionScreen() {
       <PaperProvider>
         <View style={styles.option}>
           <NormalOptionItem iconName='globe' title={t('ApplicationOptionComponent.language')} onItemPress={openModal} />
-          <NormalOptionItem iconName='user' title={t('ApplicationOptionComponent.info')} />
+          <NormalOptionItem iconName='user' title={t('ApplicationOptionComponent.info')} onItemPress={() => { navigation.navigate(MY_PROFILE_SCREEN) }} />
           <NormalOptionItem
             iconName='key'
             title={t('ApplicationOptionComponent.password')}

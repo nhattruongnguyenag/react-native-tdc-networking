@@ -50,8 +50,10 @@ import {
   CREATE_SURVEY_SCREEN,
   DETAIL_JOB_APPLY, DETAIL_POST_SCREEN, DETAIL_SURVEY_SCREEN, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
-  FOLLOWING_SCREEN,
-  FORGOTTEN_PASSWORD_SCREEN, INTERMEDIATIOO_SCREEN,
+  MY_PROFILE_SCREEN,
+  FORGOTTEN_PASSWORD_SCREEN,
+  IMAGE_VIEW_SCREEN,
+  INTERMEDIATIOO_SCREEN,
   JOB_APPLY_SCREEN,
   LIST_FOLLOW_SCREEN,
   LIST_JOB_APPLY_SCREEN,
@@ -167,6 +169,7 @@ export type RootStackParamList = {
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
   STUDENT_AND_FACULTY_GROUP: undefined
+  MY_PROFILE_SCREEN: undefined
   DETAIL_POST_SCREEN: { post: any; notificationType: string } | undefined
   CHANGE_PASSWORD_SCREEN: undefined
 }
@@ -516,7 +519,7 @@ function TopTabNavigator(): JSX.Element {
             iconName = 'graduation-cap'
           } else if (route.name === NOTIFICATION_SCREEN) {
             iconName = 'bell'
-          } else if (route.name === FOLLOWING_SCREEN) {
+          } else if (route.name === MY_PROFILE_SCREEN) {
             iconName = 'rss'
           }
 
@@ -536,7 +539,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} options={{
         tabBarBadge: () => qty > 0 && <View style={styles.badgeWrapper}><Text style={[styles.border, {fontSize: qty >= 100 ? 9 : 13}]}>{qty}</Text></View>,
       }} />
-      <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
+      <TopTab.Screen name={MY_PROFILE_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
 }
