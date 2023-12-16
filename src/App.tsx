@@ -9,7 +9,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { useEffect, useState, useTransition } from 'react'
-import { StatusBar, StyleSheet, Text } from 'react-native'
+import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { MenuProvider } from 'react-native-popup-menu'
 import Toast from 'react-native-toast-message'
@@ -117,7 +117,6 @@ import DetailSurveyPostScreen from './screens/DetailSurveyPostScreen'
 import StudentAndFacultyGroup from './screens/StudentAndFacultyGroup'
 import UpdateProfile from './screens/UpdateProfile'
 import DetailPost from './screens/DetailPost'
-import { View } from 'react-native-reanimated/lib/typescript/Animated'
 import axios from 'axios'
 import { useGetQualityNotificationQuery } from './redux/Service'
 
@@ -498,15 +497,13 @@ function TopTabNavigator(): JSX.Element {
       id: userLogin?.id ?? -1
     },
     {
-      pollingInterval: 800
+      pollingInterval: 2000
     }
   )
-  
+
   useEffect(() => {
-    // console.log(data?.data);
-    // // setQty(data?.data)
-      setQty(data?.data)
-  },[data, isFetching])
+    setQty(data?.data)
+  }, [data, isFetching])
 
   return (
     <TopTab.Navigator
@@ -529,10 +526,6 @@ function TopTabNavigator(): JSX.Element {
 
           return <>
             <Icon name={iconName} size={size} color={color} solid={focused} />
-            {
-              iconName == 'bell' ? <Text style={styles.border}><Text style={styles.qty}>{qty}</Text></Text> : ''
-            }
-
           </>
         },
         tabBarActiveTintColor: '#0065FF',
@@ -544,7 +537,9 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={BUSINESS_DASHBOARD_SCREEN} component={BusinessDashboardScreen} />
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
-      <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
+      <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} options={{
+        tabBarBadge: () => qty > 0 && <View style={styles.badgeWrapper}><Text style={[styles.border, {fontSize: qty >= 100 ? 9 : 13}]}>{qty}</Text></View>,
+      }} />
       <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
@@ -572,12 +567,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  border: {
-    position: 'absolute',
-    top: -10,
-    right: -8,
-    borderRadius: 100,
+  badgeWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 20,
+    height: 20,
+    borderRadius: 999,
     backgroundColor: 'red'
+  },
+  border: {
+    color: '#fff'
   }
 })
 export default App
