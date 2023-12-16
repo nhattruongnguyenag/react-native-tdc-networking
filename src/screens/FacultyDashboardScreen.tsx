@@ -47,7 +47,6 @@ export default function FacultyDashboardScreen() {
       pollingInterval: 2000
     }
   );
-  console.log(code)
   useEffect(() => {
     if (data) {
       setIsLoading(false);
@@ -58,17 +57,13 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
-    console.log('==================1==================');
     if ((isStudent(userLogin) || isFaculty(userLogin))) {
       if (isFaculty(userLogin)) {
         setCode(userLogin?.code);
-        console.log('==================2==================');
       } else {
         setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode ?? ""));
-        console.log('==================3==================');
       }
     } else {
-      console.log('==================4==================');
       // reset data
       setCode('');
       setFacultyPost([]);
