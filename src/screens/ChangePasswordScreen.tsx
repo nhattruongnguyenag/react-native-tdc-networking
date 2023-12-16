@@ -197,6 +197,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='key' />
             <TextInput
               value={data.password}
+              secureTextEntry={true}
               placeholder={t('ChangePassword.txtHolderPass')}
               style={styles.txtIP}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -213,6 +214,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='retweet' />
             <TextInput
               value={data.newPassword}
+              secureTextEntry={true}
               placeholder={t('ChangePassword.txtHolderNewPass')}
               style={styles.txtIP}
               onChangeText={(value) => handleNewPasswordChange(value)}
@@ -229,6 +231,7 @@ export default function ChangePasswordScreen() {
             <Icon style={styles.icon} name='redo' />
             <TextInput
               value={data.reNewPassword}
+              secureTextEntry={true}
               placeholder={t('ChangePassword.txtHolderReNewPass')}
               style={styles.txtIP}
               onChangeText={(value) => handleReNewPasswordChange(value)}
