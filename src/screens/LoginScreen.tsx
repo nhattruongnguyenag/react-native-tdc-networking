@@ -80,7 +80,7 @@ export default function LoginScreen() {
               AsyncStorage.setItem(USER_LOGIN_KEY, JSON.stringify(response.data.data))
               dispatch(setUserLogin(response.data.data))
               dispatch(setIsLogout(false))
-              navigation.navigate(BUSINESS_DASHBOARD_SCREEN)
+              navigation.navigate(TOP_TAB_NAVIGATOR)
             }
           })
       })
