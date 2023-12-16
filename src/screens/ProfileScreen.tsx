@@ -87,8 +87,10 @@ const ProfileScreen = () => {
 
 
     useEffect(() => {
-        if (post.length != 0 || isCalled) {
-            setIsLoading(false);
+        if (Boolean(post)) {
+            if (post.length != 0 || isCalled) {
+                setIsLoading(false);
+            }   
         }
     }, [post, isCalled])
 
@@ -280,13 +282,17 @@ const ProfileScreen = () => {
                         }
                         <View style={styles.wrapperPost}>
                             {
-                                post.length !== 0 && <FlatList
-                                    extraData={post}
-                                    scrollEnabled={false}
-                                    showsVerticalScrollIndicator={false}
-                                    data={post}
-                                    renderItem={({ item }) => renderItem(item)}
-                                />
+                                (Boolean(post)) &&
+                                <>
+                                    {
+                                        post.length !== 0 && <FlatList
+                                            extraData={post}
+                                            scrollEnabled={false}
+                                            showsVerticalScrollIndicator={false}
+                                            data={post}
+                                            renderItem={({ item }) => renderItem(item)}
+                                        />
+                                    }</>
                             }
                         </View>
                     </ScrollView>

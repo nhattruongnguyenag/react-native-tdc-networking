@@ -92,6 +92,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     time: props.createdAt
                 })
                 break
+
             // Doanh nghiệp đăng khảo sát
             case CREATE_SURVEY:
                 setValue({

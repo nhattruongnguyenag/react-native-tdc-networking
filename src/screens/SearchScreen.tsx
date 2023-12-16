@@ -69,15 +69,15 @@ export default function SearchScreen() {
 
   const onMessageFindUserReceived = (payload: any) => {
     //kiem tra subjects
-    if(subjects == 'user') {
+    if (subjects == 'user') {
       console.log(JSON.parse(payload.body));
       setMasterData(JSON.parse(payload.body))
     }
   }
 
   const onMessageFindPostReceived = (payload: any) => {
-      console.log(JSON.parse(payload.body));
-      setMasterData(JSON.parse(payload.body))
+    console.log(JSON.parse(payload.body));
+    setMasterData(JSON.parse(payload.body))
   }
 
   useEffect(() => {
@@ -98,21 +98,25 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
-    if (subjects == 'user') {
-      stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
-        userId: userLogin?.id,
-        type: type,
-        name: search,
-        userFollowId: null
-      }))
+    if (stompClient.connected) {
+      if (subjects == 'user') {
+        stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
+          userId: userLogin?.id,
+          type: type,
+          name: search,
+          userFollowId: null
+        }))
+      }
     }
     else {
-      stompClient.send(`/app/find/post/unsave`, {}, JSON.stringify({
-        userId: userLogin?.id,
-        type: type,
-        search: search,
-        postId: null
-      }))
+      if (stompClient.connected) {
+        stompClient.send(`/app/find/post/unsave`, {}, JSON.stringify({
+          userId: userLogin?.id,
+          type: type,
+          search: search,
+          postId: null
+        }))
+      }
     }
   }
 
