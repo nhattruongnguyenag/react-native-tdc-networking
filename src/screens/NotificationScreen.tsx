@@ -66,9 +66,6 @@ export default function NotificationScreen() {
 
     if (notification) {
       switch (notification.type) {
-        case UPDATE_POST:
-          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'update_post' })
-          break
         case CREATE_SURVEY:
           navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'create_survey' })
           break

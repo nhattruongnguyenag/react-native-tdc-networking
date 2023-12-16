@@ -119,6 +119,7 @@ import UpdateProfile from './screens/UpdateProfile'
 import DetailPost from './screens/DetailPost'
 import { View } from 'react-native-reanimated/lib/typescript/Animated'
 import axios from 'axios'
+import { useGetQualityNotificationQuery } from './redux/Service'
 
 export type RootStackParamList = {
   ACCEPT_SCREEN: { email: string, subject: string, title: string, url: string } | undefined
@@ -490,15 +491,22 @@ export function StackNavigator(): JSX.Element {
 }
 // DETAIL_JOB_APPLY
 function TopTabNavigator(): JSX.Element {
-  const [qty, setQty] = useState(0)
+  const [qty, setQty] = useState<any>()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  setTimeout(() => {
-    axios.post(`${SERVER_ADDRESS}api/notifications/user/count`, {
-      id: userLogin?.id
-    }).then((response) => {
-      setQty(response.data.data)
-    })
-  }, 1000)
+  const { data, isFetching } = useGetQualityNotificationQuery(
+    {
+      id: userLogin?.id ?? -1
+    },
+    {
+      pollingInterval: 800
+    }
+  )
+  
+  useEffect(() => {
+    // console.log(data?.data);
+    // // setQty(data?.data)
+      setQty(data?.data)
+  },[data, isFetching])
 
   return (
     <TopTab.Navigator

@@ -92,19 +92,6 @@ export default function NotificationItem(props: NotificatonsType) {
                     time: props.createdAt
                 })
                 break
-            // Cập nhật bài viết cá nhân
-            case UPDATE_POST:
-                setValue({
-                    ...value,
-                    defaultImage: props.dataValue.user.name.length > 0 ? props.dataValue.user.name[0] : '',
-                    header: '',
-                    body: t('Notifications.update_post'),
-                    image: props.dataValue != null ? props.dataValue.user.image : '',
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
-                    time: props.createdAt,
-                    canClick: true
-                })
-                break
             // Doanh nghiệp đăng khảo sát
             case CREATE_SURVEY:
                 setValue({

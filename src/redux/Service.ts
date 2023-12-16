@@ -27,12 +27,20 @@ import { buildPostSearchRequest } from '../utils/PostHelper'
 import { Business } from '../types/Business'
 import { BusinessRequest } from '../types/request/BusinessRequest'
 import { StudentRequest } from '../types/request/StudentRequest'
+import { QualityNotificationModel } from '../types/response/QualityNotificationModel'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
   baseQuery: fetchBaseQuery({ baseUrl: SERVER_ADDRESS, timeout: 10000 }),
   tagTypes: ['Posts'],
   endpoints: (builder) => ({
+    getQualityNotification: builder.query<Data<QualityNotificationModel[]>, { id: number }>({
+      query: (data) => ({
+        url: 'api/notifications/user/count',
+        method: 'POST',
+        body: data
+      })
+    }),
     getNotificationsUser: builder.query<Data<NotificationModel[]>, { id: number }>({
       query: (data) => ({
         url: 'api/notifications/user',
@@ -301,6 +309,7 @@ export const TDCSocialNetworkAPI = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useGetQualityNotificationQuery,
   useAddStudentMutation,
   useAddBusinessMutation,
   useGetProfileApplyQuery,
