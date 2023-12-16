@@ -10,13 +10,18 @@ import { DEFAULT_LANGUAGE, LABEL_LANGUAGE } from '../constants/KeyValue';
 import { useTranslation } from 'react-multi-lang';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
+import { MY_PROFILE_SCREEN } from '../constants/Screen';
 const data = [
   { label: 'Vietnamese', value: 'vi' },
   { label: 'English', value: 'en' },
   { label: 'Japanese', value: 'ja' },
-  
+
 ];
 export default function ApplicationOptionScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
   const [language, setLanguage] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +41,7 @@ export default function ApplicationOptionScreen() {
 
 
   const handleChangeLangue = () => {
-    axios.post(`${SERVER_ADDRESS}api/option/language`,{
+    axios.post(`${SERVER_ADDRESS}api/option/language`, {
       userId: userLogin?.id,
       value: language
     }).then((response) => {
@@ -47,7 +52,7 @@ export default function ApplicationOptionScreen() {
   }
 
   useEffect(() => {
-    axios.post(`${SERVER_ADDRESS}api/option/get`,{
+    axios.post(`${SERVER_ADDRESS}api/option/get`, {
       userId: userLogin?.id,
       optionKey: 'language'
     }).then((response) => {
@@ -66,7 +71,7 @@ export default function ApplicationOptionScreen() {
           break;
       }
     })
-  },[])
+  }, [])
 
   const renderLabel = () => {
     if (value || isFocus) {
@@ -87,7 +92,7 @@ export default function ApplicationOptionScreen() {
       <PaperProvider>
         <View style={styles.option}>
           <NormalOptionItem iconName='globe' title={t('ApplicationOptionComponent.language')} onItemPress={openModal} />
-          <NormalOptionItem iconName='user' title={t('ApplicationOptionComponent.info')} />
+          <NormalOptionItem iconName='user' title={t('ApplicationOptionComponent.info')} onItemPress={() => { navigation.navigate(MY_PROFILE_SCREEN)}} />
           <NormalOptionItem iconName='key' title={t('ApplicationOptionComponent.password')} />
         </View>
         <Portal>
@@ -140,7 +145,7 @@ export default function ApplicationOptionScreen() {
                     : 'white'
                 },
                 styles.btn
-              ]}  onPress={handleChangeLangue}>
+              ]} onPress={handleChangeLangue}>
                 {({ pressed }) => (
                   <Text style={{ fontWeight: 'bold' }}>{t('ApplicationOptionComponent.change')}</Text>
                 )}

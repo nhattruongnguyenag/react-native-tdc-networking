@@ -45,7 +45,7 @@ import {
   CREATE_RECRUITMENT_SCREEN,
   CREATE_SURVEY_SCREEN, DETAIL_JOB_APPLY, DRAWER_TAB_NAVIGATOR,
   FACULTY_DASHBOARD_SCREEN,
-  FOLLOWING_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
+  MY_PROFILE_SCREEN, FORGOTTEN_PASSWORD_SCREEN, IMAGE_VIEW_SCREEN,
   INTERMEDIATIOO_SCREEN, JOB_APPLY_SCREEN, LIST_FOLLOW_SCREEN, LIST_JOB_APPLY_SCREEN,
   LIST_POST_SAVED_SCREEN,
   LOGIN_SCREEN,
@@ -163,7 +163,8 @@ export type RootStackParamList = {
   PEDDING_POST_SCREEN: undefined
   DETAIL_SURVEY_SCREEN: { surveyPostId: number } | undefined
   STUDENT_AND_FACULTY_GROUP: undefined
-  DETAIL_POST_SCREEN: {post: any, notificationType: string} | undefined
+  DETAIL_POST_SCREEN: { post: any, notificationType: string } | undefined
+  MY_PROFILE_SCREEN: undefined
 }
 
 const TopTab = createMaterialTopTabNavigator()
@@ -482,7 +483,7 @@ export function StackNavigator(): JSX.Element {
         }}
         component={StudentAndFacultyGroup}
       />
-      
+
     </RootStack.Navigator>
   )
 }
@@ -503,7 +504,7 @@ function TopTabNavigator(): JSX.Element {
             iconName = 'graduation-cap'
           } else if (route.name === NOTIFICATION_SCREEN) {
             iconName = 'bell'
-          } else if (route.name === FOLLOWING_SCREEN) {
+          } else if (route.name === MY_PROFILE_SCREEN) {
             iconName = 'rss'
           }
 
@@ -519,7 +520,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} />
-      <TopTab.Screen name={FOLLOWING_SCREEN} component={MyProfileScreen} />
+      <TopTab.Screen name={MY_PROFILE_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
   )
 }

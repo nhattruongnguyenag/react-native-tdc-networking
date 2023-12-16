@@ -21,6 +21,7 @@ interface HeaderPostPropsType {
   type: string | null
   role: string
   isSave: number
+  active: number
   handleClickMenuOption: (flag: number) => void
   handleClickIntoAvatarAndNameAndMenuEvent: (flag: number) => void
 }
@@ -57,7 +58,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
       options.push({
         type: CLICK_UPDATE_POST,
         name: props.t("MenuOption.menuOptionViewSurveyUpdateNormalPost"),
-        visible: true
+        visible: props.active === 0
       });
     }
 
@@ -87,7 +88,7 @@ const CustomizeHeaderPost = (props: HeaderPostPropsType) => {
 
 
     return options;
-  }, [props.isSave, props.userId, props.type, userLogin?.id, props.t]);
+  }, [props.isSave, props.userId, props.type, userLogin?.id, props.t, props.active]);
 
   return (
     <View style={[styles.wrapHeader]}>

@@ -1,11 +1,12 @@
-import { View, StyleSheet, Text } from 'react-native'
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import { View, StyleSheet } from 'react-native'
+import React, { memo, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import axios from 'axios'
-import { COLOR_WHITE } from '../constants/Color'
+import { COLOR_GREY, COLOR_WHITE } from '../constants/Color'
 import { useTranslation } from 'react-multi-lang'
 import { getFacultyTranslated } from '../utils/GetFacultyTranslated '
+import { ActivityIndicator } from 'react-native-paper'
 
 
 interface DataItem {
@@ -44,12 +45,12 @@ const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
         })
         return facultiesHadTranslated;
     }
-    
+
     return (
         <View>
             <View style={styles.group}>
                 <Dropdown
-                    style={[styles.dropdown, { borderColor: '#97A1B0' }]}
+                    style={[styles.dropdown, { borderColor: '#97A1B0' }, dataRequest.length === 0 && styles.dropdownUnHaveValues]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
@@ -64,6 +65,9 @@ const CustomizeSelectFacultyToolbar = (props: SelectFacultyToolbarType) => {
                         props.handleSelectFacultyEvent(item.facultyGroupCode)
                     }}
                 />
+                {
+                    dataRequest.length === 0 && <ActivityIndicator style={styles.activityIndicator} size={30} color={COLOR_WHITE} />
+                }
             </View>
         </View>
     )
@@ -135,6 +139,20 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
         elevation: 6,
+    },
+
+    dropdownHaveValues: {
+        backgroundColor: COLOR_WHITE
+    },
+
+    dropdownUnHaveValues: {
+        backgroundColor: COLOR_GREY
+    },
+
+    activityIndicator: {
+        position: 'absolute',
+        right: 10,
+        top: 10,
     },
 
     placeholderStyle: {

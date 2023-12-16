@@ -47,7 +47,7 @@ export default function FacultyDashboardScreen() {
       pollingInterval: 2000
     }
   );
-
+  console.log(code)
   useEffect(() => {
     if (data) {
       setIsLoading(false);
@@ -58,17 +58,25 @@ export default function FacultyDashboardScreen() {
   }, [data])
 
   useEffect(() => {
+    console.log('==================1==================');
     if ((isStudent(userLogin) || isFaculty(userLogin))) {
       if (isFaculty(userLogin)) {
         setCode(userLogin?.code);
+        console.log('==================2==================');
       } else {
         setCode(getFacultyByFacultyGroupCode(userLogin?.facultyGroupCode ?? ""));
+        console.log('==================3==================');
       }
+    } else {
+      console.log('==================4==================');
+      // reset data
+      setCode('');
+      setFacultyPost([]);
     }
   }, [userLogin]);
 
   const getFacultyByFacultyGroupCode = (group: string): string => {
-    let faculty = group.substring(group.indexOf('_')+1)
+    let faculty = group.substring(group.indexOf('_') + 1)
     faculty = "khoa_" + faculty;
     return faculty;
   }
@@ -138,7 +146,7 @@ export default function FacultyDashboardScreen() {
   }
 
   const handleSelectFacultyEvent = useCallback((_code: string) => {
-    setCode(_code);
+    setCode(getFacultyByFacultyGroupCode(_code));
   }, [])
 
   useEffect(() => {
@@ -235,7 +243,7 @@ export default function FacultyDashboardScreen() {
               </View>
             ) : (
               <>
-                {facultyPost.length ? (
+                {(facultyPost.length && Boolean(code)) ? (
                   <View style={styles.wrapperPost}>
                     <FlatList
                       style={styles.businessRolePostShow}
