@@ -77,7 +77,7 @@ export default function SurveyConductScreen() {
             let tempValidates: InputTextValidate[] = [];
             for (let question of data.data.questions) {
                 answer.push({
-                    question_id: question.id,
+                    question_id: question.id ?? -1,
                     choices_ids: [],
                     content: ''
                 });

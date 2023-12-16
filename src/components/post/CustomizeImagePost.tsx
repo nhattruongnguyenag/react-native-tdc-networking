@@ -10,7 +10,7 @@ LogBox.ignoreAllLogs()
 
 interface ImagePostType {
   images: Images[]
-  handleClickIntoAnyImageEvent: (flag: any, arr: Array<number>) => void
+  handleClickIntoAnyImageEvent: (flag: number, arr: Array<number>) => void
 }
 
 const TYPE_LAYOUT_WIDTH_GREATER_HEIGHT = 1
@@ -20,15 +20,15 @@ const CustomizeImagePost = (props: ImagePostType) => {
   const [typeImageLayout, setTypeImageLayout] = useState(-1)
   const [numberImageRemaining, setNumberImageRemaining] = useState(0)
   const imageQty = props.images?.length
-  const [listImageError, setListImageError] = useState([] as any)
+  const [listImageError, setListImageError] = useState<number[]>([])
 
-  const handleAddImageToListError = (id: any) => {
+  const handleAddImageToListError = (id: number) => {
     setListImageError([...listImageError, id])
   }
 
-  const handleCheckImageHaveError = (image: any) => {
+  const handleCheckImageHaveError = (image: Images) => {
     let result = false
-    listImageError.some((item: any) => {
+    listImageError.some((item: number) => {
       if (item === image.id) {
         result = true
       }

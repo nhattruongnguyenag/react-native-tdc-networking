@@ -71,7 +71,6 @@ export default function AddQuestionScreen() {
           if (item.type === MULTI_CHOICE_QUESTION) {
             return <MultiChoiceQuestion
               mode={[EDIT_MODE]}
-              editMode
               data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)}
@@ -79,14 +78,12 @@ export default function AddQuestionScreen() {
           } else if (item.type === ONE_CHOICE_QUESTION) {
             return <OneChoiceQuestion
               mode={[EDIT_MODE]}
-              editMode
               data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)} />
           } else {
             return <ShortAnswerQuestion
               mode={[EDIT_MODE]}
-              editMode
               data={item}
               index={index}
               onUpdateQuestion={(questionIndex) => onUpdateQuestion(questionIndex)} />

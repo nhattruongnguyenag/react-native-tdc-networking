@@ -19,7 +19,6 @@ import { RootStackParamList } from '../../App';
 import { PROFILE_SCREEN } from '../../constants/Screen';
 import { useTranslation } from 'react-multi-lang';
 import { getFacultyTranslated } from '../../utils/GetFacultyTranslated ';
-import ActionSheet from 'react-native-actionsheet';
 import { ActivityIndicator } from 'react-native-paper';
 
 //  Constant
@@ -48,7 +47,7 @@ const CustomizeModalComments = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [comments, setComments] = useState();
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer);
-    const inputRef = useRef<any>();
+    const inputRef = useRef<TextInput>(null);
     const [myComment, setMyComment] = useState<string>('');
     const [idReply, setIdReply] = useState(0);
     const [keyboardStatus, setKeyboardStatus] = useState(false);
@@ -152,7 +151,9 @@ const CustomizeModalComments = () => {
     // Reply comment
     const handleClickToCommentReplyEvent = useCallback((commentReplyId: number) => {
         setIdReply(commentReplyId);
-        inputRef.current.focus();
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     }, [])
 
     // Delete comments

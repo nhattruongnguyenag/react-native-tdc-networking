@@ -11,4 +11,5 @@ export interface StudentRequest {
     confimPassword: string
     subject: string
     content: string
+    phone: string
 }

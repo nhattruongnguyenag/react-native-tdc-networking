@@ -253,7 +253,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value, 
                     defaultImage: 'admin',
                     header: '',
-                    body: `${t('Notifications.user_apply_job')} " ` + props.dataValue.jobTitle + ' "',
+                    body: `${t('Notifications.user_apply_job')} " ` + props.dataValue?.jobTitle + ' "',
                     image: props.dataValue != null ? props.dataValue.studentAvatar : '',
                     group: '',
                     time: props.createdAt,
