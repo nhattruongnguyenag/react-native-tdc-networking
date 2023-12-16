@@ -58,7 +58,7 @@ const DetailPost = () => {
 
   const handleUnSave = (idPost: number) => {
     setIsSocket(true)
-    
+
     stompClient.send(`/app/posts/${post.id}/detail/unsave`, {}, JSON.stringify({
       userId: userLogin?.id,
       postId: idPost
@@ -153,7 +153,7 @@ const DetailPost = () => {
   }
 
 
-
+  return <></>
 }
 
 const styles = StyleSheet.create({
