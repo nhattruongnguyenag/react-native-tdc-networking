@@ -50,7 +50,7 @@ export default function ForgottenPasswordScreen() {
         navigation.navigate(ACCEPT_SCREEN, { email: email , subject:  t('ForgettenPassword.titleSubjectResetPassword') , title:  t('ForgettenPassword.titleSubjectResetPassword') , url: 'api/users/get/email/reset'})
       })
       .catch((error) => {
-        Alert.alert('Xác nhận thất bại', 'Email này chưa được đăng ký')
+        Alert.alert(t('ForgettenPassword.textTitleNotification'), t('ForgettenPassword.textNotificationDes'))
         setIsLoading(false)
       })
   }
@@ -73,7 +73,7 @@ export default function ForgottenPasswordScreen() {
               <Icon style={styles.icon} name='at' />
               <TextInput
                 value={email}
-                placeholder='Email ID'
+                placeholder={t('ForgettenPassword.textPlaceHolderEmail')}
                 style={styles.txtIP}
                 onChangeText={(value) => handleCheckEmail(value)}
               ></TextInput>

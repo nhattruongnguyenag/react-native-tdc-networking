@@ -208,6 +208,7 @@
         "search": "Enter search content..."
     },
     "ToolbarTitle": {
+        "changePasswordScreen": "Change Password",
         "recruitmentDetailScreen": "Recruitment details",
         "topTabNavigator": "TDC Social Network",
         "drawerTabNavigator": "TDC Social Network",
@@ -680,7 +681,10 @@
         "textSubjectResetPassword": "Update password",
         "titleSubjectResetPassword": " change password",
         "textAccept": "Confirm",
-        "textBack": "Back"
+        "textBack": "Back",
+        "textTitleNotification": "Confirmation failed",
+        "textNotificationDes": "This email is not registered",
+        "textPlaceHolderEmail": "Enter email"
     },
     "AcceptScreen": {
         "checkEmail": "Check email",
@@ -723,5 +727,21 @@
         "user_create_watch_job": " has applied for the job posting:",
         "in_group": " in",
         "survey_txt": "Survey now >>"
+    },
+    "ChangePassword": {
+        "txtBlankNotificationPassword": "Password can not be blank",
+        "txtBlankNotificationNewPassword": "The new password cannot be blank",
+        "txtFailTypeNotificationNewPassword": "The new password is not in the correct format",
+        "txtNotSameOldPassNotificationNewPassword": "The new password must not be the same as the old password",
+        "txtBlankNotificationRePassword": "The re-entered password cannot be blank",
+        "txtIsNotValidNotificationRePassword": "The re-entered password does not match",
+        "txtNotificationSuccess": "Notification",
+        "txtNotificationSuccessDes": "Updated password successfully",
+        "txtNotificationFailed": "Failed",
+        "txtNotificationFailedDes": "Old passwords do not match",
+        "textAccept": "Accepted",
+        "txtHolderNewPass": "Enter your new password",
+        "txtHolderPass": "Enter old password",
+        "txtHolderReNewPass": "Enter a new password"
     }
 }
