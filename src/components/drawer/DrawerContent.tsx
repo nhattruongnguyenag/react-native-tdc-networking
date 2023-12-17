@@ -33,15 +33,20 @@ import { setIsLogout } from '../../redux/Slice'
 import { Faculty } from '../../types/Faculty'
 import { Student } from '../../types/Student'
 import { getGroupForPost } from '../../utils/GetGroup'
+import { useChangeUserToInactiveStateMutation } from '../../redux/Service'
 
 export default function DrawerContent(props: DrawerContentComponentProps) {
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [inactive, inactiveResult] = useChangeUserToInactiveStateMutation()
   const dispatch = useAppDispatch()
   const logout = useCallback(() => {
-    dispatch(setIsLogout(true));
-    AsyncStorage.removeItem(TOKEN_KEY)
-    AsyncStorage.removeItem(USER_LOGIN_KEY)
+    if (userLogin) {
+      dispatch(setIsLogout(true))
+      AsyncStorage.removeItem(TOKEN_KEY)
+      AsyncStorage.removeItem(USER_LOGIN_KEY)
+      inactive({ id: userLogin.id })
+    }
     navigation.navigate(LOGIN_SCREEN)
   }, [])
 
@@ -90,16 +95,16 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
             />
           )}
 
-            {isBusiness(userLogin) && (
-              <DrawerItem
-                style={{ marginStart: 60 }}
-                label={getGroupForPost(groupBusiness, t)}
-                onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
-                inactiveBackgroundColor={'#fff'}
-                pressColor={'#0088ff03'}
-              />
-            )}
-          </List.Accordion>
+          {isBusiness(userLogin) && (
+            <DrawerItem
+              style={{ marginStart: 60 }}
+              label={getGroupForPost(groupBusiness, t)}
+              onPress={() => getScreenOfUser(userLogin.roleCodes ?? "")}
+              inactiveBackgroundColor={'#fff'}
+              pressColor={'#0088ff03'}
+            />
+          )}
+        </List.Accordion>
 
         {isStudent(userLogin) && (
           <DrawerItem

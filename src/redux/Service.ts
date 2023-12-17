@@ -315,6 +315,16 @@ export const TDCSocialNetworkAPI = createApi({
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
     }),
+    changeUserToInactiveState: builder.mutation<MessageResponseData, { id: number }>({
+      query: (data) => ({
+        url: 'api/users/status/inactive',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+    }),
   })
 })
 
@@ -356,5 +366,6 @@ export const {
   useGetStudentPostsQuery,
   useGetPostsByIdQuery,
   useUpdateSurveyPostMutation,
-  useUpdateNormalPostMutation
+  useUpdateNormalPostMutation,
+  useChangeUserToInactiveStateMutation
 } = TDCSocialNetworkAPI
