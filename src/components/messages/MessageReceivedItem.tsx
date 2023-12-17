@@ -201,7 +201,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
         </View>
 
         {data.sender.image ? (
-          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: data.sender.image }} />
+          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + data.sender.image }} />
         ) : (
           <DefaultAvatar size={AVATAR_HEIGHT} identifer={data.sender.name[0]} />
         )}
