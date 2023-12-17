@@ -19,6 +19,7 @@ import { LikeAction } from '../types/LikeActions'
 import { setDefaultLanguage } from '../redux/Slice'
 import { useTranslation } from 'react-multi-lang'
 import { LikeSearch } from '../types/LikeSearch'
+import { ActivityIndicator } from 'react-native-paper'
 
 
 let stompClient: Client
@@ -41,6 +42,7 @@ export default function SearchScreen() {
   const [qty, setQty] = useState(0)
   let URL = `${SERVER_ADDRESS}api/find/post`
   const t = useTranslation()
+  const [isLoading, setIsLoading] = useState(false)
   //Xu ly dropdown
   const [value, setValue] = useState(null)
   const [label, setLabel] = useState(t('SearchComponent.user'))
@@ -67,16 +69,17 @@ export default function SearchScreen() {
   ])
 
 
+
   const onMessageFindUserReceived = (payload: any) => {
     //kiem tra subjects
     if (subjects == 'user') {
-      console.log(JSON.parse(payload.body));
+      setIsLoading(false);
       setMasterData(JSON.parse(payload.body))
     }
   }
 
   const onMessageFindPostReceived = (payload: any) => {
-    console.log(JSON.parse(payload.body));
+    setIsLoading(false);
     setMasterData(JSON.parse(payload.body))
   }
 
@@ -98,6 +101,7 @@ export default function SearchScreen() {
 
   //Search
   const handleSearch = () => {
+    setIsLoading(true)
     if (stompClient.connected) {
       if (subjects == 'user') {
         stompClient.send(`/app/find/user/follow`, {}, JSON.stringify({
@@ -107,9 +111,7 @@ export default function SearchScreen() {
           userFollowId: null
         }))
       }
-    }
-    else {
-      if (stompClient.connected) {
+      else {
         stompClient.send(`/app/find/post/unsave`, {}, JSON.stringify({
           userId: userLogin?.id,
           type: type,
@@ -161,7 +163,9 @@ export default function SearchScreen() {
 
   const handleDelete = () => { }
 
+
   const checkType = () => {
+
     switch (subjects) {
       case 'user':
         return masterData.map((item: any, index) => <UserItem id={item.id} image={item.image} name={item.name} isFollow={item.isFollow} group={item.group} handleFollow={handleFollow} />)
@@ -257,7 +261,11 @@ export default function SearchScreen() {
       </View>
       <MenuProvider>
         <ScrollView>
-          {checkType()}
+          {isLoading ?
+            <ActivityIndicator color={'#000000'} style={[{ display: isLoading ? 'flex' : 'none' }, { marginTop: 100 }]} />
+            :
+            checkType()
+          }
         </ScrollView>
       </MenuProvider>
     </View>

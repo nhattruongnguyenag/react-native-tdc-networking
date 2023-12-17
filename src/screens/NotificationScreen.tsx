@@ -18,6 +18,8 @@ import { SERVER_ADDRESS } from '../constants/SystemConstant'
 import { useAppSelector } from '../redux/Hook'
 import { useGetNotificationsUserQuery } from '../redux/Service'
 import { ACCEPT_POST, CREATE_SURVEY, POST_LOG, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_LIKE_POST, USER_REPLY_COMMENT } from '../constants/TypeNotification'
+import { NotificationModel } from '../types/response/NotificationModel'
+import { ActivityIndicator } from 'react-native-paper'
 const { height, width } = Dimensions.get('screen')
 
 const NOTIFICATION_CREATE_SURVEY = 'create_survey'
@@ -30,6 +32,8 @@ export default function NotificationScreen() {
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
   const t = useTranslation()
+  const [arr, setArr] = useState<NotificationModel[]>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const { data, isFetching } = useGetNotificationsUserQuery(
     {
@@ -40,7 +44,15 @@ export default function NotificationScreen() {
     }
   )
 
+  useEffect(() => {
+    setIsLoading(true)
+    setArr([])
+  }, [userLogin?.id])
 
+  useEffect(() => {
+    setIsLoading(false)
+    setArr(data?.data)
+  }, [isFetching])
 
   const handleIsRead = (id: number) => {
     try {
@@ -60,6 +72,9 @@ export default function NotificationScreen() {
       console.error('Error updating name:', error)
     }
   }
+
+
+
 
   const handleItem = (id: number) => {
     const notification = data?.data.find(item => id === item.id)
@@ -113,7 +128,7 @@ export default function NotificationScreen() {
 
   const handleItemCanNotClick = (id: number) => {
     console.log('123');
-    
+
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
@@ -138,6 +153,7 @@ export default function NotificationScreen() {
   return (
     <>
       <View style={styles.screen}>
+
         {/* Select */}
         <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
@@ -149,12 +165,16 @@ export default function NotificationScreen() {
                 <Icon name='readme' size={20} color='#ffffff' /><Text style={styles.txtTick}>{t('NotificationsComponent.readAll')}</Text>
               </TouchableOpacity>
             </View>
-            
+
           </View>
-          
+
         </View>
         {
-            <NotificationListView data={data?.data}
+
+          isLoading ?
+            <ActivityIndicator color={'#000000'} style={[{ display: isLoading ? 'flex' : 'none' }, {marginTop: 100}]} />
+            :
+            <NotificationListView data={arr}
               handleItem={handleItem}
               handleDelNotification={handleDelNotification}
               handleIsRead={handleIsRead}
