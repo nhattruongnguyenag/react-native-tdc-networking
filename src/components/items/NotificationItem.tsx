@@ -54,7 +54,6 @@ export default function NotificationItem(props: NotificatonsType) {
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const [use, setUse] = useState([])
-    const isFocused = useIsFocused();
     const [value, setValue] = useState<Value>({
         header: '',
         body: '',
@@ -67,7 +66,7 @@ export default function NotificationItem(props: NotificatonsType) {
 
     useEffect(() => {
         checkType()
-    }, [isFocused])
+    }, [props])
     const checkType = () => {
         switch (props.type) {
             // Thong bao dang ky thanh cong
@@ -101,7 +100,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.create_survey'),
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -114,7 +113,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: '',
                     body: t('Notifications.save_post'),
                     image: '',
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -127,7 +126,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_like_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -140,7 +139,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_comment_post'),
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -153,7 +152,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_reply_comment'),
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -166,7 +165,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: props.userInteracted.name,
                     body: t('Notifications.user_conduct_survey'),
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -177,11 +176,9 @@ export default function NotificationItem(props: NotificatonsType) {
                     ...value,
                     defaultImage: 'admin',
                     header: '',
-                    body: props.dataValue != null ?
-                     t('Notifications.post_log') + '" ' + (props.dataValue.content.length > 64 ? `${props.dataValue.content.substring(0, 64)}...` : props.dataValue.content) + ' "' 
-                     : '',
+                    body: title_post_log(props),
                     image: '',
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? (props.dataValue.post != null ? (props.dataValue.post.group != null ? props.dataValue.post.group.name : '') : '') : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -194,7 +191,7 @@ export default function NotificationItem(props: NotificatonsType) {
                     header: '',
                     body: t('Notifications.accept_post'),
                     image: '',
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -202,7 +199,7 @@ export default function NotificationItem(props: NotificatonsType) {
             // Cập nhật trang cá nhân 
             case USER_UPDATE:
                 setValue({
-                    ...value, 
+                    ...value,
                     defaultImage: 'admin',
                     header: '',
                     body: t('Notifications.user_update'),
@@ -226,7 +223,7 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thay đổi ngôn ngữ
             case USER_CHANGE_LANGUAGE:
                 setValue({
-                    ...value, 
+                    ...value,
                     defaultImage: 'admin',
                     header: '',
                     body: t('Notifications.user_change_language'),
@@ -238,7 +235,7 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thông báo cho người nộp tuyển dụng
             case USER_APPLY_JOB:
                 setValue({
-                    ...value, 
+                    ...value,
                     defaultImage: 'admin',
                     header: '',
                     body: `${t('Notifications.user_apply_job')} " ` + props.dataValue?.jobTitle + ' "',
@@ -251,12 +248,12 @@ export default function NotificationItem(props: NotificatonsType) {
             // Thông báo cho người đăng tuyển dụng có người tuyển dụng (Bài đăng tuyển dụng của mình)
             case USER_CREATE_WATCH_JOB:
                 setValue({
-                    ...value, 
+                    ...value,
                     defaultImage: props.userInteracted.name.length > 0 ? props.userInteracted.name[0] : '',
                     header: props.userInteracted.name,
                     body: `${t('Notifications.user_create_watch_job')} " ` + props.dataValue.title + ' "',
                     image: props.userInteracted.image,
-                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : ''  : '',
+                    group: props.dataValue != null ? props.dataValue.group != null ? props.dataValue.group.name : '' : '',
                     time: props.createdAt,
                     canClick: true
                 })
@@ -275,16 +272,36 @@ export default function NotificationItem(props: NotificatonsType) {
                 break
         }
     }
+
+    const title_post_log = (props: any) => {
+        let title = ''
+        if (props.dataValue != null) {
+            title += 'Bài viết: "'
+            if (props.dataValue.post.title) {
+                
+                if (props.dataValue.post.title > 15) {
+
+                    title += props.dataValue.post.title.substring(0, 15) + '..." bị từ chối'
+                }
+            } else {
+                title += props.dataValue.post.content
+            }
+        } else {
+            title = ''
+        }
+        return title
+    }
+
     const handleConductNow = (surveyPostId: number, notificationId: number) => {
-        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })   
+        navigation.navigate(SURVEY_CONDUCT_SCREEN, { surveyPostId: surveyPostId })
         try {
             axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
-              id: notificationId,
-              userId: userLogin?.id
+                id: notificationId,
+                userId: userLogin?.id
             })
-          } catch (error) {
+        } catch (error) {
             console.error('Error updating name:', error)
-          }  
+        }
     }
     return (
         <View>
@@ -293,6 +310,8 @@ export default function NotificationItem(props: NotificatonsType) {
                 style={[styles.item, { backgroundColor: props.status === '1' ? '#ffffff' : '#f3f9ff' }]}
             >
                 <View style={styles.cont}>
+
+                    {/* Hinh */}
                     {value.image ? (
                         <Image style={styles.image} source={{ uri: SERVER_ADDRESS + 'api/images/' + value.image }} />
                     ) : (
@@ -300,6 +319,7 @@ export default function NotificationItem(props: NotificatonsType) {
                             <Image style={styles.image} source={require('../../assets/splash/logo.png')} /> :
                             <DefaultAvatar size={60} identifer={value.defaultImage[0]} />
                     )}
+                    {/* Noi dung */}
                     <View style={styles.content}>
                         <Text style={[styles.name, { color: props.status === '1' ? '#a9a9a9' : '#000000' }]}>
                             <Text style={styles.nameTxt}>{value.header}</Text>
@@ -310,9 +330,9 @@ export default function NotificationItem(props: NotificatonsType) {
                         {
                             props.type == 'create_survey' ?
                                 <Pressable
-                                onPress={() =>{
-                                    handleConductNow(props.dataValue.id, props.id)
-                                    } } style={styles.surveyBtn}>
+                                    onPress={() => {
+                                        handleConductNow(props.dataValue.id, props.id)
+                                    }} style={styles.surveyBtn}>
                                     <Text style={styles.surveyTxt}>{t('Notifications.survey_txt')}</Text>
                                 </Pressable>
                                 : null

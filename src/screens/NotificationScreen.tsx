@@ -50,8 +50,11 @@ export default function NotificationScreen() {
   }, [userLogin?.id])
 
   useEffect(() => {
-    setIsLoading(false)
-    setArr(data?.data)
+    setArr([])
+    if (data) {
+      setIsLoading(false)
+      setArr(data?.data)
+    }
   }, [isFetching])
 
   const handleIsRead = (id: number) => {
@@ -172,7 +175,7 @@ export default function NotificationScreen() {
         {
 
           isLoading ?
-            <ActivityIndicator color={'#000000'} style={[{ display: isLoading ? 'flex' : 'none' }, {marginTop: 100}]} />
+            <ActivityIndicator color={'#000000'} style={[{ display: isLoading ? 'flex' : 'none' }, { marginTop: 100 }]} />
             :
             <NotificationListView data={arr}
               handleItem={handleItem}

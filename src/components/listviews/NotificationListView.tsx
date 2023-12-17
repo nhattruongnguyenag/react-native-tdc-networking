@@ -32,7 +32,8 @@ export default function NotificationListView(props: NotificatonsListViewType) {
           onRefresh={() => props.data}
         />}>
             {
-                props.data?.map((item: any) => <NotificationItem
+                props.data?.map((item: any) => <>
+                <NotificationItem
                     id={item.id}
                     status={item.status}
                     type={item.type}
@@ -44,7 +45,9 @@ export default function NotificationListView(props: NotificatonsListViewType) {
                     handleIsRead={props.handleIsRead}
                     handleDelNotification={props.handleDelNotification}
                     handleItemCanNotClick={props.handleItemCanNotClick}
-                />)
+                />
+                </>
+                )
             }
         </ScrollView>
     )
