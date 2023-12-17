@@ -18,7 +18,7 @@ export default function SurveyPostApprovalItem(props: PostApprovalItemProps) {
         if (isSurveyPost(props.post)) {
             setSurveyPost(props.post)
         }
-    }, [])
+    }, [props.post])
 
     const handleClickBtnSurveyDetailEvent = (idPost: number) => {
         navigation.navigate(DETAIL_SURVEY_SCREEN, { surveyPostId: idPost })

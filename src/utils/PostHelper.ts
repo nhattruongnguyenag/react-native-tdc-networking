@@ -13,6 +13,7 @@ export function buildPostSearchRequest(postSearchRequest: PostSearchRequest) {
         }
     }
 
+    console.log(params.join('&'))
     return params.join('&')
 }
 
