@@ -26,7 +26,7 @@ export default function TextImagePostApprovalItem(props: PostApprovalItemProps) 
         }
 
         return []
-    }, [])
+    }, [props.post])
 
 
     const handleClickIntoAnyImageEvent = (imageId: number, listImageError: number[]) => {
