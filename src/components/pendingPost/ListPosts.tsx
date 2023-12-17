@@ -1,16 +1,15 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Loading from '../common/Loading'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-multi-lang'
+import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
-import { PostSearchRequest } from '../../types/request/PostSearchRequest'
 import { useGetPostsQuery, useLazyGetPostsQuery } from '../../redux/Service'
+import { PostSearchRequest } from '../../types/request/PostSearchRequest'
 import { PostResponseModel } from '../../types/response/PostResponseModel'
-import { setPostDeleteId } from '../../redux/Slice'
-import PostApprovalItem, { POST_PENDING } from '../postApproval/PostApprovalItem'
-import NoMorePost from '../postApproval/NoMorePost'
-import SkeletonPostApprove from '../postApproval/SkeletonPostApprove'
+import Loading from '../common/Loading'
 import ModalPostRejectReason from '../postApproval/ModalPostRejectReason'
+import NoMorePost from '../postApproval/NoMorePost'
+import PostApprovalItem, { POST_PENDING } from '../postApproval/PostApprovalItem'
+import SkeletonPostApprove from '../postApproval/SkeletonPostApprove'
 
 const LIMIT = 3
 
@@ -28,9 +27,7 @@ export default function ListPosts(props: ListPostsProps) {
 
     const requestData: PostSearchRequest = useMemo<PostSearchRequest>(() => ({
         active: props.active,
-        userId: props.userId,
-        limit: LIMIT,
-        offset: 0
+        userId: props.userId
     }), [])
 
     const [getPostRequest, getPostResponse] = useLazyGetPostsQuery({ refetchOnReconnect: true })
@@ -39,70 +36,35 @@ export default function ListPosts(props: ListPostsProps) {
         requestData,
         { refetchOnMountOrArgChange: true, refetchOnFocus: true })
 
-    const [posts, setPosts] = useState<PostResponseModel[]>([])
-
     useEffect(() => {
-        if (data && data.data.length > 0) {
-            data.data.forEach((item, index) => {
-                if (posts.findIndex(post => post.id === item.id) !== -1) {
-                    posts.splice(index, 1, item)
-                } else {
-                    posts.push(item)
-                }
-            })
-            setPosts([...posts])
-        }
-    }, [data])
-
-    useEffect(() => {
-        if (postDeleteId) {
-            setPosts([...posts].filter(post => post.id !== postDeleteId))
-            dispatch(setPostDeleteId(undefined))
-        }
-    }, [postDeleteId])
-
-    const onLoadMore = useCallback(() => {
-        if (data && data.data.length === LIMIT) {
-            getPostRequest({
-                active: props.active,
-                userId: props.userId,
-                limit: LIMIT,
-                offset: posts.length
-            }).unwrap().then((result) => {
-                result.data.forEach((item, index) => {
-                    if (posts.findIndex(post => post.id === item.id) !== -1) {
-                        posts.splice(index, 1, item)
-                    } else {
-                        posts.push(item)
-                    }
-                })
-                setPosts([...posts])
-            })
-
-        }
-    }, [posts, data])
+        getPostRequest({
+            active: props.active,
+            userId: props.userId
+        })
+    }, [])
 
     const onRefresh = () => {
         setRefresh(true)
         getPostRequest({
             active: props.active,
-            userId: props.userId,
-            limit: LIMIT,
-            offset: 0
-        }).unwrap().then((result) => {
-            setPosts([...result.data])
-            setRefresh(false)
+            userId: props.userId
         })
     }
+
+    useEffect(() => {
+        if (getPostResponse.data?.data && refresh) {
+            setRefresh(false)
+        }
+    }, [getPostResponse.data?.data, isFetching])
 
     return (
         <SafeAreaView style={styles.body}>
             {
-                isLoading ? <Loading title={t('PenddingPostScreen.loading')} />
+                getPostResponse.isLoading ? <Loading title={t('PenddingPostScreen.loading')} />
                     :
                     <>
                         {
-                            posts.length > 0 ?
+                            getPostResponse.data && getPostResponse.data.data.length > 0 ?
                                 <>
                                     <FlatList
                                         keyExtractor={(item, index) => index.toString()}
@@ -110,7 +72,7 @@ export default function ListPosts(props: ListPostsProps) {
                                         onRefresh={
                                             () => onRefresh()
                                         }
-                                        data={posts}
+                                        data={getPostResponse.data?.data}
                                         renderItem={({ item, index }) =>
                                             <PostApprovalItem
                                                 key={index.toString()}
@@ -118,11 +80,7 @@ export default function ListPosts(props: ListPostsProps) {
                                                 type={POST_PENDING}
                                             />
                                         }
-                                        ListFooterComponent={getPostResponse.data && getPostResponse.data.data.length < LIMIT ?
-                                            <NoMorePost />
-                                            :
-                                            <SkeletonPostApprove loading={getPostResponse.isFetching} />}
-                                        onEndReached={() => onLoadMore()}
+                                        ListFooterComponent={<NoMorePost />}
                                     />
                                     <ModalPostRejectReason />
                                 </>
