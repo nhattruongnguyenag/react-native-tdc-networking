@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../../constants/Variables'
 import { PostResponseModal } from '../../types/response/PostResponseModal'
@@ -26,6 +26,12 @@ export interface PostApprovalItemProps {
 }
 
 export default function PostApprovalItem(props: PostApprovalItemProps) {
+    let post = useMemo<PostResponseModal | undefined>(() => {
+        if (props.post) {
+            return { ...props.post }
+        }
+        return undefined
+    }, [props.post])
 
     return (
         <Pressable style={styles.container}>
@@ -36,14 +42,14 @@ export default function PostApprovalItem(props: PostApprovalItemProps) {
                     <Fragment>
                         <HeaderPostApprovalItem
                             type={props.type}
-                            post={props.post}
+                            post={post}
                             onAcceptedPost={props.onAcceptedPost}
                         />
 
                         <View style={styles.postBody}>
-                            {props.post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={props.post} />}
-                            {props.post?.type === TYPE_RECRUITMENT_POST && <RecruitmentPostApprovalItem post={props.post} />}
-                            {props.post?.type === TYPE_SURVEY_POST && <SurveyPostApprovalItem post={props.post} />}
+                            {post?.type === TYPE_NORMAL_POST && <TextImagePostApprovalItem post={post} />}
+                            {post?.type === TYPE_RECRUITMENT_POST && <RecruitmentPostApprovalItem post={post} />}
+                            {post?.type === TYPE_SURVEY_POST && <SurveyPostApprovalItem post={post} />}
                         </View>
                     </Fragment>
             }

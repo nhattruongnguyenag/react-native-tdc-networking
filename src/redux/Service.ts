@@ -343,5 +343,5 @@ export const {
   useGetBusinessPostsQuery,
   useGetStudentPostsQuery,
   useGetPostsByIdQuery,
-  useUpdateSurveyPostMutation
+  useUpdateSurveyPostMutation,
 } = TDCSocialNetworkAPI

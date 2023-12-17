@@ -9,11 +9,11 @@ import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
-import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { PEDDING_POST_TAB, TOP_TAB_NAVIGATOR } from '../constants/Screen'
 import { REVIEW_MODE } from '../constants/Variables'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
 import { useAddSurveyPostMutation, useUpdateSurveyPostMutation } from '../redux/Service'
-import { setSurveyPostRequest } from '../redux/Slice'
+import { setSurveyPostRequest, setSurveyPostUpdated } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
   const t = useTranslation()
@@ -31,14 +31,16 @@ export default function ReviewSurveyPostScreen() {
       } else {
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'))
       }
+      dispatch(setSurveyPostRequest(null))
     }
   }, [addSurveyResult])
 
   useEffect(() => {
     if (updateSurveyResult.data) {
       if (updateSurveyResult.data.status === 201 || 200) {
+        dispatch(setSurveyPostUpdated(surveyPostRequest))
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessContent'));
-        navigation.navigate(TOP_TAB_NAVIGATOR);
+        navigation.navigate(PEDDING_POST_TAB)
       } else {
         Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
       }

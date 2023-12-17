@@ -120,6 +120,7 @@ import { Conversation } from './types/Conversation'
 import { Faculty } from './types/Faculty'
 import { Student } from './types/Student'
 import { UpdateNormalPost } from './types/UpdateNormalPost'
+import { SurveyPostRequest } from './types/SurveyPost'
 
 const vie = require('moment/locale/vi')
 moment.locale('vi', vie)
@@ -143,7 +144,7 @@ export type RootStackParamList = {
   TOP_TAB_NAVIGATOR: undefined
   DRAWER_TAB_NAVIGATOR: undefined
   CREATE_RECRUITMENT_SCREEN: { recruitmentPostId?: number; groupId?: number } | undefined
-  CREATE_SURVEY_SCREEN: { surveyPostId?: number; groupId?: number } | undefined
+  CREATE_SURVEY_SCREEN: { surveyPostId?: number; groupId?: number; surveyPostRequest?: SurveyPostRequest } | undefined
   SPLASH_SCREEN: undefined
   IMAGE_VIEW_SCREEN: undefined
   INTERMEDIATIOO_SCREEN: undefined
@@ -537,7 +538,7 @@ function TopTabNavigator(): JSX.Element {
       <TopTab.Screen name={FACULTY_DASHBOARD_SCREEN} component={FacultyDashboardScreen} />
       <TopTab.Screen name={STUDENT_DISCUSSION_DASHBOARD_SCREEN} component={StudentDiscussionDashboardScreen} />
       <TopTab.Screen name={NOTIFICATION_SCREEN} component={NotificationScreen} options={{
-        tabBarBadge: () => qty > 0 && <View style={styles.badgeWrapper}><Text style={[styles.border, {fontSize: qty >= 100 ? 9 : 13}]}>{qty}</Text></View>,
+        tabBarBadge: () => qty > 0 && <View style={styles.badgeWrapper}><Text style={[styles.border, { fontSize: qty >= 100 ? 9 : 13 }]}>{qty}</Text></View>,
       }} />
       <TopTab.Screen name={MY_PROFILE_SCREEN} component={MyProfileScreen} />
     </TopTab.Navigator>
