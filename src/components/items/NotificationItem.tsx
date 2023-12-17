@@ -276,16 +276,18 @@ export default function NotificationItem(props: NotificatonsType) {
     const title_post_log = (props: any) => {
         let title = ''
         if (props.dataValue != null) {
-            title += 'Bài viết: "'
-            if (props.dataValue.post.title) {
-                
-                if (props.dataValue.post.title > 15) {
+            if (props.dataValue.post) {
+                title += 'Bài viết: "'
+                if (props.dataValue.post.title) {
+                    if (props.dataValue.post.title > 15) {
 
-                    title += props.dataValue.post.title.substring(0, 15) + '..." bị từ chối'
+                        title += props.dataValue.post.title.substring(0, 15) + '..." bị từ chối'
+                    }
+                } else {
+                    title += props.dataValue.post.content
                 }
-            } else {
-                title += props.dataValue.post.content
             }
+
         } else {
             title = ''
         }
