@@ -1,9 +1,8 @@
 import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
 import React, { useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Appbar } from 'react-native-paper'
-import { SEARCH_ICON } from '../../constants/Icon'
 import { CONVERSATION_SCREEN, SEACRH_SCREEN } from '../../constants/Screen'
 export default function ToolBar() {
   const navigation = useNavigation<DrawerNavigationProp<any>>()

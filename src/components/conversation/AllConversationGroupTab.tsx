@@ -12,7 +12,6 @@ export default function AllConversationGroupTab() {
   })
 
   useEffect(() => {
-    console.log(data)
     if (data && isSuccess) {
       dispatch(setConversations(data))
     }

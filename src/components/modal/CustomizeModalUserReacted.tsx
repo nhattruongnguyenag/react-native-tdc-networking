@@ -1,5 +1,5 @@
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_BLACK, COLOR_GREY, COLOR_MODAL, COLOR_WHITE } from '../../constants/Color'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
@@ -9,8 +9,11 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { PROFILE_SCREEN } from '../../constants/Screen'
+import { useTranslation } from 'react-multi-lang'
+import { getFacultyTranslated } from '../../utils/GetFacultyTranslated '
 
 const CustomizeModalUserReacted = () => {
+  const t = useTranslation();
   const { userIdOfProfileNow, currentScreenNowIsProfileScreen, modalUserReactionData } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
@@ -29,13 +32,12 @@ const CustomizeModalUserReacted = () => {
       }
     }
   }
-
   return (
-    <Modal transparent statusBarTranslucent={true}>
+    <Modal animationType='slide' transparent statusBarTranslucent={true}>
       <TouchableOpacity onPress={() => handleClickIntoBtnIconClose()} style={styles.container}>
         <Pressable style={styles.wrapLayout}>
           <View style={styles.header}>
-            <Text style={styles.txtTitle}>Lượt thích</Text>
+            <Text style={styles.txtTitle}>{t("ModalListUserLiked.modalListUserLikedTitle")}</Text>
             <TouchableOpacity onPress={() => handleClickIntoBtnIconClose()} style={styles.btnIconClose}>
               <IconAntDesign name='close' size={20} color={COLOR_BLACK} />
             </TouchableOpacity>
@@ -45,7 +47,7 @@ const CustomizeModalUserReacted = () => {
               <CustomizeUserReaction
                 key={item.id}
                 id={item.id}
-                name={item.name}
+                name={getFacultyTranslated(item.name, t)}
                 avatar={item.image}
                 handleClickIntoUserReactedEvent={handleClickIntoUserReactedEvent}
               />
@@ -89,4 +91,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   }
 })
-export default CustomizeModalUserReacted
+export default memo(CustomizeModalUserReacted)

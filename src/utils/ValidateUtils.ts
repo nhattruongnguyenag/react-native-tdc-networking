@@ -13,7 +13,10 @@ export function isNotContainSpecialCharacter(text: string): boolean {
   return !isContainSpecialCharacter(text)
 }
 
-export function isBlank(text: string): boolean {
+export function isBlank(text?: string): boolean {
+  if (text === undefined) {
+    return true
+  }
   const pattern = /^[\s]*$/g
   return pattern.test(text)
 }

@@ -1,9 +1,12 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { LegacyRef, useEffect, useRef, useState } from 'react'
-import IconButton from '../buttons/IconButton'
-import { PURPLE_COLOR } from '../../constants/Color'
+import React, { LegacyRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import { StyleSheet, TextInput, View } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
+import { Asset } from 'react-native-image-picker'
+import { PURPLE_COLOR } from '../../constants/Color'
+import IconButton from '../buttons/IconButton'
 import CustomizedImagePicker from '../CustomizedImagePicker'
+import ImagePicker from '../ImagePicker'
 
 interface MessageBottomBarProps {
   onButtonSendPress?: () => void
@@ -11,10 +14,12 @@ interface MessageBottomBarProps {
   onInputMessageContent?: (value: string) => void
   onInputMessageFocus?: () => void
   onInputMessageBlur?: () => void
+  onImagePickerResult: (result: Asset[]) => void
   textInputMessageRef: LegacyRef<TextInput>
 }
 
 export default function MessageBottomBar(props: MessageBottomBarProps) {
+  const t = useTranslation()
   const [messageContent, setMessageContent] = useState('')
 
   const [imagePickerOptionsRef, setImagePickerOptionsRef] = useState<ActionSheet | null>()
@@ -42,7 +47,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
           setMessageContent(value)
           props.onInputMessageContent && props.onInputMessageContent(value)
         }}
-        placeholder='Tin nhắn'
+        placeholder={t('MessageBottomBar.messageBottomBarComponentInputTextPlaceholder')}
         style={styles.inputMessage}
         cursorColor={PURPLE_COLOR}
         multiline
@@ -65,7 +70,7 @@ export default function MessageBottomBar(props: MessageBottomBarProps) {
         customStyle={{ marginLeft: 'auto' }}
       />
 
-      <CustomizedImagePicker optionsRef={(ref) => setImagePickerOptionsRef(ref)} />
+      <ImagePicker optionsRef={(ref) => setImagePickerOptionsRef(ref)} onResult={(result) => props.onImagePickerResult(result)}/>
     </View>
   )
 }

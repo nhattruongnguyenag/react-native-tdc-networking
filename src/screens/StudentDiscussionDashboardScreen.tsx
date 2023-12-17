@@ -2,27 +2,31 @@ import { StyleSheet, Text, View, Image, ScrollView, FlatList, RefreshControl } f
 import React, { useEffect, useState, useCallback } from 'react'
 import { COLOR_BLUE_BANNER, COLOR_WHITE, COLOR_BOTTOM_AVATAR } from '../constants/Color'
 import CustomizePost from '../components/post/CustomizePost'
-import { NAME_GROUP, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import { postAPI } from '../api/CallApi'
+import { deletePostAPI, savePostAPI } from '../api/CallApi'
 import { Client, Frame } from 'stompjs'
 import { getStompClient } from '../sockets/SocketClient'
 import { LikeAction } from '../types/LikeActions'
-import { API_URL_STUDENT_POST } from '../constants/Path'
+import { API_URL_DELETE_POST, API_URL_SAVE_POST } from '../constants/Path'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
-import { updatePostWhenHaveChangeComment } from '../redux/Slice'
 import SkeletonPost from '../components/SkeletonPost'
 import CustomizeCreatePostToolbar from '../components/CustomizeCreatePostToolbar'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST } from '../constants/Variables'
+import { TYPE_POST_STUDENT, TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, groupStudent } from '../constants/Variables'
 import { CREATE_NORMAL_POST_SCREEN, CREATE_RECRUITMENT_SCREEN, CREATE_SURVEY_SCREEN, PROFILE_SCREEN } from '../constants/Screen'
-import { useIsFocused } from '@react-navigation/native';
+import { ToastMessenger } from '../utils/ToastMessenger'
+import { useTranslation } from 'react-multi-lang'
+import { useGetStudentPostsQuery } from '../redux/Service'
+import { GROUP_TDC_ID } from '../constants/Groups'
+import { Post } from '../types/Post'
+import { getPostActive } from '../utils/GetPostActive'
 
 let stompClient: Client
 export default function StudentDiscussionDashboardScreen() {
+  const t = useTranslation();
   const isFocused = useIsFocused();
-  const code = 'group_tdc';
+  const code = groupStudent;
   const [isCalled, setIsCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePost, userLogin } = useAppSelector(
@@ -30,8 +34,23 @@ export default function StudentDiscussionDashboardScreen() {
   )
   const dispatch = useAppDispatch()
   const [refreshing, setRefreshing] = useState(false)
-  const [studentsPost, setStudentPost] = useState([])
+  const [studentsPost, setStudentPost] = useState<Post[]>([])
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const { data, isFetching } = useGetStudentPostsQuery({
+    id: userLogin?.id ?? 0
+  }, {
+    pollingInterval: 1000
+  });
+
+  useEffect(() => {
+    if (data) {
+      setIsLoading(false);
+      setStudentPost([]);
+      setStudentPost(data.data);
+      setIsCalled(true);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (studentsPost.length > 0 || isCalled) {
@@ -41,17 +60,6 @@ export default function StudentDiscussionDashboardScreen() {
     }
   }, [studentsPost, isCalled])
 
-  const getDataStudentApi = async () => {
-    try {
-      const data = await postAPI(API_URL_STUDENT_POST + userLogin?.id)
-      setStudentPost(data.data)
-    } catch (error) {
-      console.log(error)
-    }
-    setIsCalled(true)
-  }
-
-  // Socket
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
@@ -74,23 +82,18 @@ export default function StudentDiscussionDashboardScreen() {
     like(obj)
   }
 
-  useEffect(() => {
-    getDataStudentApi()
-    dispatch(updatePostWhenHaveChangeComment(false))
-  }, [updatePost, isFocused])
-
   const like = useCallback((likeData: LikeAction) => {
     stompClient.send(`/app/posts/group/${code}/like`, {}, JSON.stringify(likeData))
-  }, [])
+  }, [code])
 
 
   const handleClickToCreateButtonEvent = (type: string) => {
     if (type === TYPE_NORMAL_POST) {
-      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: 1 });
+      navigation.navigate(CREATE_NORMAL_POST_SCREEN, { group: GROUP_TDC_ID });
     } else if (type === TYPE_RECRUITMENT_POST) {
-      navigation.navigate(CREATE_RECRUITMENT_SCREEN);
+      navigation.navigate(CREATE_RECRUITMENT_SCREEN, { groupId: GROUP_TDC_ID })
     } else {
-      navigation.navigate(CREATE_SURVEY_SCREEN);
+      navigation.navigate(CREATE_SURVEY_SCREEN, { groupId: GROUP_TDC_ID })
     }
   }
 
@@ -98,38 +101,56 @@ export default function StudentDiscussionDashboardScreen() {
     navigation.navigate(PROFILE_SCREEN, { userId: userLogin?.id ?? 0, group: code })
   }
 
-  const handleUnSave = () => { }
-
-  const renderItem = (item: any) => {
-    return (
-      <CustomizePost
-        id={item.id}
-        userId={item.user['id']}
-        name={item.user['name']}
-        avatar={item.user['image']}
-        typeAuthor={null}
-        available={null}
-        timeCreatePost={item.createdAt}
-        content={item.content}
-        type={item.type}
-        likes={item.likes}
-        comments={item.comment}
-        commentQty={item.commentQuantity}
-        images={item.images}
-        role={item.user['roleCodes']}
-        likeAction={likeAction}
-        location={item.location ?? null}
-        title={item.title ?? null}
-        expiration={item.expiration ?? null}
-        salary={item.salary ?? null}
-        employmentType={item.employmentType ?? null}
-        description={item.description ?? null}
-        isSave={item.isSave}
-        group={code}
-        handleUnSave={handleUnSave}
-      />
-    )
+  const handleDeletePost = async (id: number) => {
+    const status = await deletePostAPI(API_URL_DELETE_POST, id);
+    ToastMessenger(status, 200, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
   }
+
+  const handleSavePost = async (id: number) => {
+    const data = {
+      "userId": userLogin?.id,
+      "postId": id
+    }
+    const status = await savePostAPI(API_URL_SAVE_POST, data);
+    ToastMessenger(status, 201, t("ToastMessenger.toastMessengerTextTitle"), t("ToastMessenger.toastMessengerTextWarning"));
+  }
+
+  const renderItem = useCallback((item: any) => {
+    if (getPostActive(item.active)) {
+      return (
+        <CustomizePost
+          id={item.id}
+          userId={item.user['id']}
+          name={item.user['name']}
+          avatar={item.user['image']}
+          typeAuthor={item.user['roleCodes']}
+          available={null}
+          timeCreatePost={item.createdAt}
+          content={item.content}
+          type={item.type}
+          likes={item.likes}
+          comments={item.comment}
+          commentQty={item.commentQuantity}
+          images={item.images}
+          role={item.user['roleCodes']}
+          likeAction={likeAction}
+          location={item.location ?? null}
+          title={item.title ?? null}
+          expiration={item.expiration ?? null}
+          salary={item.salary ?? null}
+          employmentType={item.employmentType ?? null}
+          description={item.description ?? null}
+          isSave={item.isSave}
+          group={code}
+          handleUnSave={handleSavePost}
+          handleDelete={handleDeletePost}
+          active={item.active}
+        />
+      )
+    }else{
+      return null
+    }
+  }, [studentsPost])
 
   return (
     <View style={styles.container}>
@@ -141,21 +162,22 @@ export default function StudentDiscussionDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
           refreshing={refreshing}
-          onRefresh={() => getDataStudentApi()} />}
+          onRefresh={() => {
+          }} />}
       >
         {/* Image banner */}
         <Image
           style={styles.imageBanner}
-          source={{ uri: 'https://a.cdn-hotels.com/gdcs/production69/d31/7e6c2166-24ef-4fa4-893a-39b403ff02cd.jpg' }}
+          source={require('../assets/image/TDCBanner.jpg')}
         />
 
         {/* Name group */}
         <View style={styles.lineBellowBanner}>
-          <Text style={styles.nameOfStudentGroup}>{NAME_GROUP}</Text>
+          <Text style={styles.nameOfStudentGroup}>{t("StudentDashboard.studentDashboardGroupTitle")}</Text>
         </View>
         {/* Create post */}
         {
-          userLogin?.roleCodes.includes(TYPE_POST_STUDENT) ?
+          userLogin?.roleCodes?.includes(TYPE_POST_STUDENT) ?
             <View style={styles.toolbarCreatePost}>
               <CustomizeCreatePostToolbar
                 role={userLogin?.roleCodes ?? ''}
@@ -166,12 +188,15 @@ export default function StudentDiscussionDashboardScreen() {
               />
             </View> : null
         }
-        <FlatList
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          data={studentsPost}
-          renderItem={({ item }) => renderItem(item)}
-        />
+        <View style={styles.wrapperPost}>
+          <FlatList
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            data={studentsPost}
+            extraData={studentsPost}
+            renderItem={({ item }) => renderItem(item)}
+          />
+        </View>
       </ScrollView>
     </View>
   )
@@ -198,5 +223,8 @@ const styles = StyleSheet.create({
   },
   toolbarCreatePost: {
     marginBottom: 20,
+  },
+  wrapperPost: {
+    marginTop: 5,
   }
 })

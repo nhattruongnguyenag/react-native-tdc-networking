@@ -1,9 +1,11 @@
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import ImageView from 'react-native-image-viewing'
 import { Avatar } from 'react-native-paper'
 import { FlatGrid } from 'react-native-super-grid'
+import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppSelector } from '../../redux/Hook'
 import MessageSectionTimeItemStyle, { AVATAR_HEIGHT } from '../../styles/MessageSectionTimeItemStyle'
@@ -11,7 +13,7 @@ import { ImageUri } from '../../types/ImageUri'
 import { Message } from '../../types/Message'
 import { getMessageSectionTitle } from '../../utils/DateTimeUtils'
 import { isApproximatelyTime } from '../../utils/MessageUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import MessageSectionTitle from './MessageSectionTitle'
 import { MessageItemProps, TextMessageRenderItemProps } from './MessageSentItem'
 
@@ -134,7 +136,7 @@ const TextMessageRenderItem = (props: TextMessageRenderItemProps) => {
         </View>
         <View style={{ opacity: isLastItem || isSingleItem ? 1 : 0 }}>
           {props.message.sender.image ? (
-            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: props.message.sender.image }} />
+            <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + props.message.sender.image }} />
           ) : (
             <DefaultAvatar size={AVATAR_HEIGHT} identifer={props.message.sender.name[0]} />
           )}
@@ -199,7 +201,7 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
         </View>
 
         {data.sender.image ? (
-          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: data.sender.image }} />
+          <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: API_URL_RENDER_IMAGE + data.sender.image }} />
         ) : (
           <DefaultAvatar size={AVATAR_HEIGHT} identifer={data.sender.name[0]} />
         )}
@@ -223,9 +225,11 @@ const imagesMessageRenderItem = (data: Message): React.JSX.Element => {
 }
 
 export default function MessageReceivedItem(props: MessageItemProps) {
+  const t = useTranslation()
+
   return (
     <Pressable style={MessageSectionTimeItemStyle.body}>
-      <MessageSectionTitle title={getMessageSectionTitle(props.data.createdAt)} visible={props.dayHeaderVisible} />
+      <MessageSectionTitle title={getMessageSectionTitle(t, props.data.createdAt)} visible={props.dayHeaderVisible} />
       <View style={MessageSectionTimeItemStyle.wrapperContentGroup}>
         <View style={[MessageSectionTimeItemStyle.messageContentWrapper, styles.messageContentWrapper]}>
           {messageContentRenderItems(props.data, props.index)}

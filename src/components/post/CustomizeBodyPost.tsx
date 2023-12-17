@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, memo } from 'react'
 import { COLOR_TEXT_CREATE_NORMAL_POST, COLOR_BLACK } from '../../constants/Color'
-import { TEXT_HIDE_LESS, TEXT_SEE_MORE } from '../../constants/StringVietnamese'
+import { useTranslation } from 'react-multi-lang'
 
 interface PostContentType {
   content: string
@@ -9,6 +9,7 @@ interface PostContentType {
 
 export const NUM_OF_LINES = 5
 const CustomizeBodyPost = (props: PostContentType) => {
+  const t = useTranslation();
   const [showMore, setShowMore] = useState(false)
   const [seeMore, setSeeMore] = useState(true)
 
@@ -24,9 +25,9 @@ const CustomizeBodyPost = (props: PostContentType) => {
     let data: any = null
     if (showMore) {
       data = seeMore ? (
-        <Text style={styles.bodyTxtSeeMore}>{TEXT_SEE_MORE}</Text>
+        <Text style={styles.bodyTxtSeeMore}>{t("CommentContainer.commentContainerComponentSeeMore")}</Text>
       ) : (
-        <Text style={styles.bodyTxtSeeMore}>{TEXT_HIDE_LESS}</Text>
+        <Text style={styles.bodyTxtSeeMore}>{t("CommentContainer.commentContainerComponentHidden")}</Text>
       )
     }
     return data
@@ -52,4 +53,4 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   }
 })
-export default CustomizeBodyPost
+export default memo(CustomizeBodyPost)

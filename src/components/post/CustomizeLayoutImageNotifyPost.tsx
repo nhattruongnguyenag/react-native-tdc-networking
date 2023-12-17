@@ -1,15 +1,15 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { COLOR_BLACK, COLOR_IMAGE_ERROR } from '../../constants/Color'
+import { useTranslation } from 'react-multi-lang'
 
-//  Constant
-const TEXT_IMAGE_ERROR = `Count't Load Activity`
 const CustomizeLayoutImageNotify = () => {
+  const t = useTranslation();
   return (
     <View style={styles.container}>
       <Ionicons name='refresh-outline' size={30} color={COLOR_BLACK} />
-      <Text>{TEXT_IMAGE_ERROR}</Text>
+      <Text>{t("ImageError.couldNotLoadActivity")}</Text>
     </View>
   )
 }
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR_IMAGE_ERROR
   }
 })
-export default CustomizeLayoutImageNotify
+export default memo(CustomizeLayoutImageNotify)

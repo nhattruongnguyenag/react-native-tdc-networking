@@ -1,5 +1,6 @@
 export interface ModalComments {
   id: number
+  userCreatedPostId: number
   group: string
   commentFather: {
     id: number

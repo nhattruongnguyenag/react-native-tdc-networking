@@ -5,10 +5,11 @@ import { COLOR_BTN_BLUE, COLOR_GREY, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../c
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { TYPE_NORMAL_POST, TYPE_NORMAL_POST_TEXT, TYPE_RECRUITMENT_POST, TYPE_RECRUITMENT_POST_TEXT, TYPE_SURVEY_POST, TYPE_SURVEY_POST_TXT } from '../constants/Variables'
-import { TEXT_PLACEHOLDER_CREATE_ANY_POST, TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/StringVietnamese'
-import DefaultAvatar from './DefaultAvatar'
+import { TYPE_NORMAL_POST, TYPE_RECRUITMENT_POST, TYPE_SURVEY_POST } from '../constants/Variables'
+import { TYPE_POST_FACULTY, TYPE_POST_STUDENT } from '../constants/Variables'
+import DefaultAvatar from './common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 
 export interface CreatePostToolbarType {
     role: string,
@@ -20,7 +21,7 @@ export interface CreatePostToolbarType {
 
 export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToolbarType>) {
     const [typeChoose, setTypeChoose] = useState(TYPE_NORMAL_POST);
-
+    const t = useTranslation();
     const handleClickChooseTypePost = (typePost: string) => {
         setTypeChoose(typePost);
     }
@@ -52,7 +53,7 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
                         style={styles.wrapInput}>
                         <Text style={styles.txtInput}>
                             {
-                                TEXT_PLACEHOLDER_CREATE_ANY_POST
+                                t("CreatePostSelector.createPostSelectorPlaceHolder")
                             }
                         </Text>
                     </TouchableOpacity>
@@ -70,7 +71,7 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
                     />
                     <Text
                         style={typeChoose == TYPE_SURVEY_POST ? styles.txtButtonChooseTypePostActive : styles.txtButtonChooseTypePostUnActive}
-                    >{TYPE_SURVEY_POST_TXT}</Text>
+                    >{t("CreatePostSelector.createPostSelectorSurveyText")}</Text>
                 </TouchableOpacity>
                 {
                     (props.role === TYPE_POST_STUDENT || props.role === TYPE_POST_FACULTY) ?
@@ -86,20 +87,19 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
                             />
                             <Text
                                 style={typeChoose == TYPE_RECRUITMENT_POST ? styles.txtButtonChooseTypePostActive : styles.txtButtonChooseTypePostUnActive}
-                            >{TYPE_RECRUITMENT_POST_TEXT}</Text>
+                            >{t("CreatePostSelector.createPostSelectorRecruitmentText")}</Text>
                         </TouchableOpacity>
                 }
                 <TouchableOpacity
                     onPress={() => handleClickChooseTypePost(TYPE_NORMAL_POST)}
-                    style={[typeChoose == TYPE_NORMAL_POST ? styles.activeButton : styles.unActiveButton, styles.button]}
-                >
+                    style={[typeChoose == TYPE_NORMAL_POST ? styles.activeButton : styles.unActiveButton, styles.button]}>
                     <IoniconsIcon
                         name='create' size={20}
                         color={typeChoose == TYPE_NORMAL_POST ? COLOR_WHITE : COLOR_GREY}
                     />
                     <Text
                         style={typeChoose == TYPE_NORMAL_POST ? styles.txtButtonChooseTypePostActive : styles.txtButtonChooseTypePostUnActive}
-                    >{TYPE_NORMAL_POST_TEXT}</Text>
+                    >{t("CreatePostSelector.createPostSelectorNormalText")}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -108,7 +108,18 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLOR_WHITE
+        backgroundColor: COLOR_WHITE,
+        marginHorizontal:5,
+        borderRadius:5,
+        marginTop:5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4.84,
+        elevation: 5,
     },
     header: {
         flexDirection: 'row',
@@ -157,7 +168,7 @@ const styles = StyleSheet.create({
     },
     txtButtonChooseTypePostUnActive: {
         color: COLOR_GREY,
-        paddingLeft: 5,
+        paddingLeft: 5
     },
     txtButtonChooseTypePostActive: {
         color: COLOR_WHITE,

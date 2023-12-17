@@ -1,7 +1,12 @@
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import axios, { AxiosResponse } from 'axios'
+import moment from 'moment'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import {
   Alert,
   Image,
-  PermissionsAndroid,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -10,22 +15,20 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import ActionSheet from 'react-native-actionsheet'
+import DatePicker from 'react-native-date-picker'
+import { ActivityIndicator } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Business } from '../types/Business'
-import axios, { AxiosResponse } from 'axios'
+import TextValidate from '../components/common/TextValidate'
+import CustomizedImagePicker from '../components/CustomizedImagePicker'
+import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
+import { Business } from '../types/Business'
 import { Data } from '../types/Data'
 import { Token } from '../types/Token'
-import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import { ActivityIndicator } from 'react-native-paper'
-import { COLOR_BTN_BLUE } from '../constants/Color'
-import ActionSheet from 'react-native-actionsheet'
-import { useAppSelector } from '../redux/Hook'
-import CustomizedImagePicker from '../components/CustomizedImagePicker'
-import { useNavigation, ParamListBase } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
 import {
   InputTextValidate,
   isBlank,
@@ -37,9 +40,11 @@ import {
   isTime,
   isType
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/TextValidate'
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
+import { useAddBusinessMutation } from '../redux/Service'
+import { BusinessRequest } from '../types/request/BusinessRequest'
 
 interface RegisterBusiness {
   name: InputTextValidate
@@ -64,14 +69,15 @@ const isAllFieldsValid = (validate: RegisterBusiness): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho doanh ngiep
 export default function BusinessRegistrationScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [timeStart, setTimeStart] = useState('07:00')
   const [timeEnd, setTimeEnd] = useState('17:00')
-  const [business, setBusiness] = useState<
-    Omit<Business, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'roleCodes' | 'isTyping' | 'isMessageConnect'>
-  >({
+  const [business, setBusiness] = useState<BusinessRequest>({
     password: '',
     representor: '',
     phone: '',
@@ -81,54 +87,56 @@ export default function BusinessRegistrationScreen() {
     activeTime: timeStart + '-' + timeEnd,
     email: '',
     name: '',
-    image: '',
-    confimPassword: ''
+    confimPassword: '',
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+    content: ''
   })
+  const [saveBusiness, businessRegisterResponse] = useAddBusinessMutation()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
   const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [validate, setValidate] = useState<RegisterBusiness>({
     name: {
-      textError: 'Tên không được để trống',
+      textError: t('RegisterBusinessComponent.errorNameEmpty'),
       isVisible: false,
       isError: true
     },
     representor: {
-      textError: 'Tên người đại diện không được để trống',
+      textError: t('RegisterBusinessComponent.errorRepresentEmpty'),
       isVisible: false,
       isError: true
     },
     email: {
-      textError: 'Email không được để trống',
+      textError: t('RegisterBusinessComponent.errorEmailEmpty'),
       isVisible: false,
       isError: true
     },
     taxCode: {
-      textError: 'Mã số thuế không được để trống',
+      textError: t('RegisterBusinessComponent.errorTaxCodeEmpty'),
       isVisible: false,
       isError: true
     },
     address: {
-      textError: 'Địa chỉ không được để trống',
+      textError: t('RegisterBusinessComponent.errorAddressEmpty'),
       isVisible: false,
       isError: true
     },
     phone: {
-      textError: 'Số điện thoại không được để trống',
+      textError: t('RegisterBusinessComponent.errorPhoneEmpty'),
       isVisible: false,
       isError: true
     },
     activeTime: {
-      textError: 'Thời gian hoạt động sai định dạng',
+      textError: t('RegisterBusinessComponent.activeTimeNotFormat'),
       isVisible: false,
       isError: true
     },
     password: {
-      textError: 'Mật khẩu không được để trống',
+      textError: t('RegisterBusinessComponent.errorPasswordEmpty'),
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: 'Nhập lại mật khẩu không được để trống',
+      textError: t('RegisterBusinessComponent.errorConfimPasswordEmpty'),
       isVisible: false,
       isError: true
     }
@@ -146,7 +154,8 @@ export default function BusinessRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            isVisible: true
+            isVisible: true,
+            textError: t('RegisterBusinessComponent.errorNameEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -156,7 +165,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên công ty không chứa ký tự đặt biệt'
+            textError: t('RegisterBusinessComponent.errorNameNotSpecial')
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -166,7 +175,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên công ty không vượt quá 255 ký tự'
+            textError: t('RegisterBusinessComponent.errorNameNotLengthMax')
           }
         })
       } else {
@@ -192,7 +201,7 @@ export default function BusinessRegistrationScreen() {
             ...validate.representor,
             isError: true,
             isVisible: true,
-            textError: 'Tên người đại diện không được để trống'
+            textError: t('RegisterBusinessComponent.errorRepresentEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -201,7 +210,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: 'Tên người đại diện không được chứa ký tự đặc biệt',
+            textError: t('RegisterBusinessComponent.errorRepresentNotSpecial'),
             isVisible: true
           }
         })
@@ -211,7 +220,7 @@ export default function BusinessRegistrationScreen() {
           representor: {
             ...validate.representor,
             isError: true,
-            textError: 'Tên người đại diện không vượt quá 255 ký tự',
+            textError: t('RegisterBusinessComponent.errorRepresentNotLengthMax'),
             isVisible: true
           }
         })
@@ -238,7 +247,7 @@ export default function BusinessRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: 'Email đã được sử dụng',
+              textError: t('RegisterBusinessComponent.errorSameEmail'),
               isVisible: true
             }
           })
@@ -259,7 +268,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email không được để trống',
+            textError: t('RegisterBusinessComponent.errorEmailEmpty'),
             isVisible: true
           }
         })
@@ -269,7 +278,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email không vượt quá 255 ký tự',
+            textError: t('RegisterBusinessComponent.errorEmailNotLengthMax'),
             isVisible: true
           }
         })
@@ -279,7 +288,7 @@ export default function BusinessRegistrationScreen() {
           email: {
             ...validate.email,
             isError: true,
-            textError: 'Email sai định dạng',
+            textError: t('RegisterBusinessComponent.errorEmailNotFormat'),
             isVisible: true
           }
         })
@@ -305,7 +314,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu không được để trống',
+            textError: t('RegisterBusinessComponent.errorPasswordEmpty'),
             isVisible: true
           }
         })
@@ -315,7 +324,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu không vượt quá 8 ký tự',
+            textError: t('RegisterBusinessComponent.errorPassNotLengthMax'),
             isVisible: true
           }
         })
@@ -325,7 +334,7 @@ export default function BusinessRegistrationScreen() {
           password: {
             ...validate.password,
             isError: true,
-            textError: 'Mật khẩu sai định dạng',
+            textError: t('RegisterBusinessComponent.errorPassNotFormat'),
             isVisible: true
           }
         })
@@ -351,7 +360,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu không được để trống',
+            textError: t('RegisterBusinessComponent.errorConfimPasswordEmpty'),
             isVisible: true
           }
         })
@@ -361,7 +370,7 @@ export default function BusinessRegistrationScreen() {
           confimPassword: {
             ...validate.confimPassword,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu phải trùng với mật khẩu',
+            textError: t('RegisterBusinessComponent.errorConfimPassNotMatch'),
             isVisible: true
           }
         })
@@ -387,7 +396,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế không được để trống',
+            textError: t('RegisterBusinessComponent.errorTaxCodeEmpty'),
             isVisible: true
           }
         })
@@ -397,7 +406,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế không vượt quá 255 ký tự',
+            textError: t('RegisterBusinessComponent.errorTaxCodeNotLengthMax'),
             isVisible: true
           }
         })
@@ -407,7 +416,7 @@ export default function BusinessRegistrationScreen() {
           taxCode: {
             ...validate.taxCode,
             isError: true,
-            textError: 'Mã số thuế sai định dạng',
+            textError: t('RegisterBusinessComponent.errorTaxCodeNotFormat'),
             isVisible: true
           }
         })
@@ -433,7 +442,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: 'Địa chỉ không được để trống',
+            textError: t('RegisterBusinessComponent.errorAddressEmpty'),
             isVisible: true
           }
         })
@@ -443,7 +452,7 @@ export default function BusinessRegistrationScreen() {
           address: {
             ...validate.address,
             isError: true,
-            textError: 'Địa chỉ không vượt quá 255 ký tự',
+            textError: t('RegisterBusinessComponent.errorAddressNotLengthMax'),
             isVisible: true
           }
         })
@@ -469,7 +478,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: 'Số điện thoại không được để trống',
+            textError: t('RegisterBusinessComponent.errorPhoneEmpty'),
             isVisible: true
           }
         })
@@ -479,7 +488,7 @@ export default function BusinessRegistrationScreen() {
           phone: {
             ...validate.phone,
             isError: true,
-            textError: 'Số điện thoại sai định dạng',
+            textError: t('RegisterBusinessComponent.errorPhoneNotFormat'),
             isVisible: true
           }
         })
@@ -496,7 +505,7 @@ export default function BusinessRegistrationScreen() {
     },
     [validate]
   )
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
@@ -523,12 +532,12 @@ export default function BusinessRegistrationScreen() {
         activeTime: {
           ...validate.activeTime,
           isError: true,
-          textError: 'Thời gian hoạt động sai định dạng',
+          textError: t('RegisterBusinessComponent.activeTimeNotFormat'),
           isVisible: true
         }
       })
     } else {
-      setBusiness({ ...business, activeTime: timeStart + '-' + timeEnd})
+      setBusiness({ ...business, activeTime: timeStart + '-' + timeEnd })
       setValidate({
         ...validate,
         activeTime: {
@@ -539,29 +548,22 @@ export default function BusinessRegistrationScreen() {
       })
     }
   }, [timeStart, timeEnd])
- 
-  useEffect(() => {
-    setBusiness({ ...business, image: imagesUpload ? imagesUpload[0] : '' })
-  }, [imagesUpload])
 
   const onSubmit = useCallback(() => {
-    console.log(business.activeTime)
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      axios
-        .post<Business, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/business/register', business)
-        .then((response) => {
-          setIsLoading(false)
-          Alert.alert('Thông báo', 'Đăng ký thành công')
-          navigation.navigate(LOGIN_SCREEN)
+      if (imagePicker) {
+        handleUploadImage(imagePicker, (data) => {
+          saveBusiness({
+            ...business,
+            image: data[0]
+          })
         })
-        .catch((error) => {
-          Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
-          setIsLoading(false)
-        })
+      } else {
+        saveBusiness(business)
+      }
     } else {
       let key: keyof RegisterBusiness
-
       for (key in validate) {
         if (validate[key].isError) {
           validate[key].isVisible = true
@@ -569,24 +571,35 @@ export default function BusinessRegistrationScreen() {
       }
       setValidate({ ...validate })
     }
-  }, [validate])
+  }, [validate, imagePicker])
 
+  useEffect(() => {
+    if (businessRegisterResponse.data) {
+      setIsLoading(false)
+      navigation.navigate(ACCEPT_SCREEN, {
+        email: business.email,
+        subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+        title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
+        url: 'api/users/get/email/authen/register'
+      })
+    }
+  }, [businessRegisterResponse])
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -80 }} onPress={() => navigation.goBack()}>
             <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>Đăng ký doanh nghiệp</Text>
+            <Text style={styles.txtHeader}>{t('RegisterBusinessComponent.titleRegisterBusiness')}</Text>
           </View>
         </View>
         <View>
           <TextInputWithTitle
-            value={business.name}
-            title='Tên doanh nghiệp'
-            placeholder='Nhập tên doanh nghiệp...'
+            defaultValue={business.name}
+            title={t('RegisterBusinessComponent.titleBusinessName')}
+            placeholder={t('RegisterBusinessComponent.placeholderBusinessName')}
             onChangeText={(value) => handleNameChange(value)}
             textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
@@ -598,9 +611,9 @@ export default function BusinessRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={business.email}
-            title='Email'
-            placeholder='Nhập email...'
+            defaultValue={business.email}
+            title={t('RegisterBusinessComponent.titleEmail')}
+            placeholder={t('RegisterBusinessComponent.placeholderEmail')}
             onChangeText={(value) => handleEmailChange(value)}
             onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
@@ -614,9 +627,9 @@ export default function BusinessRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={business.representor}
-            title='Họ tên người đại diện'
-            placeholder='Nhập họ tên người đại diện...'
+            defaultValue={business.representor}
+            title={t('RegisterBusinessComponent.titleRepresent')}
+            placeholder={t('RegisterBusinessComponent.placeholderRepresent')}
             onChangeText={(value) => handleRepresentoreChange(value)}
             textInputStyle={!validate.representor?.isError ? styles.textInput : styles.ip}
           />
@@ -629,9 +642,9 @@ export default function BusinessRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={business.taxCode}
-            title='Mã số thuế'
-            placeholder='Nhập mã số thuế...'
+            defaultValue={business.taxCode}
+            title={t('RegisterBusinessComponent.titleTaxCode')}
+            placeholder={t('RegisterBusinessComponent.placeholderTaxCode')}
             onChangeText={(value) => handleTaxCodeChange(value)}
             textInputStyle={!validate.taxCode?.isError ? styles.textInput : styles.ip}
           />
@@ -644,9 +657,9 @@ export default function BusinessRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={business.address}
-            title='Địa chỉ'
-            placeholder='Nhập địa chỉ...'
+            defaultValue={business.address}
+            title={t('RegisterBusinessComponent.titleAddress')}
+            placeholder={t('RegisterBusinessComponent.placeholderAddress')}
             onChangeText={(value) => handleAddressChange(value)}
             textInputStyle={!validate.address?.isError ? styles.textInput : styles.ip}
           />
@@ -658,9 +671,9 @@ export default function BusinessRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={business.phone}
-            title='Điện thoại'
-            placeholder='Nhập số điện thoại...'
+            defaultValue={business.phone}
+            title={t('RegisterBusinessComponent.titlePhone')}
+            placeholder={t('RegisterBusinessComponent.placeholderPhone')}
             onChangeText={(value) => handlePhoneChange(value)}
             textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
           />
@@ -671,18 +684,18 @@ export default function BusinessRegistrationScreen() {
             isError={validate.phone?.isError}
             isVisible={validate.phone?.isVisible}
           />
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <TextInputWithTitle
-              value={timeStart}
+              defaultValue={timeStart}
               textInputRef={timeStartRef}
               onFocus={() => {
                 setShowDatePickerStart(true)
               }}
               textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title='Thời gian bắt đầu'
+              title={t('RegisterBusinessComponent.titleTimeStart')}
               placeholder={moment().format('HH:mm')}
             />
-            <Text style={styles.txt}>đến</Text>
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titleTo')}</Text>
             <DatePicker
               modal
               mode='time'
@@ -701,13 +714,13 @@ export default function BusinessRegistrationScreen() {
             />
 
             <TextInputWithTitle
-              value={timeEnd}
+              defaultValue={timeEnd}
               textInputRef={timeEndRef}
               onFocus={() => {
                 setShowDatePickerEnd(true)
               }}
               textInputStyle={!validate.activeTime?.isError ? styles.textInput : styles.ip}
-              title='Thời gian kết thúc'
+              title={t('RegisterBusinessComponent.titleTimeEnd')}
               placeholder={moment().format('HH:mm')}
             />
 
@@ -737,10 +750,10 @@ export default function BusinessRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Mật khẩu đăng ký</Text>
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titlePass')}</Text>
             <TextInput
               value={business.password}
-              placeholder='Nhập mật khẩu đăng ký...'
+              placeholder={t('RegisterBusinessComponent.placeholderPass')}
               style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -758,10 +771,10 @@ export default function BusinessRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Nhập lại mật khẩu</Text>
+            <Text style={styles.txt}>{t('RegisterBusinessComponent.titleConfimPass')}</Text>
             <TextInput
               value={business.confimPassword}
-              placeholder='Nhập lại mật khẩu...'
+              placeholder={t('RegisterBusinessComponent.placeholderConfimPass')}
               style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -781,35 +794,44 @@ export default function BusinessRegistrationScreen() {
 
           <View style={styles.group}>
             <View style={styles.logo}>
-              <Text style={styles.txt}>Ảnh đại diện</Text>
+              <Text style={styles.txt}>{t('RegisterBusinessComponent.avata')}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    console.log(result)
+                    setImagePicker(result)
+                  }}
+                />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
+              {imagePicker && imagePicker.length > 0 && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: imagePicker && imagePicker.length > 0 ? imagePicker[0].uri : '' }}
+                />
               )}
             </View>
           </View>
         </View>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>Đăng ký tài khoản</Text>
+          <Text style={styles.txtRegister}>{t('RegisterBusinessComponent.titleRegister')}</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
 
         <View style={styles.login}>
-          <Text>Đã có tài khoản? </Text>
+          <Text>{t('RegisterBusinessComponent.requestLogin')} </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>Đăng nhập</Text>
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+              {t('RegisterBusinessComponent.titleLogin')}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -818,6 +840,35 @@ export default function BusinessRegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
+  btnBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  btnItem: {
+    padding: 5,
+    backgroundColor: '#1e90ff',
+    borderRadius: 10
+  },
+  txtBottom: {
+    color: COLOR_WHITE,
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  headerModal: {
+    borderBottomWidth: 0.7
+  },
+  txtModal: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 14
+  },
   header: { backgroundColor: COLOR_BTN_BLUE, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
   txtHeader: {
     color: '#ffffff',

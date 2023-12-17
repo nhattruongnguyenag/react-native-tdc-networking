@@ -9,73 +9,48 @@ import { onFocus } from '@reduxjs/toolkit/dist/query/core/setupListeners'
 import { TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Icon2 from 'react-native-vector-icons/AntDesign'
+import { useGetFollowerUserQuery } from '../../redux/Service'
+import axios from 'axios'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
+import { useTranslation } from 'react-multi-lang'
 
 
 let stompClient: Client
 const FollowerList = () => {
-  const [data, setData] = useState([])
+  const t = useTranslation()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const isFocused = useIsFocused()
   const [search, setSearch] = useState('')
-
-
-  useEffect(() => {
-    stompClient = getStompClient()
-    const onConnected = () => {
-      stompClient.subscribe(`/topic/user/detail/follow/follower`, onMessageReceived)
-      stompClient.send(
-        `/app/user/detail/follow/follower`,
-        {},
-        JSON.stringify({
-          userId: 12,
-        })
-      )
+  const { data, isFetching } = useGetFollowerUserQuery(
+    {
+      id: userLogin?.id,
+    },
+    {
+      pollingInterval: 500
     }
-    const onMessageReceived = (payload: any) => {
-      setData(JSON.parse(payload.body))
-    }
-    const onError = (err: string | Frame) => {
-      console.log('Loi ko lay dc du lieu')
-    }
-    stompClient.connect({}, onConnected, onError)
-  }, [isFocused])
-
+  )
+  const filter = (data?.data)?.filter(item => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/d/g, 'đ').includes(search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/d/g, 'đ')))
 
   const handleFollow = (userFollowId: number) => {
-    stompClient.send(
-      `/app/user/detail/follow/follower`,
-      {},
-      JSON.stringify({
-        userId: 12,
-        userFollowId: userFollowId
-      })
+    axios.post(`${SERVER_ADDRESS}api/users/follow`, {
+      userFollowId: userFollowId,
+      userId: userLogin?.id
+    }
     )
   }
-
 
   const handleDelSearch = () => {
     setSearch('')
   }
 
-  const getDataSearch = (i: string) => {
-    setSearch(i)
-    stompClient.send(
-      `/app/user/detail/follow/follower/search`,
-      {},
-      JSON.stringify({
-        userId: 12,
-        search: search
-      })
-    )
-  }
+ 
 
   return (
     <View>
       <View style={styles.search}>
         <TextInput
           value={search}
-          style={styles.txt_input} placeholder='Tìm kiếm ...'
-          onChangeText={(i) => getDataSearch(i)}
+          style={styles.txt_input} placeholder={t('FollowComponent.search')}
+          onChangeText={(i) => setSearch(i)}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
         {search != '' ? (
@@ -87,7 +62,12 @@ const FollowerList = () => {
           </Pressable>
         ) : null}
       </View>
-      <FollowListView data={data} handleFollow={handleFollow} />
+      {
+        search == '' ?
+          (<FollowListView data={data?.data} handleFollow={handleFollow} />)
+          :
+          (<FollowListView data={filter} handleFollow={handleFollow} />)
+      }
     </View>
   )
 }

@@ -1,37 +1,60 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
-import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionView'
+import { MULTI_CHOICE_QUESTION, ONE_CHOICE_QUESTION } from '../components/survey/AddQuestionModal'
 import MultiChoiceQuestion from '../components/survey/MultiChoiceQuestion'
 import OneChoiceQuestion from '../components/survey/OneChoiceQuestion'
 import ShortAnswerQuestion from '../components/survey/ShortAnswerQuestion'
-import { TOP_TAB_NAVIGATOR } from '../constants/Screen'
-import { useAppSelector } from '../redux/Hook'
-import { useAddSurveyPostMutation } from '../redux/Service'
+import { PEDDING_POST_TAB, TOP_TAB_NAVIGATOR } from '../constants/Screen'
+import { REVIEW_MODE } from '../constants/Variables'
+import { useAppDispatch, useAppSelector } from '../redux/Hook'
+import { useAddSurveyPostMutation, useUpdateSurveyPostMutation } from '../redux/Service'
+import { setSurveyPostRequest, setSurveyPostUpdated } from '../redux/Slice'
 
 export default function ReviewSurveyPostScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [addSurvey, addSurveyResult] = useAddSurveyPostMutation()
+  const [updateSurvey, updateSurveyResult] = useUpdateSurveyPostMutation()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (addSurveyResult.data) {
       if (addSurveyResult.data.status === 201 || 200) {
-        Alert.alert('Thành công !!!', 'Bài khảo sát đã được lưu')
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveSuccessContent'))
         navigation.navigate(TOP_TAB_NAVIGATOR)
       } else {
-        Alert.alert('Thất bại !!!', 'Bài khảo sát thêm thất bại')
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'))
       }
+      dispatch(setSurveyPostRequest(null))
     }
   }, [addSurveyResult])
 
+  useEffect(() => {
+    if (updateSurveyResult.data) {
+      if (updateSurveyResult.data.status === 201 || 200) {
+        dispatch(setSurveyPostUpdated(surveyPostRequest))
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenUpdateSuccessContent'));
+        navigation.navigate(PEDDING_POST_TAB)
+      } else {
+        Alert.alert(t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailTitle'), t('ReviewSurveyPostScreen.reviewSurveyScreenSaveFailContent'));
+      }
+      dispatch(setSurveyPostRequest(null))
+    }
+  }, [updateSurveyResult])
+
   const onBtnPublishPostPress = () => {
-    console.log(JSON.stringify(surveyPostRequest))
     if (surveyPostRequest) {
-      addSurvey(surveyPostRequest)
+      if (surveyPostRequest.postId) {
+        updateSurvey(surveyPostRequest)
+      } else {
+        addSurvey(surveyPostRequest)
+      }
     }
   }
 
@@ -45,25 +68,31 @@ export default function ReviewSurveyPostScreen() {
 
       <Text style={styles.surveyDesc}>{surveyPostRequest?.description}</Text>
 
-      <Text style={styles.textTitle}>Câu hỏi</Text>
+      <Text style={styles.textTitle}>{t('ReviewSurveyPostScreen.reviewSurveyScreenAnswerTitle')}</Text>
 
       <View style={styles.questionWrapper}>
         {surveyPostRequest?.questions.map((item, index) => {
           if (item.type === MULTI_CHOICE_QUESTION) {
             return <MultiChoiceQuestion
               key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           } else if (item.type === ONE_CHOICE_QUESTION) {
             return <OneChoiceQuestion
               key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           } else {
             return <ShortAnswerQuestion
               key={index}
-              reviewMode
-              data={item} index={index} isDisableDeleteBtn />
+              mode={[REVIEW_MODE]}
+              data={item}
+              index={index}
+              isDisableDeleteBtn />
           }
         })}
       </View>
@@ -74,19 +103,22 @@ export default function ReviewSurveyPostScreen() {
           btnStyle={{ marginRight: 10, width: 140, backgroundColor: '#eee' }}
           onPress={onBtnBackPress}
           iconName='arrow-left-thin'
-          title='Quay lại'
+          title={t('ReviewSurveyPostScreen.reviewSurveyScreenButtonGoBack')}
         />
 
         <ButtonFullWith
+          disable={updateSurveyResult.isLoading || addSurveyResult.isLoading}
+          loading={updateSurveyResult.isLoading || addSurveyResult.isLoading}
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={onBtnPublishPostPress}
           iconName='plus'
-          title='Hoàn tất'
+          title={t('ReviewSurveyPostScreen.reviewSurveyScreenButtonComplete')}
         />
       </View>
     </ScrollView>
   )
 }
+
 
 const styles = StyleSheet.create({
   body: {

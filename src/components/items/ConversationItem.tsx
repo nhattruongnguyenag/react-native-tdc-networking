@@ -1,21 +1,25 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
+import { API_URL_RENDER_IMAGE } from '../../constants/Path'
 import { MESSENGER_SCREEN } from '../../constants/Screen'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
 import { Conversation } from '../../types/Conversation'
 import { getConversationLastUpdate } from '../../utils/DateTimeUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 interface ConversationItemProps {
   data: Conversation
 }
 
 export default function ConversationItem({ data }: ConversationItemProps) {
+  const t = useTranslation()
   const [active, setActive] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const dispatch = useAppDispatch()
@@ -39,7 +43,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
 
   const lastMessageContent = useMemo(() => {
     if (data?.lastMessageType === 'images') {
-      return '[Hình ảnh]'
+      return `[${t('ConversationItem.conversationItemComponentImageMessageAnnotation')}]`
     }
 
     return data?.lastMessageContent
@@ -54,7 +58,7 @@ export default function ConversationItem({ data }: ConversationItemProps) {
     >
       <View style={styles.avatarGroup}>
         {data?.receiver.image ? (
-          <Avatar.Image size={60} source={{ uri: data?.receiver?.image }} />
+          <Avatar.Image size={60} source={{ uri: API_URL_RENDER_IMAGE + data?.receiver?.image }} />
         ) : (
           <DefaultAvatar identifer={data?.receiver.name[0]} />
         )}

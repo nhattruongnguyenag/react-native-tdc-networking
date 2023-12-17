@@ -1,216 +1,154 @@
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, View } from 'react-native'
+import { RootStackParamList } from '../App'
 import ButtonFullWith from '../components/buttons/ButtonFullWith'
+import Loading from '../components/common/Loading'
+import TextValidate from '../components/common/TextValidate'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
-import TextValidate from '../components/TextValidate'
 import { ADD_QUESTION_SCREEN } from '../constants/Screen'
 import { useAppDispatch, useAppSelector } from '../redux/Hook'
-import { setSurveyPostRequest } from '../redux/Slice'
+import { useGetSurveyPostUpdateQuery } from '../redux/Service'
+import { setSurveyPostRequest, updateSurveyDescription, updateSurveyTitle } from '../redux/Slice'
 import { SurveyPostRequest } from '../types/SurveyPost'
-import { InputTextValidate, isBlank, isContainSpecialCharacter, isLengthInRange, isNotBlank, isNotContainSpecialCharacter } from '../utils/ValidateUtils'
+import { isSurveyPost } from '../utils/PostHelper'
+import { ErrorMessage, isExistFieldInvalid, validateField } from '../utils/ValidateHelper'
+import { InputTextValidate } from '../utils/ValidateUtils'
 
 interface CreateSurveyPostScreenValidate {
   title: InputTextValidate
   description: InputTextValidate
 }
 
-const isAllFieldsValid = (validate: CreateSurveyPostScreenValidate): boolean => {
-  let key: keyof CreateSurveyPostScreenValidate
-
-  for (key in validate) {
-    if (validate[key].isError) {
-      return false
-    }
-  }
-
-  return true
+interface CreateSurveyPostErrorMessage {
+  title: ErrorMessage
+  description: ErrorMessage
 }
 
-// man hinh dang bai viet khao sat
+const error: CreateSurveyPostErrorMessage = {
+  title: {
+    blank: 'CreateSurveyPostScreen.surveySaveTitleEmptyValidate'
+  },
+  description: {
+    blank: 'CreateSurveyPostScreen.surveySaveDescEmptyValidate'
+  }
+}
+
 export default function CreateSurveyPostScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { userLogin, surveyPostRequest } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const dispatch = useAppDispatch()
+  const t = useTranslation()
+  const { params } = useRoute<RouteProp<RootStackParamList, 'CREATE_SURVEY_SCREEN'>>()
+
+  const surveyPostUpdate = useMemo<SurveyPostRequest | undefined>(() => {
+    return params?.surveyPostRequest
+  }, [])
+
+  const defaultSurveyPost: SurveyPostRequest = {
+    type: 'khao-sat',
+    title: '',
+    description: '',
+    userId: userLogin?.id ?? -1,
+    questions: [],
+    groupId: params?.groupId
+  }
+
+  useEffect(() => {
+    if (surveyPostRequest) {
+      if (surveyPostRequest) {
+        dispatch(setSurveyPostRequest(surveyPostRequest))
+      }
+    } else {
+      dispatch(setSurveyPostRequest(defaultSurveyPost))
+    }
+  }, [])
+
   const [validate, setValidate] = useState<CreateSurveyPostScreenValidate>({
     title: {
-      textError: 'Tiêu đề không được để trống',
+      textError: '',
       isVisible: false,
-      isError: true
+      isError: false
     },
     description: {
-      textError: 'Mô tả không được để trống',
+      textError: '',
       isVisible: false,
-      isError: true
+      isError: false
     }
   })
 
-  const defaultSurveyPost: SurveyPostRequest = useMemo(() => {
-    return {
-      type: 'khao-sat',
-      title: '',
-      description: '',
-      images: [],
-      userId: userLogin?.id ?? -1,
-      questions: [],
-      groupId: 1
-    }
-  }, [])
-
-  useEffect(() => {
-    dispatch(setSurveyPostRequest(defaultSurveyPost))
-  }, [])
-
-  const setTitleError = useCallback((error: string) => {
-    setValidate({
-      ...validate,
-      title: {
-        textError: error,
-        isError: true,
-        isVisible: true
-      }
-    })
-    return
-  }, [])
-
-  const setDescriptionError = useCallback((error: string) => {
-    setValidate({
-      ...validate,
-      description: {
-        textError: error,
-        isError: true,
-        isVisible: true
-      }
-    })
-    return
-  }, [])
-
   const onTitleChangeText = useCallback(
     (value: string) => {
-      console.log(surveyPostRequest)
-      if (isBlank(value)) {
-        setTitleError("Tiêu đề không được để trống")
-        return
-      }
-
-      if (isContainSpecialCharacter(value)) {
-        setTitleError("Tiêu đề không được để trống")
-        return
-      }
-
-      if (!isLengthInRange(value, 1, 255)) {
-        setTitleError("Tiêu đề không vượt quá 255 ký tự")
-        return
-      }
-
-      if (surveyPostRequest) {
-        dispatch(setSurveyPostRequest({ ...surveyPostRequest, title: value }))
-      }
-
-      setValidate({
-        ...validate,
-        title: {
-          ...validate.title,
-          isError: false,
-          isVisible: false
-        }
-      })
+      validateField(error['title'], validate['title'], value)
+      setValidate({ ...validate })
+      dispatch(updateSurveyTitle(value))
     },
-    [surveyPostRequest, validate.title]
+    [surveyPostRequest, validate]
   )
 
   const onDescriptionChangeText = useCallback(
     (value: string) => {
-      console.log(surveyPostRequest)
-      if (isBlank(value)) {
-        setDescriptionError("Mô tả không được để trống")
-        return
-      }
-
-      if (isContainSpecialCharacter(value)) {
-        setDescriptionError("Mô tả không được để trống")
-        return
-      }
-
-      if (!isLengthInRange(value, 1, 255)) {
-        setDescriptionError("Mô tả không vượt quá 255 ký tự")
-        return
-      }
-
-      if (surveyPostRequest) {
-        dispatch(setSurveyPostRequest({ ...surveyPostRequest, description: value }))
-      }
-
-      setValidate({
-        ...validate,
-        description: {
-          ...validate.description,
-          isError: false,
-          isVisible: false
-        }
-      })
+      validateField(error['description'], validate['description'], value)
+      setValidate({ ...validate })
+      dispatch(updateSurveyDescription(value))
     },
-    [surveyPostRequest, validate.description]
+    [surveyPostRequest, validate]
   )
 
   const onBtnNextPress = () => {
-    if (isAllFieldsValid(validate)) {
-      navigation.navigate(ADD_QUESTION_SCREEN)
-    } else {
-      let key: keyof CreateSurveyPostScreenValidate
-
-      for (key in validate) {
-        if (validate[key].isError && !validate[key].isVisible) {
-          validate[key].isVisible = true
-        }
+    if (surveyPostRequest) {
+      if (isExistFieldInvalid<SurveyPostRequest, CreateSurveyPostScreenValidate, CreateSurveyPostErrorMessage>(surveyPostRequest, validate, error)) {
+        setValidate({ ...validate })
+      } else {
+        navigation.navigate(ADD_QUESTION_SCREEN)
       }
-
-      setValidate({...validate})
     }
-
   }
 
   return (
     <View style={styles.body}>
-      <TextInputWithTitle
-        value={surveyPostRequest?.title ?? ''}
-        onChangeText={(value) => onTitleChangeText(value)}
-        title='Tiêu đề'
-        placeholder='Nhập tiêu đề...'
-      />
+      <Fragment>
+        <TextInputWithTitle
+          defaultValue={surveyPostRequest?.title}
+          onChangeText={(value) => onTitleChangeText(value)}
+          title={t('CreateSurveyPostScreen.surveySaveTitleTitle')}
+          placeholder={t('CreateSurveyPostScreen.surveySaveTitlePlaceholder')}
+        />
 
-      <TextValidate
-        customStyle={{ marginLeft: 10 }}
-        textError={validate.title.textError}
-        isError={validate.title.isError}
-        isVisible={validate.title.isVisible}
-      />
+        <TextValidate
+          customStyle={{ marginLeft: 10 }}
+          textError={t(validate.title.textError)}
+          isError={validate.title.isError}
+          isVisible={validate.title.isVisible}
+        />
 
-      <TextInputWithTitle
-        value={surveyPostRequest?.description ?? ''}
-        onChangeText={(value) => onDescriptionChangeText(value)}
-        title='Mô tả'
-        placeholder='Nhập mô tả bài viết...'
-        multiline={true}
-        numberOfLine={7}
-        textInputStyle={styles.textInputStyle}
-      />
+        <TextInputWithTitle
+          defaultValue={surveyPostRequest?.description}
+          onChangeText={(value) => onDescriptionChangeText(value)}
+          title={t('CreateSurveyPostScreen.surveySaveDescTitle')}
+          placeholder={t('CreateSurveyPostScreen.surveySaveDescPlaceholder')}
+          multiline={true}
+          numberOfLine={7}
+          textInputStyle={styles.textInputStyle}
+        />
 
-      <TextValidate
-        customStyle={{ marginLeft: 10 }}
-        textError={validate.description.textError}
-        isError={validate.description.isError}
-        isVisible={validate.description.isVisible}
-      />
+        <TextValidate
+          customStyle={{ marginLeft: 10 }}
+          textError={t(validate.description.textError)}
+          isError={validate.description.isError}
+          isVisible={validate.description.isVisible}
+        />
 
-      <ButtonFullWith
-        iconName='arrow-right-thin'
-        btnStyle={styles.customBtnStyle}
-        contentStyle={{ flexDirection: 'row-reverse' }}
-        title='Tiếp theo'
-        onPress={() => onBtnNextPress()}
-      />
+        <ButtonFullWith
+          iconName='arrow-right-thin'
+          btnStyle={styles.customBtnStyle}
+          contentStyle={{ flexDirection: 'row-reverse' }}
+          title={t('CreateSurveyPostScreen.surveySaveButtonGoNext')}
+          onPress={() => onBtnNextPress()}
+        />
+      </Fragment>
     </View>
   )
 }

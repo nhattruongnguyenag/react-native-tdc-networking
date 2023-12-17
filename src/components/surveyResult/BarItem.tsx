@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React, { memo, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Tooltip from 'react-native-walkthrough-tooltip'
-import { Pressable } from 'react-native'
-import { ChoiceItemResult } from '../../types/response/SurveyResult'
-import { LayoutChangeEvent } from 'react-native'
+import { BAR_ITEM_COMPONENT_NUMBER_OF_VOTE } from '../../constants/StringVietnamese'
 import { ChartData } from './OptionSurveyQuesionResult'
 
 interface BarItemProps {
@@ -14,6 +13,7 @@ interface BarItemProps {
 }
 
 function BarItem(props: BarItemProps) {
+  const t = useTranslation()
   const [tooltipVisible, setTooltipVisible] = useState(false)
   return (
     <Tooltip
@@ -24,14 +24,13 @@ function BarItem(props: BarItemProps) {
       backgroundColor={'#ffffff00'}
       showChildInTooltip={false}
       isVisible={tooltipVisible}
-      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + ' lượt bình chọn)'}</Text>}
+      content={<Text style={{ color: '#fff' }}>{props.data.name + ' (' + props.data.votes + t('BarItemComponentNumberVote.barItemComponentNumberOfVote') + ')'}</Text>}
       onClose={() => setTooltipVisible(false)}
       placement='top'
     >
       <Pressable
         onPress={() => {
           setTooltipVisible(true)
-          console.log(props.data.color)
         }}
         style={[styles.barChartItemContainer, { backgroundColor: props.data.color + (tooltipVisible ? 'b3' : 'ff') }]}
       >

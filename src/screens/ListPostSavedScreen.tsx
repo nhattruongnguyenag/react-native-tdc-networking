@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View, Button, Image, TouchableOpacity, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../constants/SystemConstant';
@@ -12,23 +12,23 @@ import { getStompClient } from '../sockets/SocketClient';
 import { RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CustomizePost from '../components/post/CustomizePost';
-import { TEXT_SEARCH } from '../constants/StringVietnamese';
+import { TEXT_SEARCH, TYPE_POST_BUSINESS } from '../constants/StringVietnamese';
+import { useTranslation } from 'react-multi-lang';
+import { useGetListPostSavedQuery } from '../redux/Service';
 
 let stompClient: Client
 const ListPostSavedScreen = () => {
-  const [data, setData] = useState<Post[]>([])
-  const [dataSearch, setDataType] = useState<Post[]>([])
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
   const [search, setSearch] = useState('')
   const [value, setValue] = useState(null)
-
-  const likeAction = (obj: LikeAction) => {
-  }
-
+  const t = useTranslation()
+  const [data, setData] = useState<Post[]>()
+  
+  ////////////////////////////////////////////////
   useEffect(() => {
     stompClient = getStompClient()
     const onConnected = () => {
-      stompClient.subscribe(`/topic/posts/save/page`, onMessageReceived)
+      stompClient.subscribe(`/topic/posts/save`, onMessageReceived)
     }
     const onMessageReceived = (payload: any) => {
       setData(JSON.parse(payload.body))
@@ -38,120 +38,118 @@ const ListPostSavedScreen = () => {
     }
     stompClient.connect({}, onConnected, onError)
   }, [])
+  useEffect(() => {
+    axios.get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`).then((response) => {
+      setData(response.data.data)
+    })
+  }, [])
+
+  const likeAction = (obj: LikeAction) => {
+    like(obj)
+  }
+
+  const like = useCallback(async (likeData: LikeAction) => {
+    stompClient.send(`/app/posts/save/user/like`,
+      {}, JSON.stringify(likeData))
+  }, [])
 
   const handleUnSave = (post_id: number) => {
     stompClient.send(
-      `/app/posts/user/unsave`,
+      `/app/posts/save/user/unsave`,
       {},
       JSON.stringify({
-        userId: userLogin?.id ?? 12,
-        postId: post_id
+        postId: post_id,
+        userId: userLogin?.id
       })
     )
-    setSearch('')
+  }
+  const handleDelete = (post_id: number) => {
   }
 
+  //////////////////////////////////////////////////
+  // const searchBox = () => {
+  //   stompClient = getStompClient()
+  //   const onConnected = () => {
+  //     stompClient.subscribe(`/topic/posts/save/${userLogin?.id}/search/${search}`, onMessageReceived)
+  //   }
+  //   const onMessageReceived = (payload: any) => {
+  //     // setData(JSON.parse(payload.body))
+  //     console.log(payload.body);
+      
+  //   }
+  //   const onError = (err: string | Frame) => {
+  //     console.log('aaaaaaaaaaaaaaaaaaaaa');
+  //     console.log(err)
+  //   }
+  //   stompClient.connect({}, onConnected, onError)
 
-  useEffect(() => {
-    axios
-      .get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`)
-      .then((response) => {
-        setData(response.data.data)
-      })
-  }, [])
+  //   stompClient.send(`/app/posts/save/${userLogin?.id}/search/abc/listen`,
+  //     {})
 
+  // }
 
-  useEffect(() => {
-    if (search.trim() === '') {
-      axios
-        .get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`)
-        .then((response) => {
-          setData(response.data.data)
-        })
-    }
-    const dataSearch = []
-    for (let index = 0; index < data.length; index++) {
-      if (data[index].type == 'thong-thuong') {
-        if (data[index].content.includes(search)) {
-          dataSearch.push(data[index])
-        }
-      } else {
-        if (data[index].title?.includes(search)) {
-          dataSearch.push(data[index])
-        }
-      }
-    }
-    setData(dataSearch)
-  }, [search])
-
-
-  const getDataSavedApi = async () => {
-    try {
-      axios
-        .get(`${SERVER_ADDRESS}api/posts/user/save/${userLogin?.id}`)
-        .then((response) => {
-          setData(response.data.data)
-        })
-    } catch (error) {
-      console.log(error)
-    }
+  const searchPost = (i:string) => {
+    setSearch(i)
+    // console.log(search);
+    
+    // stompClient.send(`/app/posts/save/user/search/${i}/listen`,
+    //   {})
   }
 
 
   return (
     <View style={styles.searchScreen}>
-      <View style={styles.search}>
+      {/* <View style={styles.search}>
         <TextInput
           value={search}
-          style={styles.txt_input} placeholder={TEXT_SEARCH}
-          onChangeText={(i) => setSearch(i)}
+          style={styles.txt_input} placeholder={t('SavedPostListComponent.search')}
+          onChangeText={(i) => searchPost(i)}
+          onPressIn={() => searchBox()}
         />
         <Icon style={styles.btn_search} name='search' size={22} color='#000000' />
-      </View>
+      </View> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl
           refreshing={false}
-          onRefresh={() => getDataSavedApi()}
+          onRefresh={() => data}
         />}
       >
         {
-          data.map((item: any) =>
-            <CustomizePost
-              id={item.id}
-              userId={item.user['id']}
-              name={item.user['name']}
-              avatar={item.user['image']}
-              typeAuthor={'Doanh Nghiệp'}
-              available={null}
-              timeCreatePost={item.createdAt}
-              content={item.content}
-              type={item.type}
-              likes={item.likes}
-              comments={item.comment}
-              commentQty={item.commentQuantity}
-              images={item.images}
-              role={item.user['roleCodes']}
-              likeAction={likeAction}
-              location={item.location ?? null}
-              title={item.title ?? null}
-              expiration={item.expiration ?? null}
-              salary={item.salary ?? null}
-              employmentType={item.employmentType ?? null}
-              description={item.description ?? null}
-              isSave={item.isSave}
-              group={''}
-              handleUnSave={handleUnSave}
-            />
-          )
-        }
+          data?.map((item: any) => <CustomizePost
+            id={item.id}
+            userId={item.user['id']}
+            name={item.user['name']}
+            avatar={item.user['image']}
+            typeAuthor={'Doanh Nghiệp'}
+            available={null}
+            timeCreatePost={item.createdAt}
+            content={item.content}
+            type={item.type}
+            likes={item.likes}
+            comments={item.comment}
+            commentQty={item.commentQuantity}
+            images={item.images}
+            role={item.user['roleCodes']}
+            likeAction={likeAction}
+            location={item.location ?? null}
+            title={item.title ?? null}
+            expiration={item.expiration ?? null}
+            salary={item.salary ?? null}
+            employmentType={item.employmentType ?? null}
+            description={item.description ?? null}
+            isSave={item.isSave}
+            group={''}
+            handleUnSave={handleUnSave}
+            handleDelete={handleDelete}
+            active={0} />
+          )}
       </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-
   search: {
     marginTop: 10,
     marginBottom: 10,

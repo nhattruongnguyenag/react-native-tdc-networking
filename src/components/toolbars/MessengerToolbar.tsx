@@ -1,20 +1,36 @@
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import moment from 'moment'
 import React, { Fragment } from 'react'
+import { useTranslation } from 'react-multi-lang'
 import { StyleSheet, Text, View } from 'react-native'
 import { Appbar, Avatar } from 'react-native-paper'
 import { PURPLE_COLOR } from '../../constants/Color'
+import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch, useAppSelector } from '../../redux/Hook'
 import { setSelectConversation } from '../../redux/Slice'
-import { getUserStatus } from '../../utils/DateTimeUtils'
-import DefaultAvatar from '../DefaultAvatar'
+import { User } from '../../types/User'
+import DefaultAvatar from '../common/DefaultAvatar'
 
 const AVATAR_HEIGHT = 40
 
-export default function MessengerToolbar({}) {
+export default function MessengerToolbar({ }) {
+  const t = useTranslation()
   const dispatch = useAppDispatch()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   const { selectConversation } = useAppSelector((state) => state.TDCSocialNetworkReducer)
+
+  const getUserStatus = (user?: User): string => {
+    let status = ''
+
+    if (user?.status === 1) {
+      status = t('MessengerToolbar.userStatusActive')
+    } else {
+      status = `${t('MessengerToolbar.userStatusInactive')} ` + moment(user?.lastActive).fromNow()
+    }
+
+    return status
+  }
 
   return (
     <Appbar.Header style={styles.header}>
@@ -33,7 +49,7 @@ export default function MessengerToolbar({}) {
           <Fragment>
             <View style={styles.avatarGroup}>
               {selectConversation?.receiver.image ? (
-                <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: selectConversation?.receiver?.image }} />
+                <Avatar.Image size={AVATAR_HEIGHT} source={{ uri: SERVER_ADDRESS + 'api/images/' + selectConversation?.receiver?.image }} />
               ) : (
                 <DefaultAvatar size={AVATAR_HEIGHT} identifer={selectConversation?.receiver.name[0]} />
               )}
@@ -42,8 +58,12 @@ export default function MessengerToolbar({}) {
               />
             </View>
             <View style={styles.conversationContentGroup}>
-              <Text style={styles.userFullnameTitle}>{selectConversation?.receiver.name}</Text>
-              <Text style={styles.conversationContent}>{getUserStatus(selectConversation?.receiver)}</Text>
+              <View style={{ flexDirection: 'row'}}>
+                <Text numberOfLines={1} ellipsizeMode='tail' style={styles.userFullnameTitle}>{selectConversation?.receiver.name}</Text>
+              </View>
+              <View style={styles.conversationContent}>
+                <Text>{getUserStatus(selectConversation?.receiver)}</Text>
+              </View>
             </View>
           </Fragment>
         }
@@ -89,15 +109,21 @@ const styles = StyleSheet.create({
   },
   conversationContentGroup: {
     display: 'flex',
-    justifyContent: 'center',
-    marginStart: 7
+    marginStart: 7,
+    flexDirection: 'column',
+    flex: 1
   },
   userFullnameTitle: {
     fontWeight: 'bold',
     fontSize: 14,
-    marginBottom: 3
+    marginBottom: 3,
+    flex: 1,
+    paddingRight: 10,
+    flexWrap: 'wrap'
   },
-  conversationContent: {},
+  conversationContent: {
+    flex: 1
+  },
   conversationExtraInfoGroup: {
     display: 'flex',
     justifyContent: 'center',

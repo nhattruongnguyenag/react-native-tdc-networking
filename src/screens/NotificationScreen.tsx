@@ -1,93 +1,141 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-  Vibration,
-  Alert
-} from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import Icon1 from 'react-native-vector-icons/Entypo'
-import Icon2 from 'react-native-vector-icons/AntDesign'
-import { SERVER_ADDRESS } from '../constants/SystemConstant'
-import axios from 'axios'
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { useAppDispatch, useAppSelector } from '../redux/Hook'
-import { TEXT_NOTIFICATION, TEXT_NOTIFICATION_ALL_READ, TEXT_NOTIFICATION_DELETE, TEXT_NOTIFICATION_NOT_READ } from '../constants/StringVietnamese'
-import moment from 'moment'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-multi-lang'
+import {
+  Dimensions, Pressable, StyleSheet,
+  Text,
+  View
+} from 'react-native'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import Icon2 from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { RootStackParamList } from '../App'
+import NotificationListView from '../components/listviews/NotificationListView'
+import { DETAIL_JOB_APPLY, DETAIL_POST_SCREEN, SURVEY_CONDUCT_SCREEN } from '../constants/Screen'
+import { SERVER_ADDRESS } from '../constants/SystemConstant'
+import { useAppSelector } from '../redux/Hook'
+import { useGetNotificationsUserQuery } from '../redux/Service'
+import { ACCEPT_POST, CREATE_SURVEY, POST_LOG, SAVE_POST, UPDATE_POST, USER_APPLY_JOB, USER_COMMENT_POST, USER_CONDUCT_SURVEY, USER_CREATE_WATCH_JOB, USER_LIKE_POST, USER_REPLY_COMMENT } from '../constants/TypeNotification'
+import { NotificationModel } from '../types/response/NotificationModel'
+import { ActivityIndicator } from 'react-native-paper'
 const { height, width } = Dimensions.get('screen')
+
+const NOTIFICATION_CREATE_SURVEY = 'create_survey'
 
 // man hinh hien thi danh sach thong bao
 export default function NotificationScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  // const [menuRef, setMenuRef] = useState<Menu | null>()
-  const [data, setData] = useState([])
-  const [dataIsRead, setDataIsRead] = useState([])
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
-  const [filterData, setFilterData] = useState([])
+  const t = useTranslation()
+  const [arr, setArr] = useState<NotificationModel[]>()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const callData = () => {
-    axios
-      .post(`${SERVER_ADDRESS}api/notifications/user/`, {
-        id: userLogin?.id
-      })
-      .then((res) => {
-        const respo = res.data.data
-        setData(respo)
-      })
-      .catch((error) => console.log(error))
-  }
-  useEffect(() => {
-    callData()
-  }, [])
+  const { data, isFetching } = useGetNotificationsUserQuery(
+    {
+      id: userLogin?.id ?? -1
+    },
+    {
+      pollingInterval: 800
+    }
+  )
 
   useEffect(() => {
-    axios.get(`${SERVER_ADDRESS}api/notifications/find?content=${search}`).then((res) => {
-      const respo = res.data.data
-      setFilterData(respo)
-    })
-  }, [search])
+    setIsLoading(true)
+    console.log(isLoading);
+    
+    setArr([])
+  }, [userLogin?.id])
 
-  const handleIsRead = (id: any, userId: any) => {
+  useEffect(() => {
+    setIsLoading(false)
+    setArr(data?.data)
+  }, [isFetching])
+
+  const handleIsRead = (id: number) => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/makeNotSeen`, {
         id: id,
-        userId: userId
+        userId: userLogin?.id
       })
-      callData()
     } catch (error) {
       console.error('Error updating name:', error)
     }
   }
 
-  const handleDelNotification = (id: number, userId: number) => {
+  const handleDelNotification = (id: number) => {
     try {
-      axios.delete(`${SERVER_ADDRESS}api/notifications/`, { data: { id: id, userId: userId } })
-      callData()
+      axios.delete(`${SERVER_ADDRESS}api/notifications/`, { data: { id: id, userId: userLogin?.id } })
     } catch (error) {
       console.error('Error updating name:', error)
     }
   }
 
-  const handleItem = (id: number, userId: number) => {
+
+
+
+  const handleItem = (id: number) => {
+    const notification = data?.data.find(item => id === item.id)
+
+    if (notification) {
+      switch (notification.type) {
+        case CREATE_SURVEY:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'create_survey' })
+          break
+        case SAVE_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'save_post' })
+          break
+        case USER_LIKE_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_like_post' })
+          break
+        case USER_COMMENT_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_comment_post' })
+          break
+        case USER_REPLY_COMMENT:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_reply_comment' })
+          break
+        case USER_CONDUCT_SURVEY:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_conduct_survey' })
+          break
+        case ACCEPT_POST:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'accept_post' })
+          break
+        case USER_CREATE_WATCH_JOB:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'user_create_watch_job' })
+          break
+        case POST_LOG:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: notification.dataValue, notificationType: 'post_log' })
+          break
+        case USER_APPLY_JOB:
+          navigation.navigate(DETAIL_JOB_APPLY, { cvId: notification.dataValue.id })
+          break
+        default:
+          navigation.navigate(DETAIL_POST_SCREEN, { post: null, notificationType: '' })
+          break
+      }
+    }
     try {
-      // navigation.navigate('Man hinh muon den', { id: id })
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
         id: id,
-        userId: userId
+        userId: userLogin?.id
       })
-      callData()
+    } catch (error) {
+      console.error('Error updating name:', error)
+    }
+  }
+
+  const handleItemCanNotClick = (id: number) => {
+    console.log('123');
+
+    try {
+      axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus`, {
+        id: id,
+        userId: userLogin?.id
+      })
     } catch (error) {
       console.error('Error updating name:', error)
     }
@@ -96,110 +144,44 @@ export default function NotificationScreen() {
   const handleListIsRead = () => {
     try {
       axios.put(`${SERVER_ADDRESS}api/notifications/changeStatus/all`, { userId: userLogin?.id })
-      callData()
     } catch (error) {
       console.log(error)
     }
   }
 
-  const handleDelSearch = () => {
-    setSearch('')
-  }
 
-  const handleOpenSearch = () => {
-    setOpenSearch(!openSearch)
-  }
 
-  //Render Items
-  const renderItem = (item: any, index: any) => {
-    return (
-      <View>
-        <Pressable
-          onPress={() => handleItem(item.id, item.user.id)}
-          key={index}
-          style={[styles.item, { backgroundColor: item.status === '1' ? '#ffffff' : '#f3f9ff' }]}
-        >
-          <View style={styles.cont}>
-            <Image
-              style={styles.image}
-              source={{
-                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7h13cetHlwG784hz57YxCRBAfacOVhCmPrt0EoVRAcg&s'
-              }}
-            />
-            <View style={styles.content}>
-              <Text style={styles.name}>{item.content}</Text>
-              <Text style={styles.tg}>{moment(item.createddate).fromNow()}</Text>
-            </View>
-          </View>
-          <Menu style={styles.menu} key={item.id} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)}>
-            <MenuTrigger>
-              <Icon1 name='dots-three-vertical' size={17} color='#000000' />
-            </MenuTrigger>
-            <MenuOptions optionsContainerStyle={{ marginLeft: 50, marginTop: 25, borderRadius: 10 }}>
-              <MenuOption onSelect={() => handleDelNotification(item.id, item.user.id)}>
-                <Text style={styles.option}>{TEXT_NOTIFICATION_DELETE}</Text>
-              </MenuOption>
-              <MenuOption onSelect={() => handleIsRead(item.id, item.user.id)}>
-                <Text style={styles.option}>{TEXT_NOTIFICATION_NOT_READ}</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        </Pressable>
-      </View>
-    )
-  }
 
   return (
     <>
       <View style={styles.screen}>
+
         {/* Select */}
         <View style={[styles.operation, { height: openSearch ? height * 0.168 : height * 0.1 }]}>
           <View style={styles.select}>
             <View style={styles.txtN}>
-              <Text style={styles.txt}>{TEXT_NOTIFICATION}</Text>
+              <Text style={styles.txt}>{t('NotificationsComponent.notification')}</Text>
             </View>
             <View style={styles.tick}>
               <TouchableOpacity style={styles.tickButton} onPress={handleListIsRead}>
-                <Text style={styles.txtTick}>{TEXT_NOTIFICATION_ALL_READ}</Text>
+                <Icon name='readme' size={20} color='#ffffff' /><Text style={styles.txtTick}>{t('NotificationsComponent.readAll')}</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.searchBtn}>
-              <TouchableOpacity style={styles.searchButton} onPress={handleOpenSearch}>
-                <Text>
-                  <Icon name='search' size={20} color='#ffffff' />
-                </Text>
-              </TouchableOpacity>
-            </View>
+
           </View>
-          {openSearch && (
-            <View>
-              <TextInput
-                value={search}
-                style={styles.search}
-                placeholder='Tìm kiếm thông báo...'
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={(i) => setSearch(i)}
-              />
-              {search != '' ? (
-                <Pressable
-                  style={{ position: 'absolute', right: 0, paddingRight: 30, marginTop: 20 }}
-                  onPress={handleDelSearch}
-                >
-                  <Icon2 name='closecircleo' size={18} color='grey' />
-                </Pressable>
-              ) : null}
-            </View>
-          )}
+
         </View>
-        {/*  */}
-        <ScrollView style={styles.platList}>
-          {search === ''
-            ? data !== null
-              ? data.map((item, index) => renderItem(item, index))
-              : null
-            : filterData.map((item, index) => renderItem(item, index))}
-        </ScrollView>
+        {
+
+          isLoading ?
+            <ActivityIndicator color={'#000000'} style={[{ display: 'flex'}, {marginTop: 100}]} />
+            :
+            <NotificationListView data={arr}
+              handleItem={handleItem}
+              handleDelNotification={handleDelNotification}
+              handleIsRead={handleIsRead}
+              handleItemCanNotClick={handleItemCanNotClick} />
+        }
       </View>
     </>
   )
@@ -246,16 +228,18 @@ const styles = StyleSheet.create({
   },
   tickButton: {
     backgroundColor: '#0065ff',
+    flexDirection: 'row',
+    justifyContent: 'center',
     width: '100%',
     height: 35,
     borderRadius: 6,
-    justifyContent: 'center',
     alignItems: 'center'
   },
   txtTick: {
     color: '#ffffff',
     fontSize: 13,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: 10
   },
   //Search
   searchBtn: {
@@ -271,54 +255,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 6
   },
-  //Flatlist
-  platList: {
-    width: '100%'
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 80,
-    // backgroundColor: '#f3f9ff',
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 10,
-    paddingRight: 15,
-    borderBottomWidth: 0.8,
-    borderBottomColor: 'grey'
-  },
-  image: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    paddingVertical: 20,
-    borderColor: '#0065ff',
-    borderWidth: 1
-  },
-  cont: {
-    flexDirection: 'row'
-  },
-  content: {
-    paddingTop: 8,
-    paddingLeft: 10,
-    width: '80%'
-  },
-  name: {
-    color: '#000000',
-    fontSize: 17
-  },
-  tg: {
-    fontSize: 15,
-    color: '#B9B6B6',
-    paddingBottom: 0
-  },
-  menu: {
-    justifyContent: 'center'
-  },
-  option: {
-    fontSize: 15,
-    paddingTop: 7,
-    paddingBottom: 7,
-    paddingLeft: 5
-  }
 })

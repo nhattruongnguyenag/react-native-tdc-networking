@@ -1,22 +1,12 @@
-import {
-  Alert,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import TextInputWithTitle from '../components/inputs/TextInputWithTitle'
 import { useNavigation, ParamListBase } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { LOGIN_SCREEN } from '../constants/Screen'
-import { COLOR_BTN_BLUE } from '../constants/Color'
+import { ACCEPT_SCREEN, LOGIN_SCREEN } from '../constants/Screen'
+import { COLOR_BTN_BLUE, COLOR_WHITE } from '../constants/Color'
 import { Student } from '../types/Student'
 import axios, { AxiosResponse } from 'axios'
 import { SERVER_ADDRESS } from '../constants/SystemConstant'
@@ -32,9 +22,16 @@ import {
   isContainSpecialCharacter,
   isEmail,
   isLengthInRange,
-  isPassword
+  isPassword,
+  isPhone
 } from '../utils/ValidateUtils'
-import TextValidate from '../components/TextValidate'
+import TextValidate from '../components/common/TextValidate'
+import { useTranslation } from 'react-multi-lang'
+import ImagePicker from '../components/ImagePicker'
+import { Asset } from 'react-native-image-picker'
+import { handleUploadImage } from '../utils/ImageHelper'
+import { StudentRequest } from '../types/request/StudentRequest'
+import { useAddStudentMutation } from '../redux/Service'
 
 interface RegisterStudent {
   name: InputTextValidate
@@ -44,6 +41,7 @@ interface RegisterStudent {
   facultyName: InputTextValidate
   password: InputTextValidate
   confimPassword: InputTextValidate
+  phone: InputTextValidate
 }
 
 const isAllFieldsValid = (validate: RegisterStudent): boolean => {
@@ -57,82 +55,88 @@ const isAllFieldsValid = (validate: RegisterStudent): boolean => {
 
   return true
 }
+
 // man hinh dang ky danh cho sinh vien
 export default function StudentRegistrationScreen() {
+  const t = useTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+  const [imagePicker, setImagePicker] = useState<Asset[]>()
   const [imagePickerOption, setImagePickerOption] = useState<ActionSheet | null>()
-  const { imagesUpload } = useAppSelector((state) => state.TDCSocialNetworkReducer)
-  const [student, setStudent] = useState<
-    Omit<
-      Student,
-      'status' | 'roleCodes' | 'createdAt' | 'updatedAt' | 'isTyping' | 'isMessageConnect' | 'facultyGroupCode'
-    >
-  >({
+  const [saveStudent, saveStudentResponse] = useAddStudentMutation()
+  const [student, setStudent] = useState<StudentRequest>({
     id: 0,
     password: '',
     code: Date.now().toString(),
     email: '',
     name: '',
     image: '',
-    facultyName: '',
-    major: '',
+    phone: '',
+    facultyId: 0,
+    majorId: 0,
     studentCode: '',
-    confimPassword: ''
+    confimPassword: '',
+    subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+    content: ''
   })
   const [dataRequest, setDataRequest] = useState([
     {
-      id: '',
+      id: 0,
       name: '',
       majors: [
         {
-          id: '',
+          id: 0,
           name: ''
         }
       ]
     }
   ])
 
-  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: '', name: '' }])
+  const [dataNganhRequest, setDataNganhRequest] = useState([{ id: 0, name: '' }])
   const [isLoading, setIsLoading] = useState(false)
   const [validate, setValidate] = useState<RegisterStudent>({
     name: {
-      textError: 'Tên sinh viên không được để trống',
+      textError: t('RegisterStudentComponent.errorStudentNameEmpty'),
       isVisible: false,
       isError: true
     },
     email: {
-      textError: 'Email không được để trống',
+      textError: t('RegisterStudentComponent.errorEmailEmpty'),
       isVisible: false,
       isError: true
     },
     studentCode: {
-      textError: 'Mã số sinh viên không được để trống',
+      textError: t('RegisterStudentComponent.errorStudentCodeEmpty'),
+      isVisible: false,
+      isError: true
+    },
+    phone: {
+      textError: t('RegisterStudentComponent.errorPhoneEmpty'),
       isVisible: false,
       isError: true
     },
     facultyName: {
-      textError: 'Tên khoa không được để trống',
+      textError: t('RegisterStudentComponent.errorFaculityEmpty'),
       isVisible: false,
       isError: true
     },
     major: {
-      textError: 'Tên ngành không được để trống',
+      textError: t('RegisterStudentComponent.errorMajor'),
       isVisible: false,
       isError: true
     },
     password: {
-      textError: 'Mật khẩu không được để trống',
+      textError: t('RegisterStudentComponent.errorPasswordEmpty'),
       isVisible: false,
       isError: true
     },
     confimPassword: {
-      textError: 'Nhập lại mật khẩu không được để trống',
+      textError: t('RegisterStudentComponent.errorConfimPasswordEmpty'),
       isVisible: false,
       isError: true
     }
   })
-  const [value, setValue] = useState('')
-  const [item, setItem] = useState('')
+  const [value, setValue] = useState(t('RegisterStudentComponent.placeholderFaculity'))
+  const [item, setItem] = useState(t('RegisterStudentComponent.placeholderMajor'))
   const [isCheck, setCheck] = useState({
     secureTextEntry: true
   })
@@ -159,7 +163,7 @@ export default function StudentRegistrationScreen() {
             ...validate.name,
             isError: true,
             isVisible: true,
-            textError: 'Tên sinh viên không được để trống'
+            textError: t('RegisterStudentComponent.errorStudentNameEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -168,7 +172,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: 'Tên sinh viên không được chứa ký tự đặc biệt',
+            textError: t('RegisterStudentComponent.errorStudentNameNotSpecial'),
             isVisible: true
           }
         })
@@ -178,7 +182,7 @@ export default function StudentRegistrationScreen() {
           name: {
             ...validate.name,
             isError: true,
-            textError: 'Tên sinh viên không vượt quá 255 ký tự',
+            textError: t('RegisterStudentComponent.errorStudentNameNotLengthMax'),
             isVisible: true
           }
         })
@@ -206,7 +210,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã số sinh viên không được để trống'
+            textError: t('RegisterStudentComponent.errorStudentCodeEmpty')
           }
         })
       } else if (isContainSpecialCharacter(value)) {
@@ -216,7 +220,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã số sinh viên không được chứa ký tự đặc biệt'
+            textError: t('RegisterStudentComponent.errorStudentCodeNotSpecial')
           }
         })
       } else if (!stCode.test(value)) {
@@ -226,17 +230,7 @@ export default function StudentRegistrationScreen() {
             ...validate.studentCode,
             isError: true,
             isVisible: true,
-            textError: 'Mã sinh viên không đúng định dạng'
-          }
-        })
-      } else if (!isLengthInRange(value, 1, 12)) {
-        setValidate({
-          ...validate,
-          studentCode: {
-            ...validate.studentCode,
-            isError: true,
-            isVisible: true,
-            textError: 'Mã sinh viên không vượt quá 255 ký tự'
+            textError: t('RegisterStudentComponent.errorStudentCodeNotFormat')
           }
         })
       } else {
@@ -252,6 +246,43 @@ export default function StudentRegistrationScreen() {
     },
     [validate]
   )
+  const handlePhoneChange = useCallback(
+    (value: string) => {
+      setStudent({ ...student, phone: value })
+      if (isBlank(value)) {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: t('RegisterStudentComponent.errorPhoneEmpty'),
+            isVisible: true
+          }
+        })
+      } else if (!isPhone(value)) {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: true,
+            textError: t('RegisterStudentComponent.errorPhoneNotFormat'),
+            isVisible: true
+          }
+        })
+      } else {
+        setValidate({
+          ...validate,
+          phone: {
+            ...validate.phone,
+            isError: false,
+            isVisible: false
+          }
+        })
+      }
+    },
+    [validate]
+  )
+
   const handleCheckEmail = useCallback(() => {
     axios
       .post(SERVER_ADDRESS + `api/users/check?email=${student.email}`)
@@ -262,7 +293,7 @@ export default function StudentRegistrationScreen() {
             email: {
               ...validate.email,
               isError: true,
-              textError: 'Email đã được sử dụng',
+              textError: t('RegisterStudentComponent.errorSameEmail'),
               isVisible: true
             }
           })
@@ -282,7 +313,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email không được để trống'
+            textError: t('RegisterStudentComponent.errorEmailEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 255)) {
@@ -292,7 +323,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email không vượt quá 255 ký tự'
+            textError: t('RegisterStudentComponent.errorEmailNotLengthMax')
           }
         })
       } else if (!isEmail(value)) {
@@ -302,7 +333,7 @@ export default function StudentRegistrationScreen() {
             ...validate.email,
             isError: true,
             isVisible: true,
-            textError: 'Email sai định dạng'
+            textError: t('RegisterStudentComponent.errorEmailNotFormat')
           }
         })
       } else {
@@ -328,7 +359,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không được để trống'
+            textError: t('RegisterStudentComponent.errorPasswordEmpty')
           }
         })
       } else if (!isLengthInRange(value, 1, 8)) {
@@ -338,7 +369,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không vượt quá 8 ký tự'
+            textError: t('RegisterStudentComponent.errorPassNotLengthMax')
           }
         })
       } else if (!isPassword(value)) {
@@ -348,7 +379,7 @@ export default function StudentRegistrationScreen() {
             ...validate.password,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu sai định dạng'
+            textError: t('RegisterStudentComponent.errorPassNotFormat')
           }
         })
       } else {
@@ -374,7 +405,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: 'Trường nhập lại mật khẩu không được để trống'
+            textError: t('RegisterStudentComponent.errorConfimPasswordEmpty')
           }
         })
       } else if (value != student.password) {
@@ -384,7 +415,7 @@ export default function StudentRegistrationScreen() {
             ...validate.confimPassword,
             isVisible: true,
             isError: true,
-            textError: 'Mật khẩu không đúng'
+            textError: t('RegisterStudentComponent.errorConfimPassNotMatch')
           }
         })
       } else {
@@ -401,16 +432,16 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleMajorNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, major: value })
-      if (isBlank(value)) {
+    (value: number) => {
+      setStudent({ ...student, majorId: value })
+      if (value == null) {
         setValidate({
           ...validate,
           major: {
             ...validate.major,
             isError: true,
             isVisible: true,
-            textError: 'Tên khoa không được để trống'
+            textError: t('RegisterStudentComponent.errorMajorEmpty')
           }
         })
       } else {
@@ -427,16 +458,17 @@ export default function StudentRegistrationScreen() {
     [validate]
   )
   const handleFacultyNameChange = useCallback(
-    (value: string) => {
-      setStudent({ ...student, facultyName: value })
-      if (isBlank(value)) {
+    (value: any) => {
+      setStudent({ ...student, facultyId: value.id })
+      setDataNganhRequest(value.majors)
+      if (value == null) {
         setValidate({
           ...validate,
           facultyName: {
             ...validate.facultyName,
             isVisible: true,
             isError: true,
-            textError: 'Tên khoa không được để trống'
+            textError: t('RegisterStudentComponent.errorFaculityEmpty')
           }
         })
       } else {
@@ -457,36 +489,25 @@ export default function StudentRegistrationScreen() {
       .get(SERVER_ADDRESS + 'api/faculty')
       .then((response) => {
         setDataRequest(response.data.data)
-        dataRequest.map((data) => {
-          if (data.name === student.facultyName) {
-            setDataNganhRequest(data.majors)
-          }
-        })
       })
       .catch((error) => {
         console.log(error)
       })
   }, [student])
 
-  useEffect(() => {
-    setStudent({ ...student, image: imagesUpload ? imagesUpload[0] : '' })
-  }, [imagesUpload])
-
   const onSubmit = useCallback(() => {
     if (isAllFieldsValid(validate)) {
       setIsLoading(true)
-      axios
-        .post<Student, AxiosResponse<Data<Token>>>(SERVER_ADDRESS + 'api/student/register', student)
-        .then((response) => {
-          setIsLoading(false)
-          Alert.alert('Thông báo', 'Đăng ký thành công')
-          navigation.navigate(LOGIN_SCREEN)
+      if (imagePicker) {
+        handleUploadImage(imagePicker, (data) => {
+          saveStudent({
+            ...student,
+            image: data[0]
+          })
         })
-        .catch((error) => {
-          console.log(error)
-          Alert.alert('Đăng ký thất bại', 'Thông tin không hợp lệ')
-          setIsLoading(false)
-        })
+      } else {
+        saveStudent(student)
+      }
     } else {
       let key: keyof RegisterStudent
 
@@ -498,25 +519,36 @@ export default function StudentRegistrationScreen() {
 
       setValidate({ ...validate })
     }
-  }, [validate])
+  }, [validate, imagePicker])
 
+  useEffect(() => {
+    if (saveStudentResponse.data) {
+      setIsLoading(false)
+      navigation.navigate(ACCEPT_SCREEN, {
+        email: student.email,
+        subject: t('AuthenticateRegistraion.textSubjectAuthenRegistration'),
+        title: t('AuthenticateRegistraion.titleSubjectAuthenRegistration'),
+        url: 'api/users/get/email/authen/register'
+      })
+    }
+  }, [saveStudentResponse])
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <SafeAreaView>
         <View style={styles.header}>
           <TouchableOpacity style={{ left: -100 }} onPress={() => navigation.goBack()}>
             <Icon name='chevron-left' size={20} color={'#ffff'} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Text style={styles.txtHeader}>Đăng ký sinh viên</Text>
+            <Text style={styles.txtHeader}>{t('RegisterStudentComponent.titleRegisterStudent')}</Text>
           </View>
         </View>
 
         <View style={styles.form}>
           <TextInputWithTitle
-            value={student.name}
-            title='Họ tên'
-            placeholder='Nhập họ tên...'
+            defaultValue={student.name}
+            title={t('RegisterStudentComponent.titleStudentName')}
+            placeholder={t('RegisterStudentComponent.placeholderStudentName')}
             onChangeText={(value) => handleStudentNameChange(value)}
             textInputStyle={!validate.name?.isError ? styles.textInput : styles.ip}
           />
@@ -529,9 +561,9 @@ export default function StudentRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={student.studentCode}
-            title='Mã số sinh viên'
-            placeholder='Nhập mã số sinh viên...'
+            defaultValue={student.studentCode}
+            title={t('RegisterStudentComponent.titleStudentCode')}
+            placeholder={t('RegisterStudentComponent.placeholderStudentCode')}
             onChangeText={(value) => handleStudentCodeChange(value)}
             textInputStyle={!validate.studentCode?.isError ? styles.textInput : styles.ip}
           />
@@ -544,9 +576,24 @@ export default function StudentRegistrationScreen() {
           />
 
           <TextInputWithTitle
-            value={student.email}
-            title='Email sinh viên'
-            placeholder='Nhập email sinh viên...'
+            defaultValue={student.phone}
+            title={t('RegisterStudentComponent.titlePhone')}
+            placeholder={t('RegisterStudentComponent.placeholderPhone')}
+            onChangeText={(value) => handlePhoneChange(value)}
+            textInputStyle={!validate.phone?.isError ? styles.textInput : styles.ip}
+          />
+
+          <TextValidate
+            customStyle={{ marginLeft: 10 }}
+            textError={validate.phone?.textError}
+            isError={validate.phone?.isError}
+            isVisible={validate.phone?.isVisible}
+          />
+
+          <TextInputWithTitle
+            defaultValue={student.email}
+            title={t('RegisterStudentComponent.titleEmail')}
+            placeholder={t('RegisterStudentComponent.placeholderEmail')}
             onChangeText={(value) => handleEmailChange(value)}
             onBlur={() => handleCheckEmail()}
             textInputStyle={!validate.email?.isError ? styles.textInput : styles.ip}
@@ -560,7 +607,7 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Khoa</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleFaculity')}</Text>
             <Dropdown
               style={[styles.dropdown, { borderColor: !validate.facultyName?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -571,12 +618,12 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              placeholder='Chọn khoa...'
-              searchPlaceholder='Tìm kiếm...'
+              placeholder={value}
+              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={value}
               onChange={(item) => {
-                setValue(item.id)
-                handleFacultyNameChange(item.name)
+                setValue(item.name)
+                handleFacultyNameChange(item)
               }}
             />
           </View>
@@ -589,9 +636,9 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Ngành học</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleMajor')}</Text>
             <Dropdown
-              placeholder='Chọn ngành học...'
+              placeholder={item}
               style={[styles.dropdown, { borderColor: !validate.major?.isError ? '#228b22' : '#97A1B0' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -601,11 +648,11 @@ export default function StudentRegistrationScreen() {
               search
               labelField='name'
               valueField='id'
-              searchPlaceholder='Tìm kiếm...'
+              searchPlaceholder={t('RegisterStudentComponent.placeholderSearch')}
               value={item}
               onChange={(item) => {
-                setItem(item.id)
-                handleMajorNameChange(item.name)
+                setItem(item.name)
+                handleMajorNameChange(item.id)
               }}
             />
           </View>
@@ -618,10 +665,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Mật khẩu đăng ký</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titlePass')}</Text>
             <TextInput
               value={student.password}
-              placeholder='Nhập mật khẩu đăng ký...'
+              placeholder={t('RegisterStudentComponent.placeholderPass')}
               style={[styles.ip, { borderColor: !validate.password?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck.secureTextEntry ? true : false}
               onChangeText={(value) => handlePasswordChange(value)}
@@ -639,10 +686,10 @@ export default function StudentRegistrationScreen() {
           />
 
           <View style={styles.group}>
-            <Text style={styles.txt}>Nhập lại mật khẩu</Text>
+            <Text style={styles.txt}>{t('RegisterStudentComponent.titleConfimPass')}</Text>
             <TextInput
               value={student.confimPassword}
-              placeholder='Nhập lại mật khẩu...'
+              placeholder={t('RegisterStudentComponent.placeholderConfimPass')}
               style={[styles.ip, { borderColor: !validate.confimPassword?.isError ? '#228b22' : '#97A1B0' }]}
               secureTextEntry={isCheck1.secureTextEntry ? true : false}
               onChangeText={(value) => handleConfirmPasswordChange(value)}
@@ -662,34 +709,43 @@ export default function StudentRegistrationScreen() {
 
           <View style={styles.group}>
             <View style={styles.logo}>
-              <Text style={styles.txt}>Ảnh đại diện</Text>
+              <Text style={styles.txt}>{t('RegisterStudentComponent.avata')}</Text>
               <TouchableOpacity style={styles.btnImg} onPress={() => imagePickerOption?.show()}>
                 <Icon name='camera-retro' size={20}></Icon>
-                <CustomizedImagePicker optionsRef={(ref) => setImagePickerOption(ref)} />
+                <ImagePicker
+                  optionsRef={(ref) => setImagePickerOption(ref)}
+                  onResult={(result) => {
+                    console.log(result)
+                    setImagePicker(result)
+                  }}
+                />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center' }}>
-              {imagesUpload ? (
-                <Image style={styles.img} source={{ uri: SERVER_ADDRESS + `api/images/${imagesUpload}` }} />
-              ) : (
-                ''
+              {imagePicker && imagePicker.length > 0 && (
+                <Image
+                  style={styles.img}
+                  source={{ uri: imagePicker && imagePicker.length > 0 ? imagePicker[0].uri : '' }}
+                />
               )}
             </View>
           </View>
         </View>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => onSubmit()}>
-          <Text style={styles.txtRegister}>Đăng ký tài khoản</Text>
+          <Text style={styles.txtRegister}>{t('RegisterStudentComponent.titleRegister')}</Text>
           <ActivityIndicator color={'#fff'} style={{ display: isLoading ? 'flex' : 'none' }} />
         </TouchableOpacity>
         <View style={styles.login}>
-          <Text>Đã có tài khoản? </Text>
+          <Text>{t('RegisterStudentComponent.requestLogin')} </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(LOGIN_SCREEN)
             }}
           >
-            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>Đăng nhập</Text>
+            <Text style={{ color: COLOR_BTN_BLUE, fontWeight: 'bold' }}>
+              {t('RegisterStudentComponent.titleLogin')}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -698,6 +754,19 @@ export default function StudentRegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerModal: {
+    borderBottomWidth: 0.7
+  },
+  txtModal: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingLeft: 15
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 14
+  },
   header: {
     backgroundColor: '#1e90ff',
     alignItems: 'center',
@@ -803,5 +872,21 @@ const styles = StyleSheet.create({
   textInput: {
     borderColor: '#228b22',
     borderWidth: 2
+  },
+  btnBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  btnItem: {
+    padding: 5,
+    backgroundColor: '#1e90ff',
+    borderRadius: 10
+  },
+  txtBottom: {
+    color: COLOR_WHITE,
+    fontWeight: 'bold',
+    fontSize: 18
   }
 })

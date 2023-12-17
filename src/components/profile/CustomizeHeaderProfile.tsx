@@ -1,19 +1,20 @@
 import { StyleSheet, View, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { COLOR_BLACK, COLOR_GREY_FEEBLE, COLOR_WHITE } from '../../constants/Color'
-import DefaultAvatar from '../DefaultAvatar'
+import DefaultAvatar from '../common/DefaultAvatar'
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import IconEntypo from 'react-native-vector-icons/Entypo'
 import { SCREEN_HEIGHT } from '../../utils/SystemDimensions'
 import { CLICK_CAMERA_AVATAR_EVENT, CLICK_CAMERA_BACKGROUND_EVENT, SEE_AVATAR, SEE_BACKGROUND } from '../../constants/Variables'
 
 interface HeaderProfileType {
+  isSameUser: boolean,
   background: string,
   avatar: string | null,
   name: string,
   handleClickIntoHeaderComponentEvent: (flag: number) => void
 }
-export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType>) {
+const CustomizeHeaderProfile = (props: Readonly<HeaderProfileType>) => {
   return (
     <View>
       <Pressable
@@ -23,11 +24,13 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
           style={styles.imageBackground}
           source={{ uri: SERVER_ADDRESS + `api/images/${props.background}` }} />
         <View style={styles.wrapperCameraBackground}>
-          <Pressable
-            onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
-            style={[styles.btnUploadImageBackground, styles.border]}>
-            <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-          </Pressable>
+          {
+            props.isSameUser && <Pressable
+              onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_BACKGROUND_EVENT)}
+              style={[styles.btnUploadImageBackground, styles.border]}>
+              <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
+            </Pressable>
+          }
         </View>
       </Pressable>
       <Pressable
@@ -42,11 +45,6 @@ export default function CustomizeHeaderProfile(props: Readonly<HeaderProfileType
                 style={styles.avatar}
                 source={{ uri: SERVER_ADDRESS + `api/images/${props.avatar}` }}
               />
-              <Pressable
-                onPress={() => props.handleClickIntoHeaderComponentEvent(CLICK_CAMERA_AVATAR_EVENT)}
-                style={[styles.btnUploadImageAvatar, styles.border]}>
-                <IconEntypo name='camera' size={15} color={COLOR_BLACK} />
-              </Pressable>
             </View>
             :
             <View style={styles.imageAvatarWrapper}>
@@ -103,13 +101,14 @@ const styles = StyleSheet.create({
   },
   border: {
     borderWidth: 2,
-    borderColor: COLOR_WHITE,
+    borderColor: COLOR_GREY_FEEBLE,
   },
   avatar: {
     width: '100%',
     height: '100%',
     borderRadius: 100,
     objectFit: 'cover',
+    backgroundColor:COLOR_WHITE
   },
   wrapperCameraBackground: {
     position: 'absolute',
@@ -117,3 +116,5 @@ const styles = StyleSheet.create({
     bottom: 10,
   }
 })
+
+export default memo(CustomizeHeaderProfile)

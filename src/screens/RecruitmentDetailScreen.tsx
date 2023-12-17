@@ -15,6 +15,9 @@ import { RootStackParamList } from '../App'
 import { JOB_APPLY_SCREEN } from '../constants/Screen'
 import { formatDateTime } from '../utils/FormatTime'
 import { useAppSelector } from '../redux/Hook'
+import Loading from '../components/common/Loading'
+import { t } from 'react-multi-lang'
+import { isStudent } from '../utils/UserHelper'
 
 export default function RecruitmentDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'RECRUITMENT_DETAIL_SCREEN'>>()
@@ -30,26 +33,37 @@ export default function RecruitmentDetailScreen() {
     benefit: '',
     description: '',
     requirement: '',
-    title: ''
+    title: '',
+    isApplyJob: 0
   })
+  const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState([data.benefit])
   const [description, setDescription] = useState([data.description])
   const [requirement, setRequirement] = useState([data.requirement])
   useEffect(() => {
     if (postId) {
+      setIsLoading(true)
       axios
         .get(SERVER_ADDRESS + `api/posts/recruitment?postId=${postId}&&userLogin=${userLogin?.id}`)
         .then((recruitment) => {
+          setIsLoading(false)
           setData(recruitment.data.data)
         })
         .catch((error) => {
+          setIsLoading(false)
           console.log(error)
         })
     }
   }, [postId])
 
   const onSubmit = () => {
-    navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
+    if (data.isApplyJob === 1) {
+      Alert.alert(t('RecuitmentPostDetailComponent.textNotification'), t('RecuitmentPostDetailComponent.textApplied'))
+    } else if (!isStudent(userLogin)) {
+      Alert.alert(t('RecuitmentPostDetailComponent.textNotification'), t('RecuitmentPostDetailComponent.textNoApply'))
+    } else {
+      navigation.navigate(JOB_APPLY_SCREEN, { recruitmentPostId: postId })
+    }
   }
 
   useEffect(() => {
@@ -57,111 +71,126 @@ export default function RecruitmentDetailScreen() {
     setDescription(data.description.split(','))
     setRequirement(data.requirement.split(','))
   }, [data.benefit, data.description, data.requirement])
-  
+
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.group}>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Vị trí tuyển dụng</Text>
-            <View style={styles.iconRecuitment}>
-              <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.title}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Hình thức làm việc</Text>
-            <View style={styles.iconRecuitment}>
-              <Icon name='briefcase' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.employmentType}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Lương</Text>
-            <View style={styles.iconRecuitment}>
-              <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}>
-                {' '}
-                {formatVietNamCurrency(data.salary)} vnd/tháng{}
-              </Text>
-            </View>
-          </View>
+    <>
+      {isLoading ? (
+        <Loading title={t('RecuitmentPostDetailComponent.titleLoader')} />
+      ) : (
+        <ScrollView style={{ backgroundColor: '#fff' }}>
+          <>
+            {data.title !== '' && (
+              <>
+                <SafeAreaView>
+                  <View style={styles.group}>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.titleJob')}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <FontAwesome6Icon name='ranking-star' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}>{data.title}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.employeType')}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <Icon name='briefcase' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {data.employmentType}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.salary')}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <FontAwesome6Icon name='money-bill-1' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}>
+                          {' '}
+                          {formatVietNamCurrency(data.salary)}{' '}{t('RecuitmentPostDetailComponent.salaryUnitMonth')}
+                        </Text>
+                      </View>
+                    </View>
 
-          <View style={styles.item}>
-            <Text style={styles.txt}>Thời hạn ứng tuyển</Text>
-            <View style={styles.iconRecuitment}>
-              <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {formatDateTime(data.expiration)}</Text>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <Text style={styles.txt}>Địa chỉ làm việc</Text>
-            <View style={styles.iconRecuitment}>
-              <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
-              <Text style={{ color: COLOR_BLACK }}> {data.location}</Text>
-            </View>
-          </View>
-        </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.expiration')}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <AntDesignIcon name='clockcircleo' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {formatDateTime(data.expiration)}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.item}>
+                      <Text style={styles.txt}>{t('RecuitmentPostDetailComponent.location')}</Text>
+                      <View style={styles.iconRecuitment}>
+                        <Icon name='map-marker-alt' size={16} color={COLOR_GREY} />
+                        <Text style={{ color: COLOR_BLACK, marginLeft: 10 }}> {data.location}</Text>
+                      </View>
+                    </View>
+                  </View>
 
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Phúc lợi</Text>
-          </View>
-          <View style={styles.welfare}>
-            {result
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <Text style={styles.welfareTxt} key={index}>{item}</Text>
-              ))}
-          </View>
-        </View>
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.benefit')}</Text>
+                    </View>
+                    <View style={styles.welfare}>
+                      {result
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <Text style={styles.welfareTxt} key={index}>
+                            {item}
+                          </Text>
+                        ))}
+                    </View>
+                  </View>
 
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Mô tả công việc</Text>
-          </View>
-          <View>
-            {description
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <View style={styles.description} key={index}>
-                  <Icon name='circle' style={styles.icon} />
-                  <Text style={{ color: COLOR_BLACK }}>{item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}</Text>
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.descriptionJob')}</Text>
+                    </View>
+                    <View>
+                      {description
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <View style={styles.description} key={index}>
+                            <Icon name='circle' style={styles.icon} />
+                            <Text style={{ color: COLOR_BLACK }}>
+                              {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            </Text>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+
+                  <View style={styles.group1}>
+                    <View>
+                      <Text style={styles.headerWelfare}>{t('RecuitmentPostDetailComponent.requipmentJob')}</Text>
+                    </View>
+                    <View>
+                      {requirement
+                        .filter((item) => item !== '')
+                        .map((item, index) => (
+                          <View style={styles.description} key={index}>
+                            <Icon name='circle' style={styles.icon} />
+                            <Text style={{ color: COLOR_BLACK }}>
+                              {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
+                            </Text>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+                </SafeAreaView>
+
+                <View>
+                  <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
+                    <Text style={styles.txtRecruitment}>{t('RecuitmentPostDetailComponent.btnApplyJob')}</Text>
+                  </TouchableOpacity>
                 </View>
-              ))}
-          </View>
-        </View>
-
-        <View style={styles.group1}>
-          <View>
-            <Text style={styles.headerWelfare}>Yêu cầu công việc</Text>
-          </View>
-          <View>
-            {requirement
-              .filter((item) => item !== '')
-              .map((item, index) => (
-                <View style={styles.description} key={index}>
-                  <Icon name='circle' style={styles.icon} />
-                  <Text style={{ color: COLOR_BLACK }} >
-                    {item.replace(/(^|\s)\S/g, (l) => l.toUpperCase())}
-                  </Text>
-                </View>
-              ))}
-          </View>
-        </View>
-      </SafeAreaView>
-
-      <View>
-        <TouchableOpacity style={styles.btnRecruitment} onPress={() => onSubmit()}>
-          <Text style={styles.txtRecruitment}>Nộp đơn ứng tuyển</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+              </>
+            )}
+          </>
+        </ScrollView>
+      )}
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {},
   txtHeader: {
     color: COLOR_BLACK,
     paddingVertical: 10,
@@ -219,7 +248,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   description: {
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'flex-start',
     marginHorizontal: 10
   },

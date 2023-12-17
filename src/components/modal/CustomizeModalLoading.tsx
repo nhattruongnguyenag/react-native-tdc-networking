@@ -4,7 +4,7 @@ import { COLOR_WHITE } from '../../constants/Color'
 
 export default function CustomizeModalLoading() {
   return (
-    <Modal visible={true} transparent statusBarTranslucent={true}>
+    <Modal animationType='slide' visible={true} transparent statusBarTranslucent={true}>
       <View style={styles.container}>
         <ActivityIndicator size={50} color={COLOR_WHITE} />
       </View>
