@@ -92,8 +92,7 @@ export default function CustomizeCreatePostToolbar(props: Readonly<CreatePostToo
                 }
                 <TouchableOpacity
                     onPress={() => handleClickChooseTypePost(TYPE_NORMAL_POST)}
-                    style={[typeChoose == TYPE_NORMAL_POST ? styles.activeButton : styles.unActiveButton, styles.button]}
-                >
+                    style={[typeChoose == TYPE_NORMAL_POST ? styles.activeButton : styles.unActiveButton, styles.button]}>
                     <IoniconsIcon
                         name='create' size={20}
                         color={typeChoose == TYPE_NORMAL_POST ? COLOR_WHITE : COLOR_GREY}

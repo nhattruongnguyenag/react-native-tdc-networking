@@ -27,6 +27,7 @@ import { useTranslation } from 'react-multi-lang'
 import ImagePicker from '../components/ImagePicker'
 import { Asset } from 'react-native-image-picker'
 import { handleUploadImage } from '../utils/ImageHelper'
+import { useUpdateNormalPostMutation } from '../redux/Service'
 
 interface ImageUpdate {
   id: number,
@@ -48,6 +49,7 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
   const [imagePicker, setImagePicker] = useState<Asset[] | null>(null);
   const [type, setType] = useState<string>(TYPE_NORMAL_POST);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+  const [updatePost, updatePostResponse] = useUpdateNormalPostMutation()
 
   useEffect(() => {
     if (updateNormalPost != undefined) {
@@ -87,18 +89,8 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
             content: content,
             images: images
           }
-          const status = await updateNormalPostAPI(apiUrl, data)
-          setIsLoading(false)
-          if (status === 201) {
-            setContent('');
-            setImagePicker(null);
-            setImages([]);
-            showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostSuccess"), false)
-            Keyboard.dismiss()
-            navigation.goBack();
-          } else {
-            showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostFail"), false)
-          }
+
+          updatePost(data)
         }
       } catch (error) {
         console.error('Error:', error)
@@ -122,12 +114,29 @@ export default function CreateNormalPostScreen({ navigation, route }: any) {
     }
   }
 
+  useEffect(() => {
+    setIsLoading(false)
+    if (updatePostResponse.data) {
+      if (updatePostResponse.data.status == 201) {
+        setContent('');
+        setImagePicker(null);
+        setImages([]);
+        showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostSuccess"), false)
+        Keyboard.dismiss()
+        navigation.goBack();
+      } else {
+        showAlert(t("AlertNotify.alertNotifyTitle"), t("AlertNotify.alertNotifyUpdatePostFail"), false)
+      }
+    }
+  }, [updatePostResponse.data])
+
   const HandleClickIntoIconBtnArrowLeft = () => {
     setContent('');
     setImagePicker(null);
     setImages([]);
     navigation.goBack()
   }
+
   const handleLongClickIntoImage = async (imageName: string) => {
     let result: boolean = false
     result = await showAlert(t("CreateNormalPost.createNormalPostAllerTitle"), t("CreateNormalPost.createNormalPostAllertQuestion"), true)
