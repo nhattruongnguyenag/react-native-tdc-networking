@@ -15,9 +15,11 @@ import { SurveyPostRequest } from '../types/SurveyPostRequest'
 import { User } from '../types/User'
 
 export interface TDCSocialNetworkState {
+  previousScreen: string
   postAcceptId: number | undefined
   postRejectId: number | undefined
   postDeleteId: number | undefined
+  surveyPostUpdated: SurveyPostRequest | null
   postRejectLog: PostRejectedLog | null
   surveyPostRequest: SurveyPostRequest | null
   questions: Question[]
@@ -41,6 +43,8 @@ export interface TDCSocialNetworkState {
 }
 
 const initialState: TDCSocialNetworkState = {
+  previousScreen: '',
+  surveyPostUpdated: null,
   postDeleteId: undefined,
   postAcceptId: undefined,
   postRejectId: undefined,
@@ -184,12 +188,20 @@ export const TDCSocialNetworkSlice = createSlice({
     },
     setPostAcceptId: (state, action: PayloadAction<number | undefined>) => {
       state.postAcceptId = action.payload
+    },
+    setSurveyPostUpdated: (state, action: PayloadAction<SurveyPostRequest | null>) => {
+      state.surveyPostRequest = action.payload
+    },
+    setPreviousScreen: (state, action: PayloadAction<string>) => {
+      state.previousScreen = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 export const {
+  setPreviousScreen,
+  setSurveyPostUpdated,
   setPostRejectLog,
   setDefaultLanguage,
   setImagesUpload,

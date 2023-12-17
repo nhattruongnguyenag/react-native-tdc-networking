@@ -14,7 +14,7 @@ import { TYPE_POST_RECRUITMENT, TYPE_POST_SURVEY } from '../../constants/StringV
 import { SERVER_ADDRESS } from '../../constants/SystemConstant'
 import { useAppDispatch } from '../../redux/Hook'
 import { useAcceptPostMutation, useDeletePostMutation } from '../../redux/Service'
-import { setPostAcceptId, setPostDeleteId, setPostRejectLog } from '../../redux/Slice'
+import { setPostAcceptId, setPostDeleteId, setPostRejectLog, setPreviousScreen, setSurveyPostRequest } from '../../redux/Slice'
 import { Data } from '../../types/Data'
 import { PostRejectLogResponse } from '../../types/response/PostRejectLogResponse'
 import { PostResponseModal } from '../../types/response/PostResponseModal'
@@ -27,6 +27,13 @@ import { PostApprovalItemProps, POST_APPROVAL, POST_PENDING, POST_REJECT } from 
 const RECRUITMENT_BADGE_COLOR = '#999fac'
 const SURVEY_BADGE_COLOR = '#00C9F4'
 const TEXT_IMAGE_BADGE_COLOR = '#00A255'
+
+interface MenuOptionItem {
+    type: number
+    name: string
+    visible: boolean
+}
+
 
 export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -80,7 +87,8 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
             if (isRecruitmentPost(post)) {
                 navigation.navigate(CREATE_RECRUITMENT_SCREEN, { recruitmentPostId: post.id })
             } else if (isSurveyPost(post)) {
-                navigation.navigate(CREATE_SURVEY_SCREEN, { surveyPostId: post.id })
+                navigation.navigate(CREATE_SURVEY_SCREEN)
+                dispatch(setSurveyPostRequest({...post, postId: post.id}))
             } else if (isTextImagePost(post)) {
                 const updateNormalPost: UpdateNormalPost = {
                     postId: post.id ?? 0,
@@ -109,7 +117,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
     const handleNavigateToProfileScreen = () => {
         console.log(props.post)
         if (props.post && props.post.user) {
-            navigation.navigate(PROFILE_SCREEN, { userId: props.post.user.id, group: props.post.group.code })
+            navigation.navigate(PROFILE_SCREEN, { userId: props.post?.user?.id, group: props.post?.group?.code })
         }
     }
 
@@ -140,7 +148,7 @@ export default function HeaderPostApprovalItem(props: PostApprovalItemProps) {
                     <MenuTrigger style={styles.menuTrigger}>
                         <FontAwesome6Icon name='ellipsis-vertical' size={18} color={'#000'} />
                     </MenuTrigger>
-                    <MenuOptions optionsContainerStyle={styles.menuOption} >
+                    <MenuOptions optionsContainerStyle={styles.menuOption} key={'menu-option'} >
                         {
                             props.type === POST_APPROVAL
                             &&
