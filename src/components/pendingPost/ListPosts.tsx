@@ -16,7 +16,8 @@ const LIMIT = 3
 interface ListPostsProps {
     active?: number,
     userId?: number,
-    group?: string
+    group?: string,
+    type: number
 }
 
 export default function ListPosts(props: ListPostsProps) {
@@ -77,7 +78,7 @@ export default function ListPosts(props: ListPostsProps) {
                                             <PostApprovalItem
                                                 key={index.toString()}
                                                 post={{ ...item }}
-                                                type={POST_PENDING}
+                                                type={props.type}
                                             />
                                         }
                                         ListFooterComponent={<NoMorePost />}
