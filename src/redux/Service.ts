@@ -28,6 +28,7 @@ import { Business } from '../types/Business'
 import { BusinessRequest } from '../types/request/BusinessRequest'
 import { StudentRequest } from '../types/request/StudentRequest'
 import { QualityNotificationModel } from '../types/response/QualityNotificationModel'
+import { NormalPostUpdateRequest } from '../types/request/NormalPostUpdateRequest'
 
 export const TDCSocialNetworkAPI = createApi({
   reducerPath: 'TDCSocialNetworkAPI',
@@ -302,7 +303,28 @@ export const TDCSocialNetworkAPI = createApi({
         }
       }),
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
-    })
+    }),
+    updateNormalPost: builder.mutation<MessageResponseData, NormalPostUpdateRequest>({
+      query: (data) => ({
+        url: 'api/posts/normal',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Posts' as const, id: data.postId }])
+    }),
+    changeUserToInactiveState: builder.mutation<MessageResponseData, { id: number }>({
+      query: (data) => ({
+        url: 'api/users/status/inactive',
+        method: 'PUT',
+        body: data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      }),
+    }),
   })
 })
 
@@ -344,4 +366,6 @@ export const {
   useGetStudentPostsQuery,
   useGetPostsByIdQuery,
   useUpdateSurveyPostMutation,
+  useUpdateNormalPostMutation,
+  useChangeUserToInactiveStateMutation
 } = TDCSocialNetworkAPI

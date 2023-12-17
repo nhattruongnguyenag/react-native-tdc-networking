@@ -107,6 +107,8 @@ export default function ReviewSurveyPostScreen() {
         />
 
         <ButtonFullWith
+          disable={updateSurveyResult.isLoading || addSurveyResult.isLoading}
+          loading={updateSurveyResult.isLoading || addSurveyResult.isLoading}
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={onBtnPublishPostPress}
           iconName='plus'

@@ -40,9 +40,7 @@ export default function ApprovalPostScreen() {
   const { data, isLoading, isFetching } = useGetPostsQuery({
     active: 0,
     group: group,
-    ownerFaculty: faculty,
-    limit: LIMIT,
-    offset: offset
+    ownerFaculty: faculty
   }, { refetchOnFocus: true, refetchOnMountOrArgChange: true })
 
   const [posts, setPosts] = useState<PostResponseModel[]>([])
@@ -54,36 +52,6 @@ export default function ApprovalPostScreen() {
     }
   }, [data])
 
-  useEffect(() => {
-    console.log(buildPostSearchRequest({
-      active: 0,
-      group: group,
-      ownerFaculty: faculty,
-      limit: LIMIT,
-      offset: offset
-    }))
-  }, [offset])
-
-  useEffect(() => {
-    if (postRejectId) {
-      setPosts([...posts].filter(post => post.id !== postRejectId))
-      dispatch(setPostRejectId(undefined))
-    }
-  }, [postRejectId])
-
-  useEffect(() => {
-    if (postAcceptId) {
-      setPosts([...posts].filter(post => post.id !== postAcceptId))
-      dispatch(setPostAcceptId(undefined))
-    }
-  }, [postAcceptId])
-
-  const onLoadMore = useCallback(() => {
-    if (data && data.data.length === LIMIT) {
-      setOffset(posts.length)
-    }
-  }, [posts, data])
-
   return (
     <SafeAreaView style={styles.body}>
       {
@@ -91,10 +59,10 @@ export default function ApprovalPostScreen() {
           :
           <>
             {
-              data && posts.length > 0 ?
+              data && data.data.length > 0 ?
                 <>
                   <FlatList
-                    data={posts}
+                    data={data.data}
                     renderItem={({ item, index }) =>
                       <PostApprovalItem
                         post={item}
@@ -102,11 +70,7 @@ export default function ApprovalPostScreen() {
                         loading={isFetching && index === posts.length - 1}
                       />
                     }
-                    ListFooterComponent={data && data.data.length < LIMIT ?
-                      <NoMorePost />
-                      :
-                      <SkeletonPostApprove loading={isFetching} />}
-                    onEndReached={() => onLoadMore()}
+                    ListFooterComponent={<NoMorePost />}
                   />
                   <ModalPostRejectReason />
                 </>

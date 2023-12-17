@@ -108,7 +108,7 @@ export default function JobApplyScreen() {
     }
 
     if (cvSource.type.includes('image')) {
-      Alert.alert( t('JobApplyScreen.jobApplyScreenSaveSuccessTextTitle'), t('JobApplyScreen.jobApplyScreenUploadErrorFormat'))
+      Alert.alert(t('JobApplyScreen.jobApplyScreenSaveSuccessTextTitle'), t('JobApplyScreen.jobApplyScreenUploadErrorFormat'))
     } else {
       handleUploadDocumentFiles([cvSource], onResult)
     }
@@ -140,7 +140,7 @@ export default function JobApplyScreen() {
       >
         <Text style={styles.btnTitle}>
           {cvSource.size !== 0 || route.params?.profileId
-            ? t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle') 
+            ? t('JobApplyScreen.jobApplyScreenButtonUpdateCvTitle')
             : t('JobApplyScreen.jobApplyScreenButtonAddCvTitle')}
         </Text>
         <FontAwesome6Icon style={styles.btnIcon} name='upload' size={20} color='#fff' />
@@ -161,6 +161,8 @@ export default function JobApplyScreen() {
         />
 
         <ButtonFullWith
+          disable={jobApplyResponse.isLoading}
+          loading={jobApplyResponse.isLoading}
           btnStyle={{ marginLeft: 10, width: 140 }}
           onPress={() => {
             onBtnFinishJobApplyPress()

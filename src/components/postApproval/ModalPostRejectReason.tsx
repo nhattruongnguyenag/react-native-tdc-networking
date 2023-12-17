@@ -31,15 +31,16 @@ function ModalPostRejectReason() {
         if (rejectPostResponse.data) {
             setVisible(false)
             dispatch(setPostRejectId(postRejectLog?.postId))
+            dispatch(setPostRejectLog(null))
             Alert.alert("Thành công !!!", "Đã từ chối bài viết thành công")
         }
     }, [rejectPostResponse.data])
 
     useEffect(() => {
-        if (postRejectLog && isFocused) {
+        if (postRejectLog) {
             setVisible(true)
         }
-    }, [isFocused, postRejectLog])
+    }, [postRejectLog])
 
     return (
         <Fragment>
@@ -72,6 +73,7 @@ function ModalPostRejectReason() {
                         />
 
                         <ButtonWithLoader
+                            disable={rejectPostResponse.isLoading}
                             loading={rejectPostResponse.isLoading}
                             onPress={onCompleteRejectPost}
                             btnStyle={{ marginLeft: 10, width: 140 }}
