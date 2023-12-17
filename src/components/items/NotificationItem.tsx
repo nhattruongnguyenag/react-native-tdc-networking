@@ -54,6 +54,7 @@ export default function NotificationItem(props: NotificatonsType) {
     const [isMenuOpen, setMenuOpen] = useState(false)
     const { userLogin } = useAppSelector((state) => state.TDCSocialNetworkReducer)
     const [use, setUse] = useState([])
+    const isFocused = useIsFocused();
     const [value, setValue] = useState<Value>({
         header: '',
         body: '',
@@ -66,7 +67,11 @@ export default function NotificationItem(props: NotificatonsType) {
 
     useEffect(() => {
         checkType()
+    }, [isFocused])
+    useEffect(() => {
+        checkType()
     }, [props])
+
     const checkType = () => {
         switch (props.type) {
             // Thong bao dang ky thanh cong
