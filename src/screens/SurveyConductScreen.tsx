@@ -249,6 +249,8 @@ export default function SurveyConductScreen() {
                         />
 
                         <ButtonFullWith
+                            disable={surveyConductRequestResult.isLoading}
+                            loading={surveyConductRequestResult.isLoading}
                             btnStyle={{ marginLeft: 10, width: 140 }}
                             onPress={onBtnPublishPostPress}
                             iconName='plus'

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAppSelector } from '../../redux/Hook'
+import { POST_REJECT } from '../postApproval/PostApprovalItem'
 import ListPosts from './ListPosts'
 
 export default function RejectedPostTab() {
@@ -7,6 +8,7 @@ export default function RejectedPostTab() {
     
     return (
         <ListPosts
+            type={POST_REJECT}
             active={2}
             userId={userLogin?.id} />
     )

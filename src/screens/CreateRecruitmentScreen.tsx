@@ -432,9 +432,8 @@ export default function CreateRecruitmentScreen() {
           />
 
           <Button
-            loading={
-              recruitmentModel.id ? updateRecruitmentPostResponse.isLoading : createRecruitmentPostResponse.isLoading
-            }
+            loading={updateRecruitmentPostResponse.isLoading || createRecruitmentPostResponse.isLoading}
+            disabled={updateRecruitmentPostResponse.isLoading || createRecruitmentPostResponse.isLoading}
             icon='plus'
             mode='contained'
             rippleColor={'#0065FF80'}
