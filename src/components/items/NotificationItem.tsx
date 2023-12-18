@@ -323,7 +323,7 @@ export default function NotificationItem(props: NotificatonsType) {
                         <Image style={styles.image} source={{ uri: SERVER_ADDRESS + 'api/images/' + value.image }} />
                     ) : (
                         value.defaultImage == 'admin' ?
-                            <Image style={styles.image} source={require('../../assets/splash/logo.png')} /> :
+                            <Image style={styles.image} source={{uri: SERVER_ADDRESS + 'api/images/logo.jpg'}} /> :
                             <DefaultAvatar size={60} identifer={value.defaultImage[0]} />
                     )}
                     {/* Noi dung */}
